@@ -1,4 +1,4 @@
-package com.example.teigi_app
+package com.toda.teigi_app
 
 import io.flutter.embedding.android.FlutterActivity
 
