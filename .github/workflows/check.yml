@@ -26,16 +26,6 @@ jobs:
         with:
           fetch-depth: 0
 
-    # TODO(me): おそらく不要。不要であることが確認できたら削除する
-    #   - name: Run pre-process script
-    #     shell: bash
-    #     env:
-    #       PREPROCESS_SCRIPT_BASE64: ${{ secrets.PREPROCESS_SCRIPT_BASE64 }}
-    #     run: |
-    #       if [ -n "$PREPROCESS_SCRIPT_BASE64" ]; then
-    #         echo $PREPROCESS_SCRIPT_BASE64 | base64 --decode > ./pre-process.sh && bash ./pre-process.sh
-    #       fi
-
       # 空の.envを作成
       # 必要あれば、githubのSECRET情報から値を取得して.envに書き込む
       # 参考
@@ -94,16 +84,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-    # TODO(me): おそらく不要。不要であることが確認できたら削除する
-    #   - name: Run pre-process script
-    #     shell: bash
-    #     env:
-    #       PREPROCESS_SCRIPT_BASE64: ${{ secrets.PREPROCESS_SCRIPT_BASE64 }}
-    #     run: |
-    #       if [ -n "$PREPROCESS_SCRIPT_BASE64" ]; then
-    #         echo $PREPROCESS_SCRIPT_BASE64 | base64 --decode > ./pre-process.sh && bash ./pre-process.sh
-    #       fi
 
       # 空の.envを作成
       # 必要あれば、githubのSECRET情報から値を取得して.envに書き込む
