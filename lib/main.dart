@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,10 @@ Future<void> main() async {
 
   const flavorName = String.fromEnvironment('flavor');
   await Firebase.initializeApp(options: firebaseOptionsWithFlavor(flavorName));
+
+  await FirebaseAnalytics.instance.logEvent(
+    name: 'launch App',
+  );
 
   runApp(const MyApp());
 }
