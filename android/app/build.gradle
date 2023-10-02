@@ -22,6 +22,9 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
+// START: FlutterFire Configuration
+apply plugin: 'com.google.gms.google-services'
+// END: FlutterFire Configuration
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -51,6 +54,9 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+        multiDexEnabled true
+
         // flavorの設定
         // https://zenn.dev/altiveinc/articles/separating-environments-in-flutter#defaultconfig-%E3%81%A7%E3%82%A2%E3%83%97%E3%83%AAid%E3%81%A8%E3%82%A2%E3%83%97%E3%83%AA%E5%90%8D%E3%82%92%E8%A8%AD%E5%AE%9A
         applicationIdSuffix appIdSuffix
@@ -82,4 +88,15 @@ task copySources(type: Copy) {
 }
 tasks.whenTaskAdded { task ->
    task.dependsOn copySources
+}
+
+task selectGoogleServicesJson(type: Copy) {
+    from "src/$flavor/google-services.json"
+    into './'
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'processDebugGoogleServices' || task.name == 'processReleaseGoogleServices') {
+        task.dependsOn selectGoogleServicesJson
+    }
 }
