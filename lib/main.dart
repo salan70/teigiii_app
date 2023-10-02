@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -5,7 +6,7 @@ import 'firebase_options/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   const flavorName = String.fromEnvironment('flavor');
   await Firebase.initializeApp(options: firebaseOptionsWithFlavor(flavorName));
 
