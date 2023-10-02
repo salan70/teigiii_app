@@ -1,4 +1,8 @@
+import 'dart:ui';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options/firebase_options.dart';
@@ -8,6 +12,20 @@ Future<void> main() async {
 
   const flavorName = String.fromEnvironment('flavor');
   await Firebase.initializeApp(options: firebaseOptionsWithFlavor(flavorName));
+
+  await FirebaseAnalytics.instance.logEvent(
+    name: 'launch App',
+  );
+
+  // Flutterフレームワークがキャッチしたエラーを記録する
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Flutterフレームワークでキャッチできない非同期エラーを記録する
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   runApp(const MyApp());
 }
