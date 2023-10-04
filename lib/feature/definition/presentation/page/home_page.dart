@@ -14,8 +14,6 @@ class HomePage extends StatelessWidget {
           title: const Text('ホーム'),
           leading: IconButton(
             icon: const Icon(Icons.settings),
-            highlightColor: Theme.of(context).colorScheme.surface,
-            splashColor: Theme.of(context).colorScheme.surface,
             onPressed: () {
               // TODO(me): 設定画面へ遷移
             },
@@ -23,8 +21,6 @@ class HomePage extends StatelessWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.notifications_none),
-              highlightColor: Theme.of(context).colorScheme.surface,
-              splashColor: Theme.of(context).colorScheme.surface,
               onPressed: () {
                 // TODO(me): 通知履歴画面へ遷移
               },
