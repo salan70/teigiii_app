@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
-import 'definition/presentation/page/home_page.dart';
+import 'feature/definition/presentation/page/home_page.dart';
 import 'firebase_options/firebase_options.dart';
 import 'util/constant/color_scheme.dart';
 
