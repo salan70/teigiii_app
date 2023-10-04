@@ -5,8 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
-import 'feature/definition/presentation/page/home_page.dart';
 import 'firebase_options/firebase_options.dart';
+import 'router/app_router.dart';
 import 'util/constant/color_scheme.dart';
 
 Future<void> main() async {
@@ -29,15 +29,18 @@ Future<void> main() async {
     return true;
   };
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: _appRouter.config(),
       theme: ThemeData(
         colorScheme: lightColorScheme,
         appBarTheme: AppBarTheme(
@@ -61,8 +64,10 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
+        // タップ時のエフェクトを無効化
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
       ),
-      home: const HomePage(),
     );
   }
 }

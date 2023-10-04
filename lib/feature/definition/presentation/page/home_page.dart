@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+@RoutePage()
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -36,15 +38,6 @@ class HomePage extends StatelessWidget {
             indicatorSize: TabBarIndicatorSize.label,
             indicatorWeight: 3,
             unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
-            // タブタップ時のエフェクト（背景色の変化やスプラッシュ表示など）を無効化
-            splashFactory: NoSplash.splashFactory,
-            overlayColor: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-                return states.contains(MaterialState.focused)
-                    ? null
-                    : Colors.transparent;
-              },
-            ),
             tabs: const <Widget>[
               Tab(text: 'おすすめ'),
               Tab(text: 'フォロー中'),
