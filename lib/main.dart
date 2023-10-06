@@ -6,8 +6,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options/firebase_options.dart';
-import 'router/app_router.dart';
 import 'util/constant/color_scheme.dart';
+import 'util/router/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +28,8 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
+  // await TestDataSender().writeTestData();
 
   runApp(MyApp());
 }

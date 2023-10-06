@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 
-import '../base_page.dart';
-import '../feature/definition/presentation/page/home_page.dart';
-import '../feature/definition/presentation/page/index_page.dart';
-import '../feature/definition/presentation/page/profile_page.dart';
+import '../../base_page.dart';
+import '../../feature/definition/presentation/page/home_page.dart';
+import '../../feature/definition/presentation/page/index_page.dart';
+import '../../feature/definition/presentation/page/profile_page.dart';
+
+
 
 part 'app_router.gr.dart';
 
