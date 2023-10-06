@@ -1,24 +1,19 @@
-class Definition {
-  Definition({
-    required this.id,
-    required this.wordId,
-    required this.authorId,
-    required this.word,
-    required this.definition,
-    required this.updatedAt,
-    required this.authorName,
-    required this.authorIconUrl,
-    required this.likesCount,
-    required this.isLikedByUser,
-  });
-  final String id;
-  final String wordId;
-  final String authorId;
-  final String word;
-  final String definition;
-  final DateTime updatedAt;
-  final String authorName;
-  final String authorIconUrl;
-  final int likesCount;
-  final bool isLikedByUser;
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'definition.freezed.dart';
+
+@freezed
+class Definition with _$Definition {
+  const factory Definition({
+    required String id,
+    required String wordId,
+    required String authorId,
+    required String word,
+    required String definition,
+    required DateTime updatedAt,
+    required String authorName,
+    required String authorIconUrl,
+    required int likesCount,
+    required bool isLikedByUser,
+  }) = _Definition;
 }
