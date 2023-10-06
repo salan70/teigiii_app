@@ -1,8 +1,8 @@
-class WordDefinition {
-  WordDefinition({
-    required this.wordID,
-    required this.definitionID,
-    required this.authorID,
+class Definition {
+  Definition({
+    required this.id,
+    required this.wordId,
+    required this.authorId,
     required this.word,
     required this.definition,
     required this.updatedAt,
@@ -11,9 +11,9 @@ class WordDefinition {
     required this.likesCount,
     required this.isLikedByUser,
   });
-  final String wordID;
-  final String definitionID;
-  final String authorID;
+  final String id;
+  final String wordId;
+  final String authorId;
   final String word;
   final String definition;
   final DateTime updatedAt;
