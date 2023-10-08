@@ -23,7 +23,7 @@ mixin _$Definition {
   String get definition => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
   String get authorName => throw _privateConstructorUsedError;
-  String get authorIconUrl => throw _privateConstructorUsedError;
+  String get authorImageUrl => throw _privateConstructorUsedError;
   int get likesCount => throw _privateConstructorUsedError;
   bool get isLikedByUser => throw _privateConstructorUsedError;
 
@@ -46,7 +46,7 @@ abstract class $DefinitionCopyWith<$Res> {
       String definition,
       DateTime updatedAt,
       String authorName,
-      String authorIconUrl,
+      String authorImageUrl,
       int likesCount,
       bool isLikedByUser});
 }
@@ -71,7 +71,7 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
     Object? definition = null,
     Object? updatedAt = null,
     Object? authorName = null,
-    Object? authorIconUrl = null,
+    Object? authorImageUrl = null,
     Object? likesCount = null,
     Object? isLikedByUser = null,
   }) {
@@ -104,9 +104,9 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
           ? _value.authorName
           : authorName // ignore: cast_nullable_to_non_nullable
               as String,
-      authorIconUrl: null == authorIconUrl
-          ? _value.authorIconUrl
-          : authorIconUrl // ignore: cast_nullable_to_non_nullable
+      authorImageUrl: null == authorImageUrl
+          ? _value.authorImageUrl
+          : authorImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       likesCount: null == likesCount
           ? _value.likesCount
@@ -136,7 +136,7 @@ abstract class _$$DefinitionImplCopyWith<$Res>
       String definition,
       DateTime updatedAt,
       String authorName,
-      String authorIconUrl,
+      String authorImageUrl,
       int likesCount,
       bool isLikedByUser});
 }
@@ -159,7 +159,7 @@ class __$$DefinitionImplCopyWithImpl<$Res>
     Object? definition = null,
     Object? updatedAt = null,
     Object? authorName = null,
-    Object? authorIconUrl = null,
+    Object? authorImageUrl = null,
     Object? likesCount = null,
     Object? isLikedByUser = null,
   }) {
@@ -192,9 +192,9 @@ class __$$DefinitionImplCopyWithImpl<$Res>
           ? _value.authorName
           : authorName // ignore: cast_nullable_to_non_nullable
               as String,
-      authorIconUrl: null == authorIconUrl
-          ? _value.authorIconUrl
-          : authorIconUrl // ignore: cast_nullable_to_non_nullable
+      authorImageUrl: null == authorImageUrl
+          ? _value.authorImageUrl
+          : authorImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       likesCount: null == likesCount
           ? _value.likesCount
@@ -219,7 +219,7 @@ class _$DefinitionImpl implements _Definition {
       required this.definition,
       required this.updatedAt,
       required this.authorName,
-      required this.authorIconUrl,
+      required this.authorImageUrl,
       required this.likesCount,
       required this.isLikedByUser});
 
@@ -238,7 +238,7 @@ class _$DefinitionImpl implements _Definition {
   @override
   final String authorName;
   @override
-  final String authorIconUrl;
+  final String authorImageUrl;
   @override
   final int likesCount;
   @override
@@ -246,7 +246,7 @@ class _$DefinitionImpl implements _Definition {
 
   @override
   String toString() {
-    return 'Definition(id: $id, wordId: $wordId, authorId: $authorId, word: $word, definition: $definition, updatedAt: $updatedAt, authorName: $authorName, authorIconUrl: $authorIconUrl, likesCount: $likesCount, isLikedByUser: $isLikedByUser)';
+    return 'Definition(id: $id, wordId: $wordId, authorId: $authorId, word: $word, definition: $definition, updatedAt: $updatedAt, authorName: $authorName, authorImageUrl: $authorImageUrl, likesCount: $likesCount, isLikedByUser: $isLikedByUser)';
   }
 
   @override
@@ -265,8 +265,8 @@ class _$DefinitionImpl implements _Definition {
                 other.updatedAt == updatedAt) &&
             (identical(other.authorName, authorName) ||
                 other.authorName == authorName) &&
-            (identical(other.authorIconUrl, authorIconUrl) ||
-                other.authorIconUrl == authorIconUrl) &&
+            (identical(other.authorImageUrl, authorImageUrl) ||
+                other.authorImageUrl == authorImageUrl) &&
             (identical(other.likesCount, likesCount) ||
                 other.likesCount == likesCount) &&
             (identical(other.isLikedByUser, isLikedByUser) ||
@@ -283,7 +283,7 @@ class _$DefinitionImpl implements _Definition {
       definition,
       updatedAt,
       authorName,
-      authorIconUrl,
+      authorImageUrl,
       likesCount,
       isLikedByUser);
 
@@ -303,7 +303,7 @@ abstract class _Definition implements Definition {
       required final String definition,
       required final DateTime updatedAt,
       required final String authorName,
-      required final String authorIconUrl,
+      required final String authorImageUrl,
       required final int likesCount,
       required final bool isLikedByUser}) = _$DefinitionImpl;
 
@@ -322,7 +322,7 @@ abstract class _Definition implements Definition {
   @override
   String get authorName;
   @override
-  String get authorIconUrl;
+  String get authorImageUrl;
   @override
   int get likesCount;
   @override

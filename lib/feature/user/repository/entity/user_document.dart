@@ -10,6 +10,7 @@ class UserDocument with _$UserDocument {
     required String name,
     required String email,
     required String profileImageUrl,
+    required List<String> mutedUserIdList,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _UserDocument;
@@ -21,6 +22,9 @@ class UserDocument with _$UserDocument {
       name: data['name'] as String,
       email: data['email'] as String,
       profileImageUrl: data['profileImageUrl'] as String,
+      mutedUserIdList: (data['mutedUserIdList'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
       createdAt: (data['createdAt'] as Timestamp).toDate(),
       updatedAt: (data['updatedAt'] as Timestamp).toDate(),
     );

@@ -12,7 +12,7 @@ class Definition with _$Definition {
     required String definition,
     required DateTime updatedAt,
     required String authorName,
-    required String authorIconUrl,
+    required String authorImageUrl,
     required int likesCount,
     required bool isLikedByUser,
   }) = _Definition;

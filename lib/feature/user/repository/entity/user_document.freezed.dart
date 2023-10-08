@@ -20,6 +20,7 @@ mixin _$UserDocument {
   String get name => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get profileImageUrl => throw _privateConstructorUsedError;
+  List<String> get mutedUserIdList => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
@@ -39,6 +40,7 @@ abstract class $UserDocumentCopyWith<$Res> {
       String name,
       String email,
       String profileImageUrl,
+      List<String> mutedUserIdList,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -60,6 +62,7 @@ class _$UserDocumentCopyWithImpl<$Res, $Val extends UserDocument>
     Object? name = null,
     Object? email = null,
     Object? profileImageUrl = null,
+    Object? mutedUserIdList = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -80,6 +83,10 @@ class _$UserDocumentCopyWithImpl<$Res, $Val extends UserDocument>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      mutedUserIdList: null == mutedUserIdList
+          ? _value.mutedUserIdList
+          : mutedUserIdList // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -105,6 +112,7 @@ abstract class _$$UserDocumentImplCopyWith<$Res>
       String name,
       String email,
       String profileImageUrl,
+      List<String> mutedUserIdList,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -124,6 +132,7 @@ class __$$UserDocumentImplCopyWithImpl<$Res>
     Object? name = null,
     Object? email = null,
     Object? profileImageUrl = null,
+    Object? mutedUserIdList = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -144,6 +153,10 @@ class __$$UserDocumentImplCopyWithImpl<$Res>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      mutedUserIdList: null == mutedUserIdList
+          ? _value._mutedUserIdList
+          : mutedUserIdList // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -164,8 +177,10 @@ class _$UserDocumentImpl implements _UserDocument {
       required this.name,
       required this.email,
       required this.profileImageUrl,
+      required final List<String> mutedUserIdList,
       required this.createdAt,
-      required this.updatedAt});
+      required this.updatedAt})
+      : _mutedUserIdList = mutedUserIdList;
 
   @override
   final String id;
@@ -175,6 +190,14 @@ class _$UserDocumentImpl implements _UserDocument {
   final String email;
   @override
   final String profileImageUrl;
+  final List<String> _mutedUserIdList;
+  @override
+  List<String> get mutedUserIdList {
+    if (_mutedUserIdList is EqualUnmodifiableListView) return _mutedUserIdList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_mutedUserIdList);
+  }
+
   @override
   final DateTime createdAt;
   @override
@@ -182,7 +205,7 @@ class _$UserDocumentImpl implements _UserDocument {
 
   @override
   String toString() {
-    return 'UserDocument(id: $id, name: $name, email: $email, profileImageUrl: $profileImageUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserDocument(id: $id, name: $name, email: $email, profileImageUrl: $profileImageUrl, mutedUserIdList: $mutedUserIdList, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -195,6 +218,8 @@ class _$UserDocumentImpl implements _UserDocument {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
                 other.profileImageUrl == profileImageUrl) &&
+            const DeepCollectionEquality()
+                .equals(other._mutedUserIdList, _mutedUserIdList) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -203,7 +228,14 @@ class _$UserDocumentImpl implements _UserDocument {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, name, email, profileImageUrl, createdAt, updatedAt);
+      runtimeType,
+      id,
+      name,
+      email,
+      profileImageUrl,
+      const DeepCollectionEquality().hash(_mutedUserIdList),
+      createdAt,
+      updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -218,6 +250,7 @@ abstract class _UserDocument implements UserDocument {
       required final String name,
       required final String email,
       required final String profileImageUrl,
+      required final List<String> mutedUserIdList,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$UserDocumentImpl;
 
@@ -229,6 +262,8 @@ abstract class _UserDocument implements UserDocument {
   String get email;
   @override
   String get profileImageUrl;
+  @override
+  List<String> get mutedUserIdList;
   @override
   DateTime get createdAt;
   @override
