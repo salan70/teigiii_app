@@ -23,9 +23,7 @@ class DefinitionList extends ConsumerWidget {
         return ListView.builder(
           itemCount: data.length,
           itemBuilder: (context, index) {
-            return DefinitionTile(
-              definition: data[index],
-            );
+            return DefinitionTile(definition: data[index]);
           },
         );
       },
@@ -39,7 +37,7 @@ class DefinitionList extends ConsumerWidget {
       },
       loading: () {
         // TODO(me): スケルトンを表示させる
-        return const CircularProgressIndicator();
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }
