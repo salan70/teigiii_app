@@ -7,11 +7,10 @@ import '../repository/definition_repository.dart';
 import '../repository/entity/definition_document.dart';
 import '../util/definition_feed_type.dart';
 
-part 'definition_list_state.g.dart';
+part 'definition_list_notifier.g.dart';
 
 @riverpod
-class DefinitionListStateNotifier extends _$DefinitionListStateNotifier {
-  // TODO(me): テスト書く
+class DefinitionListNotifier extends _$DefinitionListNotifier {
   @override
   FutureOr<List<Definition>> build(
     DefinitionFeedType definitionFeedType,

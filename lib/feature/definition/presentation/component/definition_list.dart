@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../application/definition_list_state.dart';
+import '../../application/definition_list_notifier.dart';
 import '../../util/definition_feed_type.dart';
 import 'definition_tile.dart';
 
@@ -16,7 +16,7 @@ class DefinitionList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final definitionList = ref.watch(
-      definitionListStateNotifierProvider(definitionFeedType),
+      definitionListNotifierProvider(definitionFeedType),
     );
     return definitionList.when(
       data: (data) {

@@ -121,11 +121,11 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
 }
 
 /// @nodoc
-abstract class _$$DefinitionImplCopyWith<$Res>
+abstract class _$$_DefinitionCopyWith<$Res>
     implements $DefinitionCopyWith<$Res> {
-  factory _$$DefinitionImplCopyWith(
-          _$DefinitionImpl value, $Res Function(_$DefinitionImpl) then) =
-      __$$DefinitionImplCopyWithImpl<$Res>;
+  factory _$$_DefinitionCopyWith(
+          _$_Definition value, $Res Function(_$_Definition) then) =
+      __$$_DefinitionCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -142,11 +142,11 @@ abstract class _$$DefinitionImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$DefinitionImplCopyWithImpl<$Res>
-    extends _$DefinitionCopyWithImpl<$Res, _$DefinitionImpl>
-    implements _$$DefinitionImplCopyWith<$Res> {
-  __$$DefinitionImplCopyWithImpl(
-      _$DefinitionImpl _value, $Res Function(_$DefinitionImpl) _then)
+class __$$_DefinitionCopyWithImpl<$Res>
+    extends _$DefinitionCopyWithImpl<$Res, _$_Definition>
+    implements _$$_DefinitionCopyWith<$Res> {
+  __$$_DefinitionCopyWithImpl(
+      _$_Definition _value, $Res Function(_$_Definition) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -163,7 +163,7 @@ class __$$DefinitionImplCopyWithImpl<$Res>
     Object? likesCount = null,
     Object? isLikedByUser = null,
   }) {
-    return _then(_$DefinitionImpl(
+    return _then(_$_Definition(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -210,8 +210,8 @@ class __$$DefinitionImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DefinitionImpl implements _Definition {
-  const _$DefinitionImpl(
+class _$_Definition implements _Definition {
+  const _$_Definition(
       {required this.id,
       required this.wordId,
       required this.authorId,
@@ -253,7 +253,7 @@ class _$DefinitionImpl implements _Definition {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DefinitionImpl &&
+            other is _$_Definition &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.wordId, wordId) || other.wordId == wordId) &&
             (identical(other.authorId, authorId) ||
@@ -290,8 +290,8 @@ class _$DefinitionImpl implements _Definition {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$DefinitionImplCopyWith<_$DefinitionImpl> get copyWith =>
-      __$$DefinitionImplCopyWithImpl<_$DefinitionImpl>(this, _$identity);
+  _$$_DefinitionCopyWith<_$_Definition> get copyWith =>
+      __$$_DefinitionCopyWithImpl<_$_Definition>(this, _$identity);
 }
 
 abstract class _Definition implements Definition {
@@ -305,7 +305,7 @@ abstract class _Definition implements Definition {
       required final String authorName,
       required final String authorImageUrl,
       required final int likesCount,
-      required final bool isLikedByUser}) = _$DefinitionImpl;
+      required final bool isLikedByUser}) = _$_Definition;
 
   @override
   String get id;
@@ -329,6 +329,6 @@ abstract class _Definition implements Definition {
   bool get isLikedByUser;
   @override
   @JsonKey(ignore: true)
-  _$$DefinitionImplCopyWith<_$DefinitionImpl> get copyWith =>
+  _$$_DefinitionCopyWith<_$_Definition> get copyWith =>
       throw _privateConstructorUsedError;
 }

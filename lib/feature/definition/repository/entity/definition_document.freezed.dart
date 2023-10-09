@@ -107,11 +107,11 @@ class _$DefinitionDocumentCopyWithImpl<$Res, $Val extends DefinitionDocument>
 }
 
 /// @nodoc
-abstract class _$$DefinitionDocumentImplCopyWith<$Res>
+abstract class _$$_DefinitionDocumentCopyWith<$Res>
     implements $DefinitionDocumentCopyWith<$Res> {
-  factory _$$DefinitionDocumentImplCopyWith(_$DefinitionDocumentImpl value,
-          $Res Function(_$DefinitionDocumentImpl) then) =
-      __$$DefinitionDocumentImplCopyWithImpl<$Res>;
+  factory _$$_DefinitionDocumentCopyWith(_$_DefinitionDocument value,
+          $Res Function(_$_DefinitionDocument) then) =
+      __$$_DefinitionDocumentCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -126,11 +126,11 @@ abstract class _$$DefinitionDocumentImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$DefinitionDocumentImplCopyWithImpl<$Res>
-    extends _$DefinitionDocumentCopyWithImpl<$Res, _$DefinitionDocumentImpl>
-    implements _$$DefinitionDocumentImplCopyWith<$Res> {
-  __$$DefinitionDocumentImplCopyWithImpl(_$DefinitionDocumentImpl _value,
-      $Res Function(_$DefinitionDocumentImpl) _then)
+class __$$_DefinitionDocumentCopyWithImpl<$Res>
+    extends _$DefinitionDocumentCopyWithImpl<$Res, _$_DefinitionDocument>
+    implements _$$_DefinitionDocumentCopyWith<$Res> {
+  __$$_DefinitionDocumentCopyWithImpl(
+      _$_DefinitionDocument _value, $Res Function(_$_DefinitionDocument) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -145,7 +145,7 @@ class __$$DefinitionDocumentImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$DefinitionDocumentImpl(
+    return _then(_$_DefinitionDocument(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -184,8 +184,8 @@ class __$$DefinitionDocumentImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DefinitionDocumentImpl implements _DefinitionDocument {
-  const _$DefinitionDocumentImpl(
+class _$_DefinitionDocument implements _DefinitionDocument {
+  const _$_DefinitionDocument(
       {required this.id,
       required this.wordId,
       required this.authorId,
@@ -221,7 +221,7 @@ class _$DefinitionDocumentImpl implements _DefinitionDocument {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DefinitionDocumentImpl &&
+            other is _$_DefinitionDocument &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.wordId, wordId) || other.wordId == wordId) &&
             (identical(other.authorId, authorId) ||
@@ -244,8 +244,8 @@ class _$DefinitionDocumentImpl implements _DefinitionDocument {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$DefinitionDocumentImplCopyWith<_$DefinitionDocumentImpl> get copyWith =>
-      __$$DefinitionDocumentImplCopyWithImpl<_$DefinitionDocumentImpl>(
+  _$$_DefinitionDocumentCopyWith<_$_DefinitionDocument> get copyWith =>
+      __$$_DefinitionDocumentCopyWithImpl<_$_DefinitionDocument>(
           this, _$identity);
 }
 
@@ -258,7 +258,7 @@ abstract class _DefinitionDocument implements DefinitionDocument {
       required final int likesCount,
       required final bool isPublic,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$DefinitionDocumentImpl;
+      required final DateTime updatedAt}) = _$_DefinitionDocument;
 
   @override
   String get id;
@@ -278,6 +278,6 @@ abstract class _DefinitionDocument implements DefinitionDocument {
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
-  _$$DefinitionDocumentImplCopyWith<_$DefinitionDocumentImpl> get copyWith =>
+  _$$_DefinitionDocumentCopyWith<_$_DefinitionDocument> get copyWith =>
       throw _privateConstructorUsedError;
 }

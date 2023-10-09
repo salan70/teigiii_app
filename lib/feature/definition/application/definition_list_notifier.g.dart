@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'definition_list_state.dart';
+part of 'definition_list_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$definitionListStateNotifierHash() =>
-    r'2e3a3914cd1d3fd39766b46f6ceca56a1a2c63ae';
+String _$definitionListNotifierHash() =>
+    r'83163ff22f2eecaf9924401463ee72e0cc145f2e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,7 +30,7 @@ class _SystemHash {
   }
 }
 
-abstract class _$DefinitionListStateNotifier
+abstract class _$DefinitionListNotifier
     extends BuildlessAutoDisposeAsyncNotifier<List<Definition>> {
   late final DefinitionFeedType definitionFeedType;
 
@@ -39,28 +39,28 @@ abstract class _$DefinitionListStateNotifier
   );
 }
 
-/// See also [DefinitionListStateNotifier].
-@ProviderFor(DefinitionListStateNotifier)
-const definitionListStateNotifierProvider = DefinitionListStateNotifierFamily();
+/// See also [DefinitionListNotifier].
+@ProviderFor(DefinitionListNotifier)
+const definitionListNotifierProvider = DefinitionListNotifierFamily();
 
-/// See also [DefinitionListStateNotifier].
-class DefinitionListStateNotifierFamily
+/// See also [DefinitionListNotifier].
+class DefinitionListNotifierFamily
     extends Family<AsyncValue<List<Definition>>> {
-  /// See also [DefinitionListStateNotifier].
-  const DefinitionListStateNotifierFamily();
+  /// See also [DefinitionListNotifier].
+  const DefinitionListNotifierFamily();
 
-  /// See also [DefinitionListStateNotifier].
-  DefinitionListStateNotifierProvider call(
+  /// See also [DefinitionListNotifier].
+  DefinitionListNotifierProvider call(
     DefinitionFeedType definitionFeedType,
   ) {
-    return DefinitionListStateNotifierProvider(
+    return DefinitionListNotifierProvider(
       definitionFeedType,
     );
   }
 
   @override
-  DefinitionListStateNotifierProvider getProviderOverride(
-    covariant DefinitionListStateNotifierProvider provider,
+  DefinitionListNotifierProvider getProviderOverride(
+    covariant DefinitionListNotifierProvider provider,
   ) {
     return call(
       provider.definitionFeedType,
@@ -79,32 +79,32 @@ class DefinitionListStateNotifierFamily
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'definitionListStateNotifierProvider';
+  String? get name => r'definitionListNotifierProvider';
 }
 
-/// See also [DefinitionListStateNotifier].
-class DefinitionListStateNotifierProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<DefinitionListStateNotifier,
+/// See also [DefinitionListNotifier].
+class DefinitionListNotifierProvider
+    extends AutoDisposeAsyncNotifierProviderImpl<DefinitionListNotifier,
         List<Definition>> {
-  /// See also [DefinitionListStateNotifier].
-  DefinitionListStateNotifierProvider(
+  /// See also [DefinitionListNotifier].
+  DefinitionListNotifierProvider(
     DefinitionFeedType definitionFeedType,
   ) : this._internal(
-          () => DefinitionListStateNotifier()
-            ..definitionFeedType = definitionFeedType,
-          from: definitionListStateNotifierProvider,
-          name: r'definitionListStateNotifierProvider',
+          () =>
+              DefinitionListNotifier()..definitionFeedType = definitionFeedType,
+          from: definitionListNotifierProvider,
+          name: r'definitionListNotifierProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$definitionListStateNotifierHash,
-          dependencies: DefinitionListStateNotifierFamily._dependencies,
+                  : _$definitionListNotifierHash,
+          dependencies: DefinitionListNotifierFamily._dependencies,
           allTransitiveDependencies:
-              DefinitionListStateNotifierFamily._allTransitiveDependencies,
+              DefinitionListNotifierFamily._allTransitiveDependencies,
           definitionFeedType: definitionFeedType,
         );
 
-  DefinitionListStateNotifierProvider._internal(
+  DefinitionListNotifierProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -118,7 +118,7 @@ class DefinitionListStateNotifierProvider
 
   @override
   FutureOr<List<Definition>> runNotifierBuild(
-    covariant DefinitionListStateNotifier notifier,
+    covariant DefinitionListNotifier notifier,
   ) {
     return notifier.build(
       definitionFeedType,
@@ -126,10 +126,10 @@ class DefinitionListStateNotifierProvider
   }
 
   @override
-  Override overrideWith(DefinitionListStateNotifier Function() create) {
+  Override overrideWith(DefinitionListNotifier Function() create) {
     return ProviderOverride(
       origin: this,
-      override: DefinitionListStateNotifierProvider._internal(
+      override: DefinitionListNotifierProvider._internal(
         () => create()..definitionFeedType = definitionFeedType,
         from: from,
         name: null,
@@ -142,14 +142,14 @@ class DefinitionListStateNotifierProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<DefinitionListStateNotifier,
+  AutoDisposeAsyncNotifierProviderElement<DefinitionListNotifier,
       List<Definition>> createElement() {
-    return _DefinitionListStateNotifierProviderElement(this);
+    return _DefinitionListNotifierProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is DefinitionListStateNotifierProvider &&
+    return other is DefinitionListNotifierProvider &&
         other.definitionFeedType == definitionFeedType;
   }
 
@@ -162,20 +162,20 @@ class DefinitionListStateNotifierProvider
   }
 }
 
-mixin DefinitionListStateNotifierRef
+mixin DefinitionListNotifierRef
     on AutoDisposeAsyncNotifierProviderRef<List<Definition>> {
   /// The parameter `definitionFeedType` of this provider.
   DefinitionFeedType get definitionFeedType;
 }
 
-class _DefinitionListStateNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<DefinitionListStateNotifier,
-        List<Definition>> with DefinitionListStateNotifierRef {
-  _DefinitionListStateNotifierProviderElement(super.provider);
+class _DefinitionListNotifierProviderElement
+    extends AutoDisposeAsyncNotifierProviderElement<DefinitionListNotifier,
+        List<Definition>> with DefinitionListNotifierRef {
+  _DefinitionListNotifierProviderElement(super.provider);
 
   @override
   DefinitionFeedType get definitionFeedType =>
-      (origin as DefinitionListStateNotifierProvider).definitionFeedType;
+      (origin as DefinitionListNotifierProvider).definitionFeedType;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

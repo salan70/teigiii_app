@@ -76,11 +76,11 @@ class _$LikeDocumentCopyWithImpl<$Res, $Val extends LikeDocument>
 }
 
 /// @nodoc
-abstract class _$$LikeDocumentImplCopyWith<$Res>
+abstract class _$$_LikeDocumentCopyWith<$Res>
     implements $LikeDocumentCopyWith<$Res> {
-  factory _$$LikeDocumentImplCopyWith(
-          _$LikeDocumentImpl value, $Res Function(_$LikeDocumentImpl) then) =
-      __$$LikeDocumentImplCopyWithImpl<$Res>;
+  factory _$$_LikeDocumentCopyWith(
+          _$_LikeDocument value, $Res Function(_$_LikeDocument) then) =
+      __$$_LikeDocumentCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -88,11 +88,11 @@ abstract class _$$LikeDocumentImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$LikeDocumentImplCopyWithImpl<$Res>
-    extends _$LikeDocumentCopyWithImpl<$Res, _$LikeDocumentImpl>
-    implements _$$LikeDocumentImplCopyWith<$Res> {
-  __$$LikeDocumentImplCopyWithImpl(
-      _$LikeDocumentImpl _value, $Res Function(_$LikeDocumentImpl) _then)
+class __$$_LikeDocumentCopyWithImpl<$Res>
+    extends _$LikeDocumentCopyWithImpl<$Res, _$_LikeDocument>
+    implements _$$_LikeDocumentCopyWith<$Res> {
+  __$$_LikeDocumentCopyWithImpl(
+      _$_LikeDocument _value, $Res Function(_$_LikeDocument) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -103,7 +103,7 @@ class __$$LikeDocumentImplCopyWithImpl<$Res>
     Object? userId = null,
     Object? createdAt = null,
   }) {
-    return _then(_$LikeDocumentImpl(
+    return _then(_$_LikeDocument(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -126,8 +126,8 @@ class __$$LikeDocumentImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LikeDocumentImpl implements _LikeDocument {
-  const _$LikeDocumentImpl(
+class _$_LikeDocument implements _LikeDocument {
+  const _$_LikeDocument(
       {required this.id,
       required this.definitionId,
       required this.userId,
@@ -151,7 +151,7 @@ class _$LikeDocumentImpl implements _LikeDocument {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LikeDocumentImpl &&
+            other is _$_LikeDocument &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.definitionId, definitionId) ||
                 other.definitionId == definitionId) &&
@@ -167,8 +167,8 @@ class _$LikeDocumentImpl implements _LikeDocument {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LikeDocumentImplCopyWith<_$LikeDocumentImpl> get copyWith =>
-      __$$LikeDocumentImplCopyWithImpl<_$LikeDocumentImpl>(this, _$identity);
+  _$$_LikeDocumentCopyWith<_$_LikeDocument> get copyWith =>
+      __$$_LikeDocumentCopyWithImpl<_$_LikeDocument>(this, _$identity);
 }
 
 abstract class _LikeDocument implements LikeDocument {
@@ -176,7 +176,7 @@ abstract class _LikeDocument implements LikeDocument {
       {required final String id,
       required final String definitionId,
       required final String userId,
-      required final DateTime createdAt}) = _$LikeDocumentImpl;
+      required final DateTime createdAt}) = _$_LikeDocument;
 
   @override
   String get id;
@@ -188,6 +188,6 @@ abstract class _LikeDocument implements LikeDocument {
   DateTime get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$$LikeDocumentImplCopyWith<_$LikeDocumentImpl> get copyWith =>
+  _$$_LikeDocumentCopyWith<_$_LikeDocument> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -76,11 +76,11 @@ class _$FollowDocumentCopyWithImpl<$Res, $Val extends FollowDocument>
 }
 
 /// @nodoc
-abstract class _$$FollowDocumentImplCopyWith<$Res>
+abstract class _$$_FollowDocumentCopyWith<$Res>
     implements $FollowDocumentCopyWith<$Res> {
-  factory _$$FollowDocumentImplCopyWith(_$FollowDocumentImpl value,
-          $Res Function(_$FollowDocumentImpl) then) =
-      __$$FollowDocumentImplCopyWithImpl<$Res>;
+  factory _$$_FollowDocumentCopyWith(
+          _$_FollowDocument value, $Res Function(_$_FollowDocument) then) =
+      __$$_FollowDocumentCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -88,11 +88,11 @@ abstract class _$$FollowDocumentImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$FollowDocumentImplCopyWithImpl<$Res>
-    extends _$FollowDocumentCopyWithImpl<$Res, _$FollowDocumentImpl>
-    implements _$$FollowDocumentImplCopyWith<$Res> {
-  __$$FollowDocumentImplCopyWithImpl(
-      _$FollowDocumentImpl _value, $Res Function(_$FollowDocumentImpl) _then)
+class __$$_FollowDocumentCopyWithImpl<$Res>
+    extends _$FollowDocumentCopyWithImpl<$Res, _$_FollowDocument>
+    implements _$$_FollowDocumentCopyWith<$Res> {
+  __$$_FollowDocumentCopyWithImpl(
+      _$_FollowDocument _value, $Res Function(_$_FollowDocument) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -103,7 +103,7 @@ class __$$FollowDocumentImplCopyWithImpl<$Res>
     Object? followingId = null,
     Object? createdAt = null,
   }) {
-    return _then(_$FollowDocumentImpl(
+    return _then(_$_FollowDocument(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -126,8 +126,8 @@ class __$$FollowDocumentImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$FollowDocumentImpl implements _FollowDocument {
-  const _$FollowDocumentImpl(
+class _$_FollowDocument implements _FollowDocument {
+  const _$_FollowDocument(
       {required this.id,
       required this.followerId,
       required this.followingId,
@@ -151,7 +151,7 @@ class _$FollowDocumentImpl implements _FollowDocument {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$FollowDocumentImpl &&
+            other is _$_FollowDocument &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.followerId, followerId) ||
                 other.followerId == followerId) &&
@@ -168,9 +168,8 @@ class _$FollowDocumentImpl implements _FollowDocument {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$FollowDocumentImplCopyWith<_$FollowDocumentImpl> get copyWith =>
-      __$$FollowDocumentImplCopyWithImpl<_$FollowDocumentImpl>(
-          this, _$identity);
+  _$$_FollowDocumentCopyWith<_$_FollowDocument> get copyWith =>
+      __$$_FollowDocumentCopyWithImpl<_$_FollowDocument>(this, _$identity);
 }
 
 abstract class _FollowDocument implements FollowDocument {
@@ -178,7 +177,7 @@ abstract class _FollowDocument implements FollowDocument {
       {required final String id,
       required final String followerId,
       required final String followingId,
-      required final DateTime createdAt}) = _$FollowDocumentImpl;
+      required final DateTime createdAt}) = _$_FollowDocument;
 
   @override
   String get id;
@@ -190,6 +189,6 @@ abstract class _FollowDocument implements FollowDocument {
   DateTime get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$$FollowDocumentImplCopyWith<_$FollowDocumentImpl> get copyWith =>
+  _$$_FollowDocumentCopyWith<_$_FollowDocument> get copyWith =>
       throw _privateConstructorUsedError;
 }

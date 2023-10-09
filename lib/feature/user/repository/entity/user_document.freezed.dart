@@ -100,11 +100,11 @@ class _$UserDocumentCopyWithImpl<$Res, $Val extends UserDocument>
 }
 
 /// @nodoc
-abstract class _$$UserDocumentImplCopyWith<$Res>
+abstract class _$$_UserDocumentCopyWith<$Res>
     implements $UserDocumentCopyWith<$Res> {
-  factory _$$UserDocumentImplCopyWith(
-          _$UserDocumentImpl value, $Res Function(_$UserDocumentImpl) then) =
-      __$$UserDocumentImplCopyWithImpl<$Res>;
+  factory _$$_UserDocumentCopyWith(
+          _$_UserDocument value, $Res Function(_$_UserDocument) then) =
+      __$$_UserDocumentCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -118,11 +118,11 @@ abstract class _$$UserDocumentImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$UserDocumentImplCopyWithImpl<$Res>
-    extends _$UserDocumentCopyWithImpl<$Res, _$UserDocumentImpl>
-    implements _$$UserDocumentImplCopyWith<$Res> {
-  __$$UserDocumentImplCopyWithImpl(
-      _$UserDocumentImpl _value, $Res Function(_$UserDocumentImpl) _then)
+class __$$_UserDocumentCopyWithImpl<$Res>
+    extends _$UserDocumentCopyWithImpl<$Res, _$_UserDocument>
+    implements _$$_UserDocumentCopyWith<$Res> {
+  __$$_UserDocumentCopyWithImpl(
+      _$_UserDocument _value, $Res Function(_$_UserDocument) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -136,7 +136,7 @@ class __$$UserDocumentImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$UserDocumentImpl(
+    return _then(_$_UserDocument(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -171,8 +171,8 @@ class __$$UserDocumentImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$UserDocumentImpl implements _UserDocument {
-  const _$UserDocumentImpl(
+class _$_UserDocument implements _UserDocument {
+  const _$_UserDocument(
       {required this.id,
       required this.name,
       required this.email,
@@ -212,7 +212,7 @@ class _$UserDocumentImpl implements _UserDocument {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UserDocumentImpl &&
+            other is _$_UserDocument &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.email, email) || other.email == email) &&
@@ -240,8 +240,8 @@ class _$UserDocumentImpl implements _UserDocument {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UserDocumentImplCopyWith<_$UserDocumentImpl> get copyWith =>
-      __$$UserDocumentImplCopyWithImpl<_$UserDocumentImpl>(this, _$identity);
+  _$$_UserDocumentCopyWith<_$_UserDocument> get copyWith =>
+      __$$_UserDocumentCopyWithImpl<_$_UserDocument>(this, _$identity);
 }
 
 abstract class _UserDocument implements UserDocument {
@@ -252,7 +252,7 @@ abstract class _UserDocument implements UserDocument {
       required final String profileImageUrl,
       required final List<String> mutedUserIdList,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$UserDocumentImpl;
+      required final DateTime updatedAt}) = _$_UserDocument;
 
   @override
   String get id;
@@ -270,6 +270,6 @@ abstract class _UserDocument implements UserDocument {
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
-  _$$UserDocumentImplCopyWith<_$UserDocumentImpl> get copyWith =>
+  _$$_UserDocumentCopyWith<_$_UserDocument> get copyWith =>
       throw _privateConstructorUsedError;
 }
