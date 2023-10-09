@@ -9,7 +9,7 @@ import '../util/definition_feed_type.dart';
 
 part 'definition_list_notifier.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class DefinitionListNotifier extends _$DefinitionListNotifier {
   @override
   FutureOr<List<Definition>> build(
