@@ -38,12 +38,21 @@ class DefinitionTile extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(definition.authorName),
+                        Expanded(
+                          child: Text(
+                            definition.authorName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
                         Text(definition.updatedAt.timeAgo(DateTime.now())),
                       ],
                     ),
                     Text(
                       definition.word,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 8),
