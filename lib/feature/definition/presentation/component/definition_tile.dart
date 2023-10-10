@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../common_widget/adaptive_overflow_text.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../domain/definition.dart';
 
@@ -38,7 +39,6 @@ class DefinitionTile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(definition.authorName),
-                        // TODO(me): 投稿が何分前にされたかを表示する
                         Text(definition.updatedAt.timeAgo(DateTime.now())),
                       ],
                     ),
@@ -47,12 +47,15 @@ class DefinitionTile extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 8),
-                    Text(definition.definition),
+                    AdaptiveOverflowText(
+                      text: definition.definition,
+                      // TODO(me): maxLinesの値を検討する
+                      maxLines: 5,
+                    ),
                     const SizedBox(height: 8),
                     InkWell(
                       onTap: () {
                         // TODO(me): タップでいいねの登録/解除する
-                        // print('いいね!!');
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
