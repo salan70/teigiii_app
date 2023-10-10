@@ -7,7 +7,7 @@ part of 'definition_list_notifier.dart';
 // **************************************************************************
 
 String _$definitionListNotifierHash() =>
-    r'83163ff22f2eecaf9924401463ee72e0cc145f2e';
+    r'35d5db4688e3fa7e24be4649ce264d9faa5ef23c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,7 +31,7 @@ class _SystemHash {
 }
 
 abstract class _$DefinitionListNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<List<Definition>> {
+    extends BuildlessAsyncNotifier<List<Definition>> {
   late final DefinitionFeedType definitionFeedType;
 
   FutureOr<List<Definition>> build(
@@ -83,9 +83,8 @@ class DefinitionListNotifierFamily
 }
 
 /// See also [DefinitionListNotifier].
-class DefinitionListNotifierProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<DefinitionListNotifier,
-        List<Definition>> {
+class DefinitionListNotifierProvider extends AsyncNotifierProviderImpl<
+    DefinitionListNotifier, List<Definition>> {
   /// See also [DefinitionListNotifier].
   DefinitionListNotifierProvider(
     DefinitionFeedType definitionFeedType,
@@ -142,8 +141,8 @@ class DefinitionListNotifierProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<DefinitionListNotifier,
-      List<Definition>> createElement() {
+  AsyncNotifierProviderElement<DefinitionListNotifier, List<Definition>>
+      createElement() {
     return _DefinitionListNotifierProviderElement(this);
   }
 
@@ -162,14 +161,13 @@ class DefinitionListNotifierProvider
   }
 }
 
-mixin DefinitionListNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<List<Definition>> {
+mixin DefinitionListNotifierRef on AsyncNotifierProviderRef<List<Definition>> {
   /// The parameter `definitionFeedType` of this provider.
   DefinitionFeedType get definitionFeedType;
 }
 
 class _DefinitionListNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<DefinitionListNotifier,
+    extends AsyncNotifierProviderElement<DefinitionListNotifier,
         List<Definition>> with DefinitionListNotifierRef {
   _DefinitionListNotifierProviderElement(super.provider);
 

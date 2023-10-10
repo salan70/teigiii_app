@@ -23,7 +23,10 @@ class DefinitionList extends ConsumerWidget {
         return ListView.builder(
           itemCount: data.length,
           itemBuilder: (context, index) {
-            return DefinitionTile(definition: data[index]);
+            return DefinitionTile(
+              definition: data[index],
+              definitionFeedType: definitionFeedType,
+            );
           },
         );
       },

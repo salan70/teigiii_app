@@ -44,7 +44,7 @@ class DefinitionListNotifier extends _$DefinitionListNotifier {
   /// 自分が投稿した公開中のDefinitionを取得する
   Future<List<Definition>> _fetchHomeFollowingDefinitionList() async {
     // TODO(me): auth系の実装したらFirebaseからuserIdを取得する
-    const currentUserId = 'LOAMQCoO4Dji5bvVpt4v';
+    const currentUserId = 'xE9Je2LljHXIPORKyDnk';
     final targetUserIdList = await _fetchHomeFollowingUserIdList(currentUserId);
 
     final definitionDocList = await ref
@@ -54,6 +54,80 @@ class DefinitionListNotifier extends _$DefinitionListNotifier {
           targetUserIdList,
         );
     return _fetchDefinitionList(currentUserId, definitionDocList);
+  }
+
+  /// いいねをタップした際の処理
+  Future<void> tapLike(Definition definition) async {
+    // いいねタップ時にローディングが出るのは煩わしく感じたため、
+    // stateにAsyncLoadingを入れていない
+    state = await AsyncValue.guard(
+      () async {
+        if (definition.isLikedByUser) {
+          // いいねを解除
+          final updatedDefinitions = await _unlikeDefinition(definition);
+          // stateへ反映させる値は、クライアント側で設定する（repositoryを使用しない）
+          return updatedDefinitions;
+        }
+        // いいねを登録
+        final updatedDefinitions = await _likeDefinition(definition);
+        // stateへ反映させる値は、クライアント側で設定する（repositoryを使用しない）
+        return updatedDefinitions;
+      },
+    );
+  }
+
+  /// いいねを登録する
+  ///
+  /// いいねを登録後、stateの値を修正したリストを返す
+  Future<List<Definition>> _likeDefinition(Definition definition) async {
+    // TODO(me): auth系の実装したらFirebaseからuserIdを取得する
+    const userId = 'xE9Je2LljHXIPORKyDnk';
+    // データを更新
+    await ref.read(definitionRepositoryProvider).likeDefinition(
+          definition.id,
+          userId,
+        );
+
+    // stateの値を用いて、データ更新後の値に対応するListを作成する
+    final index = state.value!.indexWhere(
+      (currentDefinition) => currentDefinition.id == definition.id,
+    );
+    final updatedDefinition = state.value![index].copyWith(
+      likesCount: state.value![index].likesCount + 1,
+      isLikedByUser: true,
+    );
+
+    final updatedList = List<Definition>.from(state.value!);
+    updatedList[index] = updatedDefinition;
+
+    return updatedList;
+  }
+
+  /// いいねを解除する
+  ///
+  /// いいねを解除後、stateの値を修正したリストを返す
+  Future<List<Definition>> _unlikeDefinition(Definition definition) async {
+    // TODO(me): auth系の実装したらFirebaseからuserIdを取得する
+    const userId = 'xE9Je2LljHXIPORKyDnk';
+    // データを更新
+    await ref.read(definitionRepositoryProvider).unlikeDefinition(
+          definition.id,
+          userId,
+        );
+
+    // stateの値を用いて、データ更新後の値に対応するListを作成する
+    final index = state.value!.indexWhere(
+      (currentDefinition) => currentDefinition.id == definition.id,
+    );
+    final updatedDefinition = state.value![index].copyWith(
+      likesCount: state.value![index].likesCount - 1,
+      isLikedByUser: false,
+    );
+
+    final updatedList = List<Definition>.from(state.value!);
+    updatedList[index] = updatedDefinition;
+
+    return updatedList;
   }
 
   Future<List<String>> _fetchHomeFollowingUserIdList(
@@ -91,34 +165,44 @@ class DefinitionListNotifier extends _$DefinitionListNotifier {
   ) async {
     final definitionList = <Definition>[];
     for (final definitionDoc in definitionDocList) {
-      final wordDoc = await ref
-          .read(wordRepositoryProvider)
-          .fetchWord(definitionDoc.wordId);
-
-      final authorDoc = await ref
-          .read(userRepositoryProvider)
-          .fetchUser(definitionDoc.authorId);
-
-      final isLikedByUser = await ref
-          .read(definitionRepositoryProvider)
-          .isLikedByUser(currentUserId, definitionDoc.id);
-
-      definitionList.add(
-        Definition(
-          id: definitionDoc.id,
-          wordId: wordDoc.id,
-          authorId: authorDoc.id,
-          word: wordDoc.word,
-          definition: definitionDoc.content,
-          updatedAt: definitionDoc.updatedAt,
-          authorName: authorDoc.name,
-          authorImageUrl: authorDoc.profileImageUrl,
-          likesCount: definitionDoc.likesCount,
-          isLikedByUser: isLikedByUser,
-        ),
+      final definition = await _fetchDefinitionByDoc(
+        currentUserId,
+        definitionDoc,
       );
+      definitionList.add(definition);
     }
 
     return definitionList;
+  }
+
+  /// DefinitionDocumentからDefinitionを取得する
+  Future<Definition> _fetchDefinitionByDoc(
+    String currentUserId,
+    DefinitionDocument definitionDoc,
+  ) async {
+    final wordDoc =
+        await ref.read(wordRepositoryProvider).fetchWord(definitionDoc.wordId);
+
+    final authorDoc = await ref
+        .read(userRepositoryProvider)
+        .fetchUser(definitionDoc.authorId);
+
+    final isLikedByUser = await ref
+        .read(definitionRepositoryProvider)
+        .isLikedByUser(currentUserId, definitionDoc.id);
+
+    // TODO(me): DefinitionクラスにfromDocuments的な関数作りたい
+    return Definition(
+      id: definitionDoc.id,
+      wordId: wordDoc.id,
+      authorId: authorDoc.id,
+      word: wordDoc.word,
+      definition: definitionDoc.content,
+      updatedAt: definitionDoc.updatedAt,
+      authorName: authorDoc.name,
+      authorImageUrl: authorDoc.profileImageUrl,
+      likesCount: definitionDoc.likesCount,
+      isLikedByUser: isLikedByUser,
+    );
   }
 }
