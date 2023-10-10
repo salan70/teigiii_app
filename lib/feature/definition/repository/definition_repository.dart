@@ -72,8 +72,9 @@ class DefinitionRepository {
       });
 
       // DefinitionコレクションからドキュメントのlikesCountを+1する
-      final definitionDocRef =
-          FirebaseFirestore.instance.collection('Definitions').doc(definitionId);
+      final definitionDocRef = FirebaseFirestore.instance
+          .collection('Definitions')
+          .doc(definitionId);
       transaction.update(definitionDocRef, {
         'likesCount': FieldValue.increment(1),
       });
@@ -97,8 +98,9 @@ class DefinitionRepository {
       transaction.delete(likeSnapshot.reference);
 
       // DefinitionコレクションからドキュメントのlikesCountを-1する
-      final definitionDocRef =
-          FirebaseFirestore.instance.collection('Definitions').doc(definitionId);
+      final definitionDocRef = FirebaseFirestore.instance
+          .collection('Definitions')
+          .doc(definitionId);
       transaction.update(definitionDocRef, {
         'likesCount': FieldValue.increment(-1),
       });
