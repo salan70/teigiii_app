@@ -69,16 +69,18 @@ class DefinitionListNotifier extends _$DefinitionListNotifier {
     await isLoadingOverlayNotifier.startLoading();
 
     late List<Definition> updatedDefinitionList;
-    if (definition.isLikedByUser) {
-      // いいねを解除
-      updatedDefinitionList = await _unlikeDefinition(definition);
-    } else {
-      // いいねを登録
-      updatedDefinitionList = await _likeDefinition(definition);
-    }
+    state = await AsyncValue.guard(() async {
+      if (definition.isLikedByUser) {
+        // いいねを解除
+        updatedDefinitionList = await _unlikeDefinition(definition);
+      } else {
+        // いいねを登録
+        updatedDefinitionList = await _likeDefinition(definition);
+      }
+      // stateへ反映させる値は、クライアント側で設定する（repositoryを使用しない）
+      return updatedDefinitionList;
+    });
 
-    // stateへ反映させる値は、クライアント側で設定する（repositoryを使用しない）
-    state = AsyncValue.data(updatedDefinitionList);
     // stateの整合性を保つため、他のDefinitionFeedTypeを引数とするNotifierを破棄する
     // これをしないと、他のNotifierのstateが更新されない（いいねの数、状態がタップ前のまま）
     _invalidateAnotherDefinitionListNotifier();
