@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'common_widget/loading_dialog.dart';
+import 'util/common_provider.dart';
 import 'util/router/app_router.dart';
 
 // 参考
@@ -11,11 +14,11 @@ class BaseRouterPage extends AutoRouter {
 }
 
 @RoutePage()
-class BasePage extends StatelessWidget {
+class BasePage extends ConsumerWidget {
   const BasePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AutoTabsRouter(
       routes: const [
         HomeRoute(),
@@ -24,28 +27,34 @@ class BasePage extends StatelessWidget {
       ],
       builder: (context, child) {
         final tabsRouter = context.tabsRouter;
-        return Scaffold(
-          body: child,
-          bottomNavigationBar: BottomNavigationBar(
-            selectedFontSize: 12,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                activeIcon: Icon(Icons.home),
-                label: 'ホーム',
+        return Stack(
+          children: [
+            Scaffold(
+              body: child,
+              bottomNavigationBar: BottomNavigationBar(
+                selectedFontSize: 12,
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home_outlined),
+                    activeIcon: Icon(Icons.home),
+                    label: 'ホーム',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.account_circle),
+                    label: 'マイページ',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.search),
+                    label: 'さがす',
+                  ),
+                ],
+                currentIndex: tabsRouter.activeIndex,
+                onTap: tabsRouter.setActiveIndex,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle),
-                label: 'マイページ',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search),
-                label: 'さがす',
-              ),
-            ],
-            currentIndex: tabsRouter.activeIndex,
-            onTap: tabsRouter.setActiveIndex,
-          ),
+            ),
+            if (ref.watch(isLoadingOverlayNotifierProvider))
+              const OverlayLoadingWidget(),
+          ],
         );
       },
     );

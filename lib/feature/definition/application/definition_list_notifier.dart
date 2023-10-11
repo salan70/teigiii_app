@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../util/common_provider.dart';
 import '../../user/repository/user_repository.dart';
 import '../../word/repository/word_repository.dart';
 import '../domain/definition.dart';
@@ -58,22 +59,25 @@ class DefinitionListNotifier extends _$DefinitionListNotifier {
 
   /// いいねをタップした際の処理
   Future<void> tapLike(Definition definition) async {
-    // いいねタップ時にローディングが出るのは煩わしく感じたため、
-    // stateにAsyncLoadingを入れていない
-    state = await AsyncValue.guard(
-      () async {
-        if (definition.isLikedByUser) {
-          // いいねを解除
-          final updatedDefinitions = await _unlikeDefinition(definition);
-          // stateへ反映させる値は、クライアント側で設定する（repositoryを使用しない）
-          return updatedDefinitions;
-        }
-        // いいねを登録
-        final updatedDefinitions = await _likeDefinition(definition);
-        // stateへ反映させる値は、クライアント側で設定する（repositoryを使用しない）
-        return updatedDefinitions;
-      },
-    );
+    // 二度押しの防止とUX向上のため、オーバーレイローディングを表示させる
+    // そのため、stateをAsyncLoadingにしない
+    final isLoadingOverlayNotifier =
+        ref.read(isLoadingOverlayNotifierProvider.notifier);
+    await isLoadingOverlayNotifier.startLoading();
+
+    late List<Definition> updatedDefinitionList;
+    if (definition.isLikedByUser) {
+      // いいねを解除
+      updatedDefinitionList = await _unlikeDefinition(definition);
+    } else {
+      // いいねを登録
+      updatedDefinitionList = await _likeDefinition(definition);
+    }
+
+    await isLoadingOverlayNotifier.finishLoading();
+
+    // stateへ反映させる値は、クライアント側で設定する（repositoryを使用しない）
+    state = AsyncValue.data(updatedDefinitionList);
   }
 
   /// いいねを登録する

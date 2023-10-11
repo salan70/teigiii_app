@@ -119,6 +119,16 @@ class DefinitionTile extends ConsumerWidget {
                                 )
                                 .tapLike(definition);
 
+                            // エラーハンドリングについて、
+                            // エラー発生時にdefinition.isLikedByUserをそのまま返し
+                            // エラー発生しなかったら、definition.isLikedByUserの反転を返すようにしたい
+
+                            // 現状、エラーがAsyncValueの中に入るようになっている
+                            // そのため、.whenのところで、errorに分岐される
+
+                            // 別のProviderでローディング/エラー状態を保持するれば実装できそう
+                            // ただ、複雑になりそう
+
                             return !definition.isLikedByUser;
                           },
                         ),
