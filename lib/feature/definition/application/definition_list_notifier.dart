@@ -10,6 +10,9 @@ import '../util/definition_feed_type.dart';
 
 part 'definition_list_notifier.g.dart';
 
+// TODO(me): このクラスは巨大になることが予想されるため分割したい
+// このクラスではstateを更新する処理だけを行うようにして、
+// 他の処理をServiceクラスなどに切り出すといいかも
 @Riverpod(keepAlive: true)
 class DefinitionListNotifier extends _$DefinitionListNotifier {
   @override
@@ -59,8 +62,8 @@ class DefinitionListNotifier extends _$DefinitionListNotifier {
 
   /// いいねをタップした際の処理
   Future<void> tapLike(Definition definition) async {
-    // 二度押しの防止とUX向上のため、オーバーレイローディングを表示させる
-    // そのため、stateをAsyncLoadingにしない
+    // 二度押し防止とUX向上のため、オーバーレイローディングを表示させる
+    // そのため、state = AsyncLoadingをしない
     final isLoadingOverlayNotifier =
         ref.read(isLoadingOverlayNotifierProvider.notifier);
     await isLoadingOverlayNotifier.startLoading();
@@ -74,10 +77,13 @@ class DefinitionListNotifier extends _$DefinitionListNotifier {
       updatedDefinitionList = await _likeDefinition(definition);
     }
 
-    await isLoadingOverlayNotifier.finishLoading();
-
     // stateへ反映させる値は、クライアント側で設定する（repositoryを使用しない）
     state = AsyncValue.data(updatedDefinitionList);
+    // stateの整合性を保つため、他のDefinitionFeedTypeを引数とするNotifierを破棄する
+    // これをしないと、他のNotifierのstateが更新されない（いいねの数、状態がタップ前のまま）
+    _invalidateAnotherDefinitionListNotifier();
+
+    await isLoadingOverlayNotifier.finishLoading();
   }
 
   /// いいねを登録する
@@ -208,5 +214,14 @@ class DefinitionListNotifier extends _$DefinitionListNotifier {
       likesCount: definitionDoc.likesCount,
       isLikedByUser: isLikedByUser,
     );
+  }
+
+  /// 他のDefinitionFeedTypeを引数とするNotifierを破棄する
+  void _invalidateAnotherDefinitionListNotifier() {
+    for (final definitionFeedType in DefinitionFeedType.values) {
+      if (definitionFeedType != this.definitionFeedType) {
+        ref.invalidate(definitionListNotifierProvider(definitionFeedType));
+      }
+    }
   }
 }
