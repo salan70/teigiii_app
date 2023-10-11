@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: <Widget>[
             DefinitionList(
               definitionFeedType: DefinitionFeedType.homeRecommend,

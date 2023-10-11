@@ -22,10 +22,6 @@ class DefinitionTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final definitionListNotifier = ref.watch(
-      definitionListNotifierProvider(definitionFeedType).notifier,
-    );
-
     return Column(
       children: [
         Padding(
@@ -115,7 +111,14 @@ class DefinitionTile extends ConsumerWidget {
                             );
                           },
                           onTap: (_) async {
-                            await definitionListNotifier.tapLike(definition);
+                            await ref
+                                .read(
+                                  definitionListNotifierProvider(
+                                    definitionFeedType,
+                                  ).notifier,
+                                )
+                                .tapLike(definition);
+
                             return !definition.isLikedByUser;
                           },
                         ),
