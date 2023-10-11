@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../application/definition_list_notifier.dart';
 import '../../util/definition_feed_type.dart';
 import 'definition_tile.dart';
+import 'definition_tile_shimmer.dart';
 
 class DefinitionList extends ConsumerWidget {
   DefinitionList({
@@ -58,8 +59,11 @@ class DefinitionList extends ConsumerWidget {
         );
       },
       loading: () {
-        // TODO(me): スケルトンを表示させる
-        return const Center(child: CircularProgressIndicator());
+        return ListView(
+          children: [
+            for (var i = 0; i < 4; i++) const DefinitionTileShimmer(),
+          ],
+        );
       },
     );
   }

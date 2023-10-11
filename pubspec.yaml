@@ -20,6 +20,7 @@ dependencies:
   like_button: ^2.0.5
   mockito: ^5.4.2
   riverpod_annotation: ^2.2.0
+  shimmer: ^3.0.0
 
   # Firebase関連
   firebase_core: ^2.16.0
