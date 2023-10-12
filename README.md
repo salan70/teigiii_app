@@ -48,6 +48,11 @@ CIは、Pull Request作成時とPush時に、静的解析とテストの実行�
 
 # 開発方針
 
+## アーキテクチャ
+
+[アーキテクチャについて](/doc/architecture.md)
+に記載しています。
+
 ## GitHub関連
 
 - Issueベースで開発する
