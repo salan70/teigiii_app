@@ -1,23 +1,38 @@
+import 'package:teigi_app/feature/definition/domain/definition.dart';
 import 'package:teigi_app/feature/definition/repository/entity/definition_document.dart';
 import 'package:teigi_app/feature/user/repository/entity/user_document.dart';
 import 'package:teigi_app/feature/word/repository/entity/word_document.dart';
 
 final nowDateTime = DateTime.now();
 
-final mockDefinitionDocumentList = [
-  DefinitionDocument(
-    id: 'definitionId',
-    wordId: mockWordDocument.id,
-    authorId: mockUserDocument.id,
-    content: 'content',
-    likesCount: 0,
-    isPublic: true,
-    createdAt: nowDateTime,
-    updatedAt: nowDateTime,
-  ),
-];
+/// テスト用のモックデータ
+/// 
+/// 他のモックデータとの整合性は取ってない
+final mockDefinition = Definition(
+  id: 'definitionId',
+  wordId: 'wordId',
+  authorId: 'authorId',
+  word: 'word',
+  definition: 'definition',
+  updatedAt: nowDateTime,
+  authorName: 'authorName',
+  authorImageUrl: 'authorImageUrl',
+  likesCount: 0,
+  isLikedByUser: false,
+);
 
-final mockUserDocument = UserDocument(
+final mockDefinitionDoc = DefinitionDocument(
+  id: 'definitionId',
+  wordId: mockWordDoc.id,
+  authorId: mockUserDoc.id,
+  content: 'content',
+  likesCount: 0,
+  isPublic: true,
+  createdAt: nowDateTime,
+  updatedAt: nowDateTime,
+);
+
+final mockUserDoc = UserDocument(
   id: 'userId',
   name: 'name',
   email: 'email',
@@ -27,7 +42,7 @@ final mockUserDocument = UserDocument(
   updatedAt: nowDateTime,
 );
 
-final mockWordDocument = WordDocument(
+final mockWordDoc = WordDocument(
   id: 'wordId',
   word: 'word',
   reading: 'reading',

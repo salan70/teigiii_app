@@ -2,7 +2,8 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../application/definition_list_notifier.dart';
+import '../../application/definition_service.dart';
+import '../../application/definition_state.dart';
 import '../../util/definition_feed_type.dart';
 import 'definition_tile.dart';
 import 'definition_tile_shimmer.dart';
@@ -20,32 +21,25 @@ class DefinitionList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final definitionList = ref.watch(
-      definitionListNotifierProvider(definitionFeedType),
-    );
+    final asyncDefinitionIdList =
+        ref.watch(definitionIdListProvider(definitionFeedType));
 
-    return definitionList.when(
+    return asyncDefinitionIdList.when(
       data: (data) {
         return EasyRefresh(
           controller: refreshController,
           header: const CupertinoHeader(),
           onRefresh: () async {
-            // providerを再生成
-            ref.invalidate(definitionListNotifierProvider(definitionFeedType));
-            // 処理が完了するまで待つ
-            await ref.read(
-              definitionListNotifierProvider(definitionFeedType).future,
-            );
+            await ref
+                .read(definitionServiceProvider.notifier)
+                .refreshAll(definitionFeedType);
 
             refreshController.finishRefresh();
           },
           child: ListView.builder(
             itemCount: data.length,
             itemBuilder: (context, index) {
-              return DefinitionTile(
-                definition: data[index],
-                definitionFeedType: definitionFeedType,
-              );
+              return DefinitionTile(definitionId: data[index]);
             },
           ),
         );

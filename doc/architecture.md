@@ -13,12 +13,7 @@
   - util
 
 参考  
-[【Flutter】アプリ全体のアーキテクチャを0から考えて作り直した話](https://zenn.dev/chooyan/articles/eefc76dbd2ba25)
-
-[【Flutter】アプリを分割する3つのレイヤーと依存関係](https://zenn.dev/chooyan/articles/17dde307509248)
-
-[Flutter App Architecture with Riverpod: An Introduction](https://codewithandrea.com/articles/flutter-app-architecture-riverpod-introduction/)
-
+[Flutter App Architecture with Riverpod: An Introduction](https://codewithandrea.com/articles/flutter-app-architecture-riverpod-introduction/)  
 [Flutter Project Structure: Feature-first or Layer-first?](https://codewithandrea.com/articles/flutter-project-structure/)
 
 
@@ -160,15 +155,13 @@ repository --> firebase
 #### クラス名
 
 - Service系: 〇〇Service
-- クラスベースのProvider: 〇〇Notifier
+  - ControllerやUseCaseなど、他に適切が表現がありそう
 - 関数ベースのProvider: 〇〇
-  - クラスではないが、便宜上個々に記載
+  - クラスではないが、便宜上ここに記載
 
 #### ファイル名
 
 Service系はクラス名に対応させる。  
-クラスベースのProviderは、語尾をstateにする。
-例: ScoreNotifier -> score_state.dart  
 
 関数ベースのProviderは、「〇〇_provider(s).dart」というファイルに、いい感じにまとめる。
 

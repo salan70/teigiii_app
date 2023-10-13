@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../util/firebase_provider.dart';
-import '../util/definition_feed_type.dart';
 import 'entity/definition_document.dart';
 
 part 'definition_repository.g.dart';
@@ -18,8 +17,8 @@ class DefinitionRepository {
 
   final FirebaseFirestore firestore;
 
-  Future<List<DefinitionDocument>> fetchHomeRecommendDefinitionList(
-    DefinitionFeedType feedType,
+  /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する
+  Future<List<String>> fetchHomeRecommendDefinitionIdList(
     List<String> mutedUserIdList,
   ) async {
     final snapshot = await firestore
@@ -30,21 +29,21 @@ class DefinitionRepository {
         .orderBy('updatedAt', descending: true)
         .get();
 
-    return snapshot.docs.map(DefinitionDocument.fromFirestore).toList();
+    return snapshot.docs.map((doc) => doc.id).toList();
   }
 
-  Future<List<DefinitionDocument>> fetchHomeFollowingDefinitionList(
-    DefinitionFeedType feedType,
-    List<String> userIdList,
+  /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する
+  Future<List<String>> fetchHomeFollowingDefinitionList(
+    List<String> targetUserIdList,
   ) async {
     final snapshot = await firestore
         .collection('Definitions')
-        .where('authorId', whereIn: userIdList)
+        .where('authorId', whereIn: targetUserIdList)
         .where('isPublic', isEqualTo: true)
         .orderBy('updatedAt', descending: true)
         .get();
 
-    return snapshot.docs.map(DefinitionDocument.fromFirestore).toList();
+    return snapshot.docs.map((doc) => doc.id).toList();
   }
 
   Future<DefinitionDocument> fetchDefinition(String definitionId) async {

@@ -3,19 +3,18 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'common_provider.g.dart';
 
 /// オーバーレイローディングをUIに表示させるかどうかを管理する
-@riverpod
-class IsLoadingOverlayNotifier
-    extends _$IsLoadingOverlayNotifier {
+@Riverpod(keepAlive: true)
+class IsLoadingOverlayNotifier extends _$IsLoadingOverlayNotifier {
   @override
   bool build() {
     return false;
   }
 
-  Future<void> startLoading() async {
+  void startLoading() {
     state = true;
   }
 
-  Future<void> finishLoading() async {
+  void finishLoading() {
     state = false;
   }
 }
