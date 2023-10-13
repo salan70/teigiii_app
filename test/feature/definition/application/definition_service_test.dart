@@ -151,6 +151,32 @@ void main() {
       verifyNoMoreInteractions(listener);
     });
 
+    // TODO(me): 以下テストを動作させる
+    // 現状は、NotifierのMock作成がうまく行かないため、テスト時にエラーが発生する
+    // test('ローディング', () {
+    //   // * Arrange
+    //   // Mock
+    //   final mockIsLoadingOverlayNotifier = MockIsLoadingOverlayNotifier();
+
+    //   final definitionService = init();
+    //   container = ProviderContainer(
+    //     overrides: [
+    //       isLoadingOverlayNotifierProvider
+    //           .overrideWith(() => mockIsLoadingOverlayNotifier),
+    //     ],
+    //   );
+    //   final isLoadingOverlayNotifier =
+    //       container.read(isLoadingOverlayNotifierProvider.notifier);
+
+    //   // * Act
+    //   definitionService.tapLike(mockDefinition);
+
+    //   // * Assert
+    //   // 想定通りにisLoadingOverlayNotifierの関数が呼ばれているか検証
+    //   verify(isLoadingOverlayNotifier.startLoading()).called(1);
+    //   verify(isLoadingOverlayNotifier.finishLoading()).called(1);
+    // });
+
     // TODO(me): definitionProviderが再生成されているか検証するテスト書く
     // providerがinvalidateされたことを検証する方法がわからないため一旦保留
     //
