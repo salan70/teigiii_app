@@ -3,5 +3,5 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'firebase_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 FirebaseFirestore firestore(FirestoreRef ref) => FirebaseFirestore.instance;

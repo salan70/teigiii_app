@@ -31,7 +31,6 @@
 ### feature/presentation
 
 - UIに関するファイルを格納する
-- 画面遷移やダイアログ、スナックバー等の表示も行う
 
 ### feature/application
 

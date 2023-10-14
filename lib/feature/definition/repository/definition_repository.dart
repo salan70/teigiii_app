@@ -91,7 +91,7 @@ class DefinitionRepository {
           .then((snapshot) => snapshot.docs.firstOrNull);
 
       if (likeSnapshot == null) {
-        throw Exception('対象のいいねが見つかりませんでした。');
+        throw Exception('いいね解除が失敗しました。');
       }
 
       transaction.delete(likeSnapshot.reference);

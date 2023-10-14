@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../util/common_provider.dart';
+import '../../../util/snack_bar.dart';
 import '../domain/definition.dart';
 import '../repository/definition_repository.dart';
 import '../util/definition_feed_type.dart';
@@ -20,13 +22,21 @@ class DefinitionService extends _$DefinitionService {
     final isLoadingOverlayNotifier =
         ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
 
-    state = await AsyncValue.guard(() async {
+    try {
       await _updateLikeStatus(definition);
-    });
+    } on Exception catch (e) {
+      debugPrint('error: $e');
+      ref
+          .read(snackBarControllerProvider.notifier)
+          .showSnackBar('失敗しました。もう一度お試しください。');
+
+      isLoadingOverlayNotifier.finishLoading();
+      // 例外が発生したことをpresentationに伝えるため、rethrowする
+      rethrow;
+    }
 
     // いいね登録/解除したDefinitionを保持するProviderを再生成
     ref.invalidate(definitionProvider(definition.id));
-
     isLoadingOverlayNotifier.finishLoading();
   }
 

@@ -114,17 +114,15 @@ class DefinitionTile extends ConsumerWidget {
                                 );
                               },
                               onTap: (_) async {
-                                final definitionService = ref
-                                    .read(definitionServiceProvider.notifier);
-
                                 try {
-                                  await definitionService.tapLike(definition);
-                                } on Exception catch (e, s) {
-                                  debugPrint('error: $e');
-                                  debugPrint('stack trace: $s');
-
+                                  await ref
+                                      .read(definitionServiceProvider.notifier)
+                                      .tapLike(definition);
+                                } on Exception catch (_) {
+                                  // 例外発生時は、もともとのisLikedByUserの値を返す
                                   return definition.isLikedByUser;
                                 }
+
                                 return !definition.isLikedByUser;
                               },
                             ),
