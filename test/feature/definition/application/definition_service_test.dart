@@ -68,11 +68,7 @@ void main() {
       verifyInOrder([
         // build()時
         listener.call(null, const AsyncData(null)),
-        // tapLike()時
-        listener.call(
-          const AsyncData(null),
-          const AsyncData(null),
-        ),
+        // tapLike()時もstateは変わらない
       ]);
       // 他にlistenerが発火されないことを検証
       verifyNoMoreInteractions(listener);
@@ -100,11 +96,7 @@ void main() {
       verifyInOrder([
         // build()時
         listener.call(null, const AsyncData(null)),
-        // tapLike()後
-        listener.call(
-          const AsyncData(null),
-          const AsyncData(null),
-        ),
+        // tapLike()後もstateは変わらない
       ]);
       // 他にlistenerが発火されないことを検証
       verifyNoMoreInteractions(listener);
@@ -118,41 +110,12 @@ void main() {
       verifyNever(mockDefinitionRepository.likeDefinition(any, any));
     });
 
-    test('エラー発生時の検証', () async {
-      // * Arrange
-      final definitionService = init();
-      final testException = Exception('likeDefinitionでエラー発生');
-      when(
-        mockDefinitionRepository.likeDefinition(any, any),
-      ).thenThrow(testException);
-
-      // * Act
-      await definitionService.tapLike(mockDefinition);
-
-      // * Assert
-      // stateの検証
-      verifyInOrder([
-        // build()時
-        listener.call(null, const AsyncData(null)),
-        // tapLike()後
-        listener.call(
-          const AsyncData(null),
-          // エラーがスローされた際、stateにAsyncErrorが入ることを検証
-          argThat(
-            isA<AsyncValue<void>>().having(
-              (data) => data.error,
-              'error',
-              testException,
-            ),
-          ),
-        ),
-      ]);
-      // 他にlistenerが発火されないことを検証
-      verifyNoMoreInteractions(listener);
-    });
+    // TODO(me): エラー発生時のテストを書く
+    // Notifier(SnackBarController)のMock作成がうまく行かないため、テスト時にエラーが発生すると思われる
+    // test('エラー発生時の検証', () async {});
 
     // TODO(me): 以下テストを動作させる
-    // 現状は、NotifierのMock作成がうまく行かないため、テスト時にエラーが発生する
+    // 現状は、Notifier(IsLoadingOverlay)のMock作成がうまく行かないため、テスト時にエラーが発生する
     // test('ローディング', () {
     //   // * Arrange
     //   // Mock
