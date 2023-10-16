@@ -1,10 +1,14 @@
+// ignore_for_file: inference_failure_on_collection_literal
+// 上記について、本ファイルはテストデータを挿入するためのもので、実際のアプリの挙動には
+// 影響しないため、ignoreを設定
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<void> addUsersToFirestore(String flavorName) async {
-  if (flavorName == 'prod'){
+  if (flavorName == 'prod') {
     return;
   }
-  
+
   final firestore = FirebaseFirestore.instance;
 
   // 上で定義したusersマップを用いてデータをFirestoreに追加
