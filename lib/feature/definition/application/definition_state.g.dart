@@ -6,7 +6,7 @@ part of 'definition_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$definitionHash() => r'1d0dccf94285064ea083fe181f5447983f0b61ad';
+String _$definitionHash() => r'0451d407a1965ee9b93c15633cd1421fa86ea242';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -72,7 +72,7 @@ class DefinitionFamily extends Family<AsyncValue<Definition>> {
 }
 
 /// See also [definition].
-class DefinitionProvider extends AutoDisposeFutureProvider<Definition> {
+class DefinitionProvider extends FutureProvider<Definition> {
   /// See also [definition].
   DefinitionProvider(
     String definitionId,
@@ -124,7 +124,7 @@ class DefinitionProvider extends AutoDisposeFutureProvider<Definition> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<Definition> createElement() {
+  FutureProviderElement<Definition> createElement() {
     return _DefinitionProviderElement(this);
   }
 
@@ -142,20 +142,20 @@ class DefinitionProvider extends AutoDisposeFutureProvider<Definition> {
   }
 }
 
-mixin DefinitionRef on AutoDisposeFutureProviderRef<Definition> {
+mixin DefinitionRef on FutureProviderRef<Definition> {
   /// The parameter `definitionId` of this provider.
   String get definitionId;
 }
 
-class _DefinitionProviderElement
-    extends AutoDisposeFutureProviderElement<Definition> with DefinitionRef {
+class _DefinitionProviderElement extends FutureProviderElement<Definition>
+    with DefinitionRef {
   _DefinitionProviderElement(super.provider);
 
   @override
   String get definitionId => (origin as DefinitionProvider).definitionId;
 }
 
-String _$definitionIdListHash() => r'c7c290dda533ef8427c9606d9501017ffed37cc7';
+String _$definitionIdListHash() => r'237f5af4fe5a4d30becd75e428ee9ac2c6e2978d';
 
 /// See also [definitionIdList].
 @ProviderFor(definitionIdList)
@@ -200,7 +200,7 @@ class DefinitionIdListFamily extends Family<AsyncValue<List<String>>> {
 }
 
 /// See also [definitionIdList].
-class DefinitionIdListProvider extends AutoDisposeFutureProvider<List<String>> {
+class DefinitionIdListProvider extends FutureProvider<List<String>> {
   /// See also [definitionIdList].
   DefinitionIdListProvider(
     DefinitionFeedType definitionFeedType,
@@ -252,7 +252,7 @@ class DefinitionIdListProvider extends AutoDisposeFutureProvider<List<String>> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<List<String>> createElement() {
+  FutureProviderElement<List<String>> createElement() {
     return _DefinitionIdListProviderElement(this);
   }
 
@@ -271,14 +271,13 @@ class DefinitionIdListProvider extends AutoDisposeFutureProvider<List<String>> {
   }
 }
 
-mixin DefinitionIdListRef on AutoDisposeFutureProviderRef<List<String>> {
+mixin DefinitionIdListRef on FutureProviderRef<List<String>> {
   /// The parameter `definitionFeedType` of this provider.
   DefinitionFeedType get definitionFeedType;
 }
 
 class _DefinitionIdListProviderElement
-    extends AutoDisposeFutureProviderElement<List<String>>
-    with DefinitionIdListRef {
+    extends FutureProviderElement<List<String>> with DefinitionIdListRef {
   _DefinitionIdListProviderElement(super.provider);
 
   @override
@@ -287,12 +286,12 @@ class _DefinitionIdListProviderElement
 }
 
 String _$homeRecommendDefinitionIdListHash() =>
-    r'3da0bde034a288db90819c023a08ee325be08c32';
+    r'd7301310084fd9c3c21dacc33fa2e6d781dce7eb';
 
 /// See also [_homeRecommendDefinitionIdList].
 @ProviderFor(_homeRecommendDefinitionIdList)
 final _homeRecommendDefinitionIdListProvider =
-    AutoDisposeFutureProvider<List<String>>.internal(
+    FutureProvider<List<String>>.internal(
   _homeRecommendDefinitionIdList,
   name: r'_homeRecommendDefinitionIdListProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -302,15 +301,14 @@ final _homeRecommendDefinitionIdListProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _HomeRecommendDefinitionIdListRef
-    = AutoDisposeFutureProviderRef<List<String>>;
+typedef _HomeRecommendDefinitionIdListRef = FutureProviderRef<List<String>>;
 String _$homeFollowingDefinitionIdListHash() =>
-    r'380bbf9ee8427a2905d2de4127e8a430698a7ff6';
+    r'382e7456fd9367d5c3989f2ac8f17efd0bd4f3b5';
 
 /// See also [_homeFollowingDefinitionIdList].
 @ProviderFor(_homeFollowingDefinitionIdList)
 final _homeFollowingDefinitionIdListProvider =
-    AutoDisposeFutureProvider<List<String>>.internal(
+    FutureProvider<List<String>>.internal(
   _homeFollowingDefinitionIdList,
   name: r'_homeFollowingDefinitionIdListProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -320,14 +318,12 @@ final _homeFollowingDefinitionIdListProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _HomeFollowingDefinitionIdListRef
-    = AutoDisposeFutureProviderRef<List<String>>;
-String _$mutedUserIdListHash() => r'98445cc723d89b92449cff8200b0ef59f2ad148c';
+typedef _HomeFollowingDefinitionIdListRef = FutureProviderRef<List<String>>;
+String _$mutedUserIdListHash() => r'b9e63bb00ebf1bf4110ea144e0f5c8f70da7ee5a';
 
 /// See also [_mutedUserIdList].
 @ProviderFor(_mutedUserIdList)
-final _mutedUserIdListProvider =
-    AutoDisposeFutureProvider<List<String>>.internal(
+final _mutedUserIdListProvider = FutureProvider<List<String>>.internal(
   _mutedUserIdList,
   name: r'_mutedUserIdListProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -337,6 +333,6 @@ final _mutedUserIdListProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _MutedUserIdListRef = AutoDisposeFutureProviderRef<List<String>>;
+typedef _MutedUserIdListRef = FutureProviderRef<List<String>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -139,11 +139,9 @@ class DefinitionTile extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        return Center(
-          child: Text(
-            error.toString(),
-          ),
-        );
+        // TODO(me): エラー時に表示させるTileを作成する
+        // 「!」みたいなアイコンと、エラーが発生した旨を表示するのが良さげ
+        return const DefinitionTileShimmer();
       },
       loading: () {
         return const DefinitionTileShimmer();

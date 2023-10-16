@@ -8,7 +8,7 @@ import '../util/definition_feed_type.dart';
 
 part 'definition_state.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<Definition> definition(DefinitionRef ref, String definitionId) async {
   // TODO(me): auth系の実装したらFirebaseからuserIdを取得する
   const userId = 'xE9Je2LljHXIPORKyDnk';
@@ -41,7 +41,7 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<String>> definitionIdList(
   DefinitionIdListRef ref,
   DefinitionFeedType definitionFeedType,
@@ -54,7 +54,7 @@ Future<List<String>> definitionIdList(
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<String>> _homeRecommendDefinitionIdList(
   _HomeRecommendDefinitionIdListRef ref,
 ) async {
@@ -65,7 +65,7 @@ Future<List<String>> _homeRecommendDefinitionIdList(
       .fetchHomeRecommendDefinitionIdList(mutedUserIdList);
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<String>> _homeFollowingDefinitionIdList(
   _HomeFollowingDefinitionIdListRef ref,
 ) async {
@@ -94,7 +94,7 @@ Future<List<String>> _homeFollowingDefinitionIdList(
 
 // auth系の実装したら、userDocを保持するProviderを作ると思われる
 // その場合、このProviderは不要になる
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<String>> _mutedUserIdList(_MutedUserIdListRef ref) async {
   // TODO(me): auth系の実装したらFirebaseからuserIdを取得する
   const userId = 'xE9Je2LljHXIPORKyDnk';

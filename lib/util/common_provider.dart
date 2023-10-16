@@ -18,5 +18,3 @@ class IsLoadingOverlayNotifier extends _$IsLoadingOverlayNotifier {
     state = false;
   }
 }
-
-

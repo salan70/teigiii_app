@@ -6,7 +6,7 @@ import 'entity/definition_document.dart';
 
 part 'definition_repository.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 DefinitionRepository definitionRepository(DefinitionRepositoryRef ref) =>
     DefinitionRepository(
       ref.watch(firestoreProvider),

@@ -6,7 +6,7 @@ import 'entity/user_document.dart';
 
 part 'user_repository.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 UserRepository userRepository(UserRepositoryRef ref) =>
     UserRepository(
       ref.watch(firestoreProvider),
