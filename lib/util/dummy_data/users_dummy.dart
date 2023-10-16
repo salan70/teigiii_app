@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Future<void> addUsersToFirestore() async {
+Future<void> addUsersToFirestore(String flavorName) async {
+  if (flavorName == 'prod'){
+    return;
+  }
+  
   final firestore = FirebaseFirestore.instance;
 
   // 上で定義したusersマップを用いてデータをFirestoreに追加

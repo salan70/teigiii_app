@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Future<void> addDefinitionsToFirestore() async {
+Future<void> addDefinitionsToFirestore(String flavorName) async {
+  if (flavorName == 'prod') {
+    return;
+  }
+
   final firestore = FirebaseFirestore.instance;
 
   // 上で定義したdefinitionsマップを用いてデータをFirestoreに追加

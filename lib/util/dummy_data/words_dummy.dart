@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Future<void> addWordsToFirestore() async {
+Future<void> addWordsToFirestore(String flavorName) async {
+  if (flavorName == 'prod') {
+    return;
+  }
+
   for (final wordId in words.keys) {
     await FirebaseFirestore.instance
         .collection('Words')
