@@ -67,11 +67,11 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i2.FirebaseFirestore);
 
   @override
-  _i5.Future<List<String>> fetchHomeRecommendDefinitionIdList(
+  _i5.Future<List<String>> fetchHomeRecommendDefinitionIdListFirst(
           List<String>? mutedUserIdList) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchHomeRecommendDefinitionIdList,
+          #fetchHomeRecommendDefinitionIdListFirst,
           [mutedUserIdList],
         ),
         returnValue: _i5.Future<List<String>>.value(<String>[]),
@@ -79,11 +79,28 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i5.Future<List<String>>);
 
   @override
-  _i5.Future<List<String>> fetchHomeFollowingDefinitionList(
+  _i5.Future<List<String>> fetchHomeRecommendDefinitionIdListNext(
+    List<String>? mutedUserIdList,
+    DateTime? startAt,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchHomeRecommendDefinitionIdListNext,
+          [
+            mutedUserIdList,
+            startAt,
+          ],
+        ),
+        returnValue: _i5.Future<List<String>>.value(<String>[]),
+        returnValueForMissingStub: _i5.Future<List<String>>.value(<String>[]),
+      ) as _i5.Future<List<String>>);
+
+  @override
+  _i5.Future<List<String>> fetchHomeFollowingDefinitionIdListFirst(
           List<String>? targetUserIdList) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchHomeFollowingDefinitionList,
+          #fetchHomeFollowingDefinitionIdListFirst,
           [targetUserIdList],
         ),
         returnValue: _i5.Future<List<String>>.value(<String>[]),

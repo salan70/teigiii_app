@@ -6,6 +6,7 @@ import '../../../util/snack_bar.dart';
 import '../domain/definition.dart';
 import '../repository/definition_repository.dart';
 import '../util/definition_feed_type.dart';
+import 'definition_list_state.dart';
 import 'definition_state.dart';
 
 part 'definition_service.g.dart';
@@ -44,8 +45,8 @@ class DefinitionService extends _$DefinitionService {
   Future<void> refreshAll(DefinitionFeedType definitionFeedType) async {
     await _invalidateAllDefinitionFamilies();
 
-    ref.invalidate(definitionIdListProvider(definitionFeedType));
-    await ref.read(definitionIdListProvider(definitionFeedType).future);
+    ref.invalidate(definitionListNotifierProvider(definitionFeedType));
+    await ref.read(definitionListNotifierProvider(definitionFeedType).future);
   }
 
   /// 全てのdefinitionProviderを再生成する
@@ -58,7 +59,7 @@ class DefinitionService extends _$DefinitionService {
   Future<void> _invalidateAllDefinitionFamilies() async {
     for (final feedType in DefinitionFeedType.values) {
       final definitionIdList =
-          await ref.read(definitionIdListProvider(feedType).future);
+          await ref.read(definitionListNotifierProvider(feedType).future);
 
       for (final definitionId in definitionIdList) {
         ref.invalidate(definitionProvider(definitionId));

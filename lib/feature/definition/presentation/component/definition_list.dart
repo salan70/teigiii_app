@@ -2,8 +2,8 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../application/definition_list_state.dart';
 import '../../application/definition_service.dart';
-import '../../application/definition_state.dart';
 import '../../util/definition_feed_type.dart';
 import 'definition_tile.dart';
 import 'definition_tile_shimmer.dart';
@@ -22,7 +22,7 @@ class DefinitionList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncDefinitionIdList =
-        ref.watch(definitionIdListProvider(definitionFeedType));
+        ref.watch(definitionListNotifierProvider(definitionFeedType));
 
     return asyncDefinitionIdList.when(
       data: (data) {
