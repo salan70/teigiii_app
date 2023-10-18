@@ -54,6 +54,7 @@ final mockWordDoc = WordDocument(
   updatedAt: nowDateTime,
 );
 
+// ignore: subtype_of_sealed_class
 class MockQueryDocumentSnapshot extends Mock implements QueryDocumentSnapshot {}
 
 final mockQueryDocumentSnapshot = MockQueryDocumentSnapshot();

@@ -24,14 +24,15 @@ class UserRepository {
     return UserDocument.fromFirestore(userSnapshot);
   }
 
+  /// 引数で渡したユーザーが、フォローしているユーザーのIDリストを取得
   Future<List<String>> fetchFollowingIdList(String userId) async {
     final QuerySnapshot followingSnapshot = await firestore
         .collection('UserFollows')
-        .where('followerId', isEqualTo: userId)
+        .where('followingId', isEqualTo: userId)
         .get();
 
     return followingSnapshot.docs
-        .map((doc) => doc['followingId'] as String)
+        .map((doc) => doc['followerId'] as String)
         .toList();
   }
 }

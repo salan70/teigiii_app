@@ -31,10 +31,6 @@ Future<void> main() async {
     return true;
   };
 
-  // await addUsersToFirestore(flavorName);
-  // await addWordsToFirestore(flavorName);
-  // await addDefinitionsToFirestore(flavorName);
-
   runApp(
     ProviderScope(
       child: MyApp(),

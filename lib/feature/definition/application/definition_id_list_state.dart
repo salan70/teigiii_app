@@ -62,7 +62,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
 
   /// DefinitionIdのListを追加で取得し、stateを更新する
   Future<void> fetchMore() async {
-    // これ以上取得できるDefinitionIdがない場合は、何もしない
+    // これ以上取得できるDefinitionIdがない場合、何もしない
     if (!state.value!.hasMore) {
       return;
     }
@@ -77,7 +77,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
     // 参考: https://www.zeroichi.biz/blog/1525/
     state = const AsyncLoading<DefinitionIdListState>().copyWithPrevious(state);
 
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
 
     state = await AsyncValue.guard(() async {
       late final DefinitionIdListState nextState;
@@ -87,7 +87,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
           break;
 
         case DefinitionFeedType.homeFollowing:
-          nextState = await _fetchHomeFollowingDefinitionIdListFirst();
+          nextState = await _fetchHomeFollowingDefinitionIdListMore();
           break;
       }
 
@@ -100,6 +100,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
     });
   }
 
+  /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する（2回目以降）
   Future<DefinitionIdListState> _homeRecommendDefinitionIdListMore() async {
     final mutedUserIdList = await _fetchMutedUserIdList();
 
@@ -107,6 +108,36 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
         .watch(definitionRepositoryProvider)
         .fetchHomeRecommendDefinitionIdListMore(
           mutedUserIdList,
+          state.value!.lastReadQueryDocumentSnapshot,
+        );
+  }
+
+  /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する（2回目以降）
+  // TODO(me): _fetchHomeFollowingDefinitionIdListFirstと共通のロジックが多く、リファクタの余地あり
+  Future<DefinitionIdListState>
+      _fetchHomeFollowingDefinitionIdListMore() async {
+    // TODO(me): auth系の実装したらFirebaseからuserIdを取得する
+    const userId = 'xE9Je2LljHXIPORKyDnk';
+
+    final targetUserIdList = <String>[];
+
+    // フォローしているユーザーのIDリストを取得
+    final followingIdList =
+        await ref.watch(userRepositoryProvider).fetchFollowingIdList(userId);
+
+    // フォローしているユーザーと自分のIDを追加
+    targetUserIdList
+      ..addAll(followingIdList)
+      ..add(userId);
+
+    // ミュートしているユーザーのIDを除外
+    final mutedUserIdList = await _fetchMutedUserIdList();
+    targetUserIdList.removeWhere(mutedUserIdList.contains);
+
+    return ref
+        .read(definitionRepositoryProvider)
+        .fetchHomeFollowingDefinitionIdListMore(
+          targetUserIdList,
           state.value!.lastReadQueryDocumentSnapshot,
         );
   }
