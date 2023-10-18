@@ -26,6 +26,8 @@ abstract class Listener<T> {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   final mockDefinitionRepository = MockDefinitionRepository();
   final mockUserRepository = MockUserRepository();
   final listener = MockListener();
@@ -47,7 +49,7 @@ void main() {
     reset(mockDefinitionRepository);
     reset(mockUserRepository);
   });
-  group('definitionIdList', () {
+  group('build()', () {
     test('homeRecommend: stateの更新、repositoryで定義している関数の呼び出しを検証', () async {
       // * Arrange
       // Mockの設定
@@ -179,6 +181,387 @@ void main() {
       verify(
         mockDefinitionRepository.fetchHomeFollowingDefinitionIdListFirst(any),
       ).called(1);
+    });
+  });
+
+  group('fetchMore()', () {
+    test('homeRecommend: stateの更新、repositoryで定義している関数の呼び出しを検証', () async {
+      // * Arrange
+      // Mockの設定
+      when(
+        mockUserRepository.fetchUser(any),
+      ).thenAnswer((_) async => mockUserDoc);
+      final mockDefinitionIdListState = DefinitionIdListState(
+        definitionIdList: [mockDefinitionDoc.id],
+        lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
+        hasMore: true,
+      );
+      when(
+        mockDefinitionRepository.fetchHomeRecommendDefinitionIdListFirst(any),
+      ).thenAnswer(
+        (_) async => mockDefinitionIdListState,
+      );
+      final mockDefinitionIdList = [mockDefinitionDoc.id];
+      when(
+        mockDefinitionRepository.fetchHomeRecommendDefinitionIdListMore(
+          any,
+          any,
+        ),
+      ).thenAnswer(
+        (_) async => DefinitionIdListState(
+          definitionIdList: mockDefinitionIdList,
+          lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
+          hasMore: false,
+        ),
+      );
+
+      container.listen(
+        definitionIdListStateNotifierProvider(DefinitionFeedType.homeRecommend),
+        listener,
+        fireImmediately: true,
+      );
+      addTearDown(() => reset(listener));
+      // build()
+      await container.read(
+        definitionIdListStateNotifierProvider(DefinitionFeedType.homeRecommend)
+            .future,
+      );
+      // build()時にlistenerが発火するため、ここで一旦verify
+      verifyInOrder([
+        listener.call(any, any),
+        listener.call(any, any),
+      ]);
+
+      // * Act
+      await container
+          .read(
+            definitionIdListStateNotifierProvider(
+              DefinitionFeedType.homeRecommend,
+            ).notifier,
+          )
+          .fetchMore();
+
+      // * Assert
+      final expected = DefinitionIdListState(
+        // build()時に取得したdefinitionIdListに、fetchMore()で取得したdefinitionIdLisが追加される
+        definitionIdList: mockDefinitionIdList + mockDefinitionIdList,
+        lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
+        hasMore: false,
+      );
+      // stateの検証
+      verifyInOrder([
+        // ローディング状態であることを検証
+        listener.call(
+          AsyncValue.data(mockDefinitionIdListState),
+          argThat(
+            isA<AsyncData<DefinitionIdListState>>()
+                // loading中であることを検証
+                .having(
+                  (d) => d.isLoading,
+                  'isLoading',
+                  true,
+                )
+                .having((d) => d.value, 'value', mockDefinitionIdListState),
+          ),
+        ),
+        // データがstateに格納されたことを検証
+        listener.call(
+          argThat(
+            isA<AsyncData<DefinitionIdListState>>()
+                .having(
+                  (d) => d.isLoading,
+                  'isLoading',
+                  true,
+                )
+                .having((d) => d.value, 'value', mockDefinitionIdListState),
+          ),
+          AsyncValue.data(expected),
+        ),
+      ]);
+      // 他にlistenerが発火されないことを検証
+      verifyNoMoreInteractions(listener);
+
+      // 想定通りにrepositoryの関数が呼ばれているか検証
+      verify(
+        mockDefinitionRepository.fetchHomeRecommendDefinitionIdListMore(
+          mockUserDoc.mutedUserIdList,
+          any,
+        ),
+      ).called(1);
+    });
+
+    test('homeFollowing: stateの更新、repositoryで定義している関数の呼び出しを検証', () async {
+      // * Arrange
+      // Mockの設定
+      when(
+        mockUserRepository.fetchUser(any),
+      ).thenAnswer((_) async => mockUserDoc);
+      final mockDefinitionIdListState = DefinitionIdListState(
+        definitionIdList: [mockDefinitionDoc.id],
+        lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
+        hasMore: true,
+      );
+      when(
+        mockDefinitionRepository.fetchHomeFollowingDefinitionIdListFirst(any),
+      ).thenAnswer(
+        (_) async => mockDefinitionIdListState,
+      );
+      final mockDefinitionIdList = [mockDefinitionDoc.id];
+      when(
+        mockDefinitionRepository.fetchHomeFollowingDefinitionIdListMore(
+          any,
+          any,
+        ),
+      ).thenAnswer(
+        (_) async => DefinitionIdListState(
+          definitionIdList: mockDefinitionIdList,
+          lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
+          hasMore: false,
+        ),
+      );
+
+      container.listen(
+        definitionIdListStateNotifierProvider(DefinitionFeedType.homeFollowing),
+        listener,
+        fireImmediately: true,
+      );
+      addTearDown(() => reset(listener));
+      // build()
+      await container.read(
+        definitionIdListStateNotifierProvider(DefinitionFeedType.homeFollowing)
+            .future,
+      );
+      // build()時にlistenerが発火するため、ここで一旦verify
+      verifyInOrder([
+        listener.call(any, any),
+        listener.call(any, any),
+      ]);
+
+      // * Act
+      await container
+          .read(
+            definitionIdListStateNotifierProvider(
+              DefinitionFeedType.homeFollowing,
+            ).notifier,
+          )
+          .fetchMore();
+
+      // * Assert
+      final expected = DefinitionIdListState(
+        // build()時に取得したdefinitionIdListに、fetchMore()で取得したdefinitionIdLisが追加される
+        definitionIdList: mockDefinitionIdList + mockDefinitionIdList,
+        lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
+        hasMore: false,
+      );
+      // stateの検証
+      verifyInOrder([
+        // ローディング状態であることを検証
+        listener.call(
+          AsyncValue.data(mockDefinitionIdListState),
+          argThat(
+            isA<AsyncData<DefinitionIdListState>>()
+                // loading中であることを検証
+                .having(
+                  (d) => d.isLoading,
+                  'isLoading',
+                  true,
+                )
+                .having((d) => d.value, 'value', mockDefinitionIdListState),
+          ),
+        ),
+        // データがstateに格納されたことを検証
+        listener.call(
+          argThat(
+            isA<AsyncData<DefinitionIdListState>>()
+                .having(
+                  (d) => d.isLoading,
+                  'isLoading',
+                  true,
+                )
+                .having((d) => d.value, 'value', mockDefinitionIdListState),
+          ),
+          AsyncValue.data(expected),
+        ),
+      ]);
+      // 他にlistenerが発火されないことを検証
+      verifyNoMoreInteractions(listener);
+
+      // 想定通りにrepositoryの関数が呼ばれているか検証
+      verify(
+        mockDefinitionRepository.fetchHomeFollowingDefinitionIdListMore(
+          any,
+          any,
+        ),
+      ).called(1);
+    });
+
+    test('hasMoreがfalse', () async {
+      // * Arrange
+      // Mockの設定
+      when(
+        mockUserRepository.fetchUser(any),
+      ).thenAnswer((_) async => mockUserDoc);
+      final mockDefinitionIdListState = DefinitionIdListState(
+        definitionIdList: [mockDefinitionDoc.id],
+        lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
+        hasMore: false,
+      );
+      when(
+        mockDefinitionRepository.fetchHomeRecommendDefinitionIdListFirst(any),
+      ).thenAnswer(
+        (_) async => mockDefinitionIdListState,
+      );
+
+      container.listen(
+        definitionIdListStateNotifierProvider(
+          DefinitionFeedType.homeRecommend,
+        ),
+        listener,
+        fireImmediately: true,
+      );
+      addTearDown(() => reset(listener));
+      // build()
+      await container.read(
+        definitionIdListStateNotifierProvider(
+          DefinitionFeedType.homeRecommend,
+        ).future,
+      );
+      // build()時にlistenerが発火するため、ここで一旦verify
+      verifyInOrder([
+        listener.call(any, any),
+        listener.call(any, any),
+      ]);
+
+      // * Act
+      await container
+          .read(
+            definitionIdListStateNotifierProvider(
+              DefinitionFeedType.homeRecommend,
+            ).notifier,
+          )
+          .fetchMore();
+
+      // * Assert
+      // stateの検証
+      // build()以降、listenerが発火されないことを検証
+      verifyNoMoreInteractions(listener);
+
+      // 想定通り、repositoryの関数が呼ばれていないか検証
+      verifyNever(
+        mockDefinitionRepository.fetchHomeRecommendDefinitionIdListMore(
+          any,
+          any,
+        ),
+      );
+      verifyNever(
+        mockDefinitionRepository.fetchHomeFollowingDefinitionIdListMore(
+          any,
+          any,
+        ),
+      );
+    });
+
+    // TODO(me): 「ローディング中の場合、何もしない」ことを検証するテスト書く
+
+    test('例外発生', () async {
+      // * Arrange
+      // Mockの設定
+      when(
+        mockUserRepository.fetchUser(any),
+      ).thenAnswer((_) async => mockUserDoc);
+      final mockDefinitionIdListState = DefinitionIdListState(
+        definitionIdList: [mockDefinitionDoc.id],
+        lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
+        hasMore: true,
+      );
+      when(
+        mockDefinitionRepository.fetchHomeRecommendDefinitionIdListFirst(any),
+      ).thenAnswer(
+        (_) async => mockDefinitionIdListState,
+      );
+      final testException =
+          Exception('fetchHomeRecommendDefinitionIdListMore()で例外発生！！！');
+      when(
+        mockDefinitionRepository.fetchHomeRecommendDefinitionIdListMore(
+          any,
+          any,
+        ),
+      ).thenThrow(testException);
+
+      container.listen(
+        definitionIdListStateNotifierProvider(
+          DefinitionFeedType.homeRecommend,
+        ),
+        listener,
+        fireImmediately: true,
+      );
+      addTearDown(() => reset(listener));
+      // build()
+      await container.read(
+        definitionIdListStateNotifierProvider(
+          DefinitionFeedType.homeRecommend,
+        ).future,
+      );
+      // build()時にlistenerが発火するため、ここで一旦verify
+      verifyInOrder([
+        listener.call(any, any),
+        listener.call(any, any),
+      ]);
+
+      // * Act
+      await container
+          .read(
+            definitionIdListStateNotifierProvider(
+              DefinitionFeedType.homeRecommend,
+            ).notifier,
+          )
+          .fetchMore();
+
+      // * Assert
+      // stateの検証
+      verifyInOrder([
+        // ローディング状態であることを検証
+        listener.call(
+          AsyncValue.data(mockDefinitionIdListState),
+          argThat(
+            isA<AsyncData<DefinitionIdListState>>()
+                // loading中であることを検証
+                .having(
+                  (d) => d.isLoading,
+                  'isLoading',
+                  true,
+                )
+                .having((d) => d.value, 'value', mockDefinitionIdListState),
+          ),
+        ),
+        // データがstateに格納されたことを検証
+        listener.call(
+          argThat(
+            isA<AsyncData<DefinitionIdListState>>()
+                .having(
+                  (d) => d.isLoading,
+                  'isLoading',
+                  true,
+                )
+                .having((d) => d.value, 'value', mockDefinitionIdListState),
+          ),
+          // AsyncErrorが格納されていることを検証
+          argThat(
+            isA<AsyncError<DefinitionIdListState>>()
+                .having(
+                  (d) => d.error,
+                  'error',
+                  testException,
+                )
+                // 元々のstateの値がvalueに格納されていることを検証
+                .having((d) => d.value, 'value', mockDefinitionIdListState),
+          ),
+        ),
+      ]);
+      // 他にlistenerが発火されないことを検証
+      verifyNoMoreInteractions(listener);
+
+      // TODO(me): snackBarを表示させる関数が呼ばれていることを検証する
     });
   });
 }
