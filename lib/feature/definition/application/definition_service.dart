@@ -46,9 +46,9 @@ class DefinitionService extends _$DefinitionService {
   Future<void> refreshAll(DefinitionFeedType definitionFeedType) async {
     await _invalidateAllDefinitionFamilies();
 
-    ref.invalidate(DefinitionIdListStateNotifierProvider(definitionFeedType));
+    ref.invalidate(definitionIdListStateNotifierProvider(definitionFeedType));
     await ref
-        .read(DefinitionIdListStateNotifierProvider(definitionFeedType).future);
+        .read(definitionIdListStateNotifierProvider(definitionFeedType).future);
   }
 
   /// 全てのdefinitionProviderを再生成する
@@ -61,7 +61,7 @@ class DefinitionService extends _$DefinitionService {
   Future<void> _invalidateAllDefinitionFamilies() async {
     for (final feedType in DefinitionFeedType.values) {
       final asyncDefinitionIdListState =
-          ref.read(DefinitionIdListStateNotifierProvider(feedType));
+          ref.read(definitionIdListStateNotifierProvider(feedType));
 
       late final DefinitionIdListState definitionIdListState;
 
@@ -75,7 +75,7 @@ class DefinitionService extends _$DefinitionService {
       // エラーが発生していない場合
       else {
         definitionIdListState = await ref
-            .read(DefinitionIdListStateNotifierProvider(feedType).future);
+            .read(definitionIdListStateNotifierProvider(feedType).future);
       }
 
       for (final definitionId in definitionIdListState.definitionIdList) {

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -49,6 +51,11 @@ class DefinitionRepository {
         .startAfterDocument(lastReadQueryDocumentSnapshot)
         .limit(fetchLimitForDefinitionList)
         .get();
+
+    // 1/2の確率でエラーを発生させる
+    if (Random().nextInt(2) == 0) {
+    throw Exception('やばいで！！！！！');
+    }
 
     return _toDefinitionIdListState(snapshot);
   }

@@ -24,7 +24,7 @@ class DefinitionList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncDefinitionIdListState =
-        ref.watch(DefinitionIdListStateNotifierProvider(definitionFeedType));
+        ref.watch(definitionIdListStateNotifierProvider(definitionFeedType));
 
     return asyncDefinitionIdListState.when(
       data: (data) {
@@ -36,7 +36,7 @@ class DefinitionList extends ConsumerWidget {
             if (notification.metrics.extentAfter == 0) {
               ref
                   .read(
-                    DefinitionIdListStateNotifierProvider(definitionFeedType)
+                    definitionIdListStateNotifierProvider(definitionFeedType)
                         .notifier,
                   )
                   .fetchMore();
@@ -119,7 +119,7 @@ class DefinitionList extends ConsumerWidget {
                         onTap: () {
                           ref
                               .read(
-                                DefinitionIdListStateNotifierProvider(
+                                definitionIdListStateNotifierProvider(
                                   definitionFeedType,
                                 ).notifier,
                               )
