@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../util/snack_bar.dart';
 import '../../user/repository/user_repository.dart';
 import '../domain/definition_id_list_state.dart';
 import '../repository/definition_repository.dart';
@@ -77,27 +79,33 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
     // 参考: https://www.zeroichi.biz/blog/1525/
     state = const AsyncLoading<DefinitionIdListState>().copyWithPrevious(state);
 
-    await Future<void>.delayed(const Duration(seconds: 2));
-
-    state = await AsyncValue.guard(() async {
-      late final DefinitionIdListState nextState;
+    try {
+      late final DefinitionIdListState tmpState;
       switch (definitionFeedType) {
         case DefinitionFeedType.homeRecommend:
-          nextState = await _homeRecommendDefinitionIdListMore();
+          tmpState = await _homeRecommendDefinitionIdListMore();
           break;
 
         case DefinitionFeedType.homeFollowing:
-          nextState = await _fetchHomeFollowingDefinitionIdListMore();
+          tmpState = await _fetchHomeFollowingDefinitionIdListMore();
           break;
       }
 
-      return DefinitionIdListState(
+      final nextState = DefinitionIdListState(
         definitionIdList:
-            state.value!.definitionIdList + nextState.definitionIdList,
-        lastReadQueryDocumentSnapshot: nextState.lastReadQueryDocumentSnapshot,
-        hasMore: nextState.hasMore,
+            state.value!.definitionIdList + tmpState.definitionIdList,
+        lastReadQueryDocumentSnapshot: tmpState.lastReadQueryDocumentSnapshot,
+        hasMore: tmpState.hasMore,
       );
-    });
+      state = AsyncData(nextState);
+    } on Exception catch (e, s) {
+      debugPrint('error: $e');
+      ref
+          .read(snackBarControllerProvider.notifier)
+          .showSnackBar('読み込めませんでした。もう一度お試しください。');
+
+      state = AsyncError(e, s);
+    }
   }
 
   /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する（2回目以降）
