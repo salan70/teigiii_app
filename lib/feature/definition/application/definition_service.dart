@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../util/common_provider.dart';
 import '../../../util/snack_bar.dart';
 import '../domain/definition.dart';
+import '../domain/definition_id_list_state.dart';
 import '../repository/definition_repository.dart';
 import '../util/definition_feed_type.dart';
 import 'definition_id_list_state.dart';
@@ -59,8 +60,23 @@ class DefinitionService extends _$DefinitionService {
   /// definitionProviderは再生成されないと思われる
   Future<void> _invalidateAllDefinitionFamilies() async {
     for (final feedType in DefinitionFeedType.values) {
-      final definitionIdListState = await ref
-          .read(DefinitionIdListStateNotifierProvider(feedType).future);
+      final asyncDefinitionIdListState =
+          ref.read(DefinitionIdListStateNotifierProvider(feedType));
+
+      late final DefinitionIdListState definitionIdListState;
+
+      // エラーが発生している場合、「ref.read(Provider).future」時にエラーになるため、
+      // エラーが発生しているかどうかで分岐させている
+
+      // エラーが発生している場合
+      if (asyncDefinitionIdListState.hasError) {
+        definitionIdListState = asyncDefinitionIdListState.value!;
+      }
+      // エラーが発生していない場合
+      else {
+        definitionIdListState = await ref
+            .read(DefinitionIdListStateNotifierProvider(feedType).future);
+      }
 
       for (final definitionId in definitionIdListState.definitionIdList) {
         ref.invalidate(definitionProvider(definitionId));
