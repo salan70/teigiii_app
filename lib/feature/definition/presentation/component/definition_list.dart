@@ -1,8 +1,8 @@
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../application/definition_list_state.dart';
+import '../../application/definition_id_list_state.dart';
 import '../../application/definition_service.dart';
 import '../../util/definition_feed_type.dart';
 import 'definition_tile.dart';
@@ -21,11 +21,12 @@ class DefinitionList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncDefinitionIdList =
-        ref.watch(definitionListNotifierProvider(definitionFeedType));
+    final asyncDefinitionIdListState =
+        ref.watch(DefinitionIdListStateNotifierProvider(definitionFeedType));
 
-    return asyncDefinitionIdList.when(
+    return asyncDefinitionIdListState.when(
       data: (data) {
+        final definitionIdList = data.definitionIdList;
         return EasyRefresh(
           controller: refreshController,
           header: const CupertinoHeader(),
@@ -36,15 +37,43 @@ class DefinitionList extends ConsumerWidget {
 
             refreshController.finishRefresh();
           },
-          child: ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              return DefinitionTile(definitionId: data[index]);
+          child: NotificationListener<ScrollEndNotification>(
+            onNotification: (notification) {
+              if (notification.metrics.extentAfter == 0) {
+                ref
+                    .read(
+                      DefinitionIdListStateNotifierProvider(definitionFeedType)
+                          .notifier,
+                    )
+                    .fetchMore();
+                return true;
+              }
+              return true;
             },
+            child: ListView.builder(
+              itemCount: definitionIdList.length,
+              itemBuilder: (context, index) {
+                return DefinitionTile(definitionId: definitionIdList[index]);
+              },
+            ),
           ),
         );
       },
       error: (error, _) {
+        debugPrint('error: $error');
+
+        // 取得済みのデータがある場合、それを表示する
+        if (asyncDefinitionIdListState.hasValue) {
+          final definitionIdList =
+              asyncDefinitionIdListState.value!.definitionIdList;
+          return ListView.builder(
+            itemCount: definitionIdList.length,
+            itemBuilder: (context, index) {
+              return DefinitionTile(definitionId: definitionIdList[index]);
+            },
+          );
+        }
+
         // TODO(me): エラー画面を表示させる
         return Center(
           child: Text(

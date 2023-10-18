@@ -10,6 +10,7 @@ Future<void> addWordsToFirestore(String flavorName) async {
         .collection('Words')
         .doc(wordId)
         .set(words[wordId]!);
+    await Future.delayed(const Duration(milliseconds: 1000));
   }
 }
 

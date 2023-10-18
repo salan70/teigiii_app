@@ -4,7 +4,6 @@ import '../../user/repository/user_repository.dart';
 import '../../word/repository/word_repository.dart';
 import '../domain/definition.dart';
 import '../repository/definition_repository.dart';
-import '../util/definition_feed_type.dart';
 
 part 'definition_state.g.dart';
 
@@ -33,6 +32,7 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
     authorId: authorDoc.id,
     word: wordDoc.word,
     definition: definitionDoc.content,
+    createdAt: definitionDoc.createdAt,
     updatedAt: definitionDoc.updatedAt,
     authorName: authorDoc.name,
     authorImageUrl: authorDoc.profileImageUrl,

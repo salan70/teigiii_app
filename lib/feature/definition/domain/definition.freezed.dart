@@ -21,6 +21,7 @@ mixin _$Definition {
   String get authorId => throw _privateConstructorUsedError;
   String get word => throw _privateConstructorUsedError;
   String get definition => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
   String get authorName => throw _privateConstructorUsedError;
   String get authorImageUrl => throw _privateConstructorUsedError;
@@ -44,6 +45,7 @@ abstract class $DefinitionCopyWith<$Res> {
       String authorId,
       String word,
       String definition,
+      DateTime createdAt,
       DateTime updatedAt,
       String authorName,
       String authorImageUrl,
@@ -69,6 +71,7 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
     Object? authorId = null,
     Object? word = null,
     Object? definition = null,
+    Object? createdAt = null,
     Object? updatedAt = null,
     Object? authorName = null,
     Object? authorImageUrl = null,
@@ -96,6 +99,10 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
           ? _value.definition
           : definition // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -134,6 +141,7 @@ abstract class _$$_DefinitionCopyWith<$Res>
       String authorId,
       String word,
       String definition,
+      DateTime createdAt,
       DateTime updatedAt,
       String authorName,
       String authorImageUrl,
@@ -157,6 +165,7 @@ class __$$_DefinitionCopyWithImpl<$Res>
     Object? authorId = null,
     Object? word = null,
     Object? definition = null,
+    Object? createdAt = null,
     Object? updatedAt = null,
     Object? authorName = null,
     Object? authorImageUrl = null,
@@ -184,6 +193,10 @@ class __$$_DefinitionCopyWithImpl<$Res>
           ? _value.definition
           : definition // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -217,6 +230,7 @@ class _$_Definition implements _Definition {
       required this.authorId,
       required this.word,
       required this.definition,
+      required this.createdAt,
       required this.updatedAt,
       required this.authorName,
       required this.authorImageUrl,
@@ -234,6 +248,8 @@ class _$_Definition implements _Definition {
   @override
   final String definition;
   @override
+  final DateTime createdAt;
+  @override
   final DateTime updatedAt;
   @override
   final String authorName;
@@ -246,7 +262,7 @@ class _$_Definition implements _Definition {
 
   @override
   String toString() {
-    return 'Definition(id: $id, wordId: $wordId, authorId: $authorId, word: $word, definition: $definition, updatedAt: $updatedAt, authorName: $authorName, authorImageUrl: $authorImageUrl, likesCount: $likesCount, isLikedByUser: $isLikedByUser)';
+    return 'Definition(id: $id, wordId: $wordId, authorId: $authorId, word: $word, definition: $definition, createdAt: $createdAt, updatedAt: $updatedAt, authorName: $authorName, authorImageUrl: $authorImageUrl, likesCount: $likesCount, isLikedByUser: $isLikedByUser)';
   }
 
   @override
@@ -261,6 +277,8 @@ class _$_Definition implements _Definition {
             (identical(other.word, word) || other.word == word) &&
             (identical(other.definition, definition) ||
                 other.definition == definition) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
             (identical(other.authorName, authorName) ||
@@ -281,6 +299,7 @@ class _$_Definition implements _Definition {
       authorId,
       word,
       definition,
+      createdAt,
       updatedAt,
       authorName,
       authorImageUrl,
@@ -301,6 +320,7 @@ abstract class _Definition implements Definition {
       required final String authorId,
       required final String word,
       required final String definition,
+      required final DateTime createdAt,
       required final DateTime updatedAt,
       required final String authorName,
       required final String authorImageUrl,
@@ -317,6 +337,8 @@ abstract class _Definition implements Definition {
   String get word;
   @override
   String get definition;
+  @override
+  DateTime get createdAt;
   @override
   DateTime get updatedAt;
   @override

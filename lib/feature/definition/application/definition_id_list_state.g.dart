@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'definition_list_state.dart';
+part of 'definition_id_list_state.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$definitionListNotifierHash() =>
-    r'c1f13fa642326fcae1af98bd7baeb749de67bcf9';
+String _$definitionIdListStateNotifierHash() =>
+    r'4082a0d47c8bc4e5b165144389516a1777960283';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,36 +30,38 @@ class _SystemHash {
   }
 }
 
-abstract class _$DefinitionListNotifier
-    extends BuildlessAsyncNotifier<List<String>> {
+abstract class _$DefinitionIdListStateNotifier
+    extends BuildlessAsyncNotifier<DefinitionIdListState> {
   late final DefinitionFeedType definitionFeedType;
 
-  FutureOr<List<String>> build(
+  FutureOr<DefinitionIdListState> build(
     DefinitionFeedType definitionFeedType,
   );
 }
 
-/// See also [DefinitionListNotifier].
-@ProviderFor(DefinitionListNotifier)
-const definitionListNotifierProvider = DefinitionListNotifierFamily();
+/// See also [DefinitionIdListStateNotifier].
+@ProviderFor(DefinitionIdListStateNotifier)
+const definitionIdListStateNotifierProvider =
+    DefinitionIdListStateNotifierFamily();
 
-/// See also [DefinitionListNotifier].
-class DefinitionListNotifierFamily extends Family<AsyncValue<List<String>>> {
-  /// See also [DefinitionListNotifier].
-  const DefinitionListNotifierFamily();
+/// See also [DefinitionIdListStateNotifier].
+class DefinitionIdListStateNotifierFamily
+    extends Family<AsyncValue<DefinitionIdListState>> {
+  /// See also [DefinitionIdListStateNotifier].
+  const DefinitionIdListStateNotifierFamily();
 
-  /// See also [DefinitionListNotifier].
-  DefinitionListNotifierProvider call(
+  /// See also [DefinitionIdListStateNotifier].
+  DefinitionIdListStateNotifierProvider call(
     DefinitionFeedType definitionFeedType,
   ) {
-    return DefinitionListNotifierProvider(
+    return DefinitionIdListStateNotifierProvider(
       definitionFeedType,
     );
   }
 
   @override
-  DefinitionListNotifierProvider getProviderOverride(
-    covariant DefinitionListNotifierProvider provider,
+  DefinitionIdListStateNotifierProvider getProviderOverride(
+    covariant DefinitionIdListStateNotifierProvider provider,
   ) {
     return call(
       provider.definitionFeedType,
@@ -78,31 +80,31 @@ class DefinitionListNotifierFamily extends Family<AsyncValue<List<String>>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'definitionListNotifierProvider';
+  String? get name => r'definitionIdListStateNotifierProvider';
 }
 
-/// See also [DefinitionListNotifier].
-class DefinitionListNotifierProvider
-    extends AsyncNotifierProviderImpl<DefinitionListNotifier, List<String>> {
-  /// See also [DefinitionListNotifier].
-  DefinitionListNotifierProvider(
+/// See also [DefinitionIdListStateNotifier].
+class DefinitionIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
+    DefinitionIdListStateNotifier, DefinitionIdListState> {
+  /// See also [DefinitionIdListStateNotifier].
+  DefinitionIdListStateNotifierProvider(
     DefinitionFeedType definitionFeedType,
   ) : this._internal(
-          () =>
-              DefinitionListNotifier()..definitionFeedType = definitionFeedType,
-          from: definitionListNotifierProvider,
-          name: r'definitionListNotifierProvider',
+          () => DefinitionIdListStateNotifier()
+            ..definitionFeedType = definitionFeedType,
+          from: definitionIdListStateNotifierProvider,
+          name: r'definitionIdListStateNotifierProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$definitionListNotifierHash,
-          dependencies: DefinitionListNotifierFamily._dependencies,
+                  : _$definitionIdListStateNotifierHash,
+          dependencies: DefinitionIdListStateNotifierFamily._dependencies,
           allTransitiveDependencies:
-              DefinitionListNotifierFamily._allTransitiveDependencies,
+              DefinitionIdListStateNotifierFamily._allTransitiveDependencies,
           definitionFeedType: definitionFeedType,
         );
 
-  DefinitionListNotifierProvider._internal(
+  DefinitionIdListStateNotifierProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -115,8 +117,8 @@ class DefinitionListNotifierProvider
   final DefinitionFeedType definitionFeedType;
 
   @override
-  FutureOr<List<String>> runNotifierBuild(
-    covariant DefinitionListNotifier notifier,
+  FutureOr<DefinitionIdListState> runNotifierBuild(
+    covariant DefinitionIdListStateNotifier notifier,
   ) {
     return notifier.build(
       definitionFeedType,
@@ -124,10 +126,10 @@ class DefinitionListNotifierProvider
   }
 
   @override
-  Override overrideWith(DefinitionListNotifier Function() create) {
+  Override overrideWith(DefinitionIdListStateNotifier Function() create) {
     return ProviderOverride(
       origin: this,
-      override: DefinitionListNotifierProvider._internal(
+      override: DefinitionIdListStateNotifierProvider._internal(
         () => create()..definitionFeedType = definitionFeedType,
         from: from,
         name: null,
@@ -140,14 +142,14 @@ class DefinitionListNotifierProvider
   }
 
   @override
-  AsyncNotifierProviderElement<DefinitionListNotifier, List<String>>
-      createElement() {
-    return _DefinitionListNotifierProviderElement(this);
+  AsyncNotifierProviderElement<DefinitionIdListStateNotifier,
+      DefinitionIdListState> createElement() {
+    return _DefinitionIdListStateNotifierProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is DefinitionListNotifierProvider &&
+    return other is DefinitionIdListStateNotifierProvider &&
         other.definitionFeedType == definitionFeedType;
   }
 
@@ -160,19 +162,20 @@ class DefinitionListNotifierProvider
   }
 }
 
-mixin DefinitionListNotifierRef on AsyncNotifierProviderRef<List<String>> {
+mixin DefinitionIdListStateNotifierRef
+    on AsyncNotifierProviderRef<DefinitionIdListState> {
   /// The parameter `definitionFeedType` of this provider.
   DefinitionFeedType get definitionFeedType;
 }
 
-class _DefinitionListNotifierProviderElement
-    extends AsyncNotifierProviderElement<DefinitionListNotifier, List<String>>
-    with DefinitionListNotifierRef {
-  _DefinitionListNotifierProviderElement(super.provider);
+class _DefinitionIdListStateNotifierProviderElement
+    extends AsyncNotifierProviderElement<DefinitionIdListStateNotifier,
+        DefinitionIdListState> with DefinitionIdListStateNotifierRef {
+  _DefinitionIdListStateNotifierProviderElement(super.provider);
 
   @override
   DefinitionFeedType get definitionFeedType =>
-      (origin as DefinitionListNotifierProvider).definitionFeedType;
+      (origin as DefinitionIdListStateNotifierProvider).definitionFeedType;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

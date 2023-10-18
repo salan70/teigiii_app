@@ -14,6 +14,7 @@ Future<void> addUsersToFirestore(String flavorName) async {
   // 上で定義したusersマップを用いてデータをFirestoreに追加
   for (final userId in users.keys) {
     await firestore.collection('Users').doc(userId).set(users[userId]!);
+    await Future.delayed(const Duration(milliseconds: 1000));
   }
 }
 

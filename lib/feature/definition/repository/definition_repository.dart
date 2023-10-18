@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../util/constant/config_constant.dart';
 import '../../../util/firebase_provider.dart';
+import '../domain/definition_id_list_state.dart';
 import 'entity/definition_document.dart';
 
 part 'definition_repository.g.dart';
@@ -17,8 +19,8 @@ class DefinitionRepository {
 
   final FirebaseFirestore firestore;
 
-  /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する
-  Future<List<String>> fetchHomeRecommendDefinitionIdList(
+  /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する（初回）
+  Future<DefinitionIdListState> fetchHomeRecommendDefinitionIdListFirst(
     List<String> mutedUserIdList,
   ) async {
     final snapshot = await firestore
@@ -26,24 +28,74 @@ class DefinitionRepository {
         .where('authorId', whereNotIn: mutedUserIdList)
         .orderBy('authorId')
         .where('isPublic', isEqualTo: true)
-        .orderBy('updatedAt', descending: true)
+        .orderBy('createdAt', descending: true)
+        .limit(fetchLimitForDefinitionList)
         .get();
 
-    return snapshot.docs.map((doc) => doc.id).toList();
+    return _toDefinitionIdListState(snapshot);
   }
 
-  /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する
-  Future<List<String>> fetchHomeFollowingDefinitionList(
+  /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する（2回目以降）
+  Future<DefinitionIdListState> fetchHomeRecommendDefinitionIdListMore(
+    List<String> mutedUserIdList,
+    QueryDocumentSnapshot lastReadQueryDocumentSnapshot,
+  ) async {
+    final snapshot = await firestore
+        .collection('Definitions')
+        .where('authorId', whereNotIn: mutedUserIdList)
+        .orderBy('authorId')
+        .where('isPublic', isEqualTo: true)
+        .orderBy('createdAt', descending: true)
+        .startAfterDocument(lastReadQueryDocumentSnapshot)
+        .limit(fetchLimitForDefinitionList)
+        .get();
+
+    return _toDefinitionIdListState(snapshot);
+  }
+
+  /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する（初回）
+  Future<DefinitionIdListState> fetchHomeFollowingDefinitionIdListFirst(
     List<String> targetUserIdList,
   ) async {
     final snapshot = await firestore
         .collection('Definitions')
         .where('authorId', whereIn: targetUserIdList)
         .where('isPublic', isEqualTo: true)
-        .orderBy('updatedAt', descending: true)
+        .orderBy('createdAt', descending: true)
+        .limit(fetchLimitForDefinitionList)
         .get();
 
-    return snapshot.docs.map((doc) => doc.id).toList();
+    return _toDefinitionIdListState(snapshot);
+  }
+
+  /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する（2回目以降）
+  Future<DefinitionIdListState> fetchHomeFollowingDefinitionIdListMore(
+    List<String> targetUserIdList,
+    QueryDocumentSnapshot lastReadQueryDocumentSnapshot,
+  ) async {
+    final snapshot = await firestore
+        .collection('Definitions')
+        .where('authorId', whereIn: targetUserIdList)
+        .where('isPublic', isEqualTo: true)
+        .orderBy('createdAt', descending: true)
+        .startAfterDocument(lastReadQueryDocumentSnapshot)
+        .limit(fetchLimitForDefinitionList)
+        .get();
+
+    return _toDefinitionIdListState(snapshot);
+  }
+
+  /// DocumentSnapshotからDefinitionIdListStateを生成する
+  DefinitionIdListState _toDefinitionIdListState(
+    QuerySnapshot snapshot,
+  ) {
+    final idList = snapshot.docs.map((doc) => doc.id).toList();
+
+    return DefinitionIdListState(
+      definitionIdList: idList,
+      lastReadQueryDocumentSnapshot: snapshot.docs.last,
+      hasMore: idList.length == fetchLimitForDefinitionList,
+    );
   }
 
   Future<DefinitionDocument> fetchDefinition(String definitionId) async {

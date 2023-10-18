@@ -8,9 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firebase_options/firebase_options.dart';
 import 'util/constant/color_scheme.dart';
-import 'util/dummy_data/definitions_dummy.dart';
-import 'util/dummy_data/users_dummy.dart';
-import 'util/dummy_data/words_dummy.dart';
 import 'util/router/app_router.dart';
 import 'util/snack_bar.dart';
 
@@ -34,9 +31,9 @@ Future<void> main() async {
     return true;
   };
 
-  // await addUsersToFirestore();
-  // await addWordsToFirestore();
-  // await addDefinitionsToFirestore();
+  // await addUsersToFirestore(flavorName);
+  // await addWordsToFirestore(flavorName);
+  // await addDefinitionsToFirestore(flavorName);
 
   runApp(
     ProviderScope(

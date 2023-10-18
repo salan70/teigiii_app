@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/definition/domain/definition.dart';
 import 'package:teigi_app/feature/definition/repository/entity/definition_document.dart';
 import 'package:teigi_app/feature/user/repository/entity/user_document.dart';
@@ -6,7 +8,7 @@ import 'package:teigi_app/feature/word/repository/entity/word_document.dart';
 final nowDateTime = DateTime.now();
 
 /// テスト用のモックデータ
-/// 
+///
 /// 他のモックデータとの整合性は取ってない
 final mockDefinition = Definition(
   id: 'definitionId',
@@ -14,6 +16,7 @@ final mockDefinition = Definition(
   authorId: 'authorId',
   word: 'word',
   definition: 'definition',
+  createdAt: nowDateTime,
   updatedAt: nowDateTime,
   authorName: 'authorName',
   authorImageUrl: 'authorImageUrl',
@@ -50,3 +53,7 @@ final mockWordDoc = WordDocument(
   createdAt: nowDateTime,
   updatedAt: nowDateTime,
 );
+
+class MockQueryDocumentSnapshot extends Mock implements QueryDocumentSnapshot {}
+
+final mockQueryDocumentSnapshot = MockQueryDocumentSnapshot();

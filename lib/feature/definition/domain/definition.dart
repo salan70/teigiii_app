@@ -10,6 +10,7 @@ class Definition with _$Definition {
     required String authorId,
     required String word,
     required String definition,
+    required DateTime createdAt,
     required DateTime updatedAt,
     required String authorName,
     required String authorImageUrl,
