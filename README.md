@@ -10,12 +10,12 @@ TODO: DL用のリンク貼る
 
 開発環境
 ```sh
-flutter run --dart-define-from-file=dart_defines/dev.json
+fvm flutter run --dart-define-from-file=dart_defines/dev.json
 ```
 
 本番環境
 ```sh
-flutter run --dart-define-from-file=dart_defines/prod.json
+fvm flutter run --dart-define-from-file=dart_defines/prod.json
 ```
 
 # 使用技術
