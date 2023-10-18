@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// 「いいね（♡）」アイコンの色
+const likeColor = Colors.pink;
+
 const _primaryColor = Color(0xFF0BBBA1);
 
 const lightColorScheme = ColorScheme(

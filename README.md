@@ -10,12 +10,12 @@ TODO: DL用のリンク貼る
 
 開発環境
 ```sh
-flutter run --dart-define-from-file=dart_defines/dev.json
+fvm flutter run --dart-define-from-file=dart_defines/dev.json
 ```
 
 本番環境
 ```sh
-flutter run --dart-define-from-file=dart_defines/prod.json
+fvm flutter run --dart-define-from-file=dart_defines/prod.json
 ```
 
 # 使用技術
@@ -48,6 +48,11 @@ CIは、Pull Request作成時とPush時に、静的解析とテストの実行�
 
 # 開発方針
 
+## アーキテクチャ
+
+[アーキテクチャについて](/doc/architecture.md)
+に記載しています。
+
 ## GitHub関連
 
 - Issueベースで開発する
@@ -61,7 +66,7 @@ CIは、Pull Request作成時とPush時に、静的解析とテストの実行�
   - 書かない場合は、理由や後で書く旨をコメントで残す
 - プライベート関数に対してはUnit Testを原則書かない
   - 書かない場合は、理由をコメントで残す
-- Widget Test, Integration Testは少なくとも初回リリースまでは実装しない
+- Widget Test, Integration Testは実装しない
   - ある程度ユーザーが増えたら実装予定
 - テストはCIで自動実行する
 - 動作確認は適宜行い、プルリクエスト作成時に確認内容や結果を記載する
@@ -71,4 +76,3 @@ CIは、Pull Request作成時とPush時に、静的解析とテストの実行�
 - 使用するIDEはVS Codeを前提とする
 - Flutterのバージョン管理に[fvm](https://fvm.app/)を使う
   - 初回リリースまでFlutterバージョンは「3.13.6」を使用する
-- UIで表示させる固定のテキストは専用のファイルで管理する（ハードコーディングしない）
