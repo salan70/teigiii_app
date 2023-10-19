@@ -19,14 +19,18 @@
 
 ## 詳細
 
-### common_widget
+### core
 
-- 複数のfeatureで使うような汎用的なwidgetを格納する
+- 複数のfeatureで使うような汎用的なwidgetを格納する（common_widget）
+- 複数のfeatureで使うような汎用的なproviderを格納する（common_provider）
+- routerを格納する
 
 ### util
 
 - アプリ全体で使用する汎用的なコードを格納する
   - constやextensionなど
+- coreとの境界は曖昧
+  - common_widget, common_provider, router 以外はutilとしている
 
 ### feature/presentation
 
