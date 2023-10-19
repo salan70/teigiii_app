@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/common_provider/firebase_provider.dart';
+import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/config_constant.dart';
 import '../domain/definition_id_list_state.dart';
 import 'entity/definition_document.dart';

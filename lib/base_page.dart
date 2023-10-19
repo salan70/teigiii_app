@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/common_provider/is_loading_overlay_state.dart';
 import 'core/common_widget/loading_dialog.dart';
 import 'core/router/app_router.dart';
+import 'feature/auth/application/auth_service.dart';
 
 // 参考
 // https://zenn.dev/flutteruniv_dev/articles/20230427-095829-flutter-auto-route#うまくいくパターン
@@ -14,11 +15,25 @@ class BaseRouterPage extends AutoRouter {
 }
 
 @RoutePage()
-class BasePage extends ConsumerWidget {
+class BasePage extends ConsumerStatefulWidget {
   const BasePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<BasePage> createState() => _BasePageState();
+}
+
+class _BasePageState extends ConsumerState<BasePage> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(authServiceProvider.notifier).onAppLaunch();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AutoTabsRouter(
       routes: const [
         HomeRoute(),
@@ -52,6 +67,7 @@ class BasePage extends ConsumerWidget {
                 onTap: tabsRouter.setActiveIndex,
               ),
             ),
+            //TODO(me): Page全体がリビルドされるのを防ぐため、Consumerでラップするなどしたい
             if (ref.watch(isLoadingOverlayNotifierProvider))
               const OverlayLoadingWidget(),
           ],
