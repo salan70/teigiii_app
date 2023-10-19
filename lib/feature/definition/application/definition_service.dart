@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../util/common_provider.dart';
-import '../../../util/snack_bar.dart';
+import '../../../core/common_provider/is_loading_overlay_state.dart';
+import '../../../core/common_provider/snack_bar_controller.dart';
 import '../domain/definition.dart';
 import '../domain/definition_id_list_state.dart';
 import '../repository/definition_repository.dart';

@@ -2,9 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'common_widget/loading_dialog.dart';
-import 'util/common_provider.dart';
-import 'util/router/app_router.dart';
+import 'core/common_provider/is_loading_overlay_state.dart';
+import 'core/common_widget/loading_dialog.dart';
+import 'core/router/app_router.dart';
 
 // 参考
 // https://zenn.dev/flutteruniv_dev/articles/20230427-095829-flutter-auto-route#うまくいくパターン

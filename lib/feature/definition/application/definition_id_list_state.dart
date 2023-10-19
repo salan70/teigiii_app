@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../util/snack_bar.dart';
+import '../../../core/common_provider/snack_bar_controller.dart';
 import '../../user/repository/user_repository.dart';
 import '../domain/definition_id_list_state.dart';
 import '../repository/definition_repository.dart';

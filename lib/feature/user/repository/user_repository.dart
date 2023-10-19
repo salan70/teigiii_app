@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../util/firebase_provider.dart';
+import '../../../core/common_provider/firebase_provider.dart';
 import 'entity/user_document.dart';
 
 part 'user_repository.g.dart';

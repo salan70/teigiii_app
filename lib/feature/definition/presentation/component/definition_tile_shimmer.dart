@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../common_widget/shimmer_widget.dart';
+import '../../../../core/common_widget/shimmer_widget.dart';
 
 class DefinitionTileShimmer extends StatelessWidget {
   const DefinitionTileShimmer({super.key});

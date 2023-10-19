@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../common_widget/cupertino_refresh_indicator.dart';
-import '../../../../common_widget/infinite_scroll_bottom_indicator.dart';
+import '../../../../core/common_widget/cupertino_refresh_indicator.dart';
+import '../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
 import '../../application/definition_id_list_state.dart';
 import '../../application/definition_service.dart';
 import '../../util/definition_feed_type.dart';

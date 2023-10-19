@@ -6,10 +6,10 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/common_provider/snack_bar_controller.dart';
+import 'core/router/app_router.dart';
 import 'firebase_options/firebase_options.dart';
 import 'util/constant/color_scheme.dart';
-import 'util/router/app_router.dart';
-import 'util/snack_bar.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
