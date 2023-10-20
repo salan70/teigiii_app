@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../auth/application/auth_state.dart';
 import '../../user/repository/user_repository.dart';
 import '../../word/repository/word_repository.dart';
 import '../domain/definition.dart';
@@ -9,8 +10,7 @@ part 'definition_state.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<Definition> definition(DefinitionRef ref, String definitionId) async {
-  // TODO(me): auth系の実装したらFirebaseからuserIdを取得する
-  const userId = 'xE9Je2LljHXIPORKyDnk';
+  final userId = (await ref.read(userIdProvider.future))!;
 
   final definitionDoc = await ref
       .read(definitionRepositoryProvider)

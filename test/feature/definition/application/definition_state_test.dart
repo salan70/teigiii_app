@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition/application/definition_state.dart';
 import 'package:teigi_app/feature/definition/domain/definition.dart';
 import 'package:teigi_app/feature/definition/repository/definition_repository.dart';
@@ -35,6 +36,7 @@ void main() {
   setUp(() {
     container = ProviderContainer(
       overrides: [
+        userIdProvider.overrideWith((ref) => 'userId'),
         definitionRepositoryProvider
             .overrideWithValue(mockDefinitionRepository),
         userRepositoryProvider.overrideWithValue(mockUserRepository),

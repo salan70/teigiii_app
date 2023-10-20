@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/is_loading_overlay_state.dart';
 import '../../../core/common_provider/snack_bar_controller.dart';
+import '../../auth/application/auth_state.dart';
 import '../domain/definition.dart';
 import '../domain/definition_id_list_state.dart';
 import '../repository/definition_repository.dart';
@@ -86,8 +87,7 @@ class DefinitionService extends _$DefinitionService {
 
   /// いいね登録/解除を行う
   Future<void> _updateLikeStatus(Definition definition) async {
-    // TODO(me): auth系の実装したらFirebaseからuserIdを取得する
-    const userId = 'xE9Je2LljHXIPORKyDnk';
+    final userId = (await ref.read(userIdProvider.future))!;
 
     if (definition.isLikedByUser) {
       // いいね解除
