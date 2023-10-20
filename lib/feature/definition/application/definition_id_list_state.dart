@@ -118,7 +118,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
         .watch(definitionRepositoryProvider)
         .fetchHomeRecommendDefinitionIdListMore(
           mutedUserIdList,
-          state.value!.lastReadQueryDocumentSnapshot,
+          state.value!.lastReadQueryDocumentSnapshot!,
         );
   }
 
@@ -148,7 +148,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
         .read(definitionRepositoryProvider)
         .fetchHomeFollowingDefinitionIdListMore(
           targetUserIdList,
-          state.value!.lastReadQueryDocumentSnapshot,
+          state.value!.lastReadQueryDocumentSnapshot!,
         );
   }
 

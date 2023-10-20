@@ -101,7 +101,7 @@ class DefinitionRepository {
 
     return DefinitionIdListState(
       definitionIdList: idList,
-      lastReadQueryDocumentSnapshot: snapshot.docs.last,
+      lastReadQueryDocumentSnapshot: snapshot.docs.lastOrNull,
       hasMore: idList.length == fetchLimitForDefinitionList,
     );
   }
@@ -180,4 +180,8 @@ class DefinitionRepository {
 
 extension on List<DocumentSnapshot> {
   DocumentSnapshot? get firstOrNull => isEmpty ? null : first;
+}
+
+extension on List<QueryDocumentSnapshot> {
+  QueryDocumentSnapshot? get lastOrNull => isEmpty ? null : last;
 }

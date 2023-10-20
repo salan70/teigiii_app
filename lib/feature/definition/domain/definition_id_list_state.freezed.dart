@@ -17,7 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$DefinitionIdListState {
   List<String> get definitionIdList => throw _privateConstructorUsedError;
-  QueryDocumentSnapshot<Object?> get lastReadQueryDocumentSnapshot =>
+
+  /// 最後に読み取られたQueryDocumentSnapshot
+  /// これがnullの場合、1件もDefinitionIdを取得していない（[definitionIdList]が空）
+  QueryDocumentSnapshot<Object?>? get lastReadQueryDocumentSnapshot =>
       throw _privateConstructorUsedError;
   bool get hasMore => throw _privateConstructorUsedError;
 
@@ -34,7 +37,7 @@ abstract class $DefinitionIdListStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<String> definitionIdList,
-      QueryDocumentSnapshot<Object?> lastReadQueryDocumentSnapshot,
+      QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
       bool hasMore});
 }
 
@@ -53,7 +56,7 @@ class _$DefinitionIdListStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? definitionIdList = null,
-    Object? lastReadQueryDocumentSnapshot = null,
+    Object? lastReadQueryDocumentSnapshot = freezed,
     Object? hasMore = null,
   }) {
     return _then(_value.copyWith(
@@ -61,10 +64,10 @@ class _$DefinitionIdListStateCopyWithImpl<$Res,
           ? _value.definitionIdList
           : definitionIdList // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      lastReadQueryDocumentSnapshot: null == lastReadQueryDocumentSnapshot
+      lastReadQueryDocumentSnapshot: freezed == lastReadQueryDocumentSnapshot
           ? _value.lastReadQueryDocumentSnapshot
           : lastReadQueryDocumentSnapshot // ignore: cast_nullable_to_non_nullable
-              as QueryDocumentSnapshot<Object?>,
+              as QueryDocumentSnapshot<Object?>?,
       hasMore: null == hasMore
           ? _value.hasMore
           : hasMore // ignore: cast_nullable_to_non_nullable
@@ -83,7 +86,7 @@ abstract class _$$_DefinitionIdListStateCopyWith<$Res>
   @useResult
   $Res call(
       {List<String> definitionIdList,
-      QueryDocumentSnapshot<Object?> lastReadQueryDocumentSnapshot,
+      QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
       bool hasMore});
 }
 
@@ -99,7 +102,7 @@ class __$$_DefinitionIdListStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? definitionIdList = null,
-    Object? lastReadQueryDocumentSnapshot = null,
+    Object? lastReadQueryDocumentSnapshot = freezed,
     Object? hasMore = null,
   }) {
     return _then(_$_DefinitionIdListState(
@@ -107,10 +110,10 @@ class __$$_DefinitionIdListStateCopyWithImpl<$Res>
           ? _value._definitionIdList
           : definitionIdList // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      lastReadQueryDocumentSnapshot: null == lastReadQueryDocumentSnapshot
+      lastReadQueryDocumentSnapshot: freezed == lastReadQueryDocumentSnapshot
           ? _value.lastReadQueryDocumentSnapshot
           : lastReadQueryDocumentSnapshot // ignore: cast_nullable_to_non_nullable
-              as QueryDocumentSnapshot<Object?>,
+              as QueryDocumentSnapshot<Object?>?,
       hasMore: null == hasMore
           ? _value.hasMore
           : hasMore // ignore: cast_nullable_to_non_nullable
@@ -137,8 +140,10 @@ class _$_DefinitionIdListState implements _DefinitionIdListState {
     return EqualUnmodifiableListView(_definitionIdList);
   }
 
+  /// 最後に読み取られたQueryDocumentSnapshot
+  /// これがnullの場合、1件もDefinitionIdを取得していない（[definitionIdList]が空）
   @override
-  final QueryDocumentSnapshot<Object?> lastReadQueryDocumentSnapshot;
+  final QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot;
   @override
   final bool hasMore;
 
@@ -179,14 +184,17 @@ class _$_DefinitionIdListState implements _DefinitionIdListState {
 abstract class _DefinitionIdListState implements DefinitionIdListState {
   const factory _DefinitionIdListState(
       {required final List<String> definitionIdList,
-      required final QueryDocumentSnapshot<Object?>
+      required final QueryDocumentSnapshot<Object?>?
           lastReadQueryDocumentSnapshot,
       required final bool hasMore}) = _$_DefinitionIdListState;
 
   @override
   List<String> get definitionIdList;
   @override
-  QueryDocumentSnapshot<Object?> get lastReadQueryDocumentSnapshot;
+
+  /// 最後に読み取られたQueryDocumentSnapshot
+  /// これがnullの場合、1件もDefinitionIdを取得していない（[definitionIdList]が空）
+  QueryDocumentSnapshot<Object?>? get lastReadQueryDocumentSnapshot;
   @override
   bool get hasMore;
   @override

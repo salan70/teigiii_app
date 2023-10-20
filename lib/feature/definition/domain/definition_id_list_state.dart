@@ -7,7 +7,10 @@ part 'definition_id_list_state.freezed.dart';
 class DefinitionIdListState with _$DefinitionIdListState {
   const factory DefinitionIdListState({
     required List<String> definitionIdList,
-    required QueryDocumentSnapshot lastReadQueryDocumentSnapshot,
+
+    /// 最後に読み取られたQueryDocumentSnapshot
+    /// これがnullの場合、1件もDefinitionIdを取得していない（[definitionIdList]が空）
+    required QueryDocumentSnapshot? lastReadQueryDocumentSnapshot,
     required bool hasMore,
   }) = _DefinitionIdListState;
 }
