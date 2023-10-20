@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'snack_bar.g.dart';
+part 'snack_bar_controller.g.dart';
 
 @riverpod
 GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey(

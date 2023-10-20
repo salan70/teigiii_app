@@ -15,9 +15,10 @@ import 'package:teigi_app/feature/definition/repository/definition_repository.da
     as _i7;
 import 'package:teigi_app/feature/definition/repository/entity/definition_document.dart'
     as _i4;
-import 'package:teigi_app/feature/user/repository/entity/user_document.dart'
+import 'package:teigi_app/feature/user/repository/entity/user_profile_document.dart'
     as _i5;
-import 'package:teigi_app/feature/user/repository/user_repository.dart' as _i9;
+import 'package:teigi_app/feature/user/repository/user_profile_repository.dart'
+    as _i9;
 import 'package:teigi_app/feature/word/repository/entity/word_document.dart'
     as _i6;
 import 'package:teigi_app/feature/word/repository/word_repository.dart' as _i10;
@@ -68,8 +69,9 @@ class _FakeDefinitionDocument_2 extends _i1.SmartFake
         );
 }
 
-class _FakeUserDocument_3 extends _i1.SmartFake implements _i5.UserDocument {
-  _FakeUserDocument_3(
+class _FakeUserProfileDocument_3 extends _i1.SmartFake
+    implements _i5.UserProfileDocument {
+  _FakeUserProfileDocument_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -309,10 +311,11 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i8.Future<bool>);
 }
 
-/// A class which mocks [UserRepository].
+/// A class which mocks [UserProfileRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserRepository extends _i1.Mock implements _i9.UserRepository {
+class MockUserProfileRepository extends _i1.Mock
+    implements _i9.UserProfileRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),
@@ -327,27 +330,46 @@ class MockUserRepository extends _i1.Mock implements _i9.UserRepository {
       ) as _i2.FirebaseFirestore);
 
   @override
-  _i8.Future<_i5.UserDocument> fetchUser(String? userId) => (super.noSuchMethod(
+  _i8.Future<_i5.UserProfileDocument> fetchUserProfile(String? userId) =>
+      (super.noSuchMethod(
         Invocation.method(
-          #fetchUser,
+          #fetchUserProfile,
           [userId],
         ),
-        returnValue: _i8.Future<_i5.UserDocument>.value(_FakeUserDocument_3(
+        returnValue: _i8.Future<_i5.UserProfileDocument>.value(
+            _FakeUserProfileDocument_3(
           this,
           Invocation.method(
-            #fetchUser,
+            #fetchUserProfile,
             [userId],
           ),
         )),
-        returnValueForMissingStub:
-            _i8.Future<_i5.UserDocument>.value(_FakeUserDocument_3(
+        returnValueForMissingStub: _i8.Future<_i5.UserProfileDocument>.value(
+            _FakeUserProfileDocument_3(
           this,
           Invocation.method(
-            #fetchUser,
+            #fetchUserProfile,
             [userId],
           ),
         )),
-      ) as _i8.Future<_i5.UserDocument>);
+      ) as _i8.Future<_i5.UserProfileDocument>);
+
+  @override
+  _i8.Future<void> addUserProfile(
+    String? userId,
+    String? name,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addUserProfile,
+          [
+            userId,
+            name,
+          ],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
 
   @override
   _i8.Future<List<String>> fetchFollowingIdList(String? userId) =>

@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'common_provider.g.dart';
+part 'is_loading_overlay_state.g.dart';
 
 /// オーバーレイローディングをUIに表示させるかどうかを管理する
 @Riverpod(keepAlive: true)

@@ -3,8 +3,9 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/config_constant.dart';
-import '../../../util/firebase_provider.dart';
+import '../../../util/extension/string_list_extension.dart';
 import '../domain/definition_id_list_state.dart';
 import 'entity/definition_document.dart';
 
@@ -27,7 +28,7 @@ class DefinitionRepository {
   ) async {
     final snapshot = await firestore
         .collection('Definitions')
-        .where('authorId', whereNotIn: mutedUserIdList)
+        .where('authorId', whereNotIn: mutedUserIdList.orSingleEmptyStringList)
         .orderBy('authorId')
         .where('isPublic', isEqualTo: true)
         .orderBy('createdAt', descending: true)
@@ -44,7 +45,7 @@ class DefinitionRepository {
   ) async {
     final snapshot = await firestore
         .collection('Definitions')
-        .where('authorId', whereNotIn: mutedUserIdList)
+        .where('authorId', whereNotIn: mutedUserIdList.orSingleEmptyStringList)
         .orderBy('authorId')
         .where('isPublic', isEqualTo: true)
         .orderBy('createdAt', descending: true)
@@ -54,7 +55,7 @@ class DefinitionRepository {
 
     // 1/2の確率でエラーを発生させる
     if (Random().nextInt(2) == 0) {
-    throw Exception('やばいで！！！！！');
+      throw Exception('やばいで！！！！！');
     }
 
     return _toDefinitionIdListState(snapshot);
@@ -100,7 +101,7 @@ class DefinitionRepository {
 
     return DefinitionIdListState(
       definitionIdList: idList,
-      lastReadQueryDocumentSnapshot: snapshot.docs.last,
+      lastReadQueryDocumentSnapshot: snapshot.docs.lastOrNull,
       hasMore: idList.length == fetchLimitForDefinitionList,
     );
   }
@@ -179,4 +180,8 @@ class DefinitionRepository {
 
 extension on List<DocumentSnapshot> {
   DocumentSnapshot? get firstOrNull => isEmpty ? null : first;
+}
+
+extension on List<QueryDocumentSnapshot> {
+  QueryDocumentSnapshot? get lastOrNull => isEmpty ? null : last;
 }

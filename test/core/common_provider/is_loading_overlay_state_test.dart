@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:teigi_app/util/common_provider.dart';
+import 'package:teigi_app/core/common_provider/is_loading_overlay_state.dart';
 
 import 'common_provider_test.mocks.dart';
 

@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../util/snack_bar.dart';
-import '../../user/repository/user_repository.dart';
+import '../../../core/common_provider/snack_bar_controller.dart';
+import '../../auth/application/auth_state.dart';
+import '../../user/repository/user_profile_repository.dart';
+import '../../user_config/repository/user_config_repository.dart';
 import '../domain/definition_id_list_state.dart';
 import '../repository/definition_repository.dart';
 import '../util/definition_feed_type.dart';
@@ -39,14 +41,14 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
   /// この関数は、[build]メソッドからのみ呼ばれる想定
   Future<DefinitionIdListState>
       _fetchHomeFollowingDefinitionIdListFirst() async {
-    // TODO(me): auth系の実装したらFirebaseからuserIdを取得する
-    const userId = 'xE9Je2LljHXIPORKyDnk';
+    final userId = ref.read(userIdProvider)!;
 
     final targetUserIdList = <String>[];
 
     // フォローしているユーザーのIDリストを取得
-    final followingIdList =
-        await ref.watch(userRepositoryProvider).fetchFollowingIdList(userId);
+    final followingIdList = await ref
+        .watch(userProfileRepositoryProvider)
+        .fetchFollowingIdList(userId);
 
     // フォローしているユーザーと自分のIDを追加
     targetUserIdList
@@ -99,7 +101,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
       );
       state = AsyncData(nextState);
     } on Exception catch (e, s) {
-      debugPrint('error: $e');
+      debugPrint('エラー: $e');
       ref
           .read(snackBarControllerProvider.notifier)
           .showSnackBar('読み込めませんでした。もう一度お試しください。');
@@ -116,7 +118,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
         .watch(definitionRepositoryProvider)
         .fetchHomeRecommendDefinitionIdListMore(
           mutedUserIdList,
-          state.value!.lastReadQueryDocumentSnapshot,
+          state.value!.lastReadQueryDocumentSnapshot!,
         );
   }
 
@@ -124,14 +126,14 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
   // TODO(me): _fetchHomeFollowingDefinitionIdListFirstと共通のロジックが多く、リファクタの余地あり
   Future<DefinitionIdListState>
       _fetchHomeFollowingDefinitionIdListMore() async {
-    // TODO(me): auth系の実装したらFirebaseからuserIdを取得する
-    const userId = 'xE9Je2LljHXIPORKyDnk';
+    final userId = ref.read(userIdProvider)!;
 
     final targetUserIdList = <String>[];
 
     // フォローしているユーザーのIDリストを取得
-    final followingIdList =
-        await ref.watch(userRepositoryProvider).fetchFollowingIdList(userId);
+    final followingIdList = await ref
+        .watch(userProfileRepositoryProvider)
+        .fetchFollowingIdList(userId);
 
     // フォローしているユーザーと自分のIDを追加
     targetUserIdList
@@ -146,17 +148,15 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
         .read(definitionRepositoryProvider)
         .fetchHomeFollowingDefinitionIdListMore(
           targetUserIdList,
-          state.value!.lastReadQueryDocumentSnapshot,
+          state.value!.lastReadQueryDocumentSnapshot!,
         );
   }
 
-  // auth系の実装したら、userDocを保持するProviderを作ると思われる
-  // その場合、この関数は不要になる
   Future<List<String>> _fetchMutedUserIdList() async {
-    // TODO(me): auth系の実装したらFirebaseからuserIdを取得する
-    const userId = 'xE9Je2LljHXIPORKyDnk';
-    final userDoc = await ref.read(userRepositoryProvider).fetchUser(userId);
+    final userId = ref.read(userIdProvider)!;
+    final userProfileDoc =
+        await ref.read(userConfigRepositoryProvider).fetchUserConfig(userId);
 
-    return userDoc.mutedUserIdList;
+    return userProfileDoc.mutedUserIdList;
   }
 }
