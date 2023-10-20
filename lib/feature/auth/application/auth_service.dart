@@ -25,6 +25,7 @@ class AuthService extends _$AuthService {
   Future<void> onAppLaunch() async {
     state = const AsyncValue.loading();
 
+    // TODO(me): デバッグ用のコード。リリース時に削除する
     // await ref.read(authRepositoryProvider).signOut();
     final currentUserId = ref.read(userIdProvider);
     debugPrint('currentUserId: $currentUserId');

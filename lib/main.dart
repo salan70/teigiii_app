@@ -113,7 +113,7 @@ class MyApp extends ConsumerWidget {
             },
           );
         }
-        // 初回起動直後にisSignedInがfalseになる想定
+        // 起動直後にisSignedInがfalseになる想定
         return const Scaffold(
           body: OverlayLoadingWidget(),
         );
