@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'user_document.dart';
+part of 'user_profile_document.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,40 +15,38 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$UserDocument {
+mixin _$UserProfileDocument {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
+  String get bio => throw _privateConstructorUsedError;
   String get profileImageUrl => throw _privateConstructorUsedError;
-  List<String> get mutedUserIdList => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $UserDocumentCopyWith<UserDocument> get copyWith =>
+  $UserProfileDocumentCopyWith<UserProfileDocument> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserDocumentCopyWith<$Res> {
-  factory $UserDocumentCopyWith(
-          UserDocument value, $Res Function(UserDocument) then) =
-      _$UserDocumentCopyWithImpl<$Res, UserDocument>;
+abstract class $UserProfileDocumentCopyWith<$Res> {
+  factory $UserProfileDocumentCopyWith(
+          UserProfileDocument value, $Res Function(UserProfileDocument) then) =
+      _$UserProfileDocumentCopyWithImpl<$Res, UserProfileDocument>;
   @useResult
   $Res call(
       {String id,
       String name,
-      String email,
+      String bio,
       String profileImageUrl,
-      List<String> mutedUserIdList,
       DateTime createdAt,
       DateTime updatedAt});
 }
 
 /// @nodoc
-class _$UserDocumentCopyWithImpl<$Res, $Val extends UserDocument>
-    implements $UserDocumentCopyWith<$Res> {
-  _$UserDocumentCopyWithImpl(this._value, this._then);
+class _$UserProfileDocumentCopyWithImpl<$Res, $Val extends UserProfileDocument>
+    implements $UserProfileDocumentCopyWith<$Res> {
+  _$UserProfileDocumentCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -60,9 +58,8 @@ class _$UserDocumentCopyWithImpl<$Res, $Val extends UserDocument>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? email = null,
+    Object? bio = null,
     Object? profileImageUrl = null,
-    Object? mutedUserIdList = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -75,18 +72,14 @@ class _$UserDocumentCopyWithImpl<$Res, $Val extends UserDocument>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
+      bio: null == bio
+          ? _value.bio
+          : bio // ignore: cast_nullable_to_non_nullable
               as String,
       profileImageUrl: null == profileImageUrl
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      mutedUserIdList: null == mutedUserIdList
-          ? _value.mutedUserIdList
-          : mutedUserIdList // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -100,29 +93,28 @@ class _$UserDocumentCopyWithImpl<$Res, $Val extends UserDocument>
 }
 
 /// @nodoc
-abstract class _$$_UserDocumentCopyWith<$Res>
-    implements $UserDocumentCopyWith<$Res> {
-  factory _$$_UserDocumentCopyWith(
-          _$_UserDocument value, $Res Function(_$_UserDocument) then) =
-      __$$_UserDocumentCopyWithImpl<$Res>;
+abstract class _$$_UserProfileDocumentCopyWith<$Res>
+    implements $UserProfileDocumentCopyWith<$Res> {
+  factory _$$_UserProfileDocumentCopyWith(_$_UserProfileDocument value,
+          $Res Function(_$_UserProfileDocument) then) =
+      __$$_UserProfileDocumentCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {String id,
       String name,
-      String email,
+      String bio,
       String profileImageUrl,
-      List<String> mutedUserIdList,
       DateTime createdAt,
       DateTime updatedAt});
 }
 
 /// @nodoc
-class __$$_UserDocumentCopyWithImpl<$Res>
-    extends _$UserDocumentCopyWithImpl<$Res, _$_UserDocument>
-    implements _$$_UserDocumentCopyWith<$Res> {
-  __$$_UserDocumentCopyWithImpl(
-      _$_UserDocument _value, $Res Function(_$_UserDocument) _then)
+class __$$_UserProfileDocumentCopyWithImpl<$Res>
+    extends _$UserProfileDocumentCopyWithImpl<$Res, _$_UserProfileDocument>
+    implements _$$_UserProfileDocumentCopyWith<$Res> {
+  __$$_UserProfileDocumentCopyWithImpl(_$_UserProfileDocument _value,
+      $Res Function(_$_UserProfileDocument) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -130,13 +122,12 @@ class __$$_UserDocumentCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? email = null,
+    Object? bio = null,
     Object? profileImageUrl = null,
-    Object? mutedUserIdList = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$_UserDocument(
+    return _then(_$_UserProfileDocument(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -145,18 +136,14 @@ class __$$_UserDocumentCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
+      bio: null == bio
+          ? _value.bio
+          : bio // ignore: cast_nullable_to_non_nullable
               as String,
       profileImageUrl: null == profileImageUrl
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      mutedUserIdList: null == mutedUserIdList
-          ? _value._mutedUserIdList
-          : mutedUserIdList // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -171,33 +158,23 @@ class __$$_UserDocumentCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserDocument implements _UserDocument {
-  const _$_UserDocument(
+class _$_UserProfileDocument implements _UserProfileDocument {
+  const _$_UserProfileDocument(
       {required this.id,
       required this.name,
-      required this.email,
+      required this.bio,
       required this.profileImageUrl,
-      required final List<String> mutedUserIdList,
       required this.createdAt,
-      required this.updatedAt})
-      : _mutedUserIdList = mutedUserIdList;
+      required this.updatedAt});
 
   @override
   final String id;
   @override
   final String name;
   @override
-  final String email;
+  final String bio;
   @override
   final String profileImageUrl;
-  final List<String> _mutedUserIdList;
-  @override
-  List<String> get mutedUserIdList {
-    if (_mutedUserIdList is EqualUnmodifiableListView) return _mutedUserIdList;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_mutedUserIdList);
-  }
-
   @override
   final DateTime createdAt;
   @override
@@ -205,21 +182,19 @@ class _$_UserDocument implements _UserDocument {
 
   @override
   String toString() {
-    return 'UserDocument(id: $id, name: $name, email: $email, profileImageUrl: $profileImageUrl, mutedUserIdList: $mutedUserIdList, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserProfileDocument(id: $id, name: $name, bio: $bio, profileImageUrl: $profileImageUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserDocument &&
+            other is _$_UserProfileDocument &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.email, email) || other.email == email) &&
+            (identical(other.bio, bio) || other.bio == bio) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
                 other.profileImageUrl == profileImageUrl) &&
-            const DeepCollectionEquality()
-                .equals(other._mutedUserIdList, _mutedUserIdList) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -228,48 +203,39 @@ class _$_UserDocument implements _UserDocument {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      email,
-      profileImageUrl,
-      const DeepCollectionEquality().hash(_mutedUserIdList),
-      createdAt,
-      updatedAt);
+      runtimeType, id, name, bio, profileImageUrl, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserDocumentCopyWith<_$_UserDocument> get copyWith =>
-      __$$_UserDocumentCopyWithImpl<_$_UserDocument>(this, _$identity);
+  _$$_UserProfileDocumentCopyWith<_$_UserProfileDocument> get copyWith =>
+      __$$_UserProfileDocumentCopyWithImpl<_$_UserProfileDocument>(
+          this, _$identity);
 }
 
-abstract class _UserDocument implements UserDocument {
-  const factory _UserDocument(
+abstract class _UserProfileDocument implements UserProfileDocument {
+  const factory _UserProfileDocument(
       {required final String id,
       required final String name,
-      required final String email,
+      required final String bio,
       required final String profileImageUrl,
-      required final List<String> mutedUserIdList,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_UserDocument;
+      required final DateTime updatedAt}) = _$_UserProfileDocument;
 
   @override
   String get id;
   @override
   String get name;
   @override
-  String get email;
+  String get bio;
   @override
   String get profileImageUrl;
-  @override
-  List<String> get mutedUserIdList;
   @override
   DateTime get createdAt;
   @override
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
-  _$$_UserDocumentCopyWith<_$_UserDocument> get copyWith =>
+  _$$_UserProfileDocumentCopyWith<_$_UserProfileDocument> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/feature/auth/repository/entity/user_config_document.dart';
 import 'package:teigi_app/feature/definition/domain/definition.dart';
 import 'package:teigi_app/feature/definition/repository/entity/definition_document.dart';
-import 'package:teigi_app/feature/user/repository/entity/user_document.dart';
+import 'package:teigi_app/feature/user/repository/entity/user_profile_document.dart';
 import 'package:teigi_app/feature/word/repository/entity/word_document.dart';
 
 final nowDateTime = DateTime.now();
@@ -27,7 +28,7 @@ final mockDefinition = Definition(
 final mockDefinitionDoc = DefinitionDocument(
   id: 'definitionId',
   wordId: mockWordDoc.id,
-  authorId: mockUserDoc.id,
+  authorId: mockUserProfileDoc.id,
   content: 'content',
   likesCount: 0,
   isPublic: true,
@@ -35,11 +36,19 @@ final mockDefinitionDoc = DefinitionDocument(
   updatedAt: nowDateTime,
 );
 
-final mockUserDoc = UserDocument(
+final mockUserProfileDoc = UserProfileDocument(
   id: 'userId',
   name: 'name',
-  email: 'email',
+  bio: 'I am a perfect human',
   profileImageUrl: 'profileImageUrl',
+  createdAt: nowDateTime,
+  updatedAt: nowDateTime,
+);
+
+final mockUserConfigDoc = UserConfigDocument(
+  id: 'userId',
+  appVersion: '1.0.0',
+  deviceOs: 'iOS 14.0.0',
   mutedUserIdList: ['mutedUserId'],
   createdAt: nowDateTime,
   updatedAt: nowDateTime,

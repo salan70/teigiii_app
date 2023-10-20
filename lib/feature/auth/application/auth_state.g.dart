@@ -6,9 +6,13 @@ part of 'auth_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userIdHash() => r'64e2f9721a8fbdecc9bf087873517007427097f6';
+String _$userIdHash() => r'8124d35a39f3edecbe46a479d9ae70cee6f6c429';
 
-/// See also [userId].
+/// 現在ログインしているユーザーのIDを取得する
+///
+/// ログインしていない場合はnullを返す
+///
+/// Copied from [userId].
 @ProviderFor(userId)
 final userIdProvider = FutureProvider<String?>.internal(
   userId,

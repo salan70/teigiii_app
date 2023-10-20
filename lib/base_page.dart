@@ -67,7 +67,7 @@ class _BasePageState extends ConsumerState<BasePage> {
                 onTap: tabsRouter.setActiveIndex,
               ),
             ),
-            //TODO(me): Page全体がリビルドされるのを防ぐため、Consumerでラップするなどしたい
+            // TODO(me): Page全体がリビルドされるのを防ぐため、Consumerでラップするなどしたい
             if (ref.watch(isLoadingOverlayNotifierProvider))
               const OverlayLoadingWidget(),
           ],

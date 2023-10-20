@@ -2,36 +2,36 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/firebase_providers.dart';
-import 'entity/user_document.dart';
+import 'entity/user_profile_document.dart';
 
-part 'user_repository.g.dart';
+part 'user_profile_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-UserRepository userRepository(UserRepositoryRef ref) =>
-    UserRepository(
+UserProfileRepository userProfileRepository(UserProfileRepositoryRef ref) =>
+    UserProfileRepository(
       ref.watch(firestoreProvider),
     );
 
-class UserRepository {
-  UserRepository(this.firestore);
+class UserProfileRepository {
+  UserProfileRepository(this.firestore);
 
   final FirebaseFirestore firestore;
 
-  Future<UserDocument> fetchUser(String userId) async {
-    final DocumentSnapshot userSnapshot =
-        await firestore.collection('Users').doc(userId).get();
+  Future<UserProfileDocument> fetchUserProfile(String userId) async {
+    final DocumentSnapshot snapshot =
+        await firestore.collection('UserProfiles').doc(userId).get();
 
-    return UserDocument.fromFirestore(userSnapshot);
+    return UserProfileDocument.fromFirestore(snapshot);
   }
 
   /// 引数で渡したユーザーが、フォローしているユーザーのIDリストを取得
   Future<List<String>> fetchFollowingIdList(String userId) async {
-    final QuerySnapshot followingSnapshot = await firestore
+    final QuerySnapshot snapshot = await firestore
         .collection('UserFollows')
         .where('followingId', isEqualTo: userId)
         .get();
 
-    return followingSnapshot.docs
+    return snapshot.docs
         .map((doc) => doc['followerId'] as String)
         .toList();
   }

@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../auth/application/auth_state.dart';
-import '../../user/repository/user_repository.dart';
+import '../../user/repository/user_profile_repository.dart';
 import '../../word/repository/word_repository.dart';
 import '../domain/definition.dart';
 import '../repository/definition_repository.dart';
@@ -19,8 +19,9 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
   final wordDoc =
       await ref.read(wordRepositoryProvider).fetchWord(definitionDoc.wordId);
 
-  final authorDoc =
-      await ref.read(userRepositoryProvider).fetchUser(definitionDoc.authorId);
+  final authorDoc = await ref
+      .read(userProfileRepositoryProvider)
+      .fetchUserProfile(definitionDoc.authorId);
 
   final isLikedByUser = await ref
       .read(definitionRepositoryProvider)

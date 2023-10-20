@@ -3,7 +3,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/snack_bar_controller.dart';
 import '../../auth/application/auth_state.dart';
-import '../../user/repository/user_repository.dart';
+import '../../auth/repository/user_config_repository.dart';
+import '../../user/repository/user_profile_repository.dart';
 import '../domain/definition_id_list_state.dart';
 import '../repository/definition_repository.dart';
 import '../util/definition_feed_type.dart';
@@ -45,8 +46,9 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
     final targetUserIdList = <String>[];
 
     // フォローしているユーザーのIDリストを取得
-    final followingIdList =
-        await ref.watch(userRepositoryProvider).fetchFollowingIdList(userId);
+    final followingIdList = await ref
+        .watch(userProfileRepositoryProvider)
+        .fetchFollowingIdList(userId);
 
     // フォローしているユーザーと自分のIDを追加
     targetUserIdList
@@ -129,8 +131,9 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
     final targetUserIdList = <String>[];
 
     // フォローしているユーザーのIDリストを取得
-    final followingIdList =
-        await ref.watch(userRepositoryProvider).fetchFollowingIdList(userId);
+    final followingIdList = await ref
+        .watch(userProfileRepositoryProvider)
+        .fetchFollowingIdList(userId);
 
     // フォローしているユーザーと自分のIDを追加
     targetUserIdList
@@ -149,12 +152,13 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
         );
   }
 
-  // auth系の実装したら、userDocを保持するProviderを作ると思われる
+  // auth系の実装したら、userProfileDocを保持するProviderを作ると思われる
   // その場合、この関数は不要になる
   Future<List<String>> _fetchMutedUserIdList() async {
     final userId = (await ref.read(userIdProvider.future))!;
-    final userDoc = await ref.read(userRepositoryProvider).fetchUser(userId);
+    final userProfileDoc =
+        await ref.read(userConfigRepositoryProvider).fetchUserConfig(userId);
 
-    return userDoc.mutedUserIdList;
+    return userProfileDoc.mutedUserIdList;
   }
 }

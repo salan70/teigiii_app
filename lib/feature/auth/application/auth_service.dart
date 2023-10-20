@@ -18,11 +18,11 @@ class AuthService extends _$AuthService {
     await Future<void>.delayed(const Duration(seconds: 2));
 
     final currentUserId = await ref.read(userIdProvider.future);
-    // 匿名アカウントが作成されていない場合
+    // ログインしていない場合
     if (currentUserId == null) {
-      // 匿名アカウント作成
       // TODO(me): エラーハンドリング
       // 専用のエラー画面を表示させるようにしたい（LoginFailurePage的な）
+      // 匿名ログイン
       await ref.read(authRepositoryProvider).signInAnonymously();
       // TODO(me): ユーザー情報をFirestoreに登録
 
@@ -30,7 +30,7 @@ class AuthService extends _$AuthService {
       return;
     }
 
-    // 匿名アカウントが作成済みの場合
+    // ログインしている場合
     // TODO(me): （必要あれば）Firestoreのユーザー情報を更新
     isLoadingOverlayNotifier.finishLoading();
     return;
