@@ -8,7 +8,7 @@ class UserConfigDocument with _$UserConfigDocument {
   const factory UserConfigDocument({
     required String id,
     required String appVersion,
-    required String deviceOs,
+    required String osVersion,
     required List<String> mutedUserIdList,
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -19,8 +19,8 @@ class UserConfigDocument with _$UserConfigDocument {
     return UserConfigDocument(
       id: doc.id,
       appVersion: data['appVersion'] as String,
-      deviceOs: data['deviceOs'] as String,
-      mutedUserIdList: (data['mutedUserIdList'] as List<dynamic>)
+      osVersion: data['osVersion'] as String,
+      mutedUserIdList: ((data['mutedUserIdList']) as List<dynamic>)
           .map((e) => e as String)
           .toList(),
       createdAt: (data['createdAt'] as Timestamp).toDate(),

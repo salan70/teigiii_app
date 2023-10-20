@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$UserConfigDocument {
   String get id => throw _privateConstructorUsedError;
   String get appVersion => throw _privateConstructorUsedError;
-  String get deviceOs => throw _privateConstructorUsedError;
+  String get osVersion => throw _privateConstructorUsedError;
   List<String> get mutedUserIdList => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
@@ -37,7 +37,7 @@ abstract class $UserConfigDocumentCopyWith<$Res> {
   $Res call(
       {String id,
       String appVersion,
-      String deviceOs,
+      String osVersion,
       List<String> mutedUserIdList,
       DateTime createdAt,
       DateTime updatedAt});
@@ -58,7 +58,7 @@ class _$UserConfigDocumentCopyWithImpl<$Res, $Val extends UserConfigDocument>
   $Res call({
     Object? id = null,
     Object? appVersion = null,
-    Object? deviceOs = null,
+    Object? osVersion = null,
     Object? mutedUserIdList = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -72,9 +72,9 @@ class _$UserConfigDocumentCopyWithImpl<$Res, $Val extends UserConfigDocument>
           ? _value.appVersion
           : appVersion // ignore: cast_nullable_to_non_nullable
               as String,
-      deviceOs: null == deviceOs
-          ? _value.deviceOs
-          : deviceOs // ignore: cast_nullable_to_non_nullable
+      osVersion: null == osVersion
+          ? _value.osVersion
+          : osVersion // ignore: cast_nullable_to_non_nullable
               as String,
       mutedUserIdList: null == mutedUserIdList
           ? _value.mutedUserIdList
@@ -103,7 +103,7 @@ abstract class _$$_UserConfigDocumentCopyWith<$Res>
   $Res call(
       {String id,
       String appVersion,
-      String deviceOs,
+      String osVersion,
       List<String> mutedUserIdList,
       DateTime createdAt,
       DateTime updatedAt});
@@ -122,7 +122,7 @@ class __$$_UserConfigDocumentCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? appVersion = null,
-    Object? deviceOs = null,
+    Object? osVersion = null,
     Object? mutedUserIdList = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -136,9 +136,9 @@ class __$$_UserConfigDocumentCopyWithImpl<$Res>
           ? _value.appVersion
           : appVersion // ignore: cast_nullable_to_non_nullable
               as String,
-      deviceOs: null == deviceOs
-          ? _value.deviceOs
-          : deviceOs // ignore: cast_nullable_to_non_nullable
+      osVersion: null == osVersion
+          ? _value.osVersion
+          : osVersion // ignore: cast_nullable_to_non_nullable
               as String,
       mutedUserIdList: null == mutedUserIdList
           ? _value._mutedUserIdList
@@ -162,7 +162,7 @@ class _$_UserConfigDocument implements _UserConfigDocument {
   const _$_UserConfigDocument(
       {required this.id,
       required this.appVersion,
-      required this.deviceOs,
+      required this.osVersion,
       required final List<String> mutedUserIdList,
       required this.createdAt,
       required this.updatedAt})
@@ -173,7 +173,7 @@ class _$_UserConfigDocument implements _UserConfigDocument {
   @override
   final String appVersion;
   @override
-  final String deviceOs;
+  final String osVersion;
   final List<String> _mutedUserIdList;
   @override
   List<String> get mutedUserIdList {
@@ -189,7 +189,7 @@ class _$_UserConfigDocument implements _UserConfigDocument {
 
   @override
   String toString() {
-    return 'UserConfigDocument(id: $id, appVersion: $appVersion, deviceOs: $deviceOs, mutedUserIdList: $mutedUserIdList, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserConfigDocument(id: $id, appVersion: $appVersion, osVersion: $osVersion, mutedUserIdList: $mutedUserIdList, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -200,8 +200,8 @@ class _$_UserConfigDocument implements _UserConfigDocument {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.appVersion, appVersion) ||
                 other.appVersion == appVersion) &&
-            (identical(other.deviceOs, deviceOs) ||
-                other.deviceOs == deviceOs) &&
+            (identical(other.osVersion, osVersion) ||
+                other.osVersion == osVersion) &&
             const DeepCollectionEquality()
                 .equals(other._mutedUserIdList, _mutedUserIdList) &&
             (identical(other.createdAt, createdAt) ||
@@ -215,7 +215,7 @@ class _$_UserConfigDocument implements _UserConfigDocument {
       runtimeType,
       id,
       appVersion,
-      deviceOs,
+      osVersion,
       const DeepCollectionEquality().hash(_mutedUserIdList),
       createdAt,
       updatedAt);
@@ -232,7 +232,7 @@ abstract class _UserConfigDocument implements UserConfigDocument {
   const factory _UserConfigDocument(
       {required final String id,
       required final String appVersion,
-      required final String deviceOs,
+      required final String osVersion,
       required final List<String> mutedUserIdList,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$_UserConfigDocument;
@@ -242,7 +242,7 @@ abstract class _UserConfigDocument implements UserConfigDocument {
   @override
   String get appVersion;
   @override
-  String get deviceOs;
+  String get osVersion;
   @override
   List<String> get mutedUserIdList;
   @override

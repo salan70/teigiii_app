@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mockito/mockito.dart';
-import 'package:teigi_app/feature/auth/repository/entity/user_config_document.dart';
 import 'package:teigi_app/feature/definition/domain/definition.dart';
 import 'package:teigi_app/feature/definition/repository/entity/definition_document.dart';
 import 'package:teigi_app/feature/user/repository/entity/user_profile_document.dart';
+import 'package:teigi_app/feature/user_config/repository/entity/user_config_document.dart';
 import 'package:teigi_app/feature/word/repository/entity/word_document.dart';
 
 final nowDateTime = DateTime.now();
@@ -48,7 +48,7 @@ final mockUserProfileDoc = UserProfileDocument(
 final mockUserConfigDoc = UserConfigDocument(
   id: 'userId',
   appVersion: '1.0.0',
-  deviceOs: 'iOS 14.0.0',
+  osVersion: 'iOS 14.0.0',
   mutedUserIdList: ['mutedUserId'],
   createdAt: nowDateTime,
   updatedAt: nowDateTime,

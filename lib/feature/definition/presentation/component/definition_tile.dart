@@ -139,8 +139,8 @@ class DefinitionTile extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        debugPrint('definition id: $definitionId');
-        debugPrint('error: $error');
+        debugPrint('definitionId [$definitionId]の取得に失敗しました。');
+        debugPrint('エラー: $error');
         // TODO(me): エラー時に表示させるTileを作成する
         // 「!」みたいなアイコンと、エラーが発生した旨を表示するのが良さげ
         return const SizedBox();

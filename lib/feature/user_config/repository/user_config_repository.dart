@@ -23,4 +23,30 @@ class UserConfigRepository {
 
     return UserConfigDocument.fromFirestore(snapshot);
   }
+
+  Future<void> addUserConfig(
+    String userId,
+    String osVersion,
+    String appVersion,
+  ) async {
+    await firestore.collection('UserConfigs').doc(userId).set({
+      'mutedUserIdList': <dynamic>[],
+      'osVersion': osVersion,
+      'appVersion': appVersion,
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> updateUserConfig(
+    String userId,
+    String osVersion,
+    String appVersion,
+  ) async {
+    await firestore.collection('UserConfigs').doc(userId).update({
+      'osVersion': osVersion,
+      'appVersion': appVersion,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
 }

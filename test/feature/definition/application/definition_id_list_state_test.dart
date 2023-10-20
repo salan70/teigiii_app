@@ -3,12 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
-import 'package:teigi_app/feature/auth/repository/user_config_repository.dart';
 import 'package:teigi_app/feature/definition/application/definition_id_list_state.dart';
 import 'package:teigi_app/feature/definition/domain/definition_id_list_state.dart';
 import 'package:teigi_app/feature/definition/repository/definition_repository.dart';
 import 'package:teigi_app/feature/definition/util/definition_feed_type.dart';
 import 'package:teigi_app/feature/user/repository/user_profile_repository.dart';
+import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
 import 'package:teigi_app/feature/word/repository/word_repository.dart';
 
 import '../../../mock/mock_data.dart';

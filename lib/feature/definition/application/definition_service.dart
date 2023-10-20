@@ -28,7 +28,7 @@ class DefinitionService extends _$DefinitionService {
     try {
       await _updateLikeStatus(definition);
     } on Exception catch (e) {
-      debugPrint('error: $e');
+      debugPrint('いいね登録もしくは解除時にエラーが発生しました。: $e');
       ref
           .read(snackBarControllerProvider.notifier)
           .showSnackBar('失敗しました。もう一度お試しください。');
@@ -87,7 +87,7 @@ class DefinitionService extends _$DefinitionService {
 
   /// いいね登録/解除を行う
   Future<void> _updateLikeStatus(Definition definition) async {
-    final userId = (await ref.read(userIdProvider.future))!;
+    final userId = ref.read(userIdProvider)!;
 
     if (definition.isLikedByUser) {
       // いいね解除

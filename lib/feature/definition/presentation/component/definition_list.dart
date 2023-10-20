@@ -78,7 +78,7 @@ class DefinitionList extends ConsumerWidget {
         );
       },
       error: (error, _) {
-        debugPrint('error: $error');
+        debugPrint('エラー: $error');
 
         // 取得済みのデータがある場合、それを表示する
         if (asyncDefinitionIdListState.hasValue) {

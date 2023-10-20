@@ -8,10 +8,6 @@ import 'dart:async' as _i9;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:riverpod_annotation/riverpod_annotation.dart' as _i14;
-import 'package:teigi_app/feature/auth/repository/entity/user_config_document.dart'
-    as _i6;
-import 'package:teigi_app/feature/auth/repository/user_config_repository.dart'
-    as _i11;
 import 'package:teigi_app/feature/definition/domain/definition_id_list_state.dart'
     as _i3;
 import 'package:teigi_app/feature/definition/repository/definition_repository.dart'
@@ -22,6 +18,10 @@ import 'package:teigi_app/feature/user/repository/entity/user_profile_document.d
     as _i5;
 import 'package:teigi_app/feature/user/repository/user_profile_repository.dart'
     as _i10;
+import 'package:teigi_app/feature/user_config/repository/entity/user_config_document.dart'
+    as _i6;
+import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart'
+    as _i11;
 import 'package:teigi_app/feature/word/repository/entity/word_document.dart'
     as _i7;
 import 'package:teigi_app/feature/word/repository/word_repository.dart' as _i12;
@@ -369,6 +369,23 @@ class MockUserProfileRepository extends _i1.Mock
       ) as _i9.Future<_i5.UserProfileDocument>);
 
   @override
+  _i9.Future<void> addUserProfile(
+    String? userId,
+    String? name,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addUserProfile,
+          [
+            userId,
+            name,
+          ],
+        ),
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
+
+  @override
   _i9.Future<List<String>> fetchFollowingIdList(String? userId) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -422,6 +439,44 @@ class MockUserConfigRepository extends _i1.Mock
           ),
         )),
       ) as _i9.Future<_i6.UserConfigDocument>);
+
+  @override
+  _i9.Future<void> addUserConfig(
+    String? userId,
+    String? osVersion,
+    String? appVersion,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addUserConfig,
+          [
+            userId,
+            osVersion,
+            appVersion,
+          ],
+        ),
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
+
+  @override
+  _i9.Future<void> updateUserConfig(
+    String? userId,
+    String? osVersion,
+    String? appVersion,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUserConfig,
+          [
+            userId,
+            osVersion,
+            appVersion,
+          ],
+        ),
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 }
 
 /// A class which mocks [WordRepository].

@@ -24,6 +24,16 @@ class UserProfileRepository {
     return UserProfileDocument.fromFirestore(snapshot);
   }
 
+  Future<void> addUserProfile(String userId, String name) async {
+    await firestore.collection('UserProfiles').doc(userId).set({
+      'name': name,
+      'bio': '',
+      'profileImageUrl': '',
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
   /// 引数で渡したユーザーが、フォローしているユーザーのIDリストを取得
   Future<List<String>> fetchFollowingIdList(String userId) async {
     final QuerySnapshot snapshot = await firestore
@@ -31,8 +41,6 @@ class UserProfileRepository {
         .where('followingId', isEqualTo: userId)
         .get();
 
-    return snapshot.docs
-        .map((doc) => doc['followerId'] as String)
-        .toList();
+    return snapshot.docs.map((doc) => doc['followerId'] as String).toList();
   }
 }
