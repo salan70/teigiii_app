@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/is_loading_overlay_state.dart';
 import '../../../core/common_provider/snack_bar_controller.dart';
+import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../domain/definition.dart';
 import '../domain/definition_id_list_state.dart';
@@ -28,7 +28,7 @@ class DefinitionService extends _$DefinitionService {
     try {
       await _updateLikeStatus(definition);
     } on Exception catch (e) {
-      debugPrint('いいね登録もしくは解除時にエラーが発生しました。: $e');
+      logger.e('いいね登録もしくは解除時にエラーが発生しました。: $e');
       ref
           .read(snackBarControllerProvider.notifier)
           .showSnackBar('失敗しました。もう一度お試しください。');

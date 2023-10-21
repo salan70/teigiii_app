@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/snack_bar_controller.dart';
+import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user/repository/user_profile_repository.dart';
 import '../../user_config/repository/user_config_repository.dart';
@@ -101,7 +101,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
       );
       state = AsyncData(nextState);
     } on Exception catch (e, s) {
-      debugPrint('エラー: $e');
+      logger.e('エラー: $e');
       ref
           .read(snackBarControllerProvider.notifier)
           .showSnackBar('読み込めませんでした。もう一度お試しください。');
