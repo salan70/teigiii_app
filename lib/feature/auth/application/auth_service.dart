@@ -51,6 +51,8 @@ class AuthService extends _$AuthService {
       // ユーザー情報を登録
       await _addUserConfig();
       await _addUserProfile();
+
+      return;
     });
 
     return;

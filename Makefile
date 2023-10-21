@@ -14,3 +14,4 @@ test:
 	fvm flutter test --coverage
 	lcov --remove coverage/lcov.info '*.freezed.dart' '*.g.dart' '*/repository*' -o coverage/lcov.info
 	genhtml coverage/lcov.info -o coverage/html
+	open /Users/odatetsuo/Projects/teigi_app/coverage/html/index.html
