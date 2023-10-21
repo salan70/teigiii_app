@@ -14,9 +14,7 @@ part 'auth_service.g.dart';
 @Riverpod(keepAlive: true)
 class AuthService extends _$AuthService {
   @override
-  FutureOr<void> build() async {
-    await onAppLaunch();
-  }
+  FutureOr<void> build() async {}
 
   /// アプリ起動時に行うAuth関連の処理
   ///
@@ -28,10 +26,11 @@ class AuthService extends _$AuthService {
     // TODO(me): デバッグ用のコード。リリース時に削除する
     // await ref.read(authRepositoryProvider).signOut();
     final currentUserId = ref.read(userIdProvider);
-    logger.i('currentUserId: $currentUserId');
+    logger.i('現在のユーザーID: $currentUserId');
     // ログインしていない場合
     if (currentUserId == null) {
       state = await AsyncValue.guard(() async {
+        logger.i('ログインしていないため、匿名ログインします');
         // 匿名ログイン
         await ref.read(authRepositoryProvider).signInAnonymously();
 
@@ -39,6 +38,8 @@ class AuthService extends _$AuthService {
         await _addUserConfig();
         await _addUserProfile();
       });
+
+      return;
     }
 
     // ログインしている場合
@@ -48,7 +49,7 @@ class AuthService extends _$AuthService {
       try {
         await _updateUserConfig();
       } on Exception catch (e) {
-        logger.e('エラー: $e');
+        logger.e('$e');
       }
     }
 

@@ -140,7 +140,7 @@ class DefinitionTile extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        logger.e('definitionId [$definitionId]の取得に失敗しました。\nエラー: $error');
+        logger.e('definitionId [$definitionId]の取得時にエラーが発生: $error');
         // TODO(me): エラー時に表示させるTileを作成する
         // 「!」みたいなアイコンと、エラーが発生した旨を表示するのが良さげ
         return const SizedBox();

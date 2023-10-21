@@ -28,7 +28,7 @@ class DefinitionService extends _$DefinitionService {
     try {
       await _updateLikeStatus(definition);
     } on Exception catch (e) {
-      logger.e('いいね登録もしくは解除時にエラーが発生しました。: $e');
+      logger.e('いいね登録もしくは解除時にエラーが発生: $e');
       ref
           .read(snackBarControllerProvider.notifier)
           .showSnackBar('失敗しました。もう一度お試しください。');
