@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common_widget/cupertino_refresh_indicator.dart';
 import '../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
+import '../../../../util/logger.dart';
 import '../../application/definition_id_list_state.dart';
 import '../../application/definition_service.dart';
 import '../../util/definition_feed_type.dart';
@@ -78,7 +79,7 @@ class DefinitionList extends ConsumerWidget {
         );
       },
       error: (error, _) {
-        debugPrint('エラー: $error');
+        logger.e('エラー: $error');
 
         // 取得済みのデータがある場合、それを表示する
         if (asyncDefinitionIdListState.hasValue) {

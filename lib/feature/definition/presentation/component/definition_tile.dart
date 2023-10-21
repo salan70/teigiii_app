@@ -6,6 +6,7 @@ import 'package:like_button/like_button.dart';
 import '../../../../core/common_widget/adaptive_overflow_text.dart';
 import '../../../../util/constant/color_scheme.dart';
 import '../../../../util/extension/date_time_extension.dart';
+import '../../../../util/logger.dart';
 import '../../application/definition_service.dart';
 import '../../application/definition_state.dart';
 import 'definition_tile_shimmer.dart';
@@ -139,8 +140,7 @@ class DefinitionTile extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        debugPrint('definitionId [$definitionId]の取得に失敗しました。');
-        debugPrint('エラー: $error');
+        logger.e('definitionId [$definitionId]の取得に失敗しました。\nエラー: $error');
         // TODO(me): エラー時に表示させるTileを作成する
         // 「!」みたいなアイコンと、エラーが発生した旨を表示するのが良さげ
         return const SizedBox();

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../util/logger.dart';
 import '../../user/repository/user_profile_repository.dart';
 import '../../user_config/repository/device_info_repository.dart';
 import '../../user_config/repository/package_info_repository.dart';
@@ -28,7 +29,7 @@ class AuthService extends _$AuthService {
     // TODO(me): デバッグ用のコード。リリース時に削除する
     // await ref.read(authRepositoryProvider).signOut();
     final currentUserId = ref.read(userIdProvider);
-    debugPrint('currentUserId: $currentUserId');
+    logger.i('currentUserId: $currentUserId');
     // ログインしていない場合
     if (currentUserId == null) {
       state = await AsyncValue.guard(() async {
@@ -44,11 +45,11 @@ class AuthService extends _$AuthService {
     // ログインしている場合
     else {
       // _updateUserConfig()時のエラーは直接ユーザーに影響がないと思われるので、
-      // AsyncValue.guard()で囲わず、debugPrint()でエラーを出力するだけとしている
+      // AsyncValue.guard()で囲わず、エラーをログ出力するだけとしている
       try {
         await _updateUserConfig();
       } on Exception catch (e) {
-        debugPrint('エラー: $e');
+        logger.e('エラー: $e');
       }
     }
 
