@@ -14,9 +14,7 @@ part 'auth_service.g.dart';
 @Riverpod(keepAlive: true)
 class AuthService extends _$AuthService {
   @override
-  FutureOr<void> build() async {
-    await onAppLaunch();
-  }
+  FutureOr<void> build() async {}
 
   /// アプリ起動時に行うAuth関連の処理
   ///
@@ -27,32 +25,36 @@ class AuthService extends _$AuthService {
 
     // TODO(me): デバッグ用のコード。リリース時に削除する
     // await ref.read(authRepositoryProvider).signOut();
-    final currentUserId = ref.read(userIdProvider);
-    logger.i('currentUserId: $currentUserId');
-    // ログインしていない場合
-    if (currentUserId == null) {
-      state = await AsyncValue.guard(() async {
-        // 匿名ログイン
-        await ref.read(authRepositoryProvider).signInAnonymously();
 
-        // ユーザー情報を登録
-        await _addUserConfig();
-        await _addUserProfile();
-      });
-    }
-
+    final isSignedIn = ref.read(isSignedInProvider);
     // ログインしている場合
-    else {
+    if (isSignedIn) {
+      logger.i('ログイン済みです。');
       // _updateUserConfig()時のエラーは直接ユーザーに影響がないと思われるので、
       // AsyncValue.guard()で囲わず、エラーをログ出力するだけとしている
       try {
         await _updateUserConfig();
       } on Exception catch (e) {
-        logger.e('エラー: $e');
+        logger.e('$e');
       }
+
+      state = const AsyncValue.data(null);
+      return;
     }
 
-    state = const AsyncValue.data(null);
+    // ログインしていない場合
+    state = await AsyncValue.guard(() async {
+      logger.i('ログインしていないため、匿名ログインします');
+      // 匿名ログイン
+      await ref.read(authRepositoryProvider).signInAnonymously();
+
+      // ユーザー情報を登録
+      await _addUserConfig();
+      await _addUserProfile();
+
+      return;
+    });
+
     return;
   }
 
@@ -66,6 +68,9 @@ class AuthService extends _$AuthService {
         await ref.read(packageInfoRepositoryProvider).fetchAppVersion();
 
     final userId = ref.read(userIdProvider)!;
+
+    // 新規ログイン後にこの関数が呼ばれる想定のため、ここでuserIdを出力しておく
+    logger.i('[$userId]として新規ログインしました。ユーザー情報を登録します。');
 
     await ref.read(userConfigRepositoryProvider).addUserConfig(
           userId,
@@ -93,6 +98,8 @@ class AuthService extends _$AuthService {
         await ref.read(packageInfoRepositoryProvider).fetchAppVersion();
 
     final userId = ref.read(userIdProvider)!;
+    // ログインしている場合、この関数が呼ばれる想定のため、ここでuserIdを出力しておく
+    logger.i('[$userId]としてログイン中です。ユーザー情報を更新します。');
 
     await ref.read(userConfigRepositoryProvider).updateUserConfig(
           userId,
