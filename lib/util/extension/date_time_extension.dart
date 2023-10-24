@@ -1,4 +1,7 @@
+import 'package:intl/intl.dart';
+
 extension DateTimeExtension on DateTime {
+  /// 引数の日時を基準として、○分前、○週間前 といった形式で返す
   String timeAgo(DateTime baseTime) {
     final difference = baseTime.difference(this);
 
@@ -23,5 +26,10 @@ extension DateTimeExtension on DateTime {
       return '${(difference.inDays / daysInMonth).floor()}ヶ月前';
     }
     return '${(difference.inDays / daysInYear).floor()}年前';
+  }
+
+  /// UIで表示する形式に変換する
+  String toDisplayFormat() {
+    return DateFormat('yyyy/MM/dd HH:mm').format(this);
   }
 }

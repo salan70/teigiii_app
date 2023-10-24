@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../util/extension/date_time_extension.dart';
 import '../../../application/definition_state.dart';
 import '../../component/avatar_icon_widget.dart';
 import '../../component/like_widget.dart';
@@ -57,14 +58,32 @@ class DefinitionDetailPage extends ConsumerWidget {
                   Text('DefinitionDetailPage: ${definition.definition}}'),
                   const SizedBox(height: 16),
                   // TODO(me): createdAt, updatedAtの表示形式をいい感じにする
-                  Text(
-                    definition.createdAt.toString(),
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  Row(
+                    children: [
+                      Text(
+                        definition.createdAt.toDisplayFormat(),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        '作成',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    definition.updatedAt.toString(),
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  Row(
+                    children: [
+                      Text(
+                        definition.updatedAt.toDisplayFormat(),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        '更新',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 8),
                   LikeWidget(definition: definition),
