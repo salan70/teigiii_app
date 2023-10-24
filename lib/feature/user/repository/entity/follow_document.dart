@@ -10,6 +10,7 @@ class FollowDocument with _$FollowDocument {
     required String followerId,
     required String followingId,
     required DateTime createdAt,
+    required DateTime updatedAt,
   }) = _FollowDocument;
 
   factory FollowDocument.fromFirestore(DocumentSnapshot doc) {
@@ -19,6 +20,7 @@ class FollowDocument with _$FollowDocument {
       followerId: data['followerId'] as String,
       followingId: data['followingId'] as String,
       createdAt: (data['createdAt'] as Timestamp).toDate(),
+      updatedAt: (data['updatedAt'] as Timestamp).toDate(),
     );
   }
 }

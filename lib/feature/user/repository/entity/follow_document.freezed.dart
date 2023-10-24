@@ -20,6 +20,7 @@ mixin _$FollowDocument {
   String get followerId => throw _privateConstructorUsedError;
   String get followingId => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $FollowDocumentCopyWith<FollowDocument> get copyWith =>
@@ -33,7 +34,11 @@ abstract class $FollowDocumentCopyWith<$Res> {
       _$FollowDocumentCopyWithImpl<$Res, FollowDocument>;
   @useResult
   $Res call(
-      {String id, String followerId, String followingId, DateTime createdAt});
+      {String id,
+      String followerId,
+      String followingId,
+      DateTime createdAt,
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -53,6 +58,7 @@ class _$FollowDocumentCopyWithImpl<$Res, $Val extends FollowDocument>
     Object? followerId = null,
     Object? followingId = null,
     Object? createdAt = null,
+    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -71,6 +77,10 @@ class _$FollowDocumentCopyWithImpl<$Res, $Val extends FollowDocument>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ) as $Val);
   }
 }
@@ -84,7 +94,11 @@ abstract class _$$_FollowDocumentCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id, String followerId, String followingId, DateTime createdAt});
+      {String id,
+      String followerId,
+      String followingId,
+      DateTime createdAt,
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -102,6 +116,7 @@ class __$$_FollowDocumentCopyWithImpl<$Res>
     Object? followerId = null,
     Object? followingId = null,
     Object? createdAt = null,
+    Object? updatedAt = null,
   }) {
     return _then(_$_FollowDocument(
       id: null == id
@@ -120,6 +135,10 @@ class __$$_FollowDocumentCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -131,7 +150,8 @@ class _$_FollowDocument implements _FollowDocument {
       {required this.id,
       required this.followerId,
       required this.followingId,
-      required this.createdAt});
+      required this.createdAt,
+      required this.updatedAt});
 
   @override
   final String id;
@@ -141,10 +161,12 @@ class _$_FollowDocument implements _FollowDocument {
   final String followingId;
   @override
   final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'FollowDocument(id: $id, followerId: $followerId, followingId: $followingId, createdAt: $createdAt)';
+    return 'FollowDocument(id: $id, followerId: $followerId, followingId: $followingId, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -158,12 +180,14 @@ class _$_FollowDocument implements _FollowDocument {
             (identical(other.followingId, followingId) ||
                 other.followingId == followingId) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, followerId, followingId, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType, id, followerId, followingId, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -177,7 +201,8 @@ abstract class _FollowDocument implements FollowDocument {
       {required final String id,
       required final String followerId,
       required final String followingId,
-      required final DateTime createdAt}) = _$_FollowDocument;
+      required final DateTime createdAt,
+      required final DateTime updatedAt}) = _$_FollowDocument;
 
   @override
   String get id;
@@ -187,6 +212,8 @@ abstract class _FollowDocument implements FollowDocument {
   String get followingId;
   @override
   DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$_FollowDocumentCopyWith<_$_FollowDocument> get copyWith =>
