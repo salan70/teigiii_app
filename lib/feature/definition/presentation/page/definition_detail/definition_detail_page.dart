@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,59 +36,68 @@ class DefinitionDetailPage extends ConsumerWidget {
       ),
       body: definitionAsync.when(
         data: (definition) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const SizedBox(width: 16),
-                      AvatarIconWidget(imageUrl: definition.authorImageUrl),
-                      const SizedBox(width: 16),
-                      Text(definition.authorName),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    definition.word,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 16),
-                  Text('DefinitionDetailPage: ${definition.definition}}'),
-                  const SizedBox(height: 16),
-                  // TODO(me): createdAt, updatedAtの表示形式をいい感じにする
-                  Row(
-                    children: [
-                      Text(
-                        definition.createdAt.toDisplayFormat(),
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(width: 2),
-                      Text(
-                        '作成',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Text(
-                        definition.updatedAt.toDisplayFormat(),
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(width: 2),
-                      Text(
-                        '更新',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  LikeWidget(definition: definition),
-                ],
+          return EasyRefresh(
+            header: const CupertinoHeader(),
+            onRefresh: () async {
+              ref.invalidate(definitionProvider(definitionId));
+            },
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 24,
+                  left: 24,
+                  right: 24,
+                  bottom: 120,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const SizedBox(width: 16),
+                        AvatarIconWidget(imageUrl: definition.authorImageUrl),
+                        const SizedBox(width: 16),
+                        Text(definition.authorName),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      definition.word,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(definition.definition),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Text(
+                          definition.createdAt.toDisplayFormat(),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          '作成',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          definition.updatedAt.toDisplayFormat(),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          '更新',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    LikeWidget(definition: definition),
+                  ],
+                ),
               ),
             ),
           );
