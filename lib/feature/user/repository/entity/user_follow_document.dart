@@ -1,21 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'follow_document.freezed.dart';
+part 'user_follow_document.freezed.dart';
 
 @freezed
-class FollowDocument with _$FollowDocument {
-  const factory FollowDocument({
+class UserFollowDocument with _$UserFollowDocument {
+  const factory UserFollowDocument({
     required String id,
     required String followerId,
     required String followingId,
     required DateTime createdAt,
     required DateTime updatedAt,
-  }) = _FollowDocument;
+  }) = _UserFollowDocument;
 
-  factory FollowDocument.fromFirestore(DocumentSnapshot doc) {
+  factory UserFollowDocument.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data()! as Map<String, dynamic>;
-    return FollowDocument(
+    return UserFollowDocument(
       id: doc.id,
       followerId: data['followerId'] as String,
       followingId: data['followingId'] as String,
