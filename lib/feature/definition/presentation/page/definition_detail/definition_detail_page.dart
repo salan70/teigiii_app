@@ -7,6 +7,7 @@ import '../../../../../util/extension/date_time_extension.dart';
 import '../../../application/definition_state.dart';
 import '../../component/avatar_icon_widget.dart';
 import '../../component/like_widget.dart';
+import 'definition_detail_shimmer.dart';
 
 @RoutePage()
 class DefinitionDetailPage extends ConsumerWidget {
@@ -54,7 +55,6 @@ class DefinitionDetailPage extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        const SizedBox(width: 16),
                         AvatarIconWidget(imageUrl: definition.authorImageUrl),
                         const SizedBox(width: 16),
                         Text(definition.authorName),
@@ -103,12 +103,10 @@ class DefinitionDetailPage extends ConsumerWidget {
           );
         },
         loading: () {
-          // TODO(me): shimmerを表示する
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const DefinitionDeitailShimmer();
         },
         error: (error, _) {
+          // TODO(me): いい感じのエラー画面を表示させる
           return Center(
             child: Text(
               error.toString(),
