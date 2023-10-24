@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import '../../util/definition_feed_type.dart';
-import '../component/definition_list.dart';
+import '../../../util/definition_feed_type.dart';
+import '../../component/definition_list.dart';
 
 @RoutePage()
 class HomeRouterPage extends AutoRouter {

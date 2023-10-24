@@ -33,7 +33,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: DefinitionDetailPage(
           key: args.key,
-          definition: args.definition,
+          definitionId: args.definitionId,
         ),
       );
     },
@@ -97,13 +97,13 @@ class BaseRouterRoute extends PageRouteInfo<void> {
 class DefinitionDetailRoute extends PageRouteInfo<DefinitionDetailRouteArgs> {
   DefinitionDetailRoute({
     Key? key,
-    required Definition definition,
+    required String definitionId,
     List<PageRouteInfo>? children,
   }) : super(
           DefinitionDetailRoute.name,
           args: DefinitionDetailRouteArgs(
             key: key,
-            definition: definition,
+            definitionId: definitionId,
           ),
           initialChildren: children,
         );
@@ -117,16 +117,16 @@ class DefinitionDetailRoute extends PageRouteInfo<DefinitionDetailRouteArgs> {
 class DefinitionDetailRouteArgs {
   const DefinitionDetailRouteArgs({
     this.key,
-    required this.definition,
+    required this.definitionId,
   });
 
   final Key? key;
 
-  final Definition definition;
+  final String definitionId;
 
   @override
   String toString() {
-    return 'DefinitionDetailRouteArgs{key: $key, definition: $definition}';
+    return 'DefinitionDetailRouteArgs{key: $key, definitionId: $definitionId}';
   }
 }
 

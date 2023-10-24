@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 import '../../base_page.dart';
 import '../../feature/definition/domain/definition.dart';
-import '../../feature/definition/presentation/page/definition_detail_page.dart';
-import '../../feature/definition/presentation/page/home_page.dart';
-import '../../feature/definition/presentation/page/index_page.dart';
-import '../../feature/definition/presentation/page/profile_page.dart';
+import '../../feature/definition/presentation/page/definition_detail/definition_detail_page.dart';
+import '../../feature/definition/presentation/page/home/home_page.dart';
+import '../../feature/definition/presentation/page/index/index_page.dart';
+import '../../feature/definition/presentation/page/profile/profile_page.dart';
 
 part 'app_router.gr.dart';
 

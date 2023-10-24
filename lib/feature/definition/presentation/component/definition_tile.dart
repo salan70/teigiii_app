@@ -1,17 +1,15 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:like_button/like_button.dart';
 
 import '../../../../core/common_widget/adaptive_overflow_text.dart';
 import '../../../../core/router/app_router.dart';
-import '../../../../util/constant/color_scheme.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../../../util/logger.dart';
-import '../../application/definition_service.dart';
 import '../../application/definition_state.dart';
+import 'avatar_icon_widget.dart';
 import 'definition_tile_shimmer.dart';
+import 'like_widget.dart';
 
 class DefinitionTile extends ConsumerWidget {
   const DefinitionTile({
@@ -32,7 +30,7 @@ class DefinitionTile extends ConsumerWidget {
               HomeRouterRoute(
                 children: [
                   DefinitionDetailRoute(
-                    definition: definition,
+                    definitionId: definition.id,
                   ),
                 ],
               ),
@@ -49,20 +47,7 @@ class DefinitionTile extends ConsumerWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CachedNetworkImage(
-                      imageUrl: definition.authorImageUrl,
-                      imageBuilder: (context, imageProvider) => Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
+                    AvatarIconWidget(imageUrl: definition.authorImageUrl),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Column(
@@ -97,58 +82,7 @@ class DefinitionTile extends ConsumerWidget {
                             maxLines: 5,
                           ),
                           const SizedBox(height: 8),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // TODO(me): countのアニメが表示されない事案を解決する
-                              LikeButton(
-                                isLiked: definition.isLikedByUser,
-                                likeCount: definition.likesCount,
-                                likeCountPadding: const EdgeInsets.only(
-                                  right: 24,
-                                ),
-                                likeBuilder: (bool isLiked) {
-                                  return Icon(
-                                    isLiked
-                                        ? Icons.favorite
-                                        : Icons.favorite_outline,
-                                    color: isLiked
-                                        ? likeColor
-                                        : Theme.of(context).colorScheme.outline,
-                                    size: 20,
-                                  );
-                                },
-                                countBuilder:
-                                    (int? count, bool isLiked, String text) {
-                                  return Text(
-                                    text,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: isLiked
-                                          ? likeColor
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .outline,
-                                    ),
-                                  );
-                                },
-                                onTap: (_) async {
-                                  try {
-                                    await ref
-                                        .read(
-                                          definitionServiceProvider.notifier,
-                                        )
-                                        .tapLike(definition);
-                                  } on Exception catch (_) {
-                                    // 例外発生時は、もともとのisLikedByUserの値を返す
-                                    return definition.isLikedByUser;
-                                  }
-
-                                  return !definition.isLikedByUser;
-                                },
-                              ),
-                            ],
-                          ),
+                          LikeWidget(definition: definition),
                         ],
                       ),
                     ),
