@@ -29,7 +29,7 @@ class _BasePageState extends ConsumerState<BasePage> {
       data: (_) {
         return AutoTabsRouter(
           routes: const [
-            HomeRoute(),
+            HomeRouterRoute(),
             ProfileRoute(),
             IndexRoute(),
           ],

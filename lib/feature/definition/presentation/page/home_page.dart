@@ -5,6 +5,11 @@ import '../../util/definition_feed_type.dart';
 import '../component/definition_list.dart';
 
 @RoutePage()
+class HomeRouterPage extends AutoRouter {
+  const HomeRouterPage({super.key});
+}
+
+@RoutePage()
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 

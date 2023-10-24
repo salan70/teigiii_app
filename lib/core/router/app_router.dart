@@ -1,11 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 
 import '../../base_page.dart';
+import '../../feature/definition/domain/definition.dart';
+import '../../feature/definition/presentation/page/definition_detail_page.dart';
 import '../../feature/definition/presentation/page/home_page.dart';
 import '../../feature/definition/presentation/page/index_page.dart';
 import '../../feature/definition/presentation/page/profile_page.dart';
-
-
 
 part 'app_router.gr.dart';
 
@@ -14,12 +15,31 @@ class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(
+          path: '/',
           page: BaseRoute.page,
-          initial: true,
           children: [
-            AutoRoute(page: HomeRoute.page),
-            AutoRoute(page: ProfileRoute.page),
-            AutoRoute(page: IndexRoute.page),
+            AutoRoute(
+              path: 'home',
+              page: HomeRouterRoute.page,
+              children: [
+                AutoRoute(
+                  initial: true,
+                  page: HomeRoute.page,
+                ),
+                AutoRoute(
+                  path: 'definition_detail',
+                  page: DefinitionDetailRoute.page,
+                ),
+              ],
+            ),
+            AutoRoute(
+              path: 'profile',
+              page: ProfileRoute.page,
+            ),
+            AutoRoute(
+              path: 'index',
+              page: IndexRoute.page,
+            ),
           ],
         ),
       ];
