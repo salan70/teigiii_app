@@ -72,6 +72,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       routerConfig: widget._appRouter.config(),
       scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
       theme: ThemeData(
+        fontFamily: 'LINESeedJP',
         colorScheme: lightColorScheme,
         appBarTheme: AppBarTheme(
           backgroundColor: lightColorScheme.surface,

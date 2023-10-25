@@ -15,10 +15,21 @@ class SnackBarController extends _$SnackBarController {
   @override
   void build() {}
 
-  void showSnackBar(String text) {
+  /// SnackBarを表示する
+  ///
+  /// [causeError]がtrueの場合は4000ミリ秒 (デフォルト)、
+  /// falseの場合は2000ミリ秒表示させる
+  void showSnackBar(String text, {required bool causeError}) {
     final scaffoldMessengerKey = ref.read(scaffoldMessengerKeyProvider);
+    // すでに表示中のSnackBarがあれば非表示にする
+    scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
     scaffoldMessengerKey.currentState?.showSnackBar(
-      SnackBar(content: Text(text)),
+      SnackBar(
+        duration: causeError
+            ? const Duration(milliseconds: 4000)
+            : const Duration(milliseconds: 2000),
+        content: Text(text),
+      ),
     );
   }
 }

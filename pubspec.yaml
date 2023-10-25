@@ -18,9 +18,11 @@ dependencies:
   easy_refresh: ^3.3.2+1
   flutter_riverpod: ^2.4.3
   freezed_annotation: ^2.4.1
+  intl: ^0.18.1
   like_button: ^2.0.5
   mockito: ^5.4.2
   package_info_plus: ^4.2.0
+  pull_down_button: ^0.9.3
   riverpod_annotation: ^2.2.0
   roggle: ^0.4.2+1
   shimmer: ^3.0.0
@@ -48,3 +50,15 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  fonts:
+  - family: LINESeedJP
+    fonts:
+      - asset: assets/fonts/LINESeedJP_A_OTF_Th.otf
+        weight: 100
+      - asset: assets/fonts/LINESeedJP_A_OTF_Rg.otf
+        weight: 400
+      - asset: assets/fonts/LINESeedJP_A_OTF_Bd.otf
+        weight: 700
+      - asset: assets/fonts/LINESeedJP_A_OTF_Eb.otf
+        weight: 800

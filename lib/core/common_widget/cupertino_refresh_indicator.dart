@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 /// [CupertinoSliverRefreshControl]のbuilderで使用する想定
 ///
 /// [CupertinoActivityIndicator]のradiusを任意の値するために作成
-/// 中身は、[CupertinoSliverRefreshControl.buildRefreshIndicator]の大部分をコピー
+/// 中身は、[CupertinoSliverRefreshControl.buildRefreshIndicator]のコピーが大半
 Widget buildCustomRefreshIndicator(
   BuildContext context,
   RefreshIndicatorMode refreshState,

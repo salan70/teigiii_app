@@ -101,7 +101,7 @@ class AuthService extends _$AuthService {
     // ログインしている場合、この関数が呼ばれる想定のため、ここでuserIdを出力しておく
     logger.i('[$userId]としてログイン中です。ユーザー情報を更新します。');
 
-    await ref.read(userConfigRepositoryProvider).updateUserConfig(
+    await ref.read(userConfigRepositoryProvider).updateVersionInfo(
           userId,
           osVersion,
           appVersion,

@@ -117,8 +117,6 @@ class DefinitionRepository {
   }
 
   Future<void> likeDefinition(String definitionId, String userId) async {
-    final now = DateTime.now();
-
     // transactionを使い、複数の処理が全て成功した場合のみ、処理を完了させる
     await FirebaseFirestore.instance.runTransaction((transaction) async {
       // Likesコレクションにドキュメントを登録
@@ -126,8 +124,8 @@ class DefinitionRepository {
       transaction.set(likesCollection.doc(), {
         'definitionId': definitionId,
         'userId': userId,
-        'createdAt': now,
-        'updatedAt': now,
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
       });
 
       // DefinitionコレクションからドキュメントのlikesCountを+1する

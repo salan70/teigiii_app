@@ -10,6 +10,7 @@ class LikeDocument with _$LikeDocument {
     required String definitionId,
     required String userId,
     required DateTime createdAt,
+    required DateTime updatedAt,
   }) = _LikeDocument;
 
   factory LikeDocument.fromFirestore(DocumentSnapshot doc) {
@@ -19,6 +20,7 @@ class LikeDocument with _$LikeDocument {
       definitionId: data['definitionId'] as String,
       userId: data['userId'] as String,
       createdAt: (data['createdAt'] as Timestamp).toDate(),
+      updatedAt: (data['updatedAt'] as Timestamp).toDate(),
     );
   }
 }

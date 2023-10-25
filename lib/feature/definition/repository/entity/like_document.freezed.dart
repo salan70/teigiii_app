@@ -20,6 +20,7 @@ mixin _$LikeDocument {
   String get definitionId => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LikeDocumentCopyWith<LikeDocument> get copyWith =>
@@ -33,7 +34,11 @@ abstract class $LikeDocumentCopyWith<$Res> {
       _$LikeDocumentCopyWithImpl<$Res, LikeDocument>;
   @useResult
   $Res call(
-      {String id, String definitionId, String userId, DateTime createdAt});
+      {String id,
+      String definitionId,
+      String userId,
+      DateTime createdAt,
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -53,6 +58,7 @@ class _$LikeDocumentCopyWithImpl<$Res, $Val extends LikeDocument>
     Object? definitionId = null,
     Object? userId = null,
     Object? createdAt = null,
+    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -71,6 +77,10 @@ class _$LikeDocumentCopyWithImpl<$Res, $Val extends LikeDocument>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ) as $Val);
   }
 }
@@ -84,7 +94,11 @@ abstract class _$$_LikeDocumentCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id, String definitionId, String userId, DateTime createdAt});
+      {String id,
+      String definitionId,
+      String userId,
+      DateTime createdAt,
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -102,6 +116,7 @@ class __$$_LikeDocumentCopyWithImpl<$Res>
     Object? definitionId = null,
     Object? userId = null,
     Object? createdAt = null,
+    Object? updatedAt = null,
   }) {
     return _then(_$_LikeDocument(
       id: null == id
@@ -120,6 +135,10 @@ class __$$_LikeDocumentCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -131,7 +150,8 @@ class _$_LikeDocument implements _LikeDocument {
       {required this.id,
       required this.definitionId,
       required this.userId,
-      required this.createdAt});
+      required this.createdAt,
+      required this.updatedAt});
 
   @override
   final String id;
@@ -141,10 +161,12 @@ class _$_LikeDocument implements _LikeDocument {
   final String userId;
   @override
   final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'LikeDocument(id: $id, definitionId: $definitionId, userId: $userId, createdAt: $createdAt)';
+    return 'LikeDocument(id: $id, definitionId: $definitionId, userId: $userId, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -157,12 +179,14 @@ class _$_LikeDocument implements _LikeDocument {
                 other.definitionId == definitionId) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, definitionId, userId, createdAt);
+      Object.hash(runtimeType, id, definitionId, userId, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -176,7 +200,8 @@ abstract class _LikeDocument implements LikeDocument {
       {required final String id,
       required final String definitionId,
       required final String userId,
-      required final DateTime createdAt}) = _$_LikeDocument;
+      required final DateTime createdAt,
+      required final DateTime updatedAt}) = _$_LikeDocument;
 
   @override
   String get id;
@@ -186,6 +211,8 @@ abstract class _LikeDocument implements LikeDocument {
   String get userId;
   @override
   DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$_LikeDocumentCopyWith<_$_LikeDocument> get copyWith =>

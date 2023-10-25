@@ -170,7 +170,7 @@ void main() {
       verify(mockDeviceInfoRepository.fetchOsVersion()).called(1);
       verify(mockPackageInfoRepository.fetchAppVersion()).called(1);
       verify(
-        mockUserConfigRepository.updateUserConfig(
+        mockUserConfigRepository.updateVersionInfo(
           mockUserId,
           mockOsVersion,
           mockAppVersion,
@@ -218,7 +218,7 @@ void main() {
 
       // * Assert
       verify(
-        mockUserConfigRepository.updateUserConfig(
+        mockUserConfigRepository.updateVersionInfo(
           any,
           unexpectedOsText, // 検証対象
           any,
@@ -258,7 +258,7 @@ void main() {
       final authService = init();
       updateContainersOverride(isSignedIn: true);
       final testException = Exception('updateUserConfig()で例外発生！！！');
-      when(mockUserConfigRepository.updateUserConfig(any, any, any))
+      when(mockUserConfigRepository.updateVersionInfo(any, any, any))
           .thenThrow(testException);
 
       // * Act
