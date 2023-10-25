@@ -7,6 +7,7 @@ import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../../../util/extension/date_time_extension.dart';
 import '../../../../auth/application/auth_state.dart';
+import '../../../../user_config/application/user_config_service.dart';
 import '../../../application/definition_state.dart';
 import '../../component/avatar_icon_widget.dart';
 import '../../component/like_widget.dart';
@@ -67,8 +68,18 @@ class DefinitionDetailPage extends ConsumerWidget {
                   } else {
                     items = [
                       PullDownMenuItem(
-                        onTap: () {
+                        onTap: () async {
                           // TODO(me): ユーザーをミュートする
+                          // 1. ミュート情報をFirestoreに保存する
+                          await ref
+                              .read(userConfigServiceProvider.notifier)
+                              .addMutedUser(definition.authorId);
+
+                          // 2. 1のセキュリティルールを設定する
+                          // 3. ミュート成功したら、ミュートしたユーザーの定義を非表示にする（該当Providerをinvalidate）
+                          // 4. ミュート完了のスナックバー出す（解除は設定から〜）
+                          // 5. ミュート失敗したら、スナックバー出す（いいねの要領）
+                          // 6. ミュート処理中はオーバーレイローディング出す（いいねの要領）
                         },
                         title: 'このユーザーをミュート',
                         icon: CupertinoIcons.speaker_slash,

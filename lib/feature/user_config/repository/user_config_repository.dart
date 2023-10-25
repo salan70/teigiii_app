@@ -38,7 +38,8 @@ class UserConfigRepository {
     });
   }
 
-  Future<void> updateUserConfig(
+  /// ユーザーが使用しているos, appのバージョン情報を更新する
+  Future<void> updateVersionInfo(
     String userId,
     String osVersion,
     String appVersion,
@@ -46,6 +47,17 @@ class UserConfigRepository {
     await firestore.collection('UserConfigs').doc(userId).update({
       'osVersion': osVersion,
       'appVersion': appVersion,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  /// mutedUserIdとして指定したユーザーIDをmutedUserIdListに追加する
+  Future<void> appendMutedUserIdList(
+    String userId,
+    String mutedUserId,
+  ) async {
+    await firestore.collection('UserConfigs').doc(userId).update({
+      'mutedUserIdList': FieldValue.arrayUnion(<dynamic>[mutedUserId]),
       'updatedAt': FieldValue.serverTimestamp(),
     });
   }

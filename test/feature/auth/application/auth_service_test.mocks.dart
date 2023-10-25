@@ -214,18 +214,35 @@ class MockUserConfigRepository extends _i1.Mock
       ) as _i7.Future<void>);
 
   @override
-  _i7.Future<void> updateUserConfig(
+  _i7.Future<void> updateVersionInfo(
     String? userId,
     String? osVersion,
     String? appVersion,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #updateUserConfig,
+          #updateVersionInfo,
           [
             userId,
             osVersion,
             appVersion,
+          ],
+        ),
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
+
+  @override
+  _i7.Future<void> appendMutedUserIdList(
+    String? userId,
+    String? mutedUserId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #appendMutedUserIdList,
+          [
+            userId,
+            mutedUserId,
           ],
         ),
         returnValue: _i7.Future<void>.value(),
