@@ -1,17 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../../../util/extension/date_time_extension.dart';
-import '../../../../auth/application/auth_state.dart';
-import '../../../../user_config/application/user_config_service.dart';
 import '../../../application/definition_state.dart';
 import '../../component/avatar_icon_widget.dart';
 import '../../component/like_widget.dart';
 import 'definition_detail_shimmer.dart';
+import 'more_ion_button_in_app_bar.dart';
 
 @RoutePage()
 class DefinitionDetailPage extends ConsumerWidget {
@@ -25,7 +22,6 @@ class DefinitionDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final definitionAsync = ref.watch(definitionProvider(definitionId));
-    final globalKey = GlobalKey();
 
     return definitionAsync.when(
       data: (definition) {
@@ -33,74 +29,7 @@ class DefinitionDetailPage extends ConsumerWidget {
           appBar: AppBar(
             title: const Text('詳細'),
             actions: [
-              IconButton(
-                key: globalKey,
-                icon: const Icon(Icons.more_horiz),
-                onPressed: () async {
-                  // 万が一userIdがnullの場合、
-                  // 定義の編集/削除をできなくするために空文字を入れる
-                  final userId = ref.read(userIdProvider) ?? '';
-
-                  // IconButtonの位置を取得
-                  final box = globalKey.currentContext?.findRenderObject()
-                      as RenderBox?;
-                  final position =
-                      box!.localToGlobal(Offset.zero) & const Size(40, 48);
-
-                  late final List<PullDownMenuEntry> items;
-                  if (userId == definition.authorId) {
-                    items = [
-                      PullDownMenuItem(
-                        onTap: () {
-                          // TODO: 定義の編集画面に遷移する
-                        },
-                        title: 'この定義を編集',
-                        icon: CupertinoIcons.pencil,
-                      ),
-                      PullDownMenuItem(
-                        onTap: () {
-                          // TODO(me): 定義を削除する（確認ダイアログを表示）
-                        },
-                        title: 'この定義を削除',
-                        icon: CupertinoIcons.trash,
-                      ),
-                    ];
-                  } else {
-                    items = [
-                      PullDownMenuItem(
-                        onTap: () async {
-                          // TODO(me): ユーザーをミュートする
-                          // 1. ミュート情報をFirestoreに保存する
-                          await ref
-                              .read(userConfigServiceProvider.notifier)
-                              .addMutedUser(definition.authorId);
-
-                          // 2. 1のセキュリティルールを設定する
-                          // 3. ミュート成功したら、ミュートしたユーザーの定義を非表示にする（該当Providerをinvalidate）
-                          // 4. ミュート完了のスナックバー出す（解除は設定から〜）
-                          // 5. ミュート失敗したら、スナックバー出す（いいねの要領）
-                          // 6. ミュート処理中はオーバーレイローディング出す（いいねの要領）
-                        },
-                        title: 'このユーザーをミュート',
-                        icon: CupertinoIcons.speaker_slash,
-                      ),
-                      PullDownMenuItem(
-                        onTap: () {
-                          // TODO(me): ユーザーを報告する(Googleフォームを開く)
-                        },
-                        title: 'このユーザーを報告',
-                        icon: CupertinoIcons.flag,
-                      ),
-                    ];
-                  }
-
-                  await showPullDownMenu(
-                    context: context,
-                    position: position,
-                    items: items,
-                  );
-                },
-              ),
+              MoreIconButtonInAppBar(definition: definition),
             ],
           ),
           body: EasyRefresh(

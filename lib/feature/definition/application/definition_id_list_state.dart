@@ -4,7 +4,7 @@ import '../../../core/common_provider/snack_bar_controller.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user/repository/user_profile_repository.dart';
-import '../../user_config/repository/user_config_repository.dart';
+import '../../user_config/application/user_config_state.dart';
 import '../domain/definition_id_list_state.dart';
 import '../repository/definition_repository.dart';
 import '../util/definition_feed_type.dart';
@@ -29,7 +29,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
   ///
   /// この関数は、[build]メソッドからのみ呼ばれる想定
   Future<DefinitionIdListState> _homeRecommendDefinitionIdListFirst() async {
-    final mutedUserIdList = await _fetchMutedUserIdList();
+    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
 
     return ref
         .watch(definitionRepositoryProvider)
@@ -56,7 +56,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
       ..add(userId);
 
     // ミュートしているユーザーのIDを除外
-    final mutedUserIdList = await _fetchMutedUserIdList();
+    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
     targetUserIdList.removeWhere(mutedUserIdList.contains);
 
     return ref
@@ -112,7 +112,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
 
   /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する（2回目以降）
   Future<DefinitionIdListState> _homeRecommendDefinitionIdListMore() async {
-    final mutedUserIdList = await _fetchMutedUserIdList();
+    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
 
     return ref
         .watch(definitionRepositoryProvider)
@@ -141,7 +141,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
       ..add(userId);
 
     // ミュートしているユーザーのIDを除外
-    final mutedUserIdList = await _fetchMutedUserIdList();
+    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
     targetUserIdList.removeWhere(mutedUserIdList.contains);
 
     return ref
@@ -150,13 +150,5 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
           targetUserIdList,
           state.value!.lastReadQueryDocumentSnapshot!,
         );
-  }
-
-  Future<List<String>> _fetchMutedUserIdList() async {
-    final userId = ref.read(userIdProvider)!;
-    final userProfileDoc =
-        await ref.read(userConfigRepositoryProvider).fetchUserConfig(userId);
-
-    return userProfileDoc.mutedUserIdList;
   }
 }

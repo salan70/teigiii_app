@@ -17,8 +17,6 @@ class UserConfigService extends _$UserConfigService {
 
   /// [targetUserId]をミュートする
   Future<void> addMutedUser(String targetUserId) async {
-    // 二度押し防止とUX向上のため、オーバーレイローディングを表示させる
-    // そのため、state = AsyncLoadingをしない
     final isLoadingOverlayNotifier =
         ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
 

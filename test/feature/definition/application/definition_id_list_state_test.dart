@@ -8,6 +8,7 @@ import 'package:teigi_app/feature/definition/domain/definition_id_list_state.dar
 import 'package:teigi_app/feature/definition/repository/definition_repository.dart';
 import 'package:teigi_app/feature/definition/util/definition_feed_type.dart';
 import 'package:teigi_app/feature/user/repository/user_profile_repository.dart';
+import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
 import 'package:teigi_app/feature/word/repository/word_repository.dart';
 
@@ -48,6 +49,7 @@ void main() {
             .overrideWithValue(mockUserProfileRepository),
         userConfigRepositoryProvider
             .overrideWithValue(mockUserConfigRepository),
+        mutedUserIdListProvider.overrideWith((ref) => mockUserConfigDoc.mutedUserIdList),
       ],
     );
     addTearDown(container.dispose);
@@ -62,9 +64,6 @@ void main() {
     test('homeRecommend: stateの更新、repositoryで定義している関数の呼び出しを検証', () async {
       // * Arrange
       // Mockの設定
-      when(
-        mockUserConfigRepository.fetchUserConfig(any),
-      ).thenAnswer((_) async => mockUserConfigDoc);
       final mockDefinitionIdList = [mockDefinitionDoc.id];
       when(
         mockDefinitionRepository.fetchHomeRecommendDefinitionIdListFirst(any),
@@ -113,7 +112,6 @@ void main() {
       verifyNoMoreInteractions(listener);
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
-      verify(mockUserConfigRepository.fetchUserConfig(any)).called(1);
       verify(
         mockDefinitionRepository.fetchHomeRecommendDefinitionIdListFirst(
           mockUserConfigDoc.mutedUserIdList,
@@ -136,9 +134,6 @@ void main() {
       when(
         mockUserProfileRepository.fetchUserProfile(any),
       ).thenAnswer((_) async => mockUserProfileDoc);
-      when(
-        mockUserConfigRepository.fetchUserConfig(any),
-      ).thenAnswer((_) async => mockUserConfigDoc);
       final mockDefinitionIdList = [mockDefinitionDoc.id];
       when(
         mockDefinitionRepository.fetchHomeFollowingDefinitionIdListFirst(any),
@@ -187,7 +182,6 @@ void main() {
       verifyNoMoreInteractions(listener);
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
-      verify(mockUserConfigRepository.fetchUserConfig(any)).called(1);
       // TODO(me): mutedUserIdListを除外したuserIdListを引数に渡していることを検証
       verify(
         mockDefinitionRepository.fetchHomeFollowingDefinitionIdListFirst(any),
@@ -199,9 +193,6 @@ void main() {
     test('homeRecommend: stateの更新、repositoryで定義している関数の呼び出しを検証', () async {
       // * Arrange
       // Mockの設定
-      when(
-        mockUserConfigRepository.fetchUserConfig(any),
-      ).thenAnswer((_) async => mockUserConfigDoc);
       final mockDefinitionIdListState = DefinitionIdListState(
         definitionIdList: [mockDefinitionDoc.id],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
@@ -304,9 +295,6 @@ void main() {
     test('homeFollowing: stateの更新、repositoryで定義している関数の呼び出しを検証', () async {
       // * Arrange
       // Mockの設定
-      when(
-        mockUserConfigRepository.fetchUserConfig(any),
-      ).thenAnswer((_) async => mockUserConfigDoc);
       final mockDefinitionIdListState = DefinitionIdListState(
         definitionIdList: [mockDefinitionDoc.id],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
@@ -409,9 +397,6 @@ void main() {
     test('hasMoreがfalse', () async {
       // * Arrange
       // Mockの設定
-      when(
-        mockUserConfigRepository.fetchUserConfig(any),
-      ).thenAnswer((_) async => mockUserConfigDoc);
       final mockDefinitionIdListState = DefinitionIdListState(
         definitionIdList: [mockDefinitionDoc.id],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
@@ -477,9 +462,6 @@ void main() {
     test('例外発生', () async {
       // * Arrange
       // Mockの設定
-      when(
-        mockUserConfigRepository.fetchUserConfig(any),
-      ).thenAnswer((_) async => mockUserConfigDoc);
       final mockDefinitionIdListState = DefinitionIdListState(
         definitionIdList: [mockDefinitionDoc.id],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
