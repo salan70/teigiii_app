@@ -54,12 +54,12 @@ class MoreIconButtonInAppBar extends ConsumerWidget {
     if (userId == definition.authorId) {
       return [
         PullDownMenuItem(
-          onTap: () {}, // TODO: 定義の編集画面に遷移する
+          onTap: () {}, // TODO(me): 定義の編集画面に遷移する
           title: 'この定義を編集',
           icon: CupertinoIcons.pencil,
         ),
         PullDownMenuItem(
-          onTap: () {}, // TODO: 定義を削除する
+          onTap: () {}, // TODO(me): 定義を削除する
           title: 'この定義を削除',
           icon: CupertinoIcons.trash,
         ),
@@ -78,7 +78,7 @@ class MoreIconButtonInAppBar extends ConsumerWidget {
           icon: CupertinoIcons.speaker,
         ),
         PullDownMenuItem(
-          onTap: () {}, // TODO: ユーザーを報告する
+          onTap: () {}, // TODO(me): ユーザーを報告する
           title: 'このユーザーを報告',
           icon: CupertinoIcons.flag,
         ),
@@ -95,7 +95,7 @@ class MoreIconButtonInAppBar extends ConsumerWidget {
           icon: CupertinoIcons.speaker_slash,
         ),
         PullDownMenuItem(
-          onTap: () {}, // TODO: ユーザーを報告する
+          onTap: () {}, // TODO(me): ユーザーを報告する
           title: 'このユーザーを報告',
           icon: CupertinoIcons.flag,
         ),
