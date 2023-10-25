@@ -494,6 +494,23 @@ class MockUserConfigRepository extends _i1.Mock
         returnValue: _i9.Future<void>.value(),
         returnValueForMissingStub: _i9.Future<void>.value(),
       ) as _i9.Future<void>);
+
+  @override
+  _i9.Future<void> removeMutedUserIdList(
+    String? userId,
+    String? mutedUserId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #removeMutedUserIdList,
+          [
+            userId,
+            mutedUserId,
+          ],
+        ),
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 }
 
 /// A class which mocks [WordRepository].

@@ -51,13 +51,24 @@ class UserConfigRepository {
     });
   }
 
-  /// mutedUserIdとして指定したユーザーIDをmutedUserIdListに追加する
+  /// [mutedUserId]をmutedUserIdListに追加する
   Future<void> appendMutedUserIdList(
     String userId,
     String mutedUserId,
   ) async {
     await firestore.collection('UserConfigs').doc(userId).update({
       'mutedUserIdList': FieldValue.arrayUnion(<dynamic>[mutedUserId]),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  /// [mutedUserId]をmutedUserIdListから削除する
+  Future<void> removeMutedUserIdList(
+    String userId,
+    String mutedUserId,
+  ) async {
+    await firestore.collection('UserConfigs').doc(userId).update({
+      'mutedUserIdList': FieldValue.arrayRemove(<dynamic>[mutedUserId]),
       'updatedAt': FieldValue.serverTimestamp(),
     });
   }

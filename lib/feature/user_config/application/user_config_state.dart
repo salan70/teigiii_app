@@ -5,7 +5,7 @@ import '../repository/user_config_repository.dart';
 
 part 'user_config_state.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<List<String>> mutedUserIdList(MutedUserIdListRef ref) async {
   final userId = ref.read(userIdProvider)!;
   final userProfileDoc =

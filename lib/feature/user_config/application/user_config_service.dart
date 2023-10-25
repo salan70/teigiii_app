@@ -16,18 +16,47 @@ class UserConfigService extends _$UserConfigService {
   FutureOr<void> build() {}
 
   /// [targetUserId]をミュートする
-  Future<void> addMutedUser(String targetUserId) async {
+  Future<void> muteUser(String targetUserId) async {
+    await _modifyMutedUserList(
+      targetUserId,
+      willMute: true,
+      snackBarMessage: 'ミュートしました',
+    );
+  }
+
+  /// [targetUserId]のミュートを解除削除する
+  Future<void> unmuteUser(String targetUserId) async {
+    await _modifyMutedUserList(
+      targetUserId,
+      willMute: false,
+      snackBarMessage: 'ミュート解除しました',
+    );
+  }
+
+  Future<void> _modifyMutedUserList(
+    String targetUserId, {
+    required bool willMute,
+    required String snackBarMessage,
+  }) async {
     final isLoadingOverlayNotifier =
         ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
 
     try {
       final currentUserId = ref.read(userIdProvider)!;
-      await ref.read(userConfigRepositoryProvider).appendMutedUserIdList(
-            currentUserId,
-            targetUserId,
-          );
+      if (willMute) {
+        await ref.read(userConfigRepositoryProvider).appendMutedUserIdList(
+              currentUserId,
+              targetUserId,
+            );
+      } else {
+        await ref.read(userConfigRepositoryProvider).removeMutedUserIdList(
+              currentUserId,
+              targetUserId,
+            );
+      }
     } on Exception catch (e) {
-      logger.e('ミュート登録時にエラーが発生: $e');
+      final action = willMute ? 'ミュート登録' : 'ミュート解除';
+      logger.e('$action時にエラーが発生: $e');
       ref
           .read(snackBarControllerProvider.notifier)
           .showSnackBar('失敗しました。もう一度お試しください。');
@@ -42,7 +71,7 @@ class UserConfigService extends _$UserConfigService {
       await ref.read(definitionServiceProvider.notifier).refreshAll(feedType);
     }
 
-    ref.read(snackBarControllerProvider.notifier).showSnackBar('ミュートしました');
+    ref.read(snackBarControllerProvider.notifier).showSnackBar(snackBarMessage);
     isLoadingOverlayNotifier.finishLoading();
   }
 }
