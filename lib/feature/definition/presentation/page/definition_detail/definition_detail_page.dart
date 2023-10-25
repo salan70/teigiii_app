@@ -29,7 +29,9 @@ class DefinitionDetailPage extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.more_horiz),
             onPressed: () {
-              // TODO(me): ドロップダウンを表示する
+              // TODO(me): プルダウンボタンを表示する
+              // ↓パッケージが良さげ
+              // https://pub.dev/packages/pull_down_button
               // 他ユーザーの場合「ミュートか通報」、自分の場合「編集か削除」
             },
           ),
