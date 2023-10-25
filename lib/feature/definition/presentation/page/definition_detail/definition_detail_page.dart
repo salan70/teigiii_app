@@ -1,9 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../../../util/extension/date_time_extension.dart';
+import '../../../../auth/application/auth_state.dart';
 import '../../../application/definition_state.dart';
 import '../../component/avatar_icon_widget.dart';
 import '../../component/like_widget.dart';
@@ -21,25 +24,75 @@ class DefinitionDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final definitionAsync = ref.watch(definitionProvider(definitionId));
+    final globalKey = GlobalKey();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('詳細'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_horiz),
-            onPressed: () {
-              // TODO(me): プルダウンボタンを表示する
-              // ↓パッケージが良さげ
-              // https://pub.dev/packages/pull_down_button
-              // 他ユーザーの場合「ミュートか通報」、自分の場合「編集か削除」
-            },
+    return definitionAsync.when(
+      data: (definition) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('詳細'),
+            actions: [
+              IconButton(
+                key: globalKey,
+                icon: const Icon(Icons.more_horiz),
+                onPressed: () async {
+                  // 万が一userIdがnullの場合、
+                  // 定義の編集/削除をできなくするために空文字を入れる
+                  final userId = ref.read(userIdProvider) ?? '';
+
+                  // IconButtonの位置を取得
+                  final box = globalKey.currentContext?.findRenderObject()
+                      as RenderBox?;
+                  final position =
+                      box!.localToGlobal(Offset.zero) & const Size(40, 48);
+
+                  late final List<PullDownMenuEntry> items;
+                  if (userId == definition.authorId) {
+                    items = [
+                      PullDownMenuItem(
+                        onTap: () {
+                          // TODO: 定義の編集画面に遷移する
+                        },
+                        title: 'この定義を編集',
+                        icon: CupertinoIcons.pencil,
+                      ),
+                      PullDownMenuItem(
+                        onTap: () {
+                          // TODO(me): 定義を削除する（確認ダイアログを表示）
+                        },
+                        title: 'この定義を削除',
+                        icon: CupertinoIcons.trash,
+                      ),
+                    ];
+                  } else {
+                    items = [
+                      PullDownMenuItem(
+                        onTap: () {
+                          // TODO(me): ユーザーをミュートする
+                        },
+                        title: 'このユーザーをミュート',
+                        icon: CupertinoIcons.speaker_slash,
+                      ),
+                      PullDownMenuItem(
+                        onTap: () {
+                          // TODO(me): ユーザーを報告する(Googleフォームを開く)
+                        },
+                        title: 'このユーザーを報告',
+                        icon: CupertinoIcons.flag,
+                      ),
+                    ];
+                  }
+
+                  await showPullDownMenu(
+                    context: context,
+                    position: position,
+                    items: items,
+                  );
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-      body: definitionAsync.when(
-        data: (definition) {
-          return EasyRefresh(
+          body: EasyRefresh(
             header: const CupertinoHeader(),
             onRefresh: () async {
               ref.invalidate(definitionProvider(definitionId));
@@ -57,7 +110,9 @@ class DefinitionDetailPage extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        AvatarIconWidget(imageUrl: definition.authorImageUrl),
+                        AvatarIconWidget(
+                          imageUrl: definition.authorImageUrl,
+                        ),
                         const SizedBox(width: 16),
                         Text(definition.authorName),
                       ],
@@ -102,20 +157,28 @@ class DefinitionDetailPage extends ConsumerWidget {
                 ),
               ),
             ),
-          );
-        },
-        loading: () {
-          return const DefinitionDeitailShimmer();
-        },
-        error: (error, _) {
-          // TODO(me): いい感じのエラー画面を表示させる
-          return Center(
-            child: Text(
-              error.toString(),
-            ),
-          );
-        },
-      ),
+          ),
+        );
+      },
+      loading: () {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('詳細'),
+          ),
+          body: const DefinitionDeitailShimmer(),
+        );
+      },
+      error: (error, _) {
+        // TODO(me): いい感じのエラー画面を表示させる
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('詳細'),
+          ),
+          body: Center(
+            child: Text(error.toString()),
+          ),
+        );
+      },
     );
   }
 }
