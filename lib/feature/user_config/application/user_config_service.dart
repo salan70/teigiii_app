@@ -59,7 +59,7 @@ class UserConfigService extends _$UserConfigService {
       logger.e('$action時にエラーが発生: $e');
       ref
           .read(snackBarControllerProvider.notifier)
-          .showSnackBar('失敗しました。もう一度お試しください。');
+          .showSnackBar('失敗しました。もう一度お試しください。', causeError: true);
 
       isLoadingOverlayNotifier.finishLoading();
       return;
@@ -71,7 +71,7 @@ class UserConfigService extends _$UserConfigService {
       await ref.read(definitionServiceProvider.notifier).refreshAll(feedType);
     }
 
-    ref.read(snackBarControllerProvider.notifier).showSnackBar(snackBarMessage);
+    ref.read(snackBarControllerProvider.notifier).showSnackBar(snackBarMessage, causeError: false);
     isLoadingOverlayNotifier.finishLoading();
   }
 }

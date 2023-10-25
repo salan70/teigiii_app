@@ -104,7 +104,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
       logger.e('$e');
       ref
           .read(snackBarControllerProvider.notifier)
-          .showSnackBar('読み込めませんでした。もう一度お試しください。');
+          .showSnackBar('読み込めませんでした。もう一度お試しください。', causeError: true);
 
       state = AsyncError(e, s);
     }

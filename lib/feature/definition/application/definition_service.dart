@@ -31,7 +31,7 @@ class DefinitionService extends _$DefinitionService {
       logger.e('いいね登録もしくは解除時にエラーが発生: $e');
       ref
           .read(snackBarControllerProvider.notifier)
-          .showSnackBar('失敗しました。もう一度お試しください。');
+          .showSnackBar('失敗しました。もう一度お試しください。', causeError: true);
 
       isLoadingOverlayNotifier.finishLoading();
       // 例外が発生したことをpresentationに伝えるため、rethrowする
