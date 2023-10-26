@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/router/app_router.dart';
+import '../../../../../core/common_widget/to_setting_button.dart';
 import '../../../util/definition_feed_type.dart';
 import '../../component/definition_list.dart';
 
@@ -22,12 +22,7 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('ホーム'),
-          leading: IconButton(
-            icon: const Icon(CupertinoIcons.gear_solid),
-            onPressed: () async {
-              await context.navigateTo(const SettingRoute());
-            },
-          ),
+          leading: const ToSettingButton(),
           actions: [
             IconButton(
               icon: const Icon(CupertinoIcons.bell),

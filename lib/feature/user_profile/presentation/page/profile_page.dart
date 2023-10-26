@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/common_widget/to_setting_button.dart';
 import '../../../auth/application/auth_state.dart';
 import '../../../definition/presentation/component/definition_list.dart';
 import '../../../definition/util/definition_feed_type.dart';
@@ -31,7 +32,7 @@ class ProfilePage extends ConsumerWidget {
                 const SliverAppBar(
                   forceElevated: true,
                   floating: true,
-                  // leading: ,
+                  leading: ToSettingButton(),
                   title: Text('プロフィール'),
                 ),
                 SliverList(
