@@ -8,6 +8,11 @@ import '../../../definition/util/definition_feed_type.dart';
 import 'profile_widget.dart';
 
 @RoutePage()
+class ProfileRouterPage extends AutoRouter {
+  const ProfileRouterPage({super.key});
+}
+
+@RoutePage()
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
@@ -26,6 +31,7 @@ class ProfilePage extends ConsumerWidget {
                 const SliverAppBar(
                   forceElevated: true,
                   floating: true,
+                  // leading: ,
                   title: Text('プロフィール'),
                 ),
                 SliverList(

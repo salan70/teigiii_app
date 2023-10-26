@@ -27,12 +27,8 @@ class DefinitionTile extends ConsumerWidget {
         return InkWell(
           onTap: () async {
             await context.navigateTo(
-              HomeRouterRoute(
-                children: [
-                  DefinitionDetailRoute(
-                    definitionId: definition.id,
-                  ),
-                ],
+              DefinitionDetailRoute(
+                definitionId: definition.id,
               ),
             );
           },

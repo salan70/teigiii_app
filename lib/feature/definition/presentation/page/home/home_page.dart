@@ -25,13 +25,7 @@ class HomePage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(CupertinoIcons.gear_solid),
             onPressed: () async {
-              await context.navigateTo(
-                const HomeRouterRoute(
-                  children: [
-                    SettingRoute(),
-                  ],
-                ),
-              );
+              await context.navigateTo(const SettingRoute());
             },
           ),
           actions: [

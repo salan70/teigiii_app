@@ -67,6 +67,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const ProfilePage(),
       );
     },
+    ProfileRouterRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ProfileRouterPage(),
+      );
+    },
     SettingRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -208,6 +214,20 @@ class ProfileRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ProfileRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ProfileRouterPage]
+class ProfileRouterRoute extends PageRouteInfo<void> {
+  const ProfileRouterRoute({List<PageRouteInfo>? children})
+      : super(
+          ProfileRouterRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ProfileRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

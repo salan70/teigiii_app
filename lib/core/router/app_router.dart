@@ -35,6 +35,7 @@ class AppRouter extends _$AppRouter {
                 AutoRoute(
                   path: 'setting',
                   page: SettingRoute.page,
+                  fullscreenDialog: true,
                 ),
                 AutoRoute(
                   path: 'license',
@@ -44,7 +45,27 @@ class AppRouter extends _$AppRouter {
             ),
             AutoRoute(
               path: 'profile',
-              page: ProfileRoute.page,
+              page: ProfileRouterRoute.page,
+              children: [
+                AutoRoute(
+                  initial: true,
+                  page: ProfileRoute.page,
+                ),
+                AutoRoute(
+                  // TODO(me): pathをdefinitionIdにする
+                  path: 'definition_detail',
+                  page: DefinitionDetailRoute.page,
+                ),
+                AutoRoute(
+                  path: 'setting',
+                  page: SettingRoute.page,
+                  fullMatch: true,
+                ),
+                AutoRoute(
+                  path: 'license',
+                  page: MyLicenseRoute.page,
+                ),
+              ],
             ),
             AutoRoute(
               path: 'index',
