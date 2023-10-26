@@ -55,10 +55,22 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const IndexPage(),
       );
     },
+    MyLicenseRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const MyLicensePage(),
+      );
+    },
     ProfileRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const ProfilePage(),
+      );
+    },
+    SettingRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SettingPage(),
       );
     },
   };
@@ -173,6 +185,20 @@ class IndexRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [MyLicensePage]
+class MyLicenseRoute extends PageRouteInfo<void> {
+  const MyLicenseRoute({List<PageRouteInfo>? children})
+      : super(
+          MyLicenseRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MyLicenseRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [ProfilePage]
 class ProfileRoute extends PageRouteInfo<void> {
   const ProfileRoute({List<PageRouteInfo>? children})
@@ -182,6 +208,20 @@ class ProfileRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ProfileRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SettingPage]
+class SettingRoute extends PageRouteInfo<void> {
+  const SettingRoute({List<PageRouteInfo>? children})
+      : super(
+          SettingRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SettingRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

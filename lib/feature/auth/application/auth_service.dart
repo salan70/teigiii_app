@@ -2,8 +2,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../util/logger.dart';
 import '../../user/repository/user_profile_repository.dart';
+import '../../user_config/application/user_config_state.dart';
 import '../../user_config/repository/device_info_repository.dart';
-import '../../user_config/repository/package_info_repository.dart';
 import '../../user_config/repository/user_config_repository.dart';
 import '../repository/auth_repository.dart';
 import '../util/constant.dart';
@@ -64,8 +64,7 @@ class AuthService extends _$AuthService {
         await ref.read(deviceInfoRepositoryProvider).fetchOsVersion() ??
             unexpectedOsText;
 
-    final appVersion =
-        await ref.read(packageInfoRepositoryProvider).fetchAppVersion();
+    final appVersion = await ref.read(appVersionProvider.future);
 
     final userId = ref.read(userIdProvider)!;
 
@@ -94,8 +93,7 @@ class AuthService extends _$AuthService {
         await ref.read(deviceInfoRepositoryProvider).fetchOsVersion() ??
             unexpectedOsText;
 
-    final appVersion =
-        await ref.read(packageInfoRepositoryProvider).fetchAppVersion();
+    final appVersion = await ref.read(appVersionProvider.future);
 
     final userId = ref.read(userIdProvider)!;
     // ログインしている場合、この関数が呼ばれる想定のため、ここでuserIdを出力しておく
