@@ -21,12 +21,12 @@ class SettingPage extends ConsumerWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.only(
-          top: 24,
           left: 24,
           right: 20,
         ),
         child: ListView(
           children: [
+            const SizedBox(height: 24),
             // 一般
             Text(
               '一般',

@@ -78,7 +78,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         textTheme: textTheme,
         appBarTheme: AppBarTheme(
           backgroundColor: lightColorScheme.surface,
-          elevation: 1,
+          elevation: 0.1,
           titleTextStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
@@ -97,6 +97,7 @@ class _MyAppState extends ConsumerState<MyApp> {
             ),
           ),
         ),
+        scaffoldBackgroundColor: lightColorScheme.surface,
         // タップ時のエフェクトを無効化
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,

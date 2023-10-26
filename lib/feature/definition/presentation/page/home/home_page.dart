@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/router/app_router.dart';
@@ -22,7 +23,7 @@ class HomePage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('ホーム'),
           leading: IconButton(
-            icon: const Icon(Icons.settings),
+            icon: const Icon(CupertinoIcons.gear_solid),
             onPressed: () async {
               await context.navigateTo(
                 const HomeRouterRoute(
@@ -35,7 +36,7 @@ class HomePage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.notifications_none),
+              icon: const Icon(CupertinoIcons.bell),
               onPressed: () {
                 // TODO(me): 通知履歴画面へ遷移
               },

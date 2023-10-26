@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -40,19 +41,22 @@ class _BasePageState extends ConsumerState<BasePage> {
                 Scaffold(
                   body: child,
                   bottomNavigationBar: BottomNavigationBar(
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    elevation: 0.1,
                     selectedFontSize: 12,
                     items: const [
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.home_outlined),
-                        activeIcon: Icon(Icons.home),
+                        icon: Icon(CupertinoIcons.house),
+                        activeIcon: Icon(CupertinoIcons.house_fill),
                         label: 'ホーム',
                       ),
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.account_circle),
+                        icon: Icon(CupertinoIcons.person),
+                        activeIcon: Icon(CupertinoIcons.person_fill),
                         label: 'マイページ',
                       ),
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.search),
+                        icon: Icon(CupertinoIcons.search),
                         label: 'さがす',
                       ),
                     ],

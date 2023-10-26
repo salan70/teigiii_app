@@ -19,7 +19,7 @@ class MoreIconButtonInAppBar extends ConsumerWidget {
 
     return IconButton(
       key: globalKey,
-      icon: const Icon(Icons.more_horiz),
+      icon: const Icon(CupertinoIcons.ellipsis),
       onPressed: () async {
         // IconButtonの位置を取得
         final box = globalKey.currentContext?.findRenderObject() as RenderBox?;

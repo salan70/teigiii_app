@@ -4,6 +4,7 @@ import '../../../util/logger.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_config/repository/device_info_repository.dart';
 import '../../user_config/repository/user_config_repository.dart';
+import '../../user_profile/repository/user_follow_repository.dart';
 import '../../user_profile/repository/user_profile_repository.dart';
 import '../repository/auth_repository.dart';
 import '../util/constant.dart';
@@ -49,8 +50,11 @@ class AuthService extends _$AuthService {
       await ref.read(authRepositoryProvider).signInAnonymously();
 
       // ユーザー情報を登録
+      // TODO(me): バッチ実行する（全て保存するか、何も保存しないか）
+      // ここ失敗したら、signOut()したほうが良さそう
       await _addUserConfig();
       await _addUserProfile();
+      await _addUserFollowCount();
 
       return;
     });
@@ -85,6 +89,12 @@ class AuthService extends _$AuthService {
     await ref
         .read(userProfileRepositoryProvider)
         .addUserProfile(userId, defaultUserName);
+  }
+
+  /// ユーザーのフォロー/フォロワー数を登録する
+  Future<void> _addUserFollowCount() async {
+    final userId = ref.read(userIdProvider)!;
+    await ref.read(userFollowRepositoryProvider).addUserFollowCount(userId);
   }
 
   /// ユーザーの設定に関する情報を更新する
