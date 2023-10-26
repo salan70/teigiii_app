@@ -3,6 +3,7 @@ import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/definition/domain/definition.dart';
 import 'package:teigi_app/feature/definition/repository/entity/definition_document.dart';
 import 'package:teigi_app/feature/user_config/repository/entity/user_config_document.dart';
+import 'package:teigi_app/feature/user_profile/repository/entity/user_follow_count_document.dart';
 import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart';
 import 'package:teigi_app/feature/word/repository/entity/word_document.dart';
 
@@ -41,6 +42,14 @@ final mockUserProfileDoc = UserProfileDocument(
   name: 'name',
   bio: 'I am a perfect human',
   profileImageUrl: 'profileImageUrl',
+  createdAt: nowDateTime,
+  updatedAt: nowDateTime,
+);
+
+final mockUserFollowCountDoc = UserFollowCountDocument(
+  id: mockUserProfileDoc.id,
+  followerCount: 1,
+  followingCount: 2,
   createdAt: nowDateTime,
   updatedAt: nowDateTime,
 );

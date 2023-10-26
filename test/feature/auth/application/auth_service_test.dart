@@ -9,12 +9,15 @@ import 'package:teigi_app/feature/auth/util/constant.dart';
 import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart';
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
+import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
 
+import '../../../mock/mock_data.dart';
 import 'auth_service_test.mocks.dart';
 
 @GenerateNiceMocks([
   MockSpec<UserProfileRepository>(),
+  MockSpec<UserFollowRepository>(),
   MockSpec<UserConfigRepository>(),
   MockSpec<DeviceInfoRepository>(),
   MockSpec<AuthRepository>(),
@@ -29,6 +32,7 @@ abstract class Listener<T> {
 
 void main() {
   final mockUserProfileRepository = MockUserProfileRepository();
+  final mockUserFollowRepository = MockUserFollowRepository();
   final mockUserConfigRepository = MockUserConfigRepository();
   final mockDeviceInfoRepository = MockDeviceInfoRepository();
   final mockAuthRepository = MockAuthRepository();
@@ -49,6 +53,8 @@ void main() {
         appVersionProvider.overrideWith((ref) => Future.value(mockAppVersion)),
         userProfileRepositoryProvider
             .overrideWithValue(mockUserProfileRepository),
+        userFollowRepositoryProvider
+            .overrideWithValue(mockUserFollowRepository),
         userConfigRepositoryProvider
             .overrideWithValue(mockUserConfigRepository),
         deviceInfoRepositoryProvider
@@ -74,6 +80,7 @@ void main() {
 
   tearDown(() {
     reset(mockUserProfileRepository);
+    reset(mockUserFollowRepository);
     reset(mockUserConfigRepository);
     reset(mockDeviceInfoRepository);
     reset(mockAuthRepository);
@@ -88,6 +95,7 @@ void main() {
       appVersionProvider.overrideWith((ref) => Future.value(mockAppVersion)),
       userProfileRepositoryProvider
           .overrideWithValue(mockUserProfileRepository),
+      userFollowRepositoryProvider.overrideWithValue(mockUserFollowRepository),
       userConfigRepositoryProvider.overrideWithValue(mockUserConfigRepository),
       deviceInfoRepositoryProvider.overrideWithValue(mockDeviceInfoRepository),
       authRepositoryProvider.overrideWithValue(mockAuthRepository),
@@ -97,6 +105,8 @@ void main() {
   void setupMock(String? osVersion) {
     when(mockDeviceInfoRepository.fetchOsVersion())
         .thenAnswer((_) async => osVersion);
+    when(mockUserFollowRepository.addUserFollowCount(any))
+        .thenAnswer((_) async => mockUserFollowCountDoc);
   }
 
   group('onAppLaunch()', () {
@@ -134,6 +144,11 @@ void main() {
         mockUserProfileRepository.addUserProfile(
           mockUserId,
           defaultUserName,
+        ),
+      ).called(1);
+      verify(
+        mockUserFollowRepository.addUserFollowCount(
+          mockUserId,
         ),
       ).called(1);
     });

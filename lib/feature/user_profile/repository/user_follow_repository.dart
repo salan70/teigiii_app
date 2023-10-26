@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/firebase_providers.dart';
-import 'entity/user_profile_document.dart';
+import 'entity/user_follow_count_document.dart';
 
 part 'user_follow_repository.g.dart';
 
@@ -17,11 +17,11 @@ class UserFollowRepository {
 
   final FirebaseFirestore firestore;
 
-  Future<UserProfileDocument> fetchUserFollowCount(String userId) async {
+  Future<UserFollowCountDocument> fetchUserFollowCount(String userId) async {
     final DocumentSnapshot snapshot =
         await firestore.collection('UserFollowCounts').doc(userId).get();
 
-    return UserProfileDocument.fromFirestore(snapshot);
+    return UserFollowCountDocument.fromFirestore(snapshot);
   }
 
   /// UserFollowCountドキュメントを追加する
