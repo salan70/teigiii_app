@@ -14,6 +14,7 @@ import 'feature/auth/application/auth_service.dart';
 import 'feature/auth/application/auth_state.dart';
 import 'firebase_options/firebase_options.dart';
 import 'util/constant/color_scheme.dart';
+import 'util/constant/tab_bar_theme.dart';
 import 'util/constant/text_theme.dart';
 
 Future<void> main() async {
@@ -97,6 +98,7 @@ class _MyAppState extends ConsumerState<MyApp> {
             ),
           ),
         ),
+        tabBarTheme: lightTabBarTheme,
         scaffoldBackgroundColor: lightColorScheme.surface,
         // タップ時のエフェクトを無効化
         splashColor: Colors.transparent,

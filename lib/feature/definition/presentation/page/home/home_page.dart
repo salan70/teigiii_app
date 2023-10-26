@@ -43,13 +43,8 @@ class HomePage extends StatelessWidget {
             ),
           ],
           bottom: TabBar(
-            labelColor: Theme.of(context).colorScheme.primary,
-            labelStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-            indicatorSize: TabBarIndicatorSize.label,
+            labelStyle: Theme.of(context).textTheme.titleMedium,
             indicatorWeight: 3,
-            unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
             tabs: const <Widget>[
               Tab(text: 'おすすめ'),
               Tab(text: 'フォロー中'),

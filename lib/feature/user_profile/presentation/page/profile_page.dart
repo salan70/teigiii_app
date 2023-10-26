@@ -37,12 +37,8 @@ class ProfilePage extends ConsumerWidget {
                   pinned: true,
                   delegate: _StickyTabBarDelegate(
                     tabBar: TabBar(
-                      labelColor: Theme.of(context).colorScheme.primary,
-                      unselectedLabelColor:
-                          Theme.of(context).colorScheme.onSurface,
                       labelStyle: Theme.of(context).textTheme.titleMedium,
                       indicatorWeight: 3,
-                      indicatorSize: TabBarIndicatorSize.label,
                       tabs: const [
                         Tab(text: '投稿'),
                         Tab(text: 'いいね'),
