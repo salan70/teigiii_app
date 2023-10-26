@@ -7,8 +7,8 @@ import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/auth/repository/auth_repository.dart';
 import 'package:teigi_app/feature/auth/util/constant.dart';
 import 'package:teigi_app/feature/user/repository/user_profile_repository.dart';
+import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart';
-import 'package:teigi_app/feature/user_config/repository/package_info_repository.dart';
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
 
 import 'auth_service_test.mocks.dart';
@@ -17,7 +17,6 @@ import 'auth_service_test.mocks.dart';
   MockSpec<UserProfileRepository>(),
   MockSpec<UserConfigRepository>(),
   MockSpec<DeviceInfoRepository>(),
-  MockSpec<PackageInfoRepository>(),
   MockSpec<AuthRepository>(),
   MockSpec<Listener<AsyncValue<void>>>(),
 ])
@@ -32,13 +31,13 @@ void main() {
   final mockUserProfileRepository = MockUserProfileRepository();
   final mockUserConfigRepository = MockUserConfigRepository();
   final mockDeviceInfoRepository = MockDeviceInfoRepository();
-  final mockPackageInfoRepository = MockPackageInfoRepository();
   final mockAuthRepository = MockAuthRepository();
   final listener = MockListener();
 
   late ProviderContainer container;
 
   const mockUserId = 'userId';
+  const mockAppVersion = '1.0.0';
 
   // ProviderContainerの初期化、authServiceProviderのlistenを設定する
   // このとき、[isSignedInProvider]はfalse（未ログイン状態）であることに注意
@@ -47,14 +46,13 @@ void main() {
       overrides: [
         isSignedInProvider.overrideWithValue(false),
         userIdProvider.overrideWithValue(mockUserId),
+        appVersionProvider.overrideWith((ref) => Future.value(mockAppVersion)),
         userProfileRepositoryProvider
             .overrideWithValue(mockUserProfileRepository),
         userConfigRepositoryProvider
             .overrideWithValue(mockUserConfigRepository),
         deviceInfoRepositoryProvider
             .overrideWithValue(mockDeviceInfoRepository),
-        packageInfoRepositoryProvider
-            .overrideWithValue(mockPackageInfoRepository),
         authRepositoryProvider.overrideWithValue(mockAuthRepository),
       ],
     );
@@ -78,7 +76,6 @@ void main() {
     reset(mockUserProfileRepository);
     reset(mockUserConfigRepository);
     reset(mockDeviceInfoRepository);
-    reset(mockPackageInfoRepository);
     reset(mockAuthRepository);
     reset(listener);
   });
@@ -88,21 +85,18 @@ void main() {
     container.updateOverrides([
       isSignedInProvider.overrideWithValue(isSignedIn),
       userIdProvider.overrideWithValue(mockUserId),
+      appVersionProvider.overrideWith((ref) => Future.value(mockAppVersion)),
       userProfileRepositoryProvider
           .overrideWithValue(mockUserProfileRepository),
       userConfigRepositoryProvider.overrideWithValue(mockUserConfigRepository),
       deviceInfoRepositoryProvider.overrideWithValue(mockDeviceInfoRepository),
-      packageInfoRepositoryProvider
-          .overrideWithValue(mockPackageInfoRepository),
       authRepositoryProvider.overrideWithValue(mockAuthRepository),
     ]);
   }
 
-  void setupMock(String? osVersion, String appVersion) {
+  void setupMock(String? osVersion) {
     when(mockDeviceInfoRepository.fetchOsVersion())
         .thenAnswer((_) async => osVersion);
-    when(mockPackageInfoRepository.fetchAppVersion())
-        .thenAnswer((_) async => appVersion);
   }
 
   group('onAppLaunch()', () {
@@ -111,7 +105,7 @@ void main() {
       final authService = init();
       const mockOsVersion = 'iOS 14.4';
       const mockAppVersion = '1.0.0';
-      setupMock(mockOsVersion, mockAppVersion);
+      setupMock(mockOsVersion);
 
       // * Act
       await authService.onAppLaunch();
@@ -129,7 +123,6 @@ void main() {
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(mockAuthRepository.signInAnonymously()).called(1);
       verify(mockDeviceInfoRepository.fetchOsVersion()).called(1);
-      verify(mockPackageInfoRepository.fetchAppVersion()).called(1);
       verify(
         mockUserConfigRepository.addUserConfig(
           mockUserId,
@@ -149,8 +142,7 @@ void main() {
       // * Arrange
       final authService = init();
       const mockOsVersion = 'iOS 14.4';
-      const mockAppVersion = '1.0.0';
-      setupMock(mockOsVersion, mockAppVersion);
+      setupMock(mockOsVersion);
       updateContainersOverride(isSignedIn: true);
 
       // * Act
@@ -168,7 +160,6 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(mockDeviceInfoRepository.fetchOsVersion()).called(1);
-      verify(mockPackageInfoRepository.fetchAppVersion()).called(1);
       verify(
         mockUserConfigRepository.updateVersionInfo(
           mockUserId,
@@ -184,10 +175,8 @@ void main() {
     test('未ログイン（OSがiOSでもAndroidでもない場合）: 処理の中で渡される引数が想定通りであることを検証', () async {
       // * Arrange
       final authService = init();
-      const mockAppVersion = '1.0.0';
       setupMock(
         null, // iOSでもAndroidでもないOSを再現
-        mockAppVersion,
       );
 
       // * Act
@@ -207,10 +196,8 @@ void main() {
       // * Arrange
       final authService = init();
       updateContainersOverride(isSignedIn: true);
-      const mockAppVersion = '1.0.0';
       setupMock(
         null, // iOSでもAndroidでもないOSを再現
-        mockAppVersion,
       );
 
       // * Act
