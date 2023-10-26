@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common_widget/shimmer_widget.dart';
+import '../../../core/router/app_router.dart';
 import '../../user_config/application/user_config_state.dart';
 
 @RoutePage()
@@ -85,7 +86,9 @@ class SettingPage extends ConsumerWidget {
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.tag),
               label: 'ライセンス',
-              onTap: () {}, // TODO(me): ライセンス画面へ遷移
+              onTap: () async {
+                await context.navigateTo(const MyLicenseRoute());
+              },
             ),
             const SizedBox(height: 24),
             Row(

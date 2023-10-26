@@ -55,6 +55,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const IndexPage(),
       );
     },
+    MyLicenseRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const MyLicensePage(),
+      );
+    },
     ProfileRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -174,6 +180,20 @@ class IndexRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'IndexRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [MyLicensePage]
+class MyLicenseRoute extends PageRouteInfo<void> {
+  const MyLicenseRoute({List<PageRouteInfo>? children})
+      : super(
+          MyLicenseRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MyLicenseRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
