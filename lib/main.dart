@@ -14,6 +14,7 @@ import 'feature/auth/application/auth_service.dart';
 import 'feature/auth/application/auth_state.dart';
 import 'firebase_options/firebase_options.dart';
 import 'util/constant/color_scheme.dart';
+import 'util/constant/text_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,6 +75,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       theme: ThemeData(
         fontFamily: 'LINESeedJP',
         colorScheme: lightColorScheme,
+        textTheme: textTheme,
         appBarTheme: AppBarTheme(
           backgroundColor: lightColorScheme.surface,
           elevation: 1,

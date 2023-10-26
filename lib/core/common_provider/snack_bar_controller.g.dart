@@ -25,7 +25,7 @@ final scaffoldMessengerKeyProvider =
 typedef ScaffoldMessengerKeyRef
     = AutoDisposeProviderRef<GlobalKey<ScaffoldMessengerState>>;
 String _$snackBarControllerHash() =>
-    r'68a887fbc2d40f8fea6dc2279538f60194301065';
+    r'dab661289f3247f62343848c9c8341ee27078e2f';
 
 /// See also [SnackBarController].
 @ProviderFor(SnackBarController)
