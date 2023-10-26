@@ -33,14 +33,4 @@ class UserProfileRepository {
       'updatedAt': FieldValue.serverTimestamp(),
     });
   }
-
-  /// 引数で渡したユーザーが、フォローしているユーザーのIDリストを取得
-  Future<List<String>> fetchFollowingIdList(String userId) async {
-    final QuerySnapshot snapshot = await firestore
-        .collection('UserFollows')
-        .where('followingId', isEqualTo: userId)
-        .get();
-
-    return snapshot.docs.map((doc) => doc['followerId'] as String).toList();
-  }
 }

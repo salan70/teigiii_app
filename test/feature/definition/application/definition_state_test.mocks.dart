@@ -15,9 +15,9 @@ import 'package:teigi_app/feature/definition/repository/definition_repository.da
     as _i7;
 import 'package:teigi_app/feature/definition/repository/entity/definition_document.dart'
     as _i4;
-import 'package:teigi_app/feature/user/repository/entity/user_profile_document.dart'
+import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart'
     as _i5;
-import 'package:teigi_app/feature/user/repository/user_profile_repository.dart'
+import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart'
     as _i9;
 import 'package:teigi_app/feature/word/repository/entity/word_document.dart'
     as _i6;
@@ -370,17 +370,6 @@ class MockUserProfileRepository extends _i1.Mock
         returnValue: _i8.Future<void>.value(),
         returnValueForMissingStub: _i8.Future<void>.value(),
       ) as _i8.Future<void>);
-
-  @override
-  _i8.Future<List<String>> fetchFollowingIdList(String? userId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchFollowingIdList,
-          [userId],
-        ),
-        returnValue: _i8.Future<List<String>>.value(<String>[]),
-        returnValueForMissingStub: _i8.Future<List<String>>.value(<String>[]),
-      ) as _i8.Future<List<String>>);
 }
 
 /// A class which mocks [WordRepository].

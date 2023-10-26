@@ -6,10 +6,10 @@ import 'package:teigi_app/feature/auth/application/auth_service.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/auth/repository/auth_repository.dart';
 import 'package:teigi_app/feature/auth/util/constant.dart';
-import 'package:teigi_app/feature/user/repository/user_profile_repository.dart';
 import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart';
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
+import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
 
 import 'auth_service_test.mocks.dart';
 

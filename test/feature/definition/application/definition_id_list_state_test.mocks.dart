@@ -7,26 +7,28 @@ import 'dart:async' as _i9;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i14;
+import 'package:riverpod_annotation/riverpod_annotation.dart' as _i15;
 import 'package:teigi_app/feature/definition/domain/definition_id_list_state.dart'
     as _i3;
 import 'package:teigi_app/feature/definition/repository/definition_repository.dart'
     as _i8;
 import 'package:teigi_app/feature/definition/repository/entity/definition_document.dart'
     as _i4;
-import 'package:teigi_app/feature/user/repository/entity/user_profile_document.dart'
-    as _i5;
-import 'package:teigi_app/feature/user/repository/user_profile_repository.dart'
-    as _i10;
 import 'package:teigi_app/feature/user_config/repository/entity/user_config_document.dart'
     as _i6;
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart'
     as _i11;
+import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart'
+    as _i5;
+import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart'
+    as _i12;
+import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart'
+    as _i10;
 import 'package:teigi_app/feature/word/repository/entity/word_document.dart'
     as _i7;
-import 'package:teigi_app/feature/word/repository/word_repository.dart' as _i12;
+import 'package:teigi_app/feature/word/repository/word_repository.dart' as _i13;
 
-import 'definition_id_list_state_test.dart' as _i13;
+import 'definition_id_list_state_test.dart' as _i14;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -384,17 +386,6 @@ class MockUserProfileRepository extends _i1.Mock
         returnValue: _i9.Future<void>.value(),
         returnValueForMissingStub: _i9.Future<void>.value(),
       ) as _i9.Future<void>);
-
-  @override
-  _i9.Future<List<String>> fetchFollowingIdList(String? userId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchFollowingIdList,
-          [userId],
-        ),
-        returnValue: _i9.Future<List<String>>.value(<String>[]),
-        returnValueForMissingStub: _i9.Future<List<String>>.value(<String>[]),
-      ) as _i9.Future<List<String>>);
 }
 
 /// A class which mocks [UserConfigRepository].
@@ -513,10 +504,75 @@ class MockUserConfigRepository extends _i1.Mock
       ) as _i9.Future<void>);
 }
 
+/// A class which mocks [UserFollowRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUserFollowRepository extends _i1.Mock
+    implements _i12.UserFollowRepository {
+  @override
+  _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
+        Invocation.getter(#firestore),
+        returnValue: _FakeFirebaseFirestore_0(
+          this,
+          Invocation.getter(#firestore),
+        ),
+        returnValueForMissingStub: _FakeFirebaseFirestore_0(
+          this,
+          Invocation.getter(#firestore),
+        ),
+      ) as _i2.FirebaseFirestore);
+
+  @override
+  _i9.Future<_i5.UserProfileDocument> fetchUserFollowCount(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchUserFollowCount,
+          [userId],
+        ),
+        returnValue: _i9.Future<_i5.UserProfileDocument>.value(
+            _FakeUserProfileDocument_3(
+          this,
+          Invocation.method(
+            #fetchUserFollowCount,
+            [userId],
+          ),
+        )),
+        returnValueForMissingStub: _i9.Future<_i5.UserProfileDocument>.value(
+            _FakeUserProfileDocument_3(
+          this,
+          Invocation.method(
+            #fetchUserFollowCount,
+            [userId],
+          ),
+        )),
+      ) as _i9.Future<_i5.UserProfileDocument>);
+
+  @override
+  _i9.Future<void> addUserFollowCount(String? userId) => (super.noSuchMethod(
+        Invocation.method(
+          #addUserFollowCount,
+          [userId],
+        ),
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
+
+  @override
+  _i9.Future<List<String>> fetchFollowingIdList(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchFollowingIdList,
+          [userId],
+        ),
+        returnValue: _i9.Future<List<String>>.value(<String>[]),
+        returnValueForMissingStub: _i9.Future<List<String>>.value(<String>[]),
+      ) as _i9.Future<List<String>>);
+}
+
 /// A class which mocks [WordRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWordRepository extends _i1.Mock implements _i12.WordRepository {
+class MockWordRepository extends _i1.Mock implements _i13.WordRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),
@@ -558,11 +614,11 @@ class MockWordRepository extends _i1.Mock implements _i12.WordRepository {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockListener extends _i1.Mock
-    implements _i13.Listener<_i14.AsyncValue<_i3.DefinitionIdListState>> {
+    implements _i14.Listener<_i15.AsyncValue<_i3.DefinitionIdListState>> {
   @override
   void call(
-    _i14.AsyncValue<_i3.DefinitionIdListState>? previous,
-    _i14.AsyncValue<_i3.DefinitionIdListState>? next,
+    _i15.AsyncValue<_i3.DefinitionIdListState>? previous,
+    _i15.AsyncValue<_i3.DefinitionIdListState>? next,
   ) =>
       super.noSuchMethod(
         Invocation.method(

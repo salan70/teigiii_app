@@ -1,10 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../util/logger.dart';
-import '../../user/repository/user_profile_repository.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_config/repository/device_info_repository.dart';
 import '../../user_config/repository/user_config_repository.dart';
+import '../../user_profile/repository/user_profile_repository.dart';
 import '../repository/auth_repository.dart';
 import '../util/constant.dart';
 import 'auth_state.dart';

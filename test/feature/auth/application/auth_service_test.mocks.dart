@@ -10,16 +10,16 @@ import 'package:firebase_auth/firebase_auth.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:riverpod_annotation/riverpod_annotation.dart' as _i12;
 import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i10;
-import 'package:teigi_app/feature/user/repository/entity/user_profile_document.dart'
-    as _i3;
-import 'package:teigi_app/feature/user/repository/user_profile_repository.dart'
-    as _i6;
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart'
     as _i9;
 import 'package:teigi_app/feature/user_config/repository/entity/user_config_document.dart'
     as _i4;
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart'
     as _i8;
+import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart'
+    as _i3;
+import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart'
+    as _i6;
 
 import 'auth_service_test.dart' as _i11;
 
@@ -136,17 +136,6 @@ class MockUserProfileRepository extends _i1.Mock
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
-
-  @override
-  _i7.Future<List<String>> fetchFollowingIdList(String? userId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchFollowingIdList,
-          [userId],
-        ),
-        returnValue: _i7.Future<List<String>>.value(<String>[]),
-        returnValueForMissingStub: _i7.Future<List<String>>.value(<String>[]),
-      ) as _i7.Future<List<String>>);
 }
 
 /// A class which mocks [UserConfigRepository].
