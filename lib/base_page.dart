@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/router/app_router.dart';
 import 'feature/auth/application/auth_service.dart';
+import 'feature/auth/application/auth_state.dart';
 
 // 参考
 // https://zenn.dev/flutteruniv_dev/articles/20230427-095829-flutter-auto-route#うまくいくパターン
@@ -28,11 +29,13 @@ class _BasePageState extends ConsumerState<BasePage> {
 
     return async.when(
       data: (_) {
+        // TODO(me): 雑に!使ってるが、問題ないか確認する
+        final currentUserId = ref.watch(userIdProvider)!;
         return AutoTabsRouter(
-          routes: const [
-            HomeRouterRoute(),
-            ProfileRoute(),
-            IndexRoute(),
+          routes: [
+            const HomeRouterRoute(),
+            ProfileRoute(userId: currentUserId),
+            const IndexRoute(),
           ],
           builder: (context, child) {
             final tabsRouter = context.tabsRouter;

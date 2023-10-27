@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/main_button.dart';
+import '../../../../core/common_widget/button/main_button.dart';
 import '../../../definition/presentation/component/avatar_icon_widget.dart';
 import '../../application/user_profile_state.dart';
 import 'profile_widget_shimmer.dart';

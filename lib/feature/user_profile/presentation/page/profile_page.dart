@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/to_setting_button.dart';
+import '../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../auth/application/auth_state.dart';
 import '../../../definition/presentation/component/definition_list.dart';
 import '../../../definition/util/definition_feed_type.dart';
@@ -15,12 +16,14 @@ class ProfileRouterPage extends AutoRouter {
 
 @RoutePage()
 class ProfilePage extends ConsumerWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({super.key, required this.userId});
+
+  final String userId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO(me): 雑に!使ってるが、問題ないか確認する
-    final userId = ref.watch(userIdProvider)!;
+    final currentUserId = ref.watch(userIdProvider)!;
 
     return DefaultTabController(
       length: 2,
@@ -28,12 +31,25 @@ class ProfilePage extends ConsumerWidget {
         child: Scaffold(
           body: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool _) {
+              final isMyProfile = currentUserId == userId;
+
               return <Widget>[
-                const SliverAppBar(
+                SliverAppBar(
                   forceElevated: true,
                   floating: true,
-                  leading: ToSettingButton(),
-                  title: Text('プロフィール'),
+                  leading: const ToSettingButton(),
+                  title: const Text('プロフィール'),
+                  actions: [
+                    // 自分のプロフィールの場合は編集ボタンを表示
+                    isMyProfile
+                        ? IconButton(
+                            icon: const Icon(CupertinoIcons.person_add),
+                            onPressed: () {
+                              // TODO(me): ユーザー検索画面を表示する
+                            },
+                          )
+                        : const SizedBox.shrink(),
+                  ],
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate(
@@ -69,6 +85,28 @@ class ProfilePage extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+enum ProfileType {
+  myProfile,
+  otherProfile;
+
+  IconButton appBarTrailingButton(GlobalKey globalKey, BuildContext context) {
+    switch (this) {
+      case ProfileType.myProfile:
+        return IconButton(
+          icon: const Icon(CupertinoIcons.person_add),
+          onPressed: () {},
+        );
+      case ProfileType.otherProfile:
+        return IconButton(
+          icon: const Icon(CupertinoIcons.ellipsis),
+          onPressed: () {
+
+          },
+        );
+    }
   }
 }
 
