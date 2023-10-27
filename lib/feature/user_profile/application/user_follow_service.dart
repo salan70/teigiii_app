@@ -37,10 +37,7 @@ class UserFollowService extends _$UserFollowService {
     }
 
     // フォローした/されたユーザーのProviderを再生成
-    ref
-      ..invalidate(userProfileProvider(currentUserId))
-      ..invalidate(userProfileProvider(targetUserId))
-      ..invalidate(isFollowingProvider(targetUserId));
+     _invalidateRelatedUserProvider(targetUserId);
 
     isLoadingOverlayNotifier.finishLoading();
   }
@@ -68,10 +65,20 @@ class UserFollowService extends _$UserFollowService {
     }
 
     // フォローした/されたユーザーのProviderを再生成
-    ref
-      ..invalidate(userProfileProvider(currentUserId))
-      ..invalidate(userProfileProvider(targetUserId));
+    _invalidateRelatedUserProvider(targetUserId);
 
     isLoadingOverlayNotifier.finishLoading();
+  }
+
+  /// ログイン中のユーザーと[targetUserId]のuserProfileProvider, isFollowingProviderを再生成する
+  /// 
+  /// フォロー/フォロー解除時に使用する
+  void _invalidateRelatedUserProvider(String targetUserId) {
+    final currentUserId = ref.read(userIdProvider)!;
+
+    ref
+      ..invalidate(userProfileProvider(currentUserId))
+      ..invalidate(userProfileProvider(targetUserId))
+      ..invalidate(isFollowingProvider(targetUserId));
   }
 }
