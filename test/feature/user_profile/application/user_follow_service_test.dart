@@ -78,6 +78,45 @@ void main() {
       verify(
         mockUserFollowRepository.follow(currentUserId, targetUserId),
       ).called(1);
+
+      // 想定外のrepositoryの関数が呼ばれていないか検証
+      verifyNever(
+        mockUserFollowRepository.unfollow(any, any),
+      );
+    });
+
+    // TODO(me): エラー発生時のテスト書く
+    // snackBarControllerProviderのMockの作り方がわからないため、保留
+  });
+
+  group('unfollow', () {
+    test('いいね登録: stateと、想定通りにrepositoryの関数が呼ばれることを検証', () async {
+      // * Arrange
+      final userFollowService = init();
+      const targetUserId = 'targetUser';
+
+      // * Act
+      await userFollowService.unfollow(targetUserId);
+
+      // * Assert
+      // stateの検証
+      verifyInOrder([
+        // build()時
+        listener.call(null, const AsyncData(null)),
+        // tapLike()時もstateは変わらない
+      ]);
+      // 他にlistenerが発火されないことを検証
+      verifyNoMoreInteractions(listener);
+
+      // 想定通りにrepositoryの関数が呼ばれているか検証
+      verify(
+        mockUserFollowRepository.unfollow(currentUserId, targetUserId),
+      ).called(1);
+
+      // 想定外のrepositoryの関数が呼ばれていないか検証
+      verifyNever(
+        mockUserFollowRepository.follow(any, any),
+      );
     });
 
     // TODO(me): エラー発生時のテスト書く
