@@ -154,5 +154,133 @@ class _UserProfileProviderElement extends FutureProviderElement<UserProfile>
   @override
   String get userId => (origin as UserProfileProvider).userId;
 }
+
+String _$isFollowingHash() => r'ba64a7ffacfc214a92102ab8a7516ab16bcfe9d5';
+
+/// See also [isFollowing].
+@ProviderFor(isFollowing)
+const isFollowingProvider = IsFollowingFamily();
+
+/// See also [isFollowing].
+class IsFollowingFamily extends Family<AsyncValue<bool>> {
+  /// See also [isFollowing].
+  const IsFollowingFamily();
+
+  /// See also [isFollowing].
+  IsFollowingProvider call(
+    String targetUserId,
+  ) {
+    return IsFollowingProvider(
+      targetUserId,
+    );
+  }
+
+  @override
+  IsFollowingProvider getProviderOverride(
+    covariant IsFollowingProvider provider,
+  ) {
+    return call(
+      provider.targetUserId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'isFollowingProvider';
+}
+
+/// See also [isFollowing].
+class IsFollowingProvider extends FutureProvider<bool> {
+  /// See also [isFollowing].
+  IsFollowingProvider(
+    String targetUserId,
+  ) : this._internal(
+          (ref) => isFollowing(
+            ref as IsFollowingRef,
+            targetUserId,
+          ),
+          from: isFollowingProvider,
+          name: r'isFollowingProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$isFollowingHash,
+          dependencies: IsFollowingFamily._dependencies,
+          allTransitiveDependencies:
+              IsFollowingFamily._allTransitiveDependencies,
+          targetUserId: targetUserId,
+        );
+
+  IsFollowingProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.targetUserId,
+  }) : super.internal();
+
+  final String targetUserId;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(IsFollowingRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: IsFollowingProvider._internal(
+        (ref) => create(ref as IsFollowingRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        targetUserId: targetUserId,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<bool> createElement() {
+    return _IsFollowingProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is IsFollowingProvider && other.targetUserId == targetUserId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, targetUserId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin IsFollowingRef on FutureProviderRef<bool> {
+  /// The parameter `targetUserId` of this provider.
+  String get targetUserId;
+}
+
+class _IsFollowingProviderElement extends FutureProviderElement<bool>
+    with IsFollowingRef {
+  _IsFollowingProviderElement(super.provider);
+
+  @override
+  String get targetUserId => (origin as IsFollowingProvider).targetUserId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

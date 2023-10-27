@@ -43,4 +43,34 @@ class UserFollowService extends _$UserFollowService {
 
     isLoadingOverlayNotifier.finishLoading();
   }
+
+  /// ログイン中のuserが[targetUserId]のフォローを解除する
+  Future<void> unfollow(String targetUserId) async {
+    final isLoadingOverlayNotifier =
+        ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
+
+    final currentUserId = ref.read(userIdProvider)!;
+
+    try {
+      await ref.read(userFollowRepositoryProvider).unfollow(
+            currentUserId,
+            targetUserId,
+          );
+    } on Exception catch (e) {
+      logger.e('フォロー解除時にエラーが発生: $e');
+      ref.read(snackBarControllerProvider.notifier).showSnackBar(
+            'フォロー解除に失敗しました',
+            causeError: true,
+          );
+      isLoadingOverlayNotifier.finishLoading();
+      return;
+    }
+
+    // フォローした/されたユーザーのProviderを再生成
+    ref
+      ..invalidate(userProfileProvider(currentUserId))
+      ..invalidate(userProfileProvider(targetUserId));
+
+    isLoadingOverlayNotifier.finishLoading();
+  }
 }

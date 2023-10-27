@@ -200,15 +200,15 @@ class MockUserFollowRepository extends _i1.Mock
 
   @override
   _i8.Future<void> follow(
-    String? followingId,
-    String? followerId,
+    String? currentUserId,
+    String? targetUserId,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
           #follow,
           [
-            followingId,
-            followerId,
+            currentUserId,
+            targetUserId,
           ],
         ),
         returnValue: _i8.Future<void>.value(),
@@ -217,20 +217,37 @@ class MockUserFollowRepository extends _i1.Mock
 
   @override
   _i8.Future<void> unfollow(
-    String? followingId,
-    String? followerId,
+    String? currentUserId,
+    String? targetUserId,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
           #unfollow,
           [
-            followingId,
-            followerId,
+            currentUserId,
+            targetUserId,
           ],
         ),
         returnValue: _i8.Future<void>.value(),
         returnValueForMissingStub: _i8.Future<void>.value(),
       ) as _i8.Future<void>);
+
+  @override
+  _i8.Future<bool> isFollowing(
+    String? currentUserId,
+    String? targetUserId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #isFollowing,
+          [
+            currentUserId,
+            targetUserId,
+          ],
+        ),
+        returnValue: _i8.Future<bool>.value(false),
+        returnValueForMissingStub: _i8.Future<bool>.value(false),
+      ) as _i8.Future<bool>);
 
   @override
   _i8.Future<void> addUserFollowCount(String? userId) => (super.noSuchMethod(

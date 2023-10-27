@@ -7,9 +7,6 @@ import 'dart:async' as _i6;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i9;
-import 'package:teigi_app/feature/user_profile/domain/user_profile.dart'
-    as _i10;
 import 'package:teigi_app/feature/user_profile/repository/entity/user_follow_count_document.dart'
     as _i4;
 import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart'
@@ -18,8 +15,6 @@ import 'package:teigi_app/feature/user_profile/repository/user_follow_repository
     as _i7;
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart'
     as _i5;
-
-import 'user_profile_state_test.dart' as _i8;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -173,15 +168,15 @@ class MockUserFollowRepository extends _i1.Mock
 
   @override
   _i6.Future<void> follow(
-    String? followingId,
-    String? followerId,
+    String? currentUserId,
+    String? targetUserId,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
           #follow,
           [
-            followingId,
-            followerId,
+            currentUserId,
+            targetUserId,
           ],
         ),
         returnValue: _i6.Future<void>.value(),
@@ -190,20 +185,37 @@ class MockUserFollowRepository extends _i1.Mock
 
   @override
   _i6.Future<void> unfollow(
-    String? followingId,
-    String? followerId,
+    String? currentUserId,
+    String? targetUserId,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
           #unfollow,
           [
-            followingId,
-            followerId,
+            currentUserId,
+            targetUserId,
           ],
         ),
         returnValue: _i6.Future<void>.value(),
         returnValueForMissingStub: _i6.Future<void>.value(),
       ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<bool> isFollowing(
+    String? currentUserId,
+    String? targetUserId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #isFollowing,
+          [
+            currentUserId,
+            targetUserId,
+          ],
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+        returnValueForMissingStub: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
 
   @override
   _i6.Future<void> addUserFollowCount(String? userId) => (super.noSuchMethod(
@@ -225,26 +237,4 @@ class MockUserFollowRepository extends _i1.Mock
         returnValue: _i6.Future<List<String>>.value(<String>[]),
         returnValueForMissingStub: _i6.Future<List<String>>.value(<String>[]),
       ) as _i6.Future<List<String>>);
-}
-
-/// A class which mocks [Listener].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockListener extends _i1.Mock
-    implements _i8.Listener<_i9.AsyncValue<_i10.UserProfile>> {
-  @override
-  void call(
-    _i9.AsyncValue<_i10.UserProfile>? previous,
-    _i9.AsyncValue<_i10.UserProfile>? next,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #call,
-          [
-            previous,
-            next,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
 }
