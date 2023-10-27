@@ -32,15 +32,6 @@ class AppRouter extends _$AppRouter {
                   path: 'definition_detail',
                   page: DefinitionDetailRoute.page,
                 ),
-                AutoRoute(
-                  path: 'setting',
-                  page: SettingRoute.page,
-                  fullscreenDialog: true,
-                ),
-                AutoRoute(
-                  path: 'license',
-                  page: MyLicenseRoute.page,
-                ),
               ],
             ),
             AutoRoute(
@@ -56,20 +47,26 @@ class AppRouter extends _$AppRouter {
                   path: 'definition_detail',
                   page: DefinitionDetailRoute.page,
                 ),
-                AutoRoute(
-                  path: 'setting',
-                  page: SettingRoute.page,
-                  fullMatch: true,
-                ),
-                AutoRoute(
-                  path: 'license',
-                  page: MyLicenseRoute.page,
-                ),
               ],
             ),
             AutoRoute(
               path: 'index',
               page: IndexRoute.page,
+            ),
+          ],
+        ),
+        AutoRoute(
+          path: '/setting',
+          page: SettingRouterRoute.page,
+          fullscreenDialog: true,
+          children: [
+            AutoRoute(
+              initial: true,
+              page: SettingRoute.page,
+            ),
+            AutoRoute(
+              path: 'license',
+              page: MyLicenseRoute.page,
             ),
           ],
         ),

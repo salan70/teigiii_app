@@ -8,6 +8,11 @@ import '../../../core/router/app_router.dart';
 import '../../user_config/application/user_config_state.dart';
 
 @RoutePage()
+class SettingRouterPage extends AutoRouter {
+  const SettingRouterPage({super.key});
+}
+
+@RoutePage()
 class SettingPage extends ConsumerWidget {
   const SettingPage({super.key});
 
@@ -18,6 +23,14 @@ class SettingPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('設定'),
+        actions: [
+          IconButton(
+            icon: const Icon(CupertinoIcons.xmark),
+            onPressed: () async {
+              await context.popRoute();
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(
