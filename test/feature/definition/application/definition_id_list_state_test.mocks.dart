@@ -565,6 +565,40 @@ class MockUserFollowRepository extends _i1.Mock
       ) as _i10.Future<_i7.UserFollowCountDocument>);
 
   @override
+  _i10.Future<void> follow(
+    String? followingId,
+    String? followerId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #follow,
+          [
+            followingId,
+            followerId,
+          ],
+        ),
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
+
+  @override
+  _i10.Future<void> unfollow(
+    String? followingId,
+    String? followerId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #unfollow,
+          [
+            followingId,
+            followerId,
+          ],
+        ),
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
+
+  @override
   _i10.Future<void> addUserFollowCount(String? userId) => (super.noSuchMethod(
         Invocation.method(
           #addUserFollowCount,

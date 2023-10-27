@@ -24,6 +24,78 @@ class UserFollowRepository {
     return UserFollowCountDocument.fromFirestore(snapshot);
   }
 
+  /// [followingId]が[followerId]をフォローする
+  Future<void> follow(String followingId, String followerId) async {
+    final batch = firestore.batch()
+
+      // UserFollowsドキュメントを追加
+      ..set(
+        firestore.collection('UserFollows').doc(),
+        {
+          'followerId': followerId,
+          'followingId': followingId,
+          'createdAt': FieldValue.serverTimestamp(),
+          'updatedAt': FieldValue.serverTimestamp(),
+        },
+      )
+
+      // フォローしたユーザーのUserFollowCountsドキュメントを更新
+      ..update(
+        firestore.collection('UserFollowCounts').doc(followingId),
+        {
+          'followingCount': FieldValue.increment(1),
+          'updatedAt': FieldValue.serverTimestamp(),
+        },
+      )
+
+      // フォローされたユーザーのUserFollowCountsドキュメントを更新
+      ..update(
+        firestore.collection('UserFollowCounts').doc(followerId),
+        {
+          'followerCount': FieldValue.increment(1),
+          'updatedAt': FieldValue.serverTimestamp(),
+        },
+      );
+
+    await batch.commit();
+  }
+
+  /// [followingId]が[followerId]のフォローを解除する
+  Future<void> unfollow(String followingId, String followerId) async {
+    final batch = firestore.batch()
+
+      // UserFollowsドキュメントを探して削除
+      ..delete(
+        await firestore
+            .collection('UserFollows')
+            .where('followingId', isEqualTo: followingId)
+            .where('followerId', isEqualTo: followerId)
+            .limit(1)
+            .get()
+            .then((snapshot) => snapshot.docs.first.reference),
+      )
+
+      // フォローしたユーザーのUserFollowCountsドキュメントを更新
+      ..update(
+        firestore.collection('UserFollowCounts').doc(followingId),
+        {
+          'followingCount': FieldValue.increment(-1),
+          'updatedAt': FieldValue.serverTimestamp(),
+        },
+      )
+
+      // フォローされたユーザーのUserFollowCountsドキュメントを更新
+      ..update(
+        firestore.collection('UserFollowCounts').doc(followerId),
+        {
+          'followerCount': FieldValue.increment(-1),
+          'updatedAt': FieldValue.serverTimestamp(),
+        },
+      );
+
+    await batch.commit();
+  }
+
   /// UserFollowCountドキュメントを追加する
   Future<void> addUserFollowCount(String userId) async {
     await firestore.collection('UserFollowCounts').doc(userId).set({

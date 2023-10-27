@@ -21,6 +21,7 @@
         "**/*.mocks.dart": true,
     },
     "cSpell.words": [
+        "unfollow",
         "unmute"
     ],
 }

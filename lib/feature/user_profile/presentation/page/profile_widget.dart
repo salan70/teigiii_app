@@ -5,6 +5,7 @@ import '../../../../core/common_widget/button/primary_filled_button.dart';
 import '../../../../core/common_widget/button/secondary_filled_button.dart';
 import '../../../auth/application/auth_state.dart';
 import '../../../definition/presentation/component/avatar_icon_widget.dart';
+import '../../application/user_follow_service.dart';
 import '../../application/user_profile_state.dart';
 import 'profile_widget_shimmer.dart';
 
@@ -16,7 +17,7 @@ class ProfileWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncTargetUserProfile = ref.watch(userProfileProvider(targetUserId));
-    final currentUserid = ref.watch(userIdProvider);
+    final currentUserId = ref.watch(userIdProvider);
 
     return asyncTargetUserProfile.when(
       data: (userProfile) {
@@ -76,14 +77,18 @@ class ProfileWidget extends ConsumerWidget {
               const SizedBox(height: 24),
               Align(
                 alignment: Alignment.topCenter,
-                child: currentUserid == targetUserId
+                child: currentUserId == targetUserId
                     ? SecondaryFilledButton(
                         text: 'プロフィールを編集する',
                         onPressed: () {},
                       )
                     : PrimaryFilledButton(
                         text: 'フォローする',
-                        onPressed: () {},
+                        onPressed: () async {
+                          await ref
+                              .read(userFollowServiceProvider.notifier)
+                              .follow(userProfile.id);
+                        },
                       ),
               ),
               const SizedBox(height: 16),
