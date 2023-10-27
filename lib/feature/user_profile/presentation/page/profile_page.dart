@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/common_widget/button/ellipsis_icon_button.dart';
 import '../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../auth/application/auth_state.dart';
 import '../../../definition/presentation/component/definition_list.dart';
@@ -16,9 +17,9 @@ class ProfileRouterPage extends AutoRouter {
 
 @RoutePage()
 class ProfilePage extends ConsumerWidget {
-  const ProfilePage({super.key, required this.userId});
+  const ProfilePage({super.key, required this.targetUserId});
 
-  final String userId;
+  final String targetUserId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,7 +32,7 @@ class ProfilePage extends ConsumerWidget {
         child: Scaffold(
           body: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool _) {
-              final isMyProfile = currentUserId == userId;
+              final isMyProfile = currentUserId == targetUserId;
 
               return <Widget>[
                 SliverAppBar(
@@ -48,12 +49,12 @@ class ProfilePage extends ConsumerWidget {
                               // TODO(me): ユーザー検索画面を表示する
                             },
                           )
-                        : const SizedBox.shrink(),
+                        : EllipsisIconButton(ownerId: targetUserId),
                   ],
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate(
-                    [ProfileWidget(userId: userId)],
+                    [ProfileWidget(userId: targetUserId)],
                   ),
                 ),
                 SliverPersistentHeader(
@@ -102,9 +103,7 @@ enum ProfileType {
       case ProfileType.otherProfile:
         return IconButton(
           icon: const Icon(CupertinoIcons.ellipsis),
-          onPressed: () {
-
-          },
+          onPressed: () {},
         );
     }
   }

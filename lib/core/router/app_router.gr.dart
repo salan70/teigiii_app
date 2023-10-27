@@ -67,7 +67,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: ProfilePage(
           key: args.key,
-          userId: args.userId,
+          targetUserId: args.userId,
         ),
       );
     },

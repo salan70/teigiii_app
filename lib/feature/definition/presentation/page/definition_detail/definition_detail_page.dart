@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-import '../../../../../core/common_widget/button/show_pull_down_icon_button.dart';
+import '../../../../../core/common_widget/button/ellipsis_icon_button.dart';
 import '../../../../../util/extension/date_time_extension.dart';
-import '../../../../auth/application/auth_state.dart';
 import '../../../../user_config/application/user_config_service.dart';
-import '../../../../user_config/application/user_config_state.dart';
 import '../../../application/definition_state.dart';
 import '../../component/avatar_icon_widget.dart';
 import '../../component/like_widget.dart';
@@ -27,49 +25,6 @@ class DefinitionDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncDefinition = ref.watch(definitionProvider(definitionId));
-    final userId = ref.watch(userIdProvider);
-    final asyncMutedUserIdList = ref.watch(mutedUserIdListProvider);
-
-    // プルダウンメニューの項目を作成する
-    List<PullDownMenuEntry> createMenuItems(
-      String authorId,
-      List<String> mutedUserIdList,
-    ) {
-      // 万が一userIdがnullの場合、
-      // 定義の編集/削除をできなくするために空文字を入れる
-
-      // 自身が投稿した定義の場合
-      if (userId == authorId) {
-        return [
-          PullDownMenuItemForDefinitionAction.editDefinition.item(),
-          PullDownMenuItemForDefinitionAction.deleteDefinition.item(),
-        ];
-      }
-      // 他ユーザーが投稿した かつ 既にミュート済みの場合
-      else if (mutedUserIdList.contains(authorId)) {
-        return [
-          PullDownMenuItemForUserAction.unmuteUser.item(
-            ref: ref,
-            targetUser: authorId,
-          ),
-          PullDownMenuItemForUserAction.reportUser.item(
-            ref: ref,
-            targetUser: authorId,
-          ),
-        ];
-      } else {
-        return [
-          PullDownMenuItemForUserAction.muteUser.item(
-            ref: ref,
-            targetUser: authorId,
-          ),
-          PullDownMenuItemForUserAction.reportUser.item(
-            ref: ref,
-            targetUser: authorId,
-          ),
-        ];
-      }
-    }
 
     return asyncDefinition.when(
       data: (definition) {
@@ -77,17 +32,7 @@ class DefinitionDetailPage extends ConsumerWidget {
           appBar: AppBar(
             title: const Text('詳細'),
             actions: [
-              asyncMutedUserIdList.maybeWhen(
-                data: (mutedUserIdList) {
-                  final items =
-                      createMenuItems(definition.authorId, mutedUserIdList);
-                  return ShowPullDownIconButton(
-                    items: items,
-                    icon: CupertinoIcons.ellipsis,
-                  );
-                },
-                orElse: () => const SizedBox.shrink(),
-              ),
+              EllipsisIconButton(ownerId: definition.authorId),
             ],
           ),
           body: EasyRefresh(
