@@ -67,7 +67,8 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: ProfilePage(
           key: args.key,
-          targetUserId: args.userId,
+          targetUserId: args.targetUserId,
+          isHome: args.isHome,
         ),
       );
     },
@@ -219,13 +220,15 @@ class MyLicenseRoute extends PageRouteInfo<void> {
 class ProfileRoute extends PageRouteInfo<ProfileRouteArgs> {
   ProfileRoute({
     Key? key,
-    required String userId,
+    required String targetUserId,
+    bool isHome = false,
     List<PageRouteInfo>? children,
   }) : super(
           ProfileRoute.name,
           args: ProfileRouteArgs(
             key: key,
-            userId: userId,
+            targetUserId: targetUserId,
+            isHome: isHome,
           ),
           initialChildren: children,
         );
@@ -239,16 +242,19 @@ class ProfileRoute extends PageRouteInfo<ProfileRouteArgs> {
 class ProfileRouteArgs {
   const ProfileRouteArgs({
     this.key,
-    required this.userId,
+    required this.targetUserId,
+    this.isHome = false,
   });
 
   final Key? key;
 
-  final String userId;
+  final String targetUserId;
+
+  final bool isHome;
 
   @override
   String toString() {
-    return 'ProfileRouteArgs{key: $key, userId: $userId}';
+    return 'ProfileRouteArgs{key: $key, targetUserId: $targetUserId, isHome: $isHome}';
   }
 }
 

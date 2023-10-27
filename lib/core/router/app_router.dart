@@ -32,6 +32,11 @@ class AppRouter extends _$AppRouter {
                   path: 'definition_detail',
                   page: DefinitionDetailRoute.page,
                 ),
+                AutoRoute(
+                  // TODO(me): pathをuserIdにする
+                  path: 'profile',
+                  page: ProfileRoute.page,
+                ),
               ],
             ),
             AutoRoute(

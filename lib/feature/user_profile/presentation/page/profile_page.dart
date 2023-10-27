@@ -17,9 +17,14 @@ class ProfileRouterPage extends AutoRouter {
 
 @RoutePage()
 class ProfilePage extends ConsumerWidget {
-  const ProfilePage({super.key, required this.targetUserId});
+  const ProfilePage({
+    super.key,
+    required this.targetUserId,
+    this.isHome = false,
+  });
 
   final String targetUserId;
+  final bool isHome;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +43,14 @@ class ProfilePage extends ConsumerWidget {
                 SliverAppBar(
                   forceElevated: true,
                   floating: true,
-                  leading: const ToSettingButton(),
+                  leading: isHome
+                      ? const ToSettingButton()
+                      : IconButton(
+                          icon: const Icon(CupertinoIcons.back),
+                          onPressed: () {
+                            context.router.pop();
+                          },
+                        ),
                   title: const Text('プロフィール'),
                   actions: [
                     // 自分のプロフィールの場合は編集ボタンを表示
