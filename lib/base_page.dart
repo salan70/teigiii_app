@@ -64,7 +64,19 @@ class _BasePageState extends ConsumerState<BasePage> {
                       ),
                     ],
                     currentIndex: tabsRouter.activeIndex,
-                    onTap: tabsRouter.setActiveIndex,
+                    onTap: (index) {
+                      // 選択中のタブをTapした場合
+                      if (tabsRouter.activeIndex == index) {
+                        // ネストされたルーターのスタック情報を破棄
+                        tabsRouter
+                            .innerRouterOf<StackRouter>(tabsRouter.current.name)
+                            ?.popUntilRoot();
+
+                        return;
+                      }
+                      // 選択中でないタブをTapした場合
+                      tabsRouter.setActiveIndex(index);
+                    },
                   ),
                 ),
               ],

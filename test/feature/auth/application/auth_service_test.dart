@@ -11,6 +11,7 @@ import 'package:teigi_app/feature/user_config/repository/device_info_repository.
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
+import 'package:teigi_app/util/constant/default_value.dart';
 
 import '../../../mock/mock_data.dart';
 import 'auth_service_test.mocks.dart';

@@ -66,7 +66,7 @@ class ProfilePage extends ConsumerWidget {
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate(
-                    [ProfileWidget(userId: targetUserId)],
+                    [ProfileWidget(targetUserId: targetUserId)],
                   ),
                 ),
                 SliverPersistentHeader(

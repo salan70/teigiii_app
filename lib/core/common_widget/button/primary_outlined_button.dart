@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-class MainTextButton extends StatelessWidget {
-  const MainTextButton({
+/// primaryカラーを使用したoutlinedボタン
+class PrimaryOutlinedButton extends StatelessWidget {
+  const PrimaryOutlinedButton({
     super.key,
     required this.onPressed,
     required this.text,
@@ -15,10 +16,10 @@ class MainTextButton extends StatelessWidget {
     return TextButton(
       style: TextButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(48),
+          borderRadius: BorderRadius.circular(48).copyWith(),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        foregroundColor: Theme.of(context).colorScheme.primary,
       ),
       onPressed: onPressed,
       child: Padding(
@@ -28,7 +29,7 @@ class MainTextButton extends StatelessWidget {
         child: Text(
           text,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).colorScheme.surface,
+                color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.normal,
               ),
         ),
