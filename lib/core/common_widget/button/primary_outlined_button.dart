@@ -13,12 +13,15 @@ class PrimaryOutlinedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(48).copyWith(),
         ),
-        backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.primary,
       ),
       onPressed: onPressed,
@@ -30,7 +33,6 @@ class PrimaryOutlinedButton extends StatelessWidget {
           text,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.normal,
               ),
         ),
       ),

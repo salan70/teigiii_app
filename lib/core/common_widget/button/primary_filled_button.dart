@@ -30,7 +30,6 @@ class PrimaryFilledButton extends StatelessWidget {
           text,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Theme.of(context).colorScheme.surface,
-                fontWeight: FontWeight.normal,
               ),
         ),
       ),

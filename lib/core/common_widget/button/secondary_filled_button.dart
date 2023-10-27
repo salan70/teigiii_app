@@ -29,8 +29,7 @@ class SecondaryFilledButton extends StatelessWidget {
         child: Text(
           text,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).colorScheme.surfaceVariant,
-                fontWeight: FontWeight.normal,
+                color: Theme.of(context).colorScheme.surface,
               ),
         ),
       ),

@@ -39,7 +39,8 @@ class UserFollowService extends _$UserFollowService {
     // フォローした/されたユーザーのProviderを再生成
     ref
       ..invalidate(userProfileProvider(currentUserId))
-      ..invalidate(userProfileProvider(targetUserId));
+      ..invalidate(userProfileProvider(targetUserId))
+      ..invalidate(isFollowingProvider(targetUserId));
 
     isLoadingOverlayNotifier.finishLoading();
   }
