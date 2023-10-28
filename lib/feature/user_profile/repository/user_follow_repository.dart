@@ -102,6 +102,7 @@ class UserFollowRepository {
         .collection('UserFollows')
         .where('followingId', isEqualTo: currentUserId)
         .where('followerId', isEqualTo: targetUserId)
+        .limit(1)
         .get();
 
     return snapshot.docs.isNotEmpty;
