@@ -26,13 +26,9 @@ class DefinitionTile extends ConsumerWidget {
       data: (definition) {
         return InkWell(
           onTap: () async {
-            await context.navigateTo(
-              HomeRouterRoute(
-                children: [
-                  DefinitionDetailRoute(
-                    definitionId: definition.id,
-                  ),
-                ],
+            await context.pushRoute(
+              DefinitionDetailRoute(
+                definitionId: definition.id,
               ),
             );
           },
@@ -47,7 +43,15 @@ class DefinitionTile extends ConsumerWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AvatarIconWidget(imageUrl: definition.authorImageUrl),
+                    InkWell(
+                      onTap: () async {
+                        await context.pushRoute(
+                          ProfileRoute(targetUserId: definition.authorId),
+                        );
+                      },
+                      child:
+                          AvatarIconWidget(imageUrl: definition.authorImageUrl),
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Column(

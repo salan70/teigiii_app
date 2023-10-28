@@ -62,15 +62,32 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     ProfileRoute.name: (routeData) {
+      final args = routeData.argsAs<ProfileRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const ProfilePage(),
+        child: ProfilePage(
+          key: args.key,
+          targetUserId: args.targetUserId,
+          isHome: args.isHome,
+        ),
+      );
+    },
+    ProfileRouterRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ProfileRouterPage(),
       );
     },
     SettingRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const SettingPage(),
+      );
+    },
+    SettingRouterRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SettingRouterPage(),
       );
     },
   };
@@ -200,14 +217,57 @@ class MyLicenseRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ProfilePage]
-class ProfileRoute extends PageRouteInfo<void> {
-  const ProfileRoute({List<PageRouteInfo>? children})
-      : super(
+class ProfileRoute extends PageRouteInfo<ProfileRouteArgs> {
+  ProfileRoute({
+    Key? key,
+    required String targetUserId,
+    bool isHome = false,
+    List<PageRouteInfo>? children,
+  }) : super(
           ProfileRoute.name,
+          args: ProfileRouteArgs(
+            key: key,
+            targetUserId: targetUserId,
+            isHome: isHome,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'ProfileRoute';
+
+  static const PageInfo<ProfileRouteArgs> page =
+      PageInfo<ProfileRouteArgs>(name);
+}
+
+class ProfileRouteArgs {
+  const ProfileRouteArgs({
+    this.key,
+    required this.targetUserId,
+    this.isHome = false,
+  });
+
+  final Key? key;
+
+  final String targetUserId;
+
+  final bool isHome;
+
+  @override
+  String toString() {
+    return 'ProfileRouteArgs{key: $key, targetUserId: $targetUserId, isHome: $isHome}';
+  }
+}
+
+/// generated route for
+/// [ProfileRouterPage]
+class ProfileRouterRoute extends PageRouteInfo<void> {
+  const ProfileRouterRoute({List<PageRouteInfo>? children})
+      : super(
+          ProfileRouterRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ProfileRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -222,6 +282,20 @@ class SettingRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'SettingRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SettingRouterPage]
+class SettingRouterRoute extends PageRouteInfo<void> {
+  const SettingRouterRoute({List<PageRouteInfo>? children})
+      : super(
+          SettingRouterRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SettingRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

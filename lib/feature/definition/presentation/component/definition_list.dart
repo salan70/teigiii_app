@@ -129,7 +129,7 @@ class DefinitionList extends ConsumerWidget {
                         // TODO(me): UIいい感じにする
                         child: const Column(
                           children: [
-                            Icon(Icons.warning),
+                            Icon(CupertinoIcons.exclamationmark_triangle_fill),
                             Text('再読み込み'),
                           ],
                         ),

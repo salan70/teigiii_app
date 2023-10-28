@@ -3,25 +3,29 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i7;
+import 'dart:async' as _i8;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
-import 'package:firebase_auth/firebase_auth.dart' as _i5;
+import 'package:firebase_auth/firebase_auth.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i12;
-import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i10;
-import 'package:teigi_app/feature/user/repository/entity/user_profile_document.dart'
-    as _i3;
-import 'package:teigi_app/feature/user/repository/user_profile_repository.dart'
-    as _i6;
+import 'package:riverpod_annotation/riverpod_annotation.dart' as _i14;
+import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i12;
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart'
-    as _i9;
+    as _i11;
 import 'package:teigi_app/feature/user_config/repository/entity/user_config_document.dart'
-    as _i4;
+    as _i5;
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart'
-    as _i8;
+    as _i10;
+import 'package:teigi_app/feature/user_profile/repository/entity/user_follow_count_document.dart'
+    as _i4;
+import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart'
+    as _i3;
+import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart'
+    as _i9;
+import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart'
+    as _i7;
 
-import 'auth_service_test.dart' as _i11;
+import 'auth_service_test.dart' as _i13;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -56,9 +60,9 @@ class _FakeUserProfileDocument_1 extends _i1.SmartFake
         );
 }
 
-class _FakeUserConfigDocument_2 extends _i1.SmartFake
-    implements _i4.UserConfigDocument {
-  _FakeUserConfigDocument_2(
+class _FakeUserFollowCountDocument_2 extends _i1.SmartFake
+    implements _i4.UserFollowCountDocument {
+  _FakeUserFollowCountDocument_2(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -67,8 +71,19 @@ class _FakeUserConfigDocument_2 extends _i1.SmartFake
         );
 }
 
-class _FakeFirebaseAuth_3 extends _i1.SmartFake implements _i5.FirebaseAuth {
-  _FakeFirebaseAuth_3(
+class _FakeUserConfigDocument_3 extends _i1.SmartFake
+    implements _i5.UserConfigDocument {
+  _FakeUserConfigDocument_3(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeFirebaseAuth_4 extends _i1.SmartFake implements _i6.FirebaseAuth {
+  _FakeFirebaseAuth_4(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -81,7 +96,7 @@ class _FakeFirebaseAuth_3 extends _i1.SmartFake implements _i5.FirebaseAuth {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserProfileRepository extends _i1.Mock
-    implements _i6.UserProfileRepository {
+    implements _i7.UserProfileRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),
@@ -96,13 +111,13 @@ class MockUserProfileRepository extends _i1.Mock
       ) as _i2.FirebaseFirestore);
 
   @override
-  _i7.Future<_i3.UserProfileDocument> fetchUserProfile(String? userId) =>
+  _i8.Future<_i3.UserProfileDocument> fetchUserProfile(String? userId) =>
       (super.noSuchMethod(
         Invocation.method(
           #fetchUserProfile,
           [userId],
         ),
-        returnValue: _i7.Future<_i3.UserProfileDocument>.value(
+        returnValue: _i8.Future<_i3.UserProfileDocument>.value(
             _FakeUserProfileDocument_1(
           this,
           Invocation.method(
@@ -110,7 +125,7 @@ class MockUserProfileRepository extends _i1.Mock
             [userId],
           ),
         )),
-        returnValueForMissingStub: _i7.Future<_i3.UserProfileDocument>.value(
+        returnValueForMissingStub: _i8.Future<_i3.UserProfileDocument>.value(
             _FakeUserProfileDocument_1(
           this,
           Invocation.method(
@@ -118,10 +133,10 @@ class MockUserProfileRepository extends _i1.Mock
             [userId],
           ),
         )),
-      ) as _i7.Future<_i3.UserProfileDocument>);
+      ) as _i8.Future<_i3.UserProfileDocument>);
 
   @override
-  _i7.Future<void> addUserProfile(
+  _i8.Future<void> addUserProfile(
     String? userId,
     String? name,
   ) =>
@@ -133,27 +148,16 @@ class MockUserProfileRepository extends _i1.Mock
             name,
           ],
         ),
-        returnValue: _i7.Future<void>.value(),
-        returnValueForMissingStub: _i7.Future<void>.value(),
-      ) as _i7.Future<void>);
-
-  @override
-  _i7.Future<List<String>> fetchFollowingIdList(String? userId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchFollowingIdList,
-          [userId],
-        ),
-        returnValue: _i7.Future<List<String>>.value(<String>[]),
-        returnValueForMissingStub: _i7.Future<List<String>>.value(<String>[]),
-      ) as _i7.Future<List<String>>);
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
 }
 
-/// A class which mocks [UserConfigRepository].
+/// A class which mocks [UserFollowRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserConfigRepository extends _i1.Mock
-    implements _i8.UserConfigRepository {
+class MockUserFollowRepository extends _i1.Mock
+    implements _i9.UserFollowRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),
@@ -168,14 +172,132 @@ class MockUserConfigRepository extends _i1.Mock
       ) as _i2.FirebaseFirestore);
 
   @override
-  _i7.Future<_i4.UserConfigDocument> fetchUserConfig(String? userId) =>
+  _i8.Future<_i4.UserFollowCountDocument> fetchUserFollowCount(
+          String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchUserFollowCount,
+          [userId],
+        ),
+        returnValue: _i8.Future<_i4.UserFollowCountDocument>.value(
+            _FakeUserFollowCountDocument_2(
+          this,
+          Invocation.method(
+            #fetchUserFollowCount,
+            [userId],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i8.Future<_i4.UserFollowCountDocument>.value(
+                _FakeUserFollowCountDocument_2(
+          this,
+          Invocation.method(
+            #fetchUserFollowCount,
+            [userId],
+          ),
+        )),
+      ) as _i8.Future<_i4.UserFollowCountDocument>);
+
+  @override
+  _i8.Future<void> follow(
+    String? currentUserId,
+    String? targetUserId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #follow,
+          [
+            currentUserId,
+            targetUserId,
+          ],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+
+  @override
+  _i8.Future<void> unfollow(
+    String? currentUserId,
+    String? targetUserId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #unfollow,
+          [
+            currentUserId,
+            targetUserId,
+          ],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+
+  @override
+  _i8.Future<bool> isFollowing(
+    String? currentUserId,
+    String? targetUserId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #isFollowing,
+          [
+            currentUserId,
+            targetUserId,
+          ],
+        ),
+        returnValue: _i8.Future<bool>.value(false),
+        returnValueForMissingStub: _i8.Future<bool>.value(false),
+      ) as _i8.Future<bool>);
+
+  @override
+  _i8.Future<void> addUserFollowCount(String? userId) => (super.noSuchMethod(
+        Invocation.method(
+          #addUserFollowCount,
+          [userId],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+
+  @override
+  _i8.Future<List<String>> fetchFollowingIdList(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchFollowingIdList,
+          [userId],
+        ),
+        returnValue: _i8.Future<List<String>>.value(<String>[]),
+        returnValueForMissingStub: _i8.Future<List<String>>.value(<String>[]),
+      ) as _i8.Future<List<String>>);
+}
+
+/// A class which mocks [UserConfigRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUserConfigRepository extends _i1.Mock
+    implements _i10.UserConfigRepository {
+  @override
+  _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
+        Invocation.getter(#firestore),
+        returnValue: _FakeFirebaseFirestore_0(
+          this,
+          Invocation.getter(#firestore),
+        ),
+        returnValueForMissingStub: _FakeFirebaseFirestore_0(
+          this,
+          Invocation.getter(#firestore),
+        ),
+      ) as _i2.FirebaseFirestore);
+
+  @override
+  _i8.Future<_i5.UserConfigDocument> fetchUserConfig(String? userId) =>
       (super.noSuchMethod(
         Invocation.method(
           #fetchUserConfig,
           [userId],
         ),
         returnValue:
-            _i7.Future<_i4.UserConfigDocument>.value(_FakeUserConfigDocument_2(
+            _i8.Future<_i5.UserConfigDocument>.value(_FakeUserConfigDocument_3(
           this,
           Invocation.method(
             #fetchUserConfig,
@@ -183,17 +305,17 @@ class MockUserConfigRepository extends _i1.Mock
           ),
         )),
         returnValueForMissingStub:
-            _i7.Future<_i4.UserConfigDocument>.value(_FakeUserConfigDocument_2(
+            _i8.Future<_i5.UserConfigDocument>.value(_FakeUserConfigDocument_3(
           this,
           Invocation.method(
             #fetchUserConfig,
             [userId],
           ),
         )),
-      ) as _i7.Future<_i4.UserConfigDocument>);
+      ) as _i8.Future<_i5.UserConfigDocument>);
 
   @override
-  _i7.Future<void> addUserConfig(
+  _i8.Future<void> addUserConfig(
     String? userId,
     String? osVersion,
     String? appVersion,
@@ -207,12 +329,12 @@ class MockUserConfigRepository extends _i1.Mock
             appVersion,
           ],
         ),
-        returnValue: _i7.Future<void>.value(),
-        returnValueForMissingStub: _i7.Future<void>.value(),
-      ) as _i7.Future<void>);
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
 
   @override
-  _i7.Future<void> updateVersionInfo(
+  _i8.Future<void> updateVersionInfo(
     String? userId,
     String? osVersion,
     String? appVersion,
@@ -226,12 +348,12 @@ class MockUserConfigRepository extends _i1.Mock
             appVersion,
           ],
         ),
-        returnValue: _i7.Future<void>.value(),
-        returnValueForMissingStub: _i7.Future<void>.value(),
-      ) as _i7.Future<void>);
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
 
   @override
-  _i7.Future<void> appendMutedUserIdList(
+  _i8.Future<void> appendMutedUserIdList(
     String? userId,
     String? mutedUserId,
   ) =>
@@ -243,12 +365,12 @@ class MockUserConfigRepository extends _i1.Mock
             mutedUserId,
           ],
         ),
-        returnValue: _i7.Future<void>.value(),
-        returnValueForMissingStub: _i7.Future<void>.value(),
-      ) as _i7.Future<void>);
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
 
   @override
-  _i7.Future<void> removeMutedUserIdList(
+  _i8.Future<void> removeMutedUserIdList(
     String? userId,
     String? mutedUserId,
   ) =>
@@ -260,81 +382,81 @@ class MockUserConfigRepository extends _i1.Mock
             mutedUserId,
           ],
         ),
-        returnValue: _i7.Future<void>.value(),
-        returnValueForMissingStub: _i7.Future<void>.value(),
-      ) as _i7.Future<void>);
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
 }
 
 /// A class which mocks [DeviceInfoRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDeviceInfoRepository extends _i1.Mock
-    implements _i9.DeviceInfoRepository {
+    implements _i11.DeviceInfoRepository {
   @override
-  _i7.Future<String?> fetchOsVersion() => (super.noSuchMethod(
+  _i8.Future<String?> fetchOsVersion() => (super.noSuchMethod(
         Invocation.method(
           #fetchOsVersion,
           [],
         ),
-        returnValue: _i7.Future<String?>.value(),
-        returnValueForMissingStub: _i7.Future<String?>.value(),
-      ) as _i7.Future<String?>);
+        returnValue: _i8.Future<String?>.value(),
+        returnValueForMissingStub: _i8.Future<String?>.value(),
+      ) as _i8.Future<String?>);
 }
 
 /// A class which mocks [AuthRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthRepository extends _i1.Mock implements _i10.AuthRepository {
+class MockAuthRepository extends _i1.Mock implements _i12.AuthRepository {
   @override
-  _i5.FirebaseAuth get firebaseAuth => (super.noSuchMethod(
+  _i6.FirebaseAuth get firebaseAuth => (super.noSuchMethod(
         Invocation.getter(#firebaseAuth),
-        returnValue: _FakeFirebaseAuth_3(
+        returnValue: _FakeFirebaseAuth_4(
           this,
           Invocation.getter(#firebaseAuth),
         ),
-        returnValueForMissingStub: _FakeFirebaseAuth_3(
+        returnValueForMissingStub: _FakeFirebaseAuth_4(
           this,
           Invocation.getter(#firebaseAuth),
         ),
-      ) as _i5.FirebaseAuth);
+      ) as _i6.FirebaseAuth);
 
   @override
-  _i7.Stream<_i5.User?> get userChanges => (super.noSuchMethod(
+  _i8.Stream<_i6.User?> get userChanges => (super.noSuchMethod(
         Invocation.getter(#userChanges),
-        returnValue: _i7.Stream<_i5.User?>.empty(),
-        returnValueForMissingStub: _i7.Stream<_i5.User?>.empty(),
-      ) as _i7.Stream<_i5.User?>);
+        returnValue: _i8.Stream<_i6.User?>.empty(),
+        returnValueForMissingStub: _i8.Stream<_i6.User?>.empty(),
+      ) as _i8.Stream<_i6.User?>);
 
   @override
-  _i7.Future<void> signInAnonymously() => (super.noSuchMethod(
+  _i8.Future<void> signInAnonymously() => (super.noSuchMethod(
         Invocation.method(
           #signInAnonymously,
           [],
         ),
-        returnValue: _i7.Future<void>.value(),
-        returnValueForMissingStub: _i7.Future<void>.value(),
-      ) as _i7.Future<void>);
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
 
   @override
-  _i7.Future<void> signOut() => (super.noSuchMethod(
+  _i8.Future<void> signOut() => (super.noSuchMethod(
         Invocation.method(
           #signOut,
           [],
         ),
-        returnValue: _i7.Future<void>.value(),
-        returnValueForMissingStub: _i7.Future<void>.value(),
-      ) as _i7.Future<void>);
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
 }
 
 /// A class which mocks [Listener].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockListener extends _i1.Mock
-    implements _i11.Listener<_i12.AsyncValue<void>> {
+    implements _i13.Listener<_i14.AsyncValue<void>> {
   @override
   void call(
-    _i12.AsyncValue<void>? previous,
-    _i12.AsyncValue<void>? next,
+    _i14.AsyncValue<void>? previous,
+    _i14.AsyncValue<void>? next,
   ) =>
       super.noSuchMethod(
         Invocation.method(

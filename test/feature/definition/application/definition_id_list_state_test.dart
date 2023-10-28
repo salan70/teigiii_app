@@ -7,9 +7,10 @@ import 'package:teigi_app/feature/definition/application/definition_id_list_stat
 import 'package:teigi_app/feature/definition/domain/definition_id_list_state.dart';
 import 'package:teigi_app/feature/definition/repository/definition_repository.dart';
 import 'package:teigi_app/feature/definition/util/definition_feed_type.dart';
-import 'package:teigi_app/feature/user/repository/user_profile_repository.dart';
 import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
+import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart';
+import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
 import 'package:teigi_app/feature/word/repository/word_repository.dart';
 
 import '../../../mock/mock_data.dart';
@@ -19,6 +20,7 @@ import 'definition_id_list_state_test.mocks.dart';
   MockSpec<DefinitionRepository>(),
   MockSpec<UserProfileRepository>(),
   MockSpec<UserConfigRepository>(),
+  MockSpec<UserFollowRepository>(),
   MockSpec<WordRepository>(),
   MockSpec<Listener<AsyncValue<DefinitionIdListState>>>(),
 ])
@@ -34,6 +36,7 @@ void main() {
 
   final mockDefinitionRepository = MockDefinitionRepository();
   final mockUserProfileRepository = MockUserProfileRepository();
+  final mockUserFollowRepository = MockUserFollowRepository();
   final mockUserConfigRepository = MockUserConfigRepository();
   final listener = MockListener();
 
@@ -49,7 +52,9 @@ void main() {
             .overrideWithValue(mockUserProfileRepository),
         userConfigRepositoryProvider
             .overrideWithValue(mockUserConfigRepository),
-        mutedUserIdListProvider.overrideWith((ref) => mockUserConfigDoc.mutedUserIdList),
+        userFollowRepositoryProvider.overrideWithValue(mockUserFollowRepository),
+        mutedUserIdListProvider
+            .overrideWith((ref) => mockUserConfigDoc.mutedUserIdList),
       ],
     );
     addTearDown(container.dispose);
@@ -58,6 +63,7 @@ void main() {
   tearDown(() {
     reset(mockDefinitionRepository);
     reset(mockUserProfileRepository);
+    reset(mockUserFollowRepository);
     reset(mockUserConfigRepository);
   });
   group('build()', () {
@@ -128,7 +134,7 @@ void main() {
         ...mockUserConfigDoc.mutedUserIdList,
       ];
 
-      when(mockUserProfileRepository.fetchFollowingIdList(any)).thenAnswer(
+      when(mockUserFollowRepository.fetchFollowingIdList(any)).thenAnswer(
         (_) async => mockFollowingUserIdList,
       );
       when(

@@ -5,9 +5,9 @@ import '../../base_page.dart';
 import '../../feature/definition/presentation/page/definition_detail/definition_detail_page.dart';
 import '../../feature/definition/presentation/page/home/home_page.dart';
 import '../../feature/definition/presentation/page/index/index_page.dart';
-import '../../feature/definition/presentation/page/profile/profile_page.dart';
 import '../../feature/setting/presentation/license_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
+import '../../feature/user_profile/presentation/page/profile_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -33,22 +33,45 @@ class AppRouter extends _$AppRouter {
                   page: DefinitionDetailRoute.page,
                 ),
                 AutoRoute(
-                  path: 'setting',
-                  page: SettingRoute.page,
-                ),
-                AutoRoute(
-                  path: 'license',
-                  page: MyLicenseRoute.page,
+                  // TODO(me): pathをuserIdにする
+                  path: 'profile',
+                  page: ProfileRoute.page,
                 ),
               ],
             ),
             AutoRoute(
               path: 'profile',
-              page: ProfileRoute.page,
+              page: ProfileRouterRoute.page,
+              children: [
+                AutoRoute(
+                  initial: true,
+                  page: ProfileRoute.page,
+                ),
+                AutoRoute(
+                  // TODO(me): pathをdefinitionIdにする
+                  path: 'definition_detail',
+                  page: DefinitionDetailRoute.page,
+                ),
+              ],
             ),
             AutoRoute(
               path: 'index',
               page: IndexRoute.page,
+            ),
+          ],
+        ),
+        AutoRoute(
+          path: '/setting',
+          page: SettingRouterRoute.page,
+          fullscreenDialog: true,
+          children: [
+            AutoRoute(
+              initial: true,
+              page: SettingRoute.page,
+            ),
+            AutoRoute(
+              path: 'license',
+              page: MyLicenseRoute.page,
             ),
           ],
         ),
