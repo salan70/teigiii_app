@@ -8,8 +8,13 @@ import '../../../../auth/application/auth_state.dart';
 
 @RoutePage()
 class FollowingAndFollowerListPage extends ConsumerWidget {
-  const FollowingAndFollowerListPage({super.key, required this.targetUserId});
+  const FollowingAndFollowerListPage({
+    super.key,
+    this.willShowFollowing = true,
+    required this.targetUserId,
+  });
 
+  final bool willShowFollowing;
   final String targetUserId;
 
   @override
@@ -18,6 +23,7 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
 
     return DefaultTabController(
       length: 2,
+      initialIndex: willShowFollowing ? 0 : 1,
       child: SafeArea(
         child: Scaffold(
           body: NestedScrollView(
@@ -28,6 +34,8 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                 SliverAppBar(
                   forceElevated: true,
                   floating: true,
+                  elevation: 0,
+                  // TODO(me): ユーザー名を表示させる
                   title: const Text('プロフィール'),
                   actions: [
                     // 自分のフォロー/フォロー一覧画面の場合は編集ボタンを表示
@@ -48,8 +56,8 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                       labelStyle: Theme.of(context).textTheme.titleMedium,
                       indicatorWeight: 3,
                       tabs: const [
-                        Tab(text: '投稿'),
-                        Tab(text: 'いいね'),
+                        Tab(text: 'フォロー中'),
+                        Tab(text: 'フォロワー'),
                       ],
                     ),
                   ),

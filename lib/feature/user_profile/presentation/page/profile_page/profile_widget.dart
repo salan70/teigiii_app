@@ -55,8 +55,13 @@ class ProfileWidget extends ConsumerWidget {
                       ),
                       const SizedBox(width: 16),
                       InkWell(
-                        onTap: () {
-                          // TODO(me): フォロワー一覧画面に遷移
+                        onTap: () async {
+                          await context.pushRoute(
+                            FollowingAndFollowerListRoute(
+                              willShowFollowing: false,
+                              targetUserId: targetUserProfile.id,
+                            ),
+                          );
                         },
                         child: Column(
                           children: [
