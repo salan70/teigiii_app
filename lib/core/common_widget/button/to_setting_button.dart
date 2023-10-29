@@ -12,7 +12,7 @@ class ToSettingButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(CupertinoIcons.gear_solid),
       onPressed: () async {
-        await context.navigateTo(const SettingRouterRoute());
+        await context.pushRoute(const SettingRouterRoute());
       },
     );
   }

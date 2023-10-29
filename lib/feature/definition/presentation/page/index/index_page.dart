@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../user_profile/presentation/page/profile_widget_shimmer.dart';
+import '../../../../user_profile/presentation/page/profile_page/profile_widget_shimmer.dart';
 
 @RoutePage()
 class IndexPage extends StatelessWidget {
