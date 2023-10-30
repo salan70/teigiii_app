@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import '../../base_page.dart';
 import '../../feature/definition/presentation/page/definition_detail/definition_detail_page.dart';
 import '../../feature/definition/presentation/page/home/home_page.dart';
-import '../../feature/definition/presentation/page/index/index_page.dart';
 import '../../feature/setting/presentation/license_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
 import '../../feature/user_profile/presentation/page/following_and_follower_list_page/following_and_follower_list_page.dart';
 import '../../feature/user_profile/presentation/page/profile_page/profile_page.dart';
+import '../../feature/word/presentation/page/index_page/index_page.dart';
 
 part 'app_router.gr.dart';
 
