@@ -16,6 +16,7 @@ import 'firebase_options/firebase_options.dart';
 import 'util/constant/color_scheme.dart';
 import 'util/constant/tab_bar_theme.dart';
 import 'util/constant/text_theme.dart';
+import 'util/dummy_data/user_follows_dummy.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +43,8 @@ Future<void> main() async {
   // await addUserConfigsToFirestore(flavorName);
   // await addUserProfilesToFirestore(flavorName);
   // await addUserFollowCountsToFirestore(flavorName);
+  // await addUserFollowsToFirestore2(flavorName);
+  // await addUserFollowsToFirestore3(flavorName);
 
   runApp(
     ProviderScope(
