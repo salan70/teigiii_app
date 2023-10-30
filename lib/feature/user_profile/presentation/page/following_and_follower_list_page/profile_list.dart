@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/common_widget/cupertino_refresh_indicator.dart';
 import '../../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
 import '../../../../../util/logger.dart';
-import '../../../../definition/presentation/component/definition_tile_shimmer.dart';
 import '../../../application/user_id_list_state.dart';
 import '../../../util/profile_feed_type.dart';
 import 'profile_tile.dart';
@@ -94,14 +93,7 @@ class ProfileList extends ConsumerWidget {
         );
       },
       loading: () {
-        return ListView(
-          controller: scrollController,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            for (var i = 0; i < 4; i++) const DefinitionTileShimmer(),
-          ],
-        );
+        return const CupertinoActivityIndicator();
       },
     );
   }
