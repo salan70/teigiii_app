@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget/button/to_setting_button.dart';
+import '../../../../../core/common_widget/search_text_field.dart';
 import '../../../util/initial_main_group.dart';
 
 @RoutePage()
@@ -23,6 +24,14 @@ class IndexPage extends StatelessWidget {
         ),
         child: ListView(
           children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 24,
+                horizontal: 36,
+              ),
+              child: SearchTextField(),
+            ),
+            const SizedBox(height: 8),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
