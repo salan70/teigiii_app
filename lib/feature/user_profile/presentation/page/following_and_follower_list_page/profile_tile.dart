@@ -6,6 +6,7 @@ import '../../../../../core/common_widget/adaptive_overflow_text.dart';
 import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/logger.dart';
+import '../../../../auth/application/auth_state.dart';
 import '../../../../definition/presentation/component/avatar_icon_widget.dart';
 import '../../../application/user_profile_state.dart';
 import 'profile_tile_shimmer.dart';
@@ -21,6 +22,8 @@ class ProfileTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncTargetUserProfile = ref.watch(userProfileProvider(targetUserId));
+    final currentUserId = ref.watch(userIdProvider);
+
     return asyncTargetUserProfile.when(
       data: (targetUserProfile) {
         return InkWell(
@@ -63,9 +66,11 @@ class ProfileTile extends ConsumerWidget {
                                 ),
                               ),
                               const SizedBox(width: 4),
-                              FollowOrUnfollowButton(
-                                targetUserId: targetUserId,
-                              ),
+                              currentUserId == targetUserId
+                                  ? const SizedBox.shrink()
+                                  : FollowOrUnfollowButton(
+                                      targetUserId: targetUserId,
+                                    ),
                             ],
                           ),
                           const SizedBox(height: 8),
