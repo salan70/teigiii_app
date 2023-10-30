@@ -60,10 +60,26 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const HomeRouterPage(),
       );
     },
-    IndexRoute.name: (routeData) {
+    IndexSecondRoute.name: (routeData) {
+      final args = routeData.argsAs<IndexSecondRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const IndexPage(),
+        child: IndexSecondPage(
+          key: args.key,
+          selectedInitialMainGroup: args.selectedInitialMainGroup,
+        ),
+      );
+    },
+    IndexTopRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const IndexTopPage(),
+      );
+    },
+    IndexTopRouterRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const IndexTopRouterPage(),
       );
     },
     MyLicenseRoute.name: (routeData) {
@@ -243,15 +259,67 @@ class HomeRouterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [IndexPage]
-class IndexRoute extends PageRouteInfo<void> {
-  const IndexRoute({List<PageRouteInfo>? children})
-      : super(
-          IndexRoute.name,
+/// [IndexSecondPage]
+class IndexSecondRoute extends PageRouteInfo<IndexSecondRouteArgs> {
+  IndexSecondRoute({
+    Key? key,
+    required InitialMainGroup selectedInitialMainGroup,
+    List<PageRouteInfo>? children,
+  }) : super(
+          IndexSecondRoute.name,
+          args: IndexSecondRouteArgs(
+            key: key,
+            selectedInitialMainGroup: selectedInitialMainGroup,
+          ),
           initialChildren: children,
         );
 
-  static const String name = 'IndexRoute';
+  static const String name = 'IndexSecondRoute';
+
+  static const PageInfo<IndexSecondRouteArgs> page =
+      PageInfo<IndexSecondRouteArgs>(name);
+}
+
+class IndexSecondRouteArgs {
+  const IndexSecondRouteArgs({
+    this.key,
+    required this.selectedInitialMainGroup,
+  });
+
+  final Key? key;
+
+  final InitialMainGroup selectedInitialMainGroup;
+
+  @override
+  String toString() {
+    return 'IndexSecondRouteArgs{key: $key, selectedInitialMainGroup: $selectedInitialMainGroup}';
+  }
+}
+
+/// generated route for
+/// [IndexTopPage]
+class IndexTopRoute extends PageRouteInfo<void> {
+  const IndexTopRoute({List<PageRouteInfo>? children})
+      : super(
+          IndexTopRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'IndexTopRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [IndexTopRouterPage]
+class IndexTopRouterRoute extends PageRouteInfo<void> {
+  const IndexTopRouterRoute({List<PageRouteInfo>? children})
+      : super(
+          IndexTopRouterRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'IndexTopRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

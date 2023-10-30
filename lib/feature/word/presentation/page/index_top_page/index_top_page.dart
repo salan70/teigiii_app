@@ -1,14 +1,20 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../../../core/common_widget/search_text_field.dart';
+import '../../../../../core/router/app_router.dart';
 import '../../../util/initial_main_group.dart';
+import '../component/index_tile.dart';
 
 @RoutePage()
-class IndexPage extends StatelessWidget {
-  const IndexPage({super.key});
+class IndexTopRouterPage extends AutoRouter {
+  const IndexTopRouterPage({super.key});
+}
+
+@RoutePage()
+class IndexTopPage extends StatelessWidget {
+  const IndexTopPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,27 +43,22 @@ class IndexPage extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: InitialMainGroup.values.length,
               itemBuilder: (BuildContext context, int index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          InitialMainGroup.values[index].label,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        IconButton(
-                          alignment: Alignment.centerRight,
-                          iconSize: 20,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          icon: const Icon(CupertinoIcons.chevron_forward),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                  ],
+                final initialMainGroup = InitialMainGroup.values[index];
+                return InkWell(
+                  onTap: () async {
+                    await context.pushRoute(
+                      IndexSecondRoute(
+                        selectedInitialMainGroup: initialMainGroup,
+                      ),
+                    );
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IndexTile(label: initialMainGroup.label),
+                      const Divider(),
+                    ],
+                  ),
                 );
               },
             ),

@@ -8,7 +8,9 @@ import '../../feature/setting/presentation/license_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
 import '../../feature/user_profile/presentation/page/following_and_follower_list_page/following_and_follower_list_page.dart';
 import '../../feature/user_profile/presentation/page/profile_page/profile_page.dart';
-import '../../feature/word/presentation/page/index_page/index_page.dart';
+import '../../feature/word/presentation/page/index_second_page/index_second_page.dart';
+import '../../feature/word/presentation/page/index_top_page/index_top_page.dart';
+import '../../feature/word/util/initial_main_group.dart';
 
 part 'app_router.gr.dart';
 
@@ -65,7 +67,17 @@ class AppRouter extends _$AppRouter {
             ),
             AutoRoute(
               path: 'index',
-              page: IndexRoute.page,
+              page: IndexTopRouterRoute.page,
+              children: [
+                AutoRoute(
+                  initial: true,
+                  page: IndexTopRoute.page,
+                ),
+                AutoRoute(
+                  path: 'index_second',
+                  page: IndexSecondRoute.page,
+                ),
+              ],
             ),
           ],
         ),

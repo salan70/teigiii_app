@@ -35,7 +35,7 @@ class _BasePageState extends ConsumerState<BasePage> {
           routes: [
             const HomeRouterRoute(),
             ProfileRoute(targetUserId: currentUserId, isHome: true),
-            const IndexRoute(),
+            const IndexTopRouterRoute(),
           ],
           builder: (context, child) {
             final tabsRouter = context.tabsRouter;

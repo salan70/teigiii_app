@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/common_widget/button/ellipsis_icon_button.dart';
 import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
@@ -47,14 +48,8 @@ class ProfilePage extends ConsumerWidget {
                 SliverAppBar(
                   forceElevated: true,
                   floating: true,
-                  leading: isHome
-                      ? const ToSettingButton()
-                      : IconButton(
-                          icon: const Icon(CupertinoIcons.back),
-                          onPressed: () {
-                            context.router.pop();
-                          },
-                        ),
+                  leading:
+                      isHome ? const ToSettingButton() : const BackIconButton(),
                   title: asyncTargetUserProfile.when(
                     data: (targetUserProfile) {
                       return Text(
