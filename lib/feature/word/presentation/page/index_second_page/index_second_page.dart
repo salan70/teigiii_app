@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget/button/back_icon_button.dart';
+import '../../../../../core/router/app_router.dart';
 import '../../../util/initial_main_group.dart';
 import '../component/index_tile.dart';
 
@@ -33,7 +34,13 @@ class IndexSecondPage extends StatelessWidget {
           itemCount: initialSubGroups.length,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              onTap: () {},
+              onTap: () {
+                context.pushRoute(
+                  WordListRoute(
+                    selectedInitialSubGroup: initialSubGroups[index],
+                  ),
+                );
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

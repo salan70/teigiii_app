@@ -10,6 +10,7 @@ import '../../feature/user_profile/presentation/page/following_and_follower_list
 import '../../feature/user_profile/presentation/page/profile_page/profile_page.dart';
 import '../../feature/word/presentation/page/index_second_page/index_second_page.dart';
 import '../../feature/word/presentation/page/index_top_page/index_top_page.dart';
+import '../../feature/word/presentation/page/word_list_page/word_list_page.dart';
 import '../../feature/word/util/initial_main_group.dart';
 
 part 'app_router.gr.dart';
@@ -76,6 +77,10 @@ class AppRouter extends _$AppRouter {
                 AutoRoute(
                   path: 'index_second',
                   page: IndexSecondRoute.page,
+                ),
+                AutoRoute(
+                  path: 'word_list',
+                  page: WordListRoute.page,
                 ),
               ],
             ),
