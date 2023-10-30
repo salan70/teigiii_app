@@ -204,6 +204,43 @@ class MockUserFollowRepository extends _i1.Mock
       ) as _i6.Future<_i4.UserIdListState>);
 
   @override
+  _i6.Future<_i4.UserIdListState> fetchFollowingIdListMore(
+    String? userId,
+    _i2.QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchFollowingIdListMore,
+          [
+            userId,
+            lastReadQueryDocumentSnapshot,
+          ],
+        ),
+        returnValue:
+            _i6.Future<_i4.UserIdListState>.value(_FakeUserIdListState_2(
+          this,
+          Invocation.method(
+            #fetchFollowingIdListMore,
+            [
+              userId,
+              lastReadQueryDocumentSnapshot,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i6.Future<_i4.UserIdListState>.value(_FakeUserIdListState_2(
+          this,
+          Invocation.method(
+            #fetchFollowingIdListMore,
+            [
+              userId,
+              lastReadQueryDocumentSnapshot,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i4.UserIdListState>);
+
+  @override
   _i6.Future<_i4.UserIdListState> fetchFollowerIdListFirst(String? userId) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -224,6 +261,43 @@ class MockUserFollowRepository extends _i1.Mock
           Invocation.method(
             #fetchFollowerIdListFirst,
             [userId],
+          ),
+        )),
+      ) as _i6.Future<_i4.UserIdListState>);
+
+  @override
+  _i6.Future<_i4.UserIdListState> fetchFollowerIdListMore(
+    String? userId,
+    _i2.QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchFollowerIdListMore,
+          [
+            userId,
+            lastReadQueryDocumentSnapshot,
+          ],
+        ),
+        returnValue:
+            _i6.Future<_i4.UserIdListState>.value(_FakeUserIdListState_2(
+          this,
+          Invocation.method(
+            #fetchFollowerIdListMore,
+            [
+              userId,
+              lastReadQueryDocumentSnapshot,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i6.Future<_i4.UserIdListState>.value(_FakeUserIdListState_2(
+          this,
+          Invocation.method(
+            #fetchFollowerIdListMore,
+            [
+              userId,
+              lastReadQueryDocumentSnapshot,
+            ],
           ),
         )),
       ) as _i6.Future<_i4.UserIdListState>);

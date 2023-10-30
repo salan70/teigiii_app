@@ -7,7 +7,7 @@ part of 'user_id_list_state.dart';
 // **************************************************************************
 
 String _$userIdListStateNotifierHash() =>
-    r'4a79769703e34438db091d7eecb4028f232e9732';
+    r'e9420429bb6133b2c7c18def3bbe96874ee3047e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,7 +31,7 @@ class _SystemHash {
 }
 
 abstract class _$UserIdListStateNotifier
-    extends BuildlessAsyncNotifier<UserIdListState> {
+    extends BuildlessAutoDisposeAsyncNotifier<UserIdListState> {
   late final UserListType userListType;
   late final String targetUserId;
 
@@ -88,8 +88,9 @@ class UserIdListStateNotifierFamily
 }
 
 /// See also [UserIdListStateNotifier].
-class UserIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
-    UserIdListStateNotifier, UserIdListState> {
+class UserIdListStateNotifierProvider
+    extends AutoDisposeAsyncNotifierProviderImpl<UserIdListStateNotifier,
+        UserIdListState> {
   /// See also [UserIdListStateNotifier].
   UserIdListStateNotifierProvider(
     UserListType userListType,
@@ -155,8 +156,8 @@ class UserIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
   }
 
   @override
-  AsyncNotifierProviderElement<UserIdListStateNotifier, UserIdListState>
-      createElement() {
+  AutoDisposeAsyncNotifierProviderElement<UserIdListStateNotifier,
+      UserIdListState> createElement() {
     return _UserIdListStateNotifierProviderElement(this);
   }
 
@@ -177,7 +178,8 @@ class UserIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
   }
 }
 
-mixin UserIdListStateNotifierRef on AsyncNotifierProviderRef<UserIdListState> {
+mixin UserIdListStateNotifierRef
+    on AutoDisposeAsyncNotifierProviderRef<UserIdListState> {
   /// The parameter `userListType` of this provider.
   UserListType get userListType;
 
@@ -186,7 +188,7 @@ mixin UserIdListStateNotifierRef on AsyncNotifierProviderRef<UserIdListState> {
 }
 
 class _UserIdListStateNotifierProviderElement
-    extends AsyncNotifierProviderElement<UserIdListStateNotifier,
+    extends AutoDisposeAsyncNotifierProviderElement<UserIdListStateNotifier,
         UserIdListState> with UserIdListStateNotifierRef {
   _UserIdListStateNotifierProviderElement(super.provider);
 

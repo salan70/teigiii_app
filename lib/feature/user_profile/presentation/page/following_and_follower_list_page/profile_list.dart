@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../core/common_widget/cupertino_refresh_indicator.dart';
+import '../../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
 import '../../../../../util/logger.dart';
 import '../../../../definition/presentation/component/definition_tile_shimmer.dart';
 import '../../../application/user_id_list_state.dart';
@@ -19,6 +21,8 @@ class ProfileList extends ConsumerWidget {
 
   final UserListType userListType;
   final scrollController = ScrollController();
+  // エラーが発生してリビルドした際、スクロール位置を保持するためのキー
+  final globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,17 +33,52 @@ class ProfileList extends ConsumerWidget {
       data: (userIdListState) {
         final userIdList = userIdListState.userIdList;
 
-        return SingleChildScrollView(
-          child: ListView.builder(
+        return NotificationListener<ScrollEndNotification>(
+          onNotification: (notification) {
+            // 画面の一番下までスクロールしたかどうかを判定
+            if (notification.metrics.extentAfter == 0) {
+              ref
+                  .read(
+                    userIdListStateNotifierProvider(userListType, targetUserId)
+                        .notifier,
+                  )
+                  .fetchMore();
+              return true;
+            }
+            return false;
+          },
+          child: Scrollbar(
+            key: globalKey,
             controller: scrollController,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: userIdList.length,
-            itemBuilder: (context, index) {
-              return ProfileTile(
-                targetUserId: userIdList[index],
-              );
-            },
+            child: CustomScrollView(
+              slivers: [
+                CupertinoSliverRefreshControl(
+                  builder: buildCustomRefreshIndicator,
+                  onRefresh: () async {
+                    ref.invalidate(
+                      userIdListStateNotifierProvider(
+                        userListType,
+                        targetUserId,
+                      ),
+                    );
+                  },
+                ),
+                SliverToBoxAdapter(
+                  child: ListView.builder(
+                    controller: scrollController,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: userIdList.length,
+                    itemBuilder: (context, index) {
+                      return ProfileTile(
+                        targetUserId: userIdList[index],
+                      );
+                    },
+                  ),
+                ),
+                InfiniteScrollBottomIndicator(hasMore: userIdListState.hasMore),
+              ],
+            ),
           ),
         );
       },

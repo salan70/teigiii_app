@@ -148,14 +148,52 @@ class UserFollowRepository {
     return _toUserIdListState(snapshot, followerIdList);
   }
 
-    /// [userId]をフォローしているユーザーのIDリストを[fetchLimitForUserIdList]件取得（初回）
-    Future<UserIdListState> fetchFollowerIdListFirst(
+  /// [userId]がフォローしているユーザーのIDリストを[fetchLimitForUserIdList]件取得（2回目以降）
+  Future<UserIdListState> fetchFollowingIdListMore(
+    String userId,
+    QueryDocumentSnapshot lastReadQueryDocumentSnapshot,
+  ) async {
+    final snapshot = await firestore
+        .collection('UserFollows')
+        .where('followingId', isEqualTo: userId)
+        .orderBy('createdAt', descending: true)
+        .startAfterDocument(lastReadQueryDocumentSnapshot)
+        .limit(fetchLimitForUserIdList)
+        .get();
+
+    final followerIdList =
+        snapshot.docs.map((doc) => doc['followerId'] as String).toList();
+
+    return _toUserIdListState(snapshot, followerIdList);
+  }
+
+  /// [userId]をフォローしているユーザーのIDリストを[fetchLimitForUserIdList]件取得（初回）
+  Future<UserIdListState> fetchFollowerIdListFirst(
     String userId,
   ) async {
     final snapshot = await firestore
         .collection('UserFollows')
         .where('followerId', isEqualTo: userId)
         .orderBy('createdAt', descending: true)
+        .limit(fetchLimitForUserIdList)
+        .get();
+
+    final followingIdList =
+        snapshot.docs.map((doc) => doc['followingId'] as String).toList();
+
+    return _toUserIdListState(snapshot, followingIdList);
+  }
+
+  /// [userId]をフォローしているユーザーのIDリストを[fetchLimitForUserIdList]件取得（2回目以降）
+  Future<UserIdListState> fetchFollowerIdListMore(
+    String userId,
+    QueryDocumentSnapshot lastReadQueryDocumentSnapshot,
+  ) async {
+    final snapshot = await firestore
+        .collection('UserFollows')
+        .where('followerId', isEqualTo: userId)
+        .orderBy('createdAt', descending: true)
+        .startAfterDocument(lastReadQueryDocumentSnapshot)
         .limit(fetchLimitForUserIdList)
         .get();
 
