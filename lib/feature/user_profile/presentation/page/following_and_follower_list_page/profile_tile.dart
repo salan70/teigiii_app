@@ -56,6 +56,8 @@ class ProfileTile extends ConsumerWidget {
                               Expanded(
                                 child: Text(
                                   targetUserProfile.name,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
