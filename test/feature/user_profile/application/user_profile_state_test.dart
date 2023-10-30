@@ -21,6 +21,9 @@ class MockUserProfileProviderListener extends Mock
 class MockIsFollowingProviderListener extends Mock
     implements Listener<AsyncValue<bool>> {}
 
+class MockFollowingIdListListener extends Mock
+    implements Listener<AsyncValue<List<String>>> {}
+
 // ignore: one_member_abstracts, unreachable_from_main
 abstract class Listener<T> {
 // ignore: unreachable_from_main
@@ -30,8 +33,6 @@ abstract class Listener<T> {
 void main() {
   final mockUserProfileRepository = MockUserProfileRepository();
   final mockUserFollowRepository = MockUserFollowRepository();
-  final userProfileProviderListener = MockUserProfileProviderListener();
-  final isFollowingProviderListener = MockIsFollowingProviderListener();
 
   const currentUserId = 'currentUserId';
 
@@ -66,12 +67,13 @@ void main() {
         mockUserFollowRepository.fetchUserFollowCount(any),
       ).thenAnswer((_) async => mockUserFollowCountDoc);
 
+      final listener = MockUserProfileProviderListener();
       container.listen(
         userProfileProvider(mockUserProfileDoc.id),
-        userProfileProviderListener,
+        listener,
         fireImmediately: true,
       );
-      addTearDown(() => reset(userProfileProviderListener));
+      addTearDown(() => reset(listener));
 
       // * Act
       await container.read(
@@ -90,18 +92,18 @@ void main() {
       // stateの検証
       verifyInOrder([
         // ローディング状態であることを検証
-        userProfileProviderListener.call(
+        listener.call(
           null,
           const AsyncLoading<UserProfile>(),
         ),
         // データがstateに格納されたこと、格納された値が想定通りであることを検証
-        userProfileProviderListener.call(
+        listener.call(
           const AsyncLoading<UserProfile>(),
           AsyncValue.data(expected),
         ),
       ]);
       // 他にlistenerが発火されないことを検証
-      verifyNoMoreInteractions(userProfileProviderListener);
+      verifyNoMoreInteractions(listener);
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
@@ -109,6 +111,55 @@ void main() {
       ).called(1);
       verify(
         mockUserFollowRepository.fetchUserFollowCount(mockUserProfileDoc.id),
+      ).called(1);
+    });
+  });
+
+    group('followingIdList', () {
+    test('stateの更新、repositoryで定義している関数の呼び出しを検証', () async {
+      // * Arrange
+      const mockFollowingIdList = ['followingId1', 'followingId2'];
+      when(
+        mockUserFollowRepository.fetchAllFollowingIdList(any),
+      ).thenAnswer((_) async => mockFollowingIdList);
+
+      const targetUserId = 'targetUserId';
+      final listener = MockFollowingIdListListener();
+      container.listen(
+        followingIdListProvider(targetUserId),
+        listener,
+        fireImmediately: true,
+      );
+      addTearDown(() => reset(listener));
+
+      // * Act
+      await container.read(
+        followingIdListProvider(targetUserId).future,
+      );
+
+      // * Assert
+      const expected = mockFollowingIdList;
+      // stateの検証
+      verifyInOrder([
+        // ローディング状態であることを検証
+        listener.call(
+          null,
+          const AsyncLoading<List<String>>(),
+        ),
+        // データがstateに格納されたこと、格納された値が想定通りであることを検証
+        listener.call(
+          const AsyncLoading<List<String>>(),
+          const AsyncValue.data(expected),
+        ),
+      ]);
+      // 他にlistenerが発火されないことを検証
+      verifyNoMoreInteractions(listener);
+
+      // 想定通りにrepositoryの関数が呼ばれているか検証
+      verify(
+        mockUserFollowRepository.fetchAllFollowingIdList(
+          targetUserId,
+        ),
       ).called(1);
     });
   });
@@ -122,12 +173,13 @@ void main() {
       ).thenAnswer((_) async => mockIsFollowing);
 
       const targetUserId = 'targetUserId';
+      final listener = MockIsFollowingProviderListener();
       container.listen(
         isFollowingProvider(targetUserId),
-        isFollowingProviderListener,
+        listener,
         fireImmediately: true,
       );
-      addTearDown(() => reset(isFollowingProviderListener));
+      addTearDown(() => reset(listener));
 
       // * Act
       await container.read(
@@ -139,18 +191,18 @@ void main() {
       // stateの検証
       verifyInOrder([
         // ローディング状態であることを検証
-        isFollowingProviderListener.call(
+        listener.call(
           null,
           const AsyncLoading<bool>(),
         ),
         // データがstateに格納されたこと、格納された値が想定通りであることを検証
-        isFollowingProviderListener.call(
+        listener.call(
           const AsyncLoading<bool>(),
           const AsyncValue.data(expected),
         ),
       ]);
       // 他にlistenerが発火されないことを検証
-      verifyNoMoreInteractions(isFollowingProviderListener);
+      verifyNoMoreInteractions(listener);
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(

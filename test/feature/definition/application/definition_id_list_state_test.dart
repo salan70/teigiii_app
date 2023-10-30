@@ -9,6 +9,7 @@ import 'package:teigi_app/feature/definition/repository/definition_repository.da
 import 'package:teigi_app/feature/definition/util/definition_feed_type.dart';
 import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
+import 'package:teigi_app/feature/user_profile/application/user_profile_state.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
 import 'package:teigi_app/feature/word/repository/word_repository.dart';
@@ -40,19 +41,28 @@ void main() {
   final mockUserConfigRepository = MockUserConfigRepository();
   final listener = MockListener();
 
+  const userId = 'userId';
+  final mockFollowingUserIdList = [
+    'userId1',
+    'userId2',
+    ...mockUserConfigDoc.mutedUserIdList,
+  ];
+
   late ProviderContainer container;
 
   setUp(() {
     container = ProviderContainer(
       overrides: [
-        userIdProvider.overrideWith((ref) => 'userId'),
+        userIdProvider.overrideWith((ref) => userId),
+        followingIdListProvider(userId).overrideWith((ref) => mockFollowingUserIdList),
         definitionRepositoryProvider
             .overrideWithValue(mockDefinitionRepository),
         userProfileRepositoryProvider
             .overrideWithValue(mockUserProfileRepository),
         userConfigRepositoryProvider
             .overrideWithValue(mockUserConfigRepository),
-        userFollowRepositoryProvider.overrideWithValue(mockUserFollowRepository),
+        userFollowRepositoryProvider
+            .overrideWithValue(mockUserFollowRepository),
         mutedUserIdListProvider
             .overrideWith((ref) => mockUserConfigDoc.mutedUserIdList),
       ],
@@ -127,16 +137,6 @@ void main() {
 
     test('homeFollowing: stateの更新、repositoryで定義している関数の呼び出しを検証', () async {
       // * Arrange
-      // Mockの設定
-      final mockFollowingUserIdList = [
-        'userId1',
-        'userId2',
-        ...mockUserConfigDoc.mutedUserIdList,
-      ];
-
-      when(mockUserFollowRepository.fetchFollowingIdList(any)).thenAnswer(
-        (_) async => mockFollowingUserIdList,
-      );
       when(
         mockUserProfileRepository.fetchUserProfile(any),
       ).thenAnswer((_) async => mockUserProfileDoc);

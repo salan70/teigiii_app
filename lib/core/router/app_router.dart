@@ -7,7 +7,8 @@ import '../../feature/definition/presentation/page/home/home_page.dart';
 import '../../feature/definition/presentation/page/index/index_page.dart';
 import '../../feature/setting/presentation/license_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
-import '../../feature/user_profile/presentation/page/profile_page.dart';
+import '../../feature/user_profile/presentation/page/following_and_follower_list_page/following_and_follower_list_page.dart';
+import '../../feature/user_profile/presentation/page/profile_page/profile_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -37,6 +38,10 @@ class AppRouter extends _$AppRouter {
                   path: 'profile',
                   page: ProfileRoute.page,
                 ),
+                AutoRoute(
+                  path: 'following_and_follower_list',
+                  page: FollowingAndFollowerListRoute.page,
+                ),
               ],
             ),
             AutoRoute(
@@ -51,6 +56,10 @@ class AppRouter extends _$AppRouter {
                   // TODO(me): pathをdefinitionIdにする
                   path: 'definition_detail',
                   page: DefinitionDetailRoute.page,
+                ),
+                AutoRoute(
+                  path: 'following_and_follower_list',
+                  page: FollowingAndFollowerListRoute.page,
                 ),
               ],
             ),

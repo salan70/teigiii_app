@@ -3,11 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/button/ellipsis_icon_button.dart';
-import '../../../../core/common_widget/button/to_setting_button.dart';
-import '../../../auth/application/auth_state.dart';
-import '../../../definition/presentation/component/definition_list.dart';
-import '../../../definition/util/definition_feed_type.dart';
+import '../../../../../core/common_widget/button/ellipsis_icon_button.dart';
+import '../../../../../core/common_widget/button/to_setting_button.dart';
+import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
+import '../../../../../util/logger.dart';
+import '../../../../auth/application/auth_state.dart';
+import '../../../../definition/presentation/component/definition_list.dart';
+import '../../../../definition/util/definition_feed_type.dart';
+import '../../../application/user_profile_state.dart';
 import 'profile_widget.dart';
 
 @RoutePage()
@@ -30,6 +33,7 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO(me): 雑に!使ってるが、問題ないか確認する
     final currentUserId = ref.watch(userIdProvider)!;
+    final asyncTargetUserProfile = ref.watch(userProfileProvider(targetUserId));
 
     return DefaultTabController(
       length: 2,
@@ -51,7 +55,19 @@ class ProfilePage extends ConsumerWidget {
                             context.router.pop();
                           },
                         ),
-                  title: const Text('プロフィール'),
+                  title: asyncTargetUserProfile.when(
+                    data: (targetUserProfile) {
+                      return Text(
+                        targetUserProfile.name,
+                        overflow: TextOverflow.ellipsis,
+                      );
+                    },
+                    loading: () => const Text(''),
+                    error: (error, _) {
+                      logger.e(error);
+                      return const Text('エラー');
+                    },
+                  ),
                   actions: [
                     // 自分のプロフィールの場合は編集ボタンを表示
                     isMyProfile
@@ -71,7 +87,7 @@ class ProfilePage extends ConsumerWidget {
                 ),
                 SliverPersistentHeader(
                   pinned: true,
-                  delegate: _StickyTabBarDelegate(
+                  delegate: StickyTabBarDelegate(
                     tabBar: TabBar(
                       labelStyle: Theme.of(context).textTheme.titleMedium,
                       indicatorWeight: 3,
@@ -118,45 +134,5 @@ enum ProfileType {
           onPressed: () {},
         );
     }
-  }
-}
-
-/// SliverPersistentHeaderDelegateが必要なため、SliverPersistentHeaderを
-/// 継承したクラスを作成
-/// 参考: https://zenn.dev/wakanao/articles/0ff4bc3f08f34a#_tabsection()について
-class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
-  const _StickyTabBarDelegate({required this.tabBar});
-
-  final TabBar tabBar;
-
-  @override
-  double get minExtent => tabBar.preferredSize.height;
-
-  @override
-  double get maxExtent => tabBar.preferredSize.height;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        border: Border(
-          bottom: BorderSide(
-            color: Theme.of(context).colorScheme.outlineVariant,
-            width: 0.3,
-          ),
-        ),
-      ),
-      child: tabBar,
-    );
-  }
-
-  @override
-  bool shouldRebuild(_StickyTabBarDelegate oldDelegate) {
-    return tabBar != oldDelegate.tabBar;
   }
 }

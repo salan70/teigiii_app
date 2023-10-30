@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Overflowに適応したTextウィジェット
+/// Overflowに適応したTextウィジェット
 class AdaptiveOverflowText extends StatelessWidget {
   const AdaptiveOverflowText({
     required this.text,

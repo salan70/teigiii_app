@@ -1,7 +1,3 @@
-// ignore_for_file: inference_failure_on_collection_literal
-// 上記について、本ファイルはテストデータを挿入するためのもので、実際のアプリの挙動には
-// 影響しないため、ignoreを設定
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<void> addUserFollowsToFirestore(String flavorName) async {
@@ -20,6 +16,44 @@ Future<void> addUserFollowsToFirestore(String flavorName) async {
       'updatedAt': FieldValue.serverTimestamp(),
     });
     await Future<void>.delayed(const Duration(milliseconds: 1000));
+  }
+}
+
+/// user1がuser2〜user20をフォローする
+Future<void> addUserFollowsToFirestore2(String flavorName) async {
+  if (flavorName == 'prod') {
+    return;
+  }
+
+  for (var i = 2; i <= 20; i++) {
+    final userId = 'user$i';
+    await FirebaseFirestore.instance.collection('UserFollows').add(
+      {
+        'followingId': 'user1',
+        'followerId': userId,
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      },
+    );
+  }
+}
+
+/// user1がuser2〜user20にフォローされる
+Future<void> addUserFollowsToFirestore3(String flavorName) async {
+  if (flavorName == 'prod') {
+    return;
+  }
+
+  for (var i = 2; i <= 20; i++) {
+    final userId = 'user$i';
+    await FirebaseFirestore.instance.collection('UserFollows').add(
+      {
+        'followingId': userId,
+        'followerId': 'user1',
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      },
+    );
   }
 }
 

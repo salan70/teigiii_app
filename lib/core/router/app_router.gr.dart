@@ -37,6 +37,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    FollowingAndFollowerListRoute.name: (routeData) {
+      final args = routeData.argsAs<FollowingAndFollowerListRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: FollowingAndFollowerListPage(
+          key: args.key,
+          willShowFollowing: args.willShowFollowing,
+          targetUserId: args.targetUserId,
+        ),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -156,6 +167,50 @@ class DefinitionDetailRouteArgs {
   @override
   String toString() {
     return 'DefinitionDetailRouteArgs{key: $key, definitionId: $definitionId}';
+  }
+}
+
+/// generated route for
+/// [FollowingAndFollowerListPage]
+class FollowingAndFollowerListRoute
+    extends PageRouteInfo<FollowingAndFollowerListRouteArgs> {
+  FollowingAndFollowerListRoute({
+    Key? key,
+    bool willShowFollowing = true,
+    required String targetUserId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          FollowingAndFollowerListRoute.name,
+          args: FollowingAndFollowerListRouteArgs(
+            key: key,
+            willShowFollowing: willShowFollowing,
+            targetUserId: targetUserId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'FollowingAndFollowerListRoute';
+
+  static const PageInfo<FollowingAndFollowerListRouteArgs> page =
+      PageInfo<FollowingAndFollowerListRouteArgs>(name);
+}
+
+class FollowingAndFollowerListRouteArgs {
+  const FollowingAndFollowerListRouteArgs({
+    this.key,
+    this.willShowFollowing = true,
+    required this.targetUserId,
+  });
+
+  final Key? key;
+
+  final bool willShowFollowing;
+
+  final String targetUserId;
+
+  @override
+  String toString() {
+    return 'FollowingAndFollowerListRouteArgs{key: $key, willShowFollowing: $willShowFollowing, targetUserId: $targetUserId}';
   }
 }
 

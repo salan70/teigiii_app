@@ -42,6 +42,8 @@ Future<void> main() async {
   // await addUserConfigsToFirestore(flavorName);
   // await addUserProfilesToFirestore(flavorName);
   // await addUserFollowCountsToFirestore(flavorName);
+  // await addUserFollowsToFirestore2(flavorName);
+  // await addUserFollowsToFirestore3(flavorName);
 
   runApp(
     ProviderScope(

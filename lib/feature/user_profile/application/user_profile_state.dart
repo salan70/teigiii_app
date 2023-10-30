@@ -33,3 +33,13 @@ Future<bool> isFollowing(IsFollowingRef ref, String targetUserId) async {
       .read(userFollowRepositoryProvider)
       .isFollowing(currentUserId, targetUserId);
 }
+
+@Riverpod(keepAlive: true)
+Future<List<String>> followingIdList(
+  FollowingIdListRef ref,
+  String targetUserId,
+) async {
+  return ref
+      .read(userFollowRepositoryProvider)
+      .fetchAllFollowingIdList(targetUserId);
+}

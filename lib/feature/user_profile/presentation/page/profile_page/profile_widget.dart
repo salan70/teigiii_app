@@ -1,11 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/button/follow_or_unfollow_button.dart';
-import '../../../../core/common_widget/button/secondary_filled_button.dart';
-import '../../../auth/application/auth_state.dart';
-import '../../../definition/presentation/component/avatar_icon_widget.dart';
-import '../../application/user_profile_state.dart';
+import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
+import '../../../../../core/common_widget/button/secondary_filled_button.dart';
+import '../../../../../core/router/app_router.dart';
+import '../../../../auth/application/auth_state.dart';
+import '../../../../definition/presentation/component/avatar_icon_widget.dart';
+import '../../../application/user_profile_state.dart';
 import 'profile_widget_shimmer.dart';
 
 class ProfileWidget extends ConsumerWidget {
@@ -19,7 +21,7 @@ class ProfileWidget extends ConsumerWidget {
     final currentUserId = ref.watch(userIdProvider);
 
     return asyncTargetUserProfile.when(
-      data: (userProfile) {
+      data: (targetUserProfile) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
@@ -29,7 +31,7 @@ class ProfileWidget extends ConsumerWidget {
               Row(
                 children: [
                   AvatarIconWidget(
-                    imageUrl: userProfile.profileImageUrl,
+                    imageUrl: targetUserProfile.profileImageUrl,
                     avatarSize: AvatarSize.large,
                   ),
                   const Spacer(),
@@ -37,24 +39,33 @@ class ProfileWidget extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
-                        onTap: () {
-                          // TODO(me): フォロー一覧画面に遷移
+                        onTap: () async {
+                          await context.pushRoute(
+                            FollowingAndFollowerListRoute(
+                              targetUserId: targetUserProfile.id,
+                            ),
+                          );
                         },
                         child: Column(
                           children: [
-                            Text(userProfile.followingCount.toString()),
+                            Text(targetUserProfile.followingCount.toString()),
                             const Text('フォロー中'),
                           ],
                         ),
                       ),
                       const SizedBox(width: 16),
                       InkWell(
-                        onTap: () {
-                          // TODO(me): フォロワー一覧画面に遷移
+                        onTap: () async {
+                          await context.pushRoute(
+                            FollowingAndFollowerListRoute(
+                              willShowFollowing: false,
+                              targetUserId: targetUserProfile.id,
+                            ),
+                          );
                         },
                         child: Column(
                           children: [
-                            Text(userProfile.followerCount.toString()),
+                            Text(targetUserProfile.followerCount.toString()),
                             const Text('フォロワー'),
                           ],
                         ),
@@ -65,12 +76,12 @@ class ProfileWidget extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                userProfile.name,
+                targetUserProfile.name,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 16),
               Text(
-                userProfile.bio,
+                targetUserProfile.bio,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               const SizedBox(height: 24),
@@ -81,7 +92,9 @@ class ProfileWidget extends ConsumerWidget {
                         text: 'プロフィールを編集する',
                         onPressed: () {},
                       )
-                    : FollowOrUnfollowButton(targetUserId: userProfile.id),
+                    : FollowOrUnfollowButton(
+                        targetUserId: targetUserProfile.id,
+                      ),
               ),
               const SizedBox(height: 16),
             ],

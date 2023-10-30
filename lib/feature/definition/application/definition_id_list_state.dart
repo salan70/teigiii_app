@@ -4,7 +4,7 @@ import '../../../core/common_provider/snack_bar_controller.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
-import '../../user_profile/repository/user_follow_repository.dart';
+import '../../user_profile/application/user_profile_state.dart';
 import '../domain/definition_id_list_state.dart';
 import '../repository/definition_repository.dart';
 import '../util/definition_feed_type.dart';
@@ -46,9 +46,8 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
     final targetUserIdList = <String>[];
 
     // フォローしているユーザーのIDリストを取得
-    final followingIdList = await ref
-        .watch(userFollowRepositoryProvider)
-        .fetchFollowingIdList(userId);
+    final followingIdList =
+        await ref.read(followingIdListProvider(userId).future);
 
     // フォローしているユーザーと自分のIDを追加
     targetUserIdList
@@ -131,9 +130,8 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
     final targetUserIdList = <String>[];
 
     // フォローしているユーザーのIDリストを取得
-    final followingIdList = await ref
-        .watch(userFollowRepositoryProvider)
-        .fetchFollowingIdList(userId);
+    final followingIdList =
+        await ref.read(followingIdListProvider(userId).future);
 
     // フォローしているユーザーと自分のIDを追加
     targetUserIdList
