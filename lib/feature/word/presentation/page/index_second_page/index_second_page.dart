@@ -25,30 +25,24 @@ class IndexSecondPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.only(
+          top: 8,
           left: 16,
           right: 16,
         ),
-        child: ListView(
-          children: [
-            const SizedBox(height: 8),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: initialSubGroups.length,
-              itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                  onTap: () {},
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      IndexTile(label: initialSubGroups[index].label),
-                      const Divider(),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ],
+        child: ListView.builder(
+          itemCount: initialSubGroups.length,
+          itemBuilder: (BuildContext context, int index) {
+            return InkWell(
+              onTap: () {},
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  IndexTile(label: initialSubGroups[index].label),
+                  const Divider(),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
