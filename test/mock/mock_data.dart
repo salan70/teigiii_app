@@ -3,6 +3,7 @@ import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/definition/domain/definition.dart';
 import 'package:teigi_app/feature/definition/repository/entity/definition_document.dart';
 import 'package:teigi_app/feature/user_config/repository/entity/user_config_document.dart';
+import 'package:teigi_app/feature/user_profile/domain/user_id_list_state.dart';
 import 'package:teigi_app/feature/user_profile/repository/entity/user_follow_count_document.dart';
 import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart';
 import 'package:teigi_app/feature/word/repository/entity/word_document.dart';
@@ -70,6 +71,12 @@ final mockWordDoc = WordDocument(
   initialLetter: 'i',
   createdAt: nowDateTime,
   updatedAt: nowDateTime,
+);
+
+final mockUserIdListState = UserIdListState(
+  userIdList: ['userId1', 'userId2'],
+  lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
+  hasMore: false,
 );
 
 // ignore: subtype_of_sealed_class

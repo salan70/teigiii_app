@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/config_constant.dart';
+import '../../../util/extension/firestore_extension.dart';
 import '../../../util/extension/string_list_extension.dart';
 import '../domain/definition_id_list_state.dart';
 import 'entity/definition_document.dart';
@@ -174,12 +175,4 @@ class DefinitionRepository {
 
     return likeSnapshot != null;
   }
-}
-
-extension on List<DocumentSnapshot> {
-  DocumentSnapshot? get firstOrNull => isEmpty ? null : first;
-}
-
-extension on List<QueryDocumentSnapshot> {
-  QueryDocumentSnapshot? get lastOrNull => isEmpty ? null : last;
 }

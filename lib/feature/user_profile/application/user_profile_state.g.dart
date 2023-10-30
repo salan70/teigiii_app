@@ -283,7 +283,7 @@ class _IsFollowingProviderElement extends FutureProviderElement<bool>
   String get targetUserId => (origin as IsFollowingProvider).targetUserId;
 }
 
-String _$followingIdListHash() => r'222e7250ab09f20c2dadf1776f9dc515223b74c9';
+String _$followingIdListHash() => r'97748b18939111d29472b2a72ce5c0a325496cf4';
 
 /// See also [followingIdList].
 @ProviderFor(followingIdList)

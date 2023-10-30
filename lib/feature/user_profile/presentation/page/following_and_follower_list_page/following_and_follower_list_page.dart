@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
 import '../../../../auth/application/auth_state.dart';
+import '../../../util/profile_feed_type.dart';
+import 'profile_list.dart';
 
 @RoutePage()
 class FollowingAndFollowerListPage extends ConsumerWidget {
@@ -64,15 +66,15 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                 ),
               ];
             },
-            body: const TabBarView(
+            body: TabBarView(
               children: [
-                SizedBox(
-                  height: 1200,
-                  child: Center(child: Text('フォロー中')),
+                ProfileList(
+                  userListType: UserListType.following,
+                  targetUserId: targetUserId,
                 ),
-                SizedBox(
-                  height: 1200,
-                  child: Center(child: Text('フォロワー')),
+                ProfileList(
+                  userListType: UserListType.follower,
+                  targetUserId: targetUserId,
                 ),
               ],
             ),

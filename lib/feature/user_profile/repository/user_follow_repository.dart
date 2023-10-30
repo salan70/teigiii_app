@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/firebase_providers.dart';
+import '../../../util/constant/config_constant.dart';
+import '../../../util/extension/firestore_extension.dart';
+import '../domain/user_id_list_state.dart';
 import 'entity/user_follow_count_document.dart';
 
 part 'user_follow_repository.g.dart';
@@ -107,7 +110,7 @@ class UserFollowRepository {
 
     return snapshot.docs.isNotEmpty;
   }
-  
+
   /// UserFollowCountドキュメントを追加する
   Future<void> addUserFollowCount(String userId) async {
     await firestore.collection('UserFollowCounts').doc(userId).set({
@@ -118,13 +121,58 @@ class UserFollowRepository {
     });
   }
 
-  /// 引数で渡したユーザーが、フォローしているユーザーのIDリストを取得
-  Future<List<String>> fetchFollowingIdList(String userId) async {
+  /// [userId]がフォローしているユーザーのIDリストを全て取得
+  Future<List<String>> fetchAllFollowingIdList(String userId) async {
     final QuerySnapshot snapshot = await firestore
         .collection('UserFollows')
         .where('followingId', isEqualTo: userId)
         .get();
 
     return snapshot.docs.map((doc) => doc['followerId'] as String).toList();
+  }
+
+  /// [userId]がフォローしているユーザーのIDリストを[fetchLimitForUserIdList]件取得（初回）
+  Future<UserIdListState> fetchFollowingIdListFirst(
+    String userId,
+  ) async {
+    final snapshot = await firestore
+        .collection('UserFollows')
+        .where('followingId', isEqualTo: userId)
+        .orderBy('createdAt', descending: true)
+        .limit(fetchLimitForUserIdList)
+        .get();
+
+    final followerIdList =
+        snapshot.docs.map((doc) => doc['followerId'] as String).toList();
+
+    return _toUserIdListState(snapshot, followerIdList);
+  }
+
+    /// [userId]をフォローしているユーザーのIDリストを[fetchLimitForUserIdList]件取得（初回）
+    Future<UserIdListState> fetchFollowerIdListFirst(
+    String userId,
+  ) async {
+    final snapshot = await firestore
+        .collection('UserFollows')
+        .where('followerId', isEqualTo: userId)
+        .orderBy('createdAt', descending: true)
+        .limit(fetchLimitForUserIdList)
+        .get();
+
+    final followingIdList =
+        snapshot.docs.map((doc) => doc['followingId'] as String).toList();
+
+    return _toUserIdListState(snapshot, followingIdList);
+  }
+
+  UserIdListState _toUserIdListState(
+    QuerySnapshot snapshot,
+    List<String> userIdList,
+  ) {
+    return UserIdListState(
+      userIdList: userIdList,
+      lastReadQueryDocumentSnapshot: snapshot.docs.lastOrNull,
+      hasMore: userIdList.length == fetchLimitForUserIdList,
+    );
   }
 }

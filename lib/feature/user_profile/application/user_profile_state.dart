@@ -41,5 +41,5 @@ Future<List<String>> followingIdList(
 ) async {
   return ref
       .read(userFollowRepositoryProvider)
-      .fetchFollowingIdList(targetUserId);
+      .fetchAllFollowingIdList(targetUserId);
 }
