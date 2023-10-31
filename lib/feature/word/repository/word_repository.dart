@@ -27,7 +27,10 @@ class WordRepository {
     return WordDocument.fromFirestore(snapshot);
   }
 
-  Future<WordListState> fetchWordDocListByInitialFirst(String initial) async {
+  Future<WordListState> fetchWordDocListByInitialFirst(
+    String initial,
+    Map<String, Map<String, int>> userPrivateWordMap,
+  ) async {
     final snapshot = await firestore
         .collection('Words')
         .where(
@@ -35,7 +38,12 @@ class WordRepository {
             Filter('initialLetter', isEqualTo: initial),
             Filter.or(
               Filter('privateDefinitionCount', isEqualTo: 0),
-              Filter('id', whereIn: ['word31', 'word32']),
+              // 本当はFieldPath.documentId()を使いたいが、エラーになるため、
+              // ドキュメントIDを保持するidフィールドを指定している
+              Filter(
+                'id',
+                whereIn: ['word31', 'word32'],
+              ),
             ),
           ),
         )
@@ -43,12 +51,13 @@ class WordRepository {
         .limit(fetchLimitForWordList)
         .get();
 
-    return _toWordListState(snapshot);
+    return _toWordListState(snapshot, initial, userPrivateWordMap);
   }
 
   Future<WordListState> fetchWordDocListByInitialMore(
     String initial,
     QueryDocumentSnapshot lastReadQueryDocumentSnapshot,
+    Map<String, Map<String, int>> userPrivateWordMap,
   ) async {
     final QuerySnapshot snapshot = await firestore
         .collection('Words')
@@ -57,6 +66,8 @@ class WordRepository {
             Filter('initialLetter', isEqualTo: initial),
             Filter.or(
               Filter('privateDefinitionCount', isEqualTo: 0),
+              // 本当はFieldPath.documentId()を使いたいが、エラーになるため、
+              // ドキュメントIDを保持するidフィールドを指定している
               Filter('id', whereIn: ['word31', 'word32']),
             ),
           ),
@@ -66,11 +77,15 @@ class WordRepository {
         .limit(fetchLimitForWordList)
         .get();
 
-    return _toWordListState(snapshot);
+    return _toWordListState(snapshot, initial, userPrivateWordMap);
   }
 
-  WordListState _toWordListState(QuerySnapshot snapshot) {
-    final wordList = _toWordList(snapshot);
+  WordListState _toWordListState(
+    QuerySnapshot snapshot,
+    String initial,
+    Map<String, Map<String, int>> userPrivateWordMap,
+  ) {
+    final wordList = _toWordList(snapshot, initial, userPrivateWordMap);
 
     return WordListState(
       wordList: wordList,
@@ -79,16 +94,23 @@ class WordRepository {
     );
   }
 
-  List<Word> _toWordList(QuerySnapshot snapshot) {
+  List<Word> _toWordList(
+    QuerySnapshot snapshot,
+    String initial,
+    Map<String, Map<String, int>> userPrivateWordMap,
+  ) {
     final wordDoc = snapshot.docs.map(WordDocument.fromFirestore).toList();
 
     return wordDoc.map((wordDoc) {
+      final postedDefinitionCount = wordDoc.publicDefinitionCount +
+          (userPrivateWordMap[initial]?[wordDoc.id] ?? 0);
+
       return Word(
         id: wordDoc.id,
         word: wordDoc.word,
         reading: wordDoc.reading,
         initialLetter: wordDoc.initialLetter,
-        postedDefinitionCount: 3,
+        postedDefinitionCount: postedDefinitionCount,
       );
     }).toList();
   }

@@ -828,25 +828,76 @@ class MockWordRepository extends _i1.Mock implements _i16.WordRepository {
 
   @override
   _i12.Future<_i10.WordListState> fetchWordDocListByInitialFirst(
-          String? initial) =>
+    String? initial,
+    Map<String, Map<String, int>>? userPrivateWordMap,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchWordDocListByInitial,
-          [initial],
+          #fetchWordDocListByInitialFirst,
+          [
+            initial,
+            userPrivateWordMap,
+          ],
         ),
         returnValue: _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
           this,
           Invocation.method(
-            #fetchWordDocListByInitial,
-            [initial],
+            #fetchWordDocListByInitialFirst,
+            [
+              initial,
+              userPrivateWordMap,
+            ],
           ),
         )),
         returnValueForMissingStub:
             _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
           this,
           Invocation.method(
-            #fetchWordDocListByInitial,
-            [initial],
+            #fetchWordDocListByInitialFirst,
+            [
+              initial,
+              userPrivateWordMap,
+            ],
+          ),
+        )),
+      ) as _i12.Future<_i10.WordListState>);
+
+  @override
+  _i12.Future<_i10.WordListState> fetchWordDocListByInitialMore(
+    String? initial,
+    _i2.QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
+    Map<String, Map<String, int>>? userPrivateWordMap,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchWordDocListByInitialMore,
+          [
+            initial,
+            lastReadQueryDocumentSnapshot,
+            userPrivateWordMap,
+          ],
+        ),
+        returnValue: _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
+          this,
+          Invocation.method(
+            #fetchWordDocListByInitialMore,
+            [
+              initial,
+              lastReadQueryDocumentSnapshot,
+              userPrivateWordMap,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
+          this,
+          Invocation.method(
+            #fetchWordDocListByInitialMore,
+            [
+              initial,
+              lastReadQueryDocumentSnapshot,
+              userPrivateWordMap,
+            ],
           ),
         )),
       ) as _i12.Future<_i10.WordListState>);
