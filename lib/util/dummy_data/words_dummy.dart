@@ -104,43 +104,8 @@ Future<void> addWordsDummy0to29(String flavorName) async {
     8,
     2,
   ];
-
-  // privateDefinitionCountのダミーデータ
-  final privateDefinitionCounts = <int>[
-    0,
-    2,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    3,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    3,
-  ];
-
   await _addWordsDummyToFirestore(flavorName, words, readings,
-      publicDefinitionCounts, privateDefinitionCounts, 0, 29,);
+      publicDefinitionCounts, 0, 29,);
 }
 
 Future<void> addWordsDummy30to59(String flavorName) async {
@@ -246,42 +211,8 @@ Future<void> addWordsDummy30to59(String flavorName) async {
     3,
   ];
 
-  // privateDefinitionCountのダミーデータ
-  final privateDefinitionCounts = <int>[
-    0,
-    2,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    3,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    3,
-  ];
-
   await _addWordsDummyToFirestore(flavorName, words, readings,
-      publicDefinitionCounts, privateDefinitionCounts, 30, 59,);
+      publicDefinitionCounts, 30, 59,);
 }
 
 
@@ -290,7 +221,6 @@ Future<void> _addWordsDummyToFirestore(
   List<String> words,
   List<String> readings,
   List<int> publicDefinitionCounts,
-  List<int> privateDefinitionCounts,
   int startIndex,
   int endIndex,
 ) async {
@@ -302,14 +232,14 @@ Future<void> _addWordsDummyToFirestore(
   // Words コレクションのテストデータを挿入
   for (var i = 0; i < 30; i++) {
     final wordId = 'word${startIndex + i + 1}';
-
+    final privateDefinitionCount = Random().nextInt(3);
     final wordData = {
       'id': wordId,
       'word': words[i],
       'reading': readings[i],
       'initialLetter': readings[i][0], // readingの最初の文字
       'publicDefinitionCount': publicDefinitionCounts[i],
-      'privateDefinitionCount': privateDefinitionCounts[i],
+      'privateDefinitionCount': privateDefinitionCount,
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
     };
@@ -317,11 +247,11 @@ Future<void> _addWordsDummyToFirestore(
     await firestore.collection('Words').doc(wordId).set(wordData);
 
     // PrivateDefinitionPostedAuthors サブコレクションのテストデータを挿入
-    if (privateDefinitionCounts[i] != 0) {
+    if (privateDefinitionCount != 0) {
       final randomIndex = Random().nextInt(19) + 1;
       final authorData = {
         'id': 'user$randomIndex',
-        'postedPrivateCount': privateDefinitionCounts[i],
+        'postedPrivateCount': privateDefinitionCount,
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       };

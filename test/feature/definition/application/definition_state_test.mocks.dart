@@ -424,7 +424,8 @@ class MockWordRepository extends _i1.Mock implements _i11.WordRepository {
       ) as _i9.Future<_i6.WordDocument>);
 
   @override
-  _i9.Future<_i7.WordListState> fetchWordDocListByInitial(String? initial) =>
+  _i9.Future<_i7.WordListState> fetchWordDocListByInitialFirst(
+          String? initial) =>
       (super.noSuchMethod(
         Invocation.method(
           #fetchWordDocListByInitial,

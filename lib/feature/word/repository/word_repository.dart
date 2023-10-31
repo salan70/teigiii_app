@@ -27,10 +27,43 @@ class WordRepository {
     return WordDocument.fromFirestore(snapshot);
   }
 
-  Future<WordListState> fetchWordDocListByInitial(String initial) async {
+  Future<WordListState> fetchWordDocListByInitialFirst(String initial) async {
+    final snapshot = await firestore
+        .collection('Words')
+        .where(
+          Filter.and(
+            Filter('initialLetter', isEqualTo: initial),
+            Filter.or(
+              Filter('privateDefinitionCount', isEqualTo: 0),
+              Filter('id', whereIn: ['word31', 'word32']),
+            ),
+          ),
+        )
+        .orderBy('reading')
+        .limit(fetchLimitForWordList)
+        .get();
+
+    return _toWordListState(snapshot);
+  }
+
+  Future<WordListState> fetchWordDocListByInitialMore(
+    String initial,
+    QueryDocumentSnapshot lastReadQueryDocumentSnapshot,
+  ) async {
     final QuerySnapshot snapshot = await firestore
         .collection('Words')
-        .where('initialLetter', isEqualTo: initial)
+        .where(
+          Filter.and(
+            Filter('initialLetter', isEqualTo: initial),
+            Filter.or(
+              Filter('privateDefinitionCount', isEqualTo: 0),
+              Filter('id', whereIn: ['word31', 'word32']),
+            ),
+          ),
+        )
+        .orderBy('reading')
+        .startAfterDocument(lastReadQueryDocumentSnapshot)
+        .limit(fetchLimitForWordList)
         .get();
 
     return _toWordListState(snapshot);
@@ -42,7 +75,7 @@ class WordRepository {
     return WordListState(
       wordList: wordList,
       lastReadQueryDocumentSnapshot: snapshot.docs.lastOrNull,
-      hasMore: wordList.length == fetchLimitForUserIdList,
+      hasMore: wordList.length == fetchLimitForWordList,
     );
   }
 
