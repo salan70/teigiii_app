@@ -16,6 +16,7 @@ import 'firebase_options/firebase_options.dart';
 import 'util/constant/color_scheme.dart';
 import 'util/constant/tab_bar_theme.dart';
 import 'util/constant/text_theme.dart';
+import 'util/dummy_data/words_dummy.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +45,8 @@ Future<void> main() async {
   // await addUserFollowCountsToFirestore(flavorName);
   // await addUserFollowsToFirestore2(flavorName);
   // await addUserFollowsToFirestore3(flavorName);
+  // await addWordsDummy0to29(flavorName);
+  // await addWordsDummy30to59(flavorName);
 
   runApp(
     ProviderScope(
