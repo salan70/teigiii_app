@@ -18,8 +18,7 @@ class SecondaryFilledButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(48),
         ),
-        backgroundColor: Theme.of(context).colorScheme.onSurface,
-        foregroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Theme.of(context).colorScheme.tertiary,
       ),
       onPressed: onPressed,
       child: Padding(
@@ -29,7 +28,7 @@ class SecondaryFilledButton extends StatelessWidget {
         child: Text(
           text,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).colorScheme.surface,
+                color: Theme.of(context).colorScheme.onTertiary,
               ),
         ),
       ),

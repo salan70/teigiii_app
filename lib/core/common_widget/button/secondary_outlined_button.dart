@@ -19,9 +19,9 @@ class SecondaryOutlinedButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(48).copyWith(),
         ),
         side: BorderSide(
-          color: Theme.of(context).colorScheme.onSurface,
+          color: Theme.of(context).colorScheme.tertiary,
         ),
-        backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.onTertiary,
       ),
       onPressed: onPressed,
       child: Padding(
@@ -31,7 +31,7 @@ class SecondaryOutlinedButton extends StatelessWidget {
         child: Text(
           text,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.tertiary,
               ),
         ),
       ),

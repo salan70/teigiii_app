@@ -30,7 +30,7 @@ class WordTile extends StatelessWidget {
                 children: [
                   Text(
                     '${word.postedDefinitionCount}件',
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                   ),
