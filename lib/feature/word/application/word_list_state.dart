@@ -1,9 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../util/mixin/fetch_more_mixin.dart';
+import '../../auth/application/auth_state.dart';
+import '../../user_config/application/user_config_state.dart';
 import '../domain/word_list_state.dart';
 import '../repository/word_repository.dart';
-import 'user_private_word_state.dart';
 
 part 'word_list_state.g.dart';
 
@@ -14,25 +15,26 @@ class WordListStateNotifier extends _$WordListStateNotifier
   FutureOr<WordListState> build(
     String initial,
   ) async {
-    final userPrivateWordMap =
-        await ref.read(userPrivateWordMapProvider.future);
-
+    final currentUserId = ref.read(userIdProvider)!;
+    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
+    
     return await ref
         .read(wordRepositoryProvider)
-        .fetchWordDocListByInitialFirst(initial, userPrivateWordMap);
+        .fetchWordListStateFirst(initial, currentUserId, mutedUserIdList);
   }
 
   Future<void> fetchMore() async {
     await fetchMoreHelper(
       ref: ref,
       fetchFunction: () async {
-        final userPrivateWordMap =
-            await ref.read(userPrivateWordMapProvider.future);
+        final currentUserId = ref.read(userIdProvider)!;
+        final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
 
-        return ref.read(wordRepositoryProvider).fetchWordDocListByInitialMore(
+        return ref.read(wordRepositoryProvider).fetchWordListStateMore(
               initial,
+              currentUserId,
+              mutedUserIdList,
               state.value!.lastReadQueryDocumentSnapshot!,
-              userPrivateWordMap,
             );
       },
       mergeFunction: (currentData, newData) => WordListState(

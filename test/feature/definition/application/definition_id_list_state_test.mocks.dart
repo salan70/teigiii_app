@@ -827,25 +827,28 @@ class MockWordRepository extends _i1.Mock implements _i16.WordRepository {
       ) as _i12.Future<_i9.WordDocument>);
 
   @override
-  _i12.Future<_i10.WordListState> fetchWordDocListByInitialFirst(
+  _i12.Future<_i10.WordListState> fetchWordListStateFirst(
     String? initial,
-    Map<String, Map<String, int>>? userPrivateWordMap,
+    String? currentUserId,
+    List<String>? mutedUserIdList,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchWordDocListByInitialFirst,
+          #fetchWordListStateFirst,
           [
             initial,
-            userPrivateWordMap,
+            currentUserId,
+            mutedUserIdList,
           ],
         ),
         returnValue: _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
           this,
           Invocation.method(
-            #fetchWordDocListByInitialFirst,
+            #fetchWordListStateFirst,
             [
               initial,
-              userPrivateWordMap,
+              currentUserId,
+              mutedUserIdList,
             ],
           ),
         )),
@@ -853,38 +856,42 @@ class MockWordRepository extends _i1.Mock implements _i16.WordRepository {
             _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
           this,
           Invocation.method(
-            #fetchWordDocListByInitialFirst,
+            #fetchWordListStateFirst,
             [
               initial,
-              userPrivateWordMap,
+              currentUserId,
+              mutedUserIdList,
             ],
           ),
         )),
       ) as _i12.Future<_i10.WordListState>);
 
   @override
-  _i12.Future<_i10.WordListState> fetchWordDocListByInitialMore(
+  _i12.Future<_i10.WordListState> fetchWordListStateMore(
     String? initial,
-    _i2.QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
-    Map<String, Map<String, int>>? userPrivateWordMap,
+    String? currentUserId,
+    List<String>? mutedUserIdList,
+    _i2.QueryDocumentSnapshot<Object?>? lastDocument,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchWordDocListByInitialMore,
+          #fetchWordListStateMore,
           [
             initial,
-            lastReadQueryDocumentSnapshot,
-            userPrivateWordMap,
+            currentUserId,
+            mutedUserIdList,
+            lastDocument,
           ],
         ),
         returnValue: _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
           this,
           Invocation.method(
-            #fetchWordDocListByInitialMore,
+            #fetchWordListStateMore,
             [
               initial,
-              lastReadQueryDocumentSnapshot,
-              userPrivateWordMap,
+              currentUserId,
+              mutedUserIdList,
+              lastDocument,
             ],
           ),
         )),
@@ -892,11 +899,12 @@ class MockWordRepository extends _i1.Mock implements _i16.WordRepository {
             _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
           this,
           Invocation.method(
-            #fetchWordDocListByInitialMore,
+            #fetchWordListStateMore,
             [
               initial,
-              lastReadQueryDocumentSnapshot,
-              userPrivateWordMap,
+              currentUserId,
+              mutedUserIdList,
+              lastDocument,
             ],
           ),
         )),
