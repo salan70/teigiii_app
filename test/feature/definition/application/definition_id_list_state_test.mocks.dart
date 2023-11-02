@@ -827,7 +827,7 @@ class MockWordRepository extends _i1.Mock implements _i16.WordRepository {
       ) as _i12.Future<_i9.WordDocument>);
 
   @override
-  _i12.Future<_i10.WordListState> fetchWordListStateFirst(
+  _i12.Future<_i10.WordListState> fetchWordListStateByInitialFirst(
     String? initial,
     String? currentUserId,
     List<String>? mutedUserIdList,
@@ -867,7 +867,7 @@ class MockWordRepository extends _i1.Mock implements _i16.WordRepository {
       ) as _i12.Future<_i10.WordListState>);
 
   @override
-  _i12.Future<_i10.WordListState> fetchWordListStateMore(
+  _i12.Future<_i10.WordListState> fetchWordListStateByInitialMore(
     String? initial,
     String? currentUserId,
     List<String>? mutedUserIdList,
@@ -905,6 +905,50 @@ class MockWordRepository extends _i1.Mock implements _i16.WordRepository {
               currentUserId,
               mutedUserIdList,
               lastDocument,
+            ],
+          ),
+        )),
+      ) as _i12.Future<_i10.WordListState>);
+
+  @override
+  _i12.Future<_i10.WordListState> fetchWordListStateBySearchWord(
+    String? searchWord,
+    String? currentUserId,
+    List<String>? mutedUserIdList,
+    _i2.QueryDocumentSnapshot<Object?>? documentSnapshot,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #searchWordListFirst,
+          [
+            searchWord,
+            currentUserId,
+            mutedUserIdList,
+            documentSnapshot,
+          ],
+        ),
+        returnValue: _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
+          this,
+          Invocation.method(
+            #searchWordListFirst,
+            [
+              searchWord,
+              currentUserId,
+              mutedUserIdList,
+              documentSnapshot,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
+          this,
+          Invocation.method(
+            #searchWordListFirst,
+            [
+              searchWord,
+              currentUserId,
+              mutedUserIdList,
+              documentSnapshot,
             ],
           ),
         )),

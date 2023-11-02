@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'word_list_state.dart';
+part of 'word_list_state_by_initial.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$wordListStateNotifierHash() =>
-    r'62337eeaea9e7ec5c05188a87a3b913133093857';
+String _$wordListStateByInitialNotifierHash() =>
+    r'31a168e7a63513f8a39deedd3f156ddaa5a28857';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,7 +30,7 @@ class _SystemHash {
   }
 }
 
-abstract class _$WordListStateNotifier
+abstract class _$WordListStateByInitialNotifier
     extends BuildlessAutoDisposeAsyncNotifier<WordListState> {
   late final String initial;
 
@@ -39,27 +39,29 @@ abstract class _$WordListStateNotifier
   );
 }
 
-/// See also [WordListStateNotifier].
-@ProviderFor(WordListStateNotifier)
-const wordListStateNotifierProvider = WordListStateNotifierFamily();
+/// See also [WordListStateByInitialNotifier].
+@ProviderFor(WordListStateByInitialNotifier)
+const wordListStateByInitialNotifierProvider =
+    WordListStateByInitialNotifierFamily();
 
-/// See also [WordListStateNotifier].
-class WordListStateNotifierFamily extends Family<AsyncValue<WordListState>> {
-  /// See also [WordListStateNotifier].
-  const WordListStateNotifierFamily();
+/// See also [WordListStateByInitialNotifier].
+class WordListStateByInitialNotifierFamily
+    extends Family<AsyncValue<WordListState>> {
+  /// See also [WordListStateByInitialNotifier].
+  const WordListStateByInitialNotifierFamily();
 
-  /// See also [WordListStateNotifier].
-  WordListStateNotifierProvider call(
+  /// See also [WordListStateByInitialNotifier].
+  WordListStateByInitialNotifierProvider call(
     String initial,
   ) {
-    return WordListStateNotifierProvider(
+    return WordListStateByInitialNotifierProvider(
       initial,
     );
   }
 
   @override
-  WordListStateNotifierProvider getProviderOverride(
-    covariant WordListStateNotifierProvider provider,
+  WordListStateByInitialNotifierProvider getProviderOverride(
+    covariant WordListStateByInitialNotifierProvider provider,
   ) {
     return call(
       provider.initial,
@@ -78,31 +80,31 @@ class WordListStateNotifierFamily extends Family<AsyncValue<WordListState>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'wordListStateNotifierProvider';
+  String? get name => r'wordListStateByInitialNotifierProvider';
 }
 
-/// See also [WordListStateNotifier].
-class WordListStateNotifierProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<WordListStateNotifier,
+/// See also [WordListStateByInitialNotifier].
+class WordListStateByInitialNotifierProvider
+    extends AutoDisposeAsyncNotifierProviderImpl<WordListStateByInitialNotifier,
         WordListState> {
-  /// See also [WordListStateNotifier].
-  WordListStateNotifierProvider(
+  /// See also [WordListStateByInitialNotifier].
+  WordListStateByInitialNotifierProvider(
     String initial,
   ) : this._internal(
-          () => WordListStateNotifier()..initial = initial,
-          from: wordListStateNotifierProvider,
-          name: r'wordListStateNotifierProvider',
+          () => WordListStateByInitialNotifier()..initial = initial,
+          from: wordListStateByInitialNotifierProvider,
+          name: r'wordListStateByInitialNotifierProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$wordListStateNotifierHash,
-          dependencies: WordListStateNotifierFamily._dependencies,
+                  : _$wordListStateByInitialNotifierHash,
+          dependencies: WordListStateByInitialNotifierFamily._dependencies,
           allTransitiveDependencies:
-              WordListStateNotifierFamily._allTransitiveDependencies,
+              WordListStateByInitialNotifierFamily._allTransitiveDependencies,
           initial: initial,
         );
 
-  WordListStateNotifierProvider._internal(
+  WordListStateByInitialNotifierProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -116,7 +118,7 @@ class WordListStateNotifierProvider
 
   @override
   FutureOr<WordListState> runNotifierBuild(
-    covariant WordListStateNotifier notifier,
+    covariant WordListStateByInitialNotifier notifier,
   ) {
     return notifier.build(
       initial,
@@ -124,10 +126,10 @@ class WordListStateNotifierProvider
   }
 
   @override
-  Override overrideWith(WordListStateNotifier Function() create) {
+  Override overrideWith(WordListStateByInitialNotifier Function() create) {
     return ProviderOverride(
       origin: this,
-      override: WordListStateNotifierProvider._internal(
+      override: WordListStateByInitialNotifierProvider._internal(
         () => create()..initial = initial,
         from: from,
         name: null,
@@ -140,14 +142,15 @@ class WordListStateNotifierProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<WordListStateNotifier, WordListState>
-      createElement() {
-    return _WordListStateNotifierProviderElement(this);
+  AutoDisposeAsyncNotifierProviderElement<WordListStateByInitialNotifier,
+      WordListState> createElement() {
+    return _WordListStateByInitialNotifierProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is WordListStateNotifierProvider && other.initial == initial;
+    return other is WordListStateByInitialNotifierProvider &&
+        other.initial == initial;
   }
 
   @override
@@ -159,19 +162,21 @@ class WordListStateNotifierProvider
   }
 }
 
-mixin WordListStateNotifierRef
+mixin WordListStateByInitialNotifierRef
     on AutoDisposeAsyncNotifierProviderRef<WordListState> {
   /// The parameter `initial` of this provider.
   String get initial;
 }
 
-class _WordListStateNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<WordListStateNotifier,
-        WordListState> with WordListStateNotifierRef {
-  _WordListStateNotifierProviderElement(super.provider);
+class _WordListStateByInitialNotifierProviderElement
+    extends AutoDisposeAsyncNotifierProviderElement<
+        WordListStateByInitialNotifier,
+        WordListState> with WordListStateByInitialNotifierRef {
+  _WordListStateByInitialNotifierProviderElement(super.provider);
 
   @override
-  String get initial => (origin as WordListStateNotifierProvider).initial;
+  String get initial =>
+      (origin as WordListStateByInitialNotifierProvider).initial;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

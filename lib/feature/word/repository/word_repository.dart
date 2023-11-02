@@ -3,7 +3,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/config_constant.dart';
-import '../../../util/logger.dart';
 import '../domain/word.dart';
 import '../domain/word_list_state.dart';
 import 'entity/word_document.dart';
@@ -27,35 +26,45 @@ class WordRepository {
     return WordDocument.fromFirestore(snapshot);
   }
 
-  Future<WordListState> fetchWordListStateFirst(
+  /// [documentSnapshot]に指定したdocumentよりも後のdocumentを取得する
+  ///
+  /// [documentSnapshot]がnullの場合、最初のdocumentから取得する
+  Future<WordListState> fetchWordListStateByInitial(
     String initial,
     String currentUserId,
     List<String> mutedUserIdList,
+    QueryDocumentSnapshot? documentSnapshot,
   ) async {
     return _fetchWordListState(
-      initial,
+      (doc, limit) => _fetchWordDocSnapshotByInitial(initial, doc, limit),
       currentUserId,
       mutedUserIdList,
-      null,
+      documentSnapshot,
     );
   }
 
-  Future<WordListState> fetchWordListStateMore(
-    String initial,
+  /// [documentSnapshot]に指定したdocumentよりも後のdocumentを取得する
+  ///
+  /// [documentSnapshot]がnullの場合、最初のdocumentから取得する
+  Future<WordListState> fetchWordListStateBySearchWord(
+    String searchWord,
     String currentUserId,
     List<String> mutedUserIdList,
-    QueryDocumentSnapshot lastDocument,
+    QueryDocumentSnapshot? documentSnapshot,
   ) async {
     return _fetchWordListState(
-      initial,
+      (doc, limit) => _fetchWordDocSnapshotBySearchWord(searchWord, doc, limit),
       currentUserId,
       mutedUserIdList,
-      lastDocument,
+      documentSnapshot,
     );
   }
 
+  /// 条件に合うWordのを[fetchLimitForWordList]に達するまで取得し、
+  /// [WordListState]として返す
   Future<WordListState> _fetchWordListState(
-    String initial,
+    Future<QuerySnapshot> Function(QueryDocumentSnapshot?, int)
+        fetchWordDocSnapshot,
     String currentUserId,
     List<String> mutedUserIdList,
     QueryDocumentSnapshot? documentSnapshot,
@@ -63,25 +72,23 @@ class WordRepository {
     final wordList = <Word>[];
     var hasMore = true;
     var lastDocument = documentSnapshot;
+    var fetchLimit = fetchLimitForWordList;
 
-    while (hasMore) {
-      final snapshot = await _fetchWordDocSnapshot(initial, lastDocument);
+    // 条件に合うWordの取得数の合計が[fetchLimitForWordList]に達するまでループする
+    while (fetchLimit > 0) {
+      final snapshot = await fetchWordDocSnapshot(lastDocument, fetchLimit);
+
       final newWordList = await _generateWordList(
         snapshot,
         currentUserId,
         mutedUserIdList,
       );
-
       wordList.addAll(newWordList);
+      fetchLimit -= newWordList.length;
 
-      // これ以上取得できるWordDocがない場合
-      if (snapshot.docs.length < fetchLimitForWordList) {
-        hasMore = false;
-        break;
-      }
-
-      // これ以上取得できる、条件に合うWordDocがない場合
-      if (newWordList.isEmpty) {
+      // これ以上取得できるWordDocがない場合、
+      // [lastDocument]を更新せずにループを抜ける
+      if (snapshot.docs.length < fetchLimit) {
         hasMore = false;
         break;
       }
@@ -96,15 +103,32 @@ class WordRepository {
     );
   }
 
-  Future<QuerySnapshot> _fetchWordDocSnapshot(
+  Future<QuerySnapshot> _fetchWordDocSnapshotByInitial(
     String initial,
     DocumentSnapshot? lastDocument,
+    int fetchLimit,
   ) {
     var query = firestore
         .collection('Words')
         .where('initialLetter', isEqualTo: initial)
         .orderBy('reading')
-        .limit(fetchLimitForWordList);
+        .limit(fetchLimit);
+
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument);
+    }
+
+    return query.get();
+  }
+
+  Future<QuerySnapshot> _fetchWordDocSnapshotBySearchWord(
+    String searchWord,
+    DocumentSnapshot? lastDocument,
+    int fetchLimit,
+  ) {
+    var query = firestore.collection('Words').orderBy('word').startAt(
+      [searchWord],
+    ).endAt(['$searchWord\uf8ff']).limit(fetchLimit);
 
     if (lastDocument != null) {
       query = query.startAfterDocument(lastDocument);
@@ -132,8 +156,6 @@ class WordRepository {
         currentUserId,
         mutedUserIdList,
       );
-
-      logger.d('postedDefinitionCount: $postedDefinitionCount');
 
       // 条件に合う定義が投稿されていない場合、Wordを追加しない
       if (postedDefinitionCount == 0) {

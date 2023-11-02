@@ -424,7 +424,7 @@ class MockWordRepository extends _i1.Mock implements _i11.WordRepository {
       ) as _i9.Future<_i6.WordDocument>);
 
   @override
-  _i9.Future<_i7.WordListState> fetchWordListStateFirst(
+  _i9.Future<_i7.WordListState> fetchWordListStateByInitialFirst(
     String? initial,
     String? currentUserId,
     List<String>? mutedUserIdList,
@@ -464,7 +464,7 @@ class MockWordRepository extends _i1.Mock implements _i11.WordRepository {
       ) as _i9.Future<_i7.WordListState>);
 
   @override
-  _i9.Future<_i7.WordListState> fetchWordListStateMore(
+  _i9.Future<_i7.WordListState> fetchWordListStateByInitialMore(
     String? initial,
     String? currentUserId,
     List<String>? mutedUserIdList,
@@ -502,6 +502,50 @@ class MockWordRepository extends _i1.Mock implements _i11.WordRepository {
               currentUserId,
               mutedUserIdList,
               lastDocument,
+            ],
+          ),
+        )),
+      ) as _i9.Future<_i7.WordListState>);
+
+  @override
+  _i9.Future<_i7.WordListState> fetchWordListStateBySearchWord(
+    String? searchWord,
+    String? currentUserId,
+    List<String>? mutedUserIdList,
+    _i2.QueryDocumentSnapshot<Object?>? documentSnapshot,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #searchWordListFirst,
+          [
+            searchWord,
+            currentUserId,
+            mutedUserIdList,
+            documentSnapshot,
+          ],
+        ),
+        returnValue: _i9.Future<_i7.WordListState>.value(_FakeWordListState_5(
+          this,
+          Invocation.method(
+            #searchWordListFirst,
+            [
+              searchWord,
+              currentUserId,
+              mutedUserIdList,
+              documentSnapshot,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i9.Future<_i7.WordListState>.value(_FakeWordListState_5(
+          this,
+          Invocation.method(
+            #searchWordListFirst,
+            [
+              searchWord,
+              currentUserId,
+              mutedUserIdList,
+              documentSnapshot,
             ],
           ),
         )),

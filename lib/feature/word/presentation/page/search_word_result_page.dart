@@ -7,18 +7,17 @@ import '../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/common_widget/cupertino_refresh_indicator.dart';
 import '../../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
 import '../../../../../util/logger.dart';
-import '../../../application/word_list_state_by_initial.dart';
-import '../../../util/initial_main_group.dart';
-import '../component/word_tile.dart';
+import '../../application/word_list_state_by_search_word.dart';
+import 'component/word_tile.dart';
 
 @RoutePage()
-class WordListPage extends ConsumerWidget {
-  WordListPage({
+class SearchWordResultPage extends ConsumerWidget {
+  SearchWordResultPage({
     super.key,
-    required this.selectedInitialSubGroup,
+    required this.searchWord,
   });
 
-  final InitialSubGroup selectedInitialSubGroup;
+  final String searchWord;
   final scrollController = ScrollController();
   // エラーが発生してリビルドした際、スクロール位置を保持するためのキー
   final globalKey = GlobalKey();
@@ -26,12 +25,12 @@ class WordListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncWordListState = ref.watch(
-      wordListStateByInitialNotifierProvider(selectedInitialSubGroup.label),
+      wordListStateBySearchWordNotifierProvider(searchWord),
     );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(selectedInitialSubGroup.label),
+        title: const Text('検索結果'),
         leading: const BackIconButton(),
       ),
       body: asyncWordListState.when(
@@ -44,8 +43,8 @@ class WordListPage extends ConsumerWidget {
               if (notification.metrics.extentAfter == 0) {
                 ref
                     .read(
-                      wordListStateByInitialNotifierProvider(
-                        selectedInitialSubGroup.label,
+                      wordListStateBySearchWordNotifierProvider(
+                        searchWord,
                       ).notifier,
                     )
                     .fetchMore();
@@ -62,8 +61,8 @@ class WordListPage extends ConsumerWidget {
                     builder: buildCustomRefreshIndicator,
                     onRefresh: () async {
                       ref.invalidate(
-                        wordListStateByInitialNotifierProvider(
-                          selectedInitialSubGroup.label,
+                        wordListStateBySearchWordNotifierProvider(
+                          searchWord,
                         ),
                       );
                     },

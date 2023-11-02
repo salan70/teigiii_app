@@ -105,6 +105,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const ProfileRouterPage(),
       );
     },
+    SearchWordResultRoute.name: (routeData) {
+      final args = routeData.argsAs<SearchWordResultRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SearchWordResultPage(
+          key: args.key,
+          searchWord: args.searchWord,
+        ),
+      );
+    },
     SettingRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -403,6 +413,44 @@ class ProfileRouterRoute extends PageRouteInfo<void> {
   static const String name = 'ProfileRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SearchWordResultPage]
+class SearchWordResultRoute extends PageRouteInfo<SearchWordResultRouteArgs> {
+  SearchWordResultRoute({
+    Key? key,
+    required String searchWord,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SearchWordResultRoute.name,
+          args: SearchWordResultRouteArgs(
+            key: key,
+            searchWord: searchWord,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SearchWordResultRoute';
+
+  static const PageInfo<SearchWordResultRouteArgs> page =
+      PageInfo<SearchWordResultRouteArgs>(name);
+}
+
+class SearchWordResultRouteArgs {
+  const SearchWordResultRouteArgs({
+    this.key,
+    required this.searchWord,
+  });
+
+  final Key? key;
+
+  final String searchWord;
+
+  @override
+  String toString() {
+    return 'SearchWordResultRouteArgs{key: $key, searchWord: $searchWord}';
+  }
 }
 
 /// generated route for

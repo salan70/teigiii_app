@@ -6,21 +6,27 @@ import '../../user_config/application/user_config_state.dart';
 import '../domain/word_list_state.dart';
 import '../repository/word_repository.dart';
 
-part 'word_list_state.g.dart';
+part 'word_list_state_by_search_word.g.dart';
 
 @riverpod
-class WordListStateNotifier extends _$WordListStateNotifier
+class WordListStateBySearchWordNotifier
+    extends _$WordListStateBySearchWordNotifier
     with FetchMoreMixin<WordListState> {
   @override
   FutureOr<WordListState> build(
-    String initial,
+    String searchWord,
   ) async {
     final currentUserId = ref.read(userIdProvider)!;
     final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
-    
+
     return await ref
         .read(wordRepositoryProvider)
-        .fetchWordListStateFirst(initial, currentUserId, mutedUserIdList);
+        .fetchWordListStateBySearchWord(
+          searchWord,
+          currentUserId,
+          mutedUserIdList,
+          null,
+        );
   }
 
   Future<void> fetchMore() async {
@@ -30,11 +36,11 @@ class WordListStateNotifier extends _$WordListStateNotifier
         final currentUserId = ref.read(userIdProvider)!;
         final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
 
-        return ref.read(wordRepositoryProvider).fetchWordListStateMore(
-              initial,
+        return ref.read(wordRepositoryProvider).fetchWordListStateBySearchWord(
+              searchWord,
               currentUserId,
               mutedUserIdList,
-              state.value!.lastReadQueryDocumentSnapshot!,
+              state.value!.lastReadQueryDocumentSnapshot,
             );
       },
       mergeFunction: (currentData, newData) => WordListState(
