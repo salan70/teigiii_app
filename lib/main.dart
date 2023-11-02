@@ -86,6 +86,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           backgroundColor: lightColorScheme.surface,
           elevation: 0.1,
           titleTextStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
+                fontFamily: 'LINESeedJP',
                 color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
