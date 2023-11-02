@@ -13,10 +13,7 @@ class PostDefinitionPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: InkWell(
-          onTap: () {},
-          child: const SelectPostTypeButton(),
-        ),
+        title: const SelectPostTypeButton(),
         actions: [
           Center(
             child: Text(
