@@ -9,21 +9,28 @@ import '../../../../../core/router/app_router.dart';
 class WordSearchTextField extends ConsumerWidget {
   const WordSearchTextField({
     super.key,
+    this.defaultText,
   });
+
+  final String? defaultText;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = TextEditingController();
+    final controller = TextEditingController(
+      text: defaultText,
+    );
 
     return TextField(
       controller: controller,
       textInputAction: TextInputAction.search,
       onChanged: ref.read(enteredTextNotifierProvider.notifier).updateText,
       onSubmitted: (value) {
+        if (value.isEmpty) {
+          return;
+        }
+        controller.text = defaultText ?? '';
         context.pushRoute(
-          SearchWordResultRoute(
-            searchWord: value,
-          ),
+          SearchWordResultRoute(searchWord: value),
         );
       },
       decoration: InputDecoration(
