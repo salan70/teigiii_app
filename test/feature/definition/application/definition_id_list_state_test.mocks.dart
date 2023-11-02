@@ -827,28 +827,31 @@ class MockWordRepository extends _i1.Mock implements _i16.WordRepository {
       ) as _i12.Future<_i9.WordDocument>);
 
   @override
-  _i12.Future<_i10.WordListState> fetchWordListStateByInitialFirst(
+  _i12.Future<_i10.WordListState> fetchWordListStateByInitial(
     String? initial,
     String? currentUserId,
     List<String>? mutedUserIdList,
+    _i2.QueryDocumentSnapshot<Object?>? documentSnapshot,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchWordListStateFirst,
+          #fetchWordListStateByInitial,
           [
             initial,
             currentUserId,
             mutedUserIdList,
+            documentSnapshot,
           ],
         ),
         returnValue: _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
           this,
           Invocation.method(
-            #fetchWordListStateFirst,
+            #fetchWordListStateByInitial,
             [
               initial,
               currentUserId,
               mutedUserIdList,
+              documentSnapshot,
             ],
           ),
         )),
@@ -856,55 +859,12 @@ class MockWordRepository extends _i1.Mock implements _i16.WordRepository {
             _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
           this,
           Invocation.method(
-            #fetchWordListStateFirst,
+            #fetchWordListStateByInitial,
             [
               initial,
               currentUserId,
               mutedUserIdList,
-            ],
-          ),
-        )),
-      ) as _i12.Future<_i10.WordListState>);
-
-  @override
-  _i12.Future<_i10.WordListState> fetchWordListStateByInitialMore(
-    String? initial,
-    String? currentUserId,
-    List<String>? mutedUserIdList,
-    _i2.QueryDocumentSnapshot<Object?>? lastDocument,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchWordListStateMore,
-          [
-            initial,
-            currentUserId,
-            mutedUserIdList,
-            lastDocument,
-          ],
-        ),
-        returnValue: _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
-          this,
-          Invocation.method(
-            #fetchWordListStateMore,
-            [
-              initial,
-              currentUserId,
-              mutedUserIdList,
-              lastDocument,
-            ],
-          ),
-        )),
-        returnValueForMissingStub:
-            _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
-          this,
-          Invocation.method(
-            #fetchWordListStateMore,
-            [
-              initial,
-              currentUserId,
-              mutedUserIdList,
-              lastDocument,
+              documentSnapshot,
             ],
           ),
         )),
@@ -919,7 +879,7 @@ class MockWordRepository extends _i1.Mock implements _i16.WordRepository {
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #searchWordListFirst,
+          #fetchWordListStateBySearchWord,
           [
             searchWord,
             currentUserId,
@@ -930,7 +890,7 @@ class MockWordRepository extends _i1.Mock implements _i16.WordRepository {
         returnValue: _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
           this,
           Invocation.method(
-            #searchWordListFirst,
+            #fetchWordListStateBySearchWord,
             [
               searchWord,
               currentUserId,
@@ -943,7 +903,7 @@ class MockWordRepository extends _i1.Mock implements _i16.WordRepository {
             _i12.Future<_i10.WordListState>.value(_FakeWordListState_8(
           this,
           Invocation.method(
-            #searchWordListFirst,
+            #fetchWordListStateBySearchWord,
             [
               searchWord,
               currentUserId,

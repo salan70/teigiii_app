@@ -42,14 +42,18 @@
   - Riverpodで状態を管理する
 - serviceクラスを格納する
   - presentationとrepositoryの橋渡しや、ビジネスロジックの実装を担う
-- 原則UnitTest書く
+- ~~原則UnitTest書く~~
+- 作成が容易そう、もしくは重要度の高い関数について、UnitTestを書く
+  - 理想は原則UnitTestを書くことだが、ユーザーが増えるまではこの方針で進める
 
 ### feature/domain
 
 - アプリ全体で使用するようなEntityを格納する
   - Entityと強く結びつくロジックも格納する
 - Freezedでイミュータブルにする
-- 原則UnitTest書く
+- ~~原則UnitTest書く~~
+- 作成が容易そう、もしくは重要度の高い関数について、UnitTestを書く
+  - 理想は原則UnitTestを書くことだが、ユーザーが増えるまではこの方針で進める
 
 ### feature/repository
 - 外部と直接通信するようなクラスを格納する
@@ -166,7 +170,7 @@ repository --> firebase
 
 Service系はクラス名に対応させる。  
 
-関数ベースのProviderは、「〇〇_provider(s).dart」というファイルに、いい感じにまとめる。
+関数ベースのProviderは、「〇〇_provider(s).dart」もしくは「〇〇_state」というファイルに、よしなにまとめる。
 
 ### domain
 
