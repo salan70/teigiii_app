@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../base_page.dart';
 import '../../feature/definition/presentation/page/definition_detail/definition_detail_page.dart';
 import '../../feature/definition/presentation/page/home/home_page.dart';
+import '../../feature/definition/presentation/page/post_definition/post_definition_page.dart';
 import '../../feature/setting/presentation/license_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
 import '../../feature/user_profile/presentation/page/following_and_follower_list_page/following_and_follower_list_page.dart';
@@ -105,6 +106,11 @@ class AppRouter extends _$AppRouter {
               page: MyLicenseRoute.page,
             ),
           ],
+        ),
+        AutoRoute(
+          path: '/post_definition',
+          page: PostDefinitionRoute.page,
+          fullscreenDialog: true,
         ),
       ];
 }

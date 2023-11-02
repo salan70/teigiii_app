@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../util/definition_feed_type.dart';
 import '../../component/definition_list.dart';
@@ -50,6 +51,7 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
+        floatingActionButton: const PostDefinitionFAB(),
       ),
     );
   }
