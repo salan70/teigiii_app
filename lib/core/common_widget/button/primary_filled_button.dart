@@ -19,7 +19,6 @@ class PrimaryFilledButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(48),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       onPressed: onPressed,
       child: Padding(
@@ -29,7 +28,7 @@ class PrimaryFilledButton extends StatelessWidget {
         child: Text(
           text,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).colorScheme.surface,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
         ),
       ),

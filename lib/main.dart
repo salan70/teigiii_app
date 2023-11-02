@@ -44,6 +44,8 @@ Future<void> main() async {
   // await addUserFollowCountsToFirestore(flavorName);
   // await addUserFollowsToFirestore2(flavorName);
   // await addUserFollowsToFirestore3(flavorName);
+  // await addWordsDummy0to29(flavorName);
+  // await addWordsDummy30to59(flavorName);
 
   runApp(
     ProviderScope(
@@ -84,6 +86,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           backgroundColor: lightColorScheme.surface,
           elevation: 0.1,
           titleTextStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
+                fontFamily: 'LINESeedJP',
                 color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'word_document.dart';
+part of 'word.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,40 +15,34 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$WordDocument {
+mixin _$Word {
   String get id => throw _privateConstructorUsedError;
   String get word => throw _privateConstructorUsedError;
   String get reading => throw _privateConstructorUsedError;
   String get initialLetter => throw _privateConstructorUsedError;
-  int get publicDefinitionCount => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
+  int get postedDefinitionCount => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $WordDocumentCopyWith<WordDocument> get copyWith =>
-      throw _privateConstructorUsedError;
+  $WordCopyWith<Word> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $WordDocumentCopyWith<$Res> {
-  factory $WordDocumentCopyWith(
-          WordDocument value, $Res Function(WordDocument) then) =
-      _$WordDocumentCopyWithImpl<$Res, WordDocument>;
+abstract class $WordCopyWith<$Res> {
+  factory $WordCopyWith(Word value, $Res Function(Word) then) =
+      _$WordCopyWithImpl<$Res, Word>;
   @useResult
   $Res call(
       {String id,
       String word,
       String reading,
       String initialLetter,
-      int publicDefinitionCount,
-      DateTime createdAt,
-      DateTime updatedAt});
+      int postedDefinitionCount});
 }
 
 /// @nodoc
-class _$WordDocumentCopyWithImpl<$Res, $Val extends WordDocument>
-    implements $WordDocumentCopyWith<$Res> {
-  _$WordDocumentCopyWithImpl(this._value, this._then);
+class _$WordCopyWithImpl<$Res, $Val extends Word>
+    implements $WordCopyWith<$Res> {
+  _$WordCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -62,9 +56,7 @@ class _$WordDocumentCopyWithImpl<$Res, $Val extends WordDocument>
     Object? word = null,
     Object? reading = null,
     Object? initialLetter = null,
-    Object? publicDefinitionCount = null,
-    Object? createdAt = null,
-    Object? updatedAt = null,
+    Object? postedDefinitionCount = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -83,28 +75,18 @@ class _$WordDocumentCopyWithImpl<$Res, $Val extends WordDocument>
           ? _value.initialLetter
           : initialLetter // ignore: cast_nullable_to_non_nullable
               as String,
-      publicDefinitionCount: null == publicDefinitionCount
-          ? _value.publicDefinitionCount
-          : publicDefinitionCount // ignore: cast_nullable_to_non_nullable
+      postedDefinitionCount: null == postedDefinitionCount
+          ? _value.postedDefinitionCount
+          : postedDefinitionCount // ignore: cast_nullable_to_non_nullable
               as int,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$_WordDocumentCopyWith<$Res>
-    implements $WordDocumentCopyWith<$Res> {
-  factory _$$_WordDocumentCopyWith(
-          _$_WordDocument value, $Res Function(_$_WordDocument) then) =
-      __$$_WordDocumentCopyWithImpl<$Res>;
+abstract class _$$_WordCopyWith<$Res> implements $WordCopyWith<$Res> {
+  factory _$$_WordCopyWith(_$_Word value, $Res Function(_$_Word) then) =
+      __$$_WordCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -112,17 +94,13 @@ abstract class _$$_WordDocumentCopyWith<$Res>
       String word,
       String reading,
       String initialLetter,
-      int publicDefinitionCount,
-      DateTime createdAt,
-      DateTime updatedAt});
+      int postedDefinitionCount});
 }
 
 /// @nodoc
-class __$$_WordDocumentCopyWithImpl<$Res>
-    extends _$WordDocumentCopyWithImpl<$Res, _$_WordDocument>
-    implements _$$_WordDocumentCopyWith<$Res> {
-  __$$_WordDocumentCopyWithImpl(
-      _$_WordDocument _value, $Res Function(_$_WordDocument) _then)
+class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res, _$_Word>
+    implements _$$_WordCopyWith<$Res> {
+  __$$_WordCopyWithImpl(_$_Word _value, $Res Function(_$_Word) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -132,11 +110,9 @@ class __$$_WordDocumentCopyWithImpl<$Res>
     Object? word = null,
     Object? reading = null,
     Object? initialLetter = null,
-    Object? publicDefinitionCount = null,
-    Object? createdAt = null,
-    Object? updatedAt = null,
+    Object? postedDefinitionCount = null,
   }) {
-    return _then(_$_WordDocument(
+    return _then(_$_Word(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -153,33 +129,23 @@ class __$$_WordDocumentCopyWithImpl<$Res>
           ? _value.initialLetter
           : initialLetter // ignore: cast_nullable_to_non_nullable
               as String,
-      publicDefinitionCount: null == publicDefinitionCount
-          ? _value.publicDefinitionCount
-          : publicDefinitionCount // ignore: cast_nullable_to_non_nullable
+      postedDefinitionCount: null == postedDefinitionCount
+          ? _value.postedDefinitionCount
+          : postedDefinitionCount // ignore: cast_nullable_to_non_nullable
               as int,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_WordDocument implements _WordDocument {
-  const _$_WordDocument(
+class _$_Word implements _Word {
+  const _$_Word(
       {required this.id,
       required this.word,
       required this.reading,
       required this.initialLetter,
-      required this.publicDefinitionCount,
-      required this.createdAt,
-      required this.updatedAt});
+      required this.postedDefinitionCount});
 
   @override
   final String id;
@@ -190,55 +156,45 @@ class _$_WordDocument implements _WordDocument {
   @override
   final String initialLetter;
   @override
-  final int publicDefinitionCount;
-  @override
-  final DateTime createdAt;
-  @override
-  final DateTime updatedAt;
+  final int postedDefinitionCount;
 
   @override
   String toString() {
-    return 'WordDocument(id: $id, word: $word, reading: $reading, initialLetter: $initialLetter, publicDefinitionCount: $publicDefinitionCount, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Word(id: $id, word: $word, reading: $reading, initialLetter: $initialLetter, postedDefinitionCount: $postedDefinitionCount)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_WordDocument &&
+            other is _$_Word &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.word, word) || other.word == word) &&
             (identical(other.reading, reading) || other.reading == reading) &&
             (identical(other.initialLetter, initialLetter) ||
                 other.initialLetter == initialLetter) &&
-            (identical(other.publicDefinitionCount, publicDefinitionCount) ||
-                other.publicDefinitionCount == publicDefinitionCount) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+            (identical(other.postedDefinitionCount, postedDefinitionCount) ||
+                other.postedDefinitionCount == postedDefinitionCount));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, word, reading, initialLetter,
-      publicDefinitionCount, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+      runtimeType, id, word, reading, initialLetter, postedDefinitionCount);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_WordDocumentCopyWith<_$_WordDocument> get copyWith =>
-      __$$_WordDocumentCopyWithImpl<_$_WordDocument>(this, _$identity);
+  _$$_WordCopyWith<_$_Word> get copyWith =>
+      __$$_WordCopyWithImpl<_$_Word>(this, _$identity);
 }
 
-abstract class _WordDocument implements WordDocument {
-  const factory _WordDocument(
+abstract class _Word implements Word {
+  const factory _Word(
       {required final String id,
       required final String word,
       required final String reading,
       required final String initialLetter,
-      required final int publicDefinitionCount,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_WordDocument;
+      required final int postedDefinitionCount}) = _$_Word;
 
   @override
   String get id;
@@ -249,13 +205,8 @@ abstract class _WordDocument implements WordDocument {
   @override
   String get initialLetter;
   @override
-  int get publicDefinitionCount;
-  @override
-  DateTime get createdAt;
-  @override
-  DateTime get updatedAt;
+  int get postedDefinitionCount;
   @override
   @JsonKey(ignore: true)
-  _$$_WordDocumentCopyWith<_$_WordDocument> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$_WordCopyWith<_$_Word> get copyWith => throw _privateConstructorUsedError;
 }

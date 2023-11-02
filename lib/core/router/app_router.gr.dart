@@ -60,10 +60,26 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const HomeRouterPage(),
       );
     },
-    IndexRoute.name: (routeData) {
+    IndexSecondRoute.name: (routeData) {
+      final args = routeData.argsAs<IndexSecondRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const IndexPage(),
+        child: IndexSecondPage(
+          key: args.key,
+          selectedInitialMainGroup: args.selectedInitialMainGroup,
+        ),
+      );
+    },
+    IndexTopRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const IndexTopPage(),
+      );
+    },
+    IndexTopRouterRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const IndexTopRouterPage(),
       );
     },
     MyLicenseRoute.name: (routeData) {
@@ -89,6 +105,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const ProfileRouterPage(),
       );
     },
+    SearchWordResultRoute.name: (routeData) {
+      final args = routeData.argsAs<SearchWordResultRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SearchWordResultPage(
+          key: args.key,
+          searchWord: args.searchWord,
+        ),
+      );
+    },
     SettingRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -99,6 +125,16 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const SettingRouterPage(),
+      );
+    },
+    WordListRoute.name: (routeData) {
+      final args = routeData.argsAs<WordListRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WordListPage(
+          key: args.key,
+          selectedInitialSubGroup: args.selectedInitialSubGroup,
+        ),
       );
     },
   };
@@ -243,15 +279,67 @@ class HomeRouterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [IndexPage]
-class IndexRoute extends PageRouteInfo<void> {
-  const IndexRoute({List<PageRouteInfo>? children})
-      : super(
-          IndexRoute.name,
+/// [IndexSecondPage]
+class IndexSecondRoute extends PageRouteInfo<IndexSecondRouteArgs> {
+  IndexSecondRoute({
+    Key? key,
+    required InitialMainGroup selectedInitialMainGroup,
+    List<PageRouteInfo>? children,
+  }) : super(
+          IndexSecondRoute.name,
+          args: IndexSecondRouteArgs(
+            key: key,
+            selectedInitialMainGroup: selectedInitialMainGroup,
+          ),
           initialChildren: children,
         );
 
-  static const String name = 'IndexRoute';
+  static const String name = 'IndexSecondRoute';
+
+  static const PageInfo<IndexSecondRouteArgs> page =
+      PageInfo<IndexSecondRouteArgs>(name);
+}
+
+class IndexSecondRouteArgs {
+  const IndexSecondRouteArgs({
+    this.key,
+    required this.selectedInitialMainGroup,
+  });
+
+  final Key? key;
+
+  final InitialMainGroup selectedInitialMainGroup;
+
+  @override
+  String toString() {
+    return 'IndexSecondRouteArgs{key: $key, selectedInitialMainGroup: $selectedInitialMainGroup}';
+  }
+}
+
+/// generated route for
+/// [IndexTopPage]
+class IndexTopRoute extends PageRouteInfo<void> {
+  const IndexTopRoute({List<PageRouteInfo>? children})
+      : super(
+          IndexTopRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'IndexTopRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [IndexTopRouterPage]
+class IndexTopRouterRoute extends PageRouteInfo<void> {
+  const IndexTopRouterRoute({List<PageRouteInfo>? children})
+      : super(
+          IndexTopRouterRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'IndexTopRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -328,6 +416,44 @@ class ProfileRouterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [SearchWordResultPage]
+class SearchWordResultRoute extends PageRouteInfo<SearchWordResultRouteArgs> {
+  SearchWordResultRoute({
+    Key? key,
+    required String searchWord,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SearchWordResultRoute.name,
+          args: SearchWordResultRouteArgs(
+            key: key,
+            searchWord: searchWord,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SearchWordResultRoute';
+
+  static const PageInfo<SearchWordResultRouteArgs> page =
+      PageInfo<SearchWordResultRouteArgs>(name);
+}
+
+class SearchWordResultRouteArgs {
+  const SearchWordResultRouteArgs({
+    this.key,
+    required this.searchWord,
+  });
+
+  final Key? key;
+
+  final String searchWord;
+
+  @override
+  String toString() {
+    return 'SearchWordResultRouteArgs{key: $key, searchWord: $searchWord}';
+  }
+}
+
+/// generated route for
 /// [SettingPage]
 class SettingRoute extends PageRouteInfo<void> {
   const SettingRoute({List<PageRouteInfo>? children})
@@ -353,4 +479,42 @@ class SettingRouterRoute extends PageRouteInfo<void> {
   static const String name = 'SettingRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [WordListPage]
+class WordListRoute extends PageRouteInfo<WordListRouteArgs> {
+  WordListRoute({
+    Key? key,
+    required InitialSubGroup selectedInitialSubGroup,
+    List<PageRouteInfo>? children,
+  }) : super(
+          WordListRoute.name,
+          args: WordListRouteArgs(
+            key: key,
+            selectedInitialSubGroup: selectedInitialSubGroup,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'WordListRoute';
+
+  static const PageInfo<WordListRouteArgs> page =
+      PageInfo<WordListRouteArgs>(name);
+}
+
+class WordListRouteArgs {
+  const WordListRouteArgs({
+    this.key,
+    required this.selectedInitialSubGroup,
+  });
+
+  final Key? key;
+
+  final InitialSubGroup selectedInitialSubGroup;
+
+  @override
+  String toString() {
+    return 'WordListRouteArgs{key: $key, selectedInitialSubGroup: $selectedInitialSubGroup}';
+  }
 }

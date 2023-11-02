@@ -1,7 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/common_provider/snack_bar_controller.dart';
-import '../../../util/logger.dart';
+import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_profile/application/user_profile_state.dart';
@@ -12,7 +11,8 @@ import '../util/definition_feed_type.dart';
 part 'definition_id_list_state.g.dart';
 
 @Riverpod(keepAlive: true)
-class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
+class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
+    with FetchMoreMixin<DefinitionIdListState> {
   @override
   FutureOr<DefinitionIdListState> build(
     DefinitionFeedType definitionFeedType,
@@ -63,49 +63,25 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier {
         .fetchHomeFollowingDefinitionIdListFirst(targetUserIdList);
   }
 
-  /// DefinitionIdのListを追加で取得し、stateを更新する
   Future<void> fetchMore() async {
-    // これ以上取得できるDefinitionIdがない場合、何もしない
-    if (!state.value!.hasMore) {
-      return;
-    }
-
-    // ローディング中の場合、何もしない
-    if (state.isLoading || state.isRefreshing) {
-      return;
-    }
-
-    // 取得済みのデータを保持しながら状態をローディング中にする
-    // これにより、asyncValue.isRefreshingがtrueになる
-    // 参考: https://www.zeroichi.biz/blog/1525/
-    state = const AsyncLoading<DefinitionIdListState>().copyWithPrevious(state);
-
-    try {
-      late final DefinitionIdListState tmpState;
-      switch (definitionFeedType) {
-        case DefinitionFeedType.homeRecommend:
-          tmpState = await _homeRecommendDefinitionIdListMore();
-          break;
-
-        case DefinitionFeedType.homeFollowing:
-          tmpState = await _fetchHomeFollowingDefinitionIdListMore();
-          break;
-      }
-
-      final nextState = DefinitionIdListState(
+    await fetchMoreHelper(
+      ref: ref,
+      fetchFunction: _fetchDefinitionIdListStateBasedOnType,
+      mergeFunction: (currentData, newData) => DefinitionIdListState(
         definitionIdList:
-            state.value!.definitionIdList + tmpState.definitionIdList,
-        lastReadQueryDocumentSnapshot: tmpState.lastReadQueryDocumentSnapshot,
-        hasMore: tmpState.hasMore,
-      );
-      state = AsyncData(nextState);
-    } on Exception catch (e, s) {
-      logger.e('$e');
-      ref
-          .read(snackBarControllerProvider.notifier)
-          .showSnackBar('読み込めませんでした。もう一度お試しください。', causeError: true);
+            currentData.definitionIdList + newData.definitionIdList,
+        lastReadQueryDocumentSnapshot: newData.lastReadQueryDocumentSnapshot,
+        hasMore: newData.hasMore,
+      ),
+    );
+  }
 
-      state = AsyncError(e, s);
+  Future<DefinitionIdListState> _fetchDefinitionIdListStateBasedOnType() async {
+    switch (definitionFeedType) {
+      case DefinitionFeedType.homeRecommend:
+        return _homeRecommendDefinitionIdListMore();
+      case DefinitionFeedType.homeFollowing:
+        return _fetchHomeFollowingDefinitionIdListMore();
     }
   }
 

@@ -21,8 +21,7 @@ class PrimaryOutlinedButton extends StatelessWidget {
         side: BorderSide(
           color: Theme.of(context).colorScheme.primary,
         ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       onPressed: onPressed,
       child: Padding(

@@ -2,17 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../util/interface/list_state.dart';
+import 'word.dart';
 
-part 'user_id_list_state.freezed.dart';
+part 'word_list_state.freezed.dart';
 
 @freezed
-class UserIdListState with _$UserIdListState implements ListState {
-  const factory UserIdListState({
-    required List<String> userIdList,
+class WordListState with _$WordListState implements ListState {
+  const factory WordListState({
+    required List<Word> wordList,
 
     /// 最後に読み取られたQueryDocumentSnapshot
-    /// これがnullの場合、1件もuserIdを取得していない（[userIdList]が空）
+    /// これがnullの場合、1件もwordを取得していない（[wordList]が空）
     required QueryDocumentSnapshot? lastReadQueryDocumentSnapshot,
     required bool hasMore,
-  }) = _UserIdListState;
+  }) = _WordListState;
 }
