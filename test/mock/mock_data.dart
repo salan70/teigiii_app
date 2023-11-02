@@ -69,7 +69,6 @@ final mockWordDoc = WordDocument(
   word: 'word',
   reading: 'reading',
   initialLetter: 'i',
-  publicDefinitionCount: 1,
   createdAt: nowDateTime,
   updatedAt: nowDateTime,
 );

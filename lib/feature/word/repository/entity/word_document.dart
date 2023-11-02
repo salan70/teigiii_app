@@ -10,7 +10,6 @@ class WordDocument with _$WordDocument {
     required String word,
     required String reading,
     required String initialLetter,
-    required int publicDefinitionCount,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _WordDocument;
@@ -22,7 +21,6 @@ class WordDocument with _$WordDocument {
       word: data['word'] as String,
       reading: data['reading'] as String,
       initialLetter: data['initialLetter'] as String,
-      publicDefinitionCount: data['publicDefinitionCount'] as int,
       createdAt: (data['createdAt'] as Timestamp).toDate(),
       updatedAt: (data['updatedAt'] as Timestamp).toDate(),
     );
