@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 ///
 /// 透明のWidgetで囲い、ダイアログ表示を模している
 class OverlayLoadingWidget extends StatelessWidget {
-  const OverlayLoadingWidget({super.key, this.processingText = '通信中...'});
-
-  final String processingText;
+  const OverlayLoadingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
