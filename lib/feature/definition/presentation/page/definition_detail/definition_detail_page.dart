@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../../../core/common_widget/button/ellipsis_icon_button.dart';
+import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../util/extension/date_time_extension.dart';
 import '../../../../user_config/application/user_config_service.dart';
 import '../../../application/definition_state.dart';
@@ -101,6 +102,7 @@ class DefinitionDetailPage extends ConsumerWidget {
               ),
             ),
           ),
+          floatingActionButton: const PostDefinitionFAB(),
         );
       },
       loading: () {

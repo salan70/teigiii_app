@@ -10,6 +10,7 @@ class PostDefinitionFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      heroTag: null,
       elevation: 3,
       onPressed: () {
         context.pushRoute(const PostDefinitionRoute());
