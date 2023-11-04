@@ -7,6 +7,7 @@ import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../../../core/common_widget/button/ellipsis_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
+import '../../../../../core/router/app_router.dart';
 import '../../../../../util/extension/date_time_extension.dart';
 import '../../../../user_config/application/user_config_service.dart';
 import '../../../application/definition_state.dart';
@@ -54,8 +55,15 @@ class DefinitionDetailPage extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        AvatarIconWidget(
-                          imageUrl: definition.authorImageUrl,
+                        InkWell(
+                          onTap: () async {
+                            await context.pushRoute(
+                              ProfileRoute(targetUserId: definition.authorId),
+                            );
+                          },
+                          child: AvatarIconWidget(
+                            imageUrl: definition.authorImageUrl,
+                          ),
                         ),
                         const SizedBox(width: 16),
                         Text(definition.authorName),
