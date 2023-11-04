@@ -34,7 +34,11 @@ class _BasePageState extends ConsumerState<BasePage> {
         return AutoTabsRouter(
           routes: [
             const HomeRouterRoute(),
-            ProfileRoute(targetUserId: currentUserId, isHome: true),
+            ProfileRouterRoute(
+              children: [
+                ProfileRoute(targetUserId: currentUserId, isHome: true),
+              ],
+            ),
             const IndexTopRouterRoute(),
           ],
           builder: (context, child) {
