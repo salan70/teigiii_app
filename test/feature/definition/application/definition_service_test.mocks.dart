@@ -233,7 +233,7 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i6.Future<_i4.DefinitionDocument>);
 
   @override
-  _i6.Future<void> createDefinition(
+  _i6.Future<void> createDefinitionAndMaybeWord(
           _i7.DefinitionForWrite? definitionForWrite) =>
       (super.noSuchMethod(
         Invocation.method(

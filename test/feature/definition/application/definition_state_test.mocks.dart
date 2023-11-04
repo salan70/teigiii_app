@@ -273,7 +273,7 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i9.Future<_i4.DefinitionDocument>);
 
   @override
-  _i9.Future<void> createDefinition(
+  _i9.Future<void> createDefinitionAndMaybeWord(
           _i10.DefinitionForWrite? definitionForWrite) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -413,25 +413,6 @@ class MockWordRepository extends _i1.Mock implements _i12.WordRepository {
           Invocation.getter(#firestore),
         ),
       ) as _i2.FirebaseFirestore);
-
-  @override
-  _i9.Future<String> createWord(
-    String? word,
-    String? wordReading,
-    String? initialLetter,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #createWord,
-          [
-            word,
-            wordReading,
-            initialLetter,
-          ],
-        ),
-        returnValue: _i9.Future<String>.value(''),
-        returnValueForMissingStub: _i9.Future<String>.value(''),
-      ) as _i9.Future<String>);
 
   @override
   _i9.Future<_i6.WordDocument> fetchWordById(String? wordId) =>

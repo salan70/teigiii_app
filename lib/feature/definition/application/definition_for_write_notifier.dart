@@ -19,7 +19,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     return DefinitionForWrite(
       id: definitionId,
       authorId: currentUserId,
-      wordId: '',
+      wordId: null,
       word: '',
       wordReading: '',
       isPublic: true,
@@ -55,13 +55,11 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
             definitionForWrite.word,
             definitionForWrite.wordReading,
           );
-      // 既存のWordドキュメントが見つからない場合、新規作成する
-      final wordId = existingWordId ?? await _createNewWord(definitionForWrite);
-      state = AsyncData(definitionForWrite.copyWith(wordId: wordId));
+      state = AsyncData(definitionForWrite.copyWith(wordId: existingWordId));
 
       await ref
           .read(definitionRepositoryProvider)
-          .createDefinition(state.value!);
+          .createDefinitionAndMaybeWord(definitionForWrite);
     } on Exception catch (e) {
       logger.e('定義投稿時にエラーが発生 error: $e');
       snackBarNotifier.showSnackBar('投稿が失敗しました。もう一度お試しください。', causeError: true);
@@ -74,15 +72,5 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
     snackBarNotifier.showSnackBar('投稿しました！', causeError: false);
-  }
-
-  Future<String> _createNewWord(DefinitionForWrite definition) async {
-    final initialLetter = definition.wordReading.substring(0, 1);
-
-    return ref.read(wordRepositoryProvider).createWord(
-          definition.word,
-          definition.wordReading,
-          initialLetter,
-        );
   }
 }

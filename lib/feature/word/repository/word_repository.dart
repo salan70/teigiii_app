@@ -19,25 +19,6 @@ class WordRepository {
 
   final FirebaseFirestore firestore;
 
-  /// Wordドキュメントを作成し、作成したドキュメントのidを返す
-  Future<String> createWord(
-    String word,
-    String wordReading,
-    String initialLetter,
-  ) async {
-    final docRef = await firestore.collection('Words').add(
-      {
-        'word': word,
-        'reading': wordReading,
-        'initialLetter': initialLetter,
-        'createdAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      },
-    );
-
-    return docRef.id;
-  }
-
   Future<WordDocument> fetchWordById(String wordId) async {
     final DocumentSnapshot snapshot =
         await firestore.collection('Words').doc(wordId).get();

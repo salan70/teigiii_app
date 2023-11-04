@@ -8,7 +8,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
   const factory DefinitionForWrite({
     required String? id,
     required String authorId,
-    required String wordId,
+    required String? wordId,
     required String word,
     required String wordReading,
     required bool isPublic,

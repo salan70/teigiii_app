@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DefinitionForWrite {
   String? get id => throw _privateConstructorUsedError;
   String get authorId => throw _privateConstructorUsedError;
-  String get wordId => throw _privateConstructorUsedError;
+  String? get wordId => throw _privateConstructorUsedError;
   String get word => throw _privateConstructorUsedError;
   String get wordReading => throw _privateConstructorUsedError;
   bool get isPublic => throw _privateConstructorUsedError;
@@ -38,7 +38,7 @@ abstract class $DefinitionForWriteCopyWith<$Res> {
   $Res call(
       {String? id,
       String authorId,
-      String wordId,
+      String? wordId,
       String word,
       String wordReading,
       bool isPublic,
@@ -60,7 +60,7 @@ class _$DefinitionForWriteCopyWithImpl<$Res, $Val extends DefinitionForWrite>
   $Res call({
     Object? id = freezed,
     Object? authorId = null,
-    Object? wordId = null,
+    Object? wordId = freezed,
     Object? word = null,
     Object? wordReading = null,
     Object? isPublic = null,
@@ -75,10 +75,10 @@ class _$DefinitionForWriteCopyWithImpl<$Res, $Val extends DefinitionForWrite>
           ? _value.authorId
           : authorId // ignore: cast_nullable_to_non_nullable
               as String,
-      wordId: null == wordId
+      wordId: freezed == wordId
           ? _value.wordId
           : wordId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       word: null == word
           ? _value.word
           : word // ignore: cast_nullable_to_non_nullable
@@ -110,7 +110,7 @@ abstract class _$$_DefinitionForWriteCopyWith<$Res>
   $Res call(
       {String? id,
       String authorId,
-      String wordId,
+      String? wordId,
       String word,
       String wordReading,
       bool isPublic,
@@ -130,7 +130,7 @@ class __$$_DefinitionForWriteCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? authorId = null,
-    Object? wordId = null,
+    Object? wordId = freezed,
     Object? word = null,
     Object? wordReading = null,
     Object? isPublic = null,
@@ -145,10 +145,10 @@ class __$$_DefinitionForWriteCopyWithImpl<$Res>
           ? _value.authorId
           : authorId // ignore: cast_nullable_to_non_nullable
               as String,
-      wordId: null == wordId
+      wordId: freezed == wordId
           ? _value.wordId
           : wordId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       word: null == word
           ? _value.word
           : word // ignore: cast_nullable_to_non_nullable
@@ -187,7 +187,7 @@ class _$_DefinitionForWrite extends _DefinitionForWrite {
   @override
   final String authorId;
   @override
-  final String wordId;
+  final String? wordId;
   @override
   final String word;
   @override
@@ -236,7 +236,7 @@ abstract class _DefinitionForWrite extends DefinitionForWrite {
   const factory _DefinitionForWrite(
       {required final String? id,
       required final String authorId,
-      required final String wordId,
+      required final String? wordId,
       required final String word,
       required final String wordReading,
       required final bool isPublic,
@@ -248,7 +248,7 @@ abstract class _DefinitionForWrite extends DefinitionForWrite {
   @override
   String get authorId;
   @override
-  String get wordId;
+  String? get wordId;
   @override
   String get word;
   @override
