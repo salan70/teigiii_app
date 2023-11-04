@@ -8,12 +8,12 @@ import '../../feature/definition/presentation/page/home/home_page.dart';
 import '../../feature/definition/presentation/page/post_definition/post_definition_page.dart';
 import '../../feature/setting/presentation/license_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
-import '../../feature/user_profile/presentation/page/following_and_follower_list_page/following_and_follower_list_page.dart';
-import '../../feature/user_profile/presentation/page/profile_page/profile_page.dart';
-import '../../feature/word/presentation/page/index_second_page/index_second_page.dart';
-import '../../feature/word/presentation/page/index_top_page/index_top_page.dart';
-import '../../feature/word/presentation/page/search_word_result_page.dart';
-import '../../feature/word/presentation/page/word_list_page/word_list_page.dart';
+import '../../feature/user_profile/presentation/page/following_and_follower_list/following_and_follower_list_page.dart';
+import '../../feature/user_profile/presentation/page/profile/profile_page.dart';
+import '../../feature/word/presentation/page/index_second/index_second_page.dart';
+import '../../feature/word/presentation/page/index_top/index_top_page.dart';
+import '../../feature/word/presentation/page/search_word_result/search_word_result_page.dart';
+import '../../feature/word/presentation/page/word_list/word_list_page.dart';
 import '../../feature/word/util/initial_main_group.dart';
 
 part 'app_router.g.dart';

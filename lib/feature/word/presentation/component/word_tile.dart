@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../domain/word.dart';
+import '../../domain/word.dart';
 
 class WordTile extends StatelessWidget {
   const WordTile({

@@ -9,7 +9,7 @@ import '../../../../../core/common_widget/infinite_scroll_bottom_indicator.dart'
 import '../../../../../util/logger.dart';
 import '../../../application/word_list_state_by_initial.dart';
 import '../../../util/initial_main_group.dart';
-import '../component/word_tile.dart';
+import '../../component/word_tile.dart';
 
 @RoutePage()
 class WordListPage extends ConsumerWidget {
