@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,6 +23,20 @@ class PostDefinitionPage extends ConsumerWidget {
         return Scaffold(
           appBar: AppBar(
             elevation: 0,
+            leading: IconButton(
+              icon: const Icon(CupertinoIcons.xmark),
+              onPressed: () async {
+                // キーボードを閉じる
+                primaryFocus?.unfocus();
+
+                if (definitionForWrite.isEmptyAllFields) {
+                  // 全フィールドが未入力の場合はダイアログを表示せず戻る
+                  await context.popRoute();
+                  return;
+                }
+                await _showCloseConfirmDialog(context);
+              },
+            ),
             title: const SelectPostTypeButton(definitionId: null),
             actions: [
               Center(
@@ -89,6 +104,7 @@ class PostDefinitionPage extends ConsumerWidget {
                       onChanged: definitionForWriteNotifier.changeDefinition,
                       style: Theme.of(context).textTheme.titleLarge,
                       decoration: const InputDecoration(
+                        // TODO(me): いいヒントテキストを考える
                         hintText: '例: ばり美味い',
                         labelText: '定義',
                         border: InputBorder.none,
@@ -118,6 +134,58 @@ class PostDefinitionPage extends ConsumerWidget {
           child: Text(error.toString()),
         ),
       ),
+    );
+  }
+
+  Future<void> _showCloseConfirmDialog(BuildContext context) async {
+    await showDialog<dynamic>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          elevation: 0,
+          contentPadding: const EdgeInsets.only(
+            top: 40,
+            bottom: 16,
+          ),
+          content: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('入力した内容は保存されません。'),
+              Text('よろしいですか？'),
+            ],
+          ),
+          actionsAlignment: MainAxisAlignment.spaceEvenly,
+          actionsPadding: const EdgeInsets.only(bottom: 16),
+          actions: [
+            InkWell(
+              onTap: () {
+                context.popRoute();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'キャンセル',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'OK',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

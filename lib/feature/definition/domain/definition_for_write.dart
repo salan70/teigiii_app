@@ -109,4 +109,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
     final offset = 'ァ'.codeUnitAt(0) - 'ぁ'.codeUnitAt(0);
     return String.fromCharCode(katakana.codeUnitAt(0) - offset);
   }
+
+  bool get isEmptyAllFields =>
+      word.isEmpty && wordReading.isEmpty && definition.isEmpty;
 }
