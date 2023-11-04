@@ -22,8 +22,7 @@ class DefinitionDocument with _$DefinitionDocument {
       id: doc.id,
       wordId: data['wordId'] as String,
       authorId: data['authorId'] as String,
-      // TODO(me): data['content']をdata['definition']に変更する
-      definition: data['content'] as String,
+      definition: data['definition'] as String,
       likesCount: data['likesCount'] as int,
       isPublic: data['isPublic'] as bool,
       createdAt: (data['createdAt'] as Timestamp).toDate(),
