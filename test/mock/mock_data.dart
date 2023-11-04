@@ -31,7 +31,7 @@ final mockDefinitionDoc = DefinitionDocument(
   id: 'definitionId',
   wordId: mockWordDoc.id,
   authorId: mockUserProfileDoc.id,
-  content: 'content',
+  definition: 'content',
   likesCount: 0,
   isPublic: true,
   createdAt: nowDateTime,
@@ -69,7 +69,6 @@ final mockWordDoc = WordDocument(
   word: 'word',
   reading: 'reading',
   initialLetter: 'i',
-  publicDefinitionCount: 1,
   createdAt: nowDateTime,
   updatedAt: nowDateTime,
 );

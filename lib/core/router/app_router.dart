@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../base_page.dart';
 import '../../feature/definition/presentation/page/definition_detail/definition_detail_page.dart';
 import '../../feature/definition/presentation/page/home/home_page.dart';
+import '../../feature/definition/presentation/page/post_definition/post_definition_page.dart';
 import '../../feature/setting/presentation/license_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
 import '../../feature/user_profile/presentation/page/following_and_follower_list_page/following_and_follower_list_page.dart';
@@ -14,7 +16,11 @@ import '../../feature/word/presentation/page/search_word_result_page.dart';
 import '../../feature/word/presentation/page/word_list_page/word_list_page.dart';
 import '../../feature/word/util/initial_main_group.dart';
 
+part 'app_router.g.dart';
 part 'app_router.gr.dart';
+
+@riverpod
+Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter();
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends _$AppRouter {
@@ -105,6 +111,11 @@ class AppRouter extends _$AppRouter {
               page: MyLicenseRoute.page,
             ),
           ],
+        ),
+        AutoRoute(
+          path: '/post_definition',
+          page: PostDefinitionRoute.page,
+          fullscreenDialog: true,
         ),
       ];
 }

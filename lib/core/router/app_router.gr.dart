@@ -88,6 +88,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const MyLicensePage(),
       );
     },
+    PostDefinitionRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const PostDefinitionPage(),
+      );
+    },
     ProfileRoute.name: (routeData) {
       final args = routeData.argsAs<ProfileRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -354,6 +360,20 @@ class MyLicenseRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'MyLicenseRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [PostDefinitionPage]
+class PostDefinitionRoute extends PageRouteInfo<void> {
+  const PostDefinitionRoute({List<PageRouteInfo>? children})
+      : super(
+          PostDefinitionRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'PostDefinitionRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

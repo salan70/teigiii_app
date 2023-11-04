@@ -46,18 +46,17 @@ Future<void> main() async {
   // await addUserFollowsToFirestore3(flavorName);
   // await addWordsDummy0to29(flavorName);
   // await addWordsDummy30to59(flavorName);
+  // await addDefinitionDummy0to29(flavorName);
 
   runApp(
-    ProviderScope(
+    const ProviderScope(
       child: MyApp(),
     ),
   );
 }
 
 class MyApp extends ConsumerStatefulWidget {
-  MyApp({super.key});
-
-  final _appRouter = AppRouter();
+  const MyApp({super.key});
 
   @override
   ConsumerState<MyApp> createState() => _MyAppState();
@@ -76,7 +75,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: widget._appRouter.config(),
+      routerConfig: ref.watch(appRouterProvider).config(),
       scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
       theme: ThemeData(
         fontFamily: 'LINESeedJP',

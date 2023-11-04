@@ -20,7 +20,6 @@ mixin _$WordDocument {
   String get word => throw _privateConstructorUsedError;
   String get reading => throw _privateConstructorUsedError;
   String get initialLetter => throw _privateConstructorUsedError;
-  int get publicDefinitionCount => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
@@ -40,7 +39,6 @@ abstract class $WordDocumentCopyWith<$Res> {
       String word,
       String reading,
       String initialLetter,
-      int publicDefinitionCount,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -62,7 +60,6 @@ class _$WordDocumentCopyWithImpl<$Res, $Val extends WordDocument>
     Object? word = null,
     Object? reading = null,
     Object? initialLetter = null,
-    Object? publicDefinitionCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -83,10 +80,6 @@ class _$WordDocumentCopyWithImpl<$Res, $Val extends WordDocument>
           ? _value.initialLetter
           : initialLetter // ignore: cast_nullable_to_non_nullable
               as String,
-      publicDefinitionCount: null == publicDefinitionCount
-          ? _value.publicDefinitionCount
-          : publicDefinitionCount // ignore: cast_nullable_to_non_nullable
-              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -112,7 +105,6 @@ abstract class _$$_WordDocumentCopyWith<$Res>
       String word,
       String reading,
       String initialLetter,
-      int publicDefinitionCount,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -132,7 +124,6 @@ class __$$_WordDocumentCopyWithImpl<$Res>
     Object? word = null,
     Object? reading = null,
     Object? initialLetter = null,
-    Object? publicDefinitionCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -153,10 +144,6 @@ class __$$_WordDocumentCopyWithImpl<$Res>
           ? _value.initialLetter
           : initialLetter // ignore: cast_nullable_to_non_nullable
               as String,
-      publicDefinitionCount: null == publicDefinitionCount
-          ? _value.publicDefinitionCount
-          : publicDefinitionCount // ignore: cast_nullable_to_non_nullable
-              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -177,7 +164,6 @@ class _$_WordDocument implements _WordDocument {
       required this.word,
       required this.reading,
       required this.initialLetter,
-      required this.publicDefinitionCount,
       required this.createdAt,
       required this.updatedAt});
 
@@ -190,15 +176,13 @@ class _$_WordDocument implements _WordDocument {
   @override
   final String initialLetter;
   @override
-  final int publicDefinitionCount;
-  @override
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'WordDocument(id: $id, word: $word, reading: $reading, initialLetter: $initialLetter, publicDefinitionCount: $publicDefinitionCount, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'WordDocument(id: $id, word: $word, reading: $reading, initialLetter: $initialLetter, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -211,8 +195,6 @@ class _$_WordDocument implements _WordDocument {
             (identical(other.reading, reading) || other.reading == reading) &&
             (identical(other.initialLetter, initialLetter) ||
                 other.initialLetter == initialLetter) &&
-            (identical(other.publicDefinitionCount, publicDefinitionCount) ||
-                other.publicDefinitionCount == publicDefinitionCount) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -220,8 +202,8 @@ class _$_WordDocument implements _WordDocument {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, word, reading, initialLetter,
-      publicDefinitionCount, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+      runtimeType, id, word, reading, initialLetter, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -236,7 +218,6 @@ abstract class _WordDocument implements WordDocument {
       required final String word,
       required final String reading,
       required final String initialLetter,
-      required final int publicDefinitionCount,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$_WordDocument;
 
@@ -248,8 +229,6 @@ abstract class _WordDocument implements WordDocument {
   String get reading;
   @override
   String get initialLetter;
-  @override
-  int get publicDefinitionCount;
   @override
   DateTime get createdAt;
   @override
