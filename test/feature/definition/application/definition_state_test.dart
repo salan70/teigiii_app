@@ -89,7 +89,7 @@ void main() {
         wordId: mockDefinitionDoc.wordId,
         authorId: mockDefinitionDoc.authorId,
         word: mockWordDoc.word,
-        definition: mockDefinitionDoc.content,
+        definition: mockDefinitionDoc.definition,
         createdAt: mockDefinitionDoc.createdAt,
         updatedAt: mockDefinitionDoc.updatedAt,
         authorName: mockUserProfileDoc.name,

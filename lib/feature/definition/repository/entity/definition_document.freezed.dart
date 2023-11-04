@@ -19,7 +19,7 @@ mixin _$DefinitionDocument {
   String get id => throw _privateConstructorUsedError;
   String get wordId => throw _privateConstructorUsedError;
   String get authorId => throw _privateConstructorUsedError;
-  String get content => throw _privateConstructorUsedError;
+  String get definition => throw _privateConstructorUsedError;
   int get likesCount => throw _privateConstructorUsedError;
   bool get isPublic => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -40,7 +40,7 @@ abstract class $DefinitionDocumentCopyWith<$Res> {
       {String id,
       String wordId,
       String authorId,
-      String content,
+      String definition,
       int likesCount,
       bool isPublic,
       DateTime createdAt,
@@ -63,7 +63,7 @@ class _$DefinitionDocumentCopyWithImpl<$Res, $Val extends DefinitionDocument>
     Object? id = null,
     Object? wordId = null,
     Object? authorId = null,
-    Object? content = null,
+    Object? definition = null,
     Object? likesCount = null,
     Object? isPublic = null,
     Object? createdAt = null,
@@ -82,9 +82,9 @@ class _$DefinitionDocumentCopyWithImpl<$Res, $Val extends DefinitionDocument>
           ? _value.authorId
           : authorId // ignore: cast_nullable_to_non_nullable
               as String,
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
+      definition: null == definition
+          ? _value.definition
+          : definition // ignore: cast_nullable_to_non_nullable
               as String,
       likesCount: null == likesCount
           ? _value.likesCount
@@ -118,7 +118,7 @@ abstract class _$$_DefinitionDocumentCopyWith<$Res>
       {String id,
       String wordId,
       String authorId,
-      String content,
+      String definition,
       int likesCount,
       bool isPublic,
       DateTime createdAt,
@@ -139,7 +139,7 @@ class __$$_DefinitionDocumentCopyWithImpl<$Res>
     Object? id = null,
     Object? wordId = null,
     Object? authorId = null,
-    Object? content = null,
+    Object? definition = null,
     Object? likesCount = null,
     Object? isPublic = null,
     Object? createdAt = null,
@@ -158,9 +158,9 @@ class __$$_DefinitionDocumentCopyWithImpl<$Res>
           ? _value.authorId
           : authorId // ignore: cast_nullable_to_non_nullable
               as String,
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
+      definition: null == definition
+          ? _value.definition
+          : definition // ignore: cast_nullable_to_non_nullable
               as String,
       likesCount: null == likesCount
           ? _value.likesCount
@@ -189,7 +189,7 @@ class _$_DefinitionDocument implements _DefinitionDocument {
       {required this.id,
       required this.wordId,
       required this.authorId,
-      required this.content,
+      required this.definition,
       required this.likesCount,
       required this.isPublic,
       required this.createdAt,
@@ -202,7 +202,7 @@ class _$_DefinitionDocument implements _DefinitionDocument {
   @override
   final String authorId;
   @override
-  final String content;
+  final String definition;
   @override
   final int likesCount;
   @override
@@ -214,7 +214,7 @@ class _$_DefinitionDocument implements _DefinitionDocument {
 
   @override
   String toString() {
-    return 'DefinitionDocument(id: $id, wordId: $wordId, authorId: $authorId, content: $content, likesCount: $likesCount, isPublic: $isPublic, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'DefinitionDocument(id: $id, wordId: $wordId, authorId: $authorId, definition: $definition, likesCount: $likesCount, isPublic: $isPublic, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -226,7 +226,8 @@ class _$_DefinitionDocument implements _DefinitionDocument {
             (identical(other.wordId, wordId) || other.wordId == wordId) &&
             (identical(other.authorId, authorId) ||
                 other.authorId == authorId) &&
-            (identical(other.content, content) || other.content == content) &&
+            (identical(other.definition, definition) ||
+                other.definition == definition) &&
             (identical(other.likesCount, likesCount) ||
                 other.likesCount == likesCount) &&
             (identical(other.isPublic, isPublic) ||
@@ -238,7 +239,7 @@ class _$_DefinitionDocument implements _DefinitionDocument {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, wordId, authorId, content,
+  int get hashCode => Object.hash(runtimeType, id, wordId, authorId, definition,
       likesCount, isPublic, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
@@ -254,7 +255,7 @@ abstract class _DefinitionDocument implements DefinitionDocument {
       {required final String id,
       required final String wordId,
       required final String authorId,
-      required final String content,
+      required final String definition,
       required final int likesCount,
       required final bool isPublic,
       required final DateTime createdAt,
@@ -267,7 +268,7 @@ abstract class _DefinitionDocument implements DefinitionDocument {
   @override
   String get authorId;
   @override
-  String get content;
+  String get definition;
   @override
   int get likesCount;
   @override

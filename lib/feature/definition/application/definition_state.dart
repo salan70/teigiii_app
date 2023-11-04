@@ -32,7 +32,7 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
     wordId: wordDoc.id,
     authorId: authorDoc.id,
     word: wordDoc.word,
-    definition: definitionDoc.content,
+    definition: definitionDoc.definition,
     createdAt: definitionDoc.createdAt,
     updatedAt: definitionDoc.updatedAt,
     authorName: authorDoc.name,

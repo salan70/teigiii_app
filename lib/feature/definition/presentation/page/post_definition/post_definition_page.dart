@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/button/select_post_type_button.dart';
+import '../../../application/definition_for_write_notifier.dart';
 
 @RoutePage()
 class PostDefinitionPage extends ConsumerWidget {
@@ -10,66 +11,114 @@ class PostDefinitionPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: const SelectPostTypeButton(),
-        actions: [
-          Center(
-            child: Text(
-              '投稿',
-              style: Theme.of(context).textTheme.titleLarge,
+    final asyncDefinitionForWrite =
+        ref.watch(definitionForWriteNotifierProvider(null));
+    final definitionForWriteNotifier =
+        ref.watch(definitionForWriteNotifierProvider(null).notifier);
+
+    return asyncDefinitionForWrite.when(
+      data: (definitionForWrite) {
+        final canPost = definitionForWrite.canPost();
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: const SelectPostTypeButton(),
+            actions: [
+              Center(
+                child: InkWell(
+                  onTap: canPost
+                      ? () async {
+                          await definitionForWriteNotifier.post();
+                          // await context.popRoute();
+                        }
+                      : null,
+                  child: Text(
+                    '投稿',
+                    style: canPost
+                        ? Theme.of(context).textTheme.titleLarge
+                        : Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.3),
+                            ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 24),
+            ],
+          ),
+          body: GestureDetector(
+            onTap: () => primaryFocus?.unfocus(),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: ListView(
+                  children: [
+                    const SizedBox(height: 8),
+                    TextField(
+                      autofocus: true,
+                      maxLength: 30,
+                      maxLines: null,
+                      textInputAction: TextInputAction.next,
+                      onChanged: definitionForWriteNotifier.changeWord,
+                      style: Theme.of(context).textTheme.titleLarge,
+                      decoration: InputDecoration(
+                        hintText: '例: 二日目のカレー',
+                        labelText: '投稿する言葉',
+                        errorText: definitionForWrite.outputWordError(),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                    TextField(
+                      maxLength: 50,
+                      maxLines: null,
+                      textInputAction: TextInputAction.next,
+                      onChanged: definitionForWriteNotifier.changeWordReading,
+                      style: Theme.of(context).textTheme.titleMedium,
+                      decoration: InputDecoration(
+                        hintText: '例: ふつかめのかれー',
+                        labelText: '言葉のよみ',
+                        errorText: definitionForWrite.outputWordReadingError(),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      maxLength: 500,
+                      maxLines: null,
+                      onChanged: definitionForWriteNotifier.changeDefinition,
+                      style: Theme.of(context).textTheme.titleLarge,
+                      decoration: const InputDecoration(
+                        hintText: '例: ばり美味い',
+                        labelText: '定義',
+                        border: InputBorder.none,
+                      ),
+                    ),
+                    const SizedBox(height: 300),
+                  ],
+                ),
+              ),
             ),
           ),
-          const SizedBox(width: 24),
-        ],
+        );
+      },
+      loading: () => Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          title: const SelectPostTypeButton(),
+        ),
+        body: const Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
-      body: GestureDetector(
-        onTap: () => primaryFocus?.unfocus(),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: ListView(
-              children: [
-                const SizedBox(height: 8),
-                TextField(
-                  autofocus: true,
-                  maxLength: 30,
-                  maxLines: null,
-                  textInputAction: TextInputAction.next,
-                  style: Theme.of(context).textTheme.titleLarge,
-                  decoration: const InputDecoration(
-                    hintText: '例: 二日目のカレー',
-                    label: Text('投稿する言葉'),
-                    border: InputBorder.none,
-                  ),
-                ),
-                TextField(
-                  maxLength: 50,
-                  maxLines: null,
-                  textInputAction: TextInputAction.next,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  decoration: const InputDecoration(
-                    hintText: '例: ふつかめのかれー',
-                    label: Text('言葉のよみ'),
-                    border: InputBorder.none,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  maxLength: 500,
-                  maxLines: null,
-                  style: Theme.of(context).textTheme.titleLarge,
-                  decoration: const InputDecoration(
-                    hintText: '例: ばり美味い',
-                    label: Text('定義'),
-                    border: InputBorder.none,
-                  ),
-                ),
-                const SizedBox(height: 300),
-              ],
-            ),
-          ),
+      error: (error, stackTrace) => Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          title: const SelectPostTypeButton(),
+        ),
+        body: Center(
+          child: Text(error.toString()),
         ),
       ),
     );

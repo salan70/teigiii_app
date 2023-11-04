@@ -31,14 +31,12 @@ class SelectPostTypeButton extends StatelessWidget {
             items: [
               PullDownMenuItem(
                 onTap: () {
-                  // TODO(me): 定義編集画面へ遷移させる
                 },
                 title: '全体に公開',
                 icon: CupertinoIcons.person_3,
               ),
               PullDownMenuItem(
                 onTap: () {
-                  // TODO(me): 定義編集画面へ遷移させる
                 },
                 title: '非公開',
                 icon: CupertinoIcons.lock_fill,

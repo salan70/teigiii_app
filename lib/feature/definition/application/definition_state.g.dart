@@ -6,7 +6,7 @@ part of 'definition_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$definitionHash() => r'74bdf57ba4bc70069383c1ee26454ce853686efd';
+String _$definitionHash() => r'3b55de136c0eeb95417a12e5ae7eb46321f64c25';
 
 /// Copied from Dart SDK
 class _SystemHash {
