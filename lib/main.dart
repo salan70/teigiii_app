@@ -46,18 +46,17 @@ Future<void> main() async {
   // await addUserFollowsToFirestore3(flavorName);
   // await addWordsDummy0to29(flavorName);
   // await addWordsDummy30to59(flavorName);
+  // await addDefinitionDummy0to29(flavorName);
 
   runApp(
-    ProviderScope(
+    const ProviderScope(
       child: MyApp(),
     ),
   );
 }
 
 class MyApp extends ConsumerStatefulWidget {
-  MyApp({super.key});
-
-  final _appRouter = AppRouter();
+  const MyApp({super.key});
 
   @override
   ConsumerState<MyApp> createState() => _MyAppState();
