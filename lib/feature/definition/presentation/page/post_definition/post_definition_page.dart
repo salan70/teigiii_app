@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_widget/button/select_post_type_button.dart';
 import '../../../application/definition_for_write_notifier.dart';
+import 'select_post_type_button.dart';
 
 @RoutePage()
 class PostDefinitionPage extends ConsumerWidget {
@@ -22,7 +22,7 @@ class PostDefinitionPage extends ConsumerWidget {
         return Scaffold(
           appBar: AppBar(
             elevation: 0,
-            title: const SelectPostTypeButton(),
+            title: const SelectPostTypeButton(definitionId: null),
             actions: [
               Center(
                 child: InkWell(
@@ -105,7 +105,6 @@ class PostDefinitionPage extends ConsumerWidget {
       loading: () => Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: const SelectPostTypeButton(),
         ),
         body: const Center(
           child: CircularProgressIndicator(),
@@ -114,7 +113,6 @@ class PostDefinitionPage extends ConsumerWidget {
       error: (error, stackTrace) => Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: const SelectPostTypeButton(),
         ),
         body: Center(
           child: Text(error.toString()),
