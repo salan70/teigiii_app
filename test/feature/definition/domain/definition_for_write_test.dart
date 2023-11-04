@@ -234,4 +234,197 @@ void main() {
       expect(canPost, isFalse);
     });
   });
+
+  group('isEmptyAllFields', () {
+    test('すべてのフィールドが空', () {
+      // * Arrange
+      final definitionForWrite = baseDefinitionForWrite.copyWith(
+        word: '',
+        wordReading: '',
+        definition: '',
+      );
+
+      // * Act
+      final actual = definitionForWrite.isEmptyAllFields;
+
+      // * Assert
+      expect(actual, isTrue);
+    });
+
+    test('wordが空でない', () {
+      // * Arrange
+      final definitionForWrite = baseDefinitionForWrite.copyWith(
+        word: 'タコライス',
+        wordReading: '',
+        definition: '',
+      );
+
+      // * Act
+      final actual = definitionForWrite.isEmptyAllFields;
+
+      // * Assert
+      expect(actual, isFalse);
+    });
+
+    test('wordReadingが空でない', () {
+      // * Arrange
+      final definitionForWrite = baseDefinitionForWrite.copyWith(
+        word: '',
+        wordReading: 'たこらいす',
+        definition: '',
+      );
+
+      // * Act
+      final actual = definitionForWrite.isEmptyAllFields;
+
+      // * Assert
+      expect(actual, isFalse);
+    });
+
+    test('definitionが空でない', () {
+      // * Arrange
+      final definitionForWrite = baseDefinitionForWrite.copyWith(
+        word: '',
+        wordReading: '',
+        definition: '沖縄の名物料理',
+      );
+
+      // * Act
+      final actual = definitionForWrite.isEmptyAllFields;
+
+      // * Assert
+      expect(actual, isFalse);
+    });
+
+    test('複数のフィールドが空でない場合はfalseを返す', () {
+      // * Arrange
+      final definitionForWrite = baseDefinitionForWrite.copyWith(
+        word: 'タコライス',
+        wordReading: 'たこらいす',
+        definition: '',
+      );
+
+      // * Act
+      final actual = definitionForWrite.isEmptyAllFields;
+
+      // * Assert
+      expect(actual, isFalse);
+    });
+  });
+
+  group('toFirestore()', () {
+    test('想定通りにMap型が返されることを検証', () {
+      // * Arrange
+      const wordId = 'wordId1';
+      const word = '愛情';
+      const wordReading = 'あいじょう';
+      const authorId = 'user1';
+      const definition = '他者を思いやる深い感情。';
+      const isPublic = true;
+
+      const definitionForWrite = DefinitionForWrite(
+        id: null,
+        authorId: authorId,
+        wordId: wordId,
+        word: word,
+        wordReading: wordReading,
+        isPublic: isPublic,
+        definition: definition,
+      );
+
+      // * Act
+      final actual = definitionForWrite.toFirestore();
+
+      // * Assert
+      expect(actual, isA<Map<String, dynamic>>());
+      expect(actual['wordId'], wordId);
+      expect(actual['word'], word);
+      expect(actual['wordReading'], wordReading);
+      expect(actual['wordReadingInitialGroup'], 'あ');
+      expect(actual['authorId'], authorId);
+      expect(actual['definition'], definition);
+      expect(actual['likesCount'], 0);
+      expect(actual['isPublic'], isPublic);
+    });
+  });
+
+  group('_categorizeFirstCharacter()', () {
+    test('全てのひらがな', () {
+      // * Arrange
+      // ひらがなの全範囲
+      var allHiragana = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん';
+      // 濁点と半濁点を含む文字も追加
+      allHiragana += 'がぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ';
+
+      for (final char in allHiragana.split('')) {
+        // * Act
+        final actual = baseDefinitionForWrite.categorizeFirstCharacter(char);
+
+        // * Assert
+        expect(actual, char);
+      }
+    });
+
+    test('全てのカタカナ', () {
+      // * Arrange
+      var allKatakana = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+      // 濁点と半濁点を含む文字も追加
+      allKatakana += 'ガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ';
+      // 予め変換されたひらがなを用意
+      var allHiragana = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん';
+      // 濁点と半濁点を含む文字も追加
+      allHiragana += 'がぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ';
+
+      final katakanaArray = allKatakana.split('');
+      final hiraganaArray = allHiragana.split('');
+
+      for (var i = 0; i < katakanaArray.length; i++) {
+        // * Act
+        final actual =
+            baseDefinitionForWrite.categorizeFirstCharacter(katakanaArray[i]);
+
+        // * Assert
+        expect(actual, hiraganaArray[i]);
+      }
+    });
+
+    test('全ての大文字アルファベット', () {
+      // * Arrange
+      const allUppercaseAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+      for (final char in allUppercaseAlphabet.split('')) {
+        // * Act
+        final actual = baseDefinitionForWrite.categorizeFirstCharacter(char);
+
+        // * Assert
+        expect(actual, char);
+      }
+    });
+
+    test('全ての小文字アルファベット', () {
+      // * Arrange
+      const allLowercaseAlphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+      for (final char in allLowercaseAlphabet.split('')) {
+        // * Act
+        final actual = baseDefinitionForWrite.categorizeFirstCharacter(char);
+
+        // * Assert
+        expect(actual, char.toUpperCase());
+      }
+    });
+
+    test('全ての数字', () {
+      // * Arrange
+      const allDigits = '0123456789';
+
+      for (final char in allDigits.split('')) {
+        // * Act
+        final actual = baseDefinitionForWrite.categorizeFirstCharacter(char);
+
+        // * Assert
+        expect(actual, '数字');
+      }
+    });
+  });
 }

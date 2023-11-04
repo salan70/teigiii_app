@@ -75,7 +75,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
       'wordId': wordId,
       'word': word,
       'wordReading': wordReading,
-      'wordReadingInitialGroup': _categorizeFirstCharacter(wordReading),
+      'wordReadingInitialGroup': categorizeFirstCharacter(wordReading),
       'authorId': authorId,
       'definition': definition,
       'likesCount': 0,
@@ -83,11 +83,18 @@ class DefinitionForWrite with _$DefinitionForWrite {
     };
   }
 
-  String _categorizeFirstCharacter(String text) {
+  // 文字列（Unicode）が絡んでおり繊細な問題であること、
+  // データ取得時の絞り込み等で利用するため正確に値を保存したいことから、テストを作成する
+  @visibleForTesting
+  String categorizeFirstCharacter(String text) {
     final firstChar = text.substring(0, 1);
 
-    // ひらがなまたはカタカナの場合、ひらがなに変換して返す
-    if (RegExp(r'^[ぁ-んァ-ヶー]').hasMatch(firstChar)) {
+    // ひらがなの場合、そのまま返す
+    if (RegExp(r'^[ぁ-ん]').hasMatch(firstChar)) {
+      return firstChar;
+    }
+    // カタカナの場合、ひらがなに変換して返す
+    else if (RegExp(r'^[ァ-ヶー]').hasMatch(firstChar)) {
       return _convertToHiragana(firstChar);
     }
     // アルファベットの場合、大文字に変換して返す
