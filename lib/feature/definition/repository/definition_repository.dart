@@ -168,9 +168,9 @@ class DefinitionRepository {
 
   Future<void> likeDefinition(String definitionId, String userId) async {
     // transactionを使い、複数の処理が全て成功した場合のみ、処理を完了させる
-    await FirebaseFirestore.instance.runTransaction((transaction) async {
+    await firestore.runTransaction((transaction) async {
       // Likesコレクションにドキュメントを登録
-      final likesCollection = FirebaseFirestore.instance.collection('Likes');
+      final likesCollection = firestore.collection('Likes');
       transaction.set(likesCollection.doc(), {
         'definitionId': definitionId,
         'userId': userId,
@@ -179,9 +179,8 @@ class DefinitionRepository {
       });
 
       // DefinitionコレクションからドキュメントのlikesCountを+1する
-      final definitionDocRef = FirebaseFirestore.instance
-          .collection('Definitions')
-          .doc(definitionId);
+      final definitionDocRef =
+          firestore.collection('Definitions').doc(definitionId);
       transaction.update(definitionDocRef, {
         'likesCount': FieldValue.increment(1),
       });
@@ -189,9 +188,9 @@ class DefinitionRepository {
   }
 
   Future<void> unlikeDefinition(String definitionId, String userId) async {
-    await FirebaseFirestore.instance.runTransaction((transaction) async {
+    await firestore.runTransaction((transaction) async {
       // Likesコレクションからドキュメントを取得して削除
-      final likeSnapshot = await FirebaseFirestore.instance
+      final likeSnapshot = await firestore
           .collection('Likes')
           .where('definitionId', isEqualTo: definitionId)
           .where('userId', isEqualTo: userId)
@@ -205,9 +204,8 @@ class DefinitionRepository {
       transaction.delete(likeSnapshot.reference);
 
       // DefinitionコレクションからドキュメントのlikesCountを-1する
-      final definitionDocRef = FirebaseFirestore.instance
-          .collection('Definitions')
-          .doc(definitionId);
+      final definitionDocRef =
+          firestore.collection('Definitions').doc(definitionId);
       transaction.update(definitionDocRef, {
         'likesCount': FieldValue.increment(-1),
       });
