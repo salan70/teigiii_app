@@ -61,7 +61,7 @@ void main() {
         mockDefinitionRepository.fetchDefinition(any),
       ).thenAnswer((_) async => mockDefinitionDoc);
       when(
-        mockWordRepository.fetchWord(any),
+        mockWordRepository.fetchWordById(any),
       ).thenAnswer((_) async => mockWordDoc);
       when(
         mockUserProfileRepository.fetchUserProfile(any),
@@ -118,7 +118,7 @@ void main() {
         mockDefinitionRepository.fetchDefinition(mockDefinitionDoc.id),
       ).called(1);
       verify(
-        mockWordRepository.fetchWord(mockDefinitionDoc.wordId),
+        mockWordRepository.fetchWordById(mockDefinitionDoc.wordId),
       ).called(1);
       verify(
         mockUserProfileRepository.fetchUserProfile(mockDefinitionDoc.authorId),

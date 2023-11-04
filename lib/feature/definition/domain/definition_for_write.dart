@@ -69,4 +69,44 @@ class DefinitionForWrite with _$DefinitionForWrite {
 
     return isValidWord && isValidWordReading && isValidDefinition;
   }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'wordId': wordId,
+      'word': word,
+      'wordReading': wordReading,
+      'wordReadingInitialGroup': _categorizeFirstCharacter(wordReading),
+      'authorId': authorId,
+      'definition': definition,
+      'likesCount': 0,
+      'isPublic': isPublic,
+    };
+  }
+
+  String _categorizeFirstCharacter(String text) {
+    final firstChar = text.substring(0, 1);
+
+    // ひらがなまたはカタカナの場合、ひらがなに変換して返す
+    if (RegExp(r'^[ぁ-んァ-ヶー]').hasMatch(firstChar)) {
+      return _convertToHiragana(firstChar);
+    }
+    // アルファベットの場合、大文字に変換して返す
+    else if (RegExp(r'^[a-zA-Z]').hasMatch(firstChar)) {
+      return firstChar.toUpperCase();
+    }
+    // 数字の場合、「数字」を返す
+    else if (RegExp(r'^[0-9]').hasMatch(firstChar)) {
+      return '数字';
+    }
+    // それ以外の場合（記号など）、「記号」を返す
+    else {
+      return '記号';
+    }
+  }
+
+  String _convertToHiragana(String katakana) {
+    // Unicodeの範囲を利用してカタカナからひらがなに変換
+    final offset = 'ァ'.codeUnitAt(0) - 'ぁ'.codeUnitAt(0);
+    return String.fromCharCode(katakana.codeUnitAt(0) - offset);
+  }
 }

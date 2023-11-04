@@ -7,7 +7,9 @@ import 'dart:async' as _i6;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i8;
+import 'package:riverpod_annotation/riverpod_annotation.dart' as _i9;
+import 'package:teigi_app/feature/definition/domain/definition_for_write.dart'
+    as _i7;
 import 'package:teigi_app/feature/definition/domain/definition_id_list_state.dart'
     as _i3;
 import 'package:teigi_app/feature/definition/repository/definition_repository.dart'
@@ -15,7 +17,7 @@ import 'package:teigi_app/feature/definition/repository/definition_repository.da
 import 'package:teigi_app/feature/definition/repository/entity/definition_document.dart'
     as _i4;
 
-import 'definition_service_test.dart' as _i7;
+import 'definition_service_test.dart' as _i8;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -231,6 +233,18 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i6.Future<_i4.DefinitionDocument>);
 
   @override
+  _i6.Future<void> createDefinition(
+          _i7.DefinitionForWrite? definitionForWrite) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #createDefinition,
+          [definitionForWrite],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
   _i6.Future<void> likeDefinition(
     String? definitionId,
     String? userId,
@@ -286,11 +300,11 @@ class MockDefinitionRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockListener extends _i1.Mock
-    implements _i7.Listener<_i8.AsyncValue<void>> {
+    implements _i8.Listener<_i9.AsyncValue<void>> {
   @override
   void call(
-    _i8.AsyncValue<void>? previous,
-    _i8.AsyncValue<void>? next,
+    _i9.AsyncValue<void>? previous,
+    _i9.AsyncValue<void>? next,
   ) =>
       super.noSuchMethod(
         Invocation.method(

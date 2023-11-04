@@ -76,7 +76,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: widget._appRouter.config(),
+      routerConfig: ref.watch(appRouterProvider).config(),
       scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
       theme: ThemeData(
         fontFamily: 'LINESeedJP',

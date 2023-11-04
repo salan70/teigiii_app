@@ -29,7 +29,6 @@ class PostDefinitionPage extends ConsumerWidget {
                   onTap: canPost
                       ? () async {
                           await definitionForWriteNotifier.post();
-                          // await context.popRoute();
                         }
                       : null,
                   child: Text(

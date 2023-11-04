@@ -7,7 +7,7 @@ part of 'definition_for_write_notifier.dart';
 // **************************************************************************
 
 String _$definitionForWriteNotifierHash() =>
-    r'6177d583796cb7cee3b9ab97f386f9ac2a87e04c';
+    r'68a2d0898b77765e0c0127988953d816316ad949';
 
 /// Copied from Dart SDK
 class _SystemHash {

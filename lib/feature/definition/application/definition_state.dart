@@ -16,8 +16,9 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
       .read(definitionRepositoryProvider)
       .fetchDefinition(definitionId);
 
-  final wordDoc =
-      await ref.read(wordRepositoryProvider).fetchWord(definitionDoc.wordId);
+  final wordDoc = await ref
+      .read(wordRepositoryProvider)
+      .fetchWordById(definitionDoc.wordId);
 
   final authorDoc = await ref
       .read(userProfileRepositoryProvider)

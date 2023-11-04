@@ -7,8 +7,10 @@ import 'dart:async' as _i9;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i13;
-import 'package:teigi_app/feature/definition/domain/definition.dart' as _i14;
+import 'package:riverpod_annotation/riverpod_annotation.dart' as _i14;
+import 'package:teigi_app/feature/definition/domain/definition.dart' as _i15;
+import 'package:teigi_app/feature/definition/domain/definition_for_write.dart'
+    as _i10;
 import 'package:teigi_app/feature/definition/domain/definition_id_list_state.dart'
     as _i3;
 import 'package:teigi_app/feature/definition/repository/definition_repository.dart'
@@ -18,13 +20,13 @@ import 'package:teigi_app/feature/definition/repository/entity/definition_docume
 import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart'
     as _i5;
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart'
-    as _i10;
+    as _i11;
 import 'package:teigi_app/feature/word/domain/word_list_state.dart' as _i7;
 import 'package:teigi_app/feature/word/repository/entity/word_document.dart'
     as _i6;
-import 'package:teigi_app/feature/word/repository/word_repository.dart' as _i11;
+import 'package:teigi_app/feature/word/repository/word_repository.dart' as _i12;
 
-import 'definition_state_test.dart' as _i12;
+import 'definition_state_test.dart' as _i13;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -271,6 +273,18 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i9.Future<_i4.DefinitionDocument>);
 
   @override
+  _i9.Future<void> createDefinition(
+          _i10.DefinitionForWrite? definitionForWrite) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #createDefinition,
+          [definitionForWrite],
+        ),
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
+
+  @override
   _i9.Future<void> likeDefinition(
     String? definitionId,
     String? userId,
@@ -326,7 +340,7 @@ class MockDefinitionRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserProfileRepository extends _i1.Mock
-    implements _i10.UserProfileRepository {
+    implements _i11.UserProfileRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),
@@ -386,7 +400,7 @@ class MockUserProfileRepository extends _i1.Mock
 /// A class which mocks [WordRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWordRepository extends _i1.Mock implements _i11.WordRepository {
+class MockWordRepository extends _i1.Mock implements _i12.WordRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),
@@ -401,15 +415,35 @@ class MockWordRepository extends _i1.Mock implements _i11.WordRepository {
       ) as _i2.FirebaseFirestore);
 
   @override
-  _i9.Future<_i6.WordDocument> fetchWord(String? wordId) => (super.noSuchMethod(
+  _i9.Future<String> createWord(
+    String? word,
+    String? wordReading,
+    String? initialLetter,
+  ) =>
+      (super.noSuchMethod(
         Invocation.method(
-          #fetchWord,
+          #createWord,
+          [
+            word,
+            wordReading,
+            initialLetter,
+          ],
+        ),
+        returnValue: _i9.Future<String>.value(''),
+        returnValueForMissingStub: _i9.Future<String>.value(''),
+      ) as _i9.Future<String>);
+
+  @override
+  _i9.Future<_i6.WordDocument> fetchWordById(String? wordId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchWordById,
           [wordId],
         ),
         returnValue: _i9.Future<_i6.WordDocument>.value(_FakeWordDocument_4(
           this,
           Invocation.method(
-            #fetchWord,
+            #fetchWordById,
             [wordId],
           ),
         )),
@@ -417,11 +451,28 @@ class MockWordRepository extends _i1.Mock implements _i11.WordRepository {
             _i9.Future<_i6.WordDocument>.value(_FakeWordDocument_4(
           this,
           Invocation.method(
-            #fetchWord,
+            #fetchWordById,
             [wordId],
           ),
         )),
       ) as _i9.Future<_i6.WordDocument>);
+
+  @override
+  _i9.Future<String?> findWordId(
+    String? word,
+    String? wordReading,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #findWordId,
+          [
+            word,
+            wordReading,
+          ],
+        ),
+        returnValue: _i9.Future<String?>.value(),
+        returnValueForMissingStub: _i9.Future<String?>.value(),
+      ) as _i9.Future<String?>);
 
   @override
   _i9.Future<_i7.WordListState> fetchWordListStateByInitial(
@@ -516,11 +567,11 @@ class MockWordRepository extends _i1.Mock implements _i11.WordRepository {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockListener extends _i1.Mock
-    implements _i12.Listener<_i13.AsyncValue<_i14.Definition>> {
+    implements _i13.Listener<_i14.AsyncValue<_i15.Definition>> {
   @override
   void call(
-    _i13.AsyncValue<_i14.Definition>? previous,
-    _i13.AsyncValue<_i14.Definition>? next,
+    _i14.AsyncValue<_i15.Definition>? previous,
+    _i14.AsyncValue<_i15.Definition>? next,
   ) =>
       super.noSuchMethod(
         Invocation.method(

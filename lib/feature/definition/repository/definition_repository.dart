@@ -7,6 +7,7 @@ import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/config_constant.dart';
 import '../../../util/extension/firestore_extension.dart';
 import '../../../util/extension/string_list_extension.dart';
+import '../domain/definition_for_write.dart';
 import '../domain/definition_id_list_state.dart';
 import 'entity/definition_document.dart';
 
@@ -115,6 +116,14 @@ class DefinitionRepository {
         .then((snapshot) => snapshot);
 
     return DefinitionDocument.fromFirestore(snapshot);
+  }
+
+  Future<void> createDefinition(DefinitionForWrite definitionForWrite) async {
+    await firestore.collection('Definitions').add({
+      ...definitionForWrite.toFirestore(),
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
   }
 
   Future<void> likeDefinition(String definitionId, String userId) async {

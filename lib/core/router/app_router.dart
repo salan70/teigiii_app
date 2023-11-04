@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../base_page.dart';
 import '../../feature/definition/presentation/page/definition_detail/definition_detail_page.dart';
@@ -15,7 +16,11 @@ import '../../feature/word/presentation/page/search_word_result_page.dart';
 import '../../feature/word/presentation/page/word_list_page/word_list_page.dart';
 import '../../feature/word/util/initial_main_group.dart';
 
+part 'app_router.g.dart';
 part 'app_router.gr.dart';
+
+@riverpod
+AppRouter appRouter(AppRouterRef ref) => AppRouter();
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends _$AppRouter {

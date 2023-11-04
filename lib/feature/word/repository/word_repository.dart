@@ -19,11 +19,49 @@ class WordRepository {
 
   final FirebaseFirestore firestore;
 
-  Future<WordDocument> fetchWord(String wordId) async {
+  /// Wordドキュメントを作成し、作成したドキュメントのidを返す
+  Future<String> createWord(
+    String word,
+    String wordReading,
+    String initialLetter,
+  ) async {
+    final docRef = await firestore.collection('Words').add(
+      {
+        'word': word,
+        'reading': wordReading,
+        'initialLetter': initialLetter,
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      },
+    );
+
+    return docRef.id;
+  }
+
+  Future<WordDocument> fetchWordById(String wordId) async {
     final DocumentSnapshot snapshot =
         await firestore.collection('Words').doc(wordId).get();
 
     return WordDocument.fromFirestore(snapshot);
+  }
+
+  /// [word], [wordReading]両方が一致するWordドキュメントのidを返す
+  ///
+  /// 見つからない場合はnullを返す
+  Future<String?> findWordId(String word, String wordReading) async {
+    final snapshot = await firestore
+        .collection('Words')
+        .where('word', isEqualTo: word)
+        .where('reading', isEqualTo: wordReading)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isEmpty) {
+      // 該当するWordドキュメントが見つからない場合、nullを返す
+      return null;
+    }
+
+    return snapshot.docs.first.id;
   }
 
   /// [documentSnapshot]に指定したdocumentよりも後のdocumentを取得する
