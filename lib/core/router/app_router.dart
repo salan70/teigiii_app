@@ -20,7 +20,7 @@ part 'app_router.g.dart';
 part 'app_router.gr.dart';
 
 @riverpod
-AppRouter appRouter(AppRouterRef ref) => AppRouter();
+Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter();
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends _$AppRouter {
