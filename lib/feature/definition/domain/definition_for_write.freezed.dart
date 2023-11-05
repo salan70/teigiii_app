@@ -17,8 +17,6 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$DefinitionForWrite {
   String? get id => throw _privateConstructorUsedError;
-  String get authorId => throw _privateConstructorUsedError;
-  String? get wordId => throw _privateConstructorUsedError;
   String get word => throw _privateConstructorUsedError;
   String get wordReading => throw _privateConstructorUsedError;
   bool get isPublic => throw _privateConstructorUsedError;
@@ -37,8 +35,6 @@ abstract class $DefinitionForWriteCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
-      String authorId,
-      String? wordId,
       String word,
       String wordReading,
       bool isPublic,
@@ -59,8 +55,6 @@ class _$DefinitionForWriteCopyWithImpl<$Res, $Val extends DefinitionForWrite>
   @override
   $Res call({
     Object? id = freezed,
-    Object? authorId = null,
-    Object? wordId = freezed,
     Object? word = null,
     Object? wordReading = null,
     Object? isPublic = null,
@@ -70,14 +64,6 @@ class _$DefinitionForWriteCopyWithImpl<$Res, $Val extends DefinitionForWrite>
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      authorId: null == authorId
-          ? _value.authorId
-          : authorId // ignore: cast_nullable_to_non_nullable
-              as String,
-      wordId: freezed == wordId
-          ? _value.wordId
-          : wordId // ignore: cast_nullable_to_non_nullable
               as String?,
       word: null == word
           ? _value.word
@@ -109,8 +95,6 @@ abstract class _$$_DefinitionForWriteCopyWith<$Res>
   @useResult
   $Res call(
       {String? id,
-      String authorId,
-      String? wordId,
       String word,
       String wordReading,
       bool isPublic,
@@ -129,8 +113,6 @@ class __$$_DefinitionForWriteCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? authorId = null,
-    Object? wordId = freezed,
     Object? word = null,
     Object? wordReading = null,
     Object? isPublic = null,
@@ -140,14 +122,6 @@ class __$$_DefinitionForWriteCopyWithImpl<$Res>
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      authorId: null == authorId
-          ? _value.authorId
-          : authorId // ignore: cast_nullable_to_non_nullable
-              as String,
-      wordId: freezed == wordId
-          ? _value.wordId
-          : wordId // ignore: cast_nullable_to_non_nullable
               as String?,
       word: null == word
           ? _value.word
@@ -174,8 +148,6 @@ class __$$_DefinitionForWriteCopyWithImpl<$Res>
 class _$_DefinitionForWrite extends _DefinitionForWrite {
   const _$_DefinitionForWrite(
       {required this.id,
-      required this.authorId,
-      required this.wordId,
       required this.word,
       required this.wordReading,
       required this.isPublic,
@@ -184,10 +156,6 @@ class _$_DefinitionForWrite extends _DefinitionForWrite {
 
   @override
   final String? id;
-  @override
-  final String authorId;
-  @override
-  final String? wordId;
   @override
   final String word;
   @override
@@ -199,7 +167,7 @@ class _$_DefinitionForWrite extends _DefinitionForWrite {
 
   @override
   String toString() {
-    return 'DefinitionForWrite(id: $id, authorId: $authorId, wordId: $wordId, word: $word, wordReading: $wordReading, isPublic: $isPublic, definition: $definition)';
+    return 'DefinitionForWrite(id: $id, word: $word, wordReading: $wordReading, isPublic: $isPublic, definition: $definition)';
   }
 
   @override
@@ -208,9 +176,6 @@ class _$_DefinitionForWrite extends _DefinitionForWrite {
         (other.runtimeType == runtimeType &&
             other is _$_DefinitionForWrite &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.authorId, authorId) ||
-                other.authorId == authorId) &&
-            (identical(other.wordId, wordId) || other.wordId == wordId) &&
             (identical(other.word, word) || other.word == word) &&
             (identical(other.wordReading, wordReading) ||
                 other.wordReading == wordReading) &&
@@ -221,8 +186,8 @@ class _$_DefinitionForWrite extends _DefinitionForWrite {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, authorId, wordId, word,
-      wordReading, isPublic, definition);
+  int get hashCode =>
+      Object.hash(runtimeType, id, word, wordReading, isPublic, definition);
 
   @JsonKey(ignore: true)
   @override
@@ -235,8 +200,6 @@ class _$_DefinitionForWrite extends _DefinitionForWrite {
 abstract class _DefinitionForWrite extends DefinitionForWrite {
   const factory _DefinitionForWrite(
       {required final String? id,
-      required final String authorId,
-      required final String? wordId,
       required final String word,
       required final String wordReading,
       required final bool isPublic,
@@ -245,10 +208,6 @@ abstract class _DefinitionForWrite extends DefinitionForWrite {
 
   @override
   String? get id;
-  @override
-  String get authorId;
-  @override
-  String? get wordId;
   @override
   String get word;
   @override

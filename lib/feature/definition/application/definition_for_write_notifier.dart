@@ -15,11 +15,8 @@ part 'definition_for_write_notifier.g.dart';
 class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
   @override
   FutureOr<DefinitionForWrite> build(String? definitionId) async {
-    final currentUserId = ref.read(userIdProvider)!;
     return DefinitionForWrite(
       id: definitionId,
-      authorId: currentUserId,
-      wordId: null,
       word: '',
       wordReading: '',
       isPublic: true,
@@ -55,11 +52,13 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
             definitionForWrite.word,
             definitionForWrite.wordReading,
           );
-      state = AsyncData(definitionForWrite.copyWith(wordId: existingWordId));
+      final currentUserId = ref.read(userIdProvider)!;
 
-      await ref
-          .read(definitionRepositoryProvider)
-          .createDefinitionAndMaybeWord(definitionForWrite);
+      await ref.read(definitionRepositoryProvider).createDefinitionAndMaybeWord(
+            currentUserId,
+            existingWordId,
+            definitionForWrite,
+          );
     } on Exception catch (e) {
       logger.e('定義投稿時にエラーが発生 error: $e');
       snackBarNotifier.showSnackBar('投稿が失敗しました。もう一度お試しください。', causeError: true);

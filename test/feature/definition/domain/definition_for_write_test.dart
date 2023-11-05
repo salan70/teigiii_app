@@ -4,8 +4,6 @@ import 'package:teigi_app/feature/definition/domain/definition_for_write.dart';
 void main() {
   const baseDefinitionForWrite = DefinitionForWrite(
     id: '1',
-    authorId: 'author',
-    wordId: 'wordId',
     word: 'word',
     wordReading: 'wordReading',
     isPublic: true,
@@ -315,17 +313,13 @@ void main() {
   group('toFirestore()', () {
     test('想定通りにMap型が返されることを検証', () {
       // * Arrange
-      const wordId = 'wordId1';
       const word = '愛情';
       const wordReading = 'あいじょう';
-      const authorId = 'user1';
       const definition = '他者を思いやる深い感情。';
       const isPublic = true;
 
       const definitionForWrite = DefinitionForWrite(
         id: null,
-        authorId: authorId,
-        wordId: wordId,
         word: word,
         wordReading: wordReading,
         isPublic: isPublic,
@@ -337,11 +331,9 @@ void main() {
 
       // * Assert
       expect(actual, isA<Map<String, dynamic>>());
-      expect(actual['wordId'], wordId);
       expect(actual['word'], word);
       expect(actual['wordReading'], wordReading);
       expect(actual['wordReadingInitialGroup'], 'あ');
-      expect(actual['authorId'], authorId);
       expect(actual['definition'], definition);
       expect(actual['likesCount'], 0);
       expect(actual['isPublic'], isPublic);

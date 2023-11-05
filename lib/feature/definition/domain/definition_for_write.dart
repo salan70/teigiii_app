@@ -7,8 +7,6 @@ part 'definition_for_write.freezed.dart';
 class DefinitionForWrite with _$DefinitionForWrite {
   const factory DefinitionForWrite({
     required String? id,
-    required String authorId,
-    required String? wordId,
     required String word,
     required String wordReading,
     required bool isPublic,
@@ -72,11 +70,9 @@ class DefinitionForWrite with _$DefinitionForWrite {
 
   Map<String, dynamic> toFirestore() {
     return {
-      'wordId': wordId,
       'word': word,
       'wordReading': wordReading,
       'wordReadingInitialGroup': categorizeFirstCharacter(wordReading),
-      'authorId': authorId,
       'definition': definition,
       'likesCount': 0,
       'isPublic': isPublic,
@@ -84,7 +80,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
   }
 
   // 文字列（Unicode）が絡んでおり繊細な問題であること、
-  // データ取得時の絞り込み等で利用するため正確に値を保存したいことから、テストを作成する
+  // データ取得時の絞り込み等で利用するため特に正確に値を保存したいことから、テストを作成する
   @visibleForTesting
   String categorizeFirstCharacter(String text) {
     final firstChar = text.substring(0, 1);

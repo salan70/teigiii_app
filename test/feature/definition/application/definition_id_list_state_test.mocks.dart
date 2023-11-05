@@ -318,11 +318,18 @@ class MockDefinitionRepository extends _i1.Mock
 
   @override
   _i12.Future<void> createDefinitionAndMaybeWord(
-          _i13.DefinitionForWrite? definitionForWrite) =>
+    String? authorId,
+    String? existingWordId,
+    _i13.DefinitionForWrite? definitionForWrite,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #createDefinition,
-          [definitionForWrite],
+          #createDefinitionAndMaybeWord,
+          [
+            authorId,
+            existingWordId,
+            definitionForWrite,
+          ],
         ),
         returnValue: _i12.Future<void>.value(),
         returnValueForMissingStub: _i12.Future<void>.value(),

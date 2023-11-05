@@ -119,31 +119,37 @@ class DefinitionRepository {
   }
 
   Future<void> createDefinitionAndMaybeWord(
+    String authorId,
+    String? existingWordId,
     DefinitionForWrite definitionForWrite,
   ) async {
     // Wordドキュメントが存在しない場合は新規作成する
-    if (definitionForWrite.wordId == null) {
+    if (existingWordId == null) {
       await firestore.runTransaction((transaction) async {
         // Wordドキュメントを新規作成し、
         // 作成したドキュメントのidをもとにDefinitionドキュメントを作成する
-        final wordId = await _createWord(
+        final newWordId = await _createWord(
           definitionForWrite.word,
           definitionForWrite.wordReading,
         );
-        final finallyDefinitionForWrite =
-            definitionForWrite.copyWith(wordId: wordId);
-        await _createDefinition(finallyDefinitionForWrite);
+        await _createDefinition(authorId, newWordId, definitionForWrite);
       });
       return;
     }
 
     // Wordドキュメントが存在する場合はDefinitionドキュメントのみ作成する
-    await _createDefinition(definitionForWrite);
+    await _createDefinition(authorId, existingWordId, definitionForWrite);
   }
 
-  Future<void> _createDefinition(DefinitionForWrite definitionForWrite) async {
+  Future<void> _createDefinition(
+    String authorId,
+    String wordId,
+    DefinitionForWrite definitionForWrite,
+  ) async {
     await firestore.collection('Definitions').add({
       ...definitionForWrite.toFirestore(),
+      'authorId': authorId,
+      'wordId': wordId,
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
     });
