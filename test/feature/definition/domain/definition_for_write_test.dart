@@ -327,7 +327,7 @@ void main() {
       );
 
       // * Act
-      final actual = definitionForWrite.toFirestore();
+      final actual = definitionForWrite.toFirestoreForCreate();
 
       // * Assert
       expect(actual, isA<Map<String, dynamic>>());

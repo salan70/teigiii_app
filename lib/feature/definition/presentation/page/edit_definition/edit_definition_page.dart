@@ -33,7 +33,8 @@ class EditDefinitionPage extends ConsumerWidget {
           appBarActionWidget: InkWell(
             onTap: canEdit
                 ? () async {
-                    // await notifier.post();
+                    primaryFocus?.unfocus();
+                    await notifier.edit();
                   }
                 : null,
             child: Text(

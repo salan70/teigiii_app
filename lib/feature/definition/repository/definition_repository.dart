@@ -137,7 +137,7 @@ class DefinitionRepository {
       return;
     }
 
-    // Wordドキュメントが存在する場合はDefinitionドキュメントのみ作成する
+    // Wordドキュメントが存在する場合、Definitionドキュメントのみ作成する
     await _createDefinition(authorId, existingWordId, definitionForWrite);
   }
 
@@ -147,7 +147,7 @@ class DefinitionRepository {
     DefinitionForWrite definitionForWrite,
   ) async {
     await firestore.collection('Definitions').add({
-      ...definitionForWrite.toFirestore(),
+      ...definitionForWrite.toFirestoreForCreate(),
       'authorId': authorId,
       'wordId': wordId,
       'createdAt': FieldValue.serverTimestamp(),
@@ -155,8 +155,43 @@ class DefinitionRepository {
     });
   }
 
-  // [createDefinition]とバッチ実行する必要があるため、このクラスに作成している
-  /// Wordドキュメントを作成し、作成したドキュメントのidを返す
+  Future<void> updateDefinitionAndMaybeCreateWord(
+    String? existingWordId,
+    DefinitionForWrite definitionForWrite,
+  ) async {
+    // Wordドキュメントが存在しない場合は新規作成する
+    if (existingWordId == null) {
+      await firestore.runTransaction((transaction) async {
+        // Wordドキュメントを新規作成し、
+        // 作成したドキュメントのidをもとにDefinitionドキュメントを作成する
+        final newWordId = await _createWord(
+          definitionForWrite.word,
+          definitionForWrite.wordReading,
+        );
+        await _updateDefinition(newWordId, definitionForWrite);
+      });
+      return;
+    }
+
+    // Wordドキュメントが存在する場合、Definitionドキュメントの更新のみ実行する
+    await _updateDefinition(existingWordId, definitionForWrite);
+  }
+
+  Future<void> _updateDefinition(
+    String wordId,
+    DefinitionForWrite definitionForWrite,
+  ) async {
+    await firestore.collection('Definitions').doc(definitionForWrite.id).update(
+      {
+        ...definitionForWrite.toFirestoreForUpdate(),
+        'wordId': wordId,
+        'updatedAt': FieldValue.serverTimestamp(),
+      },
+    );
+  }
+
+  // Definitionドキュメントの作成/更新処理とバッチ実行する必要があるため、このクラスに作成している。
+  /// Wordドキュメントを作成し、作成したドキュメントのidを返す。
   Future<String> _createWord(String word, String wordReading) async {
     final initialLetter = wordReading.substring(0, 1);
     final docRef = await firestore.collection('Words').add(

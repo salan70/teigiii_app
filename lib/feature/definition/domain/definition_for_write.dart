@@ -6,6 +6,7 @@ part 'definition_for_write.freezed.dart';
 @freezed
 class DefinitionForWrite with _$DefinitionForWrite {
   const factory DefinitionForWrite({
+    /// 更新時のみ使用する。新規投稿時はnull
     required String? id,
     required String word,
     required String wordReading,
@@ -71,13 +72,23 @@ class DefinitionForWrite with _$DefinitionForWrite {
     return isValidWord && isValidWordReading && isValidDefinition;
   }
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toFirestoreForCreate() {
     return {
       'word': word,
       'wordReading': wordReading,
       'wordReadingInitialGroup': categorizeFirstCharacter(wordReading),
       'definition': definition,
       'likesCount': 0,
+      'isPublic': isPublic,
+    };
+  }
+
+  Map<String, dynamic> toFirestoreForUpdate() {
+    return {
+      'word': word,
+      'wordReading': wordReading,
+      'wordReadingInitialGroup': categorizeFirstCharacter(wordReading),
+      'definition': definition,
       'isPublic': isPublic,
     };
   }

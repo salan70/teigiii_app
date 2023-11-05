@@ -8,6 +8,7 @@ import '../../auth/application/auth_state.dart';
 import '../../word/repository/word_repository.dart';
 import '../domain/definition_for_write.dart';
 import '../repository/definition_repository.dart';
+import 'definition_state.dart';
 
 part 'definition_for_write_notifier.g.dart';
 
@@ -77,8 +78,12 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
           );
     } on Exception catch (e) {
       logger.e('定義投稿時にエラーが発生 error: $e');
-      snackBarNotifier.showSnackBar('投稿が失敗しました。もう一度お試しください。', causeError: true);
+      snackBarNotifier.showSnackBar(
+        '投稿できませんでした。もう一度お試しください。',
+        causeError: true,
+      );
       isLoadingOverlayNotifier.finishLoading();
+      return;
     }
 
     // TODO(me): 適宜providerをinvalidateする
@@ -87,6 +92,43 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
     snackBarNotifier.showSnackBar('投稿しました！', causeError: false);
+  }
+
+  Future<void> edit() async {
+    final isLoadingOverlayNotifier =
+        ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
+
+    final definitionForWrite = state.value!;
+    final snackBarNotifier = ref.read(snackBarControllerProvider.notifier);
+
+    try {
+      final existingWordId = await ref.read(wordRepositoryProvider).findWordId(
+            definitionForWrite.word,
+            definitionForWrite.wordReading,
+          );
+
+      await ref
+          .read(definitionRepositoryProvider)
+          .updateDefinitionAndMaybeCreateWord(
+            existingWordId,
+            definitionForWrite,
+          );
+    } on Exception catch (e) {
+      logger.e('定義編集時にエラーが発生 error: $e');
+      snackBarNotifier.showSnackBar(
+        '保存できませんでした。もう一度お試しください。',
+        causeError: true,
+      );
+      isLoadingOverlayNotifier.finishLoading();
+      return;
+    }
+
+    // 遷移元の画面を更新するためにinvalidateする
+    ref.invalidate(definitionProvider(definitionForWrite.id!));
+
+    isLoadingOverlayNotifier.finishLoading();
+    await ref.read(appRouterProvider).pop();
+    snackBarNotifier.showSnackBar('保存しました！', causeError: false);
   }
 
   bool canPost() {
