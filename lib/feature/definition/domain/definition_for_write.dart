@@ -59,11 +59,14 @@ class DefinitionForWrite with _$DefinitionForWrite {
     return null;
   }
 
-  bool canPost() {
+  /// 全てのフィールド（[word], [wordReading], [definition]）が有効かどうか
+  bool isValidAllFields() {
     final isValidWord = outputWordError() == null && word.isNotEmpty;
     final isValidWordReading =
         outputWordReadingError() == null && wordReading.isNotEmpty;
     final isValidDefinition = definition.isNotEmpty;
+
+    // TODO(me): 入力数のバリデーションも追加する（output()系に追加するのもあり）
 
     return isValidWord && isValidWordReading && isValidDefinition;
   }

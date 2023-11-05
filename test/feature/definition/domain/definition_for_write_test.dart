@@ -156,7 +156,7 @@ void main() {
     test('全フィールドが有効', () {
       // * Arrange
       // * Act
-      final canPost = baseDefinitionForWrite.canPost();
+      final canPost = baseDefinitionForWrite.isValidAllFields();
 
       // * Assert
       expect(canPost, isTrue);
@@ -167,7 +167,7 @@ void main() {
       final definition = baseDefinitionForWrite.copyWith(word: '');
 
       // * Act
-      final canPost = definition.canPost();
+      final canPost = definition.isValidAllFields();
 
       // * Assert
       expect(canPost, isFalse);
@@ -178,7 +178,7 @@ void main() {
       final definition = baseDefinitionForWrite.copyWith(word: ' word');
 
       // * Act
-      final canPost = definition.canPost();
+      final canPost = definition.isValidAllFields();
 
       // * Assert
       expect(canPost, isFalse);
@@ -189,7 +189,7 @@ void main() {
       final definition = baseDefinitionForWrite.copyWith(wordReading: '');
 
       // * Act
-      final canPost = definition.canPost();
+      final canPost = definition.isValidAllFields();
 
       // * Assert
       expect(canPost, isFalse);
@@ -200,7 +200,7 @@ void main() {
       final definition = baseDefinitionForWrite.copyWith(wordReading: '無効文字');
 
       // * Act
-      final canPost = definition.canPost();
+      final canPost = definition.isValidAllFields();
 
       // * Assert
       expect(canPost, isFalse);
@@ -211,7 +211,7 @@ void main() {
       final definition = baseDefinitionForWrite.copyWith(definition: '');
 
       // * Act
-      final canPost = definition.canPost();
+      final canPost = definition.isValidAllFields();
 
       // * Assert
       expect(canPost, isFalse);
@@ -226,7 +226,7 @@ void main() {
       );
 
       // * Act
-      final canPost = definition.canPost();
+      final canPost = definition.isValidAllFields();
 
       // * Assert
       expect(canPost, isFalse);

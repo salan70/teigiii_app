@@ -7,7 +7,7 @@ part of 'definition_for_write_notifier.dart';
 // **************************************************************************
 
 String _$definitionForWriteNotifierHash() =>
-    r'742378614c4ac7089d911b769102103a7f5d14e6';
+    r'78486fbd9c7b965963a508294bd4c56181dab4cf';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -32,29 +32,49 @@ class _SystemHash {
 
 abstract class _$DefinitionForWriteNotifier
     extends BuildlessAutoDisposeAsyncNotifier<DefinitionForWrite> {
-  late final String? definitionId;
+  late final DefinitionForWrite? definitionForWrite;
 
   FutureOr<DefinitionForWrite> build(
-    String? definitionId,
+    DefinitionForWrite? definitionForWrite,
   );
 }
 
-/// See also [DefinitionForWriteNotifier].
+/// 更新時などTextField等に初期表示したい値がある場合、
+/// [definitionForWrite]として渡すこと
+///
+/// ない場合はnullを渡すこと
+///
+/// Copied from [DefinitionForWriteNotifier].
 @ProviderFor(DefinitionForWriteNotifier)
 const definitionForWriteNotifierProvider = DefinitionForWriteNotifierFamily();
 
-/// See also [DefinitionForWriteNotifier].
+/// 更新時などTextField等に初期表示したい値がある場合、
+/// [definitionForWrite]として渡すこと
+///
+/// ない場合はnullを渡すこと
+///
+/// Copied from [DefinitionForWriteNotifier].
 class DefinitionForWriteNotifierFamily
     extends Family<AsyncValue<DefinitionForWrite>> {
-  /// See also [DefinitionForWriteNotifier].
+  /// 更新時などTextField等に初期表示したい値がある場合、
+  /// [definitionForWrite]として渡すこと
+  ///
+  /// ない場合はnullを渡すこと
+  ///
+  /// Copied from [DefinitionForWriteNotifier].
   const DefinitionForWriteNotifierFamily();
 
-  /// See also [DefinitionForWriteNotifier].
+  /// 更新時などTextField等に初期表示したい値がある場合、
+  /// [definitionForWrite]として渡すこと
+  ///
+  /// ない場合はnullを渡すこと
+  ///
+  /// Copied from [DefinitionForWriteNotifier].
   DefinitionForWriteNotifierProvider call(
-    String? definitionId,
+    DefinitionForWrite? definitionForWrite,
   ) {
     return DefinitionForWriteNotifierProvider(
-      definitionId,
+      definitionForWrite,
     );
   }
 
@@ -63,7 +83,7 @@ class DefinitionForWriteNotifierFamily
     covariant DefinitionForWriteNotifierProvider provider,
   ) {
     return call(
-      provider.definitionId,
+      provider.definitionForWrite,
     );
   }
 
@@ -82,15 +102,26 @@ class DefinitionForWriteNotifierFamily
   String? get name => r'definitionForWriteNotifierProvider';
 }
 
-/// See also [DefinitionForWriteNotifier].
+/// 更新時などTextField等に初期表示したい値がある場合、
+/// [definitionForWrite]として渡すこと
+///
+/// ない場合はnullを渡すこと
+///
+/// Copied from [DefinitionForWriteNotifier].
 class DefinitionForWriteNotifierProvider
     extends AutoDisposeAsyncNotifierProviderImpl<DefinitionForWriteNotifier,
         DefinitionForWrite> {
-  /// See also [DefinitionForWriteNotifier].
+  /// 更新時などTextField等に初期表示したい値がある場合、
+  /// [definitionForWrite]として渡すこと
+  ///
+  /// ない場合はnullを渡すこと
+  ///
+  /// Copied from [DefinitionForWriteNotifier].
   DefinitionForWriteNotifierProvider(
-    String? definitionId,
+    DefinitionForWrite? definitionForWrite,
   ) : this._internal(
-          () => DefinitionForWriteNotifier()..definitionId = definitionId,
+          () => DefinitionForWriteNotifier()
+            ..definitionForWrite = definitionForWrite,
           from: definitionForWriteNotifierProvider,
           name: r'definitionForWriteNotifierProvider',
           debugGetCreateSourceHash:
@@ -100,7 +131,7 @@ class DefinitionForWriteNotifierProvider
           dependencies: DefinitionForWriteNotifierFamily._dependencies,
           allTransitiveDependencies:
               DefinitionForWriteNotifierFamily._allTransitiveDependencies,
-          definitionId: definitionId,
+          definitionForWrite: definitionForWrite,
         );
 
   DefinitionForWriteNotifierProvider._internal(
@@ -110,17 +141,17 @@ class DefinitionForWriteNotifierProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.definitionId,
+    required this.definitionForWrite,
   }) : super.internal();
 
-  final String? definitionId;
+  final DefinitionForWrite? definitionForWrite;
 
   @override
   FutureOr<DefinitionForWrite> runNotifierBuild(
     covariant DefinitionForWriteNotifier notifier,
   ) {
     return notifier.build(
-      definitionId,
+      definitionForWrite,
     );
   }
 
@@ -129,13 +160,13 @@ class DefinitionForWriteNotifierProvider
     return ProviderOverride(
       origin: this,
       override: DefinitionForWriteNotifierProvider._internal(
-        () => create()..definitionId = definitionId,
+        () => create()..definitionForWrite = definitionForWrite,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        definitionId: definitionId,
+        definitionForWrite: definitionForWrite,
       ),
     );
   }
@@ -149,13 +180,13 @@ class DefinitionForWriteNotifierProvider
   @override
   bool operator ==(Object other) {
     return other is DefinitionForWriteNotifierProvider &&
-        other.definitionId == definitionId;
+        other.definitionForWrite == definitionForWrite;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, definitionId.hashCode);
+    hash = _SystemHash.combine(hash, definitionForWrite.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -163,8 +194,8 @@ class DefinitionForWriteNotifierProvider
 
 mixin DefinitionForWriteNotifierRef
     on AutoDisposeAsyncNotifierProviderRef<DefinitionForWrite> {
-  /// The parameter `definitionId` of this provider.
-  String? get definitionId;
+  /// The parameter `definitionForWrite` of this provider.
+  DefinitionForWrite? get definitionForWrite;
 }
 
 class _DefinitionForWriteNotifierProviderElement
@@ -173,8 +204,8 @@ class _DefinitionForWriteNotifierProviderElement
   _DefinitionForWriteNotifierProviderElement(super.provider);
 
   @override
-  String? get definitionId =>
-      (origin as DefinitionForWriteNotifierProvider).definitionId;
+  DefinitionForWrite? get definitionForWrite =>
+      (origin as DefinitionForWriteNotifierProvider).definitionForWrite;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

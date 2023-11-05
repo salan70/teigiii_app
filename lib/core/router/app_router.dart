@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../base_page.dart';
+import '../../feature/definition/domain/definition_for_write.dart';
 import '../../feature/definition/presentation/page/definition_detail/definition_detail_page.dart';
+import '../../feature/definition/presentation/page/edit_definition/edit_definition_page.dart';
 import '../../feature/definition/presentation/page/home/home_page.dart';
 import '../../feature/definition/presentation/page/post_definition/post_definition_page.dart';
 import '../../feature/setting/presentation/license_page.dart';
@@ -115,6 +117,11 @@ class AppRouter extends _$AppRouter {
         AutoRoute(
           path: '/post_definition',
           page: PostDefinitionRoute.page,
+          fullscreenDialog: true,
+        ),
+        AutoRoute(
+          path: '/edit_definition',
+          page: EditDefinitionRoute.page,
           fullscreenDialog: true,
         ),
       ];

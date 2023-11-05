@@ -16,15 +16,17 @@ final nowDateTime = DateTime.now();
 final mockDefinition = Definition(
   id: 'definitionId',
   wordId: 'wordId',
-  authorId: 'authorId',
   word: 'word',
-  definition: 'definition',
-  createdAt: nowDateTime,
-  updatedAt: nowDateTime,
+  wordReading: 'wordReading',
+  authorId: 'authorId',
   authorName: 'authorName',
   authorImageUrl: 'authorImageUrl',
+  definition: 'definition',
+  isPublic: true,
   likesCount: 0,
   isLikedByUser: false,
+  createdAt: nowDateTime,
+  updatedAt: nowDateTime,
 );
 
 final mockDefinitionDoc = DefinitionDocument(

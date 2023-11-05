@@ -87,15 +87,17 @@ void main() {
       final expected = Definition(
         id: mockDefinitionDoc.id,
         wordId: mockDefinitionDoc.wordId,
-        authorId: mockDefinitionDoc.authorId,
         word: mockWordDoc.word,
-        definition: mockDefinitionDoc.definition,
-        createdAt: mockDefinitionDoc.createdAt,
-        updatedAt: mockDefinitionDoc.updatedAt,
+        wordReading: mockWordDoc.reading,
+        authorId: mockDefinitionDoc.authorId,
         authorName: mockUserProfileDoc.name,
         authorImageUrl: mockUserProfileDoc.profileImageUrl,
+        definition: mockDefinitionDoc.definition,
+        isPublic: mockDefinitionDoc.isPublic,
         likesCount: mockDefinitionDoc.likesCount,
         isLikedByUser: isLikedByUser,
+        createdAt: mockDefinitionDoc.createdAt,
+        updatedAt: mockDefinitionDoc.updatedAt,
       );
       // stateの検証
       verifyInOrder([

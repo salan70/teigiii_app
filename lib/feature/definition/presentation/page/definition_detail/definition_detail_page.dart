@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-import '../../../../../core/common_widget/button/ellipsis_icon_button.dart';
+import '../../../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
+import '../../../../../core/common_widget/button/self_definition_action_icon_button.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/extension/date_time_extension.dart';
+import '../../../../auth/application/auth_state.dart';
 import '../../../../user_config/application/user_config_service.dart';
 import '../../../application/definition_state.dart';
 import '../../component/avatar_icon_widget.dart';
@@ -30,11 +32,16 @@ class DefinitionDetailPage extends ConsumerWidget {
 
     return asyncDefinition.when(
       data: (definition) {
+        final currentUserId = ref.watch(userIdProvider)!;
+        final isSelfDefinition = currentUserId == definition.authorId;
+
         return Scaffold(
           appBar: AppBar(
             title: const Text('詳細'),
             actions: [
-              EllipsisIconButton(ownerId: definition.authorId),
+              isSelfDefinition
+                  ? SelfDefinitionActionIconButton(definition: definition)
+                  : OtherUserActionIconButton(ownerId: definition.authorId),
             ],
           ),
           body: EasyRefresh(
@@ -182,21 +189,17 @@ enum PullDownMenuItemForDefinitionAction {
   editDefinition,
   deleteDefinition;
 
-  PullDownMenuItem item() {
+  PullDownMenuItem item(VoidCallback onTap) {
     switch (this) {
       case PullDownMenuItemForDefinitionAction.editDefinition:
         return PullDownMenuItem(
-          onTap: () {
-            // TODO(me): 定義編集画面へ遷移させる
-          },
+          onTap: onTap,
           title: 'この定義を編集',
           icon: CupertinoIcons.pencil,
         );
       case PullDownMenuItemForDefinitionAction.deleteDefinition:
         return PullDownMenuItem(
-          onTap: () {
-            // TODO(me): 定義削除を実装する
-          },
+          onTap: onTap,
           title: 'この定義を削除',
           icon: CupertinoIcons.trash,
         );

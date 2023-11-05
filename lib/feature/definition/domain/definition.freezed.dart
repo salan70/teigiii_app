@@ -18,15 +18,17 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$Definition {
   String get id => throw _privateConstructorUsedError;
   String get wordId => throw _privateConstructorUsedError;
-  String get authorId => throw _privateConstructorUsedError;
   String get word => throw _privateConstructorUsedError;
-  String get definition => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
+  String get wordReading => throw _privateConstructorUsedError;
+  String get authorId => throw _privateConstructorUsedError;
   String get authorName => throw _privateConstructorUsedError;
   String get authorImageUrl => throw _privateConstructorUsedError;
+  String get definition => throw _privateConstructorUsedError;
+  bool get isPublic => throw _privateConstructorUsedError;
   int get likesCount => throw _privateConstructorUsedError;
   bool get isLikedByUser => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DefinitionCopyWith<Definition> get copyWith =>
@@ -42,15 +44,17 @@ abstract class $DefinitionCopyWith<$Res> {
   $Res call(
       {String id,
       String wordId,
-      String authorId,
       String word,
-      String definition,
-      DateTime createdAt,
-      DateTime updatedAt,
+      String wordReading,
+      String authorId,
       String authorName,
       String authorImageUrl,
+      String definition,
+      bool isPublic,
       int likesCount,
-      bool isLikedByUser});
+      bool isLikedByUser,
+      DateTime createdAt,
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -68,15 +72,17 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
   $Res call({
     Object? id = null,
     Object? wordId = null,
-    Object? authorId = null,
     Object? word = null,
-    Object? definition = null,
-    Object? createdAt = null,
-    Object? updatedAt = null,
+    Object? wordReading = null,
+    Object? authorId = null,
     Object? authorName = null,
     Object? authorImageUrl = null,
+    Object? definition = null,
+    Object? isPublic = null,
     Object? likesCount = null,
     Object? isLikedByUser = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -87,26 +93,18 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
           ? _value.wordId
           : wordId // ignore: cast_nullable_to_non_nullable
               as String,
-      authorId: null == authorId
-          ? _value.authorId
-          : authorId // ignore: cast_nullable_to_non_nullable
-              as String,
       word: null == word
           ? _value.word
           : word // ignore: cast_nullable_to_non_nullable
               as String,
-      definition: null == definition
-          ? _value.definition
-          : definition // ignore: cast_nullable_to_non_nullable
+      wordReading: null == wordReading
+          ? _value.wordReading
+          : wordReading // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+      authorId: null == authorId
+          ? _value.authorId
+          : authorId // ignore: cast_nullable_to_non_nullable
+              as String,
       authorName: null == authorName
           ? _value.authorName
           : authorName // ignore: cast_nullable_to_non_nullable
@@ -115,6 +113,14 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
           ? _value.authorImageUrl
           : authorImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      definition: null == definition
+          ? _value.definition
+          : definition // ignore: cast_nullable_to_non_nullable
+              as String,
+      isPublic: null == isPublic
+          ? _value.isPublic
+          : isPublic // ignore: cast_nullable_to_non_nullable
+              as bool,
       likesCount: null == likesCount
           ? _value.likesCount
           : likesCount // ignore: cast_nullable_to_non_nullable
@@ -123,6 +129,14 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
           ? _value.isLikedByUser
           : isLikedByUser // ignore: cast_nullable_to_non_nullable
               as bool,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ) as $Val);
   }
 }
@@ -138,15 +152,17 @@ abstract class _$$_DefinitionCopyWith<$Res>
   $Res call(
       {String id,
       String wordId,
-      String authorId,
       String word,
-      String definition,
-      DateTime createdAt,
-      DateTime updatedAt,
+      String wordReading,
+      String authorId,
       String authorName,
       String authorImageUrl,
+      String definition,
+      bool isPublic,
       int likesCount,
-      bool isLikedByUser});
+      bool isLikedByUser,
+      DateTime createdAt,
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -162,15 +178,17 @@ class __$$_DefinitionCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? wordId = null,
-    Object? authorId = null,
     Object? word = null,
-    Object? definition = null,
-    Object? createdAt = null,
-    Object? updatedAt = null,
+    Object? wordReading = null,
+    Object? authorId = null,
     Object? authorName = null,
     Object? authorImageUrl = null,
+    Object? definition = null,
+    Object? isPublic = null,
     Object? likesCount = null,
     Object? isLikedByUser = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
   }) {
     return _then(_$_Definition(
       id: null == id
@@ -181,26 +199,18 @@ class __$$_DefinitionCopyWithImpl<$Res>
           ? _value.wordId
           : wordId // ignore: cast_nullable_to_non_nullable
               as String,
-      authorId: null == authorId
-          ? _value.authorId
-          : authorId // ignore: cast_nullable_to_non_nullable
-              as String,
       word: null == word
           ? _value.word
           : word // ignore: cast_nullable_to_non_nullable
               as String,
-      definition: null == definition
-          ? _value.definition
-          : definition // ignore: cast_nullable_to_non_nullable
+      wordReading: null == wordReading
+          ? _value.wordReading
+          : wordReading // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+      authorId: null == authorId
+          ? _value.authorId
+          : authorId // ignore: cast_nullable_to_non_nullable
+              as String,
       authorName: null == authorName
           ? _value.authorName
           : authorName // ignore: cast_nullable_to_non_nullable
@@ -209,6 +219,14 @@ class __$$_DefinitionCopyWithImpl<$Res>
           ? _value.authorImageUrl
           : authorImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      definition: null == definition
+          ? _value.definition
+          : definition // ignore: cast_nullable_to_non_nullable
+              as String,
+      isPublic: null == isPublic
+          ? _value.isPublic
+          : isPublic // ignore: cast_nullable_to_non_nullable
+              as bool,
       likesCount: null == likesCount
           ? _value.likesCount
           : likesCount // ignore: cast_nullable_to_non_nullable
@@ -217,52 +235,67 @@ class __$$_DefinitionCopyWithImpl<$Res>
           ? _value.isLikedByUser
           : isLikedByUser // ignore: cast_nullable_to_non_nullable
               as bool,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_Definition implements _Definition {
+class _$_Definition extends _Definition {
   const _$_Definition(
       {required this.id,
       required this.wordId,
-      required this.authorId,
       required this.word,
-      required this.definition,
-      required this.createdAt,
-      required this.updatedAt,
+      required this.wordReading,
+      required this.authorId,
       required this.authorName,
       required this.authorImageUrl,
+      required this.definition,
+      required this.isPublic,
       required this.likesCount,
-      required this.isLikedByUser});
+      required this.isLikedByUser,
+      required this.createdAt,
+      required this.updatedAt})
+      : super._();
 
   @override
   final String id;
   @override
   final String wordId;
   @override
-  final String authorId;
-  @override
   final String word;
   @override
-  final String definition;
+  final String wordReading;
   @override
-  final DateTime createdAt;
-  @override
-  final DateTime updatedAt;
+  final String authorId;
   @override
   final String authorName;
   @override
   final String authorImageUrl;
   @override
+  final String definition;
+  @override
+  final bool isPublic;
+  @override
   final int likesCount;
   @override
   final bool isLikedByUser;
+  @override
+  final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'Definition(id: $id, wordId: $wordId, authorId: $authorId, word: $word, definition: $definition, createdAt: $createdAt, updatedAt: $updatedAt, authorName: $authorName, authorImageUrl: $authorImageUrl, likesCount: $likesCount, isLikedByUser: $isLikedByUser)';
+    return 'Definition(id: $id, wordId: $wordId, word: $word, wordReading: $wordReading, authorId: $authorId, authorName: $authorName, authorImageUrl: $authorImageUrl, definition: $definition, isPublic: $isPublic, likesCount: $likesCount, isLikedByUser: $isLikedByUser, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -272,23 +305,27 @@ class _$_Definition implements _Definition {
             other is _$_Definition &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.wordId, wordId) || other.wordId == wordId) &&
+            (identical(other.word, word) || other.word == word) &&
+            (identical(other.wordReading, wordReading) ||
+                other.wordReading == wordReading) &&
             (identical(other.authorId, authorId) ||
                 other.authorId == authorId) &&
-            (identical(other.word, word) || other.word == word) &&
-            (identical(other.definition, definition) ||
-                other.definition == definition) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt) &&
             (identical(other.authorName, authorName) ||
                 other.authorName == authorName) &&
             (identical(other.authorImageUrl, authorImageUrl) ||
                 other.authorImageUrl == authorImageUrl) &&
+            (identical(other.definition, definition) ||
+                other.definition == definition) &&
+            (identical(other.isPublic, isPublic) ||
+                other.isPublic == isPublic) &&
             (identical(other.likesCount, likesCount) ||
                 other.likesCount == likesCount) &&
             (identical(other.isLikedByUser, isLikedByUser) ||
-                other.isLikedByUser == isLikedByUser));
+                other.isLikedByUser == isLikedByUser) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @override
@@ -296,15 +333,17 @@ class _$_Definition implements _Definition {
       runtimeType,
       id,
       wordId,
-      authorId,
       word,
-      definition,
-      createdAt,
-      updatedAt,
+      wordReading,
+      authorId,
       authorName,
       authorImageUrl,
+      definition,
+      isPublic,
       likesCount,
-      isLikedByUser);
+      isLikedByUser,
+      createdAt,
+      updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -313,42 +352,49 @@ class _$_Definition implements _Definition {
       __$$_DefinitionCopyWithImpl<_$_Definition>(this, _$identity);
 }
 
-abstract class _Definition implements Definition {
+abstract class _Definition extends Definition {
   const factory _Definition(
       {required final String id,
       required final String wordId,
-      required final String authorId,
       required final String word,
-      required final String definition,
-      required final DateTime createdAt,
-      required final DateTime updatedAt,
+      required final String wordReading,
+      required final String authorId,
       required final String authorName,
       required final String authorImageUrl,
+      required final String definition,
+      required final bool isPublic,
       required final int likesCount,
-      required final bool isLikedByUser}) = _$_Definition;
+      required final bool isLikedByUser,
+      required final DateTime createdAt,
+      required final DateTime updatedAt}) = _$_Definition;
+  const _Definition._() : super._();
 
   @override
   String get id;
   @override
   String get wordId;
   @override
-  String get authorId;
-  @override
   String get word;
   @override
-  String get definition;
+  String get wordReading;
   @override
-  DateTime get createdAt;
-  @override
-  DateTime get updatedAt;
+  String get authorId;
   @override
   String get authorName;
   @override
   String get authorImageUrl;
   @override
+  String get definition;
+  @override
+  bool get isPublic;
+  @override
   int get likesCount;
   @override
   bool get isLikedByUser;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$_DefinitionCopyWith<_$_Definition> get copyWith =>

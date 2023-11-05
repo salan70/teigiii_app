@@ -11,18 +11,34 @@ import '../repository/definition_repository.dart';
 
 part 'definition_for_write_notifier.g.dart';
 
+/// 更新時などTextField等に初期表示したい値がある場合、
+/// [definitionForWrite]として渡すこと
+///
+/// ない場合はnullを渡すこと
 @riverpod
 class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
   @override
-  FutureOr<DefinitionForWrite> build(String? definitionId) async {
-    return DefinitionForWrite(
-      id: definitionId,
-      word: '',
-      wordReading: '',
-      isPublic: true,
-      definition: '',
-    );
+  FutureOr<DefinitionForWrite> build(
+    DefinitionForWrite? definitionForWrite,
+  ) async {
+    if (definitionForWrite == null) {
+      _initialState = const DefinitionForWrite(
+        id: null,
+        word: '',
+        wordReading: '',
+        isPublic: true,
+        definition: '',
+      );
+    } else {
+      _initialState = definitionForWrite;
+    }
+
+    return _initialState;
   }
+
+  /// 初期状態として渡された[DefinitionForWrite].
+  /// 現在の状態と比較するために使用する
+  late final DefinitionForWrite _initialState;
 
   void changeWord(String word) {
     state = AsyncData(state.value!.copyWith(word: word));
@@ -71,5 +87,18 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
     snackBarNotifier.showSnackBar('投稿しました！', causeError: false);
+  }
+
+  bool canPost() {
+    return state.value!.isValidAllFields();
+  }
+
+  bool canEdit() {
+    // canPost()を呼んだ方がいいかも
+    return state.value!.isValidAllFields() && isChanged();
+  }
+
+  bool isChanged() {
+    return state.value != _initialState;
   }
 }

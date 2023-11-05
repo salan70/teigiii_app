@@ -3,38 +3,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../application/definition_for_write_notifier.dart';
-import '../../../util/write_definition_form_type.dart';
+import '../../../domain/definition_for_write.dart';
 import '../../component/write_definition_base_page.dart';
 
 @RoutePage()
-class PostDefinitionPage extends ConsumerWidget {
-  const PostDefinitionPage({super.key});
+class EditDefinitionPage extends ConsumerWidget {
+  const EditDefinitionPage({
+    super.key,
+    required this.initialDefinitionForWrite,
+  });
+
+  final DefinitionForWrite initialDefinitionForWrite;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncDefinitionForWrite =
-        ref.watch(definitionForWriteNotifierProvider(null));
+    final asyncDefinitionForWrite = ref
+        .watch(definitionForWriteNotifierProvider(initialDefinitionForWrite));
     final notifier = ref.watch(
-      definitionForWriteNotifierProvider(null).notifier,
+      definitionForWriteNotifierProvider(initialDefinitionForWrite).notifier,
     );
 
     return asyncDefinitionForWrite.when(
       data: (definitionForWrite) {
-        final canPost = notifier.canPost();
+        final canEdit = notifier.canEdit();
 
         return WriteDefinitionBasePage(
-          autoFocusForm: WriteDefinitionFormType.word,
           definitionForWrite: definitionForWrite,
           notifier: notifier,
           appBarActionWidget: InkWell(
-            onTap: canPost
+            onTap: canEdit
                 ? () async {
-                    await notifier.post();
+                    // await notifier.post();
                   }
                 : null,
             child: Text(
-              '投稿',
-              style: canPost
+              '保存',
+              style: canEdit
                   ? Theme.of(context).textTheme.titleLarge
                   : Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Theme.of(context)

@@ -37,6 +37,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    EditDefinitionRoute.name: (routeData) {
+      final args = routeData.argsAs<EditDefinitionRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EditDefinitionPage(
+          key: args.key,
+          initialDefinitionForWrite: args.initialDefinitionForWrite,
+        ),
+      );
+    },
     FollowingAndFollowerListRoute.name: (routeData) {
       final args = routeData.argsAs<FollowingAndFollowerListRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -209,6 +219,44 @@ class DefinitionDetailRouteArgs {
   @override
   String toString() {
     return 'DefinitionDetailRouteArgs{key: $key, definitionId: $definitionId}';
+  }
+}
+
+/// generated route for
+/// [EditDefinitionPage]
+class EditDefinitionRoute extends PageRouteInfo<EditDefinitionRouteArgs> {
+  EditDefinitionRoute({
+    Key? key,
+    required DefinitionForWrite initialDefinitionForWrite,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EditDefinitionRoute.name,
+          args: EditDefinitionRouteArgs(
+            key: key,
+            initialDefinitionForWrite: initialDefinitionForWrite,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'EditDefinitionRoute';
+
+  static const PageInfo<EditDefinitionRouteArgs> page =
+      PageInfo<EditDefinitionRouteArgs>(name);
+}
+
+class EditDefinitionRouteArgs {
+  const EditDefinitionRouteArgs({
+    this.key,
+    required this.initialDefinitionForWrite,
+  });
+
+  final Key? key;
+
+  final DefinitionForWrite initialDefinitionForWrite;
+
+  @override
+  String toString() {
+    return 'EditDefinitionRouteArgs{key: $key, initialDefinitionForWrite: $initialDefinitionForWrite}';
   }
 }
 
