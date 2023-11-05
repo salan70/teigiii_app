@@ -29,6 +29,7 @@ class PostDefinitionPage extends ConsumerWidget {
           appBarActionWidget: InkWell(
             onTap: canPost
                 ? () async {
+                    primaryFocus?.unfocus();
                     await notifier.post();
                   }
                 : null,
