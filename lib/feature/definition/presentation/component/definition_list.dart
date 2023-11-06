@@ -6,7 +6,6 @@ import '../../../../core/common_widget/cupertino_refresh_indicator.dart';
 import '../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
 import '../../../../util/logger.dart';
 import '../../application/definition_id_list_state.dart';
-import '../../application/definition_service.dart';
 import '../../util/definition_feed_type.dart';
 import 'definition_tile.dart';
 import 'definition_tile_shimmer.dart';
@@ -62,9 +61,12 @@ class DefinitionList extends ConsumerWidget {
                 CupertinoSliverRefreshControl(
                   builder: buildCustomRefreshIndicator,
                   onRefresh: () async {
-                    await ref
-                        .read(definitionServiceProvider.notifier)
-                        .refreshAll(definitionFeedType, wordId);
+                    ref.invalidate(
+                      definitionIdListStateNotifierProvider(
+                        definitionFeedType,
+                        wordId: wordId,
+                      ),
+                    );
                   },
                 ),
                 SliverToBoxAdapter(
@@ -103,10 +105,12 @@ class DefinitionList extends ConsumerWidget {
                 CupertinoSliverRefreshControl(
                   builder: buildCustomRefreshIndicator,
                   onRefresh: () async {
-                    // TODO(me): 普通にProviderをinvalidateしていない理由を探す
-                    await ref
-                        .read(definitionServiceProvider.notifier)
-                        .refreshAll(definitionFeedType, wordId);
+                    ref.invalidate(
+                      definitionIdListStateNotifierProvider(
+                        definitionFeedType,
+                        wordId: wordId,
+                      ),
+                    );
                   },
                 ),
                 SliverToBoxAdapter(

@@ -148,8 +148,4 @@ void main() {
     // test('definitionProviderが再生成されているか検証', () async {});
   });
 
-  // TODO(me): refreshAll()のテスト書く
-  // providerがinvalidateされたことを検証する方法がわからないため一旦保留
-  //
-  // group('refreshAll()', () {});
 }

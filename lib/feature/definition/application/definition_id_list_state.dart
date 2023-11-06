@@ -18,6 +18,9 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     DefinitionFeedType definitionFeedType, {
     String? wordId,
   }) async {
+    // ミュートユーザーが更新されるたびに、本Notifierも更新されるよう監視
+    ref.watch(mutedUserIdListProvider);
+
     const isFirstFetch = true;
 
     switch (definitionFeedType) {
