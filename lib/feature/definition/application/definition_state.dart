@@ -31,14 +31,16 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
   return Definition(
     id: definitionDoc.id,
     wordId: wordDoc.id,
-    authorId: authorDoc.id,
     word: wordDoc.word,
-    definition: definitionDoc.definition,
-    createdAt: definitionDoc.createdAt,
-    updatedAt: definitionDoc.updatedAt,
+    wordReading: wordDoc.reading,
+    authorId: authorDoc.id,
     authorName: authorDoc.name,
     authorImageUrl: authorDoc.profileImageUrl,
+    definition: definitionDoc.definition,
     likesCount: definitionDoc.likesCount,
+    isPublic: definitionDoc.isPublic,
     isLikedByUser: isLikedByUser,
+    createdAt: definitionDoc.createdAt,
+    updatedAt: definitionDoc.updatedAt,
   );
 }

@@ -6,9 +6,8 @@ part 'definition_for_write.freezed.dart';
 @freezed
 class DefinitionForWrite with _$DefinitionForWrite {
   const factory DefinitionForWrite({
+    /// 更新時のみ使用する。新規投稿時はnull
     required String? id,
-    required String authorId,
-    required String? wordId,
     required String word,
     required String wordReading,
     required bool isPublic,
@@ -61,30 +60,41 @@ class DefinitionForWrite with _$DefinitionForWrite {
     return null;
   }
 
-  bool canPost() {
+  /// 全てのフィールド（[word], [wordReading], [definition]）が有効かどうか
+  bool isValidAllFields() {
     final isValidWord = outputWordError() == null && word.isNotEmpty;
     final isValidWordReading =
         outputWordReadingError() == null && wordReading.isNotEmpty;
     final isValidDefinition = definition.isNotEmpty;
 
+    // TODO(me): 入力数のバリデーションも追加する（output()系に追加するのもあり）
+
     return isValidWord && isValidWordReading && isValidDefinition;
   }
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toFirestoreForCreate() {
     return {
-      'wordId': wordId,
       'word': word,
       'wordReading': wordReading,
       'wordReadingInitialGroup': categorizeFirstCharacter(wordReading),
-      'authorId': authorId,
       'definition': definition,
       'likesCount': 0,
       'isPublic': isPublic,
     };
   }
 
+  Map<String, dynamic> toFirestoreForUpdate() {
+    return {
+      'word': word,
+      'wordReading': wordReading,
+      'wordReadingInitialGroup': categorizeFirstCharacter(wordReading),
+      'definition': definition,
+      'isPublic': isPublic,
+    };
+  }
+
   // 文字列（Unicode）が絡んでおり繊細な問題であること、
-  // データ取得時の絞り込み等で利用するため正確に値を保存したいことから、テストを作成する
+  // データ取得時の絞り込み等で利用するため特に正確に値を保存したいことから、テストを作成する
   @visibleForTesting
   String categorizeFirstCharacter(String text) {
     final firstChar = text.substring(0, 1);

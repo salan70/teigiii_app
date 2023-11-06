@@ -37,6 +37,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    EditDefinitionRoute.name: (routeData) {
+      final args = routeData.argsAs<EditDefinitionRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EditDefinitionPage(
+          key: args.key,
+          initialDefinition: args.initialDefinition,
+        ),
+      );
+    },
     FollowingAndFollowerListRoute.name: (routeData) {
       final args = routeData.argsAs<FollowingAndFollowerListRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -89,9 +99,14 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     PostDefinitionRoute.name: (routeData) {
+      final args = routeData.argsAs<PostDefinitionRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const PostDefinitionPage(),
+        child: PostDefinitionPage(
+          key: args.key,
+          initialDefinition: args.initialDefinition,
+          autoFocusForm: args.autoFocusForm,
+        ),
       );
     },
     ProfileRoute.name: (routeData) {
@@ -209,6 +224,44 @@ class DefinitionDetailRouteArgs {
   @override
   String toString() {
     return 'DefinitionDetailRouteArgs{key: $key, definitionId: $definitionId}';
+  }
+}
+
+/// generated route for
+/// [EditDefinitionPage]
+class EditDefinitionRoute extends PageRouteInfo<EditDefinitionRouteArgs> {
+  EditDefinitionRoute({
+    Key? key,
+    required Definition initialDefinition,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EditDefinitionRoute.name,
+          args: EditDefinitionRouteArgs(
+            key: key,
+            initialDefinition: initialDefinition,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'EditDefinitionRoute';
+
+  static const PageInfo<EditDefinitionRouteArgs> page =
+      PageInfo<EditDefinitionRouteArgs>(name);
+}
+
+class EditDefinitionRouteArgs {
+  const EditDefinitionRouteArgs({
+    this.key,
+    required this.initialDefinition,
+  });
+
+  final Key? key;
+
+  final Definition initialDefinition;
+
+  @override
+  String toString() {
+    return 'EditDefinitionRouteArgs{key: $key, initialDefinition: $initialDefinition}';
   }
 }
 
@@ -366,16 +419,45 @@ class MyLicenseRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [PostDefinitionPage]
-class PostDefinitionRoute extends PageRouteInfo<void> {
-  const PostDefinitionRoute({List<PageRouteInfo>? children})
-      : super(
+class PostDefinitionRoute extends PageRouteInfo<PostDefinitionRouteArgs> {
+  PostDefinitionRoute({
+    Key? key,
+    required Definition? initialDefinition,
+    required WriteDefinitionFormType? autoFocusForm,
+    List<PageRouteInfo>? children,
+  }) : super(
           PostDefinitionRoute.name,
+          args: PostDefinitionRouteArgs(
+            key: key,
+            initialDefinition: initialDefinition,
+            autoFocusForm: autoFocusForm,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'PostDefinitionRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<PostDefinitionRouteArgs> page =
+      PageInfo<PostDefinitionRouteArgs>(name);
+}
+
+class PostDefinitionRouteArgs {
+  const PostDefinitionRouteArgs({
+    this.key,
+    required this.initialDefinition,
+    required this.autoFocusForm,
+  });
+
+  final Key? key;
+
+  final Definition? initialDefinition;
+
+  final WriteDefinitionFormType? autoFocusForm;
+
+  @override
+  String toString() {
+    return 'PostDefinitionRouteArgs{key: $key, initialDefinition: $initialDefinition, autoFocusForm: $autoFocusForm}';
+  }
 }
 
 /// generated route for

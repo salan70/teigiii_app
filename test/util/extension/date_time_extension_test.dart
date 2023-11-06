@@ -139,4 +139,29 @@ void main() {
       expect(expected, '2023/10/22 14:30');
     });
   });
+
+  group('hasOneHourPassed()', () {
+    test('1時間経過している（1時間前の時刻が実行）', () {
+      // * Arrange
+      final oneHourInFuture = DateTime.now().subtract(const Duration(hours: 1));
+
+      // * Act
+      final actual = oneHourInFuture.hasOneHourPassed();
+
+      // * Assert
+      expect(actual, isTrue);
+    });
+
+    test('59分経過している（59分前の時刻が実行）', () {
+      // * Arrange
+      final thirtyMinutesAgo =
+          DateTime.now().subtract(const Duration(minutes: 59));
+
+      // * Act
+      final actual = thirtyMinutesAgo.hasOneHourPassed();
+
+      // * Assert
+      expect(actual, isFalse);
+    });
+  });
 }

@@ -274,11 +274,35 @@ class MockDefinitionRepository extends _i1.Mock
 
   @override
   _i9.Future<void> createDefinitionAndMaybeWord(
-          _i10.DefinitionForWrite? definitionForWrite) =>
+    String? authorId,
+    String? existingWordId,
+    _i10.DefinitionForWrite? definitionForWrite,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #createDefinition,
-          [definitionForWrite],
+          #createDefinitionAndMaybeWord,
+          [
+            authorId,
+            existingWordId,
+            definitionForWrite,
+          ],
+        ),
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
+
+  @override
+  _i9.Future<void> updateDefinitionAndMaybeCreateWord(
+    String? existingWordId,
+    _i10.DefinitionForWrite? definitionForWrite,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateDefinitionAndMaybeCreateWord,
+          [
+            existingWordId,
+            definitionForWrite,
+          ],
         ),
         returnValue: _i9.Future<void>.value(),
         returnValueForMissingStub: _i9.Future<void>.value(),

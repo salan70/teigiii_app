@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/button/back_icon_button.dart';
-import '../../../../../core/common_widget/button/ellipsis_icon_button.dart';
+import '../../../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
@@ -73,7 +73,7 @@ class ProfilePage extends ConsumerWidget {
                               // TODO(me): ユーザー検索画面を表示する
                             },
                           )
-                        : EllipsisIconButton(ownerId: targetUserId),
+                        : OtherUserActionIconButton(ownerId: targetUserId),
                   ],
                 ),
                 SliverList(
@@ -107,7 +107,7 @@ class ProfilePage extends ConsumerWidget {
               ],
             ),
           ),
-          floatingActionButton: const PostDefinitionFAB(),
+          floatingActionButton: const PostDefinitionFAB(definition:  null),
         ),
       ),
     );

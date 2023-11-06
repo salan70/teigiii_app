@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../util/initial_main_group.dart';
-import '../component/index_tile.dart';
+import '../../component/index_tile.dart';
 import 'word_search_text_field.dart';
 
 @RoutePage()

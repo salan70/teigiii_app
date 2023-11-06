@@ -8,24 +8,38 @@ import '../../auth/application/auth_state.dart';
 import '../../word/repository/word_repository.dart';
 import '../domain/definition_for_write.dart';
 import '../repository/definition_repository.dart';
+import 'definition_state.dart';
 
 part 'definition_for_write_notifier.g.dart';
 
+/// 更新時などTextField等に初期表示したい値がある場合、
+/// [definitionForWrite]として渡すこと
+///
+/// ない場合はnullを渡すこと
 @riverpod
 class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
   @override
-  FutureOr<DefinitionForWrite> build(String? definitionId) async {
-    final currentUserId = ref.read(userIdProvider)!;
-    return DefinitionForWrite(
-      id: definitionId,
-      authorId: currentUserId,
-      wordId: null,
-      word: '',
-      wordReading: '',
-      isPublic: true,
-      definition: '',
-    );
+  FutureOr<DefinitionForWrite> build(
+    DefinitionForWrite? definitionForWrite,
+  ) async {
+    if (definitionForWrite == null) {
+      _initialState = const DefinitionForWrite(
+        id: null,
+        word: '',
+        wordReading: '',
+        isPublic: true,
+        definition: '',
+      );
+    } else {
+      _initialState = definitionForWrite;
+    }
+
+    return _initialState;
   }
+
+  /// 初期状態として渡された[DefinitionForWrite].
+  /// 現在の状態と比較するために使用する
+  late final DefinitionForWrite _initialState;
 
   void changeWord(String word) {
     state = AsyncData(state.value!.copyWith(word: word));
@@ -55,15 +69,21 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
             definitionForWrite.word,
             definitionForWrite.wordReading,
           );
-      state = AsyncData(definitionForWrite.copyWith(wordId: existingWordId));
+      final currentUserId = ref.read(userIdProvider)!;
 
-      await ref
-          .read(definitionRepositoryProvider)
-          .createDefinitionAndMaybeWord(definitionForWrite);
+      await ref.read(definitionRepositoryProvider).createDefinitionAndMaybeWord(
+            currentUserId,
+            existingWordId,
+            definitionForWrite,
+          );
     } on Exception catch (e) {
       logger.e('定義投稿時にエラーが発生 error: $e');
-      snackBarNotifier.showSnackBar('投稿が失敗しました。もう一度お試しください。', causeError: true);
+      snackBarNotifier.showSnackBar(
+        '投稿できませんでした。もう一度お試しください。',
+        causeError: true,
+      );
       isLoadingOverlayNotifier.finishLoading();
+      return;
     }
 
     // TODO(me): 適宜providerをinvalidateする
@@ -72,5 +92,55 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
     snackBarNotifier.showSnackBar('投稿しました！', causeError: false);
+  }
+
+  Future<void> edit() async {
+    final isLoadingOverlayNotifier =
+        ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
+
+    final definitionForWrite = state.value!;
+    final snackBarNotifier = ref.read(snackBarControllerProvider.notifier);
+
+    try {
+      final existingWordId = await ref.read(wordRepositoryProvider).findWordId(
+            definitionForWrite.word,
+            definitionForWrite.wordReading,
+          );
+
+      await ref
+          .read(definitionRepositoryProvider)
+          .updateDefinitionAndMaybeCreateWord(
+            existingWordId,
+            definitionForWrite,
+          );
+    } on Exception catch (e) {
+      logger.e('定義編集時にエラーが発生 error: $e');
+      snackBarNotifier.showSnackBar(
+        '保存できませんでした。もう一度お試しください。',
+        causeError: true,
+      );
+      isLoadingOverlayNotifier.finishLoading();
+      return;
+    }
+
+    // 遷移元の画面を更新するためにinvalidateする
+    ref.invalidate(definitionProvider(definitionForWrite.id!));
+
+    isLoadingOverlayNotifier.finishLoading();
+    await ref.read(appRouterProvider).pop();
+    snackBarNotifier.showSnackBar('保存しました！', causeError: false);
+  }
+
+  bool canPost() {
+    return state.value!.isValidAllFields();
+  }
+
+  bool canEdit() {
+    // canPost()を呼んだ方がいいかも
+    return state.value!.isValidAllFields() && isChanged();
+  }
+
+  bool isChanged() {
+    return state.value != _initialState;
   }
 }

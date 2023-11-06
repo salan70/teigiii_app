@@ -4,8 +4,6 @@ import 'package:teigi_app/feature/definition/domain/definition_for_write.dart';
 void main() {
   const baseDefinitionForWrite = DefinitionForWrite(
     id: '1',
-    authorId: 'author',
-    wordId: 'wordId',
     word: 'word',
     wordReading: 'wordReading',
     isPublic: true,
@@ -158,7 +156,7 @@ void main() {
     test('全フィールドが有効', () {
       // * Arrange
       // * Act
-      final canPost = baseDefinitionForWrite.canPost();
+      final canPost = baseDefinitionForWrite.isValidAllFields();
 
       // * Assert
       expect(canPost, isTrue);
@@ -169,7 +167,7 @@ void main() {
       final definition = baseDefinitionForWrite.copyWith(word: '');
 
       // * Act
-      final canPost = definition.canPost();
+      final canPost = definition.isValidAllFields();
 
       // * Assert
       expect(canPost, isFalse);
@@ -180,7 +178,7 @@ void main() {
       final definition = baseDefinitionForWrite.copyWith(word: ' word');
 
       // * Act
-      final canPost = definition.canPost();
+      final canPost = definition.isValidAllFields();
 
       // * Assert
       expect(canPost, isFalse);
@@ -191,7 +189,7 @@ void main() {
       final definition = baseDefinitionForWrite.copyWith(wordReading: '');
 
       // * Act
-      final canPost = definition.canPost();
+      final canPost = definition.isValidAllFields();
 
       // * Assert
       expect(canPost, isFalse);
@@ -202,7 +200,7 @@ void main() {
       final definition = baseDefinitionForWrite.copyWith(wordReading: '無効文字');
 
       // * Act
-      final canPost = definition.canPost();
+      final canPost = definition.isValidAllFields();
 
       // * Assert
       expect(canPost, isFalse);
@@ -213,7 +211,7 @@ void main() {
       final definition = baseDefinitionForWrite.copyWith(definition: '');
 
       // * Act
-      final canPost = definition.canPost();
+      final canPost = definition.isValidAllFields();
 
       // * Assert
       expect(canPost, isFalse);
@@ -228,7 +226,7 @@ void main() {
       );
 
       // * Act
-      final canPost = definition.canPost();
+      final canPost = definition.isValidAllFields();
 
       // * Assert
       expect(canPost, isFalse);
@@ -315,17 +313,13 @@ void main() {
   group('toFirestore()', () {
     test('想定通りにMap型が返されることを検証', () {
       // * Arrange
-      const wordId = 'wordId1';
       const word = '愛情';
       const wordReading = 'あいじょう';
-      const authorId = 'user1';
       const definition = '他者を思いやる深い感情。';
       const isPublic = true;
 
       const definitionForWrite = DefinitionForWrite(
         id: null,
-        authorId: authorId,
-        wordId: wordId,
         word: word,
         wordReading: wordReading,
         isPublic: isPublic,
@@ -333,15 +327,13 @@ void main() {
       );
 
       // * Act
-      final actual = definitionForWrite.toFirestore();
+      final actual = definitionForWrite.toFirestoreForCreate();
 
       // * Assert
       expect(actual, isA<Map<String, dynamic>>());
-      expect(actual['wordId'], wordId);
       expect(actual['word'], word);
       expect(actual['wordReading'], wordReading);
       expect(actual['wordReadingInitialGroup'], 'あ');
-      expect(actual['authorId'], authorId);
       expect(actual['definition'], definition);
       expect(actual['likesCount'], 0);
       expect(actual['isPublic'], isPublic);

@@ -32,4 +32,11 @@ extension DateTimeExtension on DateTime {
   String toDisplayFormat() {
     return DateFormat('yyyy/MM/dd HH:mm').format(this);
   }
+
+  /// 呼び出したインスタンスの時刻から1時間以上が経過しているかを返す
+  bool hasOneHourPassed() {
+    final currentTime = DateTime.now();
+    // 現在時刻が、呼び出したインスタンスの時刻に1時間加えた時刻を過ぎているかどうかを確認
+    return currentTime.isAfter(add(const Duration(hours: 1)));
+  }
 }
