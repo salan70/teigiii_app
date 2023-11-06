@@ -17,33 +17,47 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
   FutureOr<DefinitionIdListState> build(
     DefinitionFeedType definitionFeedType,
   ) async {
+    const isFirstFetch = true;
+
     switch (definitionFeedType) {
       case DefinitionFeedType.homeRecommend:
-        return await _homeRecommendDefinitionIdListFirst();
+        return await _homeRecommendDefinitionIdList(
+          isFirstFetch: isFirstFetch,
+        );
+
       case DefinitionFeedType.homeFollowing:
-        return await _fetchHomeFollowingDefinitionIdListFirst();
+        return await _fetchHomeFollowingDefinitionIdList(
+          isFirstFetch: isFirstFetch,
+        );
     }
   }
 
-  /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する（初回）
+  /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する
   ///
-  /// この関数は、[build]メソッドからのみ呼ばれる想定
-  Future<DefinitionIdListState> _homeRecommendDefinitionIdListFirst() async {
+  /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
+  Future<DefinitionIdListState> _homeRecommendDefinitionIdList({
+    required bool isFirstFetch,
+  }) async {
     final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
+    final lastDoc =
+        isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
     return ref
         .watch(definitionRepositoryProvider)
-        .fetchHomeRecommendDefinitionIdListFirst(mutedUserIdList);
+        .fetchHomeRecommendDefinitionIdList(
+          mutedUserIdList,
+          lastDoc,
+        );
   }
 
-  /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する（初回）
+  /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する
   ///
-  /// この関数は、[build]メソッドからのみ呼ばれる想定
-  Future<DefinitionIdListState>
-      _fetchHomeFollowingDefinitionIdListFirst() async {
-    final userId = ref.read(userIdProvider)!;
-
+  /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
+  Future<DefinitionIdListState> _fetchHomeFollowingDefinitionIdList({
+    required bool isFirstFetch,
+  }) async {
     final targetUserIdList = <String>[];
+    final userId = ref.read(userIdProvider)!;
 
     // フォローしているユーザーのIDリストを取得
     final followingIdList =
@@ -58,15 +72,21 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
     targetUserIdList.removeWhere(mutedUserIdList.contains);
 
+    final lastDoc =
+        isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
+
     return ref
         .read(definitionRepositoryProvider)
-        .fetchHomeFollowingDefinitionIdListFirst(targetUserIdList);
+        .fetchHomeFollowingDefinitionIdList(
+          targetUserIdList,
+          lastDoc,
+        );
   }
 
   Future<void> fetchMore() async {
     await fetchMoreHelper(
       ref: ref,
-      fetchFunction: _fetchDefinitionIdListStateBasedOnType,
+      fetchFunction: _fetchMoreBasedOnType,
       mergeFunction: (currentData, newData) => DefinitionIdListState(
         definitionIdList:
             currentData.definitionIdList + newData.definitionIdList,
@@ -76,53 +96,13 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     );
   }
 
-  Future<DefinitionIdListState> _fetchDefinitionIdListStateBasedOnType() async {
+  Future<DefinitionIdListState> _fetchMoreBasedOnType() async {
     switch (definitionFeedType) {
       case DefinitionFeedType.homeRecommend:
-        return _homeRecommendDefinitionIdListMore();
+        return _homeRecommendDefinitionIdList(isFirstFetch: false);
+
       case DefinitionFeedType.homeFollowing:
-        return _fetchHomeFollowingDefinitionIdListMore();
+        return _fetchHomeFollowingDefinitionIdList(isFirstFetch: false);
     }
-  }
-
-  /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する（2回目以降）
-  Future<DefinitionIdListState> _homeRecommendDefinitionIdListMore() async {
-    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
-
-    return ref
-        .watch(definitionRepositoryProvider)
-        .fetchHomeRecommendDefinitionIdListMore(
-          mutedUserIdList,
-          state.value!.lastReadQueryDocumentSnapshot!,
-        );
-  }
-
-  /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する（2回目以降）
-  // TODO(me): _fetchHomeFollowingDefinitionIdListFirstと共通のロジックが多く、リファクタの余地あり
-  Future<DefinitionIdListState>
-      _fetchHomeFollowingDefinitionIdListMore() async {
-    final userId = ref.read(userIdProvider)!;
-
-    final targetUserIdList = <String>[];
-
-    // フォローしているユーザーのIDリストを取得
-    final followingIdList =
-        await ref.read(followingIdListProvider(userId).future);
-
-    // フォローしているユーザーと自分のIDを追加
-    targetUserIdList
-      ..addAll(followingIdList)
-      ..add(userId);
-
-    // ミュートしているユーザーのIDを除外
-    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
-    targetUserIdList.removeWhere(mutedUserIdList.contains);
-
-    return ref
-        .read(definitionRepositoryProvider)
-        .fetchHomeFollowingDefinitionIdListMore(
-          targetUserIdList,
-          state.value!.lastReadQueryDocumentSnapshot!,
-        );
   }
 }

@@ -82,52 +82,26 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i2.FirebaseFirestore);
 
   @override
-  _i6.Future<_i3.DefinitionIdListState> fetchHomeRecommendDefinitionIdListFirst(
-          List<String>? mutedUserIdList) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchHomeRecommendDefinitionIdListFirst,
-          [mutedUserIdList],
-        ),
-        returnValue: _i6.Future<_i3.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_1(
-          this,
-          Invocation.method(
-            #fetchHomeRecommendDefinitionIdListFirst,
-            [mutedUserIdList],
-          ),
-        )),
-        returnValueForMissingStub: _i6.Future<_i3.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_1(
-          this,
-          Invocation.method(
-            #fetchHomeRecommendDefinitionIdListFirst,
-            [mutedUserIdList],
-          ),
-        )),
-      ) as _i6.Future<_i3.DefinitionIdListState>);
-
-  @override
-  _i6.Future<_i3.DefinitionIdListState> fetchHomeRecommendDefinitionIdListMore(
+  _i6.Future<_i3.DefinitionIdListState> fetchHomeRecommendDefinitionIdList(
     List<String>? mutedUserIdList,
-    _i2.QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
+    _i2.QueryDocumentSnapshot<Object?>? lastDocument,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchHomeRecommendDefinitionIdListMore,
+          #fetchHomeRecommendDefinitionIdList,
           [
             mutedUserIdList,
-            lastReadQueryDocumentSnapshot,
+            lastDocument,
           ],
         ),
         returnValue: _i6.Future<_i3.DefinitionIdListState>.value(
             _FakeDefinitionIdListState_1(
           this,
           Invocation.method(
-            #fetchHomeRecommendDefinitionIdListMore,
+            #fetchHomeRecommendDefinitionIdList,
             [
               mutedUserIdList,
-              lastReadQueryDocumentSnapshot,
+              lastDocument,
             ],
           ),
         )),
@@ -135,62 +109,36 @@ class MockDefinitionRepository extends _i1.Mock
             _FakeDefinitionIdListState_1(
           this,
           Invocation.method(
-            #fetchHomeRecommendDefinitionIdListMore,
+            #fetchHomeRecommendDefinitionIdList,
             [
               mutedUserIdList,
-              lastReadQueryDocumentSnapshot,
+              lastDocument,
             ],
           ),
         )),
       ) as _i6.Future<_i3.DefinitionIdListState>);
 
   @override
-  _i6.Future<_i3.DefinitionIdListState> fetchHomeFollowingDefinitionIdListFirst(
-          List<String>? targetUserIdList) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchHomeFollowingDefinitionIdListFirst,
-          [targetUserIdList],
-        ),
-        returnValue: _i6.Future<_i3.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_1(
-          this,
-          Invocation.method(
-            #fetchHomeFollowingDefinitionIdListFirst,
-            [targetUserIdList],
-          ),
-        )),
-        returnValueForMissingStub: _i6.Future<_i3.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_1(
-          this,
-          Invocation.method(
-            #fetchHomeFollowingDefinitionIdListFirst,
-            [targetUserIdList],
-          ),
-        )),
-      ) as _i6.Future<_i3.DefinitionIdListState>);
-
-  @override
-  _i6.Future<_i3.DefinitionIdListState> fetchHomeFollowingDefinitionIdListMore(
+  _i6.Future<_i3.DefinitionIdListState> fetchHomeFollowingDefinitionIdList(
     List<String>? targetUserIdList,
-    _i2.QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
+    _i2.QueryDocumentSnapshot<Object?>? lastDocument,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchHomeFollowingDefinitionIdListMore,
+          #fetchHomeFollowingDefinitionIdList,
           [
             targetUserIdList,
-            lastReadQueryDocumentSnapshot,
+            lastDocument,
           ],
         ),
         returnValue: _i6.Future<_i3.DefinitionIdListState>.value(
             _FakeDefinitionIdListState_1(
           this,
           Invocation.method(
-            #fetchHomeFollowingDefinitionIdListMore,
+            #fetchHomeFollowingDefinitionIdList,
             [
               targetUserIdList,
-              lastReadQueryDocumentSnapshot,
+              lastDocument,
             ],
           ),
         )),
@@ -198,10 +146,10 @@ class MockDefinitionRepository extends _i1.Mock
             _FakeDefinitionIdListState_1(
           this,
           Invocation.method(
-            #fetchHomeFollowingDefinitionIdListMore,
+            #fetchHomeFollowingDefinitionIdList,
             [
               targetUserIdList,
-              lastReadQueryDocumentSnapshot,
+              lastDocument,
             ],
           ),
         )),
