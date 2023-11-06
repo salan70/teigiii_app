@@ -968,6 +968,25 @@ class MockWordRepository extends _i1.Mock implements _i17.WordRepository {
           ),
         )),
       ) as _i12.Future<_i10.WordListState>);
+
+  @override
+  _i12.Future<int> fetchPostedDefinitionCount(
+    String? wordId,
+    String? currentUserId,
+    List<String>? mutedUserIdList,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchPostedDefinitionCount,
+          [
+            wordId,
+            currentUserId,
+            mutedUserIdList,
+          ],
+        ),
+        returnValue: _i12.Future<int>.value(0),
+        returnValueForMissingStub: _i12.Future<int>.value(0),
+      ) as _i12.Future<int>);
 }
 
 /// A class which mocks [Listener].

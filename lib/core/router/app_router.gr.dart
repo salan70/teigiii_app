@@ -158,6 +158,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    WordTopRoute.name: (routeData) {
+      final args = routeData.argsAs<WordTopRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WordTopPage(
+          key: args.key,
+          wordId: args.wordId,
+        ),
+      );
+    },
   };
 }
 
@@ -618,5 +628,43 @@ class WordListRouteArgs {
   @override
   String toString() {
     return 'WordListRouteArgs{key: $key, selectedInitialSubGroup: $selectedInitialSubGroup}';
+  }
+}
+
+/// generated route for
+/// [WordTopPage]
+class WordTopRoute extends PageRouteInfo<WordTopRouteArgs> {
+  WordTopRoute({
+    Key? key,
+    required String wordId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          WordTopRoute.name,
+          args: WordTopRouteArgs(
+            key: key,
+            wordId: wordId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'WordTopRoute';
+
+  static const PageInfo<WordTopRouteArgs> page =
+      PageInfo<WordTopRouteArgs>(name);
+}
+
+class WordTopRouteArgs {
+  const WordTopRouteArgs({
+    this.key,
+    required this.wordId,
+  });
+
+  final Key? key;
+
+  final String wordId;
+
+  @override
+  String toString() {
+    return 'WordTopRouteArgs{key: $key, wordId: $wordId}';
   }
 }
