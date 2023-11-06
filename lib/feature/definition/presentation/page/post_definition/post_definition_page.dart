@@ -3,19 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../application/definition_for_write_notifier.dart';
+import '../../../domain/definition_for_write.dart';
 import '../../../util/write_definition_form_type.dart';
 import '../../component/write_definition_base_page.dart';
 
+/// 定義を投稿するページ
 @RoutePage()
 class PostDefinitionPage extends ConsumerWidget {
-  const PostDefinitionPage({super.key});
+  const PostDefinitionPage({
+    super.key,
+    required this.initialDefinitionForWrite,
+    required this.autoFocusForm,
+  });
+
+  /// 遷移時にフォーカスするTextFormField。
+  final WriteDefinitionFormType? autoFocusForm;
+  /// 初期値として持つ [DefinitionForWrite]。 
+  /// TextFieldなどに初期表示させたい値がある場合はこの値を渡す。
+  final DefinitionForWrite? initialDefinitionForWrite;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final asyncDefinitionForWrite =
-        ref.watch(definitionForWriteNotifierProvider(null));
+        ref.watch(definitionForWriteNotifierProvider(initialDefinitionForWrite));
     final notifier = ref.watch(
-      definitionForWriteNotifierProvider(null).notifier,
+      definitionForWriteNotifierProvider(initialDefinitionForWrite).notifier,
     );
 
     return asyncDefinitionForWrite.when(
@@ -23,7 +36,7 @@ class PostDefinitionPage extends ConsumerWidget {
         final canPost = notifier.canPost();
 
         return WriteDefinitionBasePage(
-          autoFocusForm: WriteDefinitionFormType.word,
+          autoFocusForm: autoFocusForm,
           definitionForWrite: definitionForWrite,
           notifier: notifier,
           appBarActionWidget: InkWell(

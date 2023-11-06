@@ -51,7 +51,7 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: const PostDefinitionFAB(),
+        floatingActionButton: const PostDefinitionFAB(definition: null),
       ),
     );
   }

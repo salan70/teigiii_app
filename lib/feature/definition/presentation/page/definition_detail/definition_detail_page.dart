@@ -117,7 +117,7 @@ class DefinitionDetailPage extends ConsumerWidget {
               ),
             ),
           ),
-          floatingActionButton: const PostDefinitionFAB(),
+          floatingActionButton: const PostDefinitionFAB(definition: null),
         );
       },
       loading: () {

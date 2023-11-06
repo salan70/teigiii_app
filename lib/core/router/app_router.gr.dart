@@ -99,9 +99,14 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     PostDefinitionRoute.name: (routeData) {
+      final args = routeData.argsAs<PostDefinitionRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const PostDefinitionPage(),
+        child: PostDefinitionPage(
+          key: args.key,
+          initialDefinitionForWrite: args.initialDefinitionForWrite,
+          autoFocusForm: args.autoFocusForm,
+        ),
       );
     },
     ProfileRoute.name: (routeData) {
@@ -414,16 +419,45 @@ class MyLicenseRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [PostDefinitionPage]
-class PostDefinitionRoute extends PageRouteInfo<void> {
-  const PostDefinitionRoute({List<PageRouteInfo>? children})
-      : super(
+class PostDefinitionRoute extends PageRouteInfo<PostDefinitionRouteArgs> {
+  PostDefinitionRoute({
+    Key? key,
+    required DefinitionForWrite? initialDefinitionForWrite,
+    required WriteDefinitionFormType? autoFocusForm,
+    List<PageRouteInfo>? children,
+  }) : super(
           PostDefinitionRoute.name,
+          args: PostDefinitionRouteArgs(
+            key: key,
+            initialDefinitionForWrite: initialDefinitionForWrite,
+            autoFocusForm: autoFocusForm,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'PostDefinitionRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<PostDefinitionRouteArgs> page =
+      PageInfo<PostDefinitionRouteArgs>(name);
+}
+
+class PostDefinitionRouteArgs {
+  const PostDefinitionRouteArgs({
+    this.key,
+    required this.initialDefinitionForWrite,
+    required this.autoFocusForm,
+  });
+
+  final Key? key;
+
+  final DefinitionForWrite? initialDefinitionForWrite;
+
+  final WriteDefinitionFormType? autoFocusForm;
+
+  @override
+  String toString() {
+    return 'PostDefinitionRouteArgs{key: $key, initialDefinitionForWrite: $initialDefinitionForWrite, autoFocusForm: $autoFocusForm}';
+  }
 }
 
 /// generated route for

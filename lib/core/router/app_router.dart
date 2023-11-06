@@ -8,6 +8,7 @@ import '../../feature/definition/presentation/page/definition_detail/definition_
 import '../../feature/definition/presentation/page/edit_definition/edit_definition_page.dart';
 import '../../feature/definition/presentation/page/home/home_page.dart';
 import '../../feature/definition/presentation/page/post_definition/post_definition_page.dart';
+import '../../feature/definition/util/write_definition_form_type.dart';
 import '../../feature/setting/presentation/license_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
 import '../../feature/user_profile/presentation/page/following_and_follower_list/following_and_follower_list_page.dart';

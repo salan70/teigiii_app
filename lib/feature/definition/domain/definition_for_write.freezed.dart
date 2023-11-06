@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$DefinitionForWrite {
+  /// 更新時のみ使用する。新規投稿時はnull
   String? get id => throw _privateConstructorUsedError;
   String get word => throw _privateConstructorUsedError;
   String get wordReading => throw _privateConstructorUsedError;
@@ -154,6 +155,7 @@ class _$_DefinitionForWrite extends _DefinitionForWrite {
       required this.definition})
       : super._();
 
+  /// 更新時のみ使用する。新規投稿時はnull
   @override
   final String? id;
   @override
@@ -207,6 +209,8 @@ abstract class _DefinitionForWrite extends DefinitionForWrite {
   const _DefinitionForWrite._() : super._();
 
   @override
+
+  /// 更新時のみ使用する。新規投稿時はnull
   String? get id;
   @override
   String get word;

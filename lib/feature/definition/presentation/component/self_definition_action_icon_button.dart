@@ -99,7 +99,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
           actions: [
             InkWell(
               onTap: () {
-                // context.popRoute();
+                context.popRoute();
               },
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -111,7 +111,13 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
             ),
             InkWell(
               onTap: () {
-                context.popRoute();
+                context.pushRoute(
+                  PostDefinitionRoute(
+                    initialDefinitionForWrite:
+                        definition.toDefinitionForWrite(),
+                    autoFocusForm: null,
+                  ),
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.all(16),
