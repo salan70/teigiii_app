@@ -81,7 +81,8 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                 ),
                 TextFormField(
                   initialValue: definitionForWrite.wordReading,
-                  autofocus: autoFocusForm == WriteDefinitionFormType.wordReading,
+                  autofocus:
+                      autoFocusForm == WriteDefinitionFormType.wordReading,
                   maxLength: 50,
                   maxLines: null,
                   textInputAction: TextInputAction.next,
@@ -97,7 +98,8 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                 const SizedBox(height: 16),
                 TextFormField(
                   initialValue: definitionForWrite.definition,
-                  autofocus: autoFocusForm == WriteDefinitionFormType.definition,
+                  autofocus:
+                      autoFocusForm == WriteDefinitionFormType.definition,
                   maxLength: 500,
                   maxLines: null,
                   onChanged: notifier.changeDefinition,
@@ -127,6 +129,9 @@ class WriteDefinitionBasePage extends ConsumerWidget {
           contentPadding: const EdgeInsets.only(
             top: 40,
             bottom: 16,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
           content: const Column(
             mainAxisSize: MainAxisSize.min,
