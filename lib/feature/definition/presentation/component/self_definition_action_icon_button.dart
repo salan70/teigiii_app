@@ -30,9 +30,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
             }
 
             context.pushRoute(
-              EditDefinitionRoute(
-                initialDefinitionForWrite: definition.toDefinitionForWrite(),
-              ),
+              EditDefinitionRoute(initialDefinition: definition),
             );
           },
         ),
@@ -111,13 +109,15 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
             ),
             InkWell(
               onTap: () {
-                context.pushRoute(
-                  PostDefinitionRoute(
-                    initialDefinitionForWrite:
-                        definition.toDefinitionForWrite(),
-                    autoFocusForm: null,
-                  ),
-                );
+                // TODO(me): 適切な画面へ遷移させる
+                context
+                  ..popRoute()
+                  ..pushRoute(
+                    PostDefinitionRoute(
+                      initialDefinition: definition,
+                      autoFocusForm: null,
+                    ),
+                  );
               },
               child: Padding(
                 padding: const EdgeInsets.all(16),

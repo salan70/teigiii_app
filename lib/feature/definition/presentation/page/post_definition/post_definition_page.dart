@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../application/definition_for_write_notifier.dart';
-import '../../../domain/definition_for_write.dart';
+import '../../../domain/definition.dart';
 import '../../../util/write_definition_form_type.dart';
 import '../../component/write_definition_base_page.dart';
 
@@ -12,21 +12,23 @@ import '../../component/write_definition_base_page.dart';
 class PostDefinitionPage extends ConsumerWidget {
   const PostDefinitionPage({
     super.key,
-    required this.initialDefinitionForWrite,
+    required this.initialDefinition,
     required this.autoFocusForm,
   });
 
   /// 遷移時にフォーカスするTextFormField。
   final WriteDefinitionFormType? autoFocusForm;
-  /// 初期値として持つ [DefinitionForWrite]。 
+
+  /// 初期値として持つ [Definition]。
   /// TextFieldなどに初期表示させたい値がある場合はこの値を渡す。
-  final DefinitionForWrite? initialDefinitionForWrite;
+  final Definition? initialDefinition;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final initialDefinitionForWrite = initialDefinition?.toDefinitionForWrite();
 
-    final asyncDefinitionForWrite =
-        ref.watch(definitionForWriteNotifierProvider(initialDefinitionForWrite));
+    final asyncDefinitionForWrite = ref
+        .watch(definitionForWriteNotifierProvider(initialDefinitionForWrite));
     final notifier = ref.watch(
       definitionForWriteNotifierProvider(initialDefinitionForWrite).notifier,
     );

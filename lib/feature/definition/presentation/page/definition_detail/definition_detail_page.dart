@@ -1,16 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/extension/date_time_extension.dart';
 import '../../../../auth/application/auth_state.dart';
-import '../../../../user_config/application/user_config_service.dart';
 import '../../../application/definition_state.dart';
 import '../../component/avatar_icon_widget.dart';
 import '../../component/like_widget.dart';
@@ -140,69 +137,5 @@ class DefinitionDetailPage extends ConsumerWidget {
         );
       },
     );
-  }
-}
-
-enum PullDownMenuItemForUserAction {
-  muteUser,
-  unmuteUser,
-  reportUser;
-
-  PullDownMenuItem item({
-    required WidgetRef ref,
-    required String targetUser,
-  }) {
-    switch (this) {
-      case PullDownMenuItemForUserAction.muteUser:
-        return PullDownMenuItem(
-          onTap: () async {
-            await ref
-                .read(userConfigServiceProvider.notifier)
-                .muteUser(targetUser);
-          },
-          title: 'このユーザーをミュート',
-          icon: CupertinoIcons.speaker_slash,
-        );
-      case PullDownMenuItemForUserAction.unmuteUser:
-        return PullDownMenuItem(
-          onTap: () async {
-            await ref
-                .read(userConfigServiceProvider.notifier)
-                .unmuteUser(targetUser);
-          },
-          title: 'このユーザーのミュートを解除',
-          icon: CupertinoIcons.speaker,
-        );
-      case PullDownMenuItemForUserAction.reportUser:
-        return PullDownMenuItem(
-          onTap: () {
-            // TODO(me): ユーザー報告を実装する
-          },
-          title: 'このユーザーを報告',
-          icon: CupertinoIcons.flag,
-        );
-    }
-  }
-}
-
-enum PullDownMenuItemForDefinitionAction {
-  editDefinition,
-  deleteDefinition;
-
-  PullDownMenuItem item(VoidCallback onTap) {
-    switch (this) {
-      case PullDownMenuItemForDefinitionAction.editDefinition:
-        return PullDownMenuItem(
-          onTap: onTap,
-          title: 'この定義を編集',
-          icon: CupertinoIcons.pencil,
-        );
-      case PullDownMenuItemForDefinitionAction.deleteDefinition:
-        return PullDownMenuItem(
-          onTap: onTap,
-          title: 'この定義を削除',
-          icon: CupertinoIcons.trash,
-        );
-    }
   }
 }
