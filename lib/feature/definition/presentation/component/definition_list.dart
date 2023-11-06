@@ -15,17 +15,24 @@ class DefinitionList extends ConsumerWidget {
   DefinitionList({
     super.key,
     required this.definitionFeedType,
+    this.wordId,
   });
 
   final DefinitionFeedType definitionFeedType;
+  final String? wordId;
+
   final scrollController = ScrollController();
   // エラーが発生してリビルドした際、スクロール位置を保持するためのキー
   final globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncDefinitionIdListState =
-        ref.watch(definitionIdListStateNotifierProvider(definitionFeedType));
+    final asyncDefinitionIdListState = ref.watch(
+      definitionIdListStateNotifierProvider(
+        definitionFeedType,
+        wordId: wordId,
+      ),
+    );
 
     return asyncDefinitionIdListState.when(
       data: (data) {
@@ -37,8 +44,10 @@ class DefinitionList extends ConsumerWidget {
             if (notification.metrics.extentAfter == 0) {
               ref
                   .read(
-                    definitionIdListStateNotifierProvider(definitionFeedType)
-                        .notifier,
+                    definitionIdListStateNotifierProvider(
+                      definitionFeedType,
+                      wordId: wordId,
+                    ).notifier,
                   )
                   .fetchMore();
               return true;
@@ -55,7 +64,7 @@ class DefinitionList extends ConsumerWidget {
                   onRefresh: () async {
                     await ref
                         .read(definitionServiceProvider.notifier)
-                        .refreshAll(definitionFeedType);
+                        .refreshAll(definitionFeedType, wordId);
                   },
                 ),
                 SliverToBoxAdapter(
@@ -94,9 +103,10 @@ class DefinitionList extends ConsumerWidget {
                 CupertinoSliverRefreshControl(
                   builder: buildCustomRefreshIndicator,
                   onRefresh: () async {
+                    // TODO(me): 普通にProviderをinvalidateしていない理由を探す
                     await ref
                         .read(definitionServiceProvider.notifier)
-                        .refreshAll(definitionFeedType);
+                        .refreshAll(definitionFeedType, wordId);
                   },
                 ),
                 SliverToBoxAdapter(
@@ -122,6 +132,7 @@ class DefinitionList extends ConsumerWidget {
                               .read(
                                 definitionIdListStateNotifierProvider(
                                   definitionFeedType,
+                                  wordId: wordId,
                                 ).notifier,
                               )
                               .fetchMore();

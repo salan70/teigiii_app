@@ -69,7 +69,9 @@ class WordTopPage extends ConsumerWidget {
             body: TabBarView(
               children: [
                 DefinitionList(
-                  definitionFeedType: DefinitionFeedType.homeRecommend,
+                  definitionFeedType:
+                      DefinitionFeedType.wordTopOrderByCreatedAt,
+                  wordId: wordId,
                 ),
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.homeFollowing,

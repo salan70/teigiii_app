@@ -5,11 +5,11 @@ enum DefinitionFeedType {
   /// ホーム画面のフォロー中タブ
   homeFollowing,
 
-  // /// 語句毎の定義一覧画面の新着順
-  // perWordOrderByCreatedAt,
+  /// 語句毎の定義一覧画面の新着順
+  wordTopOrderByCreatedAt,
 
-  // /// 語句毎の定義一覧画面のいいね順
-  // perWordOrderByLikesCount,
+  /// 語句毎の定義一覧画面のいいね順
+  wordTopOrderByLikesCount,
 
   // TODO(me): 以下はそれぞれ必要な画面実装時に追加する
   // ソート系と画面系それぞれのenumを作るのがいいかも

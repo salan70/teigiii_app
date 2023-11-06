@@ -71,7 +71,11 @@ class UserConfigService extends _$UserConfigService {
     // この処理はDefinitionServiceに移譲したほうがいいかも
     // 全てのDefinitionFeedTypeを引数とするdefinitionIdListStateNotifierを再生成
     for (final feedType in DefinitionFeedType.values) {
-      await ref.read(definitionServiceProvider.notifier).refreshAll(feedType);
+      // TODO(me): よくわかんないため、wordIdをnullにしているが、適切な値を入れる
+      // そもそもこの処理が必要かの検討も行う
+      await ref
+          .read(definitionServiceProvider.notifier)
+          .refreshAll(feedType, null);
     }
 
     ref

@@ -44,12 +44,15 @@ class DefinitionService extends _$DefinitionService {
   }
 
   /// definitionIdListProviderと全てのdefinitionProviderを再生成する
-  Future<void> refreshAll(DefinitionFeedType definitionFeedType) async {
+  Future<void> refreshAll(
+    DefinitionFeedType definitionFeedType,
+    String? wordId,
+  ) async {
     await _invalidateAllDefinitionFamilies();
 
-    ref.invalidate(definitionIdListStateNotifierProvider(definitionFeedType));
+    ref.invalidate(definitionIdListStateNotifierProvider(definitionFeedType, wordId: wordId));
     await ref
-        .read(definitionIdListStateNotifierProvider(definitionFeedType).future);
+        .read(definitionIdListStateNotifierProvider(definitionFeedType, wordId: wordId).future);
   }
 
   /// 全てのdefinitionProviderを再生成する

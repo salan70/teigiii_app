@@ -56,6 +56,10 @@ class DefinitionRepository {
   }
 
   /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する
+  ///
+  /// [lastDocument]がnullの場合、最初のdocumentから取得する。
+  /// 無限スクロールなどで、2回目以降の取得の場合、
+  /// [lastDocument]に前回取得した最後のdocumentを指定すること。
   Future<DefinitionIdListState> fetchHomeFollowingDefinitionIdList(
     List<String> targetUserIdList,
     QueryDocumentSnapshot? lastDocument,
@@ -74,6 +78,105 @@ class DefinitionRepository {
     final snapshot = await query.get();
 
     return _toDefinitionIdListState(snapshot);
+  }
+
+  /// 「語句トップ画面: 新着順タブ」で表示するDefinitionIDのListを取得する
+  ///
+  /// [lastDocument]がnullの場合、最初のdocumentから取得する。
+  /// 無限スクロールなどで、2回目以降の取得の場合、
+  /// [lastDocument]に前回取得した最後のdocumentを指定すること。
+  Future<DefinitionIdListState> fetchWordTopOrderByCreatedAtDefinitionIdList(
+    String currentUserId,
+    List<String> mutedUserIdList,
+    String wordId,
+    QueryDocumentSnapshot? lastDocument,
+  ) async {
+    return _fetchUnmutedDefinitionIdList(
+      (doc, limit) => _fetchWordTopOrderByCreatedAtSnapshot(
+        currentUserId,
+        wordId,
+        doc,
+        limit,
+      ),
+      currentUserId,
+      mutedUserIdList,
+      lastDocument,
+    );
+  }
+
+  Future<QuerySnapshot> _fetchWordTopOrderByCreatedAtSnapshot(
+    String currentUserId,
+    String wordId,
+    DocumentSnapshot? lastDocument,
+    int fetchLimit,
+  ) async {
+    var query = firestore
+        .collection('Definitions')
+        .where('wordId', isEqualTo: wordId)
+        .where(
+          Filter.or(
+            Filter('authorId', isEqualTo: currentUserId),
+            Filter('isPublic', isEqualTo: true),
+          ),
+        )
+        .orderBy('createdAt', descending: true)
+        .limit(fetchLimitForDefinitionList);
+
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument);
+    }
+
+    return query.get();
+  }
+
+  /// ミュートしていないDefinitionIdのリストを
+  /// [fetchLimitForDefinitionList]に達するまで取得する
+  Future<DefinitionIdListState> _fetchUnmutedDefinitionIdList(
+    Future<QuerySnapshot> Function(QueryDocumentSnapshot?, int)
+        fetchWordDocSnapshot,
+    String currentUserId,
+    List<String> mutedUserIdList,
+    QueryDocumentSnapshot? documentSnapshot,
+  ) async {
+    final idList = <String>[];
+    var lastDocument = documentSnapshot;
+    var hasMore = true;
+    var fetchLimit = fetchLimitForDefinitionList;
+
+    // ミュートしていないDefinitionのid取得数の合計が
+    // [fetchLimitForDefinitionList]に達するまでループする
+    while (fetchLimit > 0) {
+      final snapshot = await fetchWordDocSnapshot(lastDocument, fetchLimit);
+
+      final validIdList = snapshot.docs
+          .map((doc) {
+            final definitionDoc = DefinitionDocument.fromFirestore(doc);
+            // ミュートしていないユーザーが投稿したidのみ返す
+            if (!mutedUserIdList.contains(definitionDoc.authorId)) {
+              return definitionDoc.id;
+            }
+          })
+          .whereType<String>()
+          .toList();
+
+      idList.addAll(validIdList);
+      fetchLimit -= validIdList.length;
+
+      // muteに限らずこれ以上取得できるドキュメントがない場合、
+      // [lastDocument]を更新せずにループを抜ける
+      if (snapshot.docs.length < fetchLimit) {
+        hasMore = false;
+        break;
+      }
+
+      lastDocument = snapshot.docs.last;
+    }
+
+    return DefinitionIdListState(
+      definitionIdList: idList,
+      lastReadQueryDocumentSnapshot: lastDocument,
+      hasMore: hasMore,
+    );
   }
 
   /// DocumentSnapshotからDefinitionIdListStateを生成する

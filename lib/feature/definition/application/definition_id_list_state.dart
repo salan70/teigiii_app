@@ -15,18 +15,31 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     with FetchMoreMixin<DefinitionIdListState> {
   @override
   FutureOr<DefinitionIdListState> build(
-    DefinitionFeedType definitionFeedType,
-  ) async {
+    DefinitionFeedType definitionFeedType, {
+    String? wordId,
+  }) async {
     const isFirstFetch = true;
 
     switch (definitionFeedType) {
       case DefinitionFeedType.homeRecommend:
-        return await _homeRecommendDefinitionIdList(
+        return await _fetchForHomeRecommend(isFirstFetch: isFirstFetch);
+
+      case DefinitionFeedType.homeFollowing:
+        return await _fetchForHomeFollowing(isFirstFetch: isFirstFetch);
+
+      case DefinitionFeedType.wordTopOrderByCreatedAt:
+        if (wordId == null) {
+          throw Exception('wordIdがnullです');
+        }
+        return await _fetchForWordTopOrderByCreatedAt(
           isFirstFetch: isFirstFetch,
         );
 
-      case DefinitionFeedType.homeFollowing:
-        return await _fetchHomeFollowingDefinitionIdList(
+      case DefinitionFeedType.wordTopOrderByLikesCount:
+        if (wordId == null) {
+          throw Exception('wordIdがnullです');
+        }
+        return await _fetchForWordTopOrderByCreatedAt(
           isFirstFetch: isFirstFetch,
         );
     }
@@ -35,7 +48,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
   /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する
   ///
   /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
-  Future<DefinitionIdListState> _homeRecommendDefinitionIdList({
+  Future<DefinitionIdListState> _fetchForHomeRecommend({
     required bool isFirstFetch,
   }) async {
     final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
@@ -53,7 +66,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
   /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する
   ///
   /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
-  Future<DefinitionIdListState> _fetchHomeFollowingDefinitionIdList({
+  Future<DefinitionIdListState> _fetchForHomeFollowing({
     required bool isFirstFetch,
   }) async {
     final targetUserIdList = <String>[];
@@ -83,6 +96,27 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         );
   }
 
+  /// 「Wordトップ画面: 新着順タブ」で表示するDefinitionIDのListを取得する
+  ///
+  /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
+  Future<DefinitionIdListState> _fetchForWordTopOrderByCreatedAt({
+    required bool isFirstFetch,
+  }) async {
+    final currentUserId = ref.read(userIdProvider)!;
+    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
+    final lastDoc =
+        isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
+
+    return ref
+        .watch(definitionRepositoryProvider)
+        .fetchWordTopOrderByCreatedAtDefinitionIdList(
+          currentUserId,
+          mutedUserIdList,
+          wordId!,
+          lastDoc,
+        );
+  }
+
   Future<void> fetchMore() async {
     await fetchMoreHelper(
       ref: ref,
@@ -97,12 +131,23 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
   }
 
   Future<DefinitionIdListState> _fetchMoreBasedOnType() async {
+    const isFirstFetch = false;
     switch (definitionFeedType) {
       case DefinitionFeedType.homeRecommend:
-        return _homeRecommendDefinitionIdList(isFirstFetch: false);
+        return _fetchForHomeRecommend(isFirstFetch: isFirstFetch);
 
       case DefinitionFeedType.homeFollowing:
-        return _fetchHomeFollowingDefinitionIdList(isFirstFetch: false);
+        return _fetchForHomeFollowing(isFirstFetch: isFirstFetch);
+
+      case DefinitionFeedType.wordTopOrderByCreatedAt:
+        return _fetchForWordTopOrderByCreatedAt(
+          isFirstFetch: isFirstFetch,
+        );
+
+      case DefinitionFeedType.wordTopOrderByLikesCount:
+        return _fetchForWordTopOrderByCreatedAt(
+          isFirstFetch: isFirstFetch,
+        );
     }
   }
 }
