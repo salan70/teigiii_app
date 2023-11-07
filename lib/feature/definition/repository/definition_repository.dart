@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/common_provider/firebase_providers.dart';
+import '../../../core/common_provider/firebase_providers.dart'; 
 import '../../../util/constant/config_constant.dart';
 import '../../../util/extension/firestore_extension.dart';
 import '../domain/definition_for_write.dart';
@@ -79,7 +79,7 @@ class DefinitionRepository {
   /// [lastDocument]がnullの場合、最初のdocumentから取得する。
   /// 無限スクロールなどで、2回目以降の取得の場合、
   /// [lastDocument]に前回取得した最後のdocumentを指定すること。
-  Future<DefinitionIdListState> fetchHomeFollowingDefinitionIdList(
+  Future<DefinitionIdListState> fetchHomeFollowingDefinitionIdListState(
     String currentUserId,
     List<String> targetUserIdList,
     QueryDocumentSnapshot? lastDocument,

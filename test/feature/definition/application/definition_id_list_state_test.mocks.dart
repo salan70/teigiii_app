@@ -209,45 +209,47 @@ class MockDefinitionRepository extends _i1.Mock
           ) as _i12.Future<_i3.DefinitionIdListState>);
 
   @override
-  _i12.Future<_i3.DefinitionIdListState> fetchHomeFollowingDefinitionIdList(
+  _i12.Future<_i3.DefinitionIdListState>
+      fetchHomeFollowingDefinitionIdListState(
     String? currentUserId,
     List<String>? targetUserIdList,
     _i2.QueryDocumentSnapshot<Object?>? lastDocument,
   ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchHomeFollowingDefinitionIdList,
-          [
-            currentUserId,
-            targetUserIdList,
-            lastDocument,
-          ],
-        ),
-        returnValue: _i12.Future<_i3.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_1(
-          this,
-          Invocation.method(
-            #fetchHomeFollowingDefinitionIdList,
-            [
-              currentUserId,
-              targetUserIdList,
-              lastDocument,
-            ],
-          ),
-        )),
-        returnValueForMissingStub: _i12.Future<_i3.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_1(
-          this,
-          Invocation.method(
-            #fetchHomeFollowingDefinitionIdList,
-            [
-              currentUserId,
-              targetUserIdList,
-              lastDocument,
-            ],
-          ),
-        )),
-      ) as _i12.Future<_i3.DefinitionIdListState>);
+          (super.noSuchMethod(
+            Invocation.method(
+              #fetchHomeFollowingDefinitionIdList,
+              [
+                currentUserId,
+                targetUserIdList,
+                lastDocument,
+              ],
+            ),
+            returnValue: _i12.Future<_i3.DefinitionIdListState>.value(
+                _FakeDefinitionIdListState_1(
+              this,
+              Invocation.method(
+                #fetchHomeFollowingDefinitionIdList,
+                [
+                  currentUserId,
+                  targetUserIdList,
+                  lastDocument,
+                ],
+              ),
+            )),
+            returnValueForMissingStub:
+                _i12.Future<_i3.DefinitionIdListState>.value(
+                    _FakeDefinitionIdListState_1(
+              this,
+              Invocation.method(
+                #fetchHomeFollowingDefinitionIdList,
+                [
+                  currentUserId,
+                  targetUserIdList,
+                  lastDocument,
+                ],
+              ),
+            )),
+          ) as _i12.Future<_i3.DefinitionIdListState>);
 
   @override
   _i12.Future<_i3.DefinitionIdListState> fetchWordTopDefinitionIdListState(

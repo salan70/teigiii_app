@@ -68,7 +68,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
 
     return ref
         .read(definitionRepositoryProvider)
-        .fetchHomeFollowingDefinitionIdList(
+        .fetchHomeFollowingDefinitionIdListState(
           currentUserId,
           targetUserIdList,
           lastDoc,

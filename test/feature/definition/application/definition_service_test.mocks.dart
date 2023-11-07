@@ -125,7 +125,7 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i6.Future<_i3.DefinitionIdListState>);
 
   @override
-  _i6.Future<_i3.DefinitionIdListState> fetchHomeFollowingDefinitionIdList(
+  _i6.Future<_i3.DefinitionIdListState> fetchHomeFollowingDefinitionIdListState(
     String? currentUserId,
     List<String>? targetUserIdList,
     _i2.QueryDocumentSnapshot<Object?>? lastDocument,
