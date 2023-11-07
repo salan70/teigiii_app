@@ -149,7 +149,11 @@ void main() {
       ).thenAnswer((_) async => mockUserProfileDoc);
       final mockDefinitionIdList = [mockDefinitionDoc.id];
       when(
-        mockDefinitionRepository.fetchHomeFollowingDefinitionIdList(any, any),
+        mockDefinitionRepository.fetchHomeFollowingDefinitionIdList(
+          any,
+          any,
+          any,
+        ),
       ).thenAnswer(
         (_) async => DefinitionIdListState(
           definitionIdList: mockDefinitionIdList,
@@ -197,7 +201,11 @@ void main() {
       // 想定通りにrepositoryの関数が呼ばれているか検証
       // TODO(me): mutedUserIdListを除外したuserIdListを引数に渡していることを検証
       verify(
-        mockDefinitionRepository.fetchHomeFollowingDefinitionIdList(any, null),
+        mockDefinitionRepository.fetchHomeFollowingDefinitionIdList(
+          any,
+          any,
+          null,
+        ),
       ).called(1);
     });
   });
@@ -320,13 +328,18 @@ void main() {
         hasMore: true,
       );
       when(
-        mockDefinitionRepository.fetchHomeFollowingDefinitionIdList(any, any),
+        mockDefinitionRepository.fetchHomeFollowingDefinitionIdList(
+          any,
+          any,
+          any,
+        ),
       ).thenAnswer(
         (_) async => mockDefinitionIdListState,
       );
       final mockDefinitionIdList = [mockDefinitionDoc.id];
       when(
         mockDefinitionRepository.fetchHomeFollowingDefinitionIdList(
+          any,
           any,
           mockDefinitionIdListState.lastReadQueryDocumentSnapshot,
         ),
@@ -407,6 +420,7 @@ void main() {
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
         mockDefinitionRepository.fetchHomeFollowingDefinitionIdList(
+          any,
           any,
           mockDefinitionIdListState.lastReadQueryDocumentSnapshot,
         ),

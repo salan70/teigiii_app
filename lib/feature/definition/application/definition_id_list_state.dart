@@ -50,17 +50,14 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
   Future<DefinitionIdListState> _fetchForHomeFollowing({
     required bool isFirstFetch,
   }) async {
-    final targetUserIdList = <String>[];
-    final userId = ref.read(userIdProvider)!;
+    final currentUserId = ref.read(userIdProvider)!;
 
     // フォローしているユーザーのIDリストを取得
     final followingIdList =
-        await ref.read(followingIdListProvider(userId).future);
+        await ref.read(followingIdListProvider(currentUserId).future);
 
     // フォローしているユーザーと自分のIDを追加
-    targetUserIdList
-      ..addAll(followingIdList)
-      ..add(userId);
+    final targetUserIdList = <String>[...followingIdList, currentUserId];
 
     // ミュートしているユーザーのIDを除外
     final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
@@ -72,6 +69,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     return ref
         .read(definitionRepositoryProvider)
         .fetchHomeFollowingDefinitionIdList(
+          currentUserId,
           targetUserIdList,
           lastDoc,
         );

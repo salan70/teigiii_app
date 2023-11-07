@@ -210,6 +210,7 @@ class MockDefinitionRepository extends _i1.Mock
 
   @override
   _i12.Future<_i3.DefinitionIdListState> fetchHomeFollowingDefinitionIdList(
+    String? currentUserId,
     List<String>? targetUserIdList,
     _i2.QueryDocumentSnapshot<Object?>? lastDocument,
   ) =>
@@ -217,6 +218,7 @@ class MockDefinitionRepository extends _i1.Mock
         Invocation.method(
           #fetchHomeFollowingDefinitionIdList,
           [
+            currentUserId,
             targetUserIdList,
             lastDocument,
           ],
@@ -227,6 +229,7 @@ class MockDefinitionRepository extends _i1.Mock
           Invocation.method(
             #fetchHomeFollowingDefinitionIdList,
             [
+              currentUserId,
               targetUserIdList,
               lastDocument,
             ],
@@ -238,6 +241,7 @@ class MockDefinitionRepository extends _i1.Mock
           Invocation.method(
             #fetchHomeFollowingDefinitionIdList,
             [
+              currentUserId,
               targetUserIdList,
               lastDocument,
             ],
