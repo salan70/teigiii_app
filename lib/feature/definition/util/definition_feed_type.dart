@@ -33,3 +33,9 @@ enum DefinitionFeedType {
   // /// 他ユーザーのプロフィール画面のいいねタブ
   // otherProfileLiked,
 }
+
+// TODO(me): [DefinitionFeedType]の値に合わせて更新する必要があことをなんとかしたい
+enum WordTopOrderByType {
+  createdAt,
+  likesCount;
+}

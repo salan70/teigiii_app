@@ -6,7 +6,7 @@ part of 'definition_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$definitionServiceHash() => r'58514c4f29854ad87ceb2be2da9f14acea1c1055';
+String _$definitionServiceHash() => r'93f89b1a177d6dce387232bc36b594357e237d85';
 
 /// See also [DefinitionService].
 @ProviderFor(DefinitionService)

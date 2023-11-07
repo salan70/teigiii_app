@@ -7,17 +7,19 @@ import 'dart:async' as _i6;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i9;
+import 'package:riverpod_annotation/riverpod_annotation.dart' as _i10;
 import 'package:teigi_app/feature/definition/domain/definition_for_write.dart'
-    as _i7;
+    as _i8;
 import 'package:teigi_app/feature/definition/domain/definition_id_list_state.dart'
     as _i3;
 import 'package:teigi_app/feature/definition/repository/definition_repository.dart'
     as _i5;
 import 'package:teigi_app/feature/definition/repository/entity/definition_document.dart'
     as _i4;
+import 'package:teigi_app/feature/definition/util/definition_feed_type.dart'
+    as _i7;
 
-import 'definition_service_test.dart' as _i8;
+import 'definition_service_test.dart' as _i9;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -156,51 +158,53 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i6.Future<_i3.DefinitionIdListState>);
 
   @override
-  _i6.Future<_i3.DefinitionIdListState>
-      fetchWordTopOrderByCreatedAtDefinitionIdList(
+  _i6.Future<_i3.DefinitionIdListState> fetchWordTopDefinitionIdList(
+    _i7.WordTopOrderByType? orderByType,
     String? currentUserId,
     List<String>? mutedUserIdList,
     String? wordId,
     _i2.QueryDocumentSnapshot<Object?>? lastDocument,
   ) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #fetchWordTopOrderByCreatedAtDefinitionIdList,
-              [
-                currentUserId,
-                mutedUserIdList,
-                wordId,
-                lastDocument,
-              ],
-            ),
-            returnValue: _i6.Future<_i3.DefinitionIdListState>.value(
-                _FakeDefinitionIdListState_1(
-              this,
-              Invocation.method(
-                #fetchWordTopOrderByCreatedAtDefinitionIdList,
-                [
-                  currentUserId,
-                  mutedUserIdList,
-                  wordId,
-                  lastDocument,
-                ],
-              ),
-            )),
-            returnValueForMissingStub:
-                _i6.Future<_i3.DefinitionIdListState>.value(
-                    _FakeDefinitionIdListState_1(
-              this,
-              Invocation.method(
-                #fetchWordTopOrderByCreatedAtDefinitionIdList,
-                [
-                  currentUserId,
-                  mutedUserIdList,
-                  wordId,
-                  lastDocument,
-                ],
-              ),
-            )),
-          ) as _i6.Future<_i3.DefinitionIdListState>);
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchWordTopDefinitionIdList,
+          [
+            orderByType,
+            currentUserId,
+            mutedUserIdList,
+            wordId,
+            lastDocument,
+          ],
+        ),
+        returnValue: _i6.Future<_i3.DefinitionIdListState>.value(
+            _FakeDefinitionIdListState_1(
+          this,
+          Invocation.method(
+            #fetchWordTopDefinitionIdList,
+            [
+              orderByType,
+              currentUserId,
+              mutedUserIdList,
+              wordId,
+              lastDocument,
+            ],
+          ),
+        )),
+        returnValueForMissingStub: _i6.Future<_i3.DefinitionIdListState>.value(
+            _FakeDefinitionIdListState_1(
+          this,
+          Invocation.method(
+            #fetchWordTopDefinitionIdList,
+            [
+              orderByType,
+              currentUserId,
+              mutedUserIdList,
+              wordId,
+              lastDocument,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i3.DefinitionIdListState>);
 
   @override
   _i6.Future<_i4.DefinitionDocument> fetchDefinition(String? definitionId) =>
@@ -231,7 +235,7 @@ class MockDefinitionRepository extends _i1.Mock
   _i6.Future<void> createDefinitionAndMaybeWord(
     String? authorId,
     String? existingWordId,
-    _i7.DefinitionForWrite? definitionForWrite,
+    _i8.DefinitionForWrite? definitionForWrite,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -249,7 +253,7 @@ class MockDefinitionRepository extends _i1.Mock
   @override
   _i6.Future<void> updateDefinitionAndMaybeCreateWord(
     String? existingWordId,
-    _i7.DefinitionForWrite? definitionForWrite,
+    _i8.DefinitionForWrite? definitionForWrite,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -319,11 +323,11 @@ class MockDefinitionRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockListener extends _i1.Mock
-    implements _i8.Listener<_i9.AsyncValue<void>> {
+    implements _i9.Listener<_i10.AsyncValue<void>> {
   @override
   void call(
-    _i9.AsyncValue<void>? previous,
-    _i9.AsyncValue<void>? next,
+    _i10.AsyncValue<void>? previous,
+    _i10.AsyncValue<void>? next,
   ) =>
       super.noSuchMethod(
         Invocation.method(

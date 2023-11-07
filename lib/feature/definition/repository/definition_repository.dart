@@ -9,6 +9,7 @@ import '../../../util/extension/firestore_extension.dart';
 import '../../../util/extension/string_list_extension.dart';
 import '../domain/definition_for_write.dart';
 import '../domain/definition_id_list_state.dart';
+import '../util/definition_feed_type.dart';
 import 'entity/definition_document.dart';
 
 part 'definition_repository.g.dart';
@@ -80,19 +81,21 @@ class DefinitionRepository {
     return _toDefinitionIdListState(snapshot);
   }
 
-  /// 「語句トップ画面: 新着順タブ」で表示するDefinitionIDのListを取得する
+  /// 「語句トップ画面」で表示するDefinitionIDのListを取得する
   ///
   /// [lastDocument]がnullの場合、最初のdocumentから取得する。
   /// 無限スクロールなどで、2回目以降の取得の場合、
   /// [lastDocument]に前回取得した最後のdocumentを指定すること。
-  Future<DefinitionIdListState> fetchWordTopOrderByCreatedAtDefinitionIdList(
+  Future<DefinitionIdListState> fetchWordTopDefinitionIdList(
+    WordTopOrderByType orderByType,
     String currentUserId,
     List<String> mutedUserIdList,
     String wordId,
     QueryDocumentSnapshot? lastDocument,
   ) async {
     return _fetchUnmutedDefinitionIdList(
-      (doc, limit) => _fetchWordTopOrderByCreatedAtSnapshot(
+      (doc, limit) => _fetchWordTopSnapshot(
+        orderByType,
         currentUserId,
         wordId,
         doc,
@@ -104,12 +107,23 @@ class DefinitionRepository {
     );
   }
 
-  Future<QuerySnapshot> _fetchWordTopOrderByCreatedAtSnapshot(
+  Future<QuerySnapshot> _fetchWordTopSnapshot(
+    WordTopOrderByType orderByType,
     String currentUserId,
     String wordId,
     DocumentSnapshot? lastDocument,
     int fetchLimit,
   ) async {
+    late final String orderByField;
+    switch (orderByType) {
+      case WordTopOrderByType.createdAt:
+        orderByField = 'createdAt';
+        break;
+      case WordTopOrderByType.likesCount:
+        orderByField = 'likesCount';
+        break;
+    }
+
     var query = firestore
         .collection('Definitions')
         .where('wordId', isEqualTo: wordId)
@@ -119,7 +133,7 @@ class DefinitionRepository {
             Filter('isPublic', isEqualTo: true),
           ),
         )
-        .orderBy('createdAt', descending: true)
+        .orderBy(orderByField, descending: true)
         .limit(fetchLimitForDefinitionList);
 
     if (lastDocument != null) {

@@ -74,7 +74,8 @@ class WordTopPage extends ConsumerWidget {
                   wordId: wordId,
                 ),
                 DefinitionList(
-                  definitionFeedType: DefinitionFeedType.homeFollowing,
+                  definitionFeedType: DefinitionFeedType.wordTopOrderByLikesCount,
+                  wordId: wordId,
                 ),
               ],
             ),
