@@ -166,41 +166,47 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i2.FirebaseFirestore);
 
   @override
-  _i12.Future<_i3.DefinitionIdListState> fetchHomeRecommendDefinitionIdList(
+  _i12.Future<_i3.DefinitionIdListState>
+      fetchHomeRecommendDefinitionIdListState(
+    String? currentUserId,
     List<String>? mutedUserIdList,
     _i2.QueryDocumentSnapshot<Object?>? lastDocument,
   ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchHomeRecommendDefinitionIdList,
-          [
-            mutedUserIdList,
-            lastDocument,
-          ],
-        ),
-        returnValue: _i12.Future<_i3.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_1(
-          this,
-          Invocation.method(
-            #fetchHomeRecommendDefinitionIdList,
-            [
-              mutedUserIdList,
-              lastDocument,
-            ],
-          ),
-        )),
-        returnValueForMissingStub: _i12.Future<_i3.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_1(
-          this,
-          Invocation.method(
-            #fetchHomeRecommendDefinitionIdList,
-            [
-              mutedUserIdList,
-              lastDocument,
-            ],
-          ),
-        )),
-      ) as _i12.Future<_i3.DefinitionIdListState>);
+          (super.noSuchMethod(
+            Invocation.method(
+              #fetchHomeRecommendDefinitionIdListState,
+              [
+                currentUserId,
+                mutedUserIdList,
+                lastDocument,
+              ],
+            ),
+            returnValue: _i12.Future<_i3.DefinitionIdListState>.value(
+                _FakeDefinitionIdListState_1(
+              this,
+              Invocation.method(
+                #fetchHomeRecommendDefinitionIdListState,
+                [
+                  currentUserId,
+                  mutedUserIdList,
+                  lastDocument,
+                ],
+              ),
+            )),
+            returnValueForMissingStub:
+                _i12.Future<_i3.DefinitionIdListState>.value(
+                    _FakeDefinitionIdListState_1(
+              this,
+              Invocation.method(
+                #fetchHomeRecommendDefinitionIdListState,
+                [
+                  currentUserId,
+                  mutedUserIdList,
+                  lastDocument,
+                ],
+              ),
+            )),
+          ) as _i12.Future<_i3.DefinitionIdListState>);
 
   @override
   _i12.Future<_i3.DefinitionIdListState> fetchHomeFollowingDefinitionIdList(
@@ -240,7 +246,7 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i12.Future<_i3.DefinitionIdListState>);
 
   @override
-  _i12.Future<_i3.DefinitionIdListState> fetchWordTopDefinitionIdList(
+  _i12.Future<_i3.DefinitionIdListState> fetchWordTopDefinitionIdListState(
     _i13.WordTopOrderByType? orderByType,
     String? currentUserId,
     List<String>? mutedUserIdList,
@@ -249,7 +255,7 @@ class MockDefinitionRepository extends _i1.Mock
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchWordTopDefinitionIdList,
+          #fetchWordTopDefinitionIdListState,
           [
             orderByType,
             currentUserId,
@@ -262,7 +268,7 @@ class MockDefinitionRepository extends _i1.Mock
             _FakeDefinitionIdListState_1(
           this,
           Invocation.method(
-            #fetchWordTopDefinitionIdList,
+            #fetchWordTopDefinitionIdListState,
             [
               orderByType,
               currentUserId,
@@ -276,7 +282,7 @@ class MockDefinitionRepository extends _i1.Mock
             _FakeDefinitionIdListState_1(
           this,
           Invocation.method(
-            #fetchWordTopDefinitionIdList,
+            #fetchWordTopDefinitionIdListState,
             [
               orderByType,
               currentUserId,

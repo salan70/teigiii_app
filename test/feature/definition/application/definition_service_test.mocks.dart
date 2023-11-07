@@ -84,14 +84,16 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i2.FirebaseFirestore);
 
   @override
-  _i6.Future<_i3.DefinitionIdListState> fetchHomeRecommendDefinitionIdList(
+  _i6.Future<_i3.DefinitionIdListState> fetchHomeRecommendDefinitionIdListState(
+    String? currentUserId,
     List<String>? mutedUserIdList,
     _i2.QueryDocumentSnapshot<Object?>? lastDocument,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchHomeRecommendDefinitionIdList,
+          #fetchHomeRecommendDefinitionIdListState,
           [
+            currentUserId,
             mutedUserIdList,
             lastDocument,
           ],
@@ -100,8 +102,9 @@ class MockDefinitionRepository extends _i1.Mock
             _FakeDefinitionIdListState_1(
           this,
           Invocation.method(
-            #fetchHomeRecommendDefinitionIdList,
+            #fetchHomeRecommendDefinitionIdListState,
             [
+              currentUserId,
               mutedUserIdList,
               lastDocument,
             ],
@@ -111,8 +114,9 @@ class MockDefinitionRepository extends _i1.Mock
             _FakeDefinitionIdListState_1(
           this,
           Invocation.method(
-            #fetchHomeRecommendDefinitionIdList,
+            #fetchHomeRecommendDefinitionIdListState,
             [
+              currentUserId,
               mutedUserIdList,
               lastDocument,
             ],
@@ -158,7 +162,7 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i6.Future<_i3.DefinitionIdListState>);
 
   @override
-  _i6.Future<_i3.DefinitionIdListState> fetchWordTopDefinitionIdList(
+  _i6.Future<_i3.DefinitionIdListState> fetchWordTopDefinitionIdListState(
     _i7.WordTopOrderByType? orderByType,
     String? currentUserId,
     List<String>? mutedUserIdList,
@@ -167,7 +171,7 @@ class MockDefinitionRepository extends _i1.Mock
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchWordTopDefinitionIdList,
+          #fetchWordTopDefinitionIdListState,
           [
             orderByType,
             currentUserId,
@@ -180,7 +184,7 @@ class MockDefinitionRepository extends _i1.Mock
             _FakeDefinitionIdListState_1(
           this,
           Invocation.method(
-            #fetchWordTopDefinitionIdList,
+            #fetchWordTopDefinitionIdListState,
             [
               orderByType,
               currentUserId,
@@ -194,7 +198,7 @@ class MockDefinitionRepository extends _i1.Mock
             _FakeDefinitionIdListState_1(
           this,
           Invocation.method(
-            #fetchWordTopDefinitionIdList,
+            #fetchWordTopDefinitionIdListState,
             [
               orderByType,
               currentUserId,

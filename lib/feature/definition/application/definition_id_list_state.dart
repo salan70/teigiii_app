@@ -21,7 +21,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     // ミュートユーザーが更新されるたびに、本Notifierも更新されるよう監視
     ref.watch(mutedUserIdListProvider);
 
-    return await _fetchMoreBasedOnType(isFirstFetch: true);
+    return await _fetchBasedOnType(isFirstFetch: true);
   }
 
   /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する
@@ -30,13 +30,15 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
   Future<DefinitionIdListState> _fetchForHomeRecommend({
     required bool isFirstFetch,
   }) async {
+    final currentUserId = ref.read(userIdProvider)!;
     final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
     final lastDoc =
         isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
     return ref
         .watch(definitionRepositoryProvider)
-        .fetchHomeRecommendDefinitionIdList(
+        .fetchHomeRecommendDefinitionIdListState(
+          currentUserId,
           mutedUserIdList,
           lastDoc,
         );
@@ -87,7 +89,9 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     final lastDoc =
         isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
-    return ref.watch(definitionRepositoryProvider).fetchWordTopDefinitionIdList(
+    return ref
+        .watch(definitionRepositoryProvider)
+        .fetchWordTopDefinitionIdListState(
           orderByType,
           currentUserId,
           mutedUserIdList,
@@ -99,7 +103,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
   Future<void> fetchMore() async {
     await fetchMoreHelper(
       ref: ref,
-      fetchFunction: () => _fetchMoreBasedOnType(isFirstFetch: false),
+      fetchFunction: () => _fetchBasedOnType(isFirstFetch: false),
       mergeFunction: (currentData, newData) => DefinitionIdListState(
         definitionIdList:
             currentData.definitionIdList + newData.definitionIdList,
@@ -109,7 +113,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     );
   }
 
-  Future<DefinitionIdListState> _fetchMoreBasedOnType({
+  Future<DefinitionIdListState> _fetchBasedOnType({
     required bool isFirstFetch,
   }) async {
     switch (definitionFeedType) {
