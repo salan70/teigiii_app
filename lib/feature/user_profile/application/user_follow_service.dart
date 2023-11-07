@@ -64,6 +64,7 @@ class UserFollowService extends _$UserFollowService {
       return;
     }
 
+    // UI上でのフォロー/フォロワー数を更新するため、
     // フォローした/されたユーザーのProviderを再生成
     _invalidateRelatedUserProvider(targetUserId);
 
@@ -71,8 +72,6 @@ class UserFollowService extends _$UserFollowService {
   }
 
   /// ログイン中のユーザーと[targetUserId]のuserProfileProvider, isFollowingProviderを再生成する
-  /// 
-  /// フォロー/フォロー解除時に使用する
   void _invalidateRelatedUserProvider(String targetUserId) {
     final currentUserId = ref.read(userIdProvider)!;
 
