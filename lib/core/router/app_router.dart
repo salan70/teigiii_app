@@ -26,6 +26,8 @@ part 'app_router.gr.dart';
 @riverpod
 Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter();
 
+
+// TODO(me): 一部Routeのpathにidを含める
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends _$AppRouter {
   @override
@@ -43,12 +45,14 @@ class AppRouter extends _$AppRouter {
                   page: HomeRoute.page,
                 ),
                 AutoRoute(
-                  // TODO(me): pathをdefinitionIdにする
                   path: 'definition_detail',
                   page: DefinitionDetailRoute.page,
                 ),
                 AutoRoute(
-                  // TODO(me): pathをuserIdにする
+                  path: 'word_top',
+                  page: WordTopRoute.page,
+                ),
+                AutoRoute(
                   path: 'profile',
                   page: ProfileRoute.page,
                 ),
@@ -67,9 +71,12 @@ class AppRouter extends _$AppRouter {
                   page: ProfileRoute.page,
                 ),
                 AutoRoute(
-                  // TODO(me): pathをdefinitionIdにする
                   path: 'definition_detail',
                   page: DefinitionDetailRoute.page,
+                ),
+                AutoRoute(
+                  path: 'word_top',
+                  page: WordTopRoute.page,
                 ),
                 AutoRoute(
                   path: 'following_and_follower_list',
@@ -98,9 +105,20 @@ class AppRouter extends _$AppRouter {
                   page: SearchWordResultRoute.page,
                 ),
                 AutoRoute(
-                  // TODO(me): pathをwordIdにする
+                  path: 'definition_detail',
+                  page: DefinitionDetailRoute.page,
+                ),
+                AutoRoute(
                   path: 'word_top',
                   page: WordTopRoute.page,
+                ),
+                AutoRoute(
+                  path: 'profile',
+                  page: ProfileRoute.page,
+                ),
+                AutoRoute(
+                  path: 'following_and_follower_list',
+                  page: FollowingAndFollowerListRoute.page,
                 ),
               ],
             ),
