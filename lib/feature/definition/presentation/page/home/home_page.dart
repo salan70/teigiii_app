@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
@@ -24,14 +23,6 @@ class HomePage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('ホーム'),
           leading: const ToSettingButton(),
-          actions: [
-            IconButton(
-              icon: const Icon(CupertinoIcons.bell),
-              onPressed: () {
-                // TODO(me): 通知履歴画面へ遷移
-              },
-            ),
-          ],
           bottom: TabBar(
             labelStyle: Theme.of(context).textTheme.titleMedium,
             indicatorWeight: 3,

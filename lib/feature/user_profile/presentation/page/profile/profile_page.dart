@@ -33,7 +33,6 @@ class ProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO(me): 雑に!使ってるが、問題ないか確認する
     final currentUserId = ref.watch(userIdProvider)!;
     final asyncTargetUserProfile = ref.watch(userProfileProvider(targetUserId));
 

@@ -15,35 +15,41 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     with FetchMoreMixin<DefinitionIdListState> {
   @override
   FutureOr<DefinitionIdListState> build(
-    DefinitionFeedType definitionFeedType,
-  ) async {
-    switch (definitionFeedType) {
-      case DefinitionFeedType.homeRecommend:
-        return await _homeRecommendDefinitionIdListFirst();
-      case DefinitionFeedType.homeFollowing:
-        return await _fetchHomeFollowingDefinitionIdListFirst();
-    }
+    DefinitionFeedType definitionFeedType, {
+    String? wordId,
+  }) async {
+    // ミュートユーザーが更新されるたびに、本Notifierも更新されるよう監視
+    ref.watch(mutedUserIdListProvider);
+
+    return await _fetchMoreBasedOnType(isFirstFetch: true);
   }
 
-  /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する（初回）
+  /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する
   ///
-  /// この関数は、[build]メソッドからのみ呼ばれる想定
-  Future<DefinitionIdListState> _homeRecommendDefinitionIdListFirst() async {
+  /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
+  Future<DefinitionIdListState> _fetchForHomeRecommend({
+    required bool isFirstFetch,
+  }) async {
     final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
+    final lastDoc =
+        isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
     return ref
         .watch(definitionRepositoryProvider)
-        .fetchHomeRecommendDefinitionIdListFirst(mutedUserIdList);
+        .fetchHomeRecommendDefinitionIdList(
+          mutedUserIdList,
+          lastDoc,
+        );
   }
 
-  /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する（初回）
+  /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する
   ///
-  /// この関数は、[build]メソッドからのみ呼ばれる想定
-  Future<DefinitionIdListState>
-      _fetchHomeFollowingDefinitionIdListFirst() async {
-    final userId = ref.read(userIdProvider)!;
-
+  /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
+  Future<DefinitionIdListState> _fetchForHomeFollowing({
+    required bool isFirstFetch,
+  }) async {
     final targetUserIdList = <String>[];
+    final userId = ref.read(userIdProvider)!;
 
     // フォローしているユーザーのIDリストを取得
     final followingIdList =
@@ -58,15 +64,42 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
     targetUserIdList.removeWhere(mutedUserIdList.contains);
 
+    final lastDoc =
+        isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
+
     return ref
         .read(definitionRepositoryProvider)
-        .fetchHomeFollowingDefinitionIdListFirst(targetUserIdList);
+        .fetchHomeFollowingDefinitionIdList(
+          targetUserIdList,
+          lastDoc,
+        );
+  }
+
+  /// 「Wordトップ画面: 新着順タブ」で表示するDefinitionIDのListを取得する
+  ///
+  /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
+  Future<DefinitionIdListState> _fetchForWordTop(
+    WordTopOrderByType orderByType, {
+    required bool isFirstFetch,
+  }) async {
+    final currentUserId = ref.read(userIdProvider)!;
+    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
+    final lastDoc =
+        isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
+
+    return ref.watch(definitionRepositoryProvider).fetchWordTopDefinitionIdList(
+          orderByType,
+          currentUserId,
+          mutedUserIdList,
+          wordId!,
+          lastDoc,
+        );
   }
 
   Future<void> fetchMore() async {
     await fetchMoreHelper(
       ref: ref,
-      fetchFunction: _fetchDefinitionIdListStateBasedOnType,
+      fetchFunction: () => _fetchMoreBasedOnType(isFirstFetch: false),
       mergeFunction: (currentData, newData) => DefinitionIdListState(
         definitionIdList:
             currentData.definitionIdList + newData.definitionIdList,
@@ -76,53 +109,35 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     );
   }
 
-  Future<DefinitionIdListState> _fetchDefinitionIdListStateBasedOnType() async {
+  Future<DefinitionIdListState> _fetchMoreBasedOnType({
+    required bool isFirstFetch,
+  }) async {
     switch (definitionFeedType) {
       case DefinitionFeedType.homeRecommend:
-        return _homeRecommendDefinitionIdListMore();
+        return _fetchForHomeRecommend(isFirstFetch: isFirstFetch);
+
       case DefinitionFeedType.homeFollowing:
-        return _fetchHomeFollowingDefinitionIdListMore();
+        return _fetchForHomeFollowing(isFirstFetch: isFirstFetch);
+
+      case DefinitionFeedType.wordTopOrderByCreatedAt:
+        if (wordId == null) {
+          throw Exception('wordIdがnullです');
+        }
+
+        return _fetchForWordTop(
+          WordTopOrderByType.createdAt,
+          isFirstFetch: isFirstFetch,
+        );
+
+      case DefinitionFeedType.wordTopOrderByLikesCount:
+        if (wordId == null) {
+          throw Exception('wordIdがnullです');
+        }
+
+        return _fetchForWordTop(
+          WordTopOrderByType.likesCount,
+          isFirstFetch: isFirstFetch,
+        );
     }
-  }
-
-  /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する（2回目以降）
-  Future<DefinitionIdListState> _homeRecommendDefinitionIdListMore() async {
-    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
-
-    return ref
-        .watch(definitionRepositoryProvider)
-        .fetchHomeRecommendDefinitionIdListMore(
-          mutedUserIdList,
-          state.value!.lastReadQueryDocumentSnapshot!,
-        );
-  }
-
-  /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する（2回目以降）
-  // TODO(me): _fetchHomeFollowingDefinitionIdListFirstと共通のロジックが多く、リファクタの余地あり
-  Future<DefinitionIdListState>
-      _fetchHomeFollowingDefinitionIdListMore() async {
-    final userId = ref.read(userIdProvider)!;
-
-    final targetUserIdList = <String>[];
-
-    // フォローしているユーザーのIDリストを取得
-    final followingIdList =
-        await ref.read(followingIdListProvider(userId).future);
-
-    // フォローしているユーザーと自分のIDを追加
-    targetUserIdList
-      ..addAll(followingIdList)
-      ..add(userId);
-
-    // ミュートしているユーザーのIDを除外
-    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
-    targetUserIdList.removeWhere(mutedUserIdList.contains);
-
-    return ref
-        .read(definitionRepositoryProvider)
-        .fetchHomeFollowingDefinitionIdListMore(
-          targetUserIdList,
-          state.value!.lastReadQueryDocumentSnapshot!,
-        );
   }
 }

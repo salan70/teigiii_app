@@ -57,29 +57,59 @@ class DefinitionDetailPage extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () async {
-                            await context.pushRoute(
-                              ProfileRoute(targetUserId: definition.authorId),
-                            );
-                          },
-                          child: AvatarIconWidget(
-                            imageUrl: definition.authorImageUrl,
+                    InkWell(
+                      onTap: () async {
+                        await context.pushRoute(
+                          ProfileRoute(targetUserId: definition.authorId),
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AvatarIconWidget(imageUrl: definition.authorImageUrl),
+                          const SizedBox(width: 16),
+                          Text(
+                            definition.authorName,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(
+                                  fontWeight: FontWeight.normal,
+                                ),
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        Text(definition.authorName),
-                      ],
+                          const SizedBox(width: 32),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    InkWell(
+                      onTap: () async {
+                        await context.pushRoute(
+                          WordTopRoute(wordId: definition.wordId),
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            definition.word,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          Text(
+                            definition.wordReading,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      definition.word,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      definition.definition,
+                      // TODO(me): 用途的に、bodyLargeのサイズを大きくして使う方がよさげ
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            fontWeight: FontWeight.normal,
+                          ),
                     ),
-                    const SizedBox(height: 16),
-                    Text(definition.definition),
                     const SizedBox(height: 16),
                     Row(
                       children: [

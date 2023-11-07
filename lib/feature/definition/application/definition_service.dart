@@ -5,10 +5,7 @@ import '../../../core/common_provider/snack_bar_controller.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../domain/definition.dart';
-import '../domain/definition_id_list_state.dart';
 import '../repository/definition_repository.dart';
-import '../util/definition_feed_type.dart';
-import 'definition_id_list_state.dart';
 import 'definition_state.dart';
 
 part 'definition_service.g.dart';
@@ -41,48 +38,6 @@ class DefinitionService extends _$DefinitionService {
     // いいね登録/解除したDefinitionを保持するProviderを再生成
     ref.invalidate(definitionProvider(definition.id));
     isLoadingOverlayNotifier.finishLoading();
-  }
-
-  /// definitionIdListProviderと全てのdefinitionProviderを再生成する
-  Future<void> refreshAll(DefinitionFeedType definitionFeedType) async {
-    await _invalidateAllDefinitionFamilies();
-
-    ref.invalidate(definitionIdListStateNotifierProvider(definitionFeedType));
-    await ref
-        .read(definitionIdListStateNotifierProvider(definitionFeedType).future);
-  }
-
-  /// 全てのdefinitionProviderを再生成する
-  ///
-  /// 同じタイミングでdefinitionIdListProviderも再生成する場合、
-  /// この関数を実行してから、definitionIdListProviderを再生成すること
-  ///
-  /// そうしない場合、definitionIdListProvider生成時にあって、再生成時にない
-  /// definitionProviderは再生成されないと思われる
-  Future<void> _invalidateAllDefinitionFamilies() async {
-    for (final feedType in DefinitionFeedType.values) {
-      final asyncDefinitionIdListState =
-          ref.read(definitionIdListStateNotifierProvider(feedType));
-
-      late final DefinitionIdListState definitionIdListState;
-
-      // エラーが発生している場合、「ref.read(Provider).future」時にエラーになるため、
-      // エラーが発生しているかどうかで分岐させている
-
-      // エラーが発生している場合
-      if (asyncDefinitionIdListState.hasError) {
-        definitionIdListState = asyncDefinitionIdListState.value!;
-      }
-      // エラーが発生していない場合
-      else {
-        definitionIdListState = await ref
-            .read(definitionIdListStateNotifierProvider(feedType).future);
-      }
-
-      for (final definitionId in definitionIdListState.definitionIdList) {
-        ref.invalidate(definitionProvider(definitionId));
-      }
-    }
   }
 
   /// いいね登録/解除を行う

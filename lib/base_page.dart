@@ -29,7 +29,6 @@ class _BasePageState extends ConsumerState<BasePage> {
 
     return async.when(
       data: (_) {
-        // TODO(me): 雑に!使ってるが、問題ないか確認する
         final currentUserId = ref.watch(userIdProvider)!;
         return AutoTabsRouter(
           routes: [

@@ -4,8 +4,6 @@ import '../../../core/common_provider/is_loading_overlay_state.dart';
 import '../../../core/common_provider/snack_bar_controller.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
-import '../../definition/application/definition_service.dart';
-import '../../definition/util/definition_feed_type.dart';
 import '../repository/user_config_repository.dart';
 import 'user_config_state.dart';
 
@@ -67,12 +65,6 @@ class UserConfigService extends _$UserConfigService {
     }
 
     ref.invalidate(mutedUserIdListProvider);
-
-    // この処理はDefinitionServiceに移譲したほうがいいかも
-    // 全てのDefinitionFeedTypeを引数とするdefinitionIdListStateNotifierを再生成
-    for (final feedType in DefinitionFeedType.values) {
-      await ref.read(definitionServiceProvider.notifier).refreshAll(feedType);
-    }
 
     ref
         .read(snackBarControllerProvider.notifier)

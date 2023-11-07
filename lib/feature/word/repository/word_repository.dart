@@ -79,7 +79,7 @@ class WordRepository {
     );
   }
 
-  /// 条件に合うWordのを[fetchLimitForWordList]に達するまで取得し、
+  /// 条件に合うWordを[fetchLimitForWordList]に達するまで取得し、
   /// [WordListState]として返す
   Future<WordListState> _fetchWordListState(
     Future<QuerySnapshot> Function(QueryDocumentSnapshot?, int)
@@ -170,7 +170,7 @@ class WordRepository {
 
     final wordList = <Word>[];
     for (final wordDoc in wordDocList) {
-      final postedDefinitionCount = await _fetchPostedDefinitionCount(
+      final postedDefinitionCount = await fetchPostedDefinitionCount(
         wordDoc.id,
         currentUserId,
         mutedUserIdList,
@@ -195,7 +195,7 @@ class WordRepository {
     return wordList;
   }
 
-  Future<int> _fetchPostedDefinitionCount(
+  Future<int> fetchPostedDefinitionCount(
     String wordId,
     String currentUserId,
     List<String> mutedUserIdList,
@@ -217,12 +217,12 @@ class WordRepository {
       return allDefinitionCount;
     }
 
+    // ミュートしているユーザーがいる場合、ミュートしているユーザーの投稿数を引く
     final mutedDefinitionCount = await _fetchMutedDefinitionCount(
       wordId,
       mutedUserIdList,
       allDefinitionCount,
     );
-
     return allDefinitionCount - mutedDefinitionCount;
   }
 

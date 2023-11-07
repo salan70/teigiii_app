@@ -6,12 +6,11 @@ part of 'user_config_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mutedUserIdListHash() => r'4c86001ecd259c396278556cf3783f0b9aed781d';
+String _$mutedUserIdListHash() => r'45a3f219cd5a9d304dade1148d736ae379daa0fb';
 
 /// See also [mutedUserIdList].
 @ProviderFor(mutedUserIdList)
-final mutedUserIdListProvider =
-    AutoDisposeFutureProvider<List<String>>.internal(
+final mutedUserIdListProvider = FutureProvider<List<String>>.internal(
   mutedUserIdList,
   name: r'mutedUserIdListProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,7 +20,7 @@ final mutedUserIdListProvider =
   allTransitiveDependencies: null,
 );
 
-typedef MutedUserIdListRef = AutoDisposeFutureProviderRef<List<String>>;
+typedef MutedUserIdListRef = FutureProviderRef<List<String>>;
 String _$appVersionHash() => r'afa5e0b8c2d70e7438f5a4879c47a3f8cc3597be';
 
 /// See also [appVersion].
