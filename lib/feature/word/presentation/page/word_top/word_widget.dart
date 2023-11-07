@@ -21,18 +21,6 @@ class WordWidget extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 24),
-              const Row(
-                children: [
-                  Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(width: 16),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
               Text(
                 word.word,
                 style: Theme.of(context).textTheme.titleLarge,
