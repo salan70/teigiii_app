@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:like_button/like_button.dart';
@@ -28,7 +29,7 @@ class LikeWidget extends ConsumerWidget {
           ),
           likeBuilder: (bool isLiked) {
             return Icon(
-              isLiked ? Icons.favorite : Icons.favorite_outline,
+              isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
               color:
                   isLiked ? likeColor : Theme.of(context).colorScheme.outline,
               size: 20,

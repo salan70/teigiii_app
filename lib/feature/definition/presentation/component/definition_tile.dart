@@ -116,7 +116,10 @@ class DefinitionTile extends ConsumerWidget {
                             maxLines: 5,
                           ),
                           const SizedBox(height: 8),
-                          LikeWidget(definition: definition),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: LikeWidget(definition: definition),
+                          ),
                         ],
                       ),
                     ),
