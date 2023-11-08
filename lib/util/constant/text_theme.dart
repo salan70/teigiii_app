@@ -7,4 +7,7 @@ const textTheme = TextTheme(
   titleMedium: TextStyle(
     fontWeight: FontWeight.bold,
   ),
+  bodyLarge: TextStyle(
+    fontSize: 18,
+  ),
 );

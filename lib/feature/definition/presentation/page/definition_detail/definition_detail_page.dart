@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,6 +58,41 @@ class DefinitionDetailPage extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    definition.isPublic
+                        ? const SizedBox.shrink()
+                        : Center(
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.lock_fill,
+                                      size: 16,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
+                                    const SizedBox(width: 2),
+                                    Text(
+                                      'この投稿はあなただけに見えています',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                              ],
+                            ),
+                          ),
                     InkWell(
                       onTap: () async {
                         await context.pushRoute(
@@ -97,7 +133,15 @@ class DefinitionDetailPage extends ConsumerWidget {
                           ),
                           Text(
                             definition.wordReading,
-                            style: Theme.of(context).textTheme.titleSmall,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                         ],
                       ),
@@ -105,12 +149,9 @@ class DefinitionDetailPage extends ConsumerWidget {
                     const SizedBox(height: 16),
                     Text(
                       definition.definition,
-                      // TODO(me): 用途的に、bodyLargeのサイズを大きくして使う方がよさげ
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            fontWeight: FontWeight.normal,
-                          ),
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 48),
                     Row(
                       children: [
                         Text(
@@ -119,20 +160,7 @@ class DefinitionDetailPage extends ConsumerWidget {
                         ),
                         const SizedBox(width: 2),
                         Text(
-                          '作成',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          definition.updatedAt.toDisplayFormat(),
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        const SizedBox(width: 2),
-                        Text(
-                          '更新',
+                          '投稿',
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],

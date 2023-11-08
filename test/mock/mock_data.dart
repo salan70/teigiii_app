@@ -26,7 +26,6 @@ final mockDefinition = Definition(
   likesCount: 0,
   isLikedByUser: false,
   createdAt: nowDateTime,
-  updatedAt: nowDateTime,
 );
 
 final mockDefinitionDoc = DefinitionDocument(
@@ -36,6 +35,7 @@ final mockDefinitionDoc = DefinitionDocument(
   definition: 'content',
   likesCount: 0,
   isPublic: true,
+  isEdited: false,
   createdAt: nowDateTime,
   updatedAt: nowDateTime,
 );

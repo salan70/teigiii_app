@@ -25,7 +25,7 @@ class DefinitionsCollection {
   static const definition = 'definition';
   static const likesCount = 'likesCount';
   static const isPublic = 'isPublic';
-  // static const isEdited = 'isEdited';
+  static const isEdited = 'isEdited';
 }
 
 class LikesCollection {

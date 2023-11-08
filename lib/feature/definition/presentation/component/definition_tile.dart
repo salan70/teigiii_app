@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common_widget/adaptive_overflow_text.dart';
 import '../../../../core/router/app_router.dart';
-import '../../../../util/extension/date_time_extension.dart';
 import '../../../../util/logger.dart';
 import '../../application/definition_state.dart';
 import 'avatar_icon_widget.dart';
@@ -59,6 +59,7 @@ class DefinitionTile extends ConsumerWidget {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
                                 child: Text(
@@ -68,9 +69,20 @@ class DefinitionTile extends ConsumerWidget {
                                 ),
                               ),
                               const SizedBox(width: 4),
-                              Text(
-                                definition.updatedAt.timeAgo(DateTime.now()),
-                              ),
+                              definition.isPublic
+                                  ? const SizedBox.shrink()
+                                  : Row(
+                                      children: [
+                                        Icon(
+                                          CupertinoIcons.lock_fill,
+                                          size: 16,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                        ),
+                                        const SizedBox(width: 4),
+                                      ],
+                                    ),
                             ],
                           ),
                           Text(
@@ -86,7 +98,10 @@ class DefinitionTile extends ConsumerWidget {
                             maxLines: 5,
                           ),
                           const SizedBox(height: 8),
-                          LikeWidget(definition: definition),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: LikeWidget(definition: definition),
+                          ),
                         ],
                       ),
                     ),

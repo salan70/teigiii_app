@@ -97,7 +97,6 @@ void main() {
         likesCount: mockDefinitionDoc.likesCount,
         isLikedByUser: isLikedByUser,
         createdAt: mockDefinitionDoc.createdAt,
-        updatedAt: mockDefinitionDoc.updatedAt,
       );
       // stateの検証
       verifyInOrder([

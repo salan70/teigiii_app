@@ -28,7 +28,6 @@ mixin _$Definition {
   int get likesCount => throw _privateConstructorUsedError;
   bool get isLikedByUser => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DefinitionCopyWith<Definition> get copyWith =>
@@ -53,8 +52,7 @@ abstract class $DefinitionCopyWith<$Res> {
       bool isPublic,
       int likesCount,
       bool isLikedByUser,
-      DateTime createdAt,
-      DateTime updatedAt});
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -82,7 +80,6 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
     Object? likesCount = null,
     Object? isLikedByUser = null,
     Object? createdAt = null,
-    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -133,10 +130,6 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ) as $Val);
   }
 }
@@ -161,8 +154,7 @@ abstract class _$$_DefinitionCopyWith<$Res>
       bool isPublic,
       int likesCount,
       bool isLikedByUser,
-      DateTime createdAt,
-      DateTime updatedAt});
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -188,7 +180,6 @@ class __$$_DefinitionCopyWithImpl<$Res>
     Object? likesCount = null,
     Object? isLikedByUser = null,
     Object? createdAt = null,
-    Object? updatedAt = null,
   }) {
     return _then(_$_Definition(
       id: null == id
@@ -239,10 +230,6 @@ class __$$_DefinitionCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ));
   }
 }
@@ -262,8 +249,7 @@ class _$_Definition extends _Definition {
       required this.isPublic,
       required this.likesCount,
       required this.isLikedByUser,
-      required this.createdAt,
-      required this.updatedAt})
+      required this.createdAt})
       : super._();
 
   @override
@@ -290,12 +276,10 @@ class _$_Definition extends _Definition {
   final bool isLikedByUser;
   @override
   final DateTime createdAt;
-  @override
-  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'Definition(id: $id, wordId: $wordId, word: $word, wordReading: $wordReading, authorId: $authorId, authorName: $authorName, authorImageUrl: $authorImageUrl, definition: $definition, isPublic: $isPublic, likesCount: $likesCount, isLikedByUser: $isLikedByUser, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Definition(id: $id, wordId: $wordId, word: $word, wordReading: $wordReading, authorId: $authorId, authorName: $authorName, authorImageUrl: $authorImageUrl, definition: $definition, isPublic: $isPublic, likesCount: $likesCount, isLikedByUser: $isLikedByUser, createdAt: $createdAt)';
   }
 
   @override
@@ -323,9 +307,7 @@ class _$_Definition extends _Definition {
             (identical(other.isLikedByUser, isLikedByUser) ||
                 other.isLikedByUser == isLikedByUser) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.createdAt == createdAt));
   }
 
   @override
@@ -342,8 +324,7 @@ class _$_Definition extends _Definition {
       isPublic,
       likesCount,
       isLikedByUser,
-      createdAt,
-      updatedAt);
+      createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -365,8 +346,7 @@ abstract class _Definition extends Definition {
       required final bool isPublic,
       required final int likesCount,
       required final bool isLikedByUser,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_Definition;
+      required final DateTime createdAt}) = _$_Definition;
   const _Definition._() : super._();
 
   @override
@@ -393,8 +373,6 @@ abstract class _Definition extends Definition {
   bool get isLikedByUser;
   @override
   DateTime get createdAt;
-  @override
-  DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$_DefinitionCopyWith<_$_Definition> get copyWith =>

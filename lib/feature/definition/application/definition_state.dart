@@ -41,6 +41,5 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
     isPublic: definitionDoc.isPublic,
     isLikedByUser: isLikedByUser,
     createdAt: definitionDoc.createdAt,
-    updatedAt: definitionDoc.updatedAt,
   );
 }

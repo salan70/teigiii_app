@@ -14,6 +14,7 @@ class DefinitionDocument with _$DefinitionDocument {
     required String definition,
     required int likesCount,
     required bool isPublic,
+    required bool isEdited,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _DefinitionDocument;
@@ -27,6 +28,7 @@ class DefinitionDocument with _$DefinitionDocument {
       definition: data[DefinitionsCollection.definition] as String,
       likesCount: data[DefinitionsCollection.likesCount] as int,
       isPublic: data[DefinitionsCollection.isPublic] as bool,
+      isEdited: data[DefinitionsCollection.isEdited] as bool,
       createdAt: (data[createdAtFieldName] as Timestamp).toDate(),
       updatedAt: (data[updatedAtFieldName] as Timestamp).toDate(),
     );
