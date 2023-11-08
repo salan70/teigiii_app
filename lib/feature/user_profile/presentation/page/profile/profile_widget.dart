@@ -82,7 +82,7 @@ class ProfileWidget extends ConsumerWidget {
               const SizedBox(height: 16),
               Text(
                 targetUserProfile.bio,
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 24),
               Align(

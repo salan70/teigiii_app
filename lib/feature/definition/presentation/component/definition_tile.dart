@@ -70,6 +70,20 @@ class DefinitionTile extends ConsumerWidget {
                                 ),
                               ),
                               const SizedBox(width: 4),
+                              definition.isEdited
+                                  ? Row(
+                                      children: [
+                                        Icon(
+                                          CupertinoIcons.pencil,
+                                          size: 16,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                        ),
+                                        const SizedBox(width: 4),
+                                      ],
+                                    )
+                                  : const SizedBox.shrink(),
                               definition.isPublic
                                   ? const SizedBox.shrink()
                                   : Row(

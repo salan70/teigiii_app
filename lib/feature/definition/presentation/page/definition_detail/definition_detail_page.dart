@@ -63,46 +63,33 @@ class DefinitionDetailPage extends ConsumerWidget {
                         : Center(
                             child: Column(
                               children: [
-                                DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .surfaceVariant
-                                        .withOpacity(0.5),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Icon(
-                                          CupertinoIcons.lock_fill,
-                                          size: 16,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
-                                        ),
-                                        const SizedBox(width: 2),
-                                        Text(
-                                          'この投稿はあなただけに見えています',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurfaceVariant,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ],
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.lock_fill,
+                                      size: 16,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
                                     ),
-                                  ),
+                                    const SizedBox(width: 2),
+                                    Text(
+                                      'この投稿はあなただけに見えています',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 16),
                               ],
                             ),
                           ),
@@ -146,7 +133,15 @@ class DefinitionDetailPage extends ConsumerWidget {
                           ),
                           Text(
                             definition.wordReading,
-                            style: Theme.of(context).textTheme.titleSmall,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                         ],
                       ),
@@ -154,12 +149,9 @@ class DefinitionDetailPage extends ConsumerWidget {
                     const SizedBox(height: 16),
                     Text(
                       definition.definition,
-                      // TODO(me): 用途的に、bodyLargeのサイズを大きくして使う方がよさげ
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            fontWeight: FontWeight.normal,
-                          ),
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 48),
                     Row(
                       children: [
                         Text(
@@ -168,12 +160,13 @@ class DefinitionDetailPage extends ConsumerWidget {
                         ),
                         const SizedBox(width: 2),
                         Text(
-                          '作成',
+                          '投稿',
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
                     ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           definition.updatedAt.toDisplayFormat(),
@@ -184,6 +177,31 @@ class DefinitionDetailPage extends ConsumerWidget {
                           '更新',
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
+                        definition.isEdited
+                            ? Row(
+                                children: [
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    '編集済み',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                        ),
+                                  ),
+                                  Icon(
+                                    CupertinoIcons.pencil,
+                                    size: 16,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                                ],
+                              )
+                            : const SizedBox.shrink(),
                       ],
                     ),
                     const SizedBox(height: 8),

@@ -25,11 +25,11 @@ class WordWidget extends ConsumerWidget {
                 word.word,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(height: 8),
               Text(
                 word.reading,
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.bold,
                     ),
               ),
               const SizedBox(height: 24),
