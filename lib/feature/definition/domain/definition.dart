@@ -16,6 +16,7 @@ class Definition with _$Definition {
     required String authorImageUrl,
     required String definition,
     required bool isPublic,
+    required bool isEdited,
     required int likesCount,
     required bool isLikedByUser,
     required DateTime createdAt,

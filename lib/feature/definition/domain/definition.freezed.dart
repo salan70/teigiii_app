@@ -25,6 +25,7 @@ mixin _$Definition {
   String get authorImageUrl => throw _privateConstructorUsedError;
   String get definition => throw _privateConstructorUsedError;
   bool get isPublic => throw _privateConstructorUsedError;
+  bool get isEdited => throw _privateConstructorUsedError;
   int get likesCount => throw _privateConstructorUsedError;
   bool get isLikedByUser => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -51,6 +52,7 @@ abstract class $DefinitionCopyWith<$Res> {
       String authorImageUrl,
       String definition,
       bool isPublic,
+      bool isEdited,
       int likesCount,
       bool isLikedByUser,
       DateTime createdAt,
@@ -79,6 +81,7 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
     Object? authorImageUrl = null,
     Object? definition = null,
     Object? isPublic = null,
+    Object? isEdited = null,
     Object? likesCount = null,
     Object? isLikedByUser = null,
     Object? createdAt = null,
@@ -121,6 +124,10 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
           ? _value.isPublic
           : isPublic // ignore: cast_nullable_to_non_nullable
               as bool,
+      isEdited: null == isEdited
+          ? _value.isEdited
+          : isEdited // ignore: cast_nullable_to_non_nullable
+              as bool,
       likesCount: null == likesCount
           ? _value.likesCount
           : likesCount // ignore: cast_nullable_to_non_nullable
@@ -159,6 +166,7 @@ abstract class _$$_DefinitionCopyWith<$Res>
       String authorImageUrl,
       String definition,
       bool isPublic,
+      bool isEdited,
       int likesCount,
       bool isLikedByUser,
       DateTime createdAt,
@@ -185,6 +193,7 @@ class __$$_DefinitionCopyWithImpl<$Res>
     Object? authorImageUrl = null,
     Object? definition = null,
     Object? isPublic = null,
+    Object? isEdited = null,
     Object? likesCount = null,
     Object? isLikedByUser = null,
     Object? createdAt = null,
@@ -227,6 +236,10 @@ class __$$_DefinitionCopyWithImpl<$Res>
           ? _value.isPublic
           : isPublic // ignore: cast_nullable_to_non_nullable
               as bool,
+      isEdited: null == isEdited
+          ? _value.isEdited
+          : isEdited // ignore: cast_nullable_to_non_nullable
+              as bool,
       likesCount: null == likesCount
           ? _value.likesCount
           : likesCount // ignore: cast_nullable_to_non_nullable
@@ -260,6 +273,7 @@ class _$_Definition extends _Definition {
       required this.authorImageUrl,
       required this.definition,
       required this.isPublic,
+      required this.isEdited,
       required this.likesCount,
       required this.isLikedByUser,
       required this.createdAt,
@@ -285,6 +299,8 @@ class _$_Definition extends _Definition {
   @override
   final bool isPublic;
   @override
+  final bool isEdited;
+  @override
   final int likesCount;
   @override
   final bool isLikedByUser;
@@ -295,7 +311,7 @@ class _$_Definition extends _Definition {
 
   @override
   String toString() {
-    return 'Definition(id: $id, wordId: $wordId, word: $word, wordReading: $wordReading, authorId: $authorId, authorName: $authorName, authorImageUrl: $authorImageUrl, definition: $definition, isPublic: $isPublic, likesCount: $likesCount, isLikedByUser: $isLikedByUser, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Definition(id: $id, wordId: $wordId, word: $word, wordReading: $wordReading, authorId: $authorId, authorName: $authorName, authorImageUrl: $authorImageUrl, definition: $definition, isPublic: $isPublic, isEdited: $isEdited, likesCount: $likesCount, isLikedByUser: $isLikedByUser, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -318,6 +334,8 @@ class _$_Definition extends _Definition {
                 other.definition == definition) &&
             (identical(other.isPublic, isPublic) ||
                 other.isPublic == isPublic) &&
+            (identical(other.isEdited, isEdited) ||
+                other.isEdited == isEdited) &&
             (identical(other.likesCount, likesCount) ||
                 other.likesCount == likesCount) &&
             (identical(other.isLikedByUser, isLikedByUser) ||
@@ -340,6 +358,7 @@ class _$_Definition extends _Definition {
       authorImageUrl,
       definition,
       isPublic,
+      isEdited,
       likesCount,
       isLikedByUser,
       createdAt,
@@ -363,6 +382,7 @@ abstract class _Definition extends Definition {
       required final String authorImageUrl,
       required final String definition,
       required final bool isPublic,
+      required final bool isEdited,
       required final int likesCount,
       required final bool isLikedByUser,
       required final DateTime createdAt,
@@ -387,6 +407,8 @@ abstract class _Definition extends Definition {
   String get definition;
   @override
   bool get isPublic;
+  @override
+  bool get isEdited;
   @override
   int get likesCount;
   @override

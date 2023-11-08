@@ -124,6 +124,7 @@ Future<void> addDefinitionDummy0to29(String flavorName) async {
       'definition': definitions[i],
       'likesCount': Random().nextInt(100),
       'isPublic': Random().nextBool(),
+      'isEdited': false,
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
     });

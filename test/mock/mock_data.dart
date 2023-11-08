@@ -23,6 +23,7 @@ final mockDefinition = Definition(
   authorImageUrl: 'authorImageUrl',
   definition: 'definition',
   isPublic: true,
+  isEdited: false,
   likesCount: 0,
   isLikedByUser: false,
   createdAt: nowDateTime,
@@ -36,6 +37,7 @@ final mockDefinitionDoc = DefinitionDocument(
   definition: 'content',
   likesCount: 0,
   isPublic: true,
+  isEdited: false,
   createdAt: nowDateTime,
   updatedAt: nowDateTime,
 );

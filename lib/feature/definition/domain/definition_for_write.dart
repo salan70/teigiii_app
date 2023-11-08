@@ -93,6 +93,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
       DefinitionsCollection.definition: definition,
       DefinitionsCollection.likesCount: 0,
       DefinitionsCollection.isPublic: isPublic,
+      DefinitionsCollection.isEdited: false,
     };
   }
 
@@ -103,6 +104,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
           _wordReadingInitialLabel,
       DefinitionsCollection.definition: definition,
       DefinitionsCollection.isPublic: isPublic,
+      DefinitionsCollection.isEdited: true,
     };
   }
 

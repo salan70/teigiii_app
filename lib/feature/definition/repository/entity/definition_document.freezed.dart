@@ -22,6 +22,7 @@ mixin _$DefinitionDocument {
   String get definition => throw _privateConstructorUsedError;
   int get likesCount => throw _privateConstructorUsedError;
   bool get isPublic => throw _privateConstructorUsedError;
+  bool get isEdited => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
@@ -43,6 +44,7 @@ abstract class $DefinitionDocumentCopyWith<$Res> {
       String definition,
       int likesCount,
       bool isPublic,
+      bool isEdited,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -66,6 +68,7 @@ class _$DefinitionDocumentCopyWithImpl<$Res, $Val extends DefinitionDocument>
     Object? definition = null,
     Object? likesCount = null,
     Object? isPublic = null,
+    Object? isEdited = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -94,6 +97,10 @@ class _$DefinitionDocumentCopyWithImpl<$Res, $Val extends DefinitionDocument>
           ? _value.isPublic
           : isPublic // ignore: cast_nullable_to_non_nullable
               as bool,
+      isEdited: null == isEdited
+          ? _value.isEdited
+          : isEdited // ignore: cast_nullable_to_non_nullable
+              as bool,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -121,6 +128,7 @@ abstract class _$$_DefinitionDocumentCopyWith<$Res>
       String definition,
       int likesCount,
       bool isPublic,
+      bool isEdited,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -142,6 +150,7 @@ class __$$_DefinitionDocumentCopyWithImpl<$Res>
     Object? definition = null,
     Object? likesCount = null,
     Object? isPublic = null,
+    Object? isEdited = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -170,6 +179,10 @@ class __$$_DefinitionDocumentCopyWithImpl<$Res>
           ? _value.isPublic
           : isPublic // ignore: cast_nullable_to_non_nullable
               as bool,
+      isEdited: null == isEdited
+          ? _value.isEdited
+          : isEdited // ignore: cast_nullable_to_non_nullable
+              as bool,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -192,6 +205,7 @@ class _$_DefinitionDocument implements _DefinitionDocument {
       required this.definition,
       required this.likesCount,
       required this.isPublic,
+      required this.isEdited,
       required this.createdAt,
       required this.updatedAt});
 
@@ -208,13 +222,15 @@ class _$_DefinitionDocument implements _DefinitionDocument {
   @override
   final bool isPublic;
   @override
+  final bool isEdited;
+  @override
   final DateTime createdAt;
   @override
   final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'DefinitionDocument(id: $id, wordId: $wordId, authorId: $authorId, definition: $definition, likesCount: $likesCount, isPublic: $isPublic, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'DefinitionDocument(id: $id, wordId: $wordId, authorId: $authorId, definition: $definition, likesCount: $likesCount, isPublic: $isPublic, isEdited: $isEdited, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -232,6 +248,8 @@ class _$_DefinitionDocument implements _DefinitionDocument {
                 other.likesCount == likesCount) &&
             (identical(other.isPublic, isPublic) ||
                 other.isPublic == isPublic) &&
+            (identical(other.isEdited, isEdited) ||
+                other.isEdited == isEdited) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -240,7 +258,7 @@ class _$_DefinitionDocument implements _DefinitionDocument {
 
   @override
   int get hashCode => Object.hash(runtimeType, id, wordId, authorId, definition,
-      likesCount, isPublic, createdAt, updatedAt);
+      likesCount, isPublic, isEdited, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -258,6 +276,7 @@ abstract class _DefinitionDocument implements DefinitionDocument {
       required final String definition,
       required final int likesCount,
       required final bool isPublic,
+      required final bool isEdited,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$_DefinitionDocument;
 
@@ -273,6 +292,8 @@ abstract class _DefinitionDocument implements DefinitionDocument {
   int get likesCount;
   @override
   bool get isPublic;
+  @override
+  bool get isEdited;
   @override
   DateTime get createdAt;
   @override
