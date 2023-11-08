@@ -23,11 +23,9 @@ final mockDefinition = Definition(
   authorImageUrl: 'authorImageUrl',
   definition: 'definition',
   isPublic: true,
-  isEdited: false,
   likesCount: 0,
   isLikedByUser: false,
   createdAt: nowDateTime,
-  updatedAt: nowDateTime,
 );
 
 final mockDefinitionDoc = DefinitionDocument(

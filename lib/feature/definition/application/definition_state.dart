@@ -39,9 +39,7 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
     definition: definitionDoc.definition,
     likesCount: definitionDoc.likesCount,
     isPublic: definitionDoc.isPublic,
-    isEdited: definitionDoc.isEdited,
     isLikedByUser: isLikedByUser,
     createdAt: definitionDoc.createdAt,
-    updatedAt: definitionDoc.updatedAt,
   );
 }

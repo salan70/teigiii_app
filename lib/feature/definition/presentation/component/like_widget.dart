@@ -7,6 +7,7 @@ import '../../../../util/constant/color_scheme.dart';
 import '../../application/definition_service.dart';
 import '../../domain/definition.dart';
 
+// TODO(me): UIの左に余白があるのでそれをなくす
 class LikeWidget extends ConsumerWidget {
   const LikeWidget({
     super.key,

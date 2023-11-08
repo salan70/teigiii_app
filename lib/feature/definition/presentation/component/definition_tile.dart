@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common_widget/adaptive_overflow_text.dart';
 import '../../../../core/router/app_router.dart';
-import '../../../../util/extension/date_time_extension.dart';
 import '../../../../util/logger.dart';
 import '../../application/definition_state.dart';
 import 'avatar_icon_widget.dart';
@@ -70,20 +69,6 @@ class DefinitionTile extends ConsumerWidget {
                                 ),
                               ),
                               const SizedBox(width: 4),
-                              definition.isEdited
-                                  ? Row(
-                                      children: [
-                                        Icon(
-                                          CupertinoIcons.pencil,
-                                          size: 16,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
-                                        ),
-                                        const SizedBox(width: 4),
-                                      ],
-                                    )
-                                  : const SizedBox.shrink(),
                               definition.isPublic
                                   ? const SizedBox.shrink()
                                   : Row(
@@ -98,9 +83,6 @@ class DefinitionTile extends ConsumerWidget {
                                         const SizedBox(width: 4),
                                       ],
                                     ),
-                              Text(
-                                definition.updatedAt.timeAgo(DateTime.now()),
-                              ),
                             ],
                           ),
                           Text(

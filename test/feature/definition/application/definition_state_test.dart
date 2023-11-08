@@ -94,11 +94,9 @@ void main() {
         authorImageUrl: mockUserProfileDoc.profileImageUrl,
         definition: mockDefinitionDoc.definition,
         isPublic: mockDefinitionDoc.isPublic,
-        isEdited: mockDefinitionDoc.isEdited,
         likesCount: mockDefinitionDoc.likesCount,
         isLikedByUser: isLikedByUser,
         createdAt: mockDefinitionDoc.createdAt,
-        updatedAt: mockDefinitionDoc.updatedAt,
       );
       // stateの検証
       verifyInOrder([

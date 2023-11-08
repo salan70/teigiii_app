@@ -165,45 +165,6 @@ class DefinitionDetailPage extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          definition.updatedAt.toDisplayFormat(),
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        const SizedBox(width: 2),
-                        Text(
-                          '更新',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        definition.isEdited
-                            ? Row(
-                                children: [
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    '編集済み',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
-                                        ),
-                                  ),
-                                  Icon(
-                                    CupertinoIcons.pencil,
-                                    size: 16,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
-                                ],
-                              )
-                            : const SizedBox.shrink(),
-                      ],
-                    ),
                     const SizedBox(height: 8),
                     LikeWidget(definition: definition),
                   ],
