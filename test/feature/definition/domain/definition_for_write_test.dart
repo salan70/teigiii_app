@@ -332,7 +332,6 @@ void main() {
       // * Assert
       expect(actual, isA<Map<String, dynamic>>());
       expect(actual['word'], word);
-      expect(actual['wordReading'], wordReading);
       expect(actual['wordReadingInitialSubGroupLabel'], 'ほ');
       expect(actual['definition'], definition);
       expect(actual['likesCount'], 0);

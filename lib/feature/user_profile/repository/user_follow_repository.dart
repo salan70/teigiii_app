@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/config_constant.dart';
+import '../../../util/constant/firestore_collections.dart';
 import '../../../util/extension/firestore_extension.dart';
 import '../domain/user_id_list_state.dart';
 import 'entity/user_follow_count_document.dart';
@@ -20,9 +21,14 @@ class UserFollowRepository {
 
   final FirebaseFirestore firestore;
 
+  CollectionReference get _userFollowsCollectionRef =>
+      firestore.collection(UserFollowsCollection.collectionName);
+
+  CollectionReference get _userFollowCountsCollectionRef =>
+      firestore.collection(UserFollowCountsCollection.collectionName);
+
   Future<UserFollowCountDocument> fetchUserFollowCount(String userId) async {
-    final DocumentSnapshot snapshot =
-        await firestore.collection('UserFollowCounts').doc(userId).get();
+    final snapshot = await _userFollowCountsCollectionRef.doc(userId).get();
 
     return UserFollowCountDocument.fromFirestore(snapshot);
   }
@@ -33,30 +39,30 @@ class UserFollowRepository {
 
       // UserFollowsドキュメントを追加
       ..set(
-        firestore.collection('UserFollows').doc(),
+        _userFollowsCollectionRef.doc(),
         {
-          'followerId': targetUserId,
-          'followingId': currentUserId,
-          'createdAt': FieldValue.serverTimestamp(),
-          'updatedAt': FieldValue.serverTimestamp(),
+          UserFollowsCollection.followerId: targetUserId,
+          UserFollowsCollection.followingId: currentUserId,
+          createdAtFieldName: FieldValue.serverTimestamp(),
+          updatedAtFieldName: FieldValue.serverTimestamp(),
         },
       )
 
       // フォローしたユーザーのUserFollowCountsドキュメントを更新
       ..update(
-        firestore.collection('UserFollowCounts').doc(currentUserId),
+        _userFollowCountsCollectionRef.doc(currentUserId),
         {
-          'followingCount': FieldValue.increment(1),
-          'updatedAt': FieldValue.serverTimestamp(),
+          UserFollowCountsCollection.followingCount: FieldValue.increment(1),
+          updatedAtFieldName: FieldValue.serverTimestamp(),
         },
       )
 
       // フォローされたユーザーのUserFollowCountsドキュメントを更新
       ..update(
-        firestore.collection('UserFollowCounts').doc(targetUserId),
+        _userFollowCountsCollectionRef.doc(targetUserId),
         {
-          'followerCount': FieldValue.increment(1),
-          'updatedAt': FieldValue.serverTimestamp(),
+          UserFollowCountsCollection.followerCount: FieldValue.increment(1),
+          updatedAtFieldName: FieldValue.serverTimestamp(),
         },
       );
 
@@ -69,10 +75,15 @@ class UserFollowRepository {
 
       // UserFollowsドキュメントを探して削除
       ..delete(
-        await firestore
-            .collection('UserFollows')
-            .where('followingId', isEqualTo: currentUserId)
-            .where('followerId', isEqualTo: targetUserId)
+        await _userFollowsCollectionRef
+            .where(
+              UserFollowsCollection.followingId,
+              isEqualTo: currentUserId,
+            )
+            .where(
+              UserFollowsCollection.followerId,
+              isEqualTo: targetUserId,
+            )
             .limit(1)
             .get()
             .then((snapshot) => snapshot.docs.first.reference),
@@ -80,19 +91,19 @@ class UserFollowRepository {
 
       // フォローしたユーザーのUserFollowCountsドキュメントを更新
       ..update(
-        firestore.collection('UserFollowCounts').doc(currentUserId),
+        _userFollowCountsCollectionRef.doc(currentUserId),
         {
-          'followingCount': FieldValue.increment(-1),
-          'updatedAt': FieldValue.serverTimestamp(),
+          UserFollowCountsCollection.followingCount: FieldValue.increment(-1),
+          updatedAtFieldName: FieldValue.serverTimestamp(),
         },
       )
 
       // フォローされたユーザーのUserFollowCountsドキュメントを更新
       ..update(
-        firestore.collection('UserFollowCounts').doc(targetUserId),
+        _userFollowCountsCollectionRef.doc(targetUserId),
         {
-          'followerCount': FieldValue.increment(-1),
-          'updatedAt': FieldValue.serverTimestamp(),
+          UserFollowCountsCollection.followerCount: FieldValue.increment(-1),
+          updatedAtFieldName: FieldValue.serverTimestamp(),
         },
       );
 
@@ -101,10 +112,9 @@ class UserFollowRepository {
 
   /// [currentUserId]が[targetUserId]をフォローしているかどうかを返す
   Future<bool> isFollowing(String currentUserId, String targetUserId) async {
-    final QuerySnapshot snapshot = await firestore
-        .collection('UserFollows')
-        .where('followingId', isEqualTo: currentUserId)
-        .where('followerId', isEqualTo: targetUserId)
+    final snapshot = await _userFollowsCollectionRef
+        .where(UserFollowsCollection.followingId, isEqualTo: currentUserId)
+        .where(UserFollowsCollection.followerId, isEqualTo: targetUserId)
         .limit(1)
         .get();
 
@@ -113,37 +123,38 @@ class UserFollowRepository {
 
   /// UserFollowCountドキュメントを追加する
   Future<void> addUserFollowCount(String userId) async {
-    await firestore.collection('UserFollowCounts').doc(userId).set({
-      'followerCount': 0,
-      'followingCount': 0,
-      'createdAt': FieldValue.serverTimestamp(),
-      'updatedAt': FieldValue.serverTimestamp(),
+    await _userFollowCountsCollectionRef.doc(userId).set({
+      UserFollowCountsCollection.followerCount: 0,
+      UserFollowCountsCollection.followingCount: 0,
+      createdAtFieldName: FieldValue.serverTimestamp(),
+      updatedAtFieldName: FieldValue.serverTimestamp(),
     });
   }
 
   /// [userId]がフォローしているユーザーのIDリストを全て取得
   Future<List<String>> fetchAllFollowingIdList(String userId) async {
-    final QuerySnapshot snapshot = await firestore
-        .collection('UserFollows')
-        .where('followingId', isEqualTo: userId)
+    final snapshot = await _userFollowsCollectionRef
+        .where(UserFollowsCollection.followingId, isEqualTo: userId)
         .get();
 
-    return snapshot.docs.map((doc) => doc['followerId'] as String).toList();
+    return snapshot.docs
+        .map((doc) => doc[UserFollowsCollection.followerId] as String)
+        .toList();
   }
 
   /// [userId]がフォローしているユーザーのIDリストを[fetchLimitForUserIdList]件取得（初回）
   Future<UserIdListState> fetchFollowingIdListFirst(
     String userId,
   ) async {
-    final snapshot = await firestore
-        .collection('UserFollows')
-        .where('followingId', isEqualTo: userId)
-        .orderBy('createdAt', descending: true)
+    final snapshot = await _userFollowsCollectionRef
+        .where(UserFollowsCollection.followingId, isEqualTo: userId)
+        .orderBy(createdAtFieldName, descending: true)
         .limit(fetchLimitForUserIdList)
         .get();
 
-    final followerIdList =
-        snapshot.docs.map((doc) => doc['followerId'] as String).toList();
+    final followerIdList = snapshot.docs
+        .map((doc) => doc[UserFollowsCollection.followerId] as String)
+        .toList();
 
     return _toUserIdListState(snapshot, followerIdList);
   }
@@ -153,16 +164,16 @@ class UserFollowRepository {
     String userId,
     QueryDocumentSnapshot lastReadQueryDocumentSnapshot,
   ) async {
-    final snapshot = await firestore
-        .collection('UserFollows')
-        .where('followingId', isEqualTo: userId)
-        .orderBy('createdAt', descending: true)
+    final snapshot = await _userFollowsCollectionRef
+        .where(UserFollowsCollection.followingId, isEqualTo: userId)
+        .orderBy(createdAtFieldName, descending: true)
         .startAfterDocument(lastReadQueryDocumentSnapshot)
         .limit(fetchLimitForUserIdList)
         .get();
 
-    final followerIdList =
-        snapshot.docs.map((doc) => doc['followerId'] as String).toList();
+    final followerIdList = snapshot.docs
+        .map((doc) => doc[UserFollowsCollection.followerId] as String)
+        .toList();
 
     return _toUserIdListState(snapshot, followerIdList);
   }
@@ -171,15 +182,15 @@ class UserFollowRepository {
   Future<UserIdListState> fetchFollowerIdListFirst(
     String userId,
   ) async {
-    final snapshot = await firestore
-        .collection('UserFollows')
-        .where('followerId', isEqualTo: userId)
-        .orderBy('createdAt', descending: true)
+    final snapshot = await _userFollowsCollectionRef
+        .where(UserFollowsCollection.followerId, isEqualTo: userId)
+        .orderBy(createdAtFieldName, descending: true)
         .limit(fetchLimitForUserIdList)
         .get();
 
-    final followingIdList =
-        snapshot.docs.map((doc) => doc['followingId'] as String).toList();
+    final followingIdList = snapshot.docs
+        .map((doc) => doc[UserFollowsCollection.followingId] as String)
+        .toList();
 
     return _toUserIdListState(snapshot, followingIdList);
   }
@@ -189,16 +200,16 @@ class UserFollowRepository {
     String userId,
     QueryDocumentSnapshot lastReadQueryDocumentSnapshot,
   ) async {
-    final snapshot = await firestore
-        .collection('UserFollows')
-        .where('followerId', isEqualTo: userId)
-        .orderBy('createdAt', descending: true)
+    final snapshot = await _userFollowsCollectionRef
+        .where(UserFollowsCollection.followerId, isEqualTo: userId)
+        .orderBy(createdAtFieldName, descending: true)
         .startAfterDocument(lastReadQueryDocumentSnapshot)
         .limit(fetchLimitForUserIdList)
         .get();
 
-    final followingIdList =
-        snapshot.docs.map((doc) => doc['followingId'] as String).toList();
+    final followingIdList = snapshot.docs
+        .map((doc) => doc[UserFollowsCollection.followingId] as String)
+        .toList();
 
     return _toUserIdListState(snapshot, followingIdList);
   }

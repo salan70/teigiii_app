@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../util/constant/firestore_collections.dart';
+
 part 'definition_document.freezed.dart';
 
 @freezed
@@ -20,13 +22,13 @@ class DefinitionDocument with _$DefinitionDocument {
     final data = doc.data()! as Map<String, dynamic>;
     return DefinitionDocument(
       id: doc.id,
-      wordId: data['wordId'] as String,
-      authorId: data['authorId'] as String,
-      definition: data['definition'] as String,
-      likesCount: data['likesCount'] as int,
-      isPublic: data['isPublic'] as bool,
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
-      updatedAt: (data['updatedAt'] as Timestamp).toDate(),
+      wordId: data[DefinitionsCollection.wordId] as String,
+      authorId: data[DefinitionsCollection.authorId] as String,
+      definition: data[DefinitionsCollection.definition] as String,
+      likesCount: data[DefinitionsCollection.likesCount] as int,
+      isPublic: data[DefinitionsCollection.isPublic] as bool,
+      createdAt: (data[createdAtFieldName] as Timestamp).toDate(),
+      updatedAt: (data[updatedAtFieldName] as Timestamp).toDate(),
     );
   }
 }

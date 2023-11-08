@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../util/constant/firestore_collections.dart';
 import '../../../util/constant/initial_main_group.dart';
 import '../../../util/constant/string_regex.dart';
 
@@ -74,22 +75,22 @@ class DefinitionForWrite with _$DefinitionForWrite {
 
   Map<String, dynamic> toFirestoreForCreate() {
     return {
-      'word': word,
-      'wordReading': wordReading,
-      'wordReadingInitialSubGroupLabel': _wordReadingInitialLabel,
-      'definition': definition,
-      'likesCount': 0,
-      'isPublic': isPublic,
+      DefinitionsCollection.word: word,
+      DefinitionsCollection.wordReadingInitialSubGroupLabel:
+          _wordReadingInitialLabel,
+      DefinitionsCollection.definition: definition,
+      DefinitionsCollection.likesCount: 0,
+      DefinitionsCollection.isPublic: isPublic,
     };
   }
 
   Map<String, dynamic> toFirestoreForUpdate() {
     return {
-      'word': word,
-      'wordReading': wordReading,
-      'wordReadingInitialSubGroupLabel': _wordReadingInitialLabel,
-      'definition': definition,
-      'isPublic': isPublic,
+      DefinitionsCollection.word: word,
+      DefinitionsCollection.wordReadingInitialSubGroupLabel:
+          _wordReadingInitialLabel,
+      DefinitionsCollection.definition: definition,
+      DefinitionsCollection.isPublic: isPublic,
     };
   }
 

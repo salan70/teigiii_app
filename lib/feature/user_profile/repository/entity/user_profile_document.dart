@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../util/constant/default_value.dart';
+import '../../../../util/constant/firestore_collections.dart';
 
 part 'user_profile_document.freezed.dart';
 
@@ -20,11 +21,13 @@ class UserProfileDocument with _$UserProfileDocument {
     final data = doc.data()! as Map<String, dynamic>;
     return UserProfileDocument(
       id: doc.id,
-      name: data['name'] as String,
-      bio: data['bio'] as String,
-      profileImageUrl: data['profileImageUrl'] as String? ?? defaultImageUrl,
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
-      updatedAt: (data['updatedAt'] as Timestamp).toDate(),
+      name: data[UserProfilesCollection.name] as String,
+      bio: data[UserProfilesCollection.bio] as String,
+      profileImageUrl:
+          data[UserProfilesCollection.profileImageUrl] as String? ??
+              defaultImageUrl,
+      createdAt: (data[createdAtFieldName] as Timestamp).toDate(),
+      updatedAt: (data[updatedAtFieldName] as Timestamp).toDate(),
     );
   }
 }
