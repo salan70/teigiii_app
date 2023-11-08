@@ -70,7 +70,7 @@ final mockWordDoc = WordDocument(
   id: 'wordId',
   word: 'word',
   reading: 'reading',
-  initialLetter: 'i',
+  initialSubGroupLabel: 'R',
   createdAt: nowDateTime,
   updatedAt: nowDateTime,
 );

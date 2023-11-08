@@ -19,7 +19,7 @@ mixin _$WordDocument {
   String get id => throw _privateConstructorUsedError;
   String get word => throw _privateConstructorUsedError;
   String get reading => throw _privateConstructorUsedError;
-  String get initialLetter => throw _privateConstructorUsedError;
+  String get initialSubGroupLabel => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
@@ -38,7 +38,7 @@ abstract class $WordDocumentCopyWith<$Res> {
       {String id,
       String word,
       String reading,
-      String initialLetter,
+      String initialSubGroupLabel,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -59,7 +59,7 @@ class _$WordDocumentCopyWithImpl<$Res, $Val extends WordDocument>
     Object? id = null,
     Object? word = null,
     Object? reading = null,
-    Object? initialLetter = null,
+    Object? initialSubGroupLabel = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -76,9 +76,9 @@ class _$WordDocumentCopyWithImpl<$Res, $Val extends WordDocument>
           ? _value.reading
           : reading // ignore: cast_nullable_to_non_nullable
               as String,
-      initialLetter: null == initialLetter
-          ? _value.initialLetter
-          : initialLetter // ignore: cast_nullable_to_non_nullable
+      initialSubGroupLabel: null == initialSubGroupLabel
+          ? _value.initialSubGroupLabel
+          : initialSubGroupLabel // ignore: cast_nullable_to_non_nullable
               as String,
       createdAt: null == createdAt
           ? _value.createdAt
@@ -104,7 +104,7 @@ abstract class _$$_WordDocumentCopyWith<$Res>
       {String id,
       String word,
       String reading,
-      String initialLetter,
+      String initialSubGroupLabel,
       DateTime createdAt,
       DateTime updatedAt});
 }
@@ -123,7 +123,7 @@ class __$$_WordDocumentCopyWithImpl<$Res>
     Object? id = null,
     Object? word = null,
     Object? reading = null,
-    Object? initialLetter = null,
+    Object? initialSubGroupLabel = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -140,9 +140,9 @@ class __$$_WordDocumentCopyWithImpl<$Res>
           ? _value.reading
           : reading // ignore: cast_nullable_to_non_nullable
               as String,
-      initialLetter: null == initialLetter
-          ? _value.initialLetter
-          : initialLetter // ignore: cast_nullable_to_non_nullable
+      initialSubGroupLabel: null == initialSubGroupLabel
+          ? _value.initialSubGroupLabel
+          : initialSubGroupLabel // ignore: cast_nullable_to_non_nullable
               as String,
       createdAt: null == createdAt
           ? _value.createdAt
@@ -163,7 +163,7 @@ class _$_WordDocument implements _WordDocument {
       {required this.id,
       required this.word,
       required this.reading,
-      required this.initialLetter,
+      required this.initialSubGroupLabel,
       required this.createdAt,
       required this.updatedAt});
 
@@ -174,7 +174,7 @@ class _$_WordDocument implements _WordDocument {
   @override
   final String reading;
   @override
-  final String initialLetter;
+  final String initialSubGroupLabel;
   @override
   final DateTime createdAt;
   @override
@@ -182,7 +182,7 @@ class _$_WordDocument implements _WordDocument {
 
   @override
   String toString() {
-    return 'WordDocument(id: $id, word: $word, reading: $reading, initialLetter: $initialLetter, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'WordDocument(id: $id, word: $word, reading: $reading, initialSubGroupLabel: $initialSubGroupLabel, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -193,8 +193,8 @@ class _$_WordDocument implements _WordDocument {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.word, word) || other.word == word) &&
             (identical(other.reading, reading) || other.reading == reading) &&
-            (identical(other.initialLetter, initialLetter) ||
-                other.initialLetter == initialLetter) &&
+            (identical(other.initialSubGroupLabel, initialSubGroupLabel) ||
+                other.initialSubGroupLabel == initialSubGroupLabel) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -202,8 +202,8 @@ class _$_WordDocument implements _WordDocument {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, word, reading, initialLetter, createdAt, updatedAt);
+  int get hashCode => Object.hash(runtimeType, id, word, reading,
+      initialSubGroupLabel, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -217,7 +217,7 @@ abstract class _WordDocument implements WordDocument {
       {required final String id,
       required final String word,
       required final String reading,
-      required final String initialLetter,
+      required final String initialSubGroupLabel,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$_WordDocument;
 
@@ -228,7 +228,7 @@ abstract class _WordDocument implements WordDocument {
   @override
   String get reading;
   @override
-  String get initialLetter;
+  String get initialSubGroupLabel;
   @override
   DateTime get createdAt;
   @override

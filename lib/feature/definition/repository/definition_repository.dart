@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/common_provider/firebase_providers.dart'; 
+import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/config_constant.dart';
+import '../../../util/constant/firestore_collections.dart';
+import '../../../util/constant/initial_main_group.dart';
 import '../../../util/extension/firestore_extension.dart';
 import '../domain/definition_for_write.dart';
 import '../domain/definition_id_list_state.dart';
@@ -23,6 +25,15 @@ class DefinitionRepository {
   DefinitionRepository(this.firestore);
 
   final FirebaseFirestore firestore;
+
+  CollectionReference get _definitionsCollectionRef =>
+      firestore.collection(DefinitionsCollection.collectionName);
+
+  CollectionReference get _wordsCollectionRef =>
+      firestore.collection(WordsCollection.collectionName);
+
+  CollectionReference get _likesCollectionRef =>
+      firestore.collection(LikesCollection.collectionName);
 
   /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する
   ///
@@ -51,15 +62,17 @@ class DefinitionRepository {
     QueryDocumentSnapshot? lastDocument,
     int fetchLimit,
   ) async {
-    var query = firestore
-        .collection('Definitions')
+    var query = _definitionsCollectionRef
         .where(
           Filter.or(
-            Filter('authorId', isEqualTo: currentUserId),
-            Filter('isPublic', isEqualTo: true),
+            Filter(
+              DefinitionsCollection.authorId,
+              isEqualTo: currentUserId,
+            ),
+            Filter(DefinitionsCollection.isPublic, isEqualTo: true),
           ),
         )
-        .orderBy('createdAt', descending: true)
+        .orderBy(createdAtFieldName, descending: true)
         .limit(fetchLimit);
 
     if (lastDocument != null) {
@@ -122,16 +135,18 @@ class DefinitionRepository {
     List<String> targetUserIdChunk,
     QueryDocumentSnapshot? lastDocument,
   ) async {
-    var query = firestore
-        .collection('Definitions')
-        .where('authorId', whereIn: targetUserIdChunk)
+    var query = _definitionsCollectionRef
+        .where(DefinitionsCollection.authorId, whereIn: targetUserIdChunk)
         .where(
           Filter.or(
-            Filter('authorId', isEqualTo: currentUserId),
-            Filter('isPublic', isEqualTo: true),
+            Filter(
+              DefinitionsCollection.authorId,
+              isEqualTo: currentUserId,
+            ),
+            Filter(DefinitionsCollection.isPublic, isEqualTo: true),
           ),
         )
-        .orderBy('createdAt', descending: true)
+        .orderBy(createdAtFieldName, descending: true)
         .limit(fetchLimitForDefinitionList);
 
     if (lastDocument != null) {
@@ -148,8 +163,8 @@ class DefinitionRepository {
   ) {
     // ソート処理
     documentList.sort((a, b) {
-      final timestampA = a.get('createdAt') as Timestamp;
-      final timestampB = b.get('createdAt') as Timestamp;
+      final timestampA = a.get(createdAtFieldName) as Timestamp;
+      final timestampB = b.get(createdAtFieldName) as Timestamp;
       return timestampB.toDate().compareTo(timestampA.toDate());
     });
     // 最初の`limit`件のドキュメントを取得
@@ -208,20 +223,22 @@ class DefinitionRepository {
     late final String orderByField;
     switch (orderByType) {
       case WordTopOrderByType.createdAt:
-        orderByField = 'createdAt';
+        orderByField = createdAtFieldName;
         break;
       case WordTopOrderByType.likesCount:
-        orderByField = 'likesCount';
+        orderByField = DefinitionsCollection.likesCount;
         break;
     }
 
-    var query = firestore
-        .collection('Definitions')
-        .where('wordId', isEqualTo: wordId)
+    var query = _definitionsCollectionRef
+        .where(DefinitionsCollection.wordId, isEqualTo: wordId)
         .where(
           Filter.or(
-            Filter('authorId', isEqualTo: currentUserId),
-            Filter('isPublic', isEqualTo: true),
+            Filter(
+              DefinitionsCollection.authorId,
+              isEqualTo: currentUserId,
+            ),
+            Filter(DefinitionsCollection.isPublic, isEqualTo: true),
           ),
         )
         .orderBy(orderByField, descending: true)
@@ -285,8 +302,7 @@ class DefinitionRepository {
   }
 
   Future<DefinitionDocument> fetchDefinition(String definitionId) async {
-    final snapshot = await firestore
-        .collection('Definitions')
+    final snapshot = await _definitionsCollectionRef
         .doc(definitionId)
         .get()
         .then((snapshot) => snapshot);
@@ -322,12 +338,12 @@ class DefinitionRepository {
     String wordId,
     DefinitionForWrite definitionForWrite,
   ) async {
-    await firestore.collection('Definitions').add({
+    await _definitionsCollectionRef.add({
       ...definitionForWrite.toFirestoreForCreate(),
-      'authorId': authorId,
-      'wordId': wordId,
-      'createdAt': FieldValue.serverTimestamp(),
-      'updatedAt': FieldValue.serverTimestamp(),
+      DefinitionsCollection.authorId: authorId,
+      DefinitionsCollection.wordId: wordId,
+      createdAtFieldName: FieldValue.serverTimestamp(),
+      updatedAtFieldName: FieldValue.serverTimestamp(),
     });
   }
 
@@ -357,11 +373,11 @@ class DefinitionRepository {
     String wordId,
     DefinitionForWrite definitionForWrite,
   ) async {
-    await firestore.collection('Definitions').doc(definitionForWrite.id).update(
+    await _definitionsCollectionRef.doc(definitionForWrite.id).update(
       {
         ...definitionForWrite.toFirestoreForUpdate(),
-        'wordId': wordId,
-        'updatedAt': FieldValue.serverTimestamp(),
+        DefinitionsCollection.wordId: wordId,
+        updatedAtFieldName: FieldValue.serverTimestamp(),
       },
     );
   }
@@ -369,14 +385,14 @@ class DefinitionRepository {
   // Definitionドキュメントの作成/更新処理とバッチ実行する必要があるため、このクラスに作成している。
   /// Wordドキュメントを作成し、作成したドキュメントのidを返す。
   Future<String> _createWord(String word, String wordReading) async {
-    final initialLetter = wordReading.substring(0, 1);
-    final docRef = await firestore.collection('Words').add(
+    final docRef = await _wordsCollectionRef.add(
       {
-        'word': word,
-        'reading': wordReading,
-        'initialLetter': initialLetter,
-        'createdAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
+        WordsCollection.word: word,
+        WordsCollection.reading: wordReading,
+        WordsCollection.initialSubGroupLabel:
+            InitialSubGroup.labelFromString(wordReading),
+        createdAtFieldName: FieldValue.serverTimestamp(),
+        updatedAtFieldName: FieldValue.serverTimestamp(),
       },
     );
 
@@ -387,19 +403,18 @@ class DefinitionRepository {
     // transactionを使い、複数の処理が全て成功した場合のみ、処理を完了させる
     await firestore.runTransaction((transaction) async {
       // Likesコレクションにドキュメントを登録
-      final likesCollection = firestore.collection('Likes');
+      final likesCollection = _likesCollectionRef;
       transaction.set(likesCollection.doc(), {
-        'definitionId': definitionId,
-        'userId': userId,
-        'createdAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
+        LikesCollection.definitionId: definitionId,
+        LikesCollection.userId: userId,
+        createdAtFieldName: FieldValue.serverTimestamp(),
+        updatedAtFieldName: FieldValue.serverTimestamp(),
       });
 
       // DefinitionコレクションからドキュメントのlikesCountを+1する
-      final definitionDocRef =
-          firestore.collection('Definitions').doc(definitionId);
+      final definitionDocRef = _definitionsCollectionRef.doc(definitionId);
       transaction.update(definitionDocRef, {
-        'likesCount': FieldValue.increment(1),
+        DefinitionsCollection.likesCount: FieldValue.increment(1),
       });
     });
   }
@@ -407,10 +422,9 @@ class DefinitionRepository {
   Future<void> unlikeDefinition(String definitionId, String userId) async {
     await firestore.runTransaction((transaction) async {
       // Likesコレクションからドキュメントを取得して削除
-      final likeSnapshot = await firestore
-          .collection('Likes')
-          .where('definitionId', isEqualTo: definitionId)
-          .where('userId', isEqualTo: userId)
+      final likeSnapshot = await _likesCollectionRef
+          .where(LikesCollection.definitionId, isEqualTo: definitionId)
+          .where(LikesCollection.userId, isEqualTo: userId)
           .get()
           .then((snapshot) => snapshot.docs.firstOrNull);
 
@@ -421,19 +435,17 @@ class DefinitionRepository {
       transaction.delete(likeSnapshot.reference);
 
       // DefinitionコレクションからドキュメントのlikesCountを-1する
-      final definitionDocRef =
-          firestore.collection('Definitions').doc(definitionId);
+      final definitionDocRef = _definitionsCollectionRef.doc(definitionId);
       transaction.update(definitionDocRef, {
-        'likesCount': FieldValue.increment(-1),
+        DefinitionsCollection.likesCount: FieldValue.increment(-1),
       });
     });
   }
 
   Future<bool> isLikedByUser(String userId, String definitionId) async {
-    final likeSnapshot = await firestore
-        .collection('Likes')
-        .where('definitionId', isEqualTo: definitionId)
-        .where('userId', isEqualTo: userId)
+    final likeSnapshot = await _likesCollectionRef
+        .where(LikesCollection.definitionId, isEqualTo: definitionId)
+        .where(LikesCollection.userId, isEqualTo: userId)
         .get()
         .then((snapshot) => snapshot.docs.firstOrNull);
 

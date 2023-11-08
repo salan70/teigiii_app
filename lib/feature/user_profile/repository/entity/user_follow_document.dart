@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../util/constant/firestore_collections.dart';
+
 part 'user_follow_document.freezed.dart';
 
 @freezed
@@ -17,10 +19,10 @@ class UserFollowDocument with _$UserFollowDocument {
     final data = doc.data()! as Map<String, dynamic>;
     return UserFollowDocument(
       id: doc.id,
-      followerId: data['followerId'] as String,
-      followingId: data['followingId'] as String,
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
-      updatedAt: (data['updatedAt'] as Timestamp).toDate(),
+      followerId: data[UserFollowsCollection.followerId] as String,
+      followingId: data[UserFollowsCollection.followingId] as String,
+      createdAt: (data[createdAtFieldName] as Timestamp).toDate(),
+      updatedAt: (data[updatedAtFieldName] as Timestamp).toDate(),
     );
   }
 }

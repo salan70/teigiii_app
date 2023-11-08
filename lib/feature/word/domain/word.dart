@@ -8,7 +8,7 @@ class Word with _$Word {
     required String id,
     required String word,
     required String reading,
-    required String initialLetter,
+    required String initialSubGroupLabel,
     required int postedDefinitionCount,
   }) = _Word;
 }

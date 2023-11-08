@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/config_constant.dart';
+import '../../../util/constant/firestore_collections.dart';
 import '../domain/word.dart';
 import '../domain/word_list_state.dart';
 import 'entity/word_document.dart';
@@ -19,9 +20,14 @@ class WordRepository {
 
   final FirebaseFirestore firestore;
 
+  CollectionReference get _wordsCollectionRef =>
+      firestore.collection(WordsCollection.collectionName);
+
+  CollectionReference get _definitionsCollectionRef =>
+      firestore.collection(DefinitionsCollection.collectionName);
+
   Future<WordDocument> fetchWordById(String wordId) async {
-    final DocumentSnapshot snapshot =
-        await firestore.collection('Words').doc(wordId).get();
+    final snapshot = await _wordsCollectionRef.doc(wordId).get();
 
     return WordDocument.fromFirestore(snapshot);
   }
@@ -30,10 +36,9 @@ class WordRepository {
   ///
   /// 見つからない場合はnullを返す
   Future<String?> findWordId(String word, String wordReading) async {
-    final snapshot = await firestore
-        .collection('Words')
-        .where('word', isEqualTo: word)
-        .where('reading', isEqualTo: wordReading)
+    final snapshot = await _wordsCollectionRef
+        .where(WordsCollection.word, isEqualTo: word)
+        .where(WordsCollection.reading, isEqualTo: wordReading)
         .limit(1)
         .get();
 
@@ -127,10 +132,9 @@ class WordRepository {
     DocumentSnapshot? lastDocument,
     int fetchLimit,
   ) {
-    var query = firestore
-        .collection('Words')
-        .where('initialLetter', isEqualTo: initial)
-        .orderBy('reading')
+    var query = _wordsCollectionRef
+        .where(WordsCollection.initialSubGroupLabel, isEqualTo: initial)
+        .orderBy(WordsCollection.reading)
         .limit(fetchLimit);
 
     if (lastDocument != null) {
@@ -145,7 +149,7 @@ class WordRepository {
     DocumentSnapshot? lastDocument,
     int fetchLimit,
   ) {
-    var query = firestore.collection('Words').orderBy('word').startAt(
+    var query = _wordsCollectionRef.orderBy(WordsCollection.word).startAt(
       [searchWord],
     ).endAt(['$searchWord\uf8ff']).limit(fetchLimit);
 
@@ -186,7 +190,7 @@ class WordRepository {
           id: wordDoc.id,
           word: wordDoc.word,
           reading: wordDoc.reading,
-          initialLetter: wordDoc.initialLetter,
+          initialSubGroupLabel: wordDoc.initialSubGroupLabel,
           postedDefinitionCount: postedDefinitionCount,
         ),
       );
@@ -200,13 +204,12 @@ class WordRepository {
     String currentUserId,
     List<String> mutedUserIdList,
   ) async {
-    final allDefinitionSnapshot = await firestore
-        .collection('Definitions')
-        .where('wordId', isEqualTo: wordId)
+    final allDefinitionSnapshot = await _definitionsCollectionRef
+        .where(DefinitionsCollection.wordId, isEqualTo: wordId)
         .where(
           Filter.or(
-            Filter('authorId', isEqualTo: currentUserId),
-            Filter('isPublic', isEqualTo: true),
+            Filter(DefinitionsCollection.authorId, isEqualTo: currentUserId),
+            Filter(DefinitionsCollection.isPublic, isEqualTo: true),
           ),
         )
         .count()
@@ -239,11 +242,10 @@ class WordRepository {
           i + 10 < mutedUserIdList.length ? i + 10 : mutedUserIdList.length;
       final chunk = mutedUserIdList.sublist(i, end);
 
-      final mutedSnapshot = await firestore
-          .collection('Definitions')
-          .where('wordId', isEqualTo: wordId)
-          .where('authorId', whereIn: chunk)
-          .where('isPublic', isEqualTo: true)
+      final mutedSnapshot = await _definitionsCollectionRef
+          .where(DefinitionsCollection.wordId, isEqualTo: wordId)
+          .where(DefinitionsCollection.authorId, whereIn: chunk)
+          .where(DefinitionsCollection.isPublic, isEqualTo: true)
           .count()
           .get();
 

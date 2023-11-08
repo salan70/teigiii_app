@@ -172,7 +172,7 @@ class MockDefinitionRepository extends _i1.Mock
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchHomeFollowingDefinitionIdList,
+          #fetchHomeFollowingDefinitionIdListState,
           [
             currentUserId,
             targetUserIdList,
@@ -183,7 +183,7 @@ class MockDefinitionRepository extends _i1.Mock
             _FakeDefinitionIdListState_1(
           this,
           Invocation.method(
-            #fetchHomeFollowingDefinitionIdList,
+            #fetchHomeFollowingDefinitionIdListState,
             [
               currentUserId,
               targetUserIdList,
@@ -195,7 +195,7 @@ class MockDefinitionRepository extends _i1.Mock
             _FakeDefinitionIdListState_1(
           this,
           Invocation.method(
-            #fetchHomeFollowingDefinitionIdList,
+            #fetchHomeFollowingDefinitionIdListState,
             [
               currentUserId,
               targetUserIdList,

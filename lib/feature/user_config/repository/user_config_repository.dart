@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/firebase_providers.dart';
+import '../../../util/constant/firestore_collections.dart';
 import 'entity/user_config_document.dart';
 
 part 'user_config_repository.g.dart';
@@ -17,9 +18,11 @@ class UserConfigRepository {
 
   final FirebaseFirestore firestore;
 
+  CollectionReference get _userConfigsCollectionRef =>
+      firestore.collection(UserConfigsCollection.collectionName);
+
   Future<UserConfigDocument> fetchUserConfig(String userId) async {
-    final DocumentSnapshot snapshot =
-        await firestore.collection('UserConfigs').doc(userId).get();
+    final snapshot = await _userConfigsCollectionRef.doc(userId).get();
 
     return UserConfigDocument.fromFirestore(snapshot);
   }
@@ -29,12 +32,12 @@ class UserConfigRepository {
     String osVersion,
     String appVersion,
   ) async {
-    await firestore.collection('UserConfigs').doc(userId).set({
-      'mutedUserIdList': <dynamic>[],
-      'osVersion': osVersion,
-      'appVersion': appVersion,
-      'createdAt': FieldValue.serverTimestamp(),
-      'updatedAt': FieldValue.serverTimestamp(),
+    await _userConfigsCollectionRef.doc(userId).set({
+      UserConfigsCollection.mutedUserIdList: <dynamic>[],
+      UserConfigsCollection.osVersion: osVersion,
+      UserConfigsCollection.appVersion: appVersion,
+      createdAtFieldName: FieldValue.serverTimestamp(),
+      updatedAtFieldName: FieldValue.serverTimestamp(),
     });
   }
 
@@ -44,10 +47,10 @@ class UserConfigRepository {
     String osVersion,
     String appVersion,
   ) async {
-    await firestore.collection('UserConfigs').doc(userId).update({
-      'osVersion': osVersion,
-      'appVersion': appVersion,
-      'updatedAt': FieldValue.serverTimestamp(),
+    await _userConfigsCollectionRef.doc(userId).update({
+      UserConfigsCollection.osVersion: osVersion,
+      UserConfigsCollection.appVersion: appVersion,
+      updatedAtFieldName: FieldValue.serverTimestamp(),
     });
   }
 
@@ -56,9 +59,10 @@ class UserConfigRepository {
     String userId,
     String mutedUserId,
   ) async {
-    await firestore.collection('UserConfigs').doc(userId).update({
-      'mutedUserIdList': FieldValue.arrayUnion(<dynamic>[mutedUserId]),
-      'updatedAt': FieldValue.serverTimestamp(),
+    await _userConfigsCollectionRef.doc(userId).update({
+      UserConfigsCollection.mutedUserIdList:
+          FieldValue.arrayUnion(<dynamic>[mutedUserId]),
+      updatedAtFieldName: FieldValue.serverTimestamp(),
     });
   }
 
@@ -67,9 +71,10 @@ class UserConfigRepository {
     String userId,
     String mutedUserId,
   ) async {
-    await firestore.collection('UserConfigs').doc(userId).update({
-      'mutedUserIdList': FieldValue.arrayRemove(<dynamic>[mutedUserId]),
-      'updatedAt': FieldValue.serverTimestamp(),
+    await _userConfigsCollectionRef.doc(userId).update({
+      UserConfigsCollection.mutedUserIdList:
+          FieldValue.arrayRemove(<dynamic>[mutedUserId]),
+      updatedAtFieldName: FieldValue.serverTimestamp(),
     });
   }
 }

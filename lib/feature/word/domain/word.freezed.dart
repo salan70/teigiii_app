@@ -19,7 +19,7 @@ mixin _$Word {
   String get id => throw _privateConstructorUsedError;
   String get word => throw _privateConstructorUsedError;
   String get reading => throw _privateConstructorUsedError;
-  String get initialLetter => throw _privateConstructorUsedError;
+  String get initialSubGroupLabel => throw _privateConstructorUsedError;
   int get postedDefinitionCount => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -35,7 +35,7 @@ abstract class $WordCopyWith<$Res> {
       {String id,
       String word,
       String reading,
-      String initialLetter,
+      String initialSubGroupLabel,
       int postedDefinitionCount});
 }
 
@@ -55,7 +55,7 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
     Object? id = null,
     Object? word = null,
     Object? reading = null,
-    Object? initialLetter = null,
+    Object? initialSubGroupLabel = null,
     Object? postedDefinitionCount = null,
   }) {
     return _then(_value.copyWith(
@@ -71,9 +71,9 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
           ? _value.reading
           : reading // ignore: cast_nullable_to_non_nullable
               as String,
-      initialLetter: null == initialLetter
-          ? _value.initialLetter
-          : initialLetter // ignore: cast_nullable_to_non_nullable
+      initialSubGroupLabel: null == initialSubGroupLabel
+          ? _value.initialSubGroupLabel
+          : initialSubGroupLabel // ignore: cast_nullable_to_non_nullable
               as String,
       postedDefinitionCount: null == postedDefinitionCount
           ? _value.postedDefinitionCount
@@ -93,7 +93,7 @@ abstract class _$$_WordCopyWith<$Res> implements $WordCopyWith<$Res> {
       {String id,
       String word,
       String reading,
-      String initialLetter,
+      String initialSubGroupLabel,
       int postedDefinitionCount});
 }
 
@@ -109,7 +109,7 @@ class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res, _$_Word>
     Object? id = null,
     Object? word = null,
     Object? reading = null,
-    Object? initialLetter = null,
+    Object? initialSubGroupLabel = null,
     Object? postedDefinitionCount = null,
   }) {
     return _then(_$_Word(
@@ -125,9 +125,9 @@ class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res, _$_Word>
           ? _value.reading
           : reading // ignore: cast_nullable_to_non_nullable
               as String,
-      initialLetter: null == initialLetter
-          ? _value.initialLetter
-          : initialLetter // ignore: cast_nullable_to_non_nullable
+      initialSubGroupLabel: null == initialSubGroupLabel
+          ? _value.initialSubGroupLabel
+          : initialSubGroupLabel // ignore: cast_nullable_to_non_nullable
               as String,
       postedDefinitionCount: null == postedDefinitionCount
           ? _value.postedDefinitionCount
@@ -144,7 +144,7 @@ class _$_Word implements _Word {
       {required this.id,
       required this.word,
       required this.reading,
-      required this.initialLetter,
+      required this.initialSubGroupLabel,
       required this.postedDefinitionCount});
 
   @override
@@ -154,13 +154,13 @@ class _$_Word implements _Word {
   @override
   final String reading;
   @override
-  final String initialLetter;
+  final String initialSubGroupLabel;
   @override
   final int postedDefinitionCount;
 
   @override
   String toString() {
-    return 'Word(id: $id, word: $word, reading: $reading, initialLetter: $initialLetter, postedDefinitionCount: $postedDefinitionCount)';
+    return 'Word(id: $id, word: $word, reading: $reading, initialSubGroupLabel: $initialSubGroupLabel, postedDefinitionCount: $postedDefinitionCount)';
   }
 
   @override
@@ -171,15 +171,15 @@ class _$_Word implements _Word {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.word, word) || other.word == word) &&
             (identical(other.reading, reading) || other.reading == reading) &&
-            (identical(other.initialLetter, initialLetter) ||
-                other.initialLetter == initialLetter) &&
+            (identical(other.initialSubGroupLabel, initialSubGroupLabel) ||
+                other.initialSubGroupLabel == initialSubGroupLabel) &&
             (identical(other.postedDefinitionCount, postedDefinitionCount) ||
                 other.postedDefinitionCount == postedDefinitionCount));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, word, reading, initialLetter, postedDefinitionCount);
+  int get hashCode => Object.hash(runtimeType, id, word, reading,
+      initialSubGroupLabel, postedDefinitionCount);
 
   @JsonKey(ignore: true)
   @override
@@ -193,7 +193,7 @@ abstract class _Word implements Word {
       {required final String id,
       required final String word,
       required final String reading,
-      required final String initialLetter,
+      required final String initialSubGroupLabel,
       required final int postedDefinitionCount}) = _$_Word;
 
   @override
@@ -203,7 +203,7 @@ abstract class _Word implements Word {
   @override
   String get reading;
   @override
-  String get initialLetter;
+  String get initialSubGroupLabel;
   @override
   int get postedDefinitionCount;
   @override

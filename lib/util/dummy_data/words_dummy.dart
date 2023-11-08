@@ -1,6 +1,6 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../constant/initial_main_group.dart';
 
 Future<void> addWordsDummy0to29(String flavorName) async {
   // 語句リスト
@@ -71,41 +71,13 @@ Future<void> addWordsDummy0to29(String flavorName) async {
     'みらいえいごう',
   ];
 
-  // publicDefinitionCountのダミーデータ
-  final publicDefinitionCounts = <int>[
-    5,
-    4,
-    7,
-    6,
-    3,
-    4,
-    5,
-    6,
-    2,
-    7,
-    8,
-    3,
-    4,
-    5,
-    6,
-    7,
-    5,
-    6,
-    7,
-    4,
-    3,
-    6,
-    5,
-    7,
-    3,
-    5,
-    6,
-    7,
-    8,
-    2,
-  ];
-  await _addWordsDummyToFirestore(flavorName, words, readings,
-      publicDefinitionCounts, 0, 29,);
+  await _addWordsDummyToFirestore(
+    flavorName,
+    words,
+    readings,
+    0,
+    29,
+  );
 }
 
 Future<void> addWordsDummy30to59(String flavorName) async {
@@ -177,50 +149,19 @@ Future<void> addWordsDummy30to59(String flavorName) async {
     'ざつおん',
   ];
 
-  // publicDefinitionCountのダミーデータ
-  final publicDefinitionCounts = <int>[
-    6,
-    4,
-    8,
-    7,
-    3,
-    4,
-    5,
-    6,
-    3,
-    7,
-    8,
-    3,
-    4,
-    5,
-    6,
-    7,
-    5,
-    6,
-    7,
-    4,
-    3,
-    6,
-    5,
-    7,
-    3,
-    5,
-    6,
-    7,
-    8,
-    3,
-  ];
-
-  await _addWordsDummyToFirestore(flavorName, words, readings,
-      publicDefinitionCounts, 30, 59,);
+  await _addWordsDummyToFirestore(
+    flavorName,
+    words,
+    readings,
+    30,
+    59,
+  );
 }
-
 
 Future<void> _addWordsDummyToFirestore(
   String flavorName,
   List<String> words,
   List<String> readings,
-  List<int> publicDefinitionCounts,
   int startIndex,
   int endIndex,
 ) async {
@@ -232,36 +173,15 @@ Future<void> _addWordsDummyToFirestore(
   // Words コレクションのテストデータを挿入
   for (var i = 0; i < 30; i++) {
     final wordId = 'word${startIndex + i + 1}';
-    final privateDefinitionCount = Random().nextInt(3);
     final wordData = {
       'id': wordId,
       'word': words[i],
       'reading': readings[i],
-      'initialLetter': readings[i][0], // readingの最初の文字
-      'publicDefinitionCount': publicDefinitionCounts[i],
-      'privateDefinitionCount': privateDefinitionCount,
+      'initialSubGroupLabel': InitialSubGroup.labelFromString(readings[i]),
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
     };
 
     await firestore.collection('Words').doc(wordId).set(wordData);
-
-    // PrivateDefinitionPostedAuthors サブコレクションのテストデータを挿入
-    if (privateDefinitionCount != 0) {
-      final randomIndex = Random().nextInt(19) + 1;
-      final authorData = {
-        'id': 'user$randomIndex',
-        'postedPrivateCount': privateDefinitionCount,
-        'createdAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      };
-
-      await firestore
-          .collection('Words')
-          .doc(wordId)
-          .collection('PrivateDefinitionPostedAuthors')
-          .doc('user$randomIndex')
-          .set(authorData);
-    }
   }
 }

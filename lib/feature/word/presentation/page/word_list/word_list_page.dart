@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/common_widget/cupertino_refresh_indicator.dart';
 import '../../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
+import '../../../../../util/constant/initial_main_group.dart';
 import '../../../../../util/logger.dart';
 import '../../../application/word_list_state_by_initial.dart';
-import '../../../util/initial_main_group.dart';
 import '../../component/word_tile.dart';
 
 @RoutePage()

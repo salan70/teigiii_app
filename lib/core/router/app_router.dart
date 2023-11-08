@@ -18,7 +18,7 @@ import '../../feature/word/presentation/page/index_top/index_top_page.dart';
 import '../../feature/word/presentation/page/search_word_result/search_word_result_page.dart';
 import '../../feature/word/presentation/page/word_list/word_list_page.dart';
 import '../../feature/word/presentation/page/word_top/word_top_page.dart';
-import '../../feature/word/util/initial_main_group.dart';
+import '../../util/constant/initial_main_group.dart';
 
 part 'app_router.g.dart';
 part 'app_router.gr.dart';

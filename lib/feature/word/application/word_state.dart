@@ -25,7 +25,7 @@ Future<Word> word(WordRef ref, String wordId) async {
     id: wordDoc.id,
     word: wordDoc.word,
     reading: wordDoc.reading,
-    initialLetter: wordDoc.initialLetter,
+    initialSubGroupLabel: wordDoc.initialSubGroupLabel,
     postedDefinitionCount: postedDefinitionCount,
   );
 }

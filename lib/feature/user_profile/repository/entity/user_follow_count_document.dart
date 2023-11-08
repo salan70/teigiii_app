@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../util/constant/firestore_collections.dart';
+
 part 'user_follow_count_document.freezed.dart';
 
 @freezed
@@ -17,10 +19,10 @@ class UserFollowCountDocument with _$UserFollowCountDocument {
     final data = doc.data()! as Map<String, dynamic>;
     return UserFollowCountDocument(
       id: doc.id,
-      followerCount: data['followerCount'] as int,
-      followingCount: data['followingCount'] as int,
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
-      updatedAt: (data['updatedAt'] as Timestamp).toDate(),
+      followerCount: data[UserFollowCountsCollection.followerCount] as int,
+      followingCount: data[UserFollowCountsCollection.followingCount] as int,
+      createdAt: (data[createdAtFieldName] as Timestamp).toDate(),
+      updatedAt: (data[updatedAtFieldName] as Timestamp).toDate(),
     );
   }
 }

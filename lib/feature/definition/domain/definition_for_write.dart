@@ -1,5 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../util/constant/firestore_collections.dart';
+import '../../../util/constant/initial_main_group.dart';
+import '../../../util/constant/string_regex.dart';
+
 part 'definition_for_write.freezed.dart';
 
 /// Definitionの新規投稿・更新時に使用するオブジェクト
@@ -42,11 +46,8 @@ class DefinitionForWrite with _$DefinitionForWrite {
       return _leadingSpaceErrorText;
     }
 
-    // 次の文字種別のみを共用する正規表現
-    // スペース、ひらがな、カタカナ、アルファベット（大文字・小文字）、数字、一部記号（'ー'含む）
-    final validPattern =
-        RegExp(r'^[ ぁ-んァ-ンa-zA-Z0-9!#$%&()*+,\-./:;<=>?@\[\]^_`{|}~\u30FC]+$');
-    if (!validPattern.hasMatch(wordReading)) {
+    // 文字が無効かどうか確認
+    if (!combinedRegex.hasMatch(wordReading)) {
       // 漢字が含まれているか確認
       final kanjiPattern = RegExp(r'[\u3400-\u9FBF]');
       if (kanjiPattern.hasMatch(wordReading)) {
@@ -74,59 +75,28 @@ class DefinitionForWrite with _$DefinitionForWrite {
 
   Map<String, dynamic> toFirestoreForCreate() {
     return {
-      'word': word,
-      'wordReading': wordReading,
-      'wordReadingInitialGroup': categorizeFirstCharacter(wordReading),
-      'definition': definition,
-      'likesCount': 0,
-      'isPublic': isPublic,
+      DefinitionsCollection.word: word,
+      DefinitionsCollection.wordReadingInitialSubGroupLabel:
+          _wordReadingInitialLabel,
+      DefinitionsCollection.definition: definition,
+      DefinitionsCollection.likesCount: 0,
+      DefinitionsCollection.isPublic: isPublic,
     };
   }
 
   Map<String, dynamic> toFirestoreForUpdate() {
     return {
-      'word': word,
-      'wordReading': wordReading,
-      'wordReadingInitialGroup': categorizeFirstCharacter(wordReading),
-      'definition': definition,
-      'isPublic': isPublic,
+      DefinitionsCollection.word: word,
+      DefinitionsCollection.wordReadingInitialSubGroupLabel:
+          _wordReadingInitialLabel,
+      DefinitionsCollection.definition: definition,
+      DefinitionsCollection.isPublic: isPublic,
     };
-  }
-
-  // 文字列（Unicode）が絡んでおり繊細な問題であること、
-  // データ取得時の絞り込み等で利用するため特に正確に値を保存したいことから、テストを作成する
-  @visibleForTesting
-  String categorizeFirstCharacter(String text) {
-    final firstChar = text.substring(0, 1);
-
-    // ひらがなの場合、そのまま返す
-    if (RegExp(r'^[ぁ-ん]').hasMatch(firstChar)) {
-      return firstChar;
-    }
-    // カタカナの場合、ひらがなに変換して返す
-    else if (RegExp(r'^[ァ-ヶー]').hasMatch(firstChar)) {
-      return _convertToHiragana(firstChar);
-    }
-    // アルファベットの場合、大文字に変換して返す
-    else if (RegExp(r'^[a-zA-Z]').hasMatch(firstChar)) {
-      return firstChar.toUpperCase();
-    }
-    // 数字の場合、「数字」を返す
-    else if (RegExp(r'^[0-9]').hasMatch(firstChar)) {
-      return '数字';
-    }
-    // それ以外の場合（記号など）、「記号」を返す
-    else {
-      return '記号';
-    }
-  }
-
-  String _convertToHiragana(String katakana) {
-    // Unicodeの範囲を利用してカタカナからひらがなに変換
-    final offset = 'ァ'.codeUnitAt(0) - 'ぁ'.codeUnitAt(0);
-    return String.fromCharCode(katakana.codeUnitAt(0) - offset);
   }
 
   bool get isEmptyAllFields =>
       word.isEmpty && wordReading.isEmpty && definition.isEmpty;
+
+  String get _wordReadingInitialLabel =>
+      InitialSubGroup.labelFromString(wordReading);
 }
