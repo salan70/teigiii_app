@@ -67,7 +67,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                 TextFormField(
                   initialValue: definitionForWrite.word,
                   autofocus: autoFocusForm == WriteDefinitionFormType.word,
-                  maxLength: 30,
+                  maxLength: definitionForWrite.maxWordLength,
                   maxLines: null,
                   textInputAction: TextInputAction.next,
                   onChanged: notifier.changeWord,
@@ -83,7 +83,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                   initialValue: definitionForWrite.wordReading,
                   autofocus:
                       autoFocusForm == WriteDefinitionFormType.wordReading,
-                  maxLength: 50,
+                  maxLength: definitionForWrite.maxWordReadingLength,
                   maxLines: null,
                   textInputAction: TextInputAction.next,
                   onChanged: notifier.changeWordReading,
@@ -100,7 +100,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                   initialValue: definitionForWrite.definition,
                   autofocus:
                       autoFocusForm == WriteDefinitionFormType.definition,
-                  maxLength: 500,
+                  maxLength: definitionForWrite.maxDefinitionLength,
                   maxLines: null,
                   onChanged: notifier.changeDefinition,
                   style: Theme.of(context).textTheme.titleLarge,

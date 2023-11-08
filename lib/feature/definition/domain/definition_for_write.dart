@@ -19,12 +19,21 @@ class DefinitionForWrite with _$DefinitionForWrite {
   }) = _DefinitionForWrite;
   const DefinitionForWrite._();
 
+  int get maxWordLength => 30;
+  int get maxWordReadingLength => 50;
+  int get maxDefinitionLength => 500;
+
   String get _leadingSpaceErrorText => '先頭にはスペース等を使用できません';
 
   String? outputWordError() {
     if (word.isEmpty) {
       // 未入力の場合はエラーを出さない
       return null;
+    }
+
+    // 最大文字数を超えているかどうか
+    if (word.length > maxWordLength) {
+      return '$maxWordLength文字以内で入力してください';
     }
 
     // 頭文字が空白文字かどうか
@@ -39,6 +48,11 @@ class DefinitionForWrite with _$DefinitionForWrite {
     if (wordReading.isEmpty) {
       // 未入力の場合はエラーを出さない
       return null;
+    }
+
+    // 最大文字数を超えているかどうか
+    if (wordReading.length > maxWordReadingLength) {
+      return '$maxWordReadingLength文字以内で入力してください';
     }
 
     // 頭文字が空白文字かどうか
@@ -66,9 +80,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
     final isValidWord = outputWordError() == null && word.isNotEmpty;
     final isValidWordReading =
         outputWordReadingError() == null && wordReading.isNotEmpty;
-    final isValidDefinition = definition.isNotEmpty;
-
-    // TODO(me): 入力数のバリデーションも追加する（output()系に追加するのもあり）
+    final isValidDefinition = definition.isNotEmpty && definition.length <= maxDefinitionLength;
 
     return isValidWord && isValidWordReading && isValidDefinition;
   }

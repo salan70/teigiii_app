@@ -46,6 +46,21 @@ void main() {
       expect(actual, isNull);
     });
 
+    test('最大文字を超えている', () {
+      // * Arrange
+      final word = 'あ' * (baseDefinitionForWrite.maxWordLength + 1);
+      final definition = baseDefinitionForWrite.copyWith(word: word);
+
+      // * Act
+      final actual = definition.outputWordError();
+
+      // * Assert
+      expect(
+        actual,
+        '${baseDefinitionForWrite.maxWordLength}文字以内で入力してください',
+      );
+    });
+
     test('スペースのみ（先頭がスペース）', () {
       // * Arrange
       final definition = baseDefinitionForWrite.copyWith(word: ' ');
@@ -115,6 +130,23 @@ void main() {
 
       // * Assert
       expect(actual, '漢字は使用できません');
+    });
+
+    test('最大文字を超えている', () {
+      // * Arrange
+      final wordReading =
+          'あ' * (baseDefinitionForWrite.maxWordReadingLength + 1);
+      final definition =
+          baseDefinitionForWrite.copyWith(wordReading: wordReading);
+
+      // * Act
+      final actual = definition.outputWordReadingError();
+
+      // * Assert
+      expect(
+        actual,
+        '${baseDefinitionForWrite.maxWordReadingLength}文字以内で入力してください',
+      );
     });
 
     test('無効な記号が含まれている', () {
@@ -209,6 +241,19 @@ void main() {
     test('definitionが空', () {
       // * Arrange
       final definition = baseDefinitionForWrite.copyWith(definition: '');
+
+      // * Act
+      final canPost = definition.isValidAllFields();
+
+      // * Assert
+      expect(canPost, isFalse);
+    });
+
+    test('definitionが最大文字数を超えている', () {
+      // * Arrange
+      final definition = baseDefinitionForWrite.copyWith(
+        definition: 'あ' * (baseDefinitionForWrite.maxDefinitionLength + 1),
+      );
 
       // * Act
       final canPost = definition.isValidAllFields();
