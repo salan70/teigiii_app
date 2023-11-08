@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/firebase_providers.dart'; 
 import '../../../util/constant/config_constant.dart';
+import '../../../util/constant/initial_main_group.dart';
 import '../../../util/extension/firestore_extension.dart';
 import '../domain/definition_for_write.dart';
 import '../domain/definition_id_list_state.dart';
@@ -369,12 +370,11 @@ class DefinitionRepository {
   // Definitionドキュメントの作成/更新処理とバッチ実行する必要があるため、このクラスに作成している。
   /// Wordドキュメントを作成し、作成したドキュメントのidを返す。
   Future<String> _createWord(String word, String wordReading) async {
-    final initialLetter = wordReading.substring(0, 1);
     final docRef = await firestore.collection('Words').add(
       {
         'word': word,
         'reading': wordReading,
-        'initialLetter': initialLetter,
+        'initialSubGroupLabel': InitialSubGroup.labelFromString(wordReading),
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       },

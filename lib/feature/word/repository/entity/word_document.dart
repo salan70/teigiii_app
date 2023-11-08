@@ -9,7 +9,7 @@ class WordDocument with _$WordDocument {
     required String id,
     required String word,
     required String reading,
-    required String initialLetter,
+    required String initialSubGroupLabel,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _WordDocument;
@@ -20,7 +20,7 @@ class WordDocument with _$WordDocument {
       id: doc.id,
       word: data['word'] as String,
       reading: data['reading'] as String,
-      initialLetter: data['initialLetter'] as String,
+      initialSubGroupLabel: data['initialSubGroupLabel'] as String,
       createdAt: (data['createdAt'] as Timestamp).toDate(),
       updatedAt: (data['updatedAt'] as Timestamp).toDate(),
     );

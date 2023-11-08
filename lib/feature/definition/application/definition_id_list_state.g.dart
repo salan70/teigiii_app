@@ -7,7 +7,7 @@ part of 'definition_id_list_state.dart';
 // **************************************************************************
 
 String _$definitionIdListStateNotifierHash() =>
-    r'1a4936f2d0b182284e2a199fede6155fb125975e';
+    r'4804844313b4aa6a383887ae43c94debf1d278a5';
 
 /// Copied from Dart SDK
 class _SystemHash {

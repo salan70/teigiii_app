@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../constant/initial_main_group.dart';
+
 final firestore = FirebaseFirestore.instance;
 final definitionsCollection = firestore.collection('Definitions');
 
@@ -111,15 +113,13 @@ Future<void> addDefinitionDummy0to29(String flavorName) async {
     '限りなく続く未来。',
   ];
 
-  final wordReadingInitialGroups =
-      readings.map(_categorizeFirstCharacter).toList();
-
   for (var i = 0; i < words.length; i++) {
     await Future<void>.delayed(const Duration(microseconds: 300));
     await definitionsCollection.doc('definition${i + 1}').set({
       'wordId': wordIds[i],
       'word': words[i],
-      'wordReadingInitialGroup': wordReadingInitialGroups[i],
+      'wordReadingInitialSubGroupLabel':
+          InitialSubGroup.labelFromString(readings[i]),
       'authorId': 'user${Random().nextInt(20) + 1}',
       'definition': definitions[i],
       'likesCount': Random().nextInt(100),
@@ -128,25 +128,4 @@ Future<void> addDefinitionDummy0to29(String flavorName) async {
       'updatedAt': FieldValue.serverTimestamp(),
     });
   }
-}
-
-String _categorizeFirstCharacter(String text) {
-  final firstChar = text.substring(0, 1);
-
-  if (RegExp(r'^[ぁ-ん]').hasMatch(firstChar)) {
-    return firstChar;
-  } else if (RegExp(r'^[ァ-ヶー]').hasMatch(firstChar)) {
-    return _convertToHiragana(firstChar);
-  } else if (RegExp(r'^[a-zA-Z]').hasMatch(firstChar)) {
-    return firstChar.toUpperCase();
-  } else if (RegExp(r'^[0-9]').hasMatch(firstChar)) {
-    return '数字';
-  } else {
-    return '記号';
-  }
-}
-
-String _convertToHiragana(String katakana) {
-  final offset = 'ァ'.codeUnitAt(0) - 'ぁ'.codeUnitAt(0);
-  return String.fromCharCode(katakana.codeUnitAt(0) - offset);
 }

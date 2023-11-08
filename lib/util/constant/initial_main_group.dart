@@ -1,3 +1,6 @@
+import '../extension/string_extension.dart';
+import 'string_regex.dart';
+
 enum InitialMainGroup {
   // かな
   japaneseAColumn,
@@ -126,7 +129,8 @@ enum InitialSubGroup {
 
   // その他
   number,
-  symbol;
+  basicSymbol,
+  other;
 
   String get label {
     switch (this) {
@@ -279,9 +283,53 @@ enum InitialSubGroup {
         return 'Z';
       case InitialSubGroup.number:
         return '数字';
-      case InitialSubGroup.symbol:
+      case InitialSubGroup.basicSymbol:
         return '記号';
+      case InitialSubGroup.other:
+        return 'その他';
     }
+  }
+
+  static String labelFromString(String input) {
+    final trimmed = input.trim();
+    if (trimmed.isEmpty) {
+      return InitialSubGroup.other.label;
+    }
+
+    final initial = trimmed.substring(0, 1);
+
+    // ひらがな
+    if (hiraganaRegex.hasMatch(initial)) {
+      return kanaMapping[initial]!.label;
+    }
+
+    // カタカナ
+    if (katakanaRegex.hasMatch(initial)) {
+      final hiraganaInitial = initial.katakanaToHiragana();
+      return kanaMapping[hiraganaInitial]!.label;
+    }
+
+    // アルファベット
+    if (alphabetRegex.hasMatch(initial)) {
+      return InitialSubGroup.values
+          .firstWhere(
+            (element) => element.label == initial.toUpperCase(),
+          )
+          .label;
+    }
+
+    // 数字
+    if (numberRegex.hasMatch(initial)) {
+      return InitialSubGroup.number.label;
+    }
+
+    // 記号
+    if (basicSymbolRegex.hasMatch(initial)) {
+      return InitialSubGroup.basicSymbol.label;
+    }
+
+    // その他
+    return InitialSubGroup.other.label;
   }
 }
 
@@ -382,6 +430,102 @@ final Map<InitialMainGroup, List<InitialSubGroup>> initialMapping = {
   ],
   InitialMainGroup.other: [
     InitialSubGroup.number,
-    InitialSubGroup.symbol,
+    InitialSubGroup.basicSymbol,
+    InitialSubGroup.other,
   ],
+};
+
+final Map<String, InitialSubGroup> kanaMapping = {
+  // 清音 + を + ん
+  'あ': InitialSubGroup.a,
+  'い': InitialSubGroup.i,
+  'う': InitialSubGroup.u,
+  'え': InitialSubGroup.e,
+  'お': InitialSubGroup.o,
+  'か': InitialSubGroup.ka,
+  'き': InitialSubGroup.ki,
+  'く': InitialSubGroup.ku,
+  'け': InitialSubGroup.ke,
+  'こ': InitialSubGroup.ko,
+  'さ': InitialSubGroup.sa,
+  'し': InitialSubGroup.shi,
+  'す': InitialSubGroup.su,
+  'せ': InitialSubGroup.se,
+  'そ': InitialSubGroup.so,
+  'た': InitialSubGroup.ta,
+  'ち': InitialSubGroup.chi,
+  'つ': InitialSubGroup.tsu,
+  'て': InitialSubGroup.te,
+  'と': InitialSubGroup.to,
+  'な': InitialSubGroup.na,
+  'に': InitialSubGroup.ni,
+  'ぬ': InitialSubGroup.nu,
+  'ね': InitialSubGroup.ne,
+  'の': InitialSubGroup.no,
+  'は': InitialSubGroup.ha,
+  'ひ': InitialSubGroup.hi,
+  'ふ': InitialSubGroup.fu,
+  'へ': InitialSubGroup.he,
+  'ほ': InitialSubGroup.ho,
+  'ま': InitialSubGroup.ma,
+  'み': InitialSubGroup.mi,
+  'む': InitialSubGroup.mu,
+  'め': InitialSubGroup.me,
+  'も': InitialSubGroup.mo,
+  'や': InitialSubGroup.ya,
+  'ゆ': InitialSubGroup.yu,
+  'よ': InitialSubGroup.yo,
+  'ら': InitialSubGroup.ra,
+  'り': InitialSubGroup.ri,
+  'る': InitialSubGroup.ru,
+  'れ': InitialSubGroup.re,
+  'ろ': InitialSubGroup.ro,
+  'わ': InitialSubGroup.wa,
+  'を': InitialSubGroup.wo,
+  'ん': InitialSubGroup.n,
+
+  // 濁音
+  'が': InitialSubGroup.ka,
+  'ぎ': InitialSubGroup.ki,
+  'ぐ': InitialSubGroup.ku,
+  'げ': InitialSubGroup.ke,
+  'ご': InitialSubGroup.ko,
+  'ざ': InitialSubGroup.sa,
+  'じ': InitialSubGroup.shi,
+  'ず': InitialSubGroup.su,
+  'ぜ': InitialSubGroup.se,
+  'ぞ': InitialSubGroup.so,
+  'だ': InitialSubGroup.ta,
+  'ぢ': InitialSubGroup.chi,
+  'づ': InitialSubGroup.tsu,
+  'で': InitialSubGroup.te,
+  'ど': InitialSubGroup.to,
+  'ば': InitialSubGroup.ha,
+  'び': InitialSubGroup.hi,
+  'ぶ': InitialSubGroup.fu,
+  'べ': InitialSubGroup.he,
+  'ぼ': InitialSubGroup.ho,
+  'ゔ': InitialSubGroup.u,
+
+  // 半濁音
+  'ぱ': InitialSubGroup.ha,
+  'ぴ': InitialSubGroup.hi,
+  'ぷ': InitialSubGroup.fu,
+  'ぺ': InitialSubGroup.he,
+  'ぽ': InitialSubGroup.ho,
+
+  // 小書き
+  'ぁ': InitialSubGroup.a,
+  'ぃ': InitialSubGroup.i,
+  'ぅ': InitialSubGroup.u,
+  'ぇ': InitialSubGroup.e,
+  'ぉ': InitialSubGroup.o,
+  'ゃ': InitialSubGroup.ya,
+  'ゅ': InitialSubGroup.yu,
+  'ょ': InitialSubGroup.yo,
+  'っ': InitialSubGroup.tsu,
+
+  // 歴史的仮名遣い
+  'ゐ': InitialSubGroup.i,
+  'ゑ': InitialSubGroup.e,
 };

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/router/app_router.dart';
-import '../../../util/initial_main_group.dart';
+import '../../../../../util/constant/initial_main_group.dart';
 import '../../component/index_tile.dart';
 
 @RoutePage()

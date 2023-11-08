@@ -129,7 +129,7 @@ class WordRepository {
   ) {
     var query = firestore
         .collection('Words')
-        .where('initialLetter', isEqualTo: initial)
+        .where('initialSubGroupLabel', isEqualTo: initial)
         .orderBy('reading')
         .limit(fetchLimit);
 
@@ -186,7 +186,7 @@ class WordRepository {
           id: wordDoc.id,
           word: wordDoc.word,
           reading: wordDoc.reading,
-          initialLetter: wordDoc.initialLetter,
+          initialSubGroupLabel: wordDoc.initialSubGroupLabel,
           postedDefinitionCount: postedDefinitionCount,
         ),
       );
