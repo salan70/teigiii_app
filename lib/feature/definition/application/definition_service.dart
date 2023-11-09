@@ -5,7 +5,7 @@ import '../../../core/common_provider/snack_bar_controller.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../domain/definition.dart';
-import '../repository/definition_repository.dart';
+import '../repository/write_definition_repository.dart';
 import 'definition_state.dart';
 
 part 'definition_service.g.dart';
@@ -46,7 +46,7 @@ class DefinitionService extends _$DefinitionService {
 
     if (definition.isLikedByUser) {
       // いいね解除
-      await ref.read(definitionRepositoryProvider).unlikeDefinition(
+      await ref.read(writeDefinitionRepositoryProvider).unlikeDefinition(
             definition.id,
             userId,
           );
@@ -54,7 +54,7 @@ class DefinitionService extends _$DefinitionService {
     }
 
     // いいね登録
-    await ref.read(definitionRepositoryProvider).likeDefinition(
+    await ref.read(writeDefinitionRepositoryProvider).likeDefinition(
           definition.id,
           userId,
         );

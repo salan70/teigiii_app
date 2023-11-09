@@ -7,7 +7,7 @@ import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../../word/repository/word_repository.dart';
 import '../domain/definition_for_write.dart';
-import '../repository/definition_repository.dart';
+import '../repository/write_definition_repository.dart';
 import 'definition_state.dart';
 
 part 'definition_for_write_notifier.g.dart';
@@ -71,7 +71,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
           );
       final currentUserId = ref.read(userIdProvider)!;
 
-      await ref.read(definitionRepositoryProvider).createDefinitionAndMaybeWord(
+      await ref.read(writeDefinitionRepositoryProvider).createDefinitionAndMaybeWord(
             currentUserId,
             existingWordId,
             definitionForWrite,
@@ -108,7 +108,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
           );
 
       await ref
-          .read(definitionRepositoryProvider)
+          .read(writeDefinitionRepositoryProvider)
           .updateDefinitionAndMaybeCreateWord(
             existingWordId,
             definitionForWrite,
