@@ -15,10 +15,12 @@ class DefinitionList extends ConsumerWidget {
     super.key,
     required this.definitionFeedType,
     this.wordId,
+    this.targetUserId,
   });
 
   final DefinitionFeedType definitionFeedType;
   final String? wordId;
+  final String? targetUserId;
 
   final scrollController = ScrollController();
   // エラーが発生してリビルドした際、スクロール位置を保持するためのキー
@@ -30,6 +32,7 @@ class DefinitionList extends ConsumerWidget {
       definitionIdListStateNotifierProvider(
         definitionFeedType,
         wordId: wordId,
+        targetUserId: targetUserId,
       ),
     );
 
@@ -46,6 +49,7 @@ class DefinitionList extends ConsumerWidget {
                     definitionIdListStateNotifierProvider(
                       definitionFeedType,
                       wordId: wordId,
+                      targetUserId: targetUserId,
                     ).notifier,
                   )
                   .fetchMore();
@@ -65,6 +69,7 @@ class DefinitionList extends ConsumerWidget {
                       definitionIdListStateNotifierProvider(
                         definitionFeedType,
                         wordId: wordId,
+                        targetUserId: targetUserId,
                       ),
                     );
                   },

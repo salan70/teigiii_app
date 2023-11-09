@@ -99,7 +99,8 @@ class ProfilePage extends ConsumerWidget {
             body: TabBarView(
               children: [
                 DefinitionList(
-                  definitionFeedType: DefinitionFeedType.homeRecommend,
+                  definitionFeedType: DefinitionFeedType.profileOrderByCreatedAt,
+                  targetUserId : targetUserId,
                 ),
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.homeFollowing,

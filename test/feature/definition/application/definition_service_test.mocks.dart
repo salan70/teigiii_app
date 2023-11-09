@@ -228,6 +228,49 @@ class MockDefinitionRepository extends _i1.Mock
       ) as _i7.Future<_i3.DefinitionIdListState>);
 
   @override
+  _i7.Future<_i3.DefinitionIdListState>
+      fetchProfileCreatedAtDefinitionIdListState(
+    String? currentUserId,
+    String? targetUserId,
+    _i2.QueryDocumentSnapshot<Object?>? lastDocument,
+  ) =>
+          (super.noSuchMethod(
+            Invocation.method(
+              #fetchProfileCreatedAtDefinitionIdListState,
+              [
+                currentUserId,
+                targetUserId,
+                lastDocument,
+              ],
+            ),
+            returnValue: _i7.Future<_i3.DefinitionIdListState>.value(
+                _FakeDefinitionIdListState_1(
+              this,
+              Invocation.method(
+                #fetchProfileCreatedAtDefinitionIdListState,
+                [
+                  currentUserId,
+                  targetUserId,
+                  lastDocument,
+                ],
+              ),
+            )),
+            returnValueForMissingStub:
+                _i7.Future<_i3.DefinitionIdListState>.value(
+                    _FakeDefinitionIdListState_1(
+              this,
+              Invocation.method(
+                #fetchProfileCreatedAtDefinitionIdListState,
+                [
+                  currentUserId,
+                  targetUserId,
+                  lastDocument,
+                ],
+              ),
+            )),
+          ) as _i7.Future<_i3.DefinitionIdListState>);
+
+  @override
   _i7.Future<_i4.DefinitionDocument> fetchDefinition(String? definitionId) =>
       (super.noSuchMethod(
         Invocation.method(

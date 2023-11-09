@@ -250,6 +250,39 @@ class DefinitionRepository {
     return query.get();
   }
 
+  /// 「プロフィール画面: 投稿順タブ」で表示するDefinitionIDのListを取得する
+  ///
+  /// [lastDocument]がnullの場合、最初のdocumentから取得する。
+  /// 無限スクロールなどで、2回目以降の取得の場合、
+  /// [lastDocument]に前回取得した最後のdocumentを指定すること。
+  Future<DefinitionIdListState> fetchProfileCreatedAtDefinitionIdListState(
+    String currentUserId,
+    String targetUserId,
+    QueryDocumentSnapshot? lastDocument,
+  ) async {
+    var query = _definitionsCollectionRef
+        .where(DefinitionsCollection.authorId, isEqualTo: targetUserId)
+        .where(
+          Filter.or(
+            Filter(
+              DefinitionsCollection.authorId,
+              isEqualTo: currentUserId,
+            ),
+            Filter(DefinitionsCollection.isPublic, isEqualTo: true),
+          ),
+        )
+        .orderBy(createdAtFieldName, descending: true)
+        .limit(fetchLimitForDefinitionList);
+
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument);
+    }
+
+    final snapshot = await query.get();
+
+    return _toDefinitionIdListState(snapshot.docs);
+  }
+
   /// ミュートしていないDefinitionIdのリストを
   /// [fetchLimitForDefinitionList]に達するまで取得する
   Future<DefinitionIdListState> _fetchUnmutedDefinitionIdList(

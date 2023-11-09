@@ -17,6 +17,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
   FutureOr<DefinitionIdListState> build(
     DefinitionFeedType definitionFeedType, {
     String? wordId,
+    String? targetUserId,
   }) async {
     // ミュートユーザーが更新されるたびに、本Notifierも更新されるよう監視
     ref.watch(mutedUserIdListProvider);
@@ -82,6 +83,10 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     WordTopOrderByType orderByType, {
     required bool isFirstFetch,
   }) async {
+    if (wordId == null) {
+      throw ArgumentError('wordIdがnullです');
+    }
+
     final currentUserId = ref.read(userIdProvider)!;
     final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
     final lastDoc =
@@ -94,6 +99,29 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
           currentUserId,
           mutedUserIdList,
           wordId!,
+          lastDoc,
+        );
+  }
+
+  /// 「プロフィール画面: 投稿順タブ」で表示するDefinitionIDのListを取得する
+  ///
+  /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
+  Future<DefinitionIdListState> _fetchForProfileCreatedAt({
+    required bool isFirstFetch,
+  }) async {
+    if (targetUserId == null) {
+      throw ArgumentError('targetUserIdがnullです');
+    }
+
+    final currentUserId = ref.read(userIdProvider)!;
+    final lastDoc =
+        isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
+
+    return ref
+        .watch(definitionRepositoryProvider)
+        .fetchProfileCreatedAtDefinitionIdListState(
+          currentUserId,
+          targetUserId!,
           lastDoc,
         );
   }
@@ -122,24 +150,19 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         return _fetchForHomeFollowing(isFirstFetch: isFirstFetch);
 
       case DefinitionFeedType.wordTopOrderByCreatedAt:
-        if (wordId == null) {
-          throw ArgumentError('wordIdがnullです');
-        }
-
         return _fetchForWordTop(
           WordTopOrderByType.createdAt,
           isFirstFetch: isFirstFetch,
         );
 
       case DefinitionFeedType.wordTopOrderByLikesCount:
-        if (wordId == null) {
-          throw ArgumentError('wordIdがnullです');
-        }
-
         return _fetchForWordTop(
           WordTopOrderByType.likesCount,
           isFirstFetch: isFirstFetch,
         );
+
+      case DefinitionFeedType.profileOrderByCreatedAt:
+        return _fetchForProfileCreatedAt(isFirstFetch: isFirstFetch);
     }
   }
 }
