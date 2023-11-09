@@ -75,7 +75,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         );
   }
 
-  /// 「Wordトップ画面: 新着順タブ」で表示するDefinitionIDのListを取得する
+  /// 「Wordトップ画面: 投稿順タブ」で表示するDefinitionIDのListを取得する
   ///
   /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
   Future<DefinitionIdListState> _fetchForWordTop(

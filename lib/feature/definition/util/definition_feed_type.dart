@@ -5,7 +5,7 @@ enum DefinitionFeedType {
   /// ホーム画面のフォロー中タブ
   homeFollowing,
 
-  /// 語句毎の定義一覧画面の新着順
+  /// 語句毎の定義一覧画面の投稿順
   wordTopOrderByCreatedAt,
 
   /// 語句毎の定義一覧画面のいいね順
