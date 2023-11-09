@@ -106,7 +106,8 @@ class ProfilePage extends ConsumerWidget {
                   definitionFeedType: DefinitionFeedType.homeFollowing,
                 ),
                 DefinitionList(
-                  definitionFeedType: DefinitionFeedType.homeFollowing,
+                  definitionFeedType: DefinitionFeedType.profileLiked,
+                  targetUserId : targetUserId,
                 ),
               ],
             ),

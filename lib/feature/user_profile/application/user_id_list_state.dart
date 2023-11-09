@@ -64,9 +64,7 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
         if (targetDefinitionId == null) {
           throw ArgumentError('targetDefinitionIdがnullです');
         }
-        return ref
-            .read(fetchDefinitionRepositoryProvider)
-            .fetchFavoriteUserIdList(
+        return ref.read(fetchDefinitionRepositoryProvider).fetchLikedUserIdList(
               targetDefinitionId!,
               lastDocument,
             );

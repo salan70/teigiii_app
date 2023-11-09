@@ -14,6 +14,9 @@ enum DefinitionFeedType {
   /// プロフィール画面: 投稿順
   profileOrderByCreatedAt,
 
+  /// プロフィール画面: いいね
+  profileLiked,
+
   // TODO(me): 以下はそれぞれ必要な画面実装時に追加する
   // ソート系と画面系それぞれのenumを作るのがいいかも
   // その場合、語句名の五十音順など、Definitionコレクションのソートでは対応できないものがあることに注意

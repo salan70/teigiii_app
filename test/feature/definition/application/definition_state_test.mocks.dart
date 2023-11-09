@@ -448,7 +448,7 @@ class MockFetchDefinitionRepository extends _i1.Mock
       ) as _i10.Future<_i4.DefinitionDocument>);
 
   @override
-  _i10.Future<_i5.UserIdListState> fetchFavoriteUserIdList(
+  _i10.Future<_i5.UserIdListState> fetchLikedUserIdList(
     String? definitionId,
     _i2.QueryDocumentSnapshot<Object?>? lastDocument,
   ) =>

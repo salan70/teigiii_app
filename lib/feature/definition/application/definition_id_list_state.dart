@@ -126,6 +126,31 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         );
   }
 
+  /// 「プロフィール画面: いいねタブ」で表示するDefinitionIDのListを取得する
+  ///
+  /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
+  Future<DefinitionIdListState> _fetchForProfileLiked({
+    required bool isFirstFetch,
+  }) async {
+    if (targetUserId == null) {
+      throw ArgumentError('targetUserIdがnullです');
+    }
+
+    final currentUserId = ref.read(userIdProvider)!;
+    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
+    final lastDoc =
+        isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
+
+    return ref
+        .watch(fetchDefinitionRepositoryProvider)
+        .fetchLikedByUserDefinitionIdListState(
+          currentUserId,
+          targetUserId!,
+          mutedUserIdList,
+          lastDoc,
+        );
+  }
+
   Future<void> fetchMore() async {
     await fetchMoreHelper(
       ref: ref,
@@ -163,6 +188,9 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
 
       case DefinitionFeedType.profileOrderByCreatedAt:
         return _fetchForProfileCreatedAt(isFirstFetch: isFirstFetch);
+
+      case DefinitionFeedType.profileLiked:
+        return _fetchForProfileLiked(isFirstFetch: isFirstFetch);
     }
   }
 }

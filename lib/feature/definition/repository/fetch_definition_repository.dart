@@ -281,6 +281,112 @@ class FetchDefinitionRepository {
     return _toDefinitionIdListState(snapshot.docs);
   }
 
+  Future<QuerySnapshot> _fetchLikeSnapshotByLikedUser(
+    String likedUserId,
+    QueryDocumentSnapshot? lastDocument,
+    int fetchLimit,
+  ) async {
+    var query = _likesCollectionRef
+        .where(LikesCollection.userId, isEqualTo: likedUserId)
+        .orderBy(createdAtFieldName, descending: true)
+        .limit(fetchLimit);
+
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument);
+    }
+    return query.get();
+  }
+
+  /// [targetUserId]がいいねしたDefinitionIDのListを取得する
+  ///
+  /// [initialLastDocument]がnullの場合、最初のdocumentから取得する。
+  /// 無限スクロールなどで、2回目以降の取得の場合、
+  /// [initialLastDocument]に前回取得した最後のdocumentを指定すること。
+  Future<DefinitionIdListState> fetchLikedByUserDefinitionIdListState(
+    String currentUserId,
+    String targetUserId,
+    List<String> mutedUserIdList,
+    QueryDocumentSnapshot? initialLastDocument,
+  ) async {
+    final idList = <String>[];
+    var lastDocument = initialLastDocument;
+    var hasMore = true;
+    var fetchLimit = fetchLimitForDefinitionList;
+
+    while (fetchLimit > 0) {
+      final snapshot = await _fetchLikeSnapshotByLikedUser(
+        targetUserId,
+        lastDocument,
+        fetchLimit,
+      );
+
+      for (final likeDoc in snapshot.docs) {
+        final definitionId = likeDoc[LikesCollection.definitionId] as String;
+        late final DefinitionDocument definitionDoc;
+        try {
+          definitionDoc = await fetchDefinition(definitionId);
+        } on FirebaseException catch (e) {
+          if (e.code == 'permission-denied') {
+            // 取得しようとしたDefinitionドキュメントのisPublicがfalseの場合、
+            // permission-deniedエラーが発生するため、ここでキャッチし、
+            // idListに加えないようにする
+            continue;
+          }
+          rethrow;
+        }
+
+        final isValid = _isValidDefinitionId(
+          definitionDoc,
+          currentUserId,
+          mutedUserIdList,
+        );
+        if (isValid) {
+          idList.add(definitionId);
+          fetchLimit--;
+        }
+      }
+
+      // 条件合う合わないに限らずこれ以上取得できるドキュメントがない場合、
+      // [lastDocument]を更新せずにループを抜ける
+      if (snapshot.docs.length < fetchLimit) {
+        hasMore = false;
+        break;
+      }
+
+      lastDocument = snapshot.docs.last;
+    }
+
+    return DefinitionIdListState(
+      definitionIdList: idList,
+      lastReadQueryDocumentSnapshot: lastDocument,
+      hasMore: hasMore,
+    );
+  }
+
+  /// [definitionDoc]が表示可能かどうかを返す
+  bool _isValidDefinitionId(
+    DefinitionDocument definitionDoc,
+    String currentUserId,
+    List<String> mutedUserIdList,
+  ) {
+    // 条件に合うdefinitionのidのみ返す
+    // 条件: 自分の投稿
+    if (definitionDoc.authorId == currentUserId) {
+      return true;
+    }
+    // isPublicについては、rulesに設定すれば、permissionエラーを出せる気がする
+    // その場合、エラーが発生した場合は、そのdefinitionを表示しないようにする
+
+    // 条件: ミュートしていないユーザーの投稿
+    final isPostedByMutedUser =
+        mutedUserIdList.contains(definitionDoc.authorId);
+    if (!isPostedByMutedUser) {
+      return true;
+    }
+
+    return false;
+  }
+
   /// ミュートしていないDefinitionIdのリストを
   /// [fetchLimitForDefinitionList]に達するまで取得する
   Future<DefinitionIdListState> _fetchUnmutedDefinitionIdList(
@@ -345,7 +451,7 @@ class FetchDefinitionRepository {
   /// [lastDocument]がnullの場合、最初のdocumentから取得する。
   /// 無限スクロールなどで、2回目以降の取得の場合、
   /// [lastDocument]に前回取得した最後のdocumentを指定すること。
-  Future<UserIdListState> fetchFavoriteUserIdList(
+  Future<UserIdListState> fetchLikedUserIdList(
     String definitionId,
     QueryDocumentSnapshot? lastDocument,
   ) async {
