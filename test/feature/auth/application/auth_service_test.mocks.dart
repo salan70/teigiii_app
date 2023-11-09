@@ -284,51 +284,26 @@ class MockUserFollowRepository extends _i1.Mock
       ) as _i9.Future<List<String>>);
 
   @override
-  _i9.Future<_i5.UserIdListState> fetchFollowingIdListFirst(String? userId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchFollowingIdListFirst,
-          [userId],
-        ),
-        returnValue:
-            _i9.Future<_i5.UserIdListState>.value(_FakeUserIdListState_3(
-          this,
-          Invocation.method(
-            #fetchFollowingIdListFirst,
-            [userId],
-          ),
-        )),
-        returnValueForMissingStub:
-            _i9.Future<_i5.UserIdListState>.value(_FakeUserIdListState_3(
-          this,
-          Invocation.method(
-            #fetchFollowingIdListFirst,
-            [userId],
-          ),
-        )),
-      ) as _i9.Future<_i5.UserIdListState>);
-
-  @override
-  _i9.Future<_i5.UserIdListState> fetchFollowingIdListMore(
+  _i9.Future<_i5.UserIdListState> fetchFollowingIdList(
     String? userId,
-    _i2.QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
+    _i2.QueryDocumentSnapshot<Object?>? lastDocument,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchFollowingIdListMore,
+          #fetchFollowingIdList,
           [
             userId,
-            lastReadQueryDocumentSnapshot,
+            lastDocument,
           ],
         ),
         returnValue:
             _i9.Future<_i5.UserIdListState>.value(_FakeUserIdListState_3(
           this,
           Invocation.method(
-            #fetchFollowingIdListMore,
+            #fetchFollowingIdList,
             [
               userId,
-              lastReadQueryDocumentSnapshot,
+              lastDocument,
             ],
           ),
         )),
@@ -336,61 +311,36 @@ class MockUserFollowRepository extends _i1.Mock
             _i9.Future<_i5.UserIdListState>.value(_FakeUserIdListState_3(
           this,
           Invocation.method(
-            #fetchFollowingIdListMore,
+            #fetchFollowingIdList,
             [
               userId,
-              lastReadQueryDocumentSnapshot,
+              lastDocument,
             ],
           ),
         )),
       ) as _i9.Future<_i5.UserIdListState>);
 
   @override
-  _i9.Future<_i5.UserIdListState> fetchFollowerIdListFirst(String? userId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchFollowerIdListFirst,
-          [userId],
-        ),
-        returnValue:
-            _i9.Future<_i5.UserIdListState>.value(_FakeUserIdListState_3(
-          this,
-          Invocation.method(
-            #fetchFollowerIdListFirst,
-            [userId],
-          ),
-        )),
-        returnValueForMissingStub:
-            _i9.Future<_i5.UserIdListState>.value(_FakeUserIdListState_3(
-          this,
-          Invocation.method(
-            #fetchFollowerIdListFirst,
-            [userId],
-          ),
-        )),
-      ) as _i9.Future<_i5.UserIdListState>);
-
-  @override
-  _i9.Future<_i5.UserIdListState> fetchFollowerIdListMore(
+  _i9.Future<_i5.UserIdListState> fetchFollowerIdList(
     String? userId,
-    _i2.QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
+    _i2.QueryDocumentSnapshot<Object?>? lastDocument,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchFollowerIdListMore,
+          #fetchFollowerIdList,
           [
             userId,
-            lastReadQueryDocumentSnapshot,
+            lastDocument,
           ],
         ),
         returnValue:
             _i9.Future<_i5.UserIdListState>.value(_FakeUserIdListState_3(
           this,
           Invocation.method(
-            #fetchFollowerIdListMore,
+            #fetchFollowerIdList,
             [
               userId,
-              lastReadQueryDocumentSnapshot,
+              lastDocument,
             ],
           ),
         )),
@@ -398,10 +348,10 @@ class MockUserFollowRepository extends _i1.Mock
             _i9.Future<_i5.UserIdListState>.value(_FakeUserIdListState_3(
           this,
           Invocation.method(
-            #fetchFollowerIdListMore,
+            #fetchFollowerIdList,
             [
               userId,
-              lastReadQueryDocumentSnapshot,
+              lastDocument,
             ],
           ),
         )),

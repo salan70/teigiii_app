@@ -25,8 +25,13 @@ class ProfileList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncUserIdListState =
-        ref.watch(UserIdListStateNotifierProvider(userListType, targetUserId));
+    final asyncUserIdListState = ref.watch(
+      UserIdListStateNotifierProvider(
+        userListType,
+        targetUserId: targetUserId,
+        definitionId: null,
+      ),
+    );
 
     return asyncUserIdListState.when(
       data: (userIdListState) {
@@ -38,8 +43,11 @@ class ProfileList extends ConsumerWidget {
             if (notification.metrics.extentAfter == 0) {
               ref
                   .read(
-                    userIdListStateNotifierProvider(userListType, targetUserId)
-                        .notifier,
+                    userIdListStateNotifierProvider(
+                      userListType,
+                      targetUserId: targetUserId,
+                      definitionId: null,
+                    ).notifier,
                   )
                   .fetchMore();
               return true;
@@ -57,7 +65,8 @@ class ProfileList extends ConsumerWidget {
                     ref.invalidate(
                       userIdListStateNotifierProvider(
                         userListType,
-                        targetUserId,
+                        targetUserId: targetUserId,
+                        definitionId: null,
                       ),
                     );
                   },

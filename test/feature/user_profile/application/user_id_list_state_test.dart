@@ -47,11 +47,15 @@ void main() {
       // * Arrange
       // Mockの設定
       when(
-        mockUserFollowRepository.fetchFollowingIdListFirst(any),
+        mockUserFollowRepository.fetchFollowingIdList(any, any),
       ).thenAnswer((_) async => mockUserIdListState);
       const targetUserId = 'targetUserId';
       container.listen(
-        userIdListStateNotifierProvider(UserListType.following, targetUserId),
+        userIdListStateNotifierProvider(
+          UserListType.following,
+          targetUserId: targetUserId,
+          definitionId: null,
+        ),
         listener,
         fireImmediately: true,
       );
@@ -59,8 +63,11 @@ void main() {
 
       // * Act
       await container.read(
-        userIdListStateNotifierProvider(UserListType.following, targetUserId)
-            .future,
+        userIdListStateNotifierProvider(
+          UserListType.following,
+          targetUserId: targetUserId,
+          definitionId: null,
+        ).future,
       );
 
       // * Assert
@@ -84,8 +91,9 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockUserFollowRepository.fetchFollowingIdListFirst(
+        mockUserFollowRepository.fetchFollowingIdList(
           targetUserId,
+          null,
         ),
       ).called(1);
     });
@@ -94,12 +102,16 @@ void main() {
       // * Arrange
       // Mockの設定
       when(
-        mockUserFollowRepository.fetchFollowerIdListFirst(any),
+        mockUserFollowRepository.fetchFollowerIdList(any, any),
       ).thenAnswer((_) async => mockUserIdListState);
 
       const targetUserId = 'targetUserId';
       container.listen(
-        userIdListStateNotifierProvider(UserListType.follower, targetUserId),
+        userIdListStateNotifierProvider(
+          UserListType.follower,
+          targetUserId: targetUserId,
+          definitionId: null,
+        ),
         listener,
         fireImmediately: true,
       );
@@ -107,8 +119,11 @@ void main() {
 
       // * Act
       await container.read(
-        userIdListStateNotifierProvider(UserListType.follower, targetUserId)
-            .future,
+        userIdListStateNotifierProvider(
+          UserListType.follower,
+          targetUserId: targetUserId,
+          definitionId: null,
+        ).future,
       );
 
       // * Assert
@@ -132,8 +147,9 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockUserFollowRepository.fetchFollowerIdListFirst(
+        mockUserFollowRepository.fetchFollowerIdList(
           targetUserId,
+          null,
         ),
       ).called(1);
     });
@@ -149,7 +165,7 @@ void main() {
         hasMore: true,
       );
       when(
-        mockUserFollowRepository.fetchFollowingIdListFirst(any),
+        mockUserFollowRepository.fetchFollowingIdList(any, null),
       ).thenAnswer((_) async => firstState);
 
       final secondState = UserIdListState(
@@ -158,12 +174,15 @@ void main() {
         hasMore: false,
       );
       when(
-        mockUserFollowRepository.fetchFollowingIdListMore(any, any),
+        mockUserFollowRepository.fetchFollowingIdList(any, firstState.lastReadQueryDocumentSnapshot),
       ).thenAnswer((_) async => secondState);
 
       const targetUserId = 'targetUserId';
-      final userIdListProvider =
-          userIdListStateNotifierProvider(UserListType.following, targetUserId);
+      final userIdListProvider = userIdListStateNotifierProvider(
+        UserListType.following,
+        targetUserId: targetUserId,
+        definitionId: null,
+      );
       container.listen(
         userIdListProvider,
         listener,
@@ -226,7 +245,7 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockUserFollowRepository.fetchFollowingIdListMore(
+        mockUserFollowRepository.fetchFollowingIdList(
           targetUserId,
           firstState.lastReadQueryDocumentSnapshot,
         ),
@@ -242,7 +261,7 @@ void main() {
         hasMore: true,
       );
       when(
-        mockUserFollowRepository.fetchFollowerIdListFirst(any),
+        mockUserFollowRepository.fetchFollowerIdList(any, null),
       ).thenAnswer((_) async => firstState);
 
       final secondState = UserIdListState(
@@ -251,12 +270,15 @@ void main() {
         hasMore: false,
       );
       when(
-        mockUserFollowRepository.fetchFollowerIdListMore(any, any),
+        mockUserFollowRepository.fetchFollowerIdList(any, firstState.lastReadQueryDocumentSnapshot),
       ).thenAnswer((_) async => secondState);
 
       const targetUserId = 'targetUserId';
-      final userIdListProvider =
-          userIdListStateNotifierProvider(UserListType.follower, targetUserId);
+      final userIdListProvider = userIdListStateNotifierProvider(
+        UserListType.follower,
+        targetUserId: targetUserId,
+        definitionId: null,
+      );
       container.listen(
         userIdListProvider,
         listener,
@@ -319,7 +341,7 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockUserFollowRepository.fetchFollowerIdListMore(
+        mockUserFollowRepository.fetchFollowerIdList(
           targetUserId,
           firstState.lastReadQueryDocumentSnapshot,
         ),
@@ -330,12 +352,13 @@ void main() {
       // * Arrange
       // Mockの設定
       when(
-        mockUserFollowRepository.fetchFollowingIdListFirst(any),
+        mockUserFollowRepository.fetchFollowingIdList(any, null),
       ).thenAnswer((_) async => mockUserIdListState.copyWith(hasMore: false));
 
       final userIdListProvider = userIdListStateNotifierProvider(
         UserListType.following,
-        'targetUserId',
+        targetUserId: 'targetUserId',
+        definitionId: null,
       );
       container.listen(
         userIdListProvider,
@@ -361,10 +384,10 @@ void main() {
       // build()以降、listenerが発火されないことを検証
       verifyNoMoreInteractions(listener);
 
-      // 想定通り、repositoryの関数が呼ばれていないか検証
-      verifyNever(
-        mockUserFollowRepository.fetchFollowingIdListMore(any, any),
-      );
+      // 想定通り、repositoryの関数が1回のみ呼ばれているか検証
+      verify(
+        mockUserFollowRepository.fetchFollowingIdList(any, any),
+      ).called(1);
     });
 
     // TODO(me): 「ローディング中の場合、何もしない」ことを検証するテスト書く
@@ -378,16 +401,17 @@ void main() {
         hasMore: true,
       );
       when(
-        mockUserFollowRepository.fetchFollowingIdListFirst(any),
+        mockUserFollowRepository.fetchFollowingIdList(any, null),
       ).thenAnswer((_) async => firstState);
       final testException = Exception('fetchFollowingIdListFirst()で例外発生！！！');
       when(
-        mockUserFollowRepository.fetchFollowingIdListMore(any, any),
+        mockUserFollowRepository.fetchFollowingIdList(any, firstState.lastReadQueryDocumentSnapshot),
       ).thenThrow(testException);
 
       final userIdListProvider = userIdListStateNotifierProvider(
         UserListType.following,
-        'targetUserId',
+        targetUserId: 'targetUserId',
+        definitionId: null,
       );
       container.listen(
         userIdListProvider,

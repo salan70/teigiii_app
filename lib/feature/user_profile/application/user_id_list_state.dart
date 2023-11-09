@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../util/mixin/fetch_more_mixin.dart';
+import '../../definition/repository/definition_repository.dart';
 import '../domain/user_id_list_state.dart';
 import '../repository/user_follow_repository.dart';
 import '../util/profile_feed_type.dart';
@@ -12,30 +13,21 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
     with FetchMoreMixin<UserIdListState> {
   @override
   FutureOr<UserIdListState> build(
-    UserListType userListType,
-    String targetUserId,
-  ) async {
-    switch (userListType) {
-      case UserListType.following:
-        return await ref
-            .read(userFollowRepositoryProvider)
-            .fetchFollowingIdListFirst(targetUserId);
-      case UserListType.follower:
-        return await ref
-            .read(userFollowRepositoryProvider)
-            .fetchFollowerIdListFirst(targetUserId);
-      case UserListType.likedUser:
-        // TODO(me): いいねしたユーザー一覧を取得するよう修正する
-        return await ref
-            .read(userFollowRepositoryProvider)
-            .fetchFollowerIdListFirst(targetUserId);
-    }
+    UserListType userListType, {
+    required String? targetUserId,
+    required String? definitionId,
+  }) async {
+    return await _fetchUserIdListStateBasedOnType(
+      isFirstFetch: true,
+    );
   }
 
   Future<void> fetchMore() async {
     await fetchMoreHelper(
       ref: ref,
-      fetchFunction: _fetchUserIdListStateBasedOnType,
+      fetchFunction: () => _fetchUserIdListStateBasedOnType(
+        isFirstFetch: false,
+      ),
       mergeFunction: (currentData, newData) => UserIdListState(
         userIdList: currentData.userIdList + newData.userIdList,
         lastReadQueryDocumentSnapshot: newData.lastReadQueryDocumentSnapshot,
@@ -44,23 +36,38 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
     );
   }
 
-  Future<UserIdListState> _fetchUserIdListStateBasedOnType() async {
+  Future<UserIdListState> _fetchUserIdListStateBasedOnType({
+    required bool isFirstFetch,
+  }) async {
+    final lastDocument =
+        isFirstFetch ? null : state.value!.lastReadQueryDocumentSnapshot;
     switch (userListType) {
       case UserListType.following:
-        return ref.read(userFollowRepositoryProvider).fetchFollowingIdListMore(
-              targetUserId,
-              state.value!.lastReadQueryDocumentSnapshot!,
+        if (targetUserId == null) {
+          throw ArgumentError('targetUserIdがnullです');
+        }
+        return ref.read(userFollowRepositoryProvider).fetchFollowingIdList(
+              targetUserId!,
+              lastDocument,
             );
+
       case UserListType.follower:
-        return ref.read(userFollowRepositoryProvider).fetchFollowerIdListMore(
-              targetUserId,
-              state.value!.lastReadQueryDocumentSnapshot!,
+        if (targetUserId == null) {
+          throw ArgumentError('targetUserIdがnullです');
+        }
+        return ref.read(userFollowRepositoryProvider).fetchFollowerIdList(
+              targetUserId!,
+              lastDocument,
             );
+
       case UserListType.likedUser:
+        if (definitionId == null) {
+          throw ArgumentError('definitionIdがnullです');
+        }
         // TODO(me): いいねしたユーザー一覧を取得するよう修正する
-        return ref.read(userFollowRepositoryProvider).fetchFollowerIdListMore(
-              targetUserId,
-              state.value!.lastReadQueryDocumentSnapshot!,
+        return ref.read(definitionRepositoryProvider).fetchFavoriteUserIdList(
+              definitionId!,
+              lastDocument,
             );
     }
   }
