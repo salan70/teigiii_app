@@ -1,7 +1,5 @@
-const fetchLimitForDefinitionList = 10;
+const fetchLimitForDefinitionList = 20;
 
-// TODO(me): デバッグ済んだら20にする
-const fetchLimitForUserIdList = 7;
+const fetchLimitForUserIdList = 20;
 
-// TODO(me): デバッグ済んだら20にする
-const fetchLimitForWordList = 10;
+const fetchLimitForWordList = 20;
