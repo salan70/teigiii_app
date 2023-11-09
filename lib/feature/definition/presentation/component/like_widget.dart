@@ -12,9 +12,11 @@ class LikeWidget extends ConsumerWidget {
   const LikeWidget({
     super.key,
     required this.definition,
+    this.showCount = true,
   });
 
   final Definition definition;
+  final bool showCount;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,8 +27,8 @@ class LikeWidget extends ConsumerWidget {
         LikeButton(
           isLiked: definition.isLikedByUser,
           likeCount: definition.likesCount,
-          likeCountPadding: const EdgeInsets.only(
-            right: 24,
+          likeCountPadding: EdgeInsets.only(
+            right: showCount ? 24 : 0,
           ),
           likeBuilder: (bool isLiked) {
             return Icon(
@@ -37,14 +39,17 @@ class LikeWidget extends ConsumerWidget {
             );
           },
           countBuilder: (int? count, bool isLiked, String text) {
-            return Text(
-              text,
-              style: TextStyle(
-                fontSize: 16,
-                color:
-                    isLiked ? likeColor : Theme.of(context).colorScheme.outline,
-              ),
-            );
+            return showCount
+                ? Text(
+                    text,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: isLiked
+                          ? likeColor
+                          : Theme.of(context).colorScheme.outline,
+                    ),
+                  )
+                : const SizedBox.shrink();
           },
           onTap: (_) async {
             try {

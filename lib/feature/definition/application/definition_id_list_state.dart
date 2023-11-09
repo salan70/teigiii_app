@@ -123,7 +123,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
 
       case DefinitionFeedType.wordTopOrderByCreatedAt:
         if (wordId == null) {
-          throw Exception('wordIdがnullです');
+          throw ArgumentError('wordIdがnullです');
         }
 
         return _fetchForWordTop(
@@ -133,7 +133,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
 
       case DefinitionFeedType.wordTopOrderByLikesCount:
         if (wordId == null) {
-          throw Exception('wordIdがnullです');
+          throw ArgumentError('wordIdがnullです');
         }
 
         return _fetchForWordTop(

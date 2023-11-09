@@ -12,6 +12,7 @@ import '../../feature/definition/util/write_definition_form_type.dart';
 import '../../feature/setting/presentation/license_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
 import '../../feature/user_profile/presentation/page/following_and_follower_list/following_and_follower_list_page.dart';
+import '../../feature/user_profile/presentation/page/like_user_page.dart/like_user_page.dart';
 import '../../feature/user_profile/presentation/page/profile/profile_page.dart';
 import '../../feature/word/presentation/page/index_second/index_second_page.dart';
 import '../../feature/word/presentation/page/index_top/index_top_page.dart';
@@ -25,7 +26,6 @@ part 'app_router.gr.dart';
 
 @riverpod
 Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter();
-
 
 // TODO(me): 一部Routeのpathにidを含める
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
@@ -47,6 +47,10 @@ class AppRouter extends _$AppRouter {
                 AutoRoute(
                   path: 'definition_detail',
                   page: DefinitionDetailRoute.page,
+                ),
+                AutoRoute(
+                  path: 'like_user_list',
+                  page: LikeUserRoute.page,
                 ),
                 AutoRoute(
                   path: 'word_top',
@@ -73,6 +77,10 @@ class AppRouter extends _$AppRouter {
                 AutoRoute(
                   path: 'definition_detail',
                   page: DefinitionDetailRoute.page,
+                ),
+                AutoRoute(
+                  path: 'like_user_list',
+                  page: LikeUserRoute.page,
                 ),
                 AutoRoute(
                   path: 'word_top',
@@ -107,6 +115,10 @@ class AppRouter extends _$AppRouter {
                 AutoRoute(
                   path: 'definition_detail',
                   page: DefinitionDetailRoute.page,
+                ),
+                AutoRoute(
+                  path: 'like_user_list',
+                  page: LikeUserRoute.page,
                 ),
                 AutoRoute(
                   path: 'word_top',

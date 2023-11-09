@@ -15,7 +15,7 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
   FutureOr<UserIdListState> build(
     UserListType userListType, {
     required String? targetUserId,
-    required String? definitionId,
+    required String? targetDefinitionId,
   }) async {
     return await _fetchUserIdListStateBasedOnType(
       isFirstFetch: true,
@@ -61,12 +61,11 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
             );
 
       case UserListType.likedUser:
-        if (definitionId == null) {
-          throw ArgumentError('definitionIdがnullです');
+        if (targetDefinitionId == null) {
+          throw ArgumentError('targetDefinitionIdがnullです');
         }
-        // TODO(me): いいねしたユーザー一覧を取得するよう修正する
         return ref.read(definitionRepositoryProvider).fetchFavoriteUserIdList(
-              definitionId!,
+              targetDefinitionId!,
               lastDocument,
             );
     }

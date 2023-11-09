@@ -7,7 +7,7 @@ part of 'user_id_list_state.dart';
 // **************************************************************************
 
 String _$userIdListStateNotifierHash() =>
-    r'c8fa0d4162a3591bf3faaad00b35856ad79fd82a';
+    r'b44533a5622901906fc13b124538de8271a3d747';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,12 +34,12 @@ abstract class _$UserIdListStateNotifier
     extends BuildlessAutoDisposeAsyncNotifier<UserIdListState> {
   late final UserListType userListType;
   late final String? targetUserId;
-  late final String? definitionId;
+  late final String? targetDefinitionId;
 
   FutureOr<UserIdListState> build(
     UserListType userListType, {
     required String? targetUserId,
-    required String? definitionId,
+    required String? targetDefinitionId,
   });
 }
 
@@ -57,12 +57,12 @@ class UserIdListStateNotifierFamily
   UserIdListStateNotifierProvider call(
     UserListType userListType, {
     required String? targetUserId,
-    required String? definitionId,
+    required String? targetDefinitionId,
   }) {
     return UserIdListStateNotifierProvider(
       userListType,
       targetUserId: targetUserId,
-      definitionId: definitionId,
+      targetDefinitionId: targetDefinitionId,
     );
   }
 
@@ -73,7 +73,7 @@ class UserIdListStateNotifierFamily
     return call(
       provider.userListType,
       targetUserId: provider.targetUserId,
-      definitionId: provider.definitionId,
+      targetDefinitionId: provider.targetDefinitionId,
     );
   }
 
@@ -100,12 +100,12 @@ class UserIdListStateNotifierProvider
   UserIdListStateNotifierProvider(
     UserListType userListType, {
     required String? targetUserId,
-    required String? definitionId,
+    required String? targetDefinitionId,
   }) : this._internal(
           () => UserIdListStateNotifier()
             ..userListType = userListType
             ..targetUserId = targetUserId
-            ..definitionId = definitionId,
+            ..targetDefinitionId = targetDefinitionId,
           from: userIdListStateNotifierProvider,
           name: r'userIdListStateNotifierProvider',
           debugGetCreateSourceHash:
@@ -117,7 +117,7 @@ class UserIdListStateNotifierProvider
               UserIdListStateNotifierFamily._allTransitiveDependencies,
           userListType: userListType,
           targetUserId: targetUserId,
-          definitionId: definitionId,
+          targetDefinitionId: targetDefinitionId,
         );
 
   UserIdListStateNotifierProvider._internal(
@@ -129,12 +129,12 @@ class UserIdListStateNotifierProvider
     required super.from,
     required this.userListType,
     required this.targetUserId,
-    required this.definitionId,
+    required this.targetDefinitionId,
   }) : super.internal();
 
   final UserListType userListType;
   final String? targetUserId;
-  final String? definitionId;
+  final String? targetDefinitionId;
 
   @override
   FutureOr<UserIdListState> runNotifierBuild(
@@ -143,7 +143,7 @@ class UserIdListStateNotifierProvider
     return notifier.build(
       userListType,
       targetUserId: targetUserId,
-      definitionId: definitionId,
+      targetDefinitionId: targetDefinitionId,
     );
   }
 
@@ -155,7 +155,7 @@ class UserIdListStateNotifierProvider
         () => create()
           ..userListType = userListType
           ..targetUserId = targetUserId
-          ..definitionId = definitionId,
+          ..targetDefinitionId = targetDefinitionId,
         from: from,
         name: null,
         dependencies: null,
@@ -163,7 +163,7 @@ class UserIdListStateNotifierProvider
         debugGetCreateSourceHash: null,
         userListType: userListType,
         targetUserId: targetUserId,
-        definitionId: definitionId,
+        targetDefinitionId: targetDefinitionId,
       ),
     );
   }
@@ -179,7 +179,7 @@ class UserIdListStateNotifierProvider
     return other is UserIdListStateNotifierProvider &&
         other.userListType == userListType &&
         other.targetUserId == targetUserId &&
-        other.definitionId == definitionId;
+        other.targetDefinitionId == targetDefinitionId;
   }
 
   @override
@@ -187,7 +187,7 @@ class UserIdListStateNotifierProvider
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, userListType.hashCode);
     hash = _SystemHash.combine(hash, targetUserId.hashCode);
-    hash = _SystemHash.combine(hash, definitionId.hashCode);
+    hash = _SystemHash.combine(hash, targetDefinitionId.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -201,8 +201,8 @@ mixin UserIdListStateNotifierRef
   /// The parameter `targetUserId` of this provider.
   String? get targetUserId;
 
-  /// The parameter `definitionId` of this provider.
-  String? get definitionId;
+  /// The parameter `targetDefinitionId` of this provider.
+  String? get targetDefinitionId;
 }
 
 class _UserIdListStateNotifierProviderElement
@@ -217,8 +217,8 @@ class _UserIdListStateNotifierProviderElement
   String? get targetUserId =>
       (origin as UserIdListStateNotifierProvider).targetUserId;
   @override
-  String? get definitionId =>
-      (origin as UserIdListStateNotifierProvider).definitionId;
+  String? get targetDefinitionId =>
+      (origin as UserIdListStateNotifierProvider).targetDefinitionId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

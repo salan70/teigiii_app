@@ -154,19 +154,32 @@ class DefinitionDetailPage extends ConsumerWidget {
                     const SizedBox(height: 48),
                     Row(
                       children: [
-                        Text(
-                          definition.createdAt.toDisplayFormat(),
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        const SizedBox(width: 2),
-                        Text(
-                          '投稿',
-                          style: Theme.of(context).textTheme.bodyMedium,
+                        LikeWidget(definition: definition, showCount: false),
+                        InkWell(
+                          onTap: () async {
+                            await context.pushRoute(
+                              LikeUserRoute(definitionId: definition.id),
+                            );
+                          },
+                          child: Text('${definition.likesCount}件のいいね'),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    LikeWidget(definition: definition),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Text(
+                          '${definition.createdAt.toDisplayFormat()} 投稿',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

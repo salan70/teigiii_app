@@ -54,7 +54,7 @@ void main() {
         userIdListStateNotifierProvider(
           UserListType.following,
           targetUserId: targetUserId,
-          definitionId: null,
+          targetDefinitionId: null,
         ),
         listener,
         fireImmediately: true,
@@ -66,7 +66,7 @@ void main() {
         userIdListStateNotifierProvider(
           UserListType.following,
           targetUserId: targetUserId,
-          definitionId: null,
+          targetDefinitionId: null,
         ).future,
       );
 
@@ -110,7 +110,7 @@ void main() {
         userIdListStateNotifierProvider(
           UserListType.follower,
           targetUserId: targetUserId,
-          definitionId: null,
+          targetDefinitionId: null,
         ),
         listener,
         fireImmediately: true,
@@ -122,7 +122,7 @@ void main() {
         userIdListStateNotifierProvider(
           UserListType.follower,
           targetUserId: targetUserId,
-          definitionId: null,
+          targetDefinitionId: null,
         ).future,
       );
 
@@ -181,7 +181,7 @@ void main() {
       final userIdListProvider = userIdListStateNotifierProvider(
         UserListType.following,
         targetUserId: targetUserId,
-        definitionId: null,
+        targetDefinitionId: null,
       );
       container.listen(
         userIdListProvider,
@@ -277,7 +277,7 @@ void main() {
       final userIdListProvider = userIdListStateNotifierProvider(
         UserListType.follower,
         targetUserId: targetUserId,
-        definitionId: null,
+        targetDefinitionId: null,
       );
       container.listen(
         userIdListProvider,
@@ -358,7 +358,7 @@ void main() {
       final userIdListProvider = userIdListStateNotifierProvider(
         UserListType.following,
         targetUserId: 'targetUserId',
-        definitionId: null,
+        targetDefinitionId: null,
       );
       container.listen(
         userIdListProvider,
@@ -411,7 +411,7 @@ void main() {
       final userIdListProvider = userIdListStateNotifierProvider(
         UserListType.following,
         targetUserId: 'targetUserId',
-        definitionId: null,
+        targetDefinitionId: null,
       );
       container.listen(
         userIdListProvider,
