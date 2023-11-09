@@ -10,6 +10,7 @@ import '../../feature/definition/presentation/page/home/home_page.dart';
 import '../../feature/definition/presentation/page/post_definition/post_definition_page.dart';
 import '../../feature/definition/util/write_definition_form_type.dart';
 import '../../feature/setting/presentation/license_page.dart';
+import '../../feature/setting/presentation/muted_user_list_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
 import '../../feature/user_profile/presentation/page/following_and_follower_list/following_and_follower_list_page.dart';
 import '../../feature/user_profile/presentation/page/like_user_page.dart/like_user_page.dart';
@@ -148,6 +149,10 @@ class AppRouter extends _$AppRouter {
             AutoRoute(
               path: 'license',
               page: MyLicenseRoute.page,
+            ),
+            AutoRoute(
+              path: 'muted_user_list',
+              page: MutedUserListRoute.page,
             ),
           ],
         ),

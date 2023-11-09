@@ -102,6 +102,12 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    MutedUserListRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const MutedUserListPage(),
+      );
+    },
     MyLicenseRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -459,6 +465,20 @@ class LikeUserRouteArgs {
   String toString() {
     return 'LikeUserRouteArgs{key: $key, definitionId: $definitionId}';
   }
+}
+
+/// generated route for
+/// [MutedUserListPage]
+class MutedUserListRoute extends PageRouteInfo<void> {
+  const MutedUserListRoute({List<PageRouteInfo>? children})
+      : super(
+          MutedUserListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MutedUserListRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

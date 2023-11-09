@@ -49,7 +49,9 @@ class SettingPage extends ConsumerWidget {
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.speaker_slash),
               label: 'ミュートの管理',
-              onTap: () {}, // TODO(me): ミュート管理画面へ遷移
+              onTap: () {
+                context.navigateTo(const MutedUserListRoute());
+              },
             ),
             const SizedBox(height: 32),
 

@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/common_widget/button/follow_or_unfollow_button.dart';
 import '../../../../core/common_widget/cupertino_refresh_indicator.dart';
 import '../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
 import '../../../../util/logger.dart';
+import '../../../auth/application/auth_state.dart';
 import '../../application/user_id_list_state.dart';
 import '../../util/profile_feed_type.dart';
 import '../page/following_and_follower_list/profile_tile.dart';
@@ -16,7 +18,7 @@ class ProfileList extends ConsumerWidget {
     required this.targetUserId,
     required this.targetDefinitionId,
   });
-  
+
   final UserListType userListType;
   final String? targetUserId;
   final String? targetDefinitionId;
@@ -80,8 +82,15 @@ class ProfileList extends ConsumerWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: userIdList.length,
                     itemBuilder: (context, index) {
+                      final currentUserId = ref.watch(userIdProvider)!;
+                      final targetUserId = userIdList[index];
                       return ProfileTile(
-                        targetUserId: userIdList[index],
+                        targetUserId: targetUserId,
+                        button: currentUserId == targetUserId
+                            ? const SizedBox.shrink()
+                            : FollowOrUnfollowButton(
+                                targetUserId: targetUserId,
+                              ),
                       );
                     },
                   ),
