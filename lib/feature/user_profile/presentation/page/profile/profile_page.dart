@@ -37,7 +37,7 @@ class ProfilePage extends ConsumerWidget {
     final asyncTargetUserProfile = ref.watch(userProfileProvider(targetUserId));
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: SafeArea(
         child: Scaffold(
           body: NestedScrollView(
@@ -87,7 +87,8 @@ class ProfilePage extends ConsumerWidget {
                       labelStyle: Theme.of(context).textTheme.titleMedium,
                       indicatorWeight: 3,
                       tabs: const [
-                        Tab(text: '投稿'),
+                        Tab(text: '投稿順'),
+                        Tab(text: '索引'),
                         Tab(text: 'いいね'),
                       ],
                     ),
@@ -103,10 +104,13 @@ class ProfilePage extends ConsumerWidget {
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.homeFollowing,
                 ),
+                DefinitionList(
+                  definitionFeedType: DefinitionFeedType.homeFollowing,
+                ),
               ],
             ),
           ),
-          floatingActionButton: const PostDefinitionFAB(definition:  null),
+          floatingActionButton: const PostDefinitionFAB(definition: null),
         ),
       ),
     );
