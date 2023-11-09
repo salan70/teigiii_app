@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/adaptive_overflow_text.dart';
-import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/logger.dart';
-import '../../../../auth/application/auth_state.dart';
 import '../../../../definition/presentation/component/avatar_icon_widget.dart';
 import '../../../application/user_profile_state.dart';
 import 'profile_tile_shimmer.dart';
@@ -15,25 +13,32 @@ class ProfileTile extends ConsumerWidget {
   const ProfileTile({
     super.key,
     required this.targetUserId,
+    required this.button,
+    this.transitionToProfilePage = true,
   });
 
   final String targetUserId;
+  final Widget button;
+
+  /// プロフィールページへの遷移を行うかどうか
+  final bool transitionToProfilePage;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncTargetUserProfile = ref.watch(userProfileProvider(targetUserId));
-    final currentUserId = ref.watch(userIdProvider);
 
     return asyncTargetUserProfile.when(
       data: (targetUserProfile) {
         return InkWell(
-          onTap: () async {
-            await context.pushRoute(
-              ProfileRoute(
-                targetUserId: targetUserId,
-              ),
-            );
-          },
+          onTap: transitionToProfilePage
+              ? () async {
+                  await context.pushRoute(
+                    ProfileRoute(
+                      targetUserId: targetUserId,
+                    ),
+                  );
+                }
+              : null,
           child: Column(
             children: [
               Padding(
@@ -66,11 +71,7 @@ class ProfileTile extends ConsumerWidget {
                                 ),
                               ),
                               const SizedBox(width: 4),
-                              currentUserId == targetUserId
-                                  ? const SizedBox.shrink()
-                                  : FollowOrUnfollowButton(
-                                      targetUserId: targetUserId,
-                                    ),
+                              button,
                             ],
                           ),
                           const SizedBox(height: 8),
