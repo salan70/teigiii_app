@@ -47,6 +47,7 @@ Future<void> main() async {
   // await addWordsDummy0to29(flavorName);
   // await addWordsDummy30to59(flavorName);
   // await addDefinitionDummy0to29(flavorName);
+  // await addLikesToFirestore(flavorName);
 
   runApp(
     const ProviderScope(

@@ -2,31 +2,38 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_widget/cupertino_refresh_indicator.dart';
-import '../../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
-import '../../../../../util/logger.dart';
-import '../../../application/user_id_list_state.dart';
-import '../../../util/profile_feed_type.dart';
-import 'profile_tile.dart';
+import '../../../../core/common_widget/cupertino_refresh_indicator.dart';
+import '../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
+import '../../../../util/logger.dart';
+import '../../application/user_id_list_state.dart';
+import '../../util/profile_feed_type.dart';
+import '../page/following_and_follower_list/profile_tile.dart';
 
 class ProfileList extends ConsumerWidget {
   ProfileList({
     super.key,
     required this.userListType,
     required this.targetUserId,
+    required this.targetDefinitionId,
   });
-
-  final String targetUserId;
-
+  
   final UserListType userListType;
+  final String? targetUserId;
+  final String? targetDefinitionId;
+
   final scrollController = ScrollController();
   // エラーが発生してリビルドした際、スクロール位置を保持するためのキー
   final globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncUserIdListState =
-        ref.watch(UserIdListStateNotifierProvider(userListType, targetUserId));
+    final asyncUserIdListState = ref.watch(
+      UserIdListStateNotifierProvider(
+        userListType,
+        targetUserId: targetUserId,
+        targetDefinitionId: targetDefinitionId,
+      ),
+    );
 
     return asyncUserIdListState.when(
       data: (userIdListState) {
@@ -38,8 +45,11 @@ class ProfileList extends ConsumerWidget {
             if (notification.metrics.extentAfter == 0) {
               ref
                   .read(
-                    userIdListStateNotifierProvider(userListType, targetUserId)
-                        .notifier,
+                    userIdListStateNotifierProvider(
+                      userListType,
+                      targetUserId: targetUserId,
+                      targetDefinitionId: targetDefinitionId,
+                    ).notifier,
                   )
                   .fetchMore();
               return true;
@@ -57,7 +67,8 @@ class ProfileList extends ConsumerWidget {
                     ref.invalidate(
                       userIdListStateNotifierProvider(
                         userListType,
-                        targetUserId,
+                        targetUserId: targetUserId,
+                        targetDefinitionId: targetDefinitionId,
                       ),
                     );
                   },

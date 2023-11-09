@@ -92,6 +92,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const IndexTopRouterPage(),
       );
     },
+    LikeUserRoute.name: (routeData) {
+      final args = routeData.argsAs<LikeUserRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LikeUserPage(
+          key: args.key,
+          definitionId: args.definitionId,
+        ),
+      );
+    },
     MyLicenseRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -411,6 +421,44 @@ class IndexTopRouterRoute extends PageRouteInfo<void> {
   static const String name = 'IndexTopRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [LikeUserPage]
+class LikeUserRoute extends PageRouteInfo<LikeUserRouteArgs> {
+  LikeUserRoute({
+    Key? key,
+    required String definitionId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LikeUserRoute.name,
+          args: LikeUserRouteArgs(
+            key: key,
+            definitionId: definitionId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'LikeUserRoute';
+
+  static const PageInfo<LikeUserRouteArgs> page =
+      PageInfo<LikeUserRouteArgs>(name);
+}
+
+class LikeUserRouteArgs {
+  const LikeUserRouteArgs({
+    this.key,
+    required this.definitionId,
+  });
+
+  final Key? key;
+
+  final String definitionId;
+
+  @override
+  String toString() {
+    return 'LikeUserRouteArgs{key: $key, definitionId: $definitionId}';
+  }
 }
 
 /// generated route for

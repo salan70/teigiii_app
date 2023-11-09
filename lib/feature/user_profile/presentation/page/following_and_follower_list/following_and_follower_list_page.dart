@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
 import '../../../../auth/application/auth_state.dart';
 import '../../../util/profile_feed_type.dart';
-import 'profile_list.dart';
+import '../../component/profile_list.dart';
 
 @RoutePage()
 class FollowingAndFollowerListPage extends ConsumerWidget {
@@ -71,10 +71,12 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                 ProfileList(
                   userListType: UserListType.following,
                   targetUserId: targetUserId,
+                  targetDefinitionId: null,
                 ),
                 ProfileList(
                   userListType: UserListType.follower,
                   targetUserId: targetUserId,
+                  targetDefinitionId: null,
                 ),
               ],
             ),
