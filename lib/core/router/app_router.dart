@@ -36,86 +36,86 @@ Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter();
 // TODO(me): OSによってCupertinoRouteとMaterialRouteを切り替える
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends _$AppRouter {
-  final List<AutoRoute> commonRouteList = [
-    CupertinoRoute(
+  final List<AdaptiveRoute> commonRouteList = [
+    AdaptiveRoute(
       path: 'definition_detail',
       page: DefinitionDetailRoute.page,
     ),
-    CupertinoRoute(
+    AdaptiveRoute(
       path: 'like_user_list',
       page: LikeUserRoute.page,
     ),
-    CupertinoRoute(
+    AdaptiveRoute(
       path: 'word_top',
       page: WordTopRoute.page,
     ),
-    CupertinoRoute(
+    AdaptiveRoute(
       path: 'profile',
       page: ProfileRoute.page,
     ),
-    CupertinoRoute(
+    AdaptiveRoute(
       path: 'following_and_follower_list',
       page: FollowingAndFollowerListRoute.page,
     ),
-    CupertinoRoute(
+    AdaptiveRoute(
       path: 'initial_sub_group_index',
       page: InitialSubGroupIndexRoute.page,
     ),
-    CupertinoRoute(
+    AdaptiveRoute(
       path: 'individual_dictionary_definition_list',
       page: IndividualDictionaryDefinitionListRoute.page,
     ),
   ];
 
   @override
-  List<AutoRoute> get routes => [
-        CupertinoRoute(
+  List<AdaptiveRoute> get routes => [
+        AdaptiveRoute(
           path: '/',
           page: BaseRoute.page,
           children: [
-            CupertinoRoute(
+            AdaptiveRoute(
               path: 'home',
               page: HomeRouterRoute.page,
               children: [
-                CupertinoRoute(
+                AdaptiveRoute(
                   initial: true,
                   page: HomeRoute.page,
                 ),
-                CupertinoRoute(
+                AdaptiveRoute(
                   path: 'individual_dictionary',
                   page: IndividualDictionaryRoute.page,
                 ),
                 ...commonRouteList,
               ],
             ),
-            CupertinoRoute(
+            AdaptiveRoute(
               path: 'individual_dictionary',
               page: IndividualDictionaryRouterRoute.page,
               children: [
-                CupertinoRoute(
+                AdaptiveRoute(
                   initial: true,
                   page: IndividualDictionaryRoute.page,
                 ),
                 ...commonRouteList,
               ],
             ),
-            CupertinoRoute(
+            AdaptiveRoute(
               path: 'index',
               page: EveryoneDictionaryRouterRoute.page,
               children: [
-                CupertinoRoute(
+                AdaptiveRoute(
                   initial: true,
                   page: EveryoneDictionaryRoute.page,
                 ),
-                CupertinoRoute(
+                AdaptiveRoute(
                   path: 'word_list',
                   page: WordListRoute.page,
                 ),
-                CupertinoRoute(
+                AdaptiveRoute(
                   path: 'search_word_result',
                   page: SearchWordResultRoute.page,
                 ),
-                CupertinoRoute(
+                AdaptiveRoute(
                   path: 'individual_dictionary',
                   page: IndividualDictionaryRoute.page,
                 ),
@@ -124,36 +124,36 @@ class AppRouter extends _$AppRouter {
             ),
           ],
         ),
-        CupertinoRoute(
+        AdaptiveRoute(
           path: '/setting',
           page: SettingRouterRoute.page,
           fullscreenDialog: true,
           children: [
-            CupertinoRoute(
+            AdaptiveRoute(
               initial: true,
               page: SettingRoute.page,
             ),
-            CupertinoRoute(
+            AdaptiveRoute(
               path: 'license',
               page: MyLicenseRoute.page,
             ),
-            CupertinoRoute(
+            AdaptiveRoute(
               path: 'muted_user_list',
               page: MutedUserListRoute.page,
             ),
           ],
         ),
-        CupertinoRoute(
+        AdaptiveRoute(
           path: '/post_definition',
           page: PostDefinitionRoute.page,
           fullscreenDialog: true,
         ),
-        CupertinoRoute(
+        AdaptiveRoute(
           path: '/edit_definition',
           page: EditDefinitionRoute.page,
           fullscreenDialog: true,
         ),
-        CupertinoRoute(
+        AdaptiveRoute(
           path: '/edit_profile',
           page: EditProfileRoute.page,
           fullscreenDialog: true,
