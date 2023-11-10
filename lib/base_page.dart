@@ -36,9 +36,12 @@ class _BasePageState extends ConsumerState<BasePage> {
         return AutoTabsRouter(
           routes: [
             const HomeRouterRoute(),
-            MyDictionaryRouterRoute(
+            IndividualDictionaryRouterRoute(
               children: [
-                MyDictionaryRoute(targetUserId: currentUserId),
+                IndividualDictionaryRoute(
+                  targetUserId: currentUserId,
+                  isTopRoute: true,
+                ),
               ],
             ),
             const IndexTopRouterRoute(),
@@ -72,7 +75,9 @@ class _BasePageState extends ConsumerState<BasePage> {
                                 );
                               },
                               loading: () => const ShimmerWidget.circular(
-                                  width: 36, height: 36),
+                                width: 36,
+                                height: 36,
+                              ),
                               error: (error, stackTrace) {
                                 return const SizedBox.shrink();
                               },

@@ -33,7 +33,7 @@ class ProfileTile extends ConsumerWidget {
           onTap: transitionToProfilePage
               ? () async {
                   await context.pushRoute(
-                    ProfileRoute(
+                    IndividualDictionaryRoute(
                       targetUserId: targetUserId,
                     ),
                   );

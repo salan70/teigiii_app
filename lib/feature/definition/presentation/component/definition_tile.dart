@@ -47,7 +47,7 @@ class DefinitionTile extends ConsumerWidget {
                     InkWell(
                       onTap: () async {
                         await context.pushRoute(
-                          ProfileRoute(targetUserId: definition.authorId),
+                          IndividualDictionaryRoute(targetUserId: definition.authorId),
                         );
                       },
                       child:

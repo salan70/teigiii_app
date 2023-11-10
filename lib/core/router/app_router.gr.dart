@@ -92,6 +92,23 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const IndexTopRouterPage(),
       );
     },
+    IndividualDictionaryRoute.name: (routeData) {
+      final args = routeData.argsAs<IndividualDictionaryRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: IndividualDictionaryPage(
+          key: args.key,
+          targetUserId: args.targetUserId,
+          isTopRoute: args.isTopRoute,
+        ),
+      );
+    },
+    IndividualDictionaryRouterRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const IndividualDictionaryRouterPage(),
+      );
+    },
     LikeUserRoute.name: (routeData) {
       final args = routeData.argsAs<LikeUserRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -106,22 +123,6 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const MutedUserListPage(),
-      );
-    },
-    MyDictionaryRoute.name: (routeData) {
-      final args = routeData.argsAs<MyDictionaryRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: MyDictionaryPage(
-          key: args.key,
-          targetUserId: args.targetUserId,
-        ),
-      );
-    },
-    MyDictionaryRouterRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const MyDictionaryRouterPage(),
       );
     },
     MyLicenseRoute.name: (routeData) {
@@ -148,7 +149,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: ProfilePage(
           key: args.key,
           targetUserId: args.targetUserId,
-          isHome: args.isHome,
         ),
       );
     },
@@ -440,6 +440,64 @@ class IndexTopRouterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [IndividualDictionaryPage]
+class IndividualDictionaryRoute
+    extends PageRouteInfo<IndividualDictionaryRouteArgs> {
+  IndividualDictionaryRoute({
+    Key? key,
+    required String targetUserId,
+    bool isTopRoute = false,
+    List<PageRouteInfo>? children,
+  }) : super(
+          IndividualDictionaryRoute.name,
+          args: IndividualDictionaryRouteArgs(
+            key: key,
+            targetUserId: targetUserId,
+            isTopRoute: isTopRoute,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'IndividualDictionaryRoute';
+
+  static const PageInfo<IndividualDictionaryRouteArgs> page =
+      PageInfo<IndividualDictionaryRouteArgs>(name);
+}
+
+class IndividualDictionaryRouteArgs {
+  const IndividualDictionaryRouteArgs({
+    this.key,
+    required this.targetUserId,
+    this.isTopRoute = false,
+  });
+
+  final Key? key;
+
+  final String targetUserId;
+
+  final bool isTopRoute;
+
+  @override
+  String toString() {
+    return 'IndividualDictionaryRouteArgs{key: $key, targetUserId: $targetUserId, isTopRoute: $isTopRoute}';
+  }
+}
+
+/// generated route for
+/// [IndividualDictionaryRouterPage]
+class IndividualDictionaryRouterRoute extends PageRouteInfo<void> {
+  const IndividualDictionaryRouterRoute({List<PageRouteInfo>? children})
+      : super(
+          IndividualDictionaryRouterRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'IndividualDictionaryRouterRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [LikeUserPage]
 class LikeUserRoute extends PageRouteInfo<LikeUserRouteArgs> {
   LikeUserRoute({
@@ -487,58 +545,6 @@ class MutedUserListRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'MutedUserListRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [MyDictionaryPage]
-class MyDictionaryRoute extends PageRouteInfo<MyDictionaryRouteArgs> {
-  MyDictionaryRoute({
-    Key? key,
-    required String targetUserId,
-    List<PageRouteInfo>? children,
-  }) : super(
-          MyDictionaryRoute.name,
-          args: MyDictionaryRouteArgs(
-            key: key,
-            targetUserId: targetUserId,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'MyDictionaryRoute';
-
-  static const PageInfo<MyDictionaryRouteArgs> page =
-      PageInfo<MyDictionaryRouteArgs>(name);
-}
-
-class MyDictionaryRouteArgs {
-  const MyDictionaryRouteArgs({
-    this.key,
-    required this.targetUserId,
-  });
-
-  final Key? key;
-
-  final String targetUserId;
-
-  @override
-  String toString() {
-    return 'MyDictionaryRouteArgs{key: $key, targetUserId: $targetUserId}';
-  }
-}
-
-/// generated route for
-/// [MyDictionaryRouterPage]
-class MyDictionaryRouterRoute extends PageRouteInfo<void> {
-  const MyDictionaryRouterRoute({List<PageRouteInfo>? children})
-      : super(
-          MyDictionaryRouterRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'MyDictionaryRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -606,14 +612,12 @@ class ProfileRoute extends PageRouteInfo<ProfileRouteArgs> {
   ProfileRoute({
     Key? key,
     required String targetUserId,
-    bool isHome = false,
     List<PageRouteInfo>? children,
   }) : super(
           ProfileRoute.name,
           args: ProfileRouteArgs(
             key: key,
             targetUserId: targetUserId,
-            isHome: isHome,
           ),
           initialChildren: children,
         );
@@ -628,18 +632,15 @@ class ProfileRouteArgs {
   const ProfileRouteArgs({
     this.key,
     required this.targetUserId,
-    this.isHome = false,
   });
 
   final Key? key;
 
   final String targetUserId;
 
-  final bool isHome;
-
   @override
   String toString() {
-    return 'ProfileRouteArgs{key: $key, targetUserId: $targetUserId, isHome: $isHome}';
+    return 'ProfileRouteArgs{key: $key, targetUserId: $targetUserId}';
   }
 }
 

@@ -3,10 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
-import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
 import '../../../../../util/logger.dart';
 import '../../../../auth/application/auth_state.dart';
@@ -20,11 +18,9 @@ class ProfilePage extends ConsumerWidget {
   const ProfilePage({
     super.key,
     required this.targetUserId,
-    this.isHome = false,
   });
 
   final String targetUserId;
-  final bool isHome;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,8 +39,6 @@ class ProfilePage extends ConsumerWidget {
                 SliverAppBar(
                   forceElevated: true,
                   floating: true,
-                  leading:
-                      isHome ? const ToSettingButton() : const BackIconButton(),
                   title: asyncTargetUserProfile.when(
                     data: (targetUserProfile) {
                       return Text(

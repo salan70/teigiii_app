@@ -17,7 +17,7 @@ import '../../feature/user_profile/presentation/page/like_user_page.dart/like_us
 import '../../feature/user_profile/presentation/page/profile/profile_page.dart';
 import '../../feature/word/presentation/page/index_second/index_second_page.dart';
 import '../../feature/word/presentation/page/index_top/index_top_page.dart';
-import '../../feature/word/presentation/page/my_dictionary/my_dictionary_page.dart';
+import '../../feature/word/presentation/page/individual_dictionary/individual_dictionary_page.dart';
 import '../../feature/word/presentation/page/search_word_result/search_word_result_page.dart';
 import '../../feature/word/presentation/page/word_list/word_list_page.dart';
 import '../../feature/word/presentation/page/word_top/word_top_page.dart';
@@ -46,6 +46,10 @@ class AppRouter extends _$AppRouter {
       page: WordTopRoute.page,
     ),
     AutoRoute(
+      path: 'profile',
+      page: ProfileRoute.page,
+    ),
+    AutoRoute(
       path: 'following_and_follower_list',
       page: FollowingAndFollowerListRoute.page,
     ),
@@ -66,19 +70,19 @@ class AppRouter extends _$AppRouter {
                   page: HomeRoute.page,
                 ),
                 AutoRoute(
-                  path: 'profile',
-                  page: ProfileRoute.page,
+                  path: 'individual_dictionary',
+                  page: IndividualDictionaryRoute.page,
                 ),
                 ...commonRouteList,
               ],
             ),
             AutoRoute(
-              path: 'my_dictionary',
-              page: MyDictionaryRouterRoute.page,
+              path: 'individual_dictionary',
+              page: IndividualDictionaryRouterRoute.page,
               children: [
                 AutoRoute(
                   initial: true,
-                  page: MyDictionaryRoute.page,
+                  page: IndividualDictionaryRoute.page,
                 ),
                 ...commonRouteList,
               ],
@@ -104,8 +108,8 @@ class AppRouter extends _$AppRouter {
                   page: SearchWordResultRoute.page,
                 ),
                 AutoRoute(
-                  path: 'profile',
-                  page: ProfileRoute.page,
+                  path: 'individual_dictionary',
+                  page: IndividualDictionaryRoute.page,
                 ),
                 ...commonRouteList,
               ],
