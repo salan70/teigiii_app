@@ -21,22 +21,29 @@ class IndividualDictionaryDefinitionListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(initialSubGroup.label),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 16),
-          DictionaryAuthorWidget(targetUserId: targetUserId),
-          const SizedBox(height: 24),
-          Expanded(
-            child: DefinitionList(
-              definitionFeedType: DefinitionFeedType.individualIndex,
-              targetUserId: targetUserId,
-              initialSubGroup: initialSubGroup,
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool _) {
+          return <Widget>[
+            SliverAppBar(
+              pinned: true,
+              elevation: 0,
+              title: Text(initialSubGroup.label),
             ),
-          ),
-        ],
+          ];
+        },
+        body: Column(
+          children: [
+            const SizedBox(height: 16),
+            DictionaryAuthorWidget(targetUserId: targetUserId),
+            Expanded(
+              child: DefinitionList(
+                definitionFeedType: DefinitionFeedType.individualIndex,
+                targetUserId: targetUserId,
+                initialSubGroup: initialSubGroup,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
