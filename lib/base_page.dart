@@ -54,6 +54,7 @@ class _BasePageState extends ConsumerState<BasePage> {
                   body: child,
                   bottomNavigationBar: BottomNavigationBar(
                     backgroundColor: Theme.of(context).colorScheme.surface,
+                    selectedItemColor: Theme.of(context).colorScheme.onSurface,
                     elevation: 0.1,
                     selectedFontSize: 12,
                     items: [
