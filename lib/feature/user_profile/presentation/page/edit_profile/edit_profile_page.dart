@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/avatar_icon_widget.dart';
+import '../../../../../core/common_widget/show_write_close_confirm_dialog.dart';
 import '../../../application/user_profile_for_write_notifier.dart';
 
 @RoutePage()
@@ -27,6 +28,20 @@ class EditProfilePage extends ConsumerWidget {
         final canEdit = notifier.canEdit();
         return Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(CupertinoIcons.xmark),
+              onPressed: () async {
+                // キーボードを閉じる
+                primaryFocus?.unfocus();
+
+                if (!notifier.isChanged()) {
+                  // 初期表示時から入力内容に変更がない場合、確認ダイアログを表示せずに画面を閉じる
+                  await context.popRoute();
+                  return;
+                }
+                await showCloseConfirmDialog(context);
+              },
+            ),
             title: const Center(child: Text('プロフィール編集')),
             actions: [
               Center(
