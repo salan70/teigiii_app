@@ -15,8 +15,8 @@ import '../../feature/setting/presentation/setting_page.dart';
 import '../../feature/user_profile/presentation/page/following_and_follower_list/following_and_follower_list_page.dart';
 import '../../feature/user_profile/presentation/page/like_user_page.dart/like_user_page.dart';
 import '../../feature/user_profile/presentation/page/profile/profile_page.dart';
+import '../../feature/word/presentation/page/everyone_dictionary/everyone_dictionary_page.dart';
 import '../../feature/word/presentation/page/index_second/index_second_page.dart';
-import '../../feature/word/presentation/page/index_top/index_top_page.dart';
 import '../../feature/word/presentation/page/individual_dictionary/individual_dictionary_page.dart';
 import '../../feature/word/presentation/page/search_word_result/search_word_result_page.dart';
 import '../../feature/word/presentation/page/word_list/word_list_page.dart';
@@ -89,11 +89,11 @@ class AppRouter extends _$AppRouter {
             ),
             AutoRoute(
               path: 'index',
-              page: IndexTopRouterRoute.page,
+              page: EveryoneDictionaryRouterRoute.page,
               children: [
                 AutoRoute(
                   initial: true,
-                  page: IndexTopRoute.page,
+                  page: EveryoneDictionaryRoute.page,
                 ),
                 AutoRoute(
                   path: 'index_second',

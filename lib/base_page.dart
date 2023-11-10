@@ -44,7 +44,7 @@ class _BasePageState extends ConsumerState<BasePage> {
                 ),
               ],
             ),
-            const IndexTopRouterRoute(),
+            const EveryoneDictionaryRouterRoute(),
           ],
           builder: (context, child) {
             final tabsRouter = context.tabsRouter;
@@ -126,4 +126,8 @@ class _BasePageState extends ConsumerState<BasePage> {
       ),
     );
   }
+}
+
+class IndexTopRouterRoute {
+  const IndexTopRouterRoute();
 }

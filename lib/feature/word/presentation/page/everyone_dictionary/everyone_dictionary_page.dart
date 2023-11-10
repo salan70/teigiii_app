@@ -6,13 +6,13 @@ import '../../component/initial_main_group_list.dart';
 import '../../component/word_search_text_field.dart';
 
 @RoutePage()
-class IndexTopRouterPage extends AutoRouter {
-  const IndexTopRouterPage({super.key});
+class EveryoneDictionaryRouterPage extends AutoRouter {
+  const EveryoneDictionaryRouterPage({super.key});
 }
 
 @RoutePage()
-class IndexTopPage extends StatelessWidget {
-  const IndexTopPage({super.key});
+class EveryoneDictionaryPage extends StatelessWidget {
+  const EveryoneDictionaryPage({super.key});
 
   @override
   Widget build(BuildContext context) {

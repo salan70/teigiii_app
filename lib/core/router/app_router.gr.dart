@@ -47,6 +47,18 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    EveryoneDictionaryRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const EveryoneDictionaryPage(),
+      );
+    },
+    EveryoneDictionaryRouterRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const EveryoneDictionaryRouterPage(),
+      );
+    },
     FollowingAndFollowerListRoute.name: (routeData) {
       final args = routeData.argsAs<FollowingAndFollowerListRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -78,18 +90,6 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           selectedInitialMainGroup: args.selectedInitialMainGroup,
         ),
-      );
-    },
-    IndexTopRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const IndexTopPage(),
-      );
-    },
-    IndexTopRouterRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const IndexTopRouterPage(),
       );
     },
     IndividualDictionaryRoute.name: (routeData) {
@@ -302,6 +302,34 @@ class EditDefinitionRouteArgs {
 }
 
 /// generated route for
+/// [EveryoneDictionaryPage]
+class EveryoneDictionaryRoute extends PageRouteInfo<void> {
+  const EveryoneDictionaryRoute({List<PageRouteInfo>? children})
+      : super(
+          EveryoneDictionaryRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'EveryoneDictionaryRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [EveryoneDictionaryRouterPage]
+class EveryoneDictionaryRouterRoute extends PageRouteInfo<void> {
+  const EveryoneDictionaryRouterRoute({List<PageRouteInfo>? children})
+      : super(
+          EveryoneDictionaryRouterRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'EveryoneDictionaryRouterRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [FollowingAndFollowerListPage]
 class FollowingAndFollowerListRoute
     extends PageRouteInfo<FollowingAndFollowerListRouteArgs> {
@@ -409,34 +437,6 @@ class IndexSecondRouteArgs {
   String toString() {
     return 'IndexSecondRouteArgs{key: $key, selectedInitialMainGroup: $selectedInitialMainGroup}';
   }
-}
-
-/// generated route for
-/// [IndexTopPage]
-class IndexTopRoute extends PageRouteInfo<void> {
-  const IndexTopRoute({List<PageRouteInfo>? children})
-      : super(
-          IndexTopRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'IndexTopRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [IndexTopRouterPage]
-class IndexTopRouterRoute extends PageRouteInfo<void> {
-  const IndexTopRouterRoute({List<PageRouteInfo>? children})
-      : super(
-          IndexTopRouterRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'IndexTopRouterRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
