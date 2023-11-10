@@ -118,12 +118,13 @@ Future<void> addDefinitionDummy0to29(String flavorName) async {
     await definitionsCollection.doc('definition${i + 1}').set({
       'wordId': wordIds[i],
       'word': words[i],
+      'wordReading': readings[i],
       'wordReadingInitialSubGroupLabel':
           InitialSubGroup.labelFromString(readings[i]),
       'authorId': 'user${Random().nextInt(20) + 1}',
       'definition': definitions[i],
       'likesCount': Random().nextInt(100),
-      'isPublic': Random().nextBool(),
+      'isPublic': Random().nextInt(10) < 9,
       'isEdited': false,
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),

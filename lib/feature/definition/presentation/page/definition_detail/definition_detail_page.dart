@@ -4,13 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../core/common_widget/avatar_icon_widget.dart';
 import '../../../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/extension/date_time_extension.dart';
 import '../../../../auth/application/auth_state.dart';
 import '../../../application/definition_state.dart';
-import '../../component/avatar_icon_widget.dart';
 import '../../component/like_widget.dart';
 import '../../component/self_definition_action_icon_button.dart';
 import 'definition_detail_shimmer.dart';

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/adaptive_overflow_text.dart';
+import '../../../../../core/common_widget/avatar_icon_widget.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/logger.dart';
-import '../../../../definition/presentation/component/avatar_icon_widget.dart';
 import '../../../application/user_profile_state.dart';
 import 'profile_tile_shimmer.dart';
 

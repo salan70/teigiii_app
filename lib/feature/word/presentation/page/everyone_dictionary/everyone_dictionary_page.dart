@@ -2,17 +2,18 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget/button/to_setting_button.dart';
+import '../../../util/dictionary_page_type.dart';
 import '../../component/initial_main_group_list.dart';
-import 'word_search_text_field.dart';
+import '../../component/word_search_text_field.dart';
 
 @RoutePage()
-class IndexTopRouterPage extends AutoRouter {
-  const IndexTopRouterPage({super.key});
+class EveryoneDictionaryRouterPage extends AutoRouter {
+  const EveryoneDictionaryRouterPage({super.key});
 }
 
 @RoutePage()
-class IndexTopPage extends StatelessWidget {
-  const IndexTopPage({super.key});
+class EveryoneDictionaryPage extends StatelessWidget {
+  const EveryoneDictionaryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,10 @@ class IndexTopPage extends StatelessWidget {
                 child: WordSearchTextField(),
               ),
               SizedBox(height: 8),
-              InitialMainGroupList(),
+              InitialMainGroupList(
+                dictionaryPageType: DictionaryPageType.everyone,
+                targetUserId: null,
+              ),
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../util/constant/initial_main_group.dart';
 import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
@@ -18,6 +19,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     DefinitionFeedType definitionFeedType, {
     String? wordId,
     String? targetUserId,
+    InitialSubGroup? initialSubGroup,
   }) async {
     // ミュートユーザーが更新されるたびに、本Notifierも更新されるよう監視
     ref.watch(mutedUserIdListProvider);
@@ -151,6 +153,34 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         );
   }
 
+  /// 「ユーザー毎の辞書 -> InitialSubGroup毎の定義一覧 画面」
+  /// で表示するDefinitionIDのListを取得する
+  ///
+  /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
+  Future<DefinitionIdListState> _fetchForIndividualDictionary({
+    required bool isFirstFetch,
+  }) async {
+    if (initialSubGroup == null) {
+      throw ArgumentError('initialSubGroupがnullです');
+    }
+    if (targetUserId == null) {
+      throw ArgumentError('targetUserIdがnullです');
+    }
+
+    final currentUserId = ref.read(userIdProvider)!;
+    final lastDoc =
+        isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
+
+    return ref
+        .watch(fetchDefinitionRepositoryProvider)
+        .fetchIndividualDictionaryDefinitionIdListState(
+          currentUserId,
+          targetUserId!,
+          initialSubGroup!,
+          lastDoc,
+        );
+  }
+
   Future<void> fetchMore() async {
     await fetchMoreHelper(
       ref: ref,
@@ -191,6 +221,8 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
 
       case DefinitionFeedType.profileLiked:
         return _fetchForProfileLiked(isFirstFetch: isFirstFetch);
+      case DefinitionFeedType.individualIndex:
+        return _fetchForIndividualDictionary(isFirstFetch: isFirstFetch);
     }
   }
 }

@@ -31,6 +31,9 @@ final mockDefinition = Definition(
 final mockDefinitionDoc = DefinitionDocument(
   id: 'definitionId',
   wordId: mockWordDoc.id,
+  word: mockWordDoc.word,
+  wordReading: mockWordDoc.reading,
+  wordReadingInitialSubGroupLabel: mockWordDoc.initialSubGroupLabel,
   authorId: mockUserProfileDoc.id,
   definition: 'content',
   likesCount: 0,

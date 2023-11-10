@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/config_constant.dart';
 import '../../../util/constant/firestore_collections.dart';
+import '../../../util/constant/initial_main_group.dart';
 import '../../../util/extension/firestore_extension.dart';
 import '../../user_profile/domain/user_id_list_state.dart';
 import '../domain/definition_id_list_state.dart';
@@ -19,6 +20,8 @@ FetchDefinitionRepository fetchDefinitionRepository(
     FetchDefinitionRepository(
       ref.watch(firestoreProvider),
     );
+
+// TODO(me): DefinitionIdListStateの取得に絞ってもいいかも
 
 /// 定義の取得に関する処理を記述するRepository
 class FetchDefinitionRepository {
@@ -444,6 +447,45 @@ class FetchDefinitionRepository {
         .then((snapshot) => snapshot);
 
     return DefinitionDocument.fromFirestore(snapshot);
+  }
+
+  /// 「ユーザー毎の辞書 -> InitialSubGroup毎の定義一覧 画面」
+  /// で表示するDefinitionIDのListを取得する
+  ///
+  /// [lastDocument]がnullの場合、最初のdocumentから取得する。
+  /// 無限スクロールなどで、2回目以降の取得の場合、
+  /// [lastDocument]に前回取得した最後のdocumentを指定すること。
+  Future<DefinitionIdListState> fetchIndividualDictionaryDefinitionIdListState(
+    String currentUserId,
+    String targetUserId,
+    InitialSubGroup initialSubGroup,
+    QueryDocumentSnapshot? lastDocument,
+  ) async {
+    var query = _definitionsCollectionRef
+        .where(DefinitionsCollection.authorId, isEqualTo: targetUserId)
+        .where(
+          DefinitionsCollection.wordReadingInitialSubGroupLabel,
+          isEqualTo: initialSubGroup.label,
+        )
+        .where(
+          Filter.or(
+            Filter(
+              DefinitionsCollection.authorId,
+              isEqualTo: currentUserId,
+            ),
+            Filter(DefinitionsCollection.isPublic, isEqualTo: true),
+          ),
+        )
+        .orderBy(DefinitionsCollection.wordReading, descending: true)
+        .limit(fetchLimitForDefinitionList);
+
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument);
+    }
+
+    final snapshot = await query.get();
+
+    return _toDefinitionIdListState(snapshot.docs);
   }
 
   /// [definitionId]をいいねしたユーザーのIDリストを[fetchLimitForUserIdList]件取得

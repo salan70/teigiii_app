@@ -15,11 +15,14 @@ import '../../feature/setting/presentation/setting_page.dart';
 import '../../feature/user_profile/presentation/page/following_and_follower_list/following_and_follower_list_page.dart';
 import '../../feature/user_profile/presentation/page/like_user_page.dart/like_user_page.dart';
 import '../../feature/user_profile/presentation/page/profile/profile_page.dart';
-import '../../feature/word/presentation/page/index_second/index_second_page.dart';
-import '../../feature/word/presentation/page/index_top/index_top_page.dart';
+import '../../feature/word/presentation/page/everyone_dictionary/everyone_dictionary_page.dart';
+import '../../feature/word/presentation/page/individual_dictionary/individual_dictionary_page.dart';
+import '../../feature/word/presentation/page/individual_dictionary_definition_list/individual_dictionary_definition_list.dart';
+import '../../feature/word/presentation/page/initial_sub_group_index/initial_sub_group_index_page.dart';
 import '../../feature/word/presentation/page/search_word_result/search_word_result_page.dart';
 import '../../feature/word/presentation/page/word_list/word_list_page.dart';
 import '../../feature/word/presentation/page/word_top/word_top_page.dart';
+import '../../feature/word/util/dictionary_page_type.dart';
 import '../../util/constant/initial_main_group.dart';
 
 part 'app_router.g.dart';
@@ -31,6 +34,37 @@ Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter();
 // TODO(me): 一部Routeのpathにidを含める
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends _$AppRouter {
+  final List<AutoRoute> commonRouteList = [
+    AutoRoute(
+      path: 'definition_detail',
+      page: DefinitionDetailRoute.page,
+    ),
+    AutoRoute(
+      path: 'like_user_list',
+      page: LikeUserRoute.page,
+    ),
+    AutoRoute(
+      path: 'word_top',
+      page: WordTopRoute.page,
+    ),
+    AutoRoute(
+      path: 'profile',
+      page: ProfileRoute.page,
+    ),
+    AutoRoute(
+      path: 'following_and_follower_list',
+      page: FollowingAndFollowerListRoute.page,
+    ),
+    AutoRoute(
+      path: 'initial_sub_group_index',
+      page: InitialSubGroupIndexRoute.page,
+    ),
+    AutoRoute(
+      path: 'individual_dictionary_definition_list',
+      page: IndividualDictionaryDefinitionListRoute.page,
+    ),
+  ];
+
   @override
   List<AutoRoute> get routes => [
         AutoRoute(
@@ -46,64 +80,30 @@ class AppRouter extends _$AppRouter {
                   page: HomeRoute.page,
                 ),
                 AutoRoute(
-                  path: 'definition_detail',
-                  page: DefinitionDetailRoute.page,
+                  path: 'individual_dictionary',
+                  page: IndividualDictionaryRoute.page,
                 ),
-                AutoRoute(
-                  path: 'like_user_list',
-                  page: LikeUserRoute.page,
-                ),
-                AutoRoute(
-                  path: 'word_top',
-                  page: WordTopRoute.page,
-                ),
-                AutoRoute(
-                  path: 'profile',
-                  page: ProfileRoute.page,
-                ),
-                AutoRoute(
-                  path: 'following_and_follower_list',
-                  page: FollowingAndFollowerListRoute.page,
-                ),
+                ...commonRouteList,
               ],
             ),
             AutoRoute(
-              path: 'profile',
-              page: ProfileRouterRoute.page,
+              path: 'individual_dictionary',
+              page: IndividualDictionaryRouterRoute.page,
               children: [
                 AutoRoute(
                   initial: true,
-                  page: ProfileRoute.page,
+                  page: IndividualDictionaryRoute.page,
                 ),
-                AutoRoute(
-                  path: 'definition_detail',
-                  page: DefinitionDetailRoute.page,
-                ),
-                AutoRoute(
-                  path: 'like_user_list',
-                  page: LikeUserRoute.page,
-                ),
-                AutoRoute(
-                  path: 'word_top',
-                  page: WordTopRoute.page,
-                ),
-                AutoRoute(
-                  path: 'following_and_follower_list',
-                  page: FollowingAndFollowerListRoute.page,
-                ),
+                ...commonRouteList,
               ],
             ),
             AutoRoute(
               path: 'index',
-              page: IndexTopRouterRoute.page,
+              page: EveryoneDictionaryRouterRoute.page,
               children: [
                 AutoRoute(
                   initial: true,
-                  page: IndexTopRoute.page,
-                ),
-                AutoRoute(
-                  path: 'index_second',
-                  page: IndexSecondRoute.page,
+                  page: EveryoneDictionaryRoute.page,
                 ),
                 AutoRoute(
                   path: 'word_list',
@@ -114,25 +114,10 @@ class AppRouter extends _$AppRouter {
                   page: SearchWordResultRoute.page,
                 ),
                 AutoRoute(
-                  path: 'definition_detail',
-                  page: DefinitionDetailRoute.page,
+                  path: 'individual_dictionary',
+                  page: IndividualDictionaryRoute.page,
                 ),
-                AutoRoute(
-                  path: 'like_user_list',
-                  page: LikeUserRoute.page,
-                ),
-                AutoRoute(
-                  path: 'word_top',
-                  page: WordTopRoute.page,
-                ),
-                AutoRoute(
-                  path: 'profile',
-                  page: ProfileRoute.page,
-                ),
-                AutoRoute(
-                  path: 'following_and_follower_list',
-                  page: FollowingAndFollowerListRoute.page,
-                ),
+                ...commonRouteList,
               ],
             ),
           ],

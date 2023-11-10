@@ -5,39 +5,20 @@ enum DefinitionFeedType {
   /// ホーム画面: フォロー中タブ
   homeFollowing,
 
-  /// 語句毎の定義一覧画面: 投稿順
+  /// 語句毎の定義一覧画面: 投稿順タブ
   wordTopOrderByCreatedAt,
 
-  /// 語句毎の定義一覧画面: いいね順
+  /// 語句毎の定義一覧画面: いいね数順タブ
   wordTopOrderByLikesCount,
 
-  /// プロフィール画面: 投稿順
+  /// プロフィール画面: 投稿順タブ
   profileOrderByCreatedAt,
 
-  /// プロフィール画面: いいね
+  /// プロフィール画面: いいね数順タブ
   profileLiked,
 
-  // TODO(me): 以下はそれぞれ必要な画面実装時に追加する
-  // ソート系と画面系それぞれのenumを作るのがいいかも
-  // その場合、語句名の五十音順など、Definitionコレクションのソートでは対応できないものがあることに注意
-
-  // /// 自らのプロフィール画面の投稿タブ、語句名の五十音順
-  // selfProfilePostedOrderByWordName,
-
-  // /// 自らのプロフィール画面の投稿タブ、更新日時順
-  // selfProfilePostedOrderByUpdatedAt,
-
-  // /// 自らのプロフィール画面のいいねタブ
-  // selfProfileLiked,
-
-  // /// 他ユーザーのプロフィール画面の投稿タブ、語句名の五十音順
-  // otherProfilePostedOrderByWordName,
-
-  // /// 他ユーザーのプロフィール画面の投稿タブ、更新日時順
-  // otherProfilePostedOrderByUpdatedAt,
-
-  // /// 他ユーザーのプロフィール画面のいいねタブ
-  // otherProfileLiked,
+  /// ユーザー毎の辞書 -> InitialSubGroup毎の定義一覧 画面
+  individualIndex,
 }
 
 // TODO(me): [DefinitionFeedType]の値に合わせて更新する必要があことをなんとかしたい
