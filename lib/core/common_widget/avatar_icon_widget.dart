@@ -22,7 +22,6 @@ class AvatarIconWidget extends StatelessWidget {
           shape: BoxShape.circle,
           image: DecorationImage(
             image: imageProvider,
-            fit: BoxFit.cover,
           ),
         ),
       ),

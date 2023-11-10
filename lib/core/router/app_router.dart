@@ -12,6 +12,7 @@ import '../../feature/definition/util/write_definition_form_type.dart';
 import '../../feature/setting/presentation/license_page.dart';
 import '../../feature/setting/presentation/muted_user_list_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
+import '../../feature/user_profile/presentation/page/edit_profile/edit_profile_page.dart';
 import '../../feature/user_profile/presentation/page/following_and_follower_list/following_and_follower_list_page.dart';
 import '../../feature/user_profile/presentation/page/like_user_page.dart/like_user_page.dart';
 import '../../feature/user_profile/presentation/page/profile/profile_page.dart';
@@ -149,6 +150,11 @@ class AppRouter extends _$AppRouter {
         AutoRoute(
           path: '/edit_definition',
           page: EditDefinitionRoute.page,
+          fullscreenDialog: true,
+        ),
+        AutoRoute(
+          path: '/edit_profile',
+          page: EditProfileRoute.page,
           fullscreenDialog: true,
         ),
       ];

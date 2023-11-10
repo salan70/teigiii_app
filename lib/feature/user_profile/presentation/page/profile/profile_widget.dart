@@ -39,7 +39,9 @@ class ProfileWidget extends ConsumerWidget {
                   currentUserId == targetUserId
                       ? PrimaryOutlinedButton(
                           text: 'プロフィールを編集する',
-                          onPressed: () {},
+                          onPressed: () {
+                            context.pushRoute(const EditProfileRoute());
+                          },
                         )
                       : FollowOrUnfollowButton(
                           targetUserId: targetUserProfile.id,
