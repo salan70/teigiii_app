@@ -96,7 +96,7 @@ class DefinitionDetailPage extends ConsumerWidget {
                     InkWell(
                       onTap: () async {
                         await context.pushRoute(
-                          IndividualDictionaryRoute(targetUserId: definition.authorId),
+                          ProfileRoute(targetUserId: definition.authorId),
                         );
                       },
                       child: Row(
