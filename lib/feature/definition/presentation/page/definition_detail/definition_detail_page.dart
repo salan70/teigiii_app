@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/avatar_icon_widget.dart';
+import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
 import '../../../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/router/app_router.dart';
@@ -113,11 +114,17 @@ class DefinitionDetailPage extends ConsumerWidget {
                                   fontWeight: FontWeight.normal,
                                 ),
                           ),
-                          const SizedBox(width: 32),
+                          const Spacer(),
+                          definition.authorId == currentUserId
+                              ? const SizedBox.shrink()
+                              : FollowOrUnfollowButton(
+                                  targetUserId: definition.authorId,
+                                ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     InkWell(
                       onTap: () async {
                         await context.pushRoute(
@@ -151,23 +158,9 @@ class DefinitionDetailPage extends ConsumerWidget {
                       definition.definition,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    const SizedBox(height: 48),
+                    const SizedBox(height: 16),
                     Row(
-                      children: [
-                        LikeWidget(definition: definition, showCount: false),
-                        InkWell(
-                          onTap: () async {
-                            await context.pushRoute(
-                              LikeUserRoute(definitionId: definition.id),
-                            );
-                          },
-                          child: Text('${definition.likesCount}件のいいね'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    const SizedBox(height: 24),
-                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
                           '${definition.createdAt.toDisplayFormat()} 投稿',
@@ -177,6 +170,21 @@ class DefinitionDetailPage extends ConsumerWidget {
                                         .colorScheme
                                         .onSurfaceVariant,
                                   ),
+                        ),
+                      ],
+                    ),
+                    const Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        LikeWidget(definition: definition, showCount: false),
+                        InkWell(
+                          onTap: () async {
+                            await context.pushRoute(
+                              LikeUserRoute(definitionId: definition.id),
+                            );
+                          },
+                          child: Text('${definition.likesCount}件のいいね'),
                         ),
                       ],
                     ),
