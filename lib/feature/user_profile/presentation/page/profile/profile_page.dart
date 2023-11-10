@@ -115,23 +115,3 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 }
-
-enum ProfileType {
-  myProfile,
-  otherProfile;
-
-  IconButton appBarTrailingButton(GlobalKey globalKey, BuildContext context) {
-    switch (this) {
-      case ProfileType.myProfile:
-        return IconButton(
-          icon: const Icon(CupertinoIcons.person_add),
-          onPressed: () {},
-        );
-      case ProfileType.otherProfile:
-        return IconButton(
-          icon: const Icon(CupertinoIcons.ellipsis),
-          onPressed: () {},
-        );
-    }
-  }
-}
