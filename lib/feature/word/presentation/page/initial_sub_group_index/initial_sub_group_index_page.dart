@@ -37,9 +37,15 @@ class InitialSubGroupIndexPage extends ConsumerWidget {
       body: ListView(
         children: [
           dictionaryPageType == DictionaryPageType.individual
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: DictionaryAuthorWidget(targetUserId: targetUserId!),
+              ? Column(
+                  children: [
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child:
+                          DictionaryAuthorWidget(targetUserId: targetUserId!),
+                    ),
+                  ],
                 )
               : const SizedBox.shrink(),
           const SizedBox(height: 8),
