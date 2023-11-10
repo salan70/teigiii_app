@@ -26,7 +26,6 @@ class HomePage extends StatelessWidget {
             headerSliverBuilder: (BuildContext context, bool _) {
               return <Widget>[
                 const SliverAppBar(
-                  forceElevated: true,
                   elevation: 0,
                   title: Text('ホーム'),
                   leading: ToSettingButton(),
