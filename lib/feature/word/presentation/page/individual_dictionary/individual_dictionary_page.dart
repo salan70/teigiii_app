@@ -38,22 +38,22 @@ class IndividualDictionaryPage extends ConsumerWidget {
             leading:
                 isTopRoute ? const ToSettingButton() : const BackIconButton(),
           ),
-          body: Padding(
-            padding: const EdgeInsets.only(
-              top: 16,
-              left: 16,
-              right: 16,
-            ),
-            child: ListView(
-              children: [
-                DictionaryAuthorWidget(targetUserId: targetUserId),
-                const SizedBox(height: 24),
-                InitialMainGroupList(
+          body: ListView(
+            children: [
+              const SizedBox(height: 16),
+              DictionaryAuthorWidget(targetUserId: targetUserId),
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
+                child: InitialMainGroupList(
                   dictionaryPageType: DictionaryPageType.individual,
                   targetUserId: targetUserId,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },

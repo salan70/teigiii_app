@@ -34,21 +34,21 @@ class InitialSubGroupIndexPage extends ConsumerWidget {
         title: Text(selectedInitialMainGroup.label),
         leading: const BackIconButton(),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          top: 8,
-          left: 16,
-          right: 16,
-        ),
-        child: ListView(
-          children: [
-            dictionaryPageType == DictionaryPageType.individual
-                ? Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: DictionaryAuthorWidget(targetUserId: targetUserId!),
-                  )
-                : const SizedBox.shrink(),
-            ListView.builder(
+      body: ListView(
+        children: [
+          dictionaryPageType == DictionaryPageType.individual
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: DictionaryAuthorWidget(targetUserId: targetUserId!),
+                )
+              : const SizedBox.shrink(),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+            ),
+            child: ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: initialSubGroups.length,
@@ -83,8 +83,8 @@ class InitialSubGroupIndexPage extends ConsumerWidget {
                 );
               },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
