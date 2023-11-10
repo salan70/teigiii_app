@@ -3,12 +3,21 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/router/app_router.dart';
 import '../../../../util/constant/initial_main_group.dart';
+import '../../util/dictionary_page_type.dart';
 import 'index_tile.dart';
 
 class InitialMainGroupList extends StatelessWidget {
   const InitialMainGroupList({
     super.key,
+    required this.dictionaryPageType,
+    required this.targetUserId,
   });
+
+  final DictionaryPageType dictionaryPageType;
+
+  /// [dictionaryPageType]が[DictionaryPageType.everyone]の場合、nullを渡す。
+  /// [DictionaryPageType.individual]の場合、表示対象のユーザーidを渡す
+  final String? targetUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +30,10 @@ class InitialMainGroupList extends StatelessWidget {
         return InkWell(
           onTap: () async {
             await context.pushRoute(
-              IndexSecondRoute(
+              InitialSubGroupIndexRoute(
                 selectedInitialMainGroup: initialMainGroup,
+                dictionaryPageType: dictionaryPageType,
+                targetUserId: targetUserId,
               ),
             );
           },

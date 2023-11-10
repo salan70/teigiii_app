@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_widget/avatar_icon_widget.dart';
 import '../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/common_widget/button/to_setting_button.dart';
-import '../../../../../core/router/app_router.dart';
 import '../../../../user_profile/application/user_profile_state.dart';
+import '../../../util/dictionary_page_type.dart';
+import '../../component/dictionary_author_widget.dart';
 import '../../component/initial_main_group_list.dart';
 
 @RoutePage()
@@ -46,40 +46,12 @@ class IndividualDictionaryPage extends ConsumerWidget {
             ),
             child: ListView(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // TODO(me): 「Written by」いる？
-                    Text(
-                      'Written by',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(width: 16),
-                    InkWell(
-                      onTap: () {
-                        context.pushRoute(
-                          ProfileRoute(
-                            targetUserId: targetUserProfile.id,
-                          ),
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          AvatarIconWidget(
-                            imageUrl: targetUserProfile.profileImageUrl,
-                          ),
-                          const SizedBox(width: 16),
-                          Text(
-                            targetUserProfile.name,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                DictionaryAuthorWidget(targetUserId: targetUserId),
                 const SizedBox(height: 24),
-                const InitialMainGroupList(),
+                InitialMainGroupList(
+                  dictionaryPageType: DictionaryPageType.individual,
+                  targetUserId: targetUserId,
+                ),
               ],
             ),
           ),

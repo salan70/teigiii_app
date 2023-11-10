@@ -82,13 +82,15 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const HomeRouterPage(),
       );
     },
-    IndexSecondRoute.name: (routeData) {
-      final args = routeData.argsAs<IndexSecondRouteArgs>();
+    IndividualDictionaryDefinitionListRoute.name: (routeData) {
+      final args =
+          routeData.argsAs<IndividualDictionaryDefinitionListRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: IndexSecondPage(
+        child: IndividualDictionaryDefinitionListPage(
           key: args.key,
-          selectedInitialMainGroup: args.selectedInitialMainGroup,
+          targetUserId: args.targetUserId,
+          initialSubGroup: args.initialSubGroup,
         ),
       );
     },
@@ -107,6 +109,18 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const IndividualDictionaryRouterPage(),
+      );
+    },
+    InitialSubGroupIndexRoute.name: (routeData) {
+      final args = routeData.argsAs<InitialSubGroupIndexRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: InitialSubGroupIndexPage(
+          key: args.key,
+          selectedInitialMainGroup: args.selectedInitialMainGroup,
+          dictionaryPageType: args.dictionaryPageType,
+          targetUserId: args.targetUserId,
+        ),
       );
     },
     LikeUserRoute.name: (routeData) {
@@ -402,40 +416,46 @@ class HomeRouterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [IndexSecondPage]
-class IndexSecondRoute extends PageRouteInfo<IndexSecondRouteArgs> {
-  IndexSecondRoute({
+/// [IndividualDictionaryDefinitionListPage]
+class IndividualDictionaryDefinitionListRoute
+    extends PageRouteInfo<IndividualDictionaryDefinitionListRouteArgs> {
+  IndividualDictionaryDefinitionListRoute({
     Key? key,
-    required InitialMainGroup selectedInitialMainGroup,
+    required String targetUserId,
+    required InitialSubGroup initialSubGroup,
     List<PageRouteInfo>? children,
   }) : super(
-          IndexSecondRoute.name,
-          args: IndexSecondRouteArgs(
+          IndividualDictionaryDefinitionListRoute.name,
+          args: IndividualDictionaryDefinitionListRouteArgs(
             key: key,
-            selectedInitialMainGroup: selectedInitialMainGroup,
+            targetUserId: targetUserId,
+            initialSubGroup: initialSubGroup,
           ),
           initialChildren: children,
         );
 
-  static const String name = 'IndexSecondRoute';
+  static const String name = 'IndividualDictionaryDefinitionListRoute';
 
-  static const PageInfo<IndexSecondRouteArgs> page =
-      PageInfo<IndexSecondRouteArgs>(name);
+  static const PageInfo<IndividualDictionaryDefinitionListRouteArgs> page =
+      PageInfo<IndividualDictionaryDefinitionListRouteArgs>(name);
 }
 
-class IndexSecondRouteArgs {
-  const IndexSecondRouteArgs({
+class IndividualDictionaryDefinitionListRouteArgs {
+  const IndividualDictionaryDefinitionListRouteArgs({
     this.key,
-    required this.selectedInitialMainGroup,
+    required this.targetUserId,
+    required this.initialSubGroup,
   });
 
   final Key? key;
 
-  final InitialMainGroup selectedInitialMainGroup;
+  final String targetUserId;
+
+  final InitialSubGroup initialSubGroup;
 
   @override
   String toString() {
-    return 'IndexSecondRouteArgs{key: $key, selectedInitialMainGroup: $selectedInitialMainGroup}';
+    return 'IndividualDictionaryDefinitionListRouteArgs{key: $key, targetUserId: $targetUserId, initialSubGroup: $initialSubGroup}';
   }
 }
 
@@ -495,6 +515,55 @@ class IndividualDictionaryRouterRoute extends PageRouteInfo<void> {
   static const String name = 'IndividualDictionaryRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [InitialSubGroupIndexPage]
+class InitialSubGroupIndexRoute
+    extends PageRouteInfo<InitialSubGroupIndexRouteArgs> {
+  InitialSubGroupIndexRoute({
+    Key? key,
+    required InitialMainGroup selectedInitialMainGroup,
+    required DictionaryPageType dictionaryPageType,
+    required String? targetUserId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          InitialSubGroupIndexRoute.name,
+          args: InitialSubGroupIndexRouteArgs(
+            key: key,
+            selectedInitialMainGroup: selectedInitialMainGroup,
+            dictionaryPageType: dictionaryPageType,
+            targetUserId: targetUserId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'InitialSubGroupIndexRoute';
+
+  static const PageInfo<InitialSubGroupIndexRouteArgs> page =
+      PageInfo<InitialSubGroupIndexRouteArgs>(name);
+}
+
+class InitialSubGroupIndexRouteArgs {
+  const InitialSubGroupIndexRouteArgs({
+    this.key,
+    required this.selectedInitialMainGroup,
+    required this.dictionaryPageType,
+    required this.targetUserId,
+  });
+
+  final Key? key;
+
+  final InitialMainGroup selectedInitialMainGroup;
+
+  final DictionaryPageType dictionaryPageType;
+
+  final String? targetUserId;
+
+  @override
+  String toString() {
+    return 'InitialSubGroupIndexRouteArgs{key: $key, selectedInitialMainGroup: $selectedInitialMainGroup, dictionaryPageType: $dictionaryPageType, targetUserId: $targetUserId}';
+  }
 }
 
 /// generated route for

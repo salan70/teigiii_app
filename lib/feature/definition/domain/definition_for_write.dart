@@ -88,6 +88,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
   Map<String, dynamic> toFirestoreForCreate() {
     return {
       DefinitionsCollection.word: word,
+      DefinitionsCollection.wordReading: wordReading,
       DefinitionsCollection.wordReadingInitialSubGroupLabel:
           _wordReadingInitialLabel,
       DefinitionsCollection.definition: definition,
@@ -100,6 +101,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
   Map<String, dynamic> toFirestoreForUpdate() {
     return {
       DefinitionsCollection.word: word,
+      DefinitionsCollection.wordReading: wordReading,
       DefinitionsCollection.wordReadingInitialSubGroupLabel:
           _wordReadingInitialLabel,
       DefinitionsCollection.definition: definition,

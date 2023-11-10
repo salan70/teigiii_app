@@ -7,7 +7,7 @@ part of 'definition_id_list_state.dart';
 // **************************************************************************
 
 String _$definitionIdListStateNotifierHash() =>
-    r'92dd1e5c297629543c2f5b1589c24e088b93beb4';
+    r'bf24d92324ad004ac8efed98f92d83a1fd62fd66';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -35,11 +35,13 @@ abstract class _$DefinitionIdListStateNotifier
   late final DefinitionFeedType definitionFeedType;
   late final String? wordId;
   late final String? targetUserId;
+  late final InitialSubGroup? initialSubGroup;
 
   FutureOr<DefinitionIdListState> build(
     DefinitionFeedType definitionFeedType, {
     String? wordId,
     String? targetUserId,
+    InitialSubGroup? initialSubGroup,
   });
 }
 
@@ -59,11 +61,13 @@ class DefinitionIdListStateNotifierFamily
     DefinitionFeedType definitionFeedType, {
     String? wordId,
     String? targetUserId,
+    InitialSubGroup? initialSubGroup,
   }) {
     return DefinitionIdListStateNotifierProvider(
       definitionFeedType,
       wordId: wordId,
       targetUserId: targetUserId,
+      initialSubGroup: initialSubGroup,
     );
   }
 
@@ -75,6 +79,7 @@ class DefinitionIdListStateNotifierFamily
       provider.definitionFeedType,
       wordId: provider.wordId,
       targetUserId: provider.targetUserId,
+      initialSubGroup: provider.initialSubGroup,
     );
   }
 
@@ -101,11 +106,13 @@ class DefinitionIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
     DefinitionFeedType definitionFeedType, {
     String? wordId,
     String? targetUserId,
+    InitialSubGroup? initialSubGroup,
   }) : this._internal(
           () => DefinitionIdListStateNotifier()
             ..definitionFeedType = definitionFeedType
             ..wordId = wordId
-            ..targetUserId = targetUserId,
+            ..targetUserId = targetUserId
+            ..initialSubGroup = initialSubGroup,
           from: definitionIdListStateNotifierProvider,
           name: r'definitionIdListStateNotifierProvider',
           debugGetCreateSourceHash:
@@ -118,6 +125,7 @@ class DefinitionIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
           definitionFeedType: definitionFeedType,
           wordId: wordId,
           targetUserId: targetUserId,
+          initialSubGroup: initialSubGroup,
         );
 
   DefinitionIdListStateNotifierProvider._internal(
@@ -130,11 +138,13 @@ class DefinitionIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
     required this.definitionFeedType,
     required this.wordId,
     required this.targetUserId,
+    required this.initialSubGroup,
   }) : super.internal();
 
   final DefinitionFeedType definitionFeedType;
   final String? wordId;
   final String? targetUserId;
+  final InitialSubGroup? initialSubGroup;
 
   @override
   FutureOr<DefinitionIdListState> runNotifierBuild(
@@ -144,6 +154,7 @@ class DefinitionIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
       definitionFeedType,
       wordId: wordId,
       targetUserId: targetUserId,
+      initialSubGroup: initialSubGroup,
     );
   }
 
@@ -155,7 +166,8 @@ class DefinitionIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
         () => create()
           ..definitionFeedType = definitionFeedType
           ..wordId = wordId
-          ..targetUserId = targetUserId,
+          ..targetUserId = targetUserId
+          ..initialSubGroup = initialSubGroup,
         from: from,
         name: null,
         dependencies: null,
@@ -164,6 +176,7 @@ class DefinitionIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
         definitionFeedType: definitionFeedType,
         wordId: wordId,
         targetUserId: targetUserId,
+        initialSubGroup: initialSubGroup,
       ),
     );
   }
@@ -179,7 +192,8 @@ class DefinitionIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
     return other is DefinitionIdListStateNotifierProvider &&
         other.definitionFeedType == definitionFeedType &&
         other.wordId == wordId &&
-        other.targetUserId == targetUserId;
+        other.targetUserId == targetUserId &&
+        other.initialSubGroup == initialSubGroup;
   }
 
   @override
@@ -188,6 +202,7 @@ class DefinitionIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
     hash = _SystemHash.combine(hash, definitionFeedType.hashCode);
     hash = _SystemHash.combine(hash, wordId.hashCode);
     hash = _SystemHash.combine(hash, targetUserId.hashCode);
+    hash = _SystemHash.combine(hash, initialSubGroup.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -203,6 +218,9 @@ mixin DefinitionIdListStateNotifierRef
 
   /// The parameter `targetUserId` of this provider.
   String? get targetUserId;
+
+  /// The parameter `initialSubGroup` of this provider.
+  InitialSubGroup? get initialSubGroup;
 }
 
 class _DefinitionIdListStateNotifierProviderElement
@@ -219,6 +237,9 @@ class _DefinitionIdListStateNotifierProviderElement
   @override
   String? get targetUserId =>
       (origin as DefinitionIdListStateNotifierProvider).targetUserId;
+  @override
+  InitialSubGroup? get initialSubGroup =>
+      (origin as DefinitionIdListStateNotifierProvider).initialSubGroup;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

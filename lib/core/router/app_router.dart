@@ -16,11 +16,13 @@ import '../../feature/user_profile/presentation/page/following_and_follower_list
 import '../../feature/user_profile/presentation/page/like_user_page.dart/like_user_page.dart';
 import '../../feature/user_profile/presentation/page/profile/profile_page.dart';
 import '../../feature/word/presentation/page/everyone_dictionary/everyone_dictionary_page.dart';
-import '../../feature/word/presentation/page/index_second/index_second_page.dart';
 import '../../feature/word/presentation/page/individual_dictionary/individual_dictionary_page.dart';
+import '../../feature/word/presentation/page/individual_dictionary_definition_list/individual_dictionary_definition_list.dart';
+import '../../feature/word/presentation/page/initial_sub_group_index/initial_sub_group_index_page.dart';
 import '../../feature/word/presentation/page/search_word_result/search_word_result_page.dart';
 import '../../feature/word/presentation/page/word_list/word_list_page.dart';
 import '../../feature/word/presentation/page/word_top/word_top_page.dart';
+import '../../feature/word/util/dictionary_page_type.dart';
 import '../../util/constant/initial_main_group.dart';
 
 part 'app_router.g.dart';
@@ -52,6 +54,14 @@ class AppRouter extends _$AppRouter {
     AutoRoute(
       path: 'following_and_follower_list',
       page: FollowingAndFollowerListRoute.page,
+    ),
+    AutoRoute(
+      path: 'initial_sub_group_index',
+      page: InitialSubGroupIndexRoute.page,
+    ),
+    AutoRoute(
+      path: 'individual_dictionary_definition_list',
+      page: IndividualDictionaryDefinitionListRoute.page,
     ),
   ];
 
@@ -94,10 +104,6 @@ class AppRouter extends _$AppRouter {
                 AutoRoute(
                   initial: true,
                   page: EveryoneDictionaryRoute.page,
-                ),
-                AutoRoute(
-                  path: 'index_second',
-                  page: IndexSecondRoute.page,
                 ),
                 AutoRoute(
                   path: 'word_list',

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common_widget/cupertino_refresh_indicator.dart';
 import '../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
+import '../../../../util/constant/initial_main_group.dart';
 import '../../../../util/logger.dart';
 import '../../application/definition_id_list_state.dart';
 import '../../util/definition_feed_type.dart';
@@ -16,11 +17,13 @@ class DefinitionList extends ConsumerWidget {
     required this.definitionFeedType,
     this.wordId,
     this.targetUserId,
+    this.initialSubGroup,
   });
 
   final DefinitionFeedType definitionFeedType;
   final String? wordId;
   final String? targetUserId;
+  final InitialSubGroup? initialSubGroup;
 
   final scrollController = ScrollController();
   // エラーが発生してリビルドした際、スクロール位置を保持するためのキー
@@ -33,6 +36,7 @@ class DefinitionList extends ConsumerWidget {
         definitionFeedType,
         wordId: wordId,
         targetUserId: targetUserId,
+        initialSubGroup: initialSubGroup,
       ),
     );
 
@@ -50,6 +54,7 @@ class DefinitionList extends ConsumerWidget {
                       definitionFeedType,
                       wordId: wordId,
                       targetUserId: targetUserId,
+                      initialSubGroup: initialSubGroup,
                     ).notifier,
                   )
                   .fetchMore();
@@ -70,6 +75,7 @@ class DefinitionList extends ConsumerWidget {
                         definitionFeedType,
                         wordId: wordId,
                         targetUserId: targetUserId,
+                        initialSubGroup: initialSubGroup,
                       ),
                     );
                   },

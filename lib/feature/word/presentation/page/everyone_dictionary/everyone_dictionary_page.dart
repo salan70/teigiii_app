@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget/button/to_setting_button.dart';
+import '../../../util/dictionary_page_type.dart';
 import '../../component/initial_main_group_list.dart';
 import '../../component/word_search_text_field.dart';
 
@@ -38,7 +39,10 @@ class EveryoneDictionaryPage extends StatelessWidget {
                 child: WordSearchTextField(),
               ),
               SizedBox(height: 8),
-              InitialMainGroupList(),
+              InitialMainGroupList(
+                dictionaryPageType: DictionaryPageType.everyone,
+                targetUserId: null,
+              ),
             ],
           ),
         ),

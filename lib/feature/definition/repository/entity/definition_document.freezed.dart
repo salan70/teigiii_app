@@ -18,6 +18,10 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DefinitionDocument {
   String get id => throw _privateConstructorUsedError;
   String get wordId => throw _privateConstructorUsedError;
+  String get word => throw _privateConstructorUsedError;
+  String get wordReading => throw _privateConstructorUsedError;
+  String get wordReadingInitialSubGroupLabel =>
+      throw _privateConstructorUsedError;
   String get authorId => throw _privateConstructorUsedError;
   String get definition => throw _privateConstructorUsedError;
   int get likesCount => throw _privateConstructorUsedError;
@@ -40,6 +44,9 @@ abstract class $DefinitionDocumentCopyWith<$Res> {
   $Res call(
       {String id,
       String wordId,
+      String word,
+      String wordReading,
+      String wordReadingInitialSubGroupLabel,
       String authorId,
       String definition,
       int likesCount,
@@ -64,6 +71,9 @@ class _$DefinitionDocumentCopyWithImpl<$Res, $Val extends DefinitionDocument>
   $Res call({
     Object? id = null,
     Object? wordId = null,
+    Object? word = null,
+    Object? wordReading = null,
+    Object? wordReadingInitialSubGroupLabel = null,
     Object? authorId = null,
     Object? definition = null,
     Object? likesCount = null,
@@ -80,6 +90,18 @@ class _$DefinitionDocumentCopyWithImpl<$Res, $Val extends DefinitionDocument>
       wordId: null == wordId
           ? _value.wordId
           : wordId // ignore: cast_nullable_to_non_nullable
+              as String,
+      word: null == word
+          ? _value.word
+          : word // ignore: cast_nullable_to_non_nullable
+              as String,
+      wordReading: null == wordReading
+          ? _value.wordReading
+          : wordReading // ignore: cast_nullable_to_non_nullable
+              as String,
+      wordReadingInitialSubGroupLabel: null == wordReadingInitialSubGroupLabel
+          ? _value.wordReadingInitialSubGroupLabel
+          : wordReadingInitialSubGroupLabel // ignore: cast_nullable_to_non_nullable
               as String,
       authorId: null == authorId
           ? _value.authorId
@@ -124,6 +146,9 @@ abstract class _$$_DefinitionDocumentCopyWith<$Res>
   $Res call(
       {String id,
       String wordId,
+      String word,
+      String wordReading,
+      String wordReadingInitialSubGroupLabel,
       String authorId,
       String definition,
       int likesCount,
@@ -146,6 +171,9 @@ class __$$_DefinitionDocumentCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? wordId = null,
+    Object? word = null,
+    Object? wordReading = null,
+    Object? wordReadingInitialSubGroupLabel = null,
     Object? authorId = null,
     Object? definition = null,
     Object? likesCount = null,
@@ -162,6 +190,18 @@ class __$$_DefinitionDocumentCopyWithImpl<$Res>
       wordId: null == wordId
           ? _value.wordId
           : wordId // ignore: cast_nullable_to_non_nullable
+              as String,
+      word: null == word
+          ? _value.word
+          : word // ignore: cast_nullable_to_non_nullable
+              as String,
+      wordReading: null == wordReading
+          ? _value.wordReading
+          : wordReading // ignore: cast_nullable_to_non_nullable
+              as String,
+      wordReadingInitialSubGroupLabel: null == wordReadingInitialSubGroupLabel
+          ? _value.wordReadingInitialSubGroupLabel
+          : wordReadingInitialSubGroupLabel // ignore: cast_nullable_to_non_nullable
               as String,
       authorId: null == authorId
           ? _value.authorId
@@ -201,6 +241,9 @@ class _$_DefinitionDocument implements _DefinitionDocument {
   const _$_DefinitionDocument(
       {required this.id,
       required this.wordId,
+      required this.word,
+      required this.wordReading,
+      required this.wordReadingInitialSubGroupLabel,
       required this.authorId,
       required this.definition,
       required this.likesCount,
@@ -213,6 +256,12 @@ class _$_DefinitionDocument implements _DefinitionDocument {
   final String id;
   @override
   final String wordId;
+  @override
+  final String word;
+  @override
+  final String wordReading;
+  @override
+  final String wordReadingInitialSubGroupLabel;
   @override
   final String authorId;
   @override
@@ -230,7 +279,7 @@ class _$_DefinitionDocument implements _DefinitionDocument {
 
   @override
   String toString() {
-    return 'DefinitionDocument(id: $id, wordId: $wordId, authorId: $authorId, definition: $definition, likesCount: $likesCount, isPublic: $isPublic, isEdited: $isEdited, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'DefinitionDocument(id: $id, wordId: $wordId, word: $word, wordReading: $wordReading, wordReadingInitialSubGroupLabel: $wordReadingInitialSubGroupLabel, authorId: $authorId, definition: $definition, likesCount: $likesCount, isPublic: $isPublic, isEdited: $isEdited, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -240,6 +289,13 @@ class _$_DefinitionDocument implements _DefinitionDocument {
             other is _$_DefinitionDocument &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.wordId, wordId) || other.wordId == wordId) &&
+            (identical(other.word, word) || other.word == word) &&
+            (identical(other.wordReading, wordReading) ||
+                other.wordReading == wordReading) &&
+            (identical(other.wordReadingInitialSubGroupLabel,
+                    wordReadingInitialSubGroupLabel) ||
+                other.wordReadingInitialSubGroupLabel ==
+                    wordReadingInitialSubGroupLabel) &&
             (identical(other.authorId, authorId) ||
                 other.authorId == authorId) &&
             (identical(other.definition, definition) ||
@@ -257,8 +313,20 @@ class _$_DefinitionDocument implements _DefinitionDocument {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, wordId, authorId, definition,
-      likesCount, isPublic, isEdited, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      wordId,
+      word,
+      wordReading,
+      wordReadingInitialSubGroupLabel,
+      authorId,
+      definition,
+      likesCount,
+      isPublic,
+      isEdited,
+      createdAt,
+      updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -272,6 +340,9 @@ abstract class _DefinitionDocument implements DefinitionDocument {
   const factory _DefinitionDocument(
       {required final String id,
       required final String wordId,
+      required final String word,
+      required final String wordReading,
+      required final String wordReadingInitialSubGroupLabel,
       required final String authorId,
       required final String definition,
       required final int likesCount,
@@ -284,6 +355,12 @@ abstract class _DefinitionDocument implements DefinitionDocument {
   String get id;
   @override
   String get wordId;
+  @override
+  String get word;
+  @override
+  String get wordReading;
+  @override
+  String get wordReadingInitialSubGroupLabel;
   @override
   String get authorId;
   @override

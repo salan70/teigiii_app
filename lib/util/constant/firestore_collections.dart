@@ -19,6 +19,7 @@ class DefinitionsCollection {
   // Field
   static const wordId = 'wordId';
   static const word = 'word';
+  static const wordReading = 'wordReading';
   static const wordReadingInitialSubGroupLabel =
       'wordReadingInitialSubGroupLabel';
   static const authorId = 'authorId';
