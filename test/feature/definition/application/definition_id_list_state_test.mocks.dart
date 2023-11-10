@@ -452,6 +452,51 @@ class MockFetchDefinitionRepository extends _i1.Mock
           ) as _i12.Future<_i3.DefinitionIdListState>);
 
   @override
+  _i12.Future<_i3.DefinitionIdListState> fetchLikedByUserDefinitionIdListState(
+    String? currentUserId,
+    String? targetUserId,
+    List<String>? mutedUserIdList,
+    _i2.QueryDocumentSnapshot<Object?>? initialLastDocument,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchLikedByUserDefinitionIdListState,
+          [
+            currentUserId,
+            targetUserId,
+            mutedUserIdList,
+            initialLastDocument,
+          ],
+        ),
+        returnValue: _i12.Future<_i3.DefinitionIdListState>.value(
+            _FakeDefinitionIdListState_1(
+          this,
+          Invocation.method(
+            #fetchLikedByUserDefinitionIdListState,
+            [
+              currentUserId,
+              targetUserId,
+              mutedUserIdList,
+              initialLastDocument,
+            ],
+          ),
+        )),
+        returnValueForMissingStub: _i12.Future<_i3.DefinitionIdListState>.value(
+            _FakeDefinitionIdListState_1(
+          this,
+          Invocation.method(
+            #fetchLikedByUserDefinitionIdListState,
+            [
+              currentUserId,
+              targetUserId,
+              mutedUserIdList,
+              initialLastDocument,
+            ],
+          ),
+        )),
+      ) as _i12.Future<_i3.DefinitionIdListState>);
+
+  @override
   _i12.Future<_i4.DefinitionDocument> fetchDefinition(String? definitionId) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -483,7 +528,7 @@ class MockFetchDefinitionRepository extends _i1.Mock
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchFavoriteUserIdList,
+          #fetchLikedUserIdList,
           [
             definitionId,
             lastDocument,
@@ -493,7 +538,7 @@ class MockFetchDefinitionRepository extends _i1.Mock
             _i12.Future<_i5.UserIdListState>.value(_FakeUserIdListState_3(
           this,
           Invocation.method(
-            #fetchFavoriteUserIdList,
+            #fetchLikedUserIdList,
             [
               definitionId,
               lastDocument,
@@ -504,7 +549,7 @@ class MockFetchDefinitionRepository extends _i1.Mock
             _i12.Future<_i5.UserIdListState>.value(_FakeUserIdListState_3(
           this,
           Invocation.method(
-            #fetchFavoriteUserIdList,
+            #fetchLikedUserIdList,
             [
               definitionId,
               lastDocument,

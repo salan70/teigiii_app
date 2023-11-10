@@ -2,11 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../core/common_widget/avatar_icon_widget.dart';
 import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
 import '../../../../../core/common_widget/button/secondary_filled_button.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../auth/application/auth_state.dart';
-import '../../../../definition/presentation/component/avatar_icon_widget.dart';
 import '../../../application/user_profile_state.dart';
 import 'profile_widget_shimmer.dart';
 

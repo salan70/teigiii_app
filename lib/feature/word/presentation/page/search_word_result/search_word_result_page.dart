@@ -8,8 +8,8 @@ import '../../../../../../core/common_widget/cupertino_refresh_indicator.dart';
 import '../../../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
 import '../../../../../../util/logger.dart';
 import '../../../application/word_list_state_by_search_word.dart';
+import '../../component/word_search_text_field.dart';
 import '../../component/word_tile.dart';
-import '../index_top/word_search_text_field.dart';
 
 @RoutePage()
 class SearchWordResultPage extends ConsumerWidget {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../component/initial_main_group_list.dart';
-import 'word_search_text_field.dart';
+import '../../component/word_search_text_field.dart';
 
 @RoutePage()
 class IndexTopRouterPage extends AutoRouter {

@@ -108,6 +108,22 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const MutedUserListPage(),
       );
     },
+    MyDictionaryRoute.name: (routeData) {
+      final args = routeData.argsAs<MyDictionaryRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: MyDictionaryPage(
+          key: args.key,
+          targetUserId: args.targetUserId,
+        ),
+      );
+    },
+    MyDictionaryRouterRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const MyDictionaryRouterPage(),
+      );
+    },
     MyLicenseRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -134,12 +150,6 @@ abstract class _$AppRouter extends RootStackRouter {
           targetUserId: args.targetUserId,
           isHome: args.isHome,
         ),
-      );
-    },
-    ProfileRouterRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ProfileRouterPage(),
       );
     },
     SearchWordResultRoute.name: (routeData) {
@@ -482,6 +492,58 @@ class MutedUserListRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [MyDictionaryPage]
+class MyDictionaryRoute extends PageRouteInfo<MyDictionaryRouteArgs> {
+  MyDictionaryRoute({
+    Key? key,
+    required String targetUserId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          MyDictionaryRoute.name,
+          args: MyDictionaryRouteArgs(
+            key: key,
+            targetUserId: targetUserId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'MyDictionaryRoute';
+
+  static const PageInfo<MyDictionaryRouteArgs> page =
+      PageInfo<MyDictionaryRouteArgs>(name);
+}
+
+class MyDictionaryRouteArgs {
+  const MyDictionaryRouteArgs({
+    this.key,
+    required this.targetUserId,
+  });
+
+  final Key? key;
+
+  final String targetUserId;
+
+  @override
+  String toString() {
+    return 'MyDictionaryRouteArgs{key: $key, targetUserId: $targetUserId}';
+  }
+}
+
+/// generated route for
+/// [MyDictionaryRouterPage]
+class MyDictionaryRouterRoute extends PageRouteInfo<void> {
+  const MyDictionaryRouterRoute({List<PageRouteInfo>? children})
+      : super(
+          MyDictionaryRouterRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MyDictionaryRouterRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [MyLicensePage]
 class MyLicenseRoute extends PageRouteInfo<void> {
   const MyLicenseRoute({List<PageRouteInfo>? children})
@@ -579,20 +641,6 @@ class ProfileRouteArgs {
   String toString() {
     return 'ProfileRouteArgs{key: $key, targetUserId: $targetUserId, isHome: $isHome}';
   }
-}
-
-/// generated route for
-/// [ProfileRouterPage]
-class ProfileRouterRoute extends PageRouteInfo<void> {
-  const ProfileRouterRoute({List<PageRouteInfo>? children})
-      : super(
-          ProfileRouterRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'ProfileRouterRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

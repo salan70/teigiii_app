@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common_widget/adaptive_overflow_text.dart';
+import '../../../../core/common_widget/avatar_icon_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../../../util/logger.dart';
 import '../../application/definition_state.dart';
-import 'avatar_icon_widget.dart';
 import 'definition_tile_shimmer.dart';
 import 'like_widget.dart';
 

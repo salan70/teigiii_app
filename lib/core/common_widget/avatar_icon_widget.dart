@@ -5,7 +5,7 @@ class AvatarIconWidget extends StatelessWidget {
   const AvatarIconWidget({
     super.key,
     required this.imageUrl,
-    this.avatarSize = AvatarSize.small,
+    this.avatarSize = AvatarSize.medium,
   });
 
   final String imageUrl;
@@ -32,12 +32,15 @@ class AvatarIconWidget extends StatelessWidget {
 
 enum AvatarSize {
   small,
+  medium,
   large;
 
   /// [AvatarSize]に応じた直径を返す
   double get diameter {
     switch (this) {
       case AvatarSize.small:
+        return 32;
+      case AvatarSize.medium:
         return 48;
       case AvatarSize.large:
         return 72;

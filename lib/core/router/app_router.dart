@@ -17,6 +17,7 @@ import '../../feature/user_profile/presentation/page/like_user_page.dart/like_us
 import '../../feature/user_profile/presentation/page/profile/profile_page.dart';
 import '../../feature/word/presentation/page/index_second/index_second_page.dart';
 import '../../feature/word/presentation/page/index_top/index_top_page.dart';
+import '../../feature/word/presentation/page/my_dictionary/my_dictionary_page.dart';
 import '../../feature/word/presentation/page/search_word_result/search_word_result_page.dart';
 import '../../feature/word/presentation/page/word_list/word_list_page.dart';
 import '../../feature/word/presentation/page/word_top/word_top_page.dart';
@@ -31,6 +32,25 @@ Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter();
 // TODO(me): 一部Routeのpathにidを含める
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends _$AppRouter {
+  final List<AutoRoute> commonRouteList = [
+    AutoRoute(
+      path: 'definition_detail',
+      page: DefinitionDetailRoute.page,
+    ),
+    AutoRoute(
+      path: 'like_user_list',
+      page: LikeUserRoute.page,
+    ),
+    AutoRoute(
+      path: 'word_top',
+      page: WordTopRoute.page,
+    ),
+    AutoRoute(
+      path: 'following_and_follower_list',
+      page: FollowingAndFollowerListRoute.page,
+    ),
+  ];
+
   @override
   List<AutoRoute> get routes => [
         AutoRoute(
@@ -46,51 +66,21 @@ class AppRouter extends _$AppRouter {
                   page: HomeRoute.page,
                 ),
                 AutoRoute(
-                  path: 'definition_detail',
-                  page: DefinitionDetailRoute.page,
-                ),
-                AutoRoute(
-                  path: 'like_user_list',
-                  page: LikeUserRoute.page,
-                ),
-                AutoRoute(
-                  path: 'word_top',
-                  page: WordTopRoute.page,
-                ),
-                AutoRoute(
                   path: 'profile',
                   page: ProfileRoute.page,
                 ),
-                AutoRoute(
-                  path: 'following_and_follower_list',
-                  page: FollowingAndFollowerListRoute.page,
-                ),
+                ...commonRouteList,
               ],
             ),
             AutoRoute(
-              path: 'profile',
-              page: ProfileRouterRoute.page,
+              path: 'my_dictionary',
+              page: MyDictionaryRouterRoute.page,
               children: [
                 AutoRoute(
                   initial: true,
-                  page: ProfileRoute.page,
+                  page: MyDictionaryRoute.page,
                 ),
-                AutoRoute(
-                  path: 'definition_detail',
-                  page: DefinitionDetailRoute.page,
-                ),
-                AutoRoute(
-                  path: 'like_user_list',
-                  page: LikeUserRoute.page,
-                ),
-                AutoRoute(
-                  path: 'word_top',
-                  page: WordTopRoute.page,
-                ),
-                AutoRoute(
-                  path: 'following_and_follower_list',
-                  page: FollowingAndFollowerListRoute.page,
-                ),
+                ...commonRouteList,
               ],
             ),
             AutoRoute(
@@ -114,25 +104,10 @@ class AppRouter extends _$AppRouter {
                   page: SearchWordResultRoute.page,
                 ),
                 AutoRoute(
-                  path: 'definition_detail',
-                  page: DefinitionDetailRoute.page,
-                ),
-                AutoRoute(
-                  path: 'like_user_list',
-                  page: LikeUserRoute.page,
-                ),
-                AutoRoute(
-                  path: 'word_top',
-                  page: WordTopRoute.page,
-                ),
-                AutoRoute(
                   path: 'profile',
                   page: ProfileRoute.page,
                 ),
-                AutoRoute(
-                  path: 'following_and_follower_list',
-                  page: FollowingAndFollowerListRoute.page,
-                ),
+                ...commonRouteList,
               ],
             ),
           ],

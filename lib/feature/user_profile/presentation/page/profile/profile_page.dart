@@ -16,11 +16,6 @@ import '../../../application/user_profile_state.dart';
 import 'profile_widget.dart';
 
 @RoutePage()
-class ProfileRouterPage extends AutoRouter {
-  const ProfileRouterPage({super.key});
-}
-
-@RoutePage()
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({
     super.key,
