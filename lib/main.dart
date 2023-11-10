@@ -79,7 +79,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       routerConfig: ref.watch(appRouterProvider).config(),
       scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
       theme: ThemeData(
-        fontFamily: 'LINESeedJP',
+        fontFamily: lineFontFamily,
         colorScheme: lightColorScheme,
         textTheme: textTheme,
         appBarTheme: AppBarTheme(
@@ -103,6 +103,19 @@ class _MyAppState extends ConsumerState<MyApp> {
               Theme.of(context).colorScheme.primary,
             ),
           ),
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          selectedItemColor: lightColorScheme.primary,
+          selectedLabelStyle: const TextStyle(
+            fontFamily: lineFontFamily,
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontFamily: lineFontFamily,
+          ),
+          elevation: 0.1,
         ),
         tabBarTheme: lightTabBarTheme,
         scaffoldBackgroundColor: lightColorScheme.surface,

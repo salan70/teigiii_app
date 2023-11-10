@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const lineFontFamily = 'LINESeedJP';
+
 const textTheme = TextTheme(
   titleLarge: TextStyle(
     fontWeight: FontWeight.bold,
