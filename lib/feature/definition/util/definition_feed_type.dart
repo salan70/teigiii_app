@@ -1,15 +1,21 @@
 enum DefinitionFeedType {
-  /// ホーム画面のおすすめタブ
+  /// ホーム画面: おすすめタブ
   homeRecommend,
 
-  /// ホーム画面のフォロー中タブ
+  /// ホーム画面: フォロー中タブ
   homeFollowing,
 
-  /// 語句毎の定義一覧画面の新着順
+  /// 語句毎の定義一覧画面: 投稿順
   wordTopOrderByCreatedAt,
 
-  /// 語句毎の定義一覧画面のいいね順
+  /// 語句毎の定義一覧画面: いいね順
   wordTopOrderByLikesCount,
+
+  /// プロフィール画面: 投稿順
+  profileOrderByCreatedAt,
+
+  /// プロフィール画面: いいね
+  profileLiked,
 
   // TODO(me): 以下はそれぞれ必要な画面実装時に追加する
   // ソート系と画面系それぞれのenumを作るのがいいかも

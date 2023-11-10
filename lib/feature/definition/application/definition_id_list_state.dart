@@ -5,7 +5,7 @@ import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_profile/application/user_profile_state.dart';
 import '../domain/definition_id_list_state.dart';
-import '../repository/definition_repository.dart';
+import '../repository/fetch_definition_repository.dart';
 import '../util/definition_feed_type.dart';
 
 part 'definition_id_list_state.g.dart';
@@ -17,6 +17,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
   FutureOr<DefinitionIdListState> build(
     DefinitionFeedType definitionFeedType, {
     String? wordId,
+    String? targetUserId,
   }) async {
     // ミュートユーザーが更新されるたびに、本Notifierも更新されるよう監視
     ref.watch(mutedUserIdListProvider);
@@ -36,7 +37,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
     return ref
-        .watch(definitionRepositoryProvider)
+        .watch(fetchDefinitionRepositoryProvider)
         .fetchHomeRecommendDefinitionIdListState(
           currentUserId,
           mutedUserIdList,
@@ -67,7 +68,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
     return ref
-        .read(definitionRepositoryProvider)
+        .read(fetchDefinitionRepositoryProvider)
         .fetchHomeFollowingDefinitionIdListState(
           currentUserId,
           targetUserIdList,
@@ -75,25 +76,77 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         );
   }
 
-  /// 「Wordトップ画面: 新着順タブ」で表示するDefinitionIDのListを取得する
+  /// 「Wordトップ画面: 投稿順タブ」で表示するDefinitionIDのListを取得する
   ///
   /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
   Future<DefinitionIdListState> _fetchForWordTop(
     WordTopOrderByType orderByType, {
     required bool isFirstFetch,
   }) async {
+    if (wordId == null) {
+      throw ArgumentError('wordIdがnullです');
+    }
+
     final currentUserId = ref.read(userIdProvider)!;
     final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
     final lastDoc =
         isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
     return ref
-        .watch(definitionRepositoryProvider)
+        .watch(fetchDefinitionRepositoryProvider)
         .fetchWordTopDefinitionIdListState(
           orderByType,
           currentUserId,
           mutedUserIdList,
           wordId!,
+          lastDoc,
+        );
+  }
+
+  /// 「プロフィール画面: 投稿順タブ」で表示するDefinitionIDのListを取得する
+  ///
+  /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
+  Future<DefinitionIdListState> _fetchForProfileCreatedAt({
+    required bool isFirstFetch,
+  }) async {
+    if (targetUserId == null) {
+      throw ArgumentError('targetUserIdがnullです');
+    }
+
+    final currentUserId = ref.read(userIdProvider)!;
+    final lastDoc =
+        isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
+
+    return ref
+        .watch(fetchDefinitionRepositoryProvider)
+        .fetchProfileCreatedAtDefinitionIdListState(
+          currentUserId,
+          targetUserId!,
+          lastDoc,
+        );
+  }
+
+  /// 「プロフィール画面: いいねタブ」で表示するDefinitionIDのListを取得する
+  ///
+  /// 初回取得時（buildメソットのみの想定）は、[isFirstFetch]をtrueにすること
+  Future<DefinitionIdListState> _fetchForProfileLiked({
+    required bool isFirstFetch,
+  }) async {
+    if (targetUserId == null) {
+      throw ArgumentError('targetUserIdがnullです');
+    }
+
+    final currentUserId = ref.read(userIdProvider)!;
+    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
+    final lastDoc =
+        isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
+
+    return ref
+        .watch(fetchDefinitionRepositoryProvider)
+        .fetchLikedByUserDefinitionIdListState(
+          currentUserId,
+          targetUserId!,
+          mutedUserIdList,
           lastDoc,
         );
   }
@@ -122,24 +175,22 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         return _fetchForHomeFollowing(isFirstFetch: isFirstFetch);
 
       case DefinitionFeedType.wordTopOrderByCreatedAt:
-        if (wordId == null) {
-          throw ArgumentError('wordIdがnullです');
-        }
-
         return _fetchForWordTop(
           WordTopOrderByType.createdAt,
           isFirstFetch: isFirstFetch,
         );
 
       case DefinitionFeedType.wordTopOrderByLikesCount:
-        if (wordId == null) {
-          throw ArgumentError('wordIdがnullです');
-        }
-
         return _fetchForWordTop(
           WordTopOrderByType.likesCount,
           isFirstFetch: isFirstFetch,
         );
+
+      case DefinitionFeedType.profileOrderByCreatedAt:
+        return _fetchForProfileCreatedAt(isFirstFetch: isFirstFetch);
+
+      case DefinitionFeedType.profileLiked:
+        return _fetchForProfileLiked(isFirstFetch: isFirstFetch);
     }
   }
 }

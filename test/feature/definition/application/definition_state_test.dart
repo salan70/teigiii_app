@@ -5,7 +5,8 @@ import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition/application/definition_state.dart';
 import 'package:teigi_app/feature/definition/domain/definition.dart';
-import 'package:teigi_app/feature/definition/repository/definition_repository.dart';
+import 'package:teigi_app/feature/definition/repository/fetch_definition_repository.dart';
+import 'package:teigi_app/feature/definition/repository/write_definition_repository.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
 import 'package:teigi_app/feature/word/repository/word_repository.dart';
 
@@ -13,7 +14,8 @@ import '../../../mock/mock_data.dart';
 import 'definition_state_test.mocks.dart';
 
 @GenerateNiceMocks([
-  MockSpec<DefinitionRepository>(),
+  MockSpec<WriteDefinitionRepository>(),
+  MockSpec<FetchDefinitionRepository>(),
   MockSpec<UserProfileRepository>(),
   MockSpec<WordRepository>(),
   MockSpec<Listener<AsyncValue<Definition>>>(),
@@ -26,7 +28,8 @@ abstract class Listener<T> {
 }
 
 void main() {
-  final mockDefinitionRepository = MockDefinitionRepository();
+  final mockWriteDefinitionRepository = MockWriteDefinitionRepository();
+  final mockFetchDefinitionRepository = MockFetchDefinitionRepository();
   final mockUserProfileRepository = MockUserProfileRepository();
   final mockWordRepository = MockWordRepository();
   final listener = MockListener();
@@ -37,8 +40,10 @@ void main() {
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => 'userId'),
-        definitionRepositoryProvider
-            .overrideWithValue(mockDefinitionRepository),
+        writeDefinitionRepositoryProvider
+            .overrideWithValue(mockWriteDefinitionRepository),
+        fetchDefinitionRepositoryProvider
+            .overrideWithValue(mockFetchDefinitionRepository),
         userProfileRepositoryProvider
             .overrideWithValue(mockUserProfileRepository),
         wordRepositoryProvider.overrideWithValue(mockWordRepository),
@@ -48,7 +53,7 @@ void main() {
   });
 
   tearDown(() {
-    reset(mockDefinitionRepository);
+    reset(mockWriteDefinitionRepository);
     reset(mockUserProfileRepository);
     reset(mockWordRepository);
   });
@@ -58,7 +63,7 @@ void main() {
       // * Arrange
       // Mockの設定
       when(
-        mockDefinitionRepository.fetchDefinition(any),
+        mockFetchDefinitionRepository.fetchDefinition(any),
       ).thenAnswer((_) async => mockDefinitionDoc);
       when(
         mockWordRepository.fetchWordById(any),
@@ -68,7 +73,7 @@ void main() {
       ).thenAnswer((_) async => mockUserProfileDoc);
       const isLikedByUser = true;
       when(
-        mockDefinitionRepository.isLikedByUser(any, any),
+        mockWriteDefinitionRepository.isLikedByUser(any, any),
       ).thenAnswer((_) async => isLikedByUser);
 
       container.listen(
@@ -116,7 +121,7 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockDefinitionRepository.fetchDefinition(mockDefinitionDoc.id),
+        mockFetchDefinitionRepository.fetchDefinition(mockDefinitionDoc.id),
       ).called(1);
       verify(
         mockWordRepository.fetchWordById(mockDefinitionDoc.wordId),
@@ -125,7 +130,7 @@ void main() {
         mockUserProfileRepository.fetchUserProfile(mockDefinitionDoc.authorId),
       ).called(1);
       verify(
-        mockDefinitionRepository.isLikedByUser(
+        mockWriteDefinitionRepository.isLikedByUser(
           any,
           mockDefinitionDoc.id,
         ),

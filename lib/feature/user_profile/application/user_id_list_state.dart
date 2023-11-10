@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../util/mixin/fetch_more_mixin.dart';
-import '../../definition/repository/definition_repository.dart';
+import '../../definition/repository/fetch_definition_repository.dart';
 import '../domain/user_id_list_state.dart';
 import '../repository/user_follow_repository.dart';
 import '../util/profile_feed_type.dart';
@@ -64,7 +64,7 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
         if (targetDefinitionId == null) {
           throw ArgumentError('targetDefinitionIdがnullです');
         }
-        return ref.read(definitionRepositoryProvider).fetchFavoriteUserIdList(
+        return ref.read(fetchDefinitionRepositoryProvider).fetchLikedUserIdList(
               targetDefinitionId!,
               lastDocument,
             );

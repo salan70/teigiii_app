@@ -4,7 +4,8 @@ import '../../auth/application/auth_state.dart';
 import '../../user_profile/repository/user_profile_repository.dart';
 import '../../word/repository/word_repository.dart';
 import '../domain/definition.dart';
-import '../repository/definition_repository.dart';
+import '../repository/fetch_definition_repository.dart';
+import '../repository/write_definition_repository.dart';
 
 part 'definition_state.g.dart';
 
@@ -13,7 +14,7 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
   final userId = ref.read(userIdProvider)!;
 
   final definitionDoc = await ref
-      .read(definitionRepositoryProvider)
+      .read(fetchDefinitionRepositoryProvider)
       .fetchDefinition(definitionId);
 
   final wordDoc = await ref
@@ -25,7 +26,7 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
       .fetchUserProfile(definitionDoc.authorId);
 
   final isLikedByUser = await ref
-      .read(definitionRepositoryProvider)
+      .read(writeDefinitionRepositoryProvider)
       .isLikedByUser(userId, definitionDoc.id);
 
   return Definition(

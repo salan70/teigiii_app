@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/button/to_setting_button.dart';
+import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
 import '../../../util/definition_feed_type.dart';
 import '../../component/definition_list.dart';
 
@@ -19,30 +20,44 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('ホーム'),
-          leading: const ToSettingButton(),
-          bottom: TabBar(
-            labelStyle: Theme.of(context).textTheme.titleMedium,
-            indicatorWeight: 3,
-            tabs: const <Widget>[
-              Tab(text: 'おすすめ'),
-              Tab(text: 'フォロー中'),
-            ],
+      child: SafeArea(
+        child: Scaffold(
+          body: NestedScrollView(
+            headerSliverBuilder: (BuildContext context, bool _) {
+              return <Widget>[
+                const SliverAppBar(
+                  elevation: 0,
+                  title: Text('ホーム'),
+                  leading: ToSettingButton(),
+                ),
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: StickyTabBarDelegate(
+                    tabBar: TabBar(
+                      labelStyle: Theme.of(context).textTheme.titleMedium,
+                      indicatorWeight: 3,
+                      tabs: const [
+                        Tab(text: 'おすすめ'),
+                        Tab(text: 'フォロー中'),
+                      ],
+                    ),
+                  ),
+                ),
+              ];
+            },
+            body: TabBarView(
+              children: <Widget>[
+                DefinitionList(
+                  definitionFeedType: DefinitionFeedType.homeRecommend,
+                ),
+                DefinitionList(
+                  definitionFeedType: DefinitionFeedType.homeFollowing,
+                ),
+              ],
+            ),
           ),
+          floatingActionButton: const PostDefinitionFAB(definition: null),
         ),
-        body: TabBarView(
-          children: <Widget>[
-            DefinitionList(
-              definitionFeedType: DefinitionFeedType.homeRecommend,
-            ),
-            DefinitionList(
-              definitionFeedType: DefinitionFeedType.homeFollowing,
-            ),
-          ],
-        ),
-        floatingActionButton: const PostDefinitionFAB(definition: null),
       ),
     );
   }

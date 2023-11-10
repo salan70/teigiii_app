@@ -87,7 +87,7 @@ class ProfilePage extends ConsumerWidget {
                       labelStyle: Theme.of(context).textTheme.titleMedium,
                       indicatorWeight: 3,
                       tabs: const [
-                        Tab(text: '投稿'),
+                        Tab(text: '投稿順'),
                         Tab(text: 'いいね'),
                       ],
                     ),
@@ -98,37 +98,20 @@ class ProfilePage extends ConsumerWidget {
             body: TabBarView(
               children: [
                 DefinitionList(
-                  definitionFeedType: DefinitionFeedType.homeRecommend,
+                  definitionFeedType:
+                      DefinitionFeedType.profileOrderByCreatedAt,
+                  targetUserId: targetUserId,
                 ),
                 DefinitionList(
-                  definitionFeedType: DefinitionFeedType.homeFollowing,
+                  definitionFeedType: DefinitionFeedType.profileLiked,
+                  targetUserId: targetUserId,
                 ),
               ],
             ),
           ),
-          floatingActionButton: const PostDefinitionFAB(definition:  null),
+          floatingActionButton: const PostDefinitionFAB(definition: null),
         ),
       ),
     );
-  }
-}
-
-enum ProfileType {
-  myProfile,
-  otherProfile;
-
-  IconButton appBarTrailingButton(GlobalKey globalKey, BuildContext context) {
-    switch (this) {
-      case ProfileType.myProfile:
-        return IconButton(
-          icon: const Icon(CupertinoIcons.person_add),
-          onPressed: () {},
-        );
-      case ProfileType.otherProfile:
-        return IconButton(
-          icon: const Icon(CupertinoIcons.ellipsis),
-          onPressed: () {},
-        );
-    }
   }
 }

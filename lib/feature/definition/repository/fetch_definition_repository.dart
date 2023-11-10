@@ -4,32 +4,30 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/config_constant.dart';
 import '../../../util/constant/firestore_collections.dart';
-import '../../../util/constant/initial_main_group.dart';
 import '../../../util/extension/firestore_extension.dart';
 import '../../user_profile/domain/user_id_list_state.dart';
-import '../domain/definition_for_write.dart';
 import '../domain/definition_id_list_state.dart';
 import '../util/definition_feed_type.dart';
 import 'entity/definition_document.dart';
 
-part 'definition_repository.g.dart';
+part 'fetch_definition_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-DefinitionRepository definitionRepository(DefinitionRepositoryRef ref) =>
-    DefinitionRepository(
+FetchDefinitionRepository fetchDefinitionRepository(
+  FetchDefinitionRepositoryRef ref,
+) =>
+    FetchDefinitionRepository(
       ref.watch(firestoreProvider),
     );
 
-class DefinitionRepository {
-  DefinitionRepository(this.firestore);
+/// 定義の取得に関する処理を記述するRepository
+class FetchDefinitionRepository {
+  FetchDefinitionRepository(this.firestore);
 
   final FirebaseFirestore firestore;
 
   CollectionReference get _definitionsCollectionRef =>
       firestore.collection(DefinitionsCollection.collectionName);
-
-  CollectionReference get _wordsCollectionRef =>
-      firestore.collection(WordsCollection.collectionName);
 
   CollectionReference get _likesCollectionRef =>
       firestore.collection(LikesCollection.collectionName);
@@ -250,6 +248,145 @@ class DefinitionRepository {
     return query.get();
   }
 
+  /// 「プロフィール画面: 投稿順タブ」で表示するDefinitionIDのListを取得する
+  ///
+  /// [lastDocument]がnullの場合、最初のdocumentから取得する。
+  /// 無限スクロールなどで、2回目以降の取得の場合、
+  /// [lastDocument]に前回取得した最後のdocumentを指定すること。
+  Future<DefinitionIdListState> fetchProfileCreatedAtDefinitionIdListState(
+    String currentUserId,
+    String targetUserId,
+    QueryDocumentSnapshot? lastDocument,
+  ) async {
+    var query = _definitionsCollectionRef
+        .where(DefinitionsCollection.authorId, isEqualTo: targetUserId)
+        .where(
+          Filter.or(
+            Filter(
+              DefinitionsCollection.authorId,
+              isEqualTo: currentUserId,
+            ),
+            Filter(DefinitionsCollection.isPublic, isEqualTo: true),
+          ),
+        )
+        .orderBy(createdAtFieldName, descending: true)
+        .limit(fetchLimitForDefinitionList);
+
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument);
+    }
+
+    final snapshot = await query.get();
+
+    return _toDefinitionIdListState(snapshot.docs);
+  }
+
+  Future<QuerySnapshot> _fetchLikeSnapshotByLikedUser(
+    String likedUserId,
+    QueryDocumentSnapshot? lastDocument,
+    int fetchLimit,
+  ) async {
+    var query = _likesCollectionRef
+        .where(LikesCollection.userId, isEqualTo: likedUserId)
+        .orderBy(createdAtFieldName, descending: true)
+        .limit(fetchLimit);
+
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument);
+    }
+    return query.get();
+  }
+
+  /// [targetUserId]がいいねしたDefinitionIDのListを取得する
+  ///
+  /// [initialLastDocument]がnullの場合、最初のdocumentから取得する。
+  /// 無限スクロールなどで、2回目以降の取得の場合、
+  /// [initialLastDocument]に前回取得した最後のdocumentを指定すること。
+  Future<DefinitionIdListState> fetchLikedByUserDefinitionIdListState(
+    String currentUserId,
+    String targetUserId,
+    List<String> mutedUserIdList,
+    QueryDocumentSnapshot? initialLastDocument,
+  ) async {
+    final idList = <String>[];
+    var lastDocument = initialLastDocument;
+    var hasMore = true;
+    var fetchLimit = fetchLimitForDefinitionList;
+
+    while (fetchLimit > 0) {
+      final snapshot = await _fetchLikeSnapshotByLikedUser(
+        targetUserId,
+        lastDocument,
+        fetchLimit,
+      );
+
+      for (final likeDoc in snapshot.docs) {
+        final definitionId = likeDoc[LikesCollection.definitionId] as String;
+        late final DefinitionDocument definitionDoc;
+        try {
+          definitionDoc = await fetchDefinition(definitionId);
+        } on FirebaseException catch (e) {
+          if (e.code == 'permission-denied') {
+            // 取得しようとしたDefinitionドキュメントのisPublicがfalseの場合、
+            // permission-deniedエラーが発生するため、ここでキャッチし、
+            // idListに加えないようにする
+            continue;
+          }
+          rethrow;
+        }
+
+        final isValid = _isValidDefinitionId(
+          definitionDoc,
+          currentUserId,
+          mutedUserIdList,
+        );
+        if (isValid) {
+          idList.add(definitionId);
+          fetchLimit--;
+        }
+      }
+
+      // 条件合う合わないに限らずこれ以上取得できるドキュメントがない場合、
+      // [lastDocument]を更新せずにループを抜ける
+      if (snapshot.docs.length < fetchLimit) {
+        hasMore = false;
+        break;
+      }
+
+      lastDocument = snapshot.docs.last;
+    }
+
+    return DefinitionIdListState(
+      definitionIdList: idList,
+      lastReadQueryDocumentSnapshot: lastDocument,
+      hasMore: hasMore,
+    );
+  }
+
+  /// [definitionDoc]が表示可能かどうかを返す
+  bool _isValidDefinitionId(
+    DefinitionDocument definitionDoc,
+    String currentUserId,
+    List<String> mutedUserIdList,
+  ) {
+    // 条件に合うdefinitionのidのみ返す
+    // 条件: 自分の投稿
+    if (definitionDoc.authorId == currentUserId) {
+      return true;
+    }
+    // isPublicについては、rulesに設定すれば、permissionエラーを出せる気がする
+    // その場合、エラーが発生した場合は、そのdefinitionを表示しないようにする
+
+    // 条件: ミュートしていないユーザーの投稿
+    final isPostedByMutedUser =
+        mutedUserIdList.contains(definitionDoc.authorId);
+    if (!isPostedByMutedUser) {
+      return true;
+    }
+
+    return false;
+  }
+
   /// ミュートしていないDefinitionIdのリストを
   /// [fetchLimitForDefinitionList]に達するまで取得する
   Future<DefinitionIdListState> _fetchUnmutedDefinitionIdList(
@@ -314,7 +451,7 @@ class DefinitionRepository {
   /// [lastDocument]がnullの場合、最初のdocumentから取得する。
   /// 無限スクロールなどで、2回目以降の取得の場合、
   /// [lastDocument]に前回取得した最後のdocumentを指定すること。
-  Future<UserIdListState> fetchFavoriteUserIdList(
+  Future<UserIdListState> fetchLikedUserIdList(
     String definitionId,
     QueryDocumentSnapshot? lastDocument,
   ) async {
@@ -337,147 +474,5 @@ class DefinitionRepository {
       lastReadQueryDocumentSnapshot: snapshot.docs.lastOrNull,
       hasMore: favoriteUserIdList.length == fetchLimitForUserIdList,
     );
-  }
-
-  Future<void> createDefinitionAndMaybeWord(
-    String authorId,
-    String? existingWordId,
-    DefinitionForWrite definitionForWrite,
-  ) async {
-    // Wordドキュメントが存在しない場合は新規作成する
-    if (existingWordId == null) {
-      await firestore.runTransaction((transaction) async {
-        // Wordドキュメントを新規作成し、
-        // 作成したドキュメントのidをもとにDefinitionドキュメントを作成する
-        final newWordId = await _createWord(
-          definitionForWrite.word,
-          definitionForWrite.wordReading,
-        );
-        await _createDefinition(authorId, newWordId, definitionForWrite);
-      });
-      return;
-    }
-
-    // Wordドキュメントが存在する場合、Definitionドキュメントのみ作成する
-    await _createDefinition(authorId, existingWordId, definitionForWrite);
-  }
-
-  Future<void> _createDefinition(
-    String authorId,
-    String wordId,
-    DefinitionForWrite definitionForWrite,
-  ) async {
-    await _definitionsCollectionRef.add({
-      ...definitionForWrite.toFirestoreForCreate(),
-      DefinitionsCollection.authorId: authorId,
-      DefinitionsCollection.wordId: wordId,
-      createdAtFieldName: FieldValue.serverTimestamp(),
-      updatedAtFieldName: FieldValue.serverTimestamp(),
-    });
-  }
-
-  Future<void> updateDefinitionAndMaybeCreateWord(
-    String? existingWordId,
-    DefinitionForWrite definitionForWrite,
-  ) async {
-    // Wordドキュメントが存在しない場合は新規作成する
-    if (existingWordId == null) {
-      await firestore.runTransaction((transaction) async {
-        // Wordドキュメントを新規作成し、
-        // 作成したドキュメントのidをもとにDefinitionドキュメントを作成する
-        final newWordId = await _createWord(
-          definitionForWrite.word,
-          definitionForWrite.wordReading,
-        );
-        await _updateDefinition(newWordId, definitionForWrite);
-      });
-      return;
-    }
-
-    // Wordドキュメントが存在する場合、Definitionドキュメントの更新のみ実行する
-    await _updateDefinition(existingWordId, definitionForWrite);
-  }
-
-  Future<void> _updateDefinition(
-    String wordId,
-    DefinitionForWrite definitionForWrite,
-  ) async {
-    await _definitionsCollectionRef.doc(definitionForWrite.id).update(
-      {
-        ...definitionForWrite.toFirestoreForUpdate(),
-        DefinitionsCollection.wordId: wordId,
-        updatedAtFieldName: FieldValue.serverTimestamp(),
-      },
-    );
-  }
-
-  // Definitionドキュメントの作成/更新処理とバッチ実行する必要があるため、このクラスに作成している。
-  /// Wordドキュメントを作成し、作成したドキュメントのidを返す。
-  Future<String> _createWord(String word, String wordReading) async {
-    final docRef = await _wordsCollectionRef.add(
-      {
-        WordsCollection.word: word,
-        WordsCollection.reading: wordReading,
-        WordsCollection.initialSubGroupLabel:
-            InitialSubGroup.labelFromString(wordReading),
-        createdAtFieldName: FieldValue.serverTimestamp(),
-        updatedAtFieldName: FieldValue.serverTimestamp(),
-      },
-    );
-
-    return docRef.id;
-  }
-
-  Future<void> likeDefinition(String definitionId, String userId) async {
-    // transactionを使い、複数の処理が全て成功した場合のみ、処理を完了させる
-    await firestore.runTransaction((transaction) async {
-      // Likesコレクションにドキュメントを登録
-      final likesCollection = _likesCollectionRef;
-      transaction.set(likesCollection.doc(), {
-        LikesCollection.definitionId: definitionId,
-        LikesCollection.userId: userId,
-        createdAtFieldName: FieldValue.serverTimestamp(),
-        updatedAtFieldName: FieldValue.serverTimestamp(),
-      });
-
-      // DefinitionコレクションからドキュメントのlikesCountを+1する
-      final definitionDocRef = _definitionsCollectionRef.doc(definitionId);
-      transaction.update(definitionDocRef, {
-        DefinitionsCollection.likesCount: FieldValue.increment(1),
-      });
-    });
-  }
-
-  Future<void> unlikeDefinition(String definitionId, String userId) async {
-    await firestore.runTransaction((transaction) async {
-      // Likesコレクションからドキュメントを取得して削除
-      final likeSnapshot = await _likesCollectionRef
-          .where(LikesCollection.definitionId, isEqualTo: definitionId)
-          .where(LikesCollection.userId, isEqualTo: userId)
-          .get()
-          .then((snapshot) => snapshot.docs.firstOrNull);
-
-      if (likeSnapshot == null) {
-        throw Exception('いいね解除が失敗しました。');
-      }
-
-      transaction.delete(likeSnapshot.reference);
-
-      // DefinitionコレクションからドキュメントのlikesCountを-1する
-      final definitionDocRef = _definitionsCollectionRef.doc(definitionId);
-      transaction.update(definitionDocRef, {
-        DefinitionsCollection.likesCount: FieldValue.increment(-1),
-      });
-    });
-  }
-
-  Future<bool> isLikedByUser(String userId, String definitionId) async {
-    final likeSnapshot = await _likesCollectionRef
-        .where(LikesCollection.definitionId, isEqualTo: definitionId)
-        .where(LikesCollection.userId, isEqualTo: userId)
-        .get()
-        .then((snapshot) => snapshot.docs.firstOrNull);
-
-    return likeSnapshot != null;
   }
 }

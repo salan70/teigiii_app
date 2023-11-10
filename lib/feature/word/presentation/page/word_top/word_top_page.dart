@@ -58,7 +58,7 @@ class WordTopPage extends ConsumerWidget {
                       labelStyle: Theme.of(context).textTheme.titleMedium,
                       indicatorWeight: 3,
                       tabs: const [
-                        Tab(text: '新着順'),
+                        Tab(text: '投稿順'),
                         Tab(text: 'いいね数順'),
                       ],
                     ),
@@ -74,7 +74,8 @@ class WordTopPage extends ConsumerWidget {
                   wordId: wordId,
                 ),
                 DefinitionList(
-                  definitionFeedType: DefinitionFeedType.wordTopOrderByLikesCount,
+                  definitionFeedType:
+                      DefinitionFeedType.wordTopOrderByLikesCount,
                   wordId: wordId,
                 ),
               ],
