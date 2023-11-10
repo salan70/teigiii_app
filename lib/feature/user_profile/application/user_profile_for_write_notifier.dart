@@ -65,8 +65,7 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
 
   bool canEdit() {
     // canPost()を呼んだ方がいいかも
-    // return state.value!.isValidAllFields() && isChanged();
-    return true;
+    return state.value!.isValidAllFields() && isChanged();
   }
 
   bool isChanged() {

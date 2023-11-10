@@ -24,9 +24,29 @@ class EditProfilePage extends ConsumerWidget {
 
     return asyncUserProfileForWrite.when(
       data: (userProfileForWrite) {
+        final canEdit = notifier.canEdit();
         return Scaffold(
           appBar: AppBar(
-            title: const Text('プロフィール編集'),
+            title: const Center(child: Text('プロフィール編集')),
+            actions: [
+              Center(
+                child: InkWell(
+                  onTap: canEdit ? () async {} : null,
+                  child: Text(
+                    '保存',
+                    style: canEdit
+                        ? Theme.of(context).textTheme.titleLarge
+                        : Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.3),
+                            ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 24),
+            ],
           ),
           body: GestureDetector(
             onTap: () => primaryFocus?.unfocus(),
@@ -69,9 +89,9 @@ class EditProfilePage extends ConsumerWidget {
                     textInputAction: TextInputAction.next,
                     onChanged: notifier.changeName,
                     style: Theme.of(context).textTheme.titleLarge,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: '名前',
-                      // errorText: definitionForWrite.outputWordError(),
+                      errorText: userProfileForWrite.outputNameError(),
                       border: InputBorder.none,
                     ),
                   ),
@@ -82,9 +102,9 @@ class EditProfilePage extends ConsumerWidget {
                     maxLines: null,
                     onChanged: notifier.changeBio,
                     style: Theme.of(context).textTheme.titleLarge,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: '自己紹介',
-                      // errorText: definitionForWrite.outputWordReadingError(),
+                      errorText: userProfileForWrite.outputBioError(),
                       border: InputBorder.none,
                     ),
                   ),
