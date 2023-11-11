@@ -107,16 +107,18 @@ class DefinitionDetailPage extends ConsumerWidget {
                             imageUrl: definition.authorImageUrl,
                           ),
                           const SizedBox(width: 16),
-                          Text(
-                            definition.authorName,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(
-                                  fontWeight: FontWeight.normal,
-                                ),
+                          Expanded(
+                            child: Text(
+                              definition.authorName,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                            ),
                           ),
-                          const Spacer(),
                           definition.authorId == currentUserId
                               ? const SizedBox.shrink()
                               : FollowOrUnfollowButton(
@@ -138,10 +140,12 @@ class DefinitionDetailPage extends ConsumerWidget {
                         children: [
                           Text(
                             definition.word,
+                            overflow: TextOverflow.clip,
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           Text(
                             definition.wordReading,
+                            overflow: TextOverflow.clip,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall!
