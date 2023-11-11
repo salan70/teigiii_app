@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common_widget/adaptive_overflow_text.dart';
-import '../../../../core/common_widget/avatar_icon_widget.dart';
+import '../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../../../util/logger.dart';
@@ -50,8 +50,9 @@ class DefinitionTile extends ConsumerWidget {
                           ProfileRoute(targetUserId: definition.authorId),
                         );
                       },
-                      child:
-                          AvatarIconWidget(imageUrl: definition.authorImageUrl),
+                      child: AvatarNetworkImageWidget(
+                        imageUrl: definition.authorImageUrl,
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(

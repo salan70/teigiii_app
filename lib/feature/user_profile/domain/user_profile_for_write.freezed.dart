@@ -21,6 +21,9 @@ mixin _$UserProfileForWrite {
   String get bio => throw _privateConstructorUsedError;
   String get profileImageUrl => throw _privateConstructorUsedError;
 
+  /// アップロード用にユーザーが指定したファイル（画像）を保持する
+  CroppedFile? get croppedFile => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $UserProfileForWriteCopyWith<UserProfileForWrite> get copyWith =>
       throw _privateConstructorUsedError;
@@ -32,7 +35,12 @@ abstract class $UserProfileForWriteCopyWith<$Res> {
           UserProfileForWrite value, $Res Function(UserProfileForWrite) then) =
       _$UserProfileForWriteCopyWithImpl<$Res, UserProfileForWrite>;
   @useResult
-  $Res call({String id, String name, String bio, String profileImageUrl});
+  $Res call(
+      {String id,
+      String name,
+      String bio,
+      String profileImageUrl,
+      CroppedFile? croppedFile});
 }
 
 /// @nodoc
@@ -52,6 +60,7 @@ class _$UserProfileForWriteCopyWithImpl<$Res, $Val extends UserProfileForWrite>
     Object? name = null,
     Object? bio = null,
     Object? profileImageUrl = null,
+    Object? croppedFile = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -70,6 +79,10 @@ class _$UserProfileForWriteCopyWithImpl<$Res, $Val extends UserProfileForWrite>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      croppedFile: freezed == croppedFile
+          ? _value.croppedFile
+          : croppedFile // ignore: cast_nullable_to_non_nullable
+              as CroppedFile?,
     ) as $Val);
   }
 }
@@ -82,7 +95,12 @@ abstract class _$$_UserProfileForWriteCopyWith<$Res>
       __$$_UserProfileForWriteCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String name, String bio, String profileImageUrl});
+  $Res call(
+      {String id,
+      String name,
+      String bio,
+      String profileImageUrl,
+      CroppedFile? croppedFile});
 }
 
 /// @nodoc
@@ -100,6 +118,7 @@ class __$$_UserProfileForWriteCopyWithImpl<$Res>
     Object? name = null,
     Object? bio = null,
     Object? profileImageUrl = null,
+    Object? croppedFile = freezed,
   }) {
     return _then(_$_UserProfileForWrite(
       id: null == id
@@ -118,6 +137,10 @@ class __$$_UserProfileForWriteCopyWithImpl<$Res>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      croppedFile: freezed == croppedFile
+          ? _value.croppedFile
+          : croppedFile // ignore: cast_nullable_to_non_nullable
+              as CroppedFile?,
     ));
   }
 }
@@ -129,7 +152,8 @@ class _$_UserProfileForWrite extends _UserProfileForWrite {
       {required this.id,
       required this.name,
       required this.bio,
-      required this.profileImageUrl})
+      required this.profileImageUrl,
+      required this.croppedFile})
       : super._();
 
   @override
@@ -141,9 +165,13 @@ class _$_UserProfileForWrite extends _UserProfileForWrite {
   @override
   final String profileImageUrl;
 
+  /// アップロード用にユーザーが指定したファイル（画像）を保持する
+  @override
+  final CroppedFile? croppedFile;
+
   @override
   String toString() {
-    return 'UserProfileForWrite(id: $id, name: $name, bio: $bio, profileImageUrl: $profileImageUrl)';
+    return 'UserProfileForWrite(id: $id, name: $name, bio: $bio, profileImageUrl: $profileImageUrl, croppedFile: $croppedFile)';
   }
 
   @override
@@ -155,11 +183,14 @@ class _$_UserProfileForWrite extends _UserProfileForWrite {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.bio, bio) || other.bio == bio) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
-                other.profileImageUrl == profileImageUrl));
+                other.profileImageUrl == profileImageUrl) &&
+            (identical(other.croppedFile, croppedFile) ||
+                other.croppedFile == croppedFile));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, bio, profileImageUrl);
+  int get hashCode =>
+      Object.hash(runtimeType, id, name, bio, profileImageUrl, croppedFile);
 
   @JsonKey(ignore: true)
   @override
@@ -174,7 +205,8 @@ abstract class _UserProfileForWrite extends UserProfileForWrite {
       {required final String id,
       required final String name,
       required final String bio,
-      required final String profileImageUrl}) = _$_UserProfileForWrite;
+      required final String profileImageUrl,
+      required final CroppedFile? croppedFile}) = _$_UserProfileForWrite;
   const _UserProfileForWrite._() : super._();
 
   @override
@@ -185,6 +217,10 @@ abstract class _UserProfileForWrite extends UserProfileForWrite {
   String get bio;
   @override
   String get profileImageUrl;
+  @override
+
+  /// アップロード用にユーザーが指定したファイル（画像）を保持する
+  CroppedFile? get croppedFile;
   @override
   @JsonKey(ignore: true)
   _$$_UserProfileForWriteCopyWith<_$_UserProfileForWrite> get copyWith =>

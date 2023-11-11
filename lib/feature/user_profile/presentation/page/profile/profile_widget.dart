@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_widget/avatar_icon_widget.dart';
+import '../../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
 import '../../../../../core/common_widget/button/primary_outlined_button.dart';
 import '../../../../../core/router/app_router.dart';
@@ -31,7 +31,7 @@ class ProfileWidget extends ConsumerWidget {
               const SizedBox(height: 24),
               Row(
                 children: [
-                  AvatarIconWidget(
+                  AvatarNetworkImageWidget(
                     imageUrl: targetUserProfile.profileImageUrl,
                     avatarSize: AvatarSize.large,
                   ),

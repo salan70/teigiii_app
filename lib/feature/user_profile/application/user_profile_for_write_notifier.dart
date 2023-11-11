@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/is_loading_overlay_state.dart';
@@ -6,6 +7,7 @@ import '../../../core/router/app_router.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../domain/user_profile_for_write.dart';
+import '../repository/image_repository.dart';
 import 'user_profile_state.dart';
 
 part 'user_profile_for_write_notifier.g.dart';
@@ -31,6 +33,35 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
 
   void changeBio(String bio) {
     state = AsyncData(state.value!.copyWith(bio: bio));
+  }
+
+  Future<void> pickAndCropImage(ImageSource imageSource) async {
+    final isLoadingOverlayNotifier =
+        ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
+    final imageRepository = ref.read(imageRepositoryProvider);
+
+    // 画像を選択
+    final pickedFile = await imageRepository.pickImage(imageSource);
+    if (pickedFile == null) {
+      // TODO(me): トーストで選択されなかったことを知らせる
+      isLoadingOverlayNotifier.finishLoading();
+      return;
+    }
+
+    // 画像を切り抜き
+    final croppedFile = await imageRepository.cropImage(pickedFile.path);
+    if (croppedFile == null) {
+      // TODO(me): トーストで切り抜きされなかったことを知らせる
+      isLoadingOverlayNotifier.finishLoading();
+      return;
+    }
+    state = AsyncData(state.value!.copyWith(croppedFile: croppedFile));
+
+    isLoadingOverlayNotifier.finishLoading();
+  }
+
+  void resetCroppedFile() {
+    state = AsyncData(state.value!.copyWith(croppedFile: null));
   }
 
   void changeProfileImageUrl(String profileImageUrl) {
@@ -64,7 +95,6 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
   }
 
   bool canEdit() {
-    // canPost()を呼んだ方がいいかも
     return state.value!.isValidAllFields() && isChanged();
   }
 

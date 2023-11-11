@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class AvatarIconWidget extends StatelessWidget {
-  const AvatarIconWidget({
+class AvatarNetworkImageWidget extends StatelessWidget {
+  const AvatarNetworkImageWidget({
     super.key,
     required this.imageUrl,
     this.avatarSize = AvatarSize.medium,

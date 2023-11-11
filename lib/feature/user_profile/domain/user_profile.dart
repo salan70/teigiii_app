@@ -22,6 +22,7 @@ class UserProfile with _$UserProfile {
       name: name,
       bio: bio,
       profileImageUrl: profileImageUrl,
+      croppedFile: null,
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_widget/avatar_icon_widget.dart';
+import '../../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
 import '../../../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
@@ -103,7 +103,9 @@ class DefinitionDetailPage extends ConsumerWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          AvatarIconWidget(imageUrl: definition.authorImageUrl),
+                          AvatarNetworkImageWidget(
+                            imageUrl: definition.authorImageUrl,
+                          ),
                           const SizedBox(width: 16),
                           Text(
                             definition.authorName,

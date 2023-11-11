@@ -8,6 +8,7 @@ void main() {
       name: 'ヒトカゲ',
       bio: '早くリザードになりたい',
       profileImageUrl: 'https://example.com/profile.jpg',
+      croppedFile: null,
     );
 
     group('outputNameError()', () {

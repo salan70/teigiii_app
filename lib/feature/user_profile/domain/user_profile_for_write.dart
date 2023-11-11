@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 part 'user_profile_for_write.freezed.dart';
 
@@ -9,6 +10,9 @@ class UserProfileForWrite with _$UserProfileForWrite {
     required String name,
     required String bio,
     required String profileImageUrl,
+
+    /// アップロード用にユーザーが指定したファイル（画像）を保持する
+    required CroppedFile? croppedFile,
   }) = _UserProfileForWrite;
   const UserProfileForWrite._();
 
@@ -37,7 +41,7 @@ class UserProfileForWrite with _$UserProfileForWrite {
     return null;
   }
 
-    /// 全てのフィールド（[name], [bio]）が有効かどうか
+  /// 全てのフィールド（[name], [bio]）が有効かどうか
   bool isValidAllFields() {
     return outputNameError() == null && outputBioError() == null;
   }
