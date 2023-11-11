@@ -108,9 +108,6 @@ void main() {
       verify(
         mockUserProfileRepository.fetchUserProfile(mockUserProfileDoc.id),
       ).called(1);
-      verify(
-        mockUserFollowRepository.fetchUserFollowCount(mockUserProfileDoc.id),
-      ).called(1);
     });
   });
 

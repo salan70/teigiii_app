@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/core/common_provider/toast_controller.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition/application/definition_id_list_state.dart';
 import 'package:teigi_app/feature/definition/domain/definition_id_list_state.dart';
@@ -27,6 +28,9 @@ import 'definition_id_list_state_test.mocks.dart';
   MockSpec<WordRepository>(),
   MockSpec<Listener<AsyncValue<DefinitionIdListState>>>(),
 ])
+class MockToastController extends Notifier<void>
+    with Mock
+    implements ToastController {}
 
 // ignore: one_member_abstracts, unreachable_from_main
 abstract class Listener<T> {
@@ -57,6 +61,9 @@ void main() {
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => userId),
+        toastControllerProvider.overrideWith(
+          MockToastController.new,
+        ),
         followingIdListProvider(userId)
             .overrideWith((ref) => mockFollowingUserIdList),
         writeDefinitionRepositoryProvider
@@ -597,7 +604,7 @@ void main() {
       // 他にlistenerが発火されないことを検証
       verifyNoMoreInteractions(listener);
 
-      // TODO(me): snackBarを表示させる関数が呼ばれていることを検証する
+      // TODO(me): toastを表示させる関数が呼ばれていることを検証する
     });
   });
 }

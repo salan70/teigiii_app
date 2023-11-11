@@ -86,7 +86,6 @@ void main() {
     });
 
     // TODO(me): エラー発生時のテスト書く
-    // snackBarControllerProviderのMockの作り方がわからないため、保留
   });
 
   group('unfollow', () {
@@ -120,6 +119,5 @@ void main() {
     });
 
     // TODO(me): エラー発生時のテスト書く
-    // snackBarControllerProviderのMockの作り方がわからないため、保留
   });
 }
