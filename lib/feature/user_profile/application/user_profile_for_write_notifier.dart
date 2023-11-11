@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -8,6 +10,8 @@ import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../domain/user_profile_for_write.dart';
 import '../repository/image_repository.dart';
+import '../repository/storage_repository.dart';
+import '../repository/user_profile_repository.dart';
 import 'user_profile_state.dart';
 
 part 'user_profile_for_write_notifier.g.dart';
@@ -33,6 +37,10 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
 
   void changeBio(String bio) {
     state = AsyncData(state.value!.copyWith(bio: bio));
+  }
+
+  void _changeProfileImageUrl(String profileImageUrl) {
+    state = AsyncData(state.value!.copyWith(profileImageUrl: profileImageUrl));
   }
 
   Future<void> pickAndCropImage(ImageSource imageSource) async {
@@ -64,18 +72,25 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
     state = AsyncData(state.value!.copyWith(croppedFile: null));
   }
 
-  void changeProfileImageUrl(String profileImageUrl) {
-    // Storageやんなきゃ
-    state = AsyncData(state.value!.copyWith(profileImageUrl: profileImageUrl));
-  }
-
   Future<void> edit() async {
     final isLoadingOverlayNotifier =
         ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
     final snackBarNotifier = ref.read(snackBarControllerProvider.notifier);
 
     try {
-      // 保存処理
+      // 新たに画像が選択されているかどうか
+      if (state.value!.croppedFile != null) {
+        // 画像をアップロードし、stateを更新
+        final profileImageUrl = await _uploadImage();
+        _changeProfileImageUrl(profileImageUrl);
+      }
+
+      // プロフィールを更新
+      await ref.read(userProfileRepositoryProvider).updateUserProfile(
+            state.value!,
+          );
+
+      // プロフィールを更新
     } on Exception catch (e) {
       logger.e('プロフィール編集時にエラーが発生 error: $e');
       snackBarNotifier.showSnackBar(
@@ -86,12 +101,20 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
       return;
     }
 
-    // 遷移元の画面を更新するためにinvalidateする
-    // ref.invalidate(userProfileProvider());
+    // UIを更新するためにinvalidateする
+    final userId = ref.read(userIdProvider)!;
+    ref.invalidate(userProfileProvider(userId));
 
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
     snackBarNotifier.showSnackBar('保存しました！', causeError: false);
+  }
+
+  /// 画像をアップロードし、ダウンロードURLを返す
+  Future<String> _uploadImage() async {
+    final userId = ref.read(userIdProvider)!;
+    final file = File(state.value!.croppedFile!.path);
+    return ref.read(storageRepositoryProvider).uploadFile(userId, file);
   }
 
   bool canEdit() {

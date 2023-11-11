@@ -657,6 +657,9 @@ PODS:
   - Firebase/Firestore (10.15.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 10.15.0)
+  - Firebase/Storage (10.15.0):
+    - Firebase/CoreOnly
+    - FirebaseStorage (~> 10.15.0)
   - firebase_analytics (10.5.1):
     - Firebase/Analytics (= 10.15.0)
     - firebase_core
@@ -670,6 +673,10 @@ PODS:
     - Flutter
   - firebase_crashlytics (3.3.7):
     - Firebase/Crashlytics (= 10.15.0)
+    - firebase_core
+    - Flutter
+  - firebase_storage (11.2.8):
+    - Firebase/Storage (= 10.15.0)
     - firebase_core
     - Flutter
   - FirebaseAnalytics (10.15.0):
@@ -698,6 +705,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.8)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
     - RecaptchaInterop (~> 100.0)
+  - FirebaseAuthInterop (10.16.0)
   - FirebaseCore (10.15.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
@@ -740,6 +748,12 @@ PODS:
     - GoogleUtilities/Environment (~> 7.10)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesSwift (~> 2.1)
+  - FirebaseStorage (10.15.0):
+    - FirebaseAppCheckInterop (~> 10.0)
+    - FirebaseAuthInterop (~> 10.0)
+    - FirebaseCore (~> 10.0)
+    - FirebaseCoreExtension (~> 10.0)
+    - GTMSessionFetcher/Core (< 4.0, >= 2.1)
   - Flutter (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -881,6 +895,7 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
+  - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
@@ -896,6 +911,7 @@ SPEC REPOS:
     - FirebaseAnalytics
     - FirebaseAppCheckInterop
     - FirebaseAuth
+    - FirebaseAuthInterop
     - FirebaseCore
     - FirebaseCoreExtension
     - FirebaseCoreInternal
@@ -903,6 +919,7 @@ SPEC REPOS:
     - FirebaseFirestore
     - FirebaseInstallations
     - FirebaseSessions
+    - FirebaseStorage
     - FMDB
     - GoogleAppMeasurement
     - GoogleDataTransport
@@ -930,6 +947,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_crashlytics:
     :path: ".symlinks/plugins/firebase_crashlytics/ios"
+  firebase_storage:
+    :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
   image_cropper:
@@ -953,9 +972,11 @@ SPEC CHECKSUMS:
   firebase_auth: ca31bca59224dc727ea0df7f066f30158a8acc3b
   firebase_core: 28e84c2a4fcf6a50ef83f47b145ded8c1fa331e4
   firebase_crashlytics: 36b8a72e23437dbb69bd97102661ce31b6721be5
+  firebase_storage: 5aa5cd1cfc03814e3417b6718d805e5d1804f990
   FirebaseAnalytics: 47cef43728f81a839cf1306576bdd77ffa2eac7e
   FirebaseAppCheckInterop: 82358cff9f33452dd44259e88eea5e562500b1cb
   FirebaseAuth: a55ec5f7f8a5b1c2dd750235c1bb419bfb642445
+  FirebaseAuthInterop: b79fab8ce80e685145eee5f973d9ad5210e19d44
   FirebaseCore: 2cec518b43635f96afe7ac3a9c513e47558abd2e
   FirebaseCoreExtension: 2dbc745b337eb99d2026a7a309ae037bd873f45e
   FirebaseCoreInternal: 26233f705cc4531236818a07ac84d20c333e505a
@@ -963,6 +984,7 @@ SPEC CHECKSUMS:
   FirebaseFirestore: b4c0eaaf24efda5732ec21d9e6c788d083118ca6
   FirebaseInstallations: b822f91a61f7d1ba763e5ccc9d4f2e6f2ed3b3ee
   FirebaseSessions: 96e7781e545929cde06dd91088ddbb0841391b43
+  FirebaseStorage: 1d4be239ea32fb3c0f3680a6f2b706d6cabe37f2
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleAppMeasurement: 722db6550d1e6d552b08398b69a975ac61039338

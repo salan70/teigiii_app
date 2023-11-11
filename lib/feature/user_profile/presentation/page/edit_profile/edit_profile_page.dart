@@ -70,7 +70,13 @@ class EditProfilePage extends ConsumerWidget {
             actions: [
               Center(
                 child: InkWell(
-                  onTap: canEdit ? () async {} : null,
+                  onTap: canEdit
+                      ? () async {
+                          // キーボードを閉じる
+                          primaryFocus?.unfocus();
+                          await notifier.edit();
+                        }
+                      : null,
                   child: Text(
                     '保存',
                     style: canEdit
