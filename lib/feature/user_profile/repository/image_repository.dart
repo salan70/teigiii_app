@@ -32,10 +32,10 @@ class ImageRepository {
           hidesNavigationBar: true,
           aspectRatioPickerButtonHidden: true,
           doneButtonTitle: '次へ',
-          cancelButtonTitle: '戻る',
+          cancelButtonTitle: 'キャンセル',
         ),
       ],
-      cropStyle: CropStyle.circle, 
+      cropStyle: CropStyle.circle,
     );
     return croppedFile;
   }

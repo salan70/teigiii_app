@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/is_loading_overlay_state.dart';
-import '../../../core/common_provider/snack_bar_controller.dart';
+import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../domain/definition.dart';
@@ -27,8 +27,8 @@ class DefinitionService extends _$DefinitionService {
     } on Exception catch (e) {
       logger.e('いいね登録もしくは解除時にエラーが発生: $e');
       ref
-          .read(snackBarControllerProvider.notifier)
-          .showSnackBar('失敗しました。もう一度お試しください。', causeError: true);
+          .read(toastControllerProvider.notifier)
+          .showToast('失敗しました。もう一度お試しください。', causeError: true);
 
       isLoadingOverlayNotifier.finishLoading();
       // 例外が発生したことをpresentationに伝えるため、rethrowする

@@ -23,7 +23,6 @@ class LikeWidget extends ConsumerWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // TODO(me): countのアニメが表示されない事案を解決する
         LikeButton(
           isLiked: definition.isLikedByUser,
           likeCount: definition.likesCount,

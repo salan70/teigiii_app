@@ -7,7 +7,7 @@ part of 'user_profile_for_write_notifier.dart';
 // **************************************************************************
 
 String _$userProfileForWriteNotifierHash() =>
-    r'a2591886b6db1b25c72959e866ec7e8204b1df35';
+    r'2b576b2fc6e0a216ca0ed732b108c11fb56ffa1e';
 
 /// See also [UserProfileForWriteNotifier].
 @ProviderFor(UserProfileForWriteNotifier)

@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/is_loading_overlay_state.dart';
-import '../../../core/common_provider/snack_bar_controller.dart';
+import '../../../core/common_provider/toast_controller.dart';
 import '../../../core/router/app_router.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
@@ -62,7 +62,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
         ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
 
     final definitionForWrite = state.value!;
-    final snackBarNotifier = ref.read(snackBarControllerProvider.notifier);
+    final toastNotifier = ref.read(toastControllerProvider.notifier);
 
     try {
       final existingWordId = await ref.read(wordRepositoryProvider).findWordId(
@@ -71,17 +71,16 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
           );
       final currentUserId = ref.read(userIdProvider)!;
 
-      await ref.read(writeDefinitionRepositoryProvider).createDefinitionAndMaybeWord(
+      await ref
+          .read(writeDefinitionRepositoryProvider)
+          .createDefinitionAndMaybeWord(
             currentUserId,
             existingWordId,
             definitionForWrite,
           );
     } on Exception catch (e) {
       logger.e('定義投稿時にエラーが発生 error: $e');
-      snackBarNotifier.showSnackBar(
-        '投稿できませんでした。もう一度お試しください。',
-        causeError: true,
-      );
+      toastNotifier.showToast('投稿できませんでした。もう一度お試しください。', causeError: true);
       isLoadingOverlayNotifier.finishLoading();
       return;
     }
@@ -91,7 +90,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     // TODO(me): 画面がカクつくのなんとかする
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
-    snackBarNotifier.showSnackBar('投稿しました！', causeError: false);
+    toastNotifier.showToast('投稿しました！');
   }
 
   Future<void> edit() async {
@@ -99,7 +98,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
         ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
 
     final definitionForWrite = state.value!;
-    final snackBarNotifier = ref.read(snackBarControllerProvider.notifier);
+    final toastNotifier = ref.read(toastControllerProvider.notifier);
 
     try {
       final existingWordId = await ref.read(wordRepositoryProvider).findWordId(
@@ -115,10 +114,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
           );
     } on Exception catch (e) {
       logger.e('定義編集時にエラーが発生 error: $e');
-      snackBarNotifier.showSnackBar(
-        '保存できませんでした。もう一度お試しください。',
-        causeError: true,
-      );
+      toastNotifier.showToast('保存できませんでした。もう一度お試しください。', causeError: true);
       isLoadingOverlayNotifier.finishLoading();
       return;
     }
@@ -128,7 +124,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
 
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
-    snackBarNotifier.showSnackBar('保存しました！', causeError: false);
+    toastNotifier.showToast('保存しました！');
   }
 
   bool canPost() {

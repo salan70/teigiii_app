@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/common_provider/toast_controller.dart';
 import 'core/router/app_router.dart';
 import 'feature/auth/application/auth_service.dart';
 import 'feature/auth/application/auth_state.dart';
@@ -23,6 +24,15 @@ class BasePage extends ConsumerStatefulWidget {
 }
 
 class _BasePageState extends ConsumerState<BasePage> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(toastControllerProvider.notifier).initFToast(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final async = ref.watch(authServiceProvider);

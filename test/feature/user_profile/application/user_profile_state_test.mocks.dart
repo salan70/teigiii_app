@@ -9,12 +9,14 @@ import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:teigi_app/feature/user_profile/domain/user_id_list_state.dart'
     as _i5;
+import 'package:teigi_app/feature/user_profile/domain/user_profile_for_write.dart'
+    as _i8;
 import 'package:teigi_app/feature/user_profile/repository/entity/user_follow_count_document.dart'
     as _i4;
 import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart'
     as _i3;
 import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart'
-    as _i8;
+    as _i9;
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart'
     as _i6;
 
@@ -132,13 +134,25 @@ class MockUserProfileRepository extends _i1.Mock
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
+
+  @override
+  _i7.Future<void> updateUserProfile(
+          _i8.UserProfileForWrite? userProfileForWrite) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUserProfile,
+          [userProfileForWrite],
+        ),
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 }
 
 /// A class which mocks [UserFollowRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserFollowRepository extends _i1.Mock
-    implements _i8.UserFollowRepository {
+    implements _i9.UserFollowRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),

@@ -8,7 +8,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/common_provider/is_loading_overlay_state.dart';
-import 'core/common_provider/snack_bar_controller.dart';
 import 'core/common_widget/loading_dialog.dart';
 import 'core/router/app_router.dart';
 import 'feature/auth/application/auth_service.dart';
@@ -84,7 +83,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       ],
       supportedLocales: const [Locale('ja')],
       routerConfig: ref.watch(appRouterProvider).config(),
-      scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
+      // scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
       theme: ThemeData(
         fontFamily: lineFontFamily,
         colorScheme: lightColorScheme,

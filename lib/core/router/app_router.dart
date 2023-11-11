@@ -33,7 +33,6 @@ part 'app_router.gr.dart';
 Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter();
 
 // TODO(me): 一部Routeのpathにidを含める
-// TODO(me): OSによってCupertinoRouteとMaterialRouteを切り替える
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends _$AppRouter {
   final List<AdaptiveRoute> commonRouteList = [

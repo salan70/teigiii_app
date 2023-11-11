@@ -7,7 +7,7 @@ import 'dart:async' as _i12;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i22;
+import 'package:riverpod_annotation/riverpod_annotation.dart' as _i23;
 import 'package:teigi_app/feature/definition/domain/definition_for_write.dart'
     as _i13;
 import 'package:teigi_app/feature/definition/domain/definition_id_list_state.dart'
@@ -23,24 +23,26 @@ import 'package:teigi_app/feature/definition/util/definition_feed_type.dart'
 import 'package:teigi_app/feature/user_config/repository/entity/user_config_document.dart'
     as _i7;
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart'
-    as _i18;
+    as _i19;
 import 'package:teigi_app/feature/user_profile/domain/user_id_list_state.dart'
     as _i5;
+import 'package:teigi_app/feature/user_profile/domain/user_profile_for_write.dart'
+    as _i18;
 import 'package:teigi_app/feature/user_profile/repository/entity/user_follow_count_document.dart'
     as _i8;
 import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart'
     as _i6;
 import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart'
-    as _i19;
+    as _i20;
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart'
     as _i17;
 import 'package:teigi_app/feature/word/domain/word_list_state.dart' as _i10;
 import 'package:teigi_app/feature/word/repository/entity/word_document.dart'
     as _i9;
-import 'package:teigi_app/feature/word/repository/word_repository.dart' as _i20;
+import 'package:teigi_app/feature/word/repository/word_repository.dart' as _i21;
 import 'package:teigi_app/util/constant/initial_main_group.dart' as _i16;
 
-import 'definition_id_list_state_test.dart' as _i21;
+import 'definition_id_list_state_test.dart' as _i22;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -666,13 +668,25 @@ class MockUserProfileRepository extends _i1.Mock
         returnValue: _i12.Future<void>.value(),
         returnValueForMissingStub: _i12.Future<void>.value(),
       ) as _i12.Future<void>);
+
+  @override
+  _i12.Future<void> updateUserProfile(
+          _i18.UserProfileForWrite? userProfileForWrite) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUserProfile,
+          [userProfileForWrite],
+        ),
+        returnValue: _i12.Future<void>.value(),
+        returnValueForMissingStub: _i12.Future<void>.value(),
+      ) as _i12.Future<void>);
 }
 
 /// A class which mocks [UserConfigRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserConfigRepository extends _i1.Mock
-    implements _i18.UserConfigRepository {
+    implements _i19.UserConfigRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),
@@ -788,7 +802,7 @@ class MockUserConfigRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserFollowRepository extends _i1.Mock
-    implements _i19.UserFollowRepository {
+    implements _i20.UserFollowRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),
@@ -979,7 +993,7 @@ class MockUserFollowRepository extends _i1.Mock
 /// A class which mocks [WordRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWordRepository extends _i1.Mock implements _i20.WordRepository {
+class MockWordRepository extends _i1.Mock implements _i21.WordRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),
@@ -1146,11 +1160,11 @@ class MockWordRepository extends _i1.Mock implements _i20.WordRepository {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockListener extends _i1.Mock
-    implements _i21.Listener<_i22.AsyncValue<_i3.DefinitionIdListState>> {
+    implements _i22.Listener<_i23.AsyncValue<_i3.DefinitionIdListState>> {
   @override
   void call(
-    _i22.AsyncValue<_i3.DefinitionIdListState>? previous,
-    _i22.AsyncValue<_i3.DefinitionIdListState>? next,
+    _i23.AsyncValue<_i3.DefinitionIdListState>? previous,
+    _i23.AsyncValue<_i3.DefinitionIdListState>? next,
   ) =>
       super.noSuchMethod(
         Invocation.method(
