@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/is_loading_overlay_state.dart';
-import '../../../core/common_provider/snack_bar_controller.dart';
+import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../repository/user_follow_repository.dart';
@@ -28,16 +28,15 @@ class UserFollowService extends _$UserFollowService {
           );
     } on Exception catch (e) {
       logger.e('フォロー時にエラーが発生: $e');
-      ref.read(snackBarControllerProvider.notifier).showSnackBar(
-            'フォローに失敗しました',
-            causeError: true,
-          );
+      ref
+          .read(toastControllerProvider.notifier)
+          .showToast('フォローに失敗しました', causeError: true);
       isLoadingOverlayNotifier.finishLoading();
       return;
     }
 
     // フォローした/されたユーザーのProviderを再生成
-     _invalidateRelatedUserProvider(targetUserId);
+    _invalidateRelatedUserProvider(targetUserId);
 
     isLoadingOverlayNotifier.finishLoading();
   }
@@ -56,7 +55,7 @@ class UserFollowService extends _$UserFollowService {
           );
     } on Exception catch (e) {
       logger.e('フォロー解除時にエラーが発生: $e');
-      ref.read(snackBarControllerProvider.notifier).showSnackBar(
+      ref.read(toastControllerProvider.notifier).showToast(
             'フォロー解除に失敗しました',
             causeError: true,
           );
@@ -71,13 +70,14 @@ class UserFollowService extends _$UserFollowService {
     isLoadingOverlayNotifier.finishLoading();
   }
 
-  /// ログイン中のユーザーと[targetUserId]のuserProfileProvider, isFollowingProviderを再生成する
+  /// ログイン中のユーザーと [targetUserId] の 
+  /// [followCountProvider], [isFollowingProvider] を再生成する
   void _invalidateRelatedUserProvider(String targetUserId) {
     final currentUserId = ref.read(userIdProvider)!;
 
     ref
-      ..invalidate(userProfileProvider(currentUserId))
-      ..invalidate(userProfileProvider(targetUserId))
+      ..invalidate(followCountProvider(currentUserId))
+      ..invalidate(followCountProvider(targetUserId))
       ..invalidate(isFollowingProvider(targetUserId));
   }
 }

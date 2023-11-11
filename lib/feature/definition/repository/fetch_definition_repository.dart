@@ -22,6 +22,7 @@ FetchDefinitionRepository fetchDefinitionRepository(
     );
 
 // TODO(me): DefinitionIdListStateの取得に絞ってもいいかも
+// TODO(me): 全体的に関数名に納得がいってないのでなんとかする
 
 /// 定義の取得に関する処理を記述するRepository
 class FetchDefinitionRepository {

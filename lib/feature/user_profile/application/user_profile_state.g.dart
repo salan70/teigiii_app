@@ -6,7 +6,7 @@ part of 'user_profile_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userProfileHash() => r'eb9018068bfe4f66521d8709ab76f05528d3ac03';
+String _$userProfileHash() => r'd65bbb681f211393797c6610319902a3a4e6862f';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -153,6 +153,134 @@ class _UserProfileProviderElement extends FutureProviderElement<UserProfile>
 
   @override
   String get userId => (origin as UserProfileProvider).userId;
+}
+
+String _$followCountHash() => r'7a55134e2b960a0378e6d6156e39c8dafcfd43c3';
+
+/// See also [followCount].
+@ProviderFor(followCount)
+const followCountProvider = FollowCountFamily();
+
+/// See also [followCount].
+class FollowCountFamily extends Family<AsyncValue<FollowCount>> {
+  /// See also [followCount].
+  const FollowCountFamily();
+
+  /// See also [followCount].
+  FollowCountProvider call(
+    String userId,
+  ) {
+    return FollowCountProvider(
+      userId,
+    );
+  }
+
+  @override
+  FollowCountProvider getProviderOverride(
+    covariant FollowCountProvider provider,
+  ) {
+    return call(
+      provider.userId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'followCountProvider';
+}
+
+/// See also [followCount].
+class FollowCountProvider extends FutureProvider<FollowCount> {
+  /// See also [followCount].
+  FollowCountProvider(
+    String userId,
+  ) : this._internal(
+          (ref) => followCount(
+            ref as FollowCountRef,
+            userId,
+          ),
+          from: followCountProvider,
+          name: r'followCountProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$followCountHash,
+          dependencies: FollowCountFamily._dependencies,
+          allTransitiveDependencies:
+              FollowCountFamily._allTransitiveDependencies,
+          userId: userId,
+        );
+
+  FollowCountProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userId,
+  }) : super.internal();
+
+  final String userId;
+
+  @override
+  Override overrideWith(
+    FutureOr<FollowCount> Function(FollowCountRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FollowCountProvider._internal(
+        (ref) => create(ref as FollowCountRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userId: userId,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<FollowCount> createElement() {
+    return _FollowCountProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FollowCountProvider && other.userId == userId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, userId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FollowCountRef on FutureProviderRef<FollowCount> {
+  /// The parameter `userId` of this provider.
+  String get userId;
+}
+
+class _FollowCountProviderElement extends FutureProviderElement<FollowCount>
+    with FollowCountRef {
+  _FollowCountProviderElement(super.provider);
+
+  @override
+  String get userId => (origin as FollowCountProvider).userId;
 }
 
 String _$isFollowingHash() => r'ba64a7ffacfc214a92102ab8a7516ab16bcfe9d5';

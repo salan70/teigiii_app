@@ -4,11 +4,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/is_loading_overlay_state.dart';
-import '../../../core/common_provider/snack_bar_controller.dart';
+import '../../../core/common_provider/toast_controller.dart';
 import '../../../core/router/app_router.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
-import '../domain/user_profile_for_write.dart';
+import '../domain/user_profile.dart';
 import '../repository/image_repository.dart';
 import '../repository/storage_repository.dart';
 import '../repository/user_profile_repository.dart';
@@ -16,20 +16,21 @@ import 'user_profile_state.dart';
 
 part 'user_profile_for_write_notifier.g.dart';
 
+/// UserProfileの更新に関する処理を行う
 @riverpod
 class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
   @override
-  FutureOr<UserProfileForWrite> build() async {
+  FutureOr<UserProfile> build() async {
     final userId = ref.read(userIdProvider)!;
     final initialUserProfile =
         await ref.read(userProfileProvider(userId).future);
 
-    return _initialState = initialUserProfile.toUserProfileForWrite();
+    return _initialState = initialUserProfile;
   }
 
-  /// 初期時の[UserProfileForWrite].
+  /// 初期時の[UserProfile].
   /// 現在の状態と比較するために使用する
-  late final UserProfileForWrite _initialState;
+  late final UserProfile _initialState;
 
   void changeName(String name) {
     state = AsyncData(state.value!.copyWith(name: name));
@@ -51,7 +52,6 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
     // 画像を選択
     final pickedFile = await imageRepository.pickImage(imageSource);
     if (pickedFile == null) {
-      // TODO(me): トーストで選択されなかったことを知らせる
       isLoadingOverlayNotifier.finishLoading();
       return;
     }
@@ -59,7 +59,6 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
     // 画像を切り抜き
     final croppedFile = await imageRepository.cropImage(pickedFile.path);
     if (croppedFile == null) {
-      // TODO(me): トーストで切り抜きされなかったことを知らせる
       isLoadingOverlayNotifier.finishLoading();
       return;
     }
@@ -75,7 +74,7 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
   Future<void> edit() async {
     final isLoadingOverlayNotifier =
         ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
-    final snackBarNotifier = ref.read(snackBarControllerProvider.notifier);
+    final toastNotifier = ref.read(toastControllerProvider.notifier);
 
     try {
       // 新たに画像が選択されているかどうか
@@ -93,10 +92,7 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
       // プロフィールを更新
     } on Exception catch (e) {
       logger.e('プロフィール編集時にエラーが発生 error: $e');
-      snackBarNotifier.showSnackBar(
-        '保存できませんでした。もう一度お試しください。',
-        causeError: true,
-      );
+      toastNotifier.showToast('保存できませんでした。もう一度お試しください。', causeError: true);
       isLoadingOverlayNotifier.finishLoading();
       return;
     }
@@ -107,7 +103,7 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
 
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
-    snackBarNotifier.showSnackBar('保存しました！', causeError: false);
+    toastNotifier.showToast('保存しました！');
   }
 
   /// 画像をアップロードし、ダウンロードURLを返す

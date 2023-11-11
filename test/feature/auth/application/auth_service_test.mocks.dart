@@ -8,26 +8,28 @@ import 'dart:async' as _i9;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:firebase_auth/firebase_auth.dart' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i15;
-import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i13;
+import 'package:riverpod_annotation/riverpod_annotation.dart' as _i16;
+import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i14;
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart'
-    as _i12;
+    as _i13;
 import 'package:teigi_app/feature/user_config/repository/entity/user_config_document.dart'
     as _i6;
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart'
-    as _i11;
+    as _i12;
 import 'package:teigi_app/feature/user_profile/domain/user_id_list_state.dart'
     as _i5;
+import 'package:teigi_app/feature/user_profile/domain/user_profile.dart'
+    as _i10;
 import 'package:teigi_app/feature/user_profile/repository/entity/user_follow_count_document.dart'
     as _i4;
 import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart'
     as _i3;
 import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart'
-    as _i10;
+    as _i11;
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart'
     as _i8;
 
-import 'auth_service_test.dart' as _i14;
+import 'auth_service_test.dart' as _i15;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -164,13 +166,24 @@ class MockUserProfileRepository extends _i1.Mock
         returnValue: _i9.Future<void>.value(),
         returnValueForMissingStub: _i9.Future<void>.value(),
       ) as _i9.Future<void>);
+
+  @override
+  _i9.Future<void> updateUserProfile(_i10.UserProfile? userProfileForWrite) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUserProfile,
+          [userProfileForWrite],
+        ),
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 }
 
 /// A class which mocks [UserFollowRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserFollowRepository extends _i1.Mock
-    implements _i10.UserFollowRepository {
+    implements _i11.UserFollowRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),
@@ -362,7 +375,7 @@ class MockUserFollowRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserConfigRepository extends _i1.Mock
-    implements _i11.UserConfigRepository {
+    implements _i12.UserConfigRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),
@@ -478,7 +491,7 @@ class MockUserConfigRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDeviceInfoRepository extends _i1.Mock
-    implements _i12.DeviceInfoRepository {
+    implements _i13.DeviceInfoRepository {
   @override
   _i9.Future<String?> fetchOsVersion() => (super.noSuchMethod(
         Invocation.method(
@@ -493,7 +506,7 @@ class MockDeviceInfoRepository extends _i1.Mock
 /// A class which mocks [AuthRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthRepository extends _i1.Mock implements _i13.AuthRepository {
+class MockAuthRepository extends _i1.Mock implements _i14.AuthRepository {
   @override
   _i7.FirebaseAuth get firebaseAuth => (super.noSuchMethod(
         Invocation.getter(#firebaseAuth),
@@ -539,11 +552,11 @@ class MockAuthRepository extends _i1.Mock implements _i13.AuthRepository {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockListener extends _i1.Mock
-    implements _i14.Listener<_i15.AsyncValue<void>> {
+    implements _i15.Listener<_i16.AsyncValue<void>> {
   @override
   void call(
-    _i15.AsyncValue<void>? previous,
-    _i15.AsyncValue<void>? next,
+    _i16.AsyncValue<void>? previous,
+    _i16.AsyncValue<void>? next,
   ) =>
       super.noSuchMethod(
         Invocation.method(

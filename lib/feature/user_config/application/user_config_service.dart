@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/is_loading_overlay_state.dart';
-import '../../../core/common_provider/snack_bar_controller.dart';
+import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../repository/user_config_repository.dart';
@@ -19,7 +19,7 @@ class UserConfigService extends _$UserConfigService {
     await _modifyMutedUserList(
       targetUserId,
       willMute: true,
-      snackBarMessage: 'ミュートしました',
+      toastMessage: 'ミュートしました',
     );
   }
 
@@ -28,14 +28,14 @@ class UserConfigService extends _$UserConfigService {
     await _modifyMutedUserList(
       targetUserId,
       willMute: false,
-      snackBarMessage: 'ミュート解除しました',
+      toastMessage: 'ミュート解除しました',
     );
   }
 
   Future<void> _modifyMutedUserList(
     String targetUserId, {
     required bool willMute,
-    required String snackBarMessage,
+    required String toastMessage,
   }) async {
     final isLoadingOverlayNotifier =
         ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
@@ -57,8 +57,8 @@ class UserConfigService extends _$UserConfigService {
       final action = willMute ? 'ミュート登録' : 'ミュート解除';
       logger.e('$action時にエラーが発生: $e');
       ref
-          .read(snackBarControllerProvider.notifier)
-          .showSnackBar('失敗しました。もう一度お試しください。', causeError: true);
+          .read(toastControllerProvider.notifier)
+          .showToast('失敗しました。もう一度お試しください。', causeError: true);
 
       isLoadingOverlayNotifier.finishLoading();
       return;
@@ -66,9 +66,7 @@ class UserConfigService extends _$UserConfigService {
 
     ref.invalidate(mutedUserIdListProvider);
 
-    ref
-        .read(snackBarControllerProvider.notifier)
-        .showSnackBar(snackBarMessage, causeError: false);
+    ref.read(toastControllerProvider.notifier).showToast(toastMessage);
     isLoadingOverlayNotifier.finishLoading();
   }
 }

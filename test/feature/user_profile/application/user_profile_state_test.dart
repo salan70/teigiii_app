@@ -86,8 +86,7 @@ void main() {
         name: mockUserProfileDoc.name,
         bio: mockUserProfileDoc.bio,
         profileImageUrl: mockUserProfileDoc.profileImageUrl,
-        followerCount: mockUserFollowCountDoc.followerCount,
-        followingCount: mockUserFollowCountDoc.followingCount,
+        croppedFile: null,
       );
       // stateの検証
       verifyInOrder([
@@ -109,13 +108,10 @@ void main() {
       verify(
         mockUserProfileRepository.fetchUserProfile(mockUserProfileDoc.id),
       ).called(1);
-      verify(
-        mockUserFollowRepository.fetchUserFollowCount(mockUserProfileDoc.id),
-      ).called(1);
     });
   });
 
-    group('followingIdList', () {
+  group('followingIdList', () {
     test('stateの更新、repositoryで定義している関数の呼び出しを検証', () async {
       // * Arrange
       const mockFollowingIdList = ['followingId1', 'followingId2'];

@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_provider/snack_bar_controller.dart';
+import '../../../../../core/common_provider/toast_controller.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/extension/date_time_extension.dart';
 import '../../../../../util/logger.dart';
@@ -124,7 +124,7 @@ class EditDefinitionPage extends ConsumerWidget {
 
                     // canEdit()がtrueの場合、canPost()もtrueのため、
                     // ここに到達することはない想定
-                    ref.read(snackBarControllerProvider.notifier).showSnackBar(
+                    ref.read(toastControllerProvider.notifier).showToast(
                           '保存できませんでした。もう一度お試しください。',
                           causeError: true,
                         );

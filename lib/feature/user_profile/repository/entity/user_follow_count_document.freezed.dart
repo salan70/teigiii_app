@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$UserFollowCountDocument {
-  String get id => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
   int get followerCount => throw _privateConstructorUsedError;
   int get followingCount => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -34,7 +34,7 @@ abstract class $UserFollowCountDocumentCopyWith<$Res> {
       _$UserFollowCountDocumentCopyWithImpl<$Res, UserFollowCountDocument>;
   @useResult
   $Res call(
-      {String id,
+      {String userId,
       int followerCount,
       int followingCount,
       DateTime createdAt,
@@ -55,16 +55,16 @@ class _$UserFollowCountDocumentCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? userId = null,
     Object? followerCount = null,
     Object? followingCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String,
       followerCount: null == followerCount
           ? _value.followerCount
@@ -95,7 +95,7 @@ abstract class _$$_UserFollowCountDocumentCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
+      {String userId,
       int followerCount,
       int followingCount,
       DateTime createdAt,
@@ -114,16 +114,16 @@ class __$$_UserFollowCountDocumentCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? userId = null,
     Object? followerCount = null,
     Object? followingCount = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
     return _then(_$_UserFollowCountDocument(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String,
       followerCount: null == followerCount
           ? _value.followerCount
@@ -149,14 +149,14 @@ class __$$_UserFollowCountDocumentCopyWithImpl<$Res>
 
 class _$_UserFollowCountDocument implements _UserFollowCountDocument {
   const _$_UserFollowCountDocument(
-      {required this.id,
+      {required this.userId,
       required this.followerCount,
       required this.followingCount,
       required this.createdAt,
       required this.updatedAt});
 
   @override
-  final String id;
+  final String userId;
   @override
   final int followerCount;
   @override
@@ -168,7 +168,7 @@ class _$_UserFollowCountDocument implements _UserFollowCountDocument {
 
   @override
   String toString() {
-    return 'UserFollowCountDocument(id: $id, followerCount: $followerCount, followingCount: $followingCount, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserFollowCountDocument(userId: $userId, followerCount: $followerCount, followingCount: $followingCount, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -176,7 +176,7 @@ class _$_UserFollowCountDocument implements _UserFollowCountDocument {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_UserFollowCountDocument &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.followerCount, followerCount) ||
                 other.followerCount == followerCount) &&
             (identical(other.followingCount, followingCount) ||
@@ -189,7 +189,7 @@ class _$_UserFollowCountDocument implements _UserFollowCountDocument {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, followerCount, followingCount, createdAt, updatedAt);
+      runtimeType, userId, followerCount, followingCount, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -202,14 +202,14 @@ class _$_UserFollowCountDocument implements _UserFollowCountDocument {
 
 abstract class _UserFollowCountDocument implements UserFollowCountDocument {
   const factory _UserFollowCountDocument(
-      {required final String id,
+      {required final String userId,
       required final int followerCount,
       required final int followingCount,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$_UserFollowCountDocument;
 
   @override
-  String get id;
+  String get userId;
   @override
   int get followerCount;
   @override

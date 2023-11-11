@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/core/common_provider/toast_controller.dart';
 import 'package:teigi_app/feature/user_profile/application/user_id_list_state.dart';
 import 'package:teigi_app/feature/user_profile/domain/user_id_list_state.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart';
@@ -14,6 +15,9 @@ import 'user_id_list_state_test.mocks.dart';
   MockSpec<UserFollowRepository>(),
   MockSpec<Listener<AsyncValue<UserIdListState>>>(),
 ])
+class MockToastController extends Notifier<void>
+    with Mock
+    implements ToastController {}
 
 // ignore: one_member_abstracts, unreachable_from_main
 abstract class Listener<T> {
@@ -34,6 +38,9 @@ void main() {
       overrides: [
         userFollowRepositoryProvider
             .overrideWithValue(mockUserFollowRepository),
+        toastControllerProvider.overrideWith(
+          MockToastController.new,
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -174,7 +181,10 @@ void main() {
         hasMore: false,
       );
       when(
-        mockUserFollowRepository.fetchFollowingIdList(any, firstState.lastReadQueryDocumentSnapshot),
+        mockUserFollowRepository.fetchFollowingIdList(
+          any,
+          firstState.lastReadQueryDocumentSnapshot,
+        ),
       ).thenAnswer((_) async => secondState);
 
       const targetUserId = 'targetUserId';
@@ -270,7 +280,10 @@ void main() {
         hasMore: false,
       );
       when(
-        mockUserFollowRepository.fetchFollowerIdList(any, firstState.lastReadQueryDocumentSnapshot),
+        mockUserFollowRepository.fetchFollowerIdList(
+          any,
+          firstState.lastReadQueryDocumentSnapshot,
+        ),
       ).thenAnswer((_) async => secondState);
 
       const targetUserId = 'targetUserId';
@@ -405,7 +418,10 @@ void main() {
       ).thenAnswer((_) async => firstState);
       final testException = Exception('fetchFollowingIdListFirst()で例外発生！！！');
       when(
-        mockUserFollowRepository.fetchFollowingIdList(any, firstState.lastReadQueryDocumentSnapshot),
+        mockUserFollowRepository.fetchFollowingIdList(
+          any,
+          firstState.lastReadQueryDocumentSnapshot,
+        ),
       ).thenThrow(testException);
 
       final userIdListProvider = userIdListStateNotifierProvider(
@@ -474,7 +490,7 @@ void main() {
       // 他にlistenerが発火されないことを検証
       verifyNoMoreInteractions(listener);
 
-      // TODO(me): snackBarを表示させる関数が呼ばれていることを検証する
+      // TODO(me): toastを表示させる関数が呼ばれていることを検証する
     });
   });
 }

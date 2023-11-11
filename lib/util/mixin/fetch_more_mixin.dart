@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/common_provider/snack_bar_controller.dart';
+import '../../core/common_provider/toast_controller.dart';
 import '../interface/list_state.dart';
 import '../logger.dart';
 
@@ -33,8 +33,8 @@ mixin FetchMoreMixin<T extends ListState> {
     } on Exception catch (e, s) {
       logger.e('$e');
       ref
-          .read(snackBarControllerProvider.notifier)
-          .showSnackBar('読み込めませんでした。もう一度お試しください。', causeError: true);
+          .read(toastControllerProvider.notifier)
+          .showToast('読み込めませんでした。もう一度お試しください。', causeError: true);
       state = AsyncError(e, s);
     }
   }
