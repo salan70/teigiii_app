@@ -7,6 +7,7 @@ import 'package:teigi_app/feature/definition/application/definition_state.dart';
 import 'package:teigi_app/feature/definition/domain/definition.dart';
 import 'package:teigi_app/feature/definition/repository/fetch_definition_repository.dart';
 import 'package:teigi_app/feature/definition/repository/write_definition_repository.dart';
+import 'package:teigi_app/feature/user_profile/application/user_profile_state.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
 import 'package:teigi_app/feature/word/repository/word_repository.dart';
 
@@ -40,6 +41,9 @@ void main() {
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => 'userId'),
+        userProfileProvider(mockUserProfileDoc.id).overrideWith(
+          (ref) => mockUserProfile,
+        ),
         writeDefinitionRepositoryProvider
             .overrideWithValue(mockWriteDefinitionRepository),
         fetchDefinitionRepositoryProvider
@@ -68,9 +72,6 @@ void main() {
       when(
         mockWordRepository.fetchWordById(any),
       ).thenAnswer((_) async => mockWordDoc);
-      when(
-        mockUserProfileRepository.fetchUserProfile(any),
-      ).thenAnswer((_) async => mockUserProfileDoc);
       const isLikedByUser = true;
       when(
         mockWriteDefinitionRepository.isLikedByUser(any, any),
@@ -95,8 +96,8 @@ void main() {
         word: mockWordDoc.word,
         wordReading: mockWordDoc.reading,
         authorId: mockDefinitionDoc.authorId,
-        authorName: mockUserProfileDoc.name,
-        authorImageUrl: mockUserProfileDoc.profileImageUrl,
+        authorName: mockUserProfile.name,
+        authorImageUrl: mockUserProfile.profileImageUrl,
         definition: mockDefinitionDoc.definition,
         isPublic: mockDefinitionDoc.isPublic,
         likesCount: mockDefinitionDoc.likesCount,
@@ -122,12 +123,6 @@ void main() {
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
         mockFetchDefinitionRepository.fetchDefinition(mockDefinitionDoc.id),
-      ).called(1);
-      verify(
-        mockWordRepository.fetchWordById(mockDefinitionDoc.wordId),
-      ).called(1);
-      verify(
-        mockUserProfileRepository.fetchUserProfile(mockDefinitionDoc.authorId),
       ).called(1);
       verify(
         mockWriteDefinitionRepository.isLikedByUser(
