@@ -53,7 +53,6 @@ class ProfilePage extends ConsumerWidget {
                     },
                   ),
                   actions: [
-                    // 自分のプロフィールの場合は編集ボタンを表示
                     isMyProfile
                         ? IconButton(
                             icon: const Icon(CupertinoIcons.person_add),

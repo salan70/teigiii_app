@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'user_profile.dart';
+part of 'user_profile_for_write.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,38 +15,38 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$UserProfile {
+mixin _$UserProfileForWrite {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get bio => throw _privateConstructorUsedError;
   String get profileImageUrl => throw _privateConstructorUsedError;
-  int get followerCount => throw _privateConstructorUsedError;
-  int get followingCount => throw _privateConstructorUsedError;
+
+  /// アップロード用にユーザーが指定したファイル（画像）を保持する
+  CroppedFile? get croppedFile => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $UserProfileCopyWith<UserProfile> get copyWith =>
+  $UserProfileForWriteCopyWith<UserProfileForWrite> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserProfileCopyWith<$Res> {
-  factory $UserProfileCopyWith(
-          UserProfile value, $Res Function(UserProfile) then) =
-      _$UserProfileCopyWithImpl<$Res, UserProfile>;
+abstract class $UserProfileForWriteCopyWith<$Res> {
+  factory $UserProfileForWriteCopyWith(
+          UserProfileForWrite value, $Res Function(UserProfileForWrite) then) =
+      _$UserProfileForWriteCopyWithImpl<$Res, UserProfileForWrite>;
   @useResult
   $Res call(
       {String id,
       String name,
       String bio,
       String profileImageUrl,
-      int followerCount,
-      int followingCount});
+      CroppedFile? croppedFile});
 }
 
 /// @nodoc
-class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
-    implements $UserProfileCopyWith<$Res> {
-  _$UserProfileCopyWithImpl(this._value, this._then);
+class _$UserProfileForWriteCopyWithImpl<$Res, $Val extends UserProfileForWrite>
+    implements $UserProfileForWriteCopyWith<$Res> {
+  _$UserProfileForWriteCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -60,8 +60,7 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
     Object? name = null,
     Object? bio = null,
     Object? profileImageUrl = null,
-    Object? followerCount = null,
-    Object? followingCount = null,
+    Object? croppedFile = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -80,24 +79,20 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      followerCount: null == followerCount
-          ? _value.followerCount
-          : followerCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      followingCount: null == followingCount
-          ? _value.followingCount
-          : followingCount // ignore: cast_nullable_to_non_nullable
-              as int,
+      croppedFile: freezed == croppedFile
+          ? _value.croppedFile
+          : croppedFile // ignore: cast_nullable_to_non_nullable
+              as CroppedFile?,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$_UserProfileCopyWith<$Res>
-    implements $UserProfileCopyWith<$Res> {
-  factory _$$_UserProfileCopyWith(
-          _$_UserProfile value, $Res Function(_$_UserProfile) then) =
-      __$$_UserProfileCopyWithImpl<$Res>;
+abstract class _$$_UserProfileForWriteCopyWith<$Res>
+    implements $UserProfileForWriteCopyWith<$Res> {
+  factory _$$_UserProfileForWriteCopyWith(_$_UserProfileForWrite value,
+          $Res Function(_$_UserProfileForWrite) then) =
+      __$$_UserProfileForWriteCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -105,16 +100,15 @@ abstract class _$$_UserProfileCopyWith<$Res>
       String name,
       String bio,
       String profileImageUrl,
-      int followerCount,
-      int followingCount});
+      CroppedFile? croppedFile});
 }
 
 /// @nodoc
-class __$$_UserProfileCopyWithImpl<$Res>
-    extends _$UserProfileCopyWithImpl<$Res, _$_UserProfile>
-    implements _$$_UserProfileCopyWith<$Res> {
-  __$$_UserProfileCopyWithImpl(
-      _$_UserProfile _value, $Res Function(_$_UserProfile) _then)
+class __$$_UserProfileForWriteCopyWithImpl<$Res>
+    extends _$UserProfileForWriteCopyWithImpl<$Res, _$_UserProfileForWrite>
+    implements _$$_UserProfileForWriteCopyWith<$Res> {
+  __$$_UserProfileForWriteCopyWithImpl(_$_UserProfileForWrite _value,
+      $Res Function(_$_UserProfileForWrite) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -124,10 +118,9 @@ class __$$_UserProfileCopyWithImpl<$Res>
     Object? name = null,
     Object? bio = null,
     Object? profileImageUrl = null,
-    Object? followerCount = null,
-    Object? followingCount = null,
+    Object? croppedFile = freezed,
   }) {
-    return _then(_$_UserProfile(
+    return _then(_$_UserProfileForWrite(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -144,28 +137,23 @@ class __$$_UserProfileCopyWithImpl<$Res>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      followerCount: null == followerCount
-          ? _value.followerCount
-          : followerCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      followingCount: null == followingCount
-          ? _value.followingCount
-          : followingCount // ignore: cast_nullable_to_non_nullable
-              as int,
+      croppedFile: freezed == croppedFile
+          ? _value.croppedFile
+          : croppedFile // ignore: cast_nullable_to_non_nullable
+              as CroppedFile?,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_UserProfile extends _UserProfile {
-  const _$_UserProfile(
+class _$_UserProfileForWrite extends _UserProfileForWrite {
+  const _$_UserProfileForWrite(
       {required this.id,
       required this.name,
       required this.bio,
       required this.profileImageUrl,
-      required this.followerCount,
-      required this.followingCount})
+      required this.croppedFile})
       : super._();
 
   @override
@@ -176,52 +164,50 @@ class _$_UserProfile extends _UserProfile {
   final String bio;
   @override
   final String profileImageUrl;
+
+  /// アップロード用にユーザーが指定したファイル（画像）を保持する
   @override
-  final int followerCount;
-  @override
-  final int followingCount;
+  final CroppedFile? croppedFile;
 
   @override
   String toString() {
-    return 'UserProfile(id: $id, name: $name, bio: $bio, profileImageUrl: $profileImageUrl, followerCount: $followerCount, followingCount: $followingCount)';
+    return 'UserProfileForWrite(id: $id, name: $name, bio: $bio, profileImageUrl: $profileImageUrl, croppedFile: $croppedFile)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserProfile &&
+            other is _$_UserProfileForWrite &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.bio, bio) || other.bio == bio) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
                 other.profileImageUrl == profileImageUrl) &&
-            (identical(other.followerCount, followerCount) ||
-                other.followerCount == followerCount) &&
-            (identical(other.followingCount, followingCount) ||
-                other.followingCount == followingCount));
+            (identical(other.croppedFile, croppedFile) ||
+                other.croppedFile == croppedFile));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, bio, profileImageUrl,
-      followerCount, followingCount);
+  int get hashCode =>
+      Object.hash(runtimeType, id, name, bio, profileImageUrl, croppedFile);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserProfileCopyWith<_$_UserProfile> get copyWith =>
-      __$$_UserProfileCopyWithImpl<_$_UserProfile>(this, _$identity);
+  _$$_UserProfileForWriteCopyWith<_$_UserProfileForWrite> get copyWith =>
+      __$$_UserProfileForWriteCopyWithImpl<_$_UserProfileForWrite>(
+          this, _$identity);
 }
 
-abstract class _UserProfile extends UserProfile {
-  const factory _UserProfile(
+abstract class _UserProfileForWrite extends UserProfileForWrite {
+  const factory _UserProfileForWrite(
       {required final String id,
       required final String name,
       required final String bio,
       required final String profileImageUrl,
-      required final int followerCount,
-      required final int followingCount}) = _$_UserProfile;
-  const _UserProfile._() : super._();
+      required final CroppedFile? croppedFile}) = _$_UserProfileForWrite;
+  const _UserProfileForWrite._() : super._();
 
   @override
   String get id;
@@ -232,11 +218,11 @@ abstract class _UserProfile extends UserProfile {
   @override
   String get profileImageUrl;
   @override
-  int get followerCount;
-  @override
-  int get followingCount;
+
+  /// アップロード用にユーザーが指定したファイル（画像）を保持する
+  CroppedFile? get croppedFile;
   @override
   @JsonKey(ignore: true)
-  _$$_UserProfileCopyWith<_$_UserProfile> get copyWith =>
+  _$$_UserProfileForWriteCopyWith<_$_UserProfileForWrite> get copyWith =>
       throw _privateConstructorUsedError;
 }

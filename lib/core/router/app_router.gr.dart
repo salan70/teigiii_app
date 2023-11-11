@@ -47,6 +47,14 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    EditProfileRoute.name: (routeData) {
+      final args = routeData.argsAs<EditProfileRouteArgs>(
+          orElse: () => const EditProfileRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EditProfilePage(key: args.key),
+      );
+    },
     EveryoneDictionaryRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -312,6 +320,35 @@ class EditDefinitionRouteArgs {
   @override
   String toString() {
     return 'EditDefinitionRouteArgs{key: $key, initialDefinition: $initialDefinition}';
+  }
+}
+
+/// generated route for
+/// [EditProfilePage]
+class EditProfileRoute extends PageRouteInfo<EditProfileRouteArgs> {
+  EditProfileRoute({
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EditProfileRoute.name,
+          args: EditProfileRouteArgs(key: key),
+          initialChildren: children,
+        );
+
+  static const String name = 'EditProfileRoute';
+
+  static const PageInfo<EditProfileRouteArgs> page =
+      PageInfo<EditProfileRouteArgs>(name);
+}
+
+class EditProfileRouteArgs {
+  const EditProfileRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'EditProfileRouteArgs{key: $key}';
   }
 }
 

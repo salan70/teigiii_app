@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/common_widget/show_write_close_confirm_dialog.dart';
 import '../../application/definition_for_write_notifier.dart';
 import '../../domain/definition_for_write.dart';
 import '../../util/write_definition_form_type.dart';
@@ -44,7 +45,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
               await context.popRoute();
               return;
             }
-            await _showCloseConfirmDialog(context);
+            await showCloseConfirmDialog(context);
           },
         ),
         title: SelectPostTypeButton(
@@ -120,58 +121,4 @@ class WriteDefinitionBasePage extends ConsumerWidget {
     );
   }
 
-  Future<void> _showCloseConfirmDialog(BuildContext context) async {
-    await showDialog<dynamic>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          elevation: 0,
-          contentPadding: const EdgeInsets.only(
-            top: 40,
-            bottom: 16,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          content: const Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('入力した内容は保存されません。'),
-              Text('よろしいですか？'),
-            ],
-          ),
-          actionsAlignment: MainAxisAlignment.spaceEvenly,
-          actionsPadding: const EdgeInsets.only(bottom: 16),
-          actions: [
-            InkWell(
-              onTap: () {
-                context.popRoute();
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  'キャンセル',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  'OK',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
   }
-}

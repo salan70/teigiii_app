@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/avatar_icon_widget.dart';
+import '../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../user_profile/application/user_profile_state.dart';
 
@@ -37,7 +37,7 @@ class DictionaryAuthorWidget extends ConsumerWidget {
               },
               child: Row(
                 children: [
-                  AvatarIconWidget(
+                  AvatarNetworkImageWidget(
                     imageUrl: targetUserProfile.profileImageUrl,
                   ),
                   const SizedBox(width: 16),

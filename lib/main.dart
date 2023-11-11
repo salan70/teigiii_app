@@ -4,6 +4,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/common_provider/is_loading_overlay_state.dart';
@@ -76,17 +77,23 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('ja')],
       routerConfig: ref.watch(appRouterProvider).config(),
       scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
       theme: ThemeData(
-        fontFamily: 'LINESeedJP',
+        fontFamily: lineFontFamily,
         colorScheme: lightColorScheme,
         textTheme: textTheme,
         appBarTheme: AppBarTheme(
           backgroundColor: lightColorScheme.surface,
           elevation: 0.1,
           titleTextStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
-                fontFamily: 'LINESeedJP',
+                fontFamily: lineFontFamily,
                 color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
@@ -103,6 +110,19 @@ class _MyAppState extends ConsumerState<MyApp> {
               Theme.of(context).colorScheme.primary,
             ),
           ),
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          selectedItemColor: lightColorScheme.primary,
+          selectedLabelStyle: const TextStyle(
+            fontFamily: lineFontFamily,
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontFamily: lineFontFamily,
+          ),
+          elevation: 0.1,
         ),
         tabBarTheme: lightTabBarTheme,
         scaffoldBackgroundColor: lightColorScheme.surface,

@@ -12,6 +12,7 @@ import '../../feature/definition/util/write_definition_form_type.dart';
 import '../../feature/setting/presentation/license_page.dart';
 import '../../feature/setting/presentation/muted_user_list_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
+import '../../feature/user_profile/presentation/page/edit_profile/edit_profile_page.dart';
 import '../../feature/user_profile/presentation/page/following_and_follower_list/following_and_follower_list_page.dart';
 import '../../feature/user_profile/presentation/page/like_user_page.dart/like_user_page.dart';
 import '../../feature/user_profile/presentation/page/profile/profile_page.dart';
@@ -32,88 +33,89 @@ part 'app_router.gr.dart';
 Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter();
 
 // TODO(me): 一部Routeのpathにidを含める
+// TODO(me): OSによってCupertinoRouteとMaterialRouteを切り替える
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends _$AppRouter {
-  final List<AutoRoute> commonRouteList = [
-    AutoRoute(
+  final List<AdaptiveRoute> commonRouteList = [
+    AdaptiveRoute(
       path: 'definition_detail',
       page: DefinitionDetailRoute.page,
     ),
-    AutoRoute(
+    AdaptiveRoute(
       path: 'like_user_list',
       page: LikeUserRoute.page,
     ),
-    AutoRoute(
+    AdaptiveRoute(
       path: 'word_top',
       page: WordTopRoute.page,
     ),
-    AutoRoute(
+    AdaptiveRoute(
       path: 'profile',
       page: ProfileRoute.page,
     ),
-    AutoRoute(
+    AdaptiveRoute(
       path: 'following_and_follower_list',
       page: FollowingAndFollowerListRoute.page,
     ),
-    AutoRoute(
+    AdaptiveRoute(
       path: 'initial_sub_group_index',
       page: InitialSubGroupIndexRoute.page,
     ),
-    AutoRoute(
+    AdaptiveRoute(
       path: 'individual_dictionary_definition_list',
       page: IndividualDictionaryDefinitionListRoute.page,
     ),
   ];
 
   @override
-  List<AutoRoute> get routes => [
-        AutoRoute(
+  List<AdaptiveRoute> get routes => [
+        AdaptiveRoute(
           path: '/',
           page: BaseRoute.page,
           children: [
-            AutoRoute(
+            AdaptiveRoute(
               path: 'home',
               page: HomeRouterRoute.page,
               children: [
-                AutoRoute(
+                AdaptiveRoute(
                   initial: true,
                   page: HomeRoute.page,
                 ),
-                AutoRoute(
+                AdaptiveRoute(
                   path: 'individual_dictionary',
                   page: IndividualDictionaryRoute.page,
                 ),
                 ...commonRouteList,
               ],
             ),
-            AutoRoute(
+            AdaptiveRoute(
               path: 'individual_dictionary',
               page: IndividualDictionaryRouterRoute.page,
               children: [
-                AutoRoute(
+                AdaptiveRoute(
                   initial: true,
                   page: IndividualDictionaryRoute.page,
                 ),
                 ...commonRouteList,
               ],
             ),
-            AutoRoute(
+            AdaptiveRoute(
               path: 'index',
               page: EveryoneDictionaryRouterRoute.page,
               children: [
-                AutoRoute(
+                AdaptiveRoute(
                   initial: true,
                   page: EveryoneDictionaryRoute.page,
                 ),
-                AutoRoute(
+                AdaptiveRoute(
                   path: 'word_list',
                   page: WordListRoute.page,
                 ),
-                AutoRoute(
+                AdaptiveRoute(
                   path: 'search_word_result',
                   page: SearchWordResultRoute.page,
                 ),
-                AutoRoute(
+                AdaptiveRoute(
                   path: 'individual_dictionary',
                   page: IndividualDictionaryRoute.page,
                 ),
@@ -122,33 +124,38 @@ class AppRouter extends _$AppRouter {
             ),
           ],
         ),
-        AutoRoute(
+        AdaptiveRoute(
           path: '/setting',
           page: SettingRouterRoute.page,
           fullscreenDialog: true,
           children: [
-            AutoRoute(
+            AdaptiveRoute(
               initial: true,
               page: SettingRoute.page,
             ),
-            AutoRoute(
+            AdaptiveRoute(
               path: 'license',
               page: MyLicenseRoute.page,
             ),
-            AutoRoute(
+            AdaptiveRoute(
               path: 'muted_user_list',
               page: MutedUserListRoute.page,
             ),
           ],
         ),
-        AutoRoute(
+        AdaptiveRoute(
           path: '/post_definition',
           page: PostDefinitionRoute.page,
           fullscreenDialog: true,
         ),
-        AutoRoute(
+        AdaptiveRoute(
           path: '/edit_definition',
           page: EditDefinitionRoute.page,
+          fullscreenDialog: true,
+        ),
+        AdaptiveRoute(
+          path: '/edit_profile',
+          page: EditProfileRoute.page,
           fullscreenDialog: true,
         ),
       ];
