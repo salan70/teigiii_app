@@ -9,9 +9,12 @@ import '../../../application/user_profile_for_write_notifier.dart';
 
 @RoutePage()
 class EditProfilePage extends ConsumerWidget {
-  const EditProfilePage({
+  EditProfilePage({
     super.key,
   });
+
+  final globalKey = GlobalKey();
+  final avatarSize = AvatarSize.large;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,8 +23,6 @@ class EditProfilePage extends ConsumerWidget {
     final notifier = ref.watch(
       userProfileForWriteNotifierProvider.notifier,
     );
-
-    const avatarSize = AvatarSize.large;
 
     return asyncUserProfileForWrite.when(
       data: (userProfileForWrite) {
@@ -71,6 +72,24 @@ class EditProfilePage extends ConsumerWidget {
                 children: [
                   const SizedBox(height: 24),
                   InkWell(
+                    key: globalKey,
+                    onTap: () async {
+                      // IconButtonの位置を取得
+                      // final box = globalKey.currentContext?.findRenderObject()
+                      //     as RenderBox?;
+                      // final position =
+                      //     box!.localToGlobal(Offset.zero) & const Size(40, 48);
+
+                      // if (!context.mounted) {
+                      //   return;
+                      // }
+
+                      // await showPullDownMenu(
+                      //   context: context,
+                      //   position: position,
+                      //   items: items,
+                      // );
+                    },
                     child: Stack(
                       alignment: AlignmentDirectional.center,
                       children: [

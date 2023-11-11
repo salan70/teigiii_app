@@ -7,16 +7,16 @@ import '../../../feature/user_config/application/user_config_service.dart';
 import '../../../feature/user_config/application/user_config_state.dart';
 
 class OtherUserActionIconButton extends ConsumerWidget {
-  const OtherUserActionIconButton({
+  OtherUserActionIconButton({
     super.key,
     required this.ownerId,
   });
 
   final String ownerId;
+  final globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final globalKey = GlobalKey();
     final asyncMutedUserIdList = ref.watch(mutedUserIdListProvider);
 
     // プルダウンメニューの項目を作成する

@@ -8,7 +8,7 @@ import '../../domain/definition_for_write.dart';
 import '../../util/definition_post_type.dart';
 
 class SelectPostTypeButton extends ConsumerWidget {
-  const SelectPostTypeButton({
+  SelectPostTypeButton({
     super.key,
     required this.definitionForWrite,
     required this.notifier,
@@ -16,10 +16,10 @@ class SelectPostTypeButton extends ConsumerWidget {
 
   final DefinitionForWrite definitionForWrite;
   final DefinitionForWriteNotifier notifier;
+  final globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final globalKey = GlobalKey();
     final postType = definitionForWrite.isPublic
         ? DefinitionPostType.public
         : DefinitionPostType.private;
