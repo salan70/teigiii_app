@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:teigi_app/feature/user_profile/domain/user_profile_for_write.dart';
+import 'package:teigi_app/feature/user_profile/domain/user_profile.dart';
 
 void main() {
   group('UserProfileForWrite Tests', () {
-    const defaultUserProfileForWrite = UserProfileForWrite(
+    const defaultUserProfileForWrite = UserProfile(
       id: 'userId',
       name: 'ヒトカゲ',
       bio: '早くリザードになりたい',

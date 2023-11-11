@@ -6,7 +6,7 @@ part of 'user_config_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userConfigServiceHash() => r'aa1fd9dc9eb9b89f97a05b55b0a8339263b06ec2';
+String _$userConfigServiceHash() => r'93dd1e1b93b2d6ddbf081fa4e4868c2396583a54';
 
 /// See also [UserConfigService].
 @ProviderFor(UserConfigService)

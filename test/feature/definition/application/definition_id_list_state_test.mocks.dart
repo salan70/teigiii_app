@@ -26,7 +26,7 @@ import 'package:teigi_app/feature/user_config/repository/user_config_repository.
     as _i19;
 import 'package:teigi_app/feature/user_profile/domain/user_id_list_state.dart'
     as _i5;
-import 'package:teigi_app/feature/user_profile/domain/user_profile_for_write.dart'
+import 'package:teigi_app/feature/user_profile/domain/user_profile.dart'
     as _i18;
 import 'package:teigi_app/feature/user_profile/repository/entity/user_follow_count_document.dart'
     as _i8;
@@ -670,8 +670,7 @@ class MockUserProfileRepository extends _i1.Mock
       ) as _i12.Future<void>);
 
   @override
-  _i12.Future<void> updateUserProfile(
-          _i18.UserProfileForWrite? userProfileForWrite) =>
+  _i12.Future<void> updateUserProfile(_i18.UserProfile? userProfileForWrite) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateUserProfile,

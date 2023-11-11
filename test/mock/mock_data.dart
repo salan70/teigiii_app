@@ -49,8 +49,7 @@ final mockUserProfile = UserProfile(
   name: mockUserProfileDoc.name,
   bio: mockUserProfileDoc.bio,
   profileImageUrl: mockUserProfileDoc.profileImageUrl,
-  followerCount: mockUserFollowCountDoc.followerCount,
-  followingCount: mockUserFollowCountDoc.followingCount,
+  croppedFile: null,
 );
 
 final mockUserProfileDoc = UserProfileDocument(
@@ -63,7 +62,7 @@ final mockUserProfileDoc = UserProfileDocument(
 );
 
 final mockUserFollowCountDoc = UserFollowCountDocument(
-  id: mockUserProfileDoc.id,
+  userId: mockUserProfileDoc.id,
   followerCount: 1,
   followingCount: 2,
   createdAt: nowDateTime,

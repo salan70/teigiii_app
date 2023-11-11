@@ -70,13 +70,14 @@ class UserFollowService extends _$UserFollowService {
     isLoadingOverlayNotifier.finishLoading();
   }
 
-  /// ログイン中のユーザーと[targetUserId]のuserProfileProvider, isFollowingProviderを再生成する
+  /// ログイン中のユーザーと [targetUserId] の 
+  /// [followCountProvider], [isFollowingProvider] を再生成する
   void _invalidateRelatedUserProvider(String targetUserId) {
     final currentUserId = ref.read(userIdProvider)!;
 
     ref
-      ..invalidate(userProfileProvider(currentUserId))
-      ..invalidate(userProfileProvider(targetUserId))
+      ..invalidate(followCountProvider(currentUserId))
+      ..invalidate(followCountProvider(targetUserId))
       ..invalidate(isFollowingProvider(targetUserId));
   }
 }

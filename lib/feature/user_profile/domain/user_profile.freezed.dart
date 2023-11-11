@@ -20,8 +20,9 @@ mixin _$UserProfile {
   String get name => throw _privateConstructorUsedError;
   String get bio => throw _privateConstructorUsedError;
   String get profileImageUrl => throw _privateConstructorUsedError;
-  int get followerCount => throw _privateConstructorUsedError;
-  int get followingCount => throw _privateConstructorUsedError;
+
+  /// アップロード用にユーザーが指定したファイル（画像）を保持する
+  CroppedFile? get croppedFile => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $UserProfileCopyWith<UserProfile> get copyWith =>
@@ -39,8 +40,7 @@ abstract class $UserProfileCopyWith<$Res> {
       String name,
       String bio,
       String profileImageUrl,
-      int followerCount,
-      int followingCount});
+      CroppedFile? croppedFile});
 }
 
 /// @nodoc
@@ -60,8 +60,7 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
     Object? name = null,
     Object? bio = null,
     Object? profileImageUrl = null,
-    Object? followerCount = null,
-    Object? followingCount = null,
+    Object? croppedFile = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -80,14 +79,10 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      followerCount: null == followerCount
-          ? _value.followerCount
-          : followerCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      followingCount: null == followingCount
-          ? _value.followingCount
-          : followingCount // ignore: cast_nullable_to_non_nullable
-              as int,
+      croppedFile: freezed == croppedFile
+          ? _value.croppedFile
+          : croppedFile // ignore: cast_nullable_to_non_nullable
+              as CroppedFile?,
     ) as $Val);
   }
 }
@@ -105,8 +100,7 @@ abstract class _$$_UserProfileCopyWith<$Res>
       String name,
       String bio,
       String profileImageUrl,
-      int followerCount,
-      int followingCount});
+      CroppedFile? croppedFile});
 }
 
 /// @nodoc
@@ -124,8 +118,7 @@ class __$$_UserProfileCopyWithImpl<$Res>
     Object? name = null,
     Object? bio = null,
     Object? profileImageUrl = null,
-    Object? followerCount = null,
-    Object? followingCount = null,
+    Object? croppedFile = freezed,
   }) {
     return _then(_$_UserProfile(
       id: null == id
@@ -144,14 +137,10 @@ class __$$_UserProfileCopyWithImpl<$Res>
           ? _value.profileImageUrl
           : profileImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      followerCount: null == followerCount
-          ? _value.followerCount
-          : followerCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      followingCount: null == followingCount
-          ? _value.followingCount
-          : followingCount // ignore: cast_nullable_to_non_nullable
-              as int,
+      croppedFile: freezed == croppedFile
+          ? _value.croppedFile
+          : croppedFile // ignore: cast_nullable_to_non_nullable
+              as CroppedFile?,
     ));
   }
 }
@@ -164,8 +153,7 @@ class _$_UserProfile extends _UserProfile {
       required this.name,
       required this.bio,
       required this.profileImageUrl,
-      required this.followerCount,
-      required this.followingCount})
+      required this.croppedFile})
       : super._();
 
   @override
@@ -176,14 +164,14 @@ class _$_UserProfile extends _UserProfile {
   final String bio;
   @override
   final String profileImageUrl;
+
+  /// アップロード用にユーザーが指定したファイル（画像）を保持する
   @override
-  final int followerCount;
-  @override
-  final int followingCount;
+  final CroppedFile? croppedFile;
 
   @override
   String toString() {
-    return 'UserProfile(id: $id, name: $name, bio: $bio, profileImageUrl: $profileImageUrl, followerCount: $followerCount, followingCount: $followingCount)';
+    return 'UserProfile(id: $id, name: $name, bio: $bio, profileImageUrl: $profileImageUrl, croppedFile: $croppedFile)';
   }
 
   @override
@@ -196,15 +184,13 @@ class _$_UserProfile extends _UserProfile {
             (identical(other.bio, bio) || other.bio == bio) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
                 other.profileImageUrl == profileImageUrl) &&
-            (identical(other.followerCount, followerCount) ||
-                other.followerCount == followerCount) &&
-            (identical(other.followingCount, followingCount) ||
-                other.followingCount == followingCount));
+            (identical(other.croppedFile, croppedFile) ||
+                other.croppedFile == croppedFile));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, bio, profileImageUrl,
-      followerCount, followingCount);
+  int get hashCode =>
+      Object.hash(runtimeType, id, name, bio, profileImageUrl, croppedFile);
 
   @JsonKey(ignore: true)
   @override
@@ -219,8 +205,7 @@ abstract class _UserProfile extends UserProfile {
       required final String name,
       required final String bio,
       required final String profileImageUrl,
-      required final int followerCount,
-      required final int followingCount}) = _$_UserProfile;
+      required final CroppedFile? croppedFile}) = _$_UserProfile;
   const _UserProfile._() : super._();
 
   @override
@@ -232,9 +217,9 @@ abstract class _UserProfile extends UserProfile {
   @override
   String get profileImageUrl;
   @override
-  int get followerCount;
-  @override
-  int get followingCount;
+
+  /// アップロード用にユーザーが指定したファイル（画像）を保持する
+  CroppedFile? get croppedFile;
   @override
   @JsonKey(ignore: true)
   _$$_UserProfileCopyWith<_$_UserProfile> get copyWith =>

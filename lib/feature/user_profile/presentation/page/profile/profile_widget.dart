@@ -9,6 +9,7 @@ import '../../../../../core/common_widget/button/primary_outlined_button.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../auth/application/auth_state.dart';
 import '../../../application/user_profile_state.dart';
+import 'following_and_follower_count_widget.dart';
 import 'profile_widget_shimmer.dart';
 
 class ProfileWidget extends ConsumerWidget {
@@ -59,56 +60,7 @@ class ProfileWidget extends ConsumerWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      await context.pushRoute(
-                        FollowingAndFollowerListRoute(
-                          targetUserId: targetUserProfile.id,
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Text(
-                          targetUserProfile.followingCount.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 4),
-                        const Text('フォロー中'),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  InkWell(
-                    onTap: () async {
-                      await context.pushRoute(
-                        FollowingAndFollowerListRoute(
-                          willShowFollowing: false,
-                          targetUserId: targetUserProfile.id,
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Text(
-                          targetUserProfile.followerCount.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 4),
-                        const Text('フォロワー'),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              FollowingAndFollowerCountWidget(targetUserId: targetUserId),
               const SizedBox(height: 16),
               InkWell(
                 onTap: () async {

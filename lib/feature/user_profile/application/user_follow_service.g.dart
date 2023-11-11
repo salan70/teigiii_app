@@ -6,7 +6,7 @@ part of 'user_follow_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userFollowServiceHash() => r'fbd57d5be4f8d73ce4a647b8c3855ecc158ce5dd';
+String _$userFollowServiceHash() => r'1de2b7073acd8ab0fbbfdcfbbf2cd115110056e2';
 
 /// See also [UserFollowService].
 @ProviderFor(UserFollowService)

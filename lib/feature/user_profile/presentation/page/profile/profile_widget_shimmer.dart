@@ -17,26 +17,7 @@ class ProfileWidgetShimmer extends StatelessWidget {
             children: [
               ShimmerWidget.circular(width: 72, height: 72),
               Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Column(
-                    children: [
-                      ShimmerWidget.rectangular(width: 32, height: 16),
-                      SizedBox(height: 8),
-                      ShimmerWidget.rectangular(width: 48, height: 16),
-                    ],
-                  ),
-                  SizedBox(width: 16),
-                  Column(
-                    children: [
-                      ShimmerWidget.rectangular(width: 32, height: 16),
-                      SizedBox(height: 8),
-                      ShimmerWidget.rectangular(width: 48, height: 16),
-                    ],
-                  ),
-                ],
-              ),
+              
             ],
           ),
           const SizedBox(height: 16),

@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../auth/application/auth_state.dart';
 import '../../user_profile/repository/user_profile_repository.dart';
+import '../domain/follow_count.dart';
 import '../domain/user_profile.dart';
 import '../repository/user_follow_repository.dart';
 
@@ -12,17 +13,24 @@ Future<UserProfile> userProfile(UserProfileRef ref, String userId) async {
   final userProfileDoc =
       await ref.read(userProfileRepositoryProvider).fetchUserProfile(userId);
 
-  final userFollowCountDoc =
-      await ref.read(userFollowRepositoryProvider).fetchUserFollowCount(userId);
-
   return UserProfile(
     id: userId,
     name: userProfileDoc.name,
     bio: userProfileDoc.bio,
     profileImageUrl: userProfileDoc.profileImageUrl,
-    followerCount: userFollowCountDoc.followerCount,
-    followingCount: userFollowCountDoc.followingCount,
+    croppedFile: null,
   );
+}
+
+@Riverpod(keepAlive: true)
+Future<FollowCount> followCount(
+  FollowCountRef ref,
+  String userId,
+) async {
+  final userFollowCountDoc =
+      await ref.read(userFollowRepositoryProvider).fetchUserFollowCount(userId);
+
+  return FollowCount.fromDocument(userFollowCountDoc);
 }
 
 @Riverpod(keepAlive: true)
