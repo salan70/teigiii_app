@@ -111,9 +111,11 @@ class FetchDefinitionRepository {
       combinedDocuments.addAll(snapshot.docs);
     }
 
-    // 結果をcreatedAtでソートして最初の10件を取得
-    final sortedDocumentList =
-        _sortAndLimitDocumentsByCreatedAt(combinedDocuments, 10);
+    // 結果をcreatedAtでソートして最初の [fetchLimitForDefinitionList] 件を取得
+    final sortedDocumentList = _sortAndLimitDocumentsByCreatedAt(
+      combinedDocuments,
+      fetchLimitForDefinitionList,
+    );
 
     return _toDefinitionIdListState(sortedDocumentList);
   }
