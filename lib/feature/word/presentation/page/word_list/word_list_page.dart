@@ -10,6 +10,7 @@ import '../../../../../util/constant/initial_main_group.dart';
 import '../../../../../util/logger.dart';
 import '../../../application/word_list_state_by_initial.dart';
 import '../../component/word_tile.dart';
+import '../../component/word_tile_shimmer.dart';
 
 @RoutePage()
 class WordListPage extends ConsumerWidget {
@@ -95,9 +96,21 @@ class WordListPage extends ConsumerWidget {
           );
         },
         loading: () {
-          // TODO(me): shimmerにする
-          return const Center(
-            child: CupertinoActivityIndicator(),
+          return Padding(
+            padding: const EdgeInsets.only(
+              top: 16,
+              left: 16,
+              right: 16,
+            ),
+            child: ListView.builder(
+              controller: scrollController,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return const WordTileShimmer();
+              },
+            ),
           );
         },
         error: (error, stackTrace) {

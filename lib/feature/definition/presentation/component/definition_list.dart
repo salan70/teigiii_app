@@ -181,14 +181,14 @@ class DefinitionList extends ConsumerWidget {
         );
       },
       loading: () {
-        return ListView(
+        return ListView.builder(
           controller: scrollController,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          children: [
-            for (var i = 0; i < shimmerTileNumber; i++)
-              const DefinitionTileShimmer(),
-          ],
+          itemCount: shimmerTileNumber,
+          itemBuilder: (context, index) {
+            return const DefinitionTileShimmer();
+          },
         );
       },
     );
