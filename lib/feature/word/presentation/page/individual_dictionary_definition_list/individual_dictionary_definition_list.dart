@@ -40,6 +40,7 @@ class IndividualDictionaryDefinitionListPage extends ConsumerWidget {
                 definitionFeedType: DefinitionFeedType.individualIndex,
                 targetUserId: targetUserId,
                 initialSubGroup: initialSubGroup,
+                shimmerTileNumber: 1,
               ),
             ),
           ],

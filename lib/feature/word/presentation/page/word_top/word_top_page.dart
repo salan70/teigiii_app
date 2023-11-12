@@ -72,11 +72,13 @@ class WordTopPage extends ConsumerWidget {
                   definitionFeedType:
                       DefinitionFeedType.wordTopOrderByCreatedAt,
                   wordId: wordId,
+                  shimmerTileNumber: 2,
                 ),
                 DefinitionList(
                   definitionFeedType:
                       DefinitionFeedType.wordTopOrderByLikesCount,
                   wordId: wordId,
+                  shimmerTileNumber: 2,
                 ),
               ],
             ),

@@ -18,12 +18,16 @@ class DefinitionList extends ConsumerWidget {
     this.wordId,
     this.targetUserId,
     this.initialSubGroup,
+    this.shimmerTileNumber = 8,
   });
 
   final DefinitionFeedType definitionFeedType;
   final String? wordId;
   final String? targetUserId;
   final InitialSubGroup? initialSubGroup;
+
+  /// ローディング時に何タイル分のshimmerを表示させるか
+  final int shimmerTileNumber;
 
   final scrollController = ScrollController();
   // エラーが発生してリビルドした際、スクロール位置を保持するためのキー
@@ -182,7 +186,8 @@ class DefinitionList extends ConsumerWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            for (var i = 0; i < 4; i++) const DefinitionTileShimmer(),
+            for (var i = 0; i < shimmerTileNumber; i++)
+              const DefinitionTileShimmer(),
           ],
         );
       },

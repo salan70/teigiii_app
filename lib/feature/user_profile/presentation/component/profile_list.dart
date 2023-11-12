@@ -113,6 +113,7 @@ class ProfileList extends ConsumerWidget {
         );
       },
       loading: () {
+        // TODO(me): shimmerにする
         return const CupertinoActivityIndicator();
       },
     );
