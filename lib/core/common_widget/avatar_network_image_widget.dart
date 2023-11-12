@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import 'shimmer_widget.dart';
+
 class AvatarNetworkImageWidget extends StatelessWidget {
   const AvatarNetworkImageWidget({
     super.key,
@@ -20,10 +22,12 @@ class AvatarNetworkImageWidget extends StatelessWidget {
         height: avatarSize.diameter,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          image: DecorationImage(
-            image: imageProvider,
-          ),
+          image: DecorationImage(image: imageProvider),
         ),
+      ),
+      placeholder: (context, url) => ShimmerWidget.circular(
+        width: avatarSize.diameter,
+        height: avatarSize.diameter,
       ),
     );
   }
