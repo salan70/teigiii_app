@@ -23,17 +23,13 @@ jobs:
   review:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: ${{github.event.pull_request.head.repo.full_name}}
-          ref: ${{github.event.pull_request.head.ref}}
-          submodules: false
-      - uses: ./
+      - uses: coderabbitai/openai-pr-reviewer@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         with:
           debug: true
+          review_simple_changes: false
           review_comment_lgtm: false
           openai_light_model: gpt-4 
           openai_heavy_model: gpt-4 
@@ -57,6 +53,7 @@ jobs:
               - 複雑性
               - 最適化
               - ベストプラクティス: DRY, SOLID, KISS
+            なお、自動生成ファイルはレビュー対象に含めないでください。
           summarize: |
               次の内容でmarkdownフォーマットを使用して、最終的な回答を提供してください。
   
