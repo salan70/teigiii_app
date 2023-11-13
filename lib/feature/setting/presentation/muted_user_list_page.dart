@@ -44,7 +44,6 @@ class MutedUserListPage extends ConsumerWidget {
           );
         },
         loading: () {
-          // TODO(me): shimmerにする
           return const Center(
             child: CupertinoActivityIndicator(),
           );

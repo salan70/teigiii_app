@@ -26,10 +26,25 @@ class WordTile extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  word.word,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleLarge,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        word.word,
+                        overflow: TextOverflow.clip,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Text(
+                        word.reading,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
+                      ),
+                    ],
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -50,15 +65,6 @@ class WordTile extends StatelessWidget {
                   ],
                 ),
               ],
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                word.reading,
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-              ),
             ),
             const Divider(),
           ],
