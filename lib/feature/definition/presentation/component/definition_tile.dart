@@ -92,8 +92,7 @@ class DefinitionTile extends ConsumerWidget {
                           ),
                           Text(
                             definition.word,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                            overflow: TextOverflow.clip,
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           const SizedBox(height: 8),
