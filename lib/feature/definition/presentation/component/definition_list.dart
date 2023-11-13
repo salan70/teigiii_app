@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/infinity_scroll/infinity_scroll_widget.dart';
+import '../../../../core/common_widget/infinity_scroll_widget.dart';
 import '../../../../util/constant/initial_main_group.dart';
 import '../../application/definition_id_list_state.dart';
 import '../../util/definition_feed_type.dart';
+import 'definition_tile.dart';
 import 'definition_tile_shimmer.dart';
 
 class DefinitionList extends ConsumerWidget {
@@ -24,6 +25,8 @@ class DefinitionList extends ConsumerWidget {
   final InitialSubGroup? initialSubGroup;
 
   /// ローディング時に何タイル分のshimmerを表示させるか
+  ///
+  /// デフォルト値は恐らく画面を埋め尽くされるであろう数として8を設定
   final int shimmerTileNumber;
 
   @override
@@ -34,18 +37,12 @@ class DefinitionList extends ConsumerWidget {
       targetUserId: targetUserId,
       initialSubGroup: initialSubGroup,
     );
-    final notifier = ref.read(definitionIdListProvider.notifier);
 
     return InfinityScrollWidget(
       listStateNotifierProvider: definitionIdListProvider,
-      fetchMore: notifier.fetchMore,
-      onRefresh: () async {
-        ref.invalidate(definitionIdListProvider);
-        // indicatorを表示し続けるため、取得が完了するまで待つ
-        await ref.read(definitionIdListProvider.future);
-      },
-      onRetry: () {
-        ref.invalidate(definitionIdListProvider);
+      fetchMore: ref.read(definitionIdListProvider.notifier).fetchMore,
+      tileBuilder: (item) {
+        return DefinitionTile(definitionId: item as String);
       },
       shimmerTile: const DefinitionTileShimmer(),
       shimmerTileNumber: shimmerTileNumber,

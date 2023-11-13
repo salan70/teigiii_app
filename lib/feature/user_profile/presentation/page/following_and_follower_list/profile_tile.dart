@@ -18,6 +18,11 @@ class ProfileTile extends ConsumerWidget {
   });
 
   final String targetUserId;
+
+  // TODO(me): enumで表示するpageの種類を定義し、このWidget内で対応するボタンを配置するほうが良さそう
+  
+  /// 右側に表示させるボタン
+  /// フォロー/アンフォローボタンや、ミュート解除などを行うボタンを想定
   final Widget button;
 
   /// プロフィールページへの遷移を行うかどうか

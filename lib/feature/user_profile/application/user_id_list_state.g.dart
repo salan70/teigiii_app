@@ -7,7 +7,7 @@ part of 'user_id_list_state.dart';
 // **************************************************************************
 
 String _$userIdListStateNotifierHash() =>
-    r'42cc3941ba601a3ffb73567f4932bbd1ebdf387b';
+    r'15fcd90246717e28708bcf49b1eeb5875b7d535d';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,7 +31,7 @@ class _SystemHash {
 }
 
 abstract class _$UserIdListStateNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<UserIdListState> {
+    extends BuildlessAsyncNotifier<UserIdListState> {
   late final UserListType userListType;
   late final String? targetUserId;
   late final String? targetDefinitionId;
@@ -93,9 +93,8 @@ class UserIdListStateNotifierFamily
 }
 
 /// See also [UserIdListStateNotifier].
-class UserIdListStateNotifierProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<UserIdListStateNotifier,
-        UserIdListState> {
+class UserIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
+    UserIdListStateNotifier, UserIdListState> {
   /// See also [UserIdListStateNotifier].
   UserIdListStateNotifierProvider(
     UserListType userListType, {
@@ -169,8 +168,8 @@ class UserIdListStateNotifierProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<UserIdListStateNotifier,
-      UserIdListState> createElement() {
+  AsyncNotifierProviderElement<UserIdListStateNotifier, UserIdListState>
+      createElement() {
     return _UserIdListStateNotifierProviderElement(this);
   }
 
@@ -193,8 +192,7 @@ class UserIdListStateNotifierProvider
   }
 }
 
-mixin UserIdListStateNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<UserIdListState> {
+mixin UserIdListStateNotifierRef on AsyncNotifierProviderRef<UserIdListState> {
   /// The parameter `userListType` of this provider.
   UserListType get userListType;
 
@@ -206,7 +204,7 @@ mixin UserIdListStateNotifierRef
 }
 
 class _UserIdListStateNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<UserIdListStateNotifier,
+    extends AsyncNotifierProviderElement<UserIdListStateNotifier,
         UserIdListState> with UserIdListStateNotifierRef {
   _UserIdListStateNotifierProviderElement(super.provider);
 

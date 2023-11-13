@@ -25,8 +25,8 @@ class IndividualDictionaryDefinitionListPage extends ConsumerWidget {
         headerSliverBuilder: (BuildContext context, bool _) {
           return <Widget>[
             SliverAppBar(
+              forceElevated: true,
               pinned: true,
-              elevation: 0,
               title: Text(initialSubGroup.label),
             ),
           ];

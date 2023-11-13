@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/common_provider/toast_controller.dart';
+import '../../../util/logger.dart';
 import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../definition/repository/fetch_definition_repository.dart';
 import '../domain/user_id_list_state.dart';
@@ -8,7 +12,7 @@ import '../util/profile_feed_type.dart';
 
 part 'user_id_list_state.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class UserIdListStateNotifier extends _$UserIdListStateNotifier
     with FetchMoreMixin<UserIdListState> {
   @override
@@ -25,7 +29,7 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
   Future<void> fetchMore() async {
     await fetchMoreHelper(
       ref: ref,
-      fetchFunction: () => _fetchUserIdListStateBasedOnType(
+      fetchFunction: () async => _fetchUserIdListStateBasedOnType(
         isFirstFetch: false,
       ),
       mergeFunction: (currentData, newData) => UserIdListState(
@@ -41,33 +45,56 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
   }) async {
     final lastDocument =
         isFirstFetch ? null : state.value!.lastReadQueryDocumentSnapshot;
-    switch (userListType) {
-      case UserListType.following:
-        if (targetUserId == null) {
-          throw ArgumentError('targetUserIdがnullです');
-        }
-        return ref.read(userFollowRepositoryProvider).fetchFollowingIdList(
-              targetUserId!,
-              lastDocument,
-            );
+    try {
+      // TODO(me): デバッグ用のためリリース時に削除する
+      // 1/2の確率でエラーを発生させる
+      if (Random().nextBool()) {
+        // await Future<void>.delayed(const Duration(seconds: 2));
+        throw Exception('やばいで！！！！！');
+      }
 
-      case UserListType.follower:
-        if (targetUserId == null) {
-          throw ArgumentError('targetUserIdがnullです');
-        }
-        return ref.read(userFollowRepositoryProvider).fetchFollowerIdList(
-              targetUserId!,
-              lastDocument,
-            );
+      switch (userListType) {
+        case UserListType.following:
+          if (targetUserId == null) {
+            throw ArgumentError('targetUserIdがnullです');
+          }
+          return await ref
+              .read(userFollowRepositoryProvider)
+              .fetchFollowingIdList(
+                targetUserId!,
+                lastDocument,
+              );
 
-      case UserListType.likedUser:
-        if (targetDefinitionId == null) {
-          throw ArgumentError('targetDefinitionIdがnullです');
-        }
-        return ref.read(fetchDefinitionRepositoryProvider).fetchLikedUserIdList(
-              targetDefinitionId!,
-              lastDocument,
-            );
+        case UserListType.follower:
+          if (targetUserId == null) {
+            throw ArgumentError('targetUserIdがnullです');
+          }
+          return await ref
+              .read(userFollowRepositoryProvider)
+              .fetchFollowerIdList(
+                targetUserId!,
+                lastDocument,
+              );
+
+        case UserListType.likedUser:
+          if (targetDefinitionId == null) {
+            throw ArgumentError('targetDefinitionIdがnullです');
+          }
+          return await ref
+              .read(fetchDefinitionRepositoryProvider)
+              .fetchLikedUserIdList(
+                targetDefinitionId!,
+                lastDocument,
+              );
+      }
+    } on Exception catch (e, _) {
+      logger.e('$e');
+      ref
+          .read(toastControllerProvider.notifier)
+          .showToast('読み込めませんでした。もう一度お試しください。', causeError: true);
+
+      // stateの更新を移譲するため、rethrow
+      rethrow;
     }
   }
 }

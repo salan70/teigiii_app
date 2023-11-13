@@ -2,27 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/cupertino_refresh_indicator.dart';
-import '../../../../core/common_widget/error_and_retry_widget.dart';
-import '../../../../util/interface/list_state.dart';
-import '../../../../util/logger.dart';
-import '../../../feature/definition/presentation/component/definition_tile.dart';
+import '../../../core/common_widget/cupertino_refresh_indicator.dart';
+import '../../../core/common_widget/error_and_retry_widget.dart';
+import '../../../util/interface/list_state.dart';
+import '../../../util/logger.dart';
 
 class InfinityScrollWidget extends ConsumerWidget {
   InfinityScrollWidget({
     super.key,
     required this.listStateNotifierProvider,
     required this.fetchMore,
-    required this.onRefresh,
-    required this.onRetry,
+    required this.tileBuilder,
     required this.shimmerTile,
     required this.shimmerTileNumber,
   });
 
+  /// 扱うstate ([ListState]型)を保持するProvider
   final AsyncNotifierProvider<dynamic, ListState> listStateNotifierProvider;
   final VoidCallback fetchMore;
-  final Future<void> Function() onRefresh;
-  final VoidCallback onRetry;
+
+  /// [ListState] の中身（tile）を作成するための関数
+  final Widget Function(dynamic item) tileBuilder;
 
   /// 初回読み込み時に表示させるShimmer
   final Widget shimmerTile;
@@ -37,6 +37,12 @@ class InfinityScrollWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncListState = ref.watch(listStateNotifierProvider);
+
+    Future<void> onRefresh() async {
+      ref.invalidate(listStateNotifierProvider);
+      // indicatorを表示し続けるため、取得が完了するまで待つ
+      await ref.read(listStateNotifierProvider.future);
+    }
 
     return asyncListState.when(
       data: (listState) {
@@ -54,6 +60,7 @@ class InfinityScrollWidget extends ConsumerWidget {
             scrollController: scrollController,
             onRefresh: onRefresh,
             asyncListState: asyncListState,
+            tileBuilder: tileBuilder,
             bottomWidget: listState.hasMore
                 ? const Column(
                     children: [
@@ -82,6 +89,7 @@ class InfinityScrollWidget extends ConsumerWidget {
             scrollController: scrollController,
             onRefresh: onRefresh,
             asyncListState: asyncListState,
+            tileBuilder: tileBuilder,
             bottomWidget: _BottomWidgetWhenError(
               fetchMore: fetchMore,
               asyncListState: asyncListState,
@@ -92,7 +100,11 @@ class InfinityScrollWidget extends ConsumerWidget {
         // 取得済みのデータがない（初回読み込みが失敗した）場合を想定したエラー表示
         return Padding(
           padding: const EdgeInsets.only(top: 32),
-          child: ErrorAndRetryWidget(onRetry: onRetry),
+          child: Center(
+            child: ErrorAndRetryWidget(
+              onRetry: () => ref.invalidate(listStateNotifierProvider),
+            ),
+          ),
         );
       },
       // 初回読み込み時
@@ -121,6 +133,7 @@ class _StateScrollBar extends StatelessWidget {
     required this.scrollController,
     required this.onRefresh,
     required this.asyncListState,
+    required this.tileBuilder,
     required this.bottomWidget,
   });
 
@@ -128,6 +141,7 @@ class _StateScrollBar extends StatelessWidget {
   final ScrollController scrollController;
   final Future<void> Function() onRefresh;
   final AsyncValue<ListState?> asyncListState;
+  final Widget Function(dynamic item) tileBuilder;
   final Widget bottomWidget;
 
   @override
@@ -148,9 +162,7 @@ class _StateScrollBar extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: asyncListState.value!.list.length,
               itemBuilder: (context, index) {
-                return DefinitionTile(
-                  definitionId: asyncListState.value!.list[index] as String,
-                );
+                return tileBuilder(asyncListState.value!.list[index]);
               },
             ),
           ),
@@ -182,35 +194,39 @@ class _BottomWidgetWhenError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: InkWell(
-        onTap: fetchMore,
-        child: Column(
-          children: [
-            asyncListState.isRefreshing
-                ? const CupertinoActivityIndicator()
-                : Icon(
-                    CupertinoIcons.exclamationmark_circle_fill,
-                    color: Theme.of(context).colorScheme.error,
-                  ),
-            const SizedBox(height: 4),
-            asyncListState.isRefreshing
-                ? Text(
-                    '読み込み中...',
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
+    return asyncListState.value!.hasMore
+        ? Center(
+            child: InkWell(
+              onTap: fetchMore,
+              child: Column(
+                children: [
+                  asyncListState.isRefreshing
+                      ? const CupertinoActivityIndicator()
+                      : Icon(
+                          CupertinoIcons.exclamationmark_circle_fill,
+                          color: Theme.of(context).colorScheme.error,
                         ),
-                  )
-                : Text(
-                    'タップで再読み込み',
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
+                  const SizedBox(height: 4),
+                  asyncListState.isRefreshing
+                      ? Text(
+                          '読み込み中...',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        )
+                      : Text(
+                          'タップで再読み込み',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
-                  ),
-            const SizedBox(height: 40),
-          ],
-        ),
-      ),
-    );
+                  const SizedBox(height: 40),
+                ],
+              ),
+            ),
+          )
+        : const SizedBox();
   }
 }

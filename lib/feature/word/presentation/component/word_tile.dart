@@ -16,7 +16,11 @@ class WordTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.only(
+        top: 8,
+        right: 16,
+        left: 16,
+      ),
       child: InkWell(
         onTap: () {
           context.pushRoute(WordTopRoute(wordId: word.id));
