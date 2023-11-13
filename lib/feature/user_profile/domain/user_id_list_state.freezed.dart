@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$UserIdListState {
-  List<String> get userIdList => throw _privateConstructorUsedError;
+  List<String> get list => throw _privateConstructorUsedError;
 
   /// 最後に読み取られたQueryDocumentSnapshot
   /// これがnullの場合、1件もuserIdを取得していない（[userIdList]が空）
@@ -36,7 +36,7 @@ abstract class $UserIdListStateCopyWith<$Res> {
       _$UserIdListStateCopyWithImpl<$Res, UserIdListState>;
   @useResult
   $Res call(
-      {List<String> userIdList,
+      {List<String> list,
       QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
       bool hasMore});
 }
@@ -54,14 +54,14 @@ class _$UserIdListStateCopyWithImpl<$Res, $Val extends UserIdListState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userIdList = null,
+    Object? list = null,
     Object? lastReadQueryDocumentSnapshot = freezed,
     Object? hasMore = null,
   }) {
     return _then(_value.copyWith(
-      userIdList: null == userIdList
-          ? _value.userIdList
-          : userIdList // ignore: cast_nullable_to_non_nullable
+      list: null == list
+          ? _value.list
+          : list // ignore: cast_nullable_to_non_nullable
               as List<String>,
       lastReadQueryDocumentSnapshot: freezed == lastReadQueryDocumentSnapshot
           ? _value.lastReadQueryDocumentSnapshot
@@ -84,7 +84,7 @@ abstract class _$$_UserIdListStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<String> userIdList,
+      {List<String> list,
       QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
       bool hasMore});
 }
@@ -100,14 +100,14 @@ class __$$_UserIdListStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userIdList = null,
+    Object? list = null,
     Object? lastReadQueryDocumentSnapshot = freezed,
     Object? hasMore = null,
   }) {
     return _then(_$_UserIdListState(
-      userIdList: null == userIdList
-          ? _value._userIdList
-          : userIdList // ignore: cast_nullable_to_non_nullable
+      list: null == list
+          ? _value._list
+          : list // ignore: cast_nullable_to_non_nullable
               as List<String>,
       lastReadQueryDocumentSnapshot: freezed == lastReadQueryDocumentSnapshot
           ? _value.lastReadQueryDocumentSnapshot
@@ -125,17 +125,17 @@ class __$$_UserIdListStateCopyWithImpl<$Res>
 
 class _$_UserIdListState implements _UserIdListState {
   const _$_UserIdListState(
-      {required final List<String> userIdList,
+      {required final List<String> list,
       required this.lastReadQueryDocumentSnapshot,
       required this.hasMore})
-      : _userIdList = userIdList;
+      : _list = list;
 
-  final List<String> _userIdList;
+  final List<String> _list;
   @override
-  List<String> get userIdList {
-    if (_userIdList is EqualUnmodifiableListView) return _userIdList;
+  List<String> get list {
+    if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_userIdList);
+    return EqualUnmodifiableListView(_list);
   }
 
   /// 最後に読み取られたQueryDocumentSnapshot
@@ -147,7 +147,7 @@ class _$_UserIdListState implements _UserIdListState {
 
   @override
   String toString() {
-    return 'UserIdListState(userIdList: $userIdList, lastReadQueryDocumentSnapshot: $lastReadQueryDocumentSnapshot, hasMore: $hasMore)';
+    return 'UserIdListState(list: $list, lastReadQueryDocumentSnapshot: $lastReadQueryDocumentSnapshot, hasMore: $hasMore)';
   }
 
   @override
@@ -155,8 +155,7 @@ class _$_UserIdListState implements _UserIdListState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_UserIdListState &&
-            const DeepCollectionEquality()
-                .equals(other._userIdList, _userIdList) &&
+            const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.lastReadQueryDocumentSnapshot,
                     lastReadQueryDocumentSnapshot) ||
                 other.lastReadQueryDocumentSnapshot ==
@@ -167,7 +166,7 @@ class _$_UserIdListState implements _UserIdListState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_userIdList),
+      const DeepCollectionEquality().hash(_list),
       lastReadQueryDocumentSnapshot,
       hasMore);
 
@@ -180,13 +179,13 @@ class _$_UserIdListState implements _UserIdListState {
 
 abstract class _UserIdListState implements UserIdListState {
   const factory _UserIdListState(
-      {required final List<String> userIdList,
+      {required final List<String> list,
       required final QueryDocumentSnapshot<Object?>?
           lastReadQueryDocumentSnapshot,
       required final bool hasMore}) = _$_UserIdListState;
 
   @override
-  List<String> get userIdList;
+  List<String> get list;
   @override
 
   /// 最後に読み取られたQueryDocumentSnapshot

@@ -29,7 +29,7 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
         isFirstFetch: false,
       ),
       mergeFunction: (currentData, newData) => UserIdListState(
-        userIdList: currentData.userIdList + newData.userIdList,
+        list: currentData.list + newData.list,
         lastReadQueryDocumentSnapshot: newData.lastReadQueryDocumentSnapshot,
         hasMore: newData.hasMore,
       ),

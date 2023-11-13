@@ -7,7 +7,7 @@ part of 'word_list_state_by_initial.dart';
 // **************************************************************************
 
 String _$wordListStateByInitialNotifierHash() =>
-    r'70ea119cf2b7b8d67868436e10eb4850f62604e0';
+    r'483cdb5bc46d2f2b24234d1418bb9fe172d32680';
 
 /// Copied from Dart SDK
 class _SystemHash {

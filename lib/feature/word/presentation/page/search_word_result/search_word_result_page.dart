@@ -48,7 +48,7 @@ class SearchWordResultPage extends ConsumerWidget {
           const SizedBox(height: 8),
           asyncWordListState.when(
             data: (wordListState) {
-              final wordList = wordListState.wordList;
+              final wordList = wordListState.list;
 
               return NotificationListener<ScrollEndNotification>(
                 onNotification: (notification) {

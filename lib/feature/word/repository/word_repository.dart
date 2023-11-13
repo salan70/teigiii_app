@@ -121,7 +121,7 @@ class WordRepository {
     }
 
     return WordListState(
-      wordList: wordList,
+      list: wordList,
       lastReadQueryDocumentSnapshot: lastDocument,
       hasMore: hasMore,
     );

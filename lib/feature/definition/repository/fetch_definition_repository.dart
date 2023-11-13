@@ -78,11 +78,6 @@ class FetchDefinitionRepository {
 
     if (lastDocument != null) {
       query = query.startAfterDocument(lastDocument);
-      // TODO(me): デバッグ用のためリリース時に削除する
-      // // 1/2の確率でエラーを発生させる
-      // if (Random().nextInt(3) == 0) {
-      //   throw Exception('やばいで！！！！！');
-      // }
     }
 
     return query.get();
@@ -184,7 +179,7 @@ class FetchDefinitionRepository {
     final lastDoc = documentList.isNotEmpty ? documentList.last : null;
 
     return DefinitionIdListState(
-      definitionIdList: idList,
+      list: idList,
       lastReadQueryDocumentSnapshot: lastDoc,
       hasMore: idList.length == fetchLimitForDefinitionList,
     );
@@ -363,7 +358,7 @@ class FetchDefinitionRepository {
     }
 
     return DefinitionIdListState(
-      definitionIdList: idList,
+      list: idList,
       lastReadQueryDocumentSnapshot: lastDocument,
       hasMore: hasMore,
     );
@@ -437,7 +432,7 @@ class FetchDefinitionRepository {
     }
 
     return DefinitionIdListState(
-      definitionIdList: idList,
+      list: idList,
       lastReadQueryDocumentSnapshot: lastDocument,
       hasMore: hasMore,
     );
@@ -515,7 +510,7 @@ class FetchDefinitionRepository {
         .toList();
 
     return UserIdListState(
-      userIdList: favoriteUserIdList,
+      list: favoriteUserIdList,
       lastReadQueryDocumentSnapshot: snapshot.docs.lastOrNull,
       hasMore: favoriteUserIdList.length == fetchLimitForUserIdList,
     );

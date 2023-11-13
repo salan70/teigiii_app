@@ -1,0 +1,216 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../core/common_widget/cupertino_refresh_indicator.dart';
+import '../../../../core/common_widget/error_and_retry_widget.dart';
+import '../../../../util/interface/list_state.dart';
+import '../../../../util/logger.dart';
+import '../../../feature/definition/presentation/component/definition_tile.dart';
+
+class InfinityScrollWidget extends ConsumerWidget {
+  InfinityScrollWidget({
+    super.key,
+    required this.listStateNotifierProvider,
+    required this.fetchMore,
+    required this.onRefresh,
+    required this.onRetry,
+    required this.shimmerTile,
+    required this.shimmerTileNumber,
+  });
+
+  final AsyncNotifierProvider<dynamic, ListState> listStateNotifierProvider;
+  final VoidCallback fetchMore;
+  final Future<void> Function() onRefresh;
+  final VoidCallback onRetry;
+
+  /// 初回読み込み時に表示させるShimmer
+  final Widget shimmerTile;
+
+  /// [shimmerTile]を表示させる数
+  final int shimmerTileNumber;
+
+  final scrollController = ScrollController();
+  // エラーが発生してリビルドした際、スクロール位置を保持するためのキー
+  final globalKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncListState = ref.watch(listStateNotifierProvider);
+
+    return asyncListState.when(
+      data: (listState) {
+        return NotificationListener<ScrollEndNotification>(
+          onNotification: (notification) {
+            // 画面の一番下までスクロールしたかどうかを判定
+            if (notification.metrics.extentAfter == 0) {
+              fetchMore();
+              return true;
+            }
+            return false;
+          },
+          child: _StateScrollBar(
+            globalKey: globalKey,
+            scrollController: scrollController,
+            onRefresh: onRefresh,
+            asyncListState: asyncListState,
+            bottomWidget: listState.hasMore
+                ? const Column(
+                    children: [
+                      CupertinoActivityIndicator(),
+                      SizedBox(height: 40),
+                    ],
+                  )
+                : const SizedBox(),
+          ),
+        );
+      },
+      error: (error, _) {
+        logger.e('$error');
+
+        // 初回読み込み時にエラーが発生し、再読み込みしている場合
+        if (asyncListState.isRefreshing && !asyncListState.hasValue) {
+          return const Center(
+            child: CupertinoActivityIndicator(),
+          );
+        }
+
+        // 取得済みのデータがある場合、それを表示する
+        if (asyncListState.hasValue) {
+          return _StateScrollBar(
+            globalKey: globalKey,
+            scrollController: scrollController,
+            onRefresh: onRefresh,
+            asyncListState: asyncListState,
+            bottomWidget: _BottomWidgetWhenError(
+              fetchMore: fetchMore,
+              asyncListState: asyncListState,
+            ),
+          );
+        }
+
+        // 取得済みのデータがない（初回読み込みが失敗した）場合を想定したエラー表示
+        return Padding(
+          padding: const EdgeInsets.only(top: 32),
+          child: ErrorAndRetryWidget(onRetry: onRetry),
+        );
+      },
+      // 初回読み込み時
+      loading: () {
+        return ListView.builder(
+          controller: scrollController,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: shimmerTileNumber,
+          itemBuilder: (context, index) {
+            return shimmerTile;
+          },
+        );
+      },
+    );
+  }
+}
+
+/// [ListState] を無限スクロールで表示するWidget
+///
+/// スワイプリフレッシュ, ListView,
+/// ListViewの一番下に表示するWidget ([bottomWidget]) を内包している
+class _StateScrollBar extends StatelessWidget {
+  const _StateScrollBar({
+    required this.globalKey,
+    required this.scrollController,
+    required this.onRefresh,
+    required this.asyncListState,
+    required this.bottomWidget,
+  });
+
+  final GlobalKey globalKey;
+  final ScrollController scrollController;
+  final Future<void> Function() onRefresh;
+  final AsyncValue<ListState?> asyncListState;
+  final Widget bottomWidget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scrollbar(
+      key: globalKey,
+      controller: scrollController,
+      child: CustomScrollView(
+        slivers: [
+          CupertinoSliverRefreshControl(
+            builder: buildCustomRefreshIndicator,
+            onRefresh: onRefresh,
+          ),
+          SliverToBoxAdapter(
+            child: ListView.builder(
+              controller: scrollController,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: asyncListState.value!.list.length,
+              itemBuilder: (context, index) {
+                return DefinitionTile(
+                  definitionId: asyncListState.value!.list[index] as String,
+                );
+              },
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.only(top: 8, bottom: 40),
+            sliver: SliverToBoxAdapter(
+              child: bottomWidget,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 無限スクロールにて、エラー発生時にListの下部に表示させるWidget
+class _BottomWidgetWhenError extends StatelessWidget {
+  const _BottomWidgetWhenError({
+    required this.fetchMore,
+    required this.asyncListState,
+  });
+
+  /// 再読み込みで行う処理
+  ///
+  /// 無限スクロールの追加読み込みでエラーが発生した場合に、
+  /// 再読み込みとして行う処理のため、fetchMore（追加読み込み）を想定している
+  final VoidCallback fetchMore;
+  final AsyncValue<ListState?> asyncListState;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: InkWell(
+        onTap: fetchMore,
+        child: Column(
+          children: [
+            asyncListState.isRefreshing
+                ? const CupertinoActivityIndicator()
+                : Icon(
+                    CupertinoIcons.exclamationmark_circle_fill,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+            const SizedBox(height: 4),
+            asyncListState.isRefreshing
+                ? Text(
+                    '読み込み中...',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  )
+                : Text(
+                    'タップで再読み込み',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+            const SizedBox(height: 40),
+          ],
+        ),
+      ),
+    );
+  }
+}

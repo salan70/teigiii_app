@@ -198,7 +198,7 @@ class UserFollowRepository {
     List<String> userIdList,
   ) {
     return UserIdListState(
-      userIdList: userIdList,
+      list: userIdList,
       lastReadQueryDocumentSnapshot: snapshot.docs.lastOrNull,
       hasMore: userIdList.length == fetchLimitForUserIdList,
     );

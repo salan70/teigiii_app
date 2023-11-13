@@ -88,7 +88,7 @@ final mockWordDoc = WordDocument(
 );
 
 final mockUserIdListState = UserIdListState(
-  userIdList: ['userId1', 'userId2'],
+  list: ['userId1', 'userId2'],
   lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
   hasMore: false,
 );

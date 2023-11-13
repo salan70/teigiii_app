@@ -17,7 +17,12 @@ class InfiniteScrollBottomIndicator extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8, bottom: 40),
       sliver: SliverToBoxAdapter(
         child: hasMore
-            ? const CupertinoActivityIndicator()
+            ? const Column(
+                children: [
+                  CupertinoActivityIndicator(),
+                  SizedBox(height: 40),
+                ],
+              )
             : const SizedBox.shrink(),
       ),
     );

@@ -167,7 +167,7 @@ void main() {
       // * Arrange
       // Mockの設定
       final firstState = UserIdListState(
-        userIdList: ['user1'],
+        list: ['user1'],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: true,
       );
@@ -176,7 +176,7 @@ void main() {
       ).thenAnswer((_) async => firstState);
 
       final secondState = UserIdListState(
-        userIdList: ['user2'],
+        list: ['user2'],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: false,
       );
@@ -215,7 +215,7 @@ void main() {
       // * Assert
       final expected = UserIdListState(
         // build()時に取得したdefinitionIdListに、fetchMore()で取得したdefinitionIdLisが追加される
-        userIdList: firstState.userIdList + secondState.userIdList,
+        list: firstState.list + secondState.list,
         lastReadQueryDocumentSnapshot:
             secondState.lastReadQueryDocumentSnapshot,
         hasMore: secondState.hasMore,
@@ -266,7 +266,7 @@ void main() {
       // * Arrange
       // Mockの設定
       final firstState = UserIdListState(
-        userIdList: ['user1'],
+        list: ['user1'],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: true,
       );
@@ -275,7 +275,7 @@ void main() {
       ).thenAnswer((_) async => firstState);
 
       final secondState = UserIdListState(
-        userIdList: ['user2'],
+        list: ['user2'],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: false,
       );
@@ -314,7 +314,7 @@ void main() {
       // * Assert
       final expected = UserIdListState(
         // build()時に取得したdefinitionIdListに、fetchMore()で取得したdefinitionIdLisが追加される
-        userIdList: firstState.userIdList + secondState.userIdList,
+        list: firstState.list + secondState.list,
         lastReadQueryDocumentSnapshot:
             secondState.lastReadQueryDocumentSnapshot,
         hasMore: secondState.hasMore,
@@ -409,7 +409,7 @@ void main() {
       // * Arrange
       // Mockの設定
       final firstState = UserIdListState(
-        userIdList: ['user1'],
+        list: ['user1'],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: true,
       );

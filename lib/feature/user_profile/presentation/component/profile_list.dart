@@ -39,7 +39,7 @@ class ProfileList extends ConsumerWidget {
 
     return asyncUserIdListState.when(
       data: (userIdListState) {
-        final userIdList = userIdListState.userIdList;
+        final userIdList = userIdListState.list;
 
         return NotificationListener<ScrollEndNotification>(
           onNotification: (notification) {

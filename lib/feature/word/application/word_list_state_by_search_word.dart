@@ -44,7 +44,7 @@ class WordListStateBySearchWordNotifier
             );
       },
       mergeFunction: (currentData, newData) => WordListState(
-        wordList: currentData.wordList + newData.wordList,
+        list: currentData.list + newData.list,
         lastReadQueryDocumentSnapshot: newData.lastReadQueryDocumentSnapshot,
         hasMore: newData.hasMore,
       ),

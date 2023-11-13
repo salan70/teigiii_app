@@ -103,7 +103,7 @@ void main() {
         ),
       ).thenAnswer(
         (_) async => DefinitionIdListState(
-          definitionIdList: mockDefinitionIdList,
+          list: mockDefinitionIdList,
           lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
           hasMore: false,
         ),
@@ -124,7 +124,7 @@ void main() {
 
       // * Assert
       final expected = DefinitionIdListState(
-        definitionIdList: mockDefinitionIdList,
+        list: mockDefinitionIdList,
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: false,
       );
@@ -169,7 +169,7 @@ void main() {
         ),
       ).thenAnswer(
         (_) async => DefinitionIdListState(
-          definitionIdList: mockDefinitionIdList,
+          list: mockDefinitionIdList,
           lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
           hasMore: false,
         ),
@@ -190,7 +190,7 @@ void main() {
 
       // * Assert
       final expected = DefinitionIdListState(
-        definitionIdList: mockDefinitionIdList,
+        list: mockDefinitionIdList,
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: false,
       );
@@ -228,7 +228,7 @@ void main() {
       // * Arrange
       // Mockの設定
       final mockDefinitionIdListState = DefinitionIdListState(
-        definitionIdList: [mockDefinitionDoc.id],
+        list: [mockDefinitionDoc.id],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: true,
       );
@@ -250,7 +250,7 @@ void main() {
         ),
       ).thenAnswer(
         (_) async => DefinitionIdListState(
-          definitionIdList: mockDefinitionIdList,
+          list: mockDefinitionIdList,
           lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
           hasMore: false,
         ),
@@ -285,7 +285,7 @@ void main() {
       // * Assert
       final expected = DefinitionIdListState(
         // build()時に取得したdefinitionIdListに、fetchMore()で取得したdefinitionIdLisが追加される
-        definitionIdList: mockDefinitionIdList + mockDefinitionIdList,
+        list: mockDefinitionIdList + mockDefinitionIdList,
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: false,
       );
@@ -336,7 +336,7 @@ void main() {
       // * Arrange
       // Mockの設定
       final mockDefinitionIdListState = DefinitionIdListState(
-        definitionIdList: [mockDefinitionDoc.id],
+        list: [mockDefinitionDoc.id],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: true,
       );
@@ -358,7 +358,7 @@ void main() {
         ),
       ).thenAnswer(
         (_) async => DefinitionIdListState(
-          definitionIdList: mockDefinitionIdList,
+          list: mockDefinitionIdList,
           lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
           hasMore: false,
         ),
@@ -393,7 +393,7 @@ void main() {
       // * Assert
       final expected = DefinitionIdListState(
         // build()時に取得したdefinitionIdListに、fetchMore()で取得したdefinitionIdLisが追加される
-        definitionIdList: mockDefinitionIdList + mockDefinitionIdList,
+        list: mockDefinitionIdList + mockDefinitionIdList,
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: false,
       );
@@ -444,7 +444,7 @@ void main() {
       // * Arrange
       // Mockの設定
       final mockDefinitionIdListState = DefinitionIdListState(
-        definitionIdList: [mockDefinitionDoc.id],
+        list: [mockDefinitionDoc.id],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: false,
       );
@@ -508,7 +508,7 @@ void main() {
       // * Arrange
       // Mockの設定
       final mockDefinitionIdListState = DefinitionIdListState(
-        definitionIdList: [mockDefinitionDoc.id],
+        list: [mockDefinitionDoc.id],
         lastReadQueryDocumentSnapshot: mockQueryDocumentSnapshot,
         hasMore: true,
       );
