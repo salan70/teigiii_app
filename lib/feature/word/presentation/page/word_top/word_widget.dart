@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../core/common_widget/error_and_retry_widget.dart';
+import '../../../../../util/logger.dart';
 import '../../../application/word_state.dart';
 import 'word_widget_shimmer.dart';
 
@@ -16,7 +19,7 @@ class WordWidget extends ConsumerWidget {
     return asyncWord.when(
       data: (word) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -44,8 +47,24 @@ class WordWidget extends ConsumerWidget {
         );
       },
       loading: WordWidgetShimmer.new,
-      // TODO(me): 良い感じのエラー画面を作成（ダイアログをオーバーレイで出すのがいいかも）
-      error: (error, stackTrace) => const Center(child: Text('エラー')),
+      error: (error, stackTrace) {
+        // エラー発生後の再読み込み中の場合、trueになる
+        if (asyncWord.isRefreshing) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 24),
+            child: CupertinoActivityIndicator(),
+          );
+        }
+
+        logger.e('語句[$wordId]の取得に失敗しました。'
+            'error: $error, stackTrace: $stackTrace');
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          child: ErrorAndRetryWidget(
+            onRetry: () => ref.invalidate(wordProvider(wordId)),
+          ),
+        );
+      },
     );
   }
 }
