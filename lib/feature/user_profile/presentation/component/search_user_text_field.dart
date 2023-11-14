@@ -93,6 +93,8 @@ class SearchUserTextField extends ConsumerWidget {
           maxLength: UserProfile.publicIdLength,
           autofocus: autoFocus,
           onChanged: ref.read(enteredTextProvider.notifier).updateText,
+          // TODO(me): Android端末にて、現状のonSubmittedで使用感に問題ないか確認する
+          // 空の場合や、文字数が足りない場合など、値が無効な場合の処理を追加する必要があるかも
           onSubmitted: (value) {
             if (value.isEmpty) {
               return;
