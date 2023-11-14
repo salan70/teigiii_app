@@ -72,6 +72,6 @@ class UserProfile with _$UserProfile {
   /// [publicId]を生成する
   static String generatePublicId() {
     // 9桁のランダムな数字を生成し、文字列に変換したものを返す
-    return Random().nextInt(999999999).toString().padLeft(9, '0');
+    return List.generate(publicIdLength, (_) => Random.secure().nextInt(10)).join();
   }
 }
