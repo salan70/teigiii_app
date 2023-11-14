@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common_widget/adaptive_overflow_text.dart';
 import '../../../../core/common_widget/avatar_network_image_widget.dart';
+import '../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../../../util/logger.dart';
@@ -118,14 +119,31 @@ class DefinitionTile extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
+        // エラー発生後の再読み込み中の場合、trueになる
+        if (asyncDefinition.isRefreshing) {
+          return const Column(
+            children: [
+              SizedBox(height: 16),
+              CupertinoActivityIndicator(),
+              SizedBox(height: 24),
+              Divider(),
+            ],
+          );
+        }
+
         logger.e('definitionId [$definitionId]の取得時にエラーが発生: $error');
-        // TODO(me): エラー時に表示させるTileを作成する
-        // 「!」みたいなアイコンと、エラーが発生した旨を表示するのが良さげ
-        return const SizedBox();
+        return Column(
+          children: [
+            const SizedBox(height: 16),
+            SimpleErrorAndRetryWidget(
+              onRetry: () => ref.invalidate(definitionProvider(definitionId)),
+            ),
+            const SizedBox(height: 16),
+            const Divider(),
+          ],
+        );
       },
-      loading: () {
-        return const DefinitionTileShimmer();
-      },
+      loading: () => const DefinitionTileShimmer(),
     );
   }
 }

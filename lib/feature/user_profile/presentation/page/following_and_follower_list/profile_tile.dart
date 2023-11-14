@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/adaptive_overflow_text.dart';
 import '../../../../../core/common_widget/avatar_network_image_widget.dart';
+import '../../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/logger.dart';
 import '../../../application/user_profile_state.dart';
@@ -20,7 +22,7 @@ class ProfileTile extends ConsumerWidget {
   final String targetUserId;
 
   // TODO(me): enumで表示するpageの種類を定義し、このWidget内で対応するボタンを配置するほうが良さそう
-  
+
   /// 右側に表示させるボタン
   /// フォロー/アンフォローボタンや、ミュート解除などを行うボタンを想定
   final Widget button;
@@ -97,14 +99,31 @@ class ProfileTile extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
+        // エラー発生後の再読み込み中の場合、trueになる
+        if (asyncTargetUserProfile.isRefreshing) {
+          return const Column(
+            children: [
+              SizedBox(height: 16),
+              CupertinoActivityIndicator(),
+              SizedBox(height: 24),
+              Divider(),
+            ],
+          );
+        }
+
         logger.e('userId [$targetUserId]の取得時にエラーが発生: $error');
-        // TODO(me): エラー時に表示させるTileを作成する
-        // 「!」みたいなアイコンと、エラーが発生した旨を表示するのが良さげ
-        return const SizedBox();
+        return Column(
+          children: [
+            const SizedBox(height: 16),
+            SimpleErrorAndRetryWidget(
+              onRetry: () => ref.invalidate(userProfileProvider(targetUserId)),
+            ),
+            const SizedBox(height: 16),
+            const Divider(),
+          ],
+        );
       },
-      loading: () {
-        return const ProfileTileShimmer();
-      },
+      loading: () => const ProfileTileShimmer(),
     );
   }
 }

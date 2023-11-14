@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../auth/application/auth_state.dart';
@@ -10,6 +12,13 @@ part 'user_profile_state.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<UserProfile> userProfile(UserProfileRef ref, String userId) async {
+  // TODO(me): デバッグ用のためリリース時に削除する
+  // await Future<void>.delayed(const Duration(seconds: 2));
+  // 1/2の確率でエラーを発生させる
+  if (Random().nextBool()) {
+    throw Exception('やばいで！！！！！');
+  }
+
   final userProfileDoc =
       await ref.read(userProfileRepositoryProvider).fetchUserProfile(userId);
 
