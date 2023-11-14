@@ -33,7 +33,7 @@ class ProfileList extends ConsumerWidget {
 
     return InfinityScrollWidget(
       listStateNotifierProvider: userIdListProvider,
-      fetchMore: ref.watch(userIdListProvider.notifier).fetchMore,
+      fetchMore: ref.read(userIdListProvider.notifier).fetchMore,
       tileBuilder: (userId) {
         return ProfileTile(
           targetUserId: userId as String,
