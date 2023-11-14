@@ -8,7 +8,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../../../core/common_widget/avatar_network_image_widget.dart';
+import '../../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../../core/common_widget/show_write_close_confirm_dialog.dart';
+import '../../../../../util/logger.dart';
 import '../../../application/user_profile_for_write_notifier.dart';
 
 @RoutePage()
@@ -24,9 +26,7 @@ class EditProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncUserProfileForWrite =
         ref.watch(userProfileForWriteNotifierProvider);
-    final notifier = ref.watch(
-      userProfileForWriteNotifierProvider.notifier,
-    );
+    final notifier = ref.watch(userProfileForWriteNotifierProvider.notifier);
 
     return asyncUserProfileForWrite.when(
       data: (userProfileForWrite) {
@@ -195,17 +195,42 @@ class EditProfilePage extends ConsumerWidget {
           ),
         );
       },
+      loading: () => const Scaffold(
+        body: Center(
+          child: CupertinoActivityIndicator(),
+        ),
+      ),
       error: (error, stackTrace) {
-        return const Scaffold(
-          body: Center(
-            child: Text('エラーが発生しました。'),
+        // エラー発生後の再読み込み中の場合、trueになる
+        if (asyncUserProfileForWrite.isRefreshing) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('プロフィール編集'),
+            ),
+            body: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: CupertinoActivityIndicator(),
+              ),
+            ),
+          );
+        }
+
+        logger.e('プロフィール編集画面でエラーが発生しました。'
+            'error: $error, stackTrace: $stackTrace');
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('プロフィール編集'),
           ),
-        );
-      },
-      loading: () {
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            child: Center(
+              child: ErrorAndRetryWidget(
+                onRetry: () =>
+                    ref.invalidate(userProfileForWriteNotifierProvider),
+              ),
+            ),
           ),
         );
       },

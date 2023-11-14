@@ -229,7 +229,7 @@ class DefinitionDetailPage extends ConsumerWidget {
           );
         }
 
-        logger.e('定義[$definitionId]のプロフィールの取得に失敗しました。'
+        logger.e('定義[$definitionId]の取得に失敗しました。'
             'error: $error, stackTrace: $stackTrace');
         return Scaffold(
           appBar: AppBar(

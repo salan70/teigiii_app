@@ -29,9 +29,7 @@ class MutedUserListPage extends ConsumerWidget {
                 final mutedUserId = mutedUserIdList[index];
                 return ProfileTile(
                   targetUserId: mutedUserId,
-                  button: OtherUserActionIconButton(
-                    ownerId: mutedUserId,
-                  ),
+                  button: OtherUserActionIconButton(ownerId: mutedUserId),
                   transitionToProfilePage: false,
                 );
               },

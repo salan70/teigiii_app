@@ -40,3 +40,46 @@ class ErrorAndRetryWidget extends StatelessWidget {
     );
   }
 }
+
+/// [ErrorAndRetryWidget]の簡易版
+class SimpleErrorAndRetryWidget extends StatelessWidget {
+  const SimpleErrorAndRetryWidget({
+    super.key,
+    required this.onRetry,
+  });
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onRetry,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                CupertinoIcons.exclamationmark_circle_fill,
+                color: Theme.of(context).colorScheme.error,
+                size: 24,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'エラー',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'タップで再読み込み',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ],
+      ),
+    );
+  }
+}
