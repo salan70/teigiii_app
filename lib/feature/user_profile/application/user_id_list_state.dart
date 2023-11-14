@@ -67,7 +67,7 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
                 lastDocument,
               );
 
-        case UserListType.likedUser:
+        case UserListType.liked:
           if (targetDefinitionId == null) {
             throw ArgumentError('targetDefinitionIdがnullです');
           }
