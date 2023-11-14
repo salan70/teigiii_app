@@ -30,6 +30,7 @@ class UserProfile with _$UserProfile {
 
   int get maxNameLength => 15;
   int get maxBioLength => 150;
+  static int get publicIdLength => 9;
 
   /// nameが無効な場合、エラーメッセージを返す
   String? outputNameError() {

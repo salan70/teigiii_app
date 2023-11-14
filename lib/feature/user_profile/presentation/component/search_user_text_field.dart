@@ -7,6 +7,7 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 
 import '../../../../core/common_provider/entered_text_state.dart';
 import '../../../../core/router/app_router.dart';
+import '../../domain/user_profile.dart';
 
 class SearchUserTextField extends ConsumerWidget {
   SearchUserTextField({
@@ -47,19 +48,33 @@ class SearchUserTextField extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: InkWell(
                       onTap: () {
-                        final enteredText = ref.read(enteredTextProvider);
-                        if (enteredText.length == 9) {
-                          controller.text = defaultText ?? '';
+                        if (controller.text.length ==
+                            UserProfile.publicIdLength) {
                           context.pushRoute(
-                            SearchUserResultRoute(
-                              searchWord: ref.read(enteredTextProvider),
-                            ),
+                            SearchUserResultRoute(searchWord: controller.text),
                           );
+                          controller.text = defaultText ?? '';
                         }
                       },
-                      child: Text(
-                        '検索',
-                        style: Theme.of(context).textTheme.titleMedium,
+                      child: Consumer(
+                        builder: (context, ref, child) {
+                          final enteredText = ref.watch(enteredTextProvider);
+                          return Text(
+                            '検索',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                  color: enteredText.length ==
+                                          UserProfile.publicIdLength
+                                      ? Theme.of(context).colorScheme.onSurface
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant
+                                          .withOpacity(0.4),
+                                ),
+                          );
+                        },
                       ),
                     ),
                   );
@@ -75,7 +90,7 @@ class SearchUserTextField extends ConsumerWidget {
           textInputAction: TextInputAction.search,
           // 数字のみ入力可能
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          maxLength: 9,
+          maxLength: UserProfile.publicIdLength,
           autofocus: autoFocus,
           onChanged: ref.read(enteredTextProvider.notifier).updateText,
           onSubmitted: (value) {
@@ -109,7 +124,7 @@ class SearchUserTextField extends ConsumerWidget {
               },
             ),
             suffixIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
-            hintText: '9桁のIDを入力',
+            hintText: '${UserProfile.publicIdLength}桁のIDを入力',
             filled: true,
             contentPadding: EdgeInsets.zero,
             border: OutlineInputBorder(
