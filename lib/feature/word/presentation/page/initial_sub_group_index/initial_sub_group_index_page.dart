@@ -33,6 +33,7 @@ class InitialSubGroupIndexPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(selectedInitialMainGroup.label),
         leading: const BackIconButton(),
+        leadingWidth: 48,
       ),
       body: ListView(
         children: [

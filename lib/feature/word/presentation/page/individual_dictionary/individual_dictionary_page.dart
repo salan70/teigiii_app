@@ -37,6 +37,7 @@ class IndividualDictionaryPage extends ConsumerWidget {
             title: Text('${targetUserProfile.name}の辞書'),
             leading:
                 isTopRoute ? const ToSettingButton() : const BackIconButton(),
+            leadingWidth: 48,
           ),
           body: ListView(
             children: [

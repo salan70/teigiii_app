@@ -28,20 +28,14 @@ class WordListPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(selectedInitialSubGroup.label),
         leading: const BackIconButton(),
+        leadingWidth: 48,
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 8),
-          Expanded(
-            child: InfinityScrollWidget(
-              listStateNotifierProvider: wordListProvider,
-              fetchMore: ref.read(wordListProvider.notifier).fetchMore,
-              tileBuilder: (item) => WordTile(word: item as Word),
-              shimmerTile: const WordTileShimmer(),
-              shimmerTileNumber: 10,
-            ),
-          ),
-        ],
+      body: InfinityScrollWidget(
+        listStateNotifierProvider: wordListProvider,
+        fetchMore: ref.read(wordListProvider.notifier).fetchMore,
+        tileBuilder: (item) => WordTile(word: item as Word),
+        shimmerTile: const WordTileShimmer(),
+        shimmerTileNumber: 10,
       ),
     );
   }

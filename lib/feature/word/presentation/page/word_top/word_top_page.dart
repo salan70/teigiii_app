@@ -45,6 +45,7 @@ class WordTopPage extends ConsumerWidget {
                     },
                   ),
                   leading: const BackIconButton(),
+                  leadingWidth: 48,
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate(
