@@ -16,6 +16,7 @@ Future<UserProfile> userProfile(UserProfileRef ref, String userId) async {
   return UserProfile(
     id: userId,
     name: userProfileDoc.name,
+    publicId: userProfileDoc.publicId,
     bio: userProfileDoc.bio,
     profileImageUrl: userProfileDoc.profileImageUrl,
     croppedFile: null,

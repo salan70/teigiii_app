@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$UserProfileDocument {
   String get id => throw _privateConstructorUsedError;
+  String get publicId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get bio => throw _privateConstructorUsedError;
   String get profileImageUrl => throw _privateConstructorUsedError;
@@ -36,6 +37,7 @@ abstract class $UserProfileDocumentCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      String publicId,
       String name,
       String bio,
       String profileImageUrl,
@@ -57,6 +59,7 @@ class _$UserProfileDocumentCopyWithImpl<$Res, $Val extends UserProfileDocument>
   @override
   $Res call({
     Object? id = null,
+    Object? publicId = null,
     Object? name = null,
     Object? bio = null,
     Object? profileImageUrl = null,
@@ -67,6 +70,10 @@ class _$UserProfileDocumentCopyWithImpl<$Res, $Val extends UserProfileDocument>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      publicId: null == publicId
+          ? _value.publicId
+          : publicId // ignore: cast_nullable_to_non_nullable
               as String,
       name: null == name
           ? _value.name
@@ -102,6 +109,7 @@ abstract class _$$_UserProfileDocumentCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
+      String publicId,
       String name,
       String bio,
       String profileImageUrl,
@@ -121,6 +129,7 @@ class __$$_UserProfileDocumentCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? publicId = null,
     Object? name = null,
     Object? bio = null,
     Object? profileImageUrl = null,
@@ -131,6 +140,10 @@ class __$$_UserProfileDocumentCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      publicId: null == publicId
+          ? _value.publicId
+          : publicId // ignore: cast_nullable_to_non_nullable
               as String,
       name: null == name
           ? _value.name
@@ -161,6 +174,7 @@ class __$$_UserProfileDocumentCopyWithImpl<$Res>
 class _$_UserProfileDocument implements _UserProfileDocument {
   const _$_UserProfileDocument(
       {required this.id,
+      required this.publicId,
       required this.name,
       required this.bio,
       required this.profileImageUrl,
@@ -169,6 +183,8 @@ class _$_UserProfileDocument implements _UserProfileDocument {
 
   @override
   final String id;
+  @override
+  final String publicId;
   @override
   final String name;
   @override
@@ -182,7 +198,7 @@ class _$_UserProfileDocument implements _UserProfileDocument {
 
   @override
   String toString() {
-    return 'UserProfileDocument(id: $id, name: $name, bio: $bio, profileImageUrl: $profileImageUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserProfileDocument(id: $id, publicId: $publicId, name: $name, bio: $bio, profileImageUrl: $profileImageUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -191,6 +207,8 @@ class _$_UserProfileDocument implements _UserProfileDocument {
         (other.runtimeType == runtimeType &&
             other is _$_UserProfileDocument &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.publicId, publicId) ||
+                other.publicId == publicId) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.bio, bio) || other.bio == bio) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
@@ -202,8 +220,8 @@ class _$_UserProfileDocument implements _UserProfileDocument {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, name, bio, profileImageUrl, createdAt, updatedAt);
+  int get hashCode => Object.hash(runtimeType, id, publicId, name, bio,
+      profileImageUrl, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -216,6 +234,7 @@ class _$_UserProfileDocument implements _UserProfileDocument {
 abstract class _UserProfileDocument implements UserProfileDocument {
   const factory _UserProfileDocument(
       {required final String id,
+      required final String publicId,
       required final String name,
       required final String bio,
       required final String profileImageUrl,
@@ -224,6 +243,8 @@ abstract class _UserProfileDocument implements UserProfileDocument {
 
   @override
   String get id;
+  @override
+  String get publicId;
   @override
   String get name;
   @override

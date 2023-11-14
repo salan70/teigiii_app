@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_cropper/image_cropper.dart';
 
@@ -7,6 +9,7 @@ part 'user_profile.freezed.dart';
 class UserProfile with _$UserProfile {
   const factory UserProfile({
     required String id,
+    required String publicId,
     required String name,
     required String bio,
     required String profileImageUrl,
@@ -15,6 +18,13 @@ class UserProfile with _$UserProfile {
     required CroppedFile? croppedFile,
   }) = _UserProfile;
   const UserProfile._();
+
+  /// [name]の初期値
+  static String get defaultName => '見習い辞書編纂者';
+  /// [bio]の初期値
+  static String get defaultBio => '';
+  /// [profileImageUrl]の初期値
+  static String get defaultImageUrl => '';
 
   int get maxNameLength => 15;
   int get maxBioLength => 150;
@@ -44,5 +54,11 @@ class UserProfile with _$UserProfile {
   /// 全てのフィールド（[name], [bio]）が有効かどうか
   bool isValidAllFields() {
     return outputNameError() == null && outputBioError() == null;
+  }
+
+  /// [publicId]を生成する
+  static String generatePublicId() {
+    // 9桁のランダムな数字を生成し、文字列に変換したものを返す
+    return Random().nextInt(999999999).toString().padLeft(9, '0');
   }
 }

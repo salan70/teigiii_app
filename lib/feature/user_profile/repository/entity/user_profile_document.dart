@@ -10,6 +10,7 @@ part 'user_profile_document.freezed.dart';
 class UserProfileDocument with _$UserProfileDocument {
   const factory UserProfileDocument({
     required String id,
+    required String publicId,
     required String name,
     required String bio,
     required String profileImageUrl,
@@ -21,6 +22,7 @@ class UserProfileDocument with _$UserProfileDocument {
     final data = doc.data()! as Map<String, dynamic>;
     return UserProfileDocument(
       id: doc.id,
+      publicId: data[UserProfilesCollection.publicId] as String,
       name: data[UserProfilesCollection.name] as String,
       bio: data[UserProfilesCollection.bio] as String,
       profileImageUrl:

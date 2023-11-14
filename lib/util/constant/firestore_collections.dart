@@ -71,4 +71,3 @@ class UserFollowCountsCollection {
   static const followerCount = 'followerCount';
   static const followingCount = 'followingCount';
 }
-

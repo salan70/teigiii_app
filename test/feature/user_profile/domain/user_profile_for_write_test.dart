@@ -5,6 +5,7 @@ void main() {
   group('UserProfileForWrite Tests', () {
     const defaultUserProfileForWrite = UserProfile(
       id: 'userId',
+      publicId: '123456789',
       name: 'ヒトカゲ',
       bio: '早くリザードになりたい',
       profileImageUrl: 'https://example.com/profile.jpg',

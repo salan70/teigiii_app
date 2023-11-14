@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$UserProfile {
   String get id => throw _privateConstructorUsedError;
+  String get publicId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get bio => throw _privateConstructorUsedError;
   String get profileImageUrl => throw _privateConstructorUsedError;
@@ -37,6 +38,7 @@ abstract class $UserProfileCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      String publicId,
       String name,
       String bio,
       String profileImageUrl,
@@ -57,6 +59,7 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
   @override
   $Res call({
     Object? id = null,
+    Object? publicId = null,
     Object? name = null,
     Object? bio = null,
     Object? profileImageUrl = null,
@@ -66,6 +69,10 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      publicId: null == publicId
+          ? _value.publicId
+          : publicId // ignore: cast_nullable_to_non_nullable
               as String,
       name: null == name
           ? _value.name
@@ -97,6 +104,7 @@ abstract class _$$_UserProfileCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
+      String publicId,
       String name,
       String bio,
       String profileImageUrl,
@@ -115,6 +123,7 @@ class __$$_UserProfileCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? publicId = null,
     Object? name = null,
     Object? bio = null,
     Object? profileImageUrl = null,
@@ -124,6 +133,10 @@ class __$$_UserProfileCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      publicId: null == publicId
+          ? _value.publicId
+          : publicId // ignore: cast_nullable_to_non_nullable
               as String,
       name: null == name
           ? _value.name
@@ -150,6 +163,7 @@ class __$$_UserProfileCopyWithImpl<$Res>
 class _$_UserProfile extends _UserProfile {
   const _$_UserProfile(
       {required this.id,
+      required this.publicId,
       required this.name,
       required this.bio,
       required this.profileImageUrl,
@@ -158,6 +172,8 @@ class _$_UserProfile extends _UserProfile {
 
   @override
   final String id;
+  @override
+  final String publicId;
   @override
   final String name;
   @override
@@ -171,7 +187,7 @@ class _$_UserProfile extends _UserProfile {
 
   @override
   String toString() {
-    return 'UserProfile(id: $id, name: $name, bio: $bio, profileImageUrl: $profileImageUrl, croppedFile: $croppedFile)';
+    return 'UserProfile(id: $id, publicId: $publicId, name: $name, bio: $bio, profileImageUrl: $profileImageUrl, croppedFile: $croppedFile)';
   }
 
   @override
@@ -180,6 +196,8 @@ class _$_UserProfile extends _UserProfile {
         (other.runtimeType == runtimeType &&
             other is _$_UserProfile &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.publicId, publicId) ||
+                other.publicId == publicId) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.bio, bio) || other.bio == bio) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
@@ -189,8 +207,8 @@ class _$_UserProfile extends _UserProfile {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, bio, profileImageUrl, croppedFile);
+  int get hashCode => Object.hash(
+      runtimeType, id, publicId, name, bio, profileImageUrl, croppedFile);
 
   @JsonKey(ignore: true)
   @override
@@ -202,6 +220,7 @@ class _$_UserProfile extends _UserProfile {
 abstract class _UserProfile extends UserProfile {
   const factory _UserProfile(
       {required final String id,
+      required final String publicId,
       required final String name,
       required final String bio,
       required final String profileImageUrl,
@@ -210,6 +229,8 @@ abstract class _UserProfile extends UserProfile {
 
   @override
   String get id;
+  @override
+  String get publicId;
   @override
   String get name;
   @override

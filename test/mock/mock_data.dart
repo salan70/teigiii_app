@@ -46,6 +46,7 @@ final mockDefinitionDoc = DefinitionDocument(
 
 final mockUserProfile = UserProfile(
   id: mockUserProfileDoc.id,
+  publicId: '123456789',
   name: mockUserProfileDoc.name,
   bio: mockUserProfileDoc.bio,
   profileImageUrl: mockUserProfileDoc.profileImageUrl,
@@ -55,6 +56,7 @@ final mockUserProfile = UserProfile(
 final mockUserProfileDoc = UserProfileDocument(
   id: 'userId',
   name: 'name',
+  publicId: '123456789',
   bio: 'I am a perfect human',
   profileImageUrl: 'profileImageUrl',
   createdAt: nowDateTime,
