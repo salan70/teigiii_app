@@ -653,6 +653,19 @@ class MockUserProfileRepository extends _i1.Mock
       ) as _i12.Future<_i6.UserProfileDocument>);
 
   @override
+  _i12.Future<_i6.UserProfileDocument?> searchUserProfileByPublicId(
+          String? publicId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #searchUserProfileByPublicId,
+          [publicId],
+        ),
+        returnValue: _i12.Future<_i6.UserProfileDocument?>.value(),
+        returnValueForMissingStub:
+            _i12.Future<_i6.UserProfileDocument?>.value(),
+      ) as _i12.Future<_i6.UserProfileDocument?>);
+
+  @override
   _i12.Future<void> addUserProfile(String? userId) => (super.noSuchMethod(
         Invocation.method(
           #addUserProfile,

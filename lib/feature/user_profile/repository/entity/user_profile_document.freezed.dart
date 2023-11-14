@@ -171,7 +171,7 @@ class __$$_UserProfileDocumentCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserProfileDocument implements _UserProfileDocument {
+class _$_UserProfileDocument extends _UserProfileDocument {
   const _$_UserProfileDocument(
       {required this.id,
       required this.publicId,
@@ -179,7 +179,8 @@ class _$_UserProfileDocument implements _UserProfileDocument {
       required this.bio,
       required this.profileImageUrl,
       required this.createdAt,
-      required this.updatedAt});
+      required this.updatedAt})
+      : super._();
 
   @override
   final String id;
@@ -231,7 +232,7 @@ class _$_UserProfileDocument implements _UserProfileDocument {
           this, _$identity);
 }
 
-abstract class _UserProfileDocument implements UserProfileDocument {
+abstract class _UserProfileDocument extends UserProfileDocument {
   const factory _UserProfileDocument(
       {required final String id,
       required final String publicId,
@@ -240,6 +241,7 @@ abstract class _UserProfileDocument implements UserProfileDocument {
       required final String profileImageUrl,
       required final DateTime createdAt,
       required final DateTime updatedAt}) = _$_UserProfileDocument;
+  const _UserProfileDocument._() : super._();
 
   @override
   String get id;

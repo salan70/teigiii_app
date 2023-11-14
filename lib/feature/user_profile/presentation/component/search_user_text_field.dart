@@ -52,7 +52,7 @@ class SearchUserTextField extends ConsumerWidget {
                           controller.text = defaultText ?? '';
                           context.pushRoute(
                             SearchUserResultRoute(
-                              searchId: ref.read(enteredTextProvider),
+                              searchWord: ref.read(enteredTextProvider),
                             ),
                           );
                         }
@@ -83,9 +83,7 @@ class SearchUserTextField extends ConsumerWidget {
               return;
             }
             controller.text = defaultText ?? '';
-            context.pushRoute(
-              SearchUserResultRoute(searchId: value),
-            );
+            context.pushRoute(SearchUserResultRoute(searchWord: value));
           },
           decoration: InputDecoration(
             prefixIcon: const Icon(

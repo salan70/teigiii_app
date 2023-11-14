@@ -16,21 +16,11 @@ class SearchUserPage extends StatelessWidget {
           title: const Text('ユーザーを探す'),
         ),
         body: Padding(
-          padding: const EdgeInsets.only(
-            left: 16,
-            right: 16,
+          padding: const EdgeInsets.symmetric(
+            vertical: 24,
+            horizontal: 52,
           ),
-          child: ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 24,
-                  horizontal: 36,
-                ),
-                child: SearchUserTextField(autoFocus: true),
-              ),
-            ],
-          ),
+          child: SearchUserTextField(autoFocus: true),
         ),
       ),
     );

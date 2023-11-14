@@ -186,7 +186,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: SearchUserResultPage(
           key: args.key,
-          searchId: args.searchId,
+          searchWord: args.searchWord,
         ),
       );
     },
@@ -785,13 +785,13 @@ class SearchUserRoute extends PageRouteInfo<void> {
 class SearchUserResultRoute extends PageRouteInfo<SearchUserResultRouteArgs> {
   SearchUserResultRoute({
     Key? key,
-    required String searchId,
+    required String searchWord,
     List<PageRouteInfo>? children,
   }) : super(
           SearchUserResultRoute.name,
           args: SearchUserResultRouteArgs(
             key: key,
-            searchId: searchId,
+            searchWord: searchWord,
           ),
           initialChildren: children,
         );
@@ -805,16 +805,16 @@ class SearchUserResultRoute extends PageRouteInfo<SearchUserResultRouteArgs> {
 class SearchUserResultRouteArgs {
   const SearchUserResultRouteArgs({
     this.key,
-    required this.searchId,
+    required this.searchWord,
   });
 
   final Key? key;
 
-  final String searchId;
+  final String searchWord;
 
   @override
   String toString() {
-    return 'SearchUserResultRouteArgs{key: $key, searchId: $searchId}';
+    return 'SearchUserResultRouteArgs{key: $key, searchWord: $searchWord}';
   }
 }
 

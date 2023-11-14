@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../util/constant/default_value.dart';
 import '../../../../util/constant/firestore_collections.dart';
+import '../../domain/user_profile.dart';
 
 part 'user_profile_document.freezed.dart';
 
@@ -17,6 +18,7 @@ class UserProfileDocument with _$UserProfileDocument {
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _UserProfileDocument;
+  const UserProfileDocument._();
 
   factory UserProfileDocument.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data()! as Map<String, dynamic>;
@@ -30,6 +32,17 @@ class UserProfileDocument with _$UserProfileDocument {
               defaultImageUrl,
       createdAt: (data[createdAtFieldName] as Timestamp).toDate(),
       updatedAt: (data[updatedAtFieldName] as Timestamp).toDate(),
+    );
+  }
+
+  UserProfile toUserProfile() {
+    return UserProfile(
+      id: id,
+      publicId: publicId,
+      name: name,
+      bio: bio,
+      profileImageUrl: profileImageUrl,
+      croppedFile: null,
     );
   }
 }

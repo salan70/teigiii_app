@@ -6,7 +6,7 @@ part of 'user_profile_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userProfileHash() => r'37ac31aa8455d34627d487de2f0b8e5a72531de9';
+String _$userProfileHash() => r'685b04108915f8bf276435a3a34460680b9a5dbf';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -153,6 +153,136 @@ class _UserProfileProviderElement extends FutureProviderElement<UserProfile>
 
   @override
   String get userId => (origin as UserProfileProvider).userId;
+}
+
+String _$userIdSearchByPublicIdHash() =>
+    r'0a9f9dc257f45dcdd7e3f6843ad13c9175e8dbd6';
+
+/// See also [userIdSearchByPublicId].
+@ProviderFor(userIdSearchByPublicId)
+const userIdSearchByPublicIdProvider = UserIdSearchByPublicIdFamily();
+
+/// See also [userIdSearchByPublicId].
+class UserIdSearchByPublicIdFamily extends Family<AsyncValue<String?>> {
+  /// See also [userIdSearchByPublicId].
+  const UserIdSearchByPublicIdFamily();
+
+  /// See also [userIdSearchByPublicId].
+  UserIdSearchByPublicIdProvider call(
+    String publicId,
+  ) {
+    return UserIdSearchByPublicIdProvider(
+      publicId,
+    );
+  }
+
+  @override
+  UserIdSearchByPublicIdProvider getProviderOverride(
+    covariant UserIdSearchByPublicIdProvider provider,
+  ) {
+    return call(
+      provider.publicId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'userIdSearchByPublicIdProvider';
+}
+
+/// See also [userIdSearchByPublicId].
+class UserIdSearchByPublicIdProvider extends FutureProvider<String?> {
+  /// See also [userIdSearchByPublicId].
+  UserIdSearchByPublicIdProvider(
+    String publicId,
+  ) : this._internal(
+          (ref) => userIdSearchByPublicId(
+            ref as UserIdSearchByPublicIdRef,
+            publicId,
+          ),
+          from: userIdSearchByPublicIdProvider,
+          name: r'userIdSearchByPublicIdProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$userIdSearchByPublicIdHash,
+          dependencies: UserIdSearchByPublicIdFamily._dependencies,
+          allTransitiveDependencies:
+              UserIdSearchByPublicIdFamily._allTransitiveDependencies,
+          publicId: publicId,
+        );
+
+  UserIdSearchByPublicIdProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.publicId,
+  }) : super.internal();
+
+  final String publicId;
+
+  @override
+  Override overrideWith(
+    FutureOr<String?> Function(UserIdSearchByPublicIdRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UserIdSearchByPublicIdProvider._internal(
+        (ref) => create(ref as UserIdSearchByPublicIdRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        publicId: publicId,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<String?> createElement() {
+    return _UserIdSearchByPublicIdProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserIdSearchByPublicIdProvider &&
+        other.publicId == publicId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, publicId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UserIdSearchByPublicIdRef on FutureProviderRef<String?> {
+  /// The parameter `publicId` of this provider.
+  String get publicId;
+}
+
+class _UserIdSearchByPublicIdProviderElement
+    extends FutureProviderElement<String?> with UserIdSearchByPublicIdRef {
+  _UserIdSearchByPublicIdProviderElement(super.provider);
+
+  @override
+  String get publicId => (origin as UserIdSearchByPublicIdProvider).publicId;
 }
 
 String _$followCountHash() => r'7a55134e2b960a0378e6d6156e39c8dafcfd43c3';
