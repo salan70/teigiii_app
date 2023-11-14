@@ -6,7 +6,7 @@ import '../../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/common_widget/infinity_scroll_widget.dart';
 import '../../../application/word_list_state_by_search_word.dart';
 import '../../../domain/word.dart';
-import '../../component/word_search_text_field.dart';
+import '../../component/search_word_text_field.dart';
 import '../../component/word_tile.dart';
 import '../../component/word_tile_shimmer.dart';
 
@@ -36,7 +36,7 @@ class SearchWordResultPage extends ConsumerWidget {
               vertical: 24,
               horizontal: 36,
             ),
-            child: WordSearchTextField(defaultText: searchWord),
+            child: SearchWordTextField(defaultText: searchWord),
           ),
           const SizedBox(height: 8),
           Expanded(

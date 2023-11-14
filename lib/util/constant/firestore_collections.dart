@@ -37,6 +37,16 @@ class LikesCollection {
   static const definitionId = 'definitionId';
 }
 
+class UserProfilesCollection {
+  static const collectionName = 'UserProfiles';
+
+  // Field
+  static const name = 'name';
+  static const bio = 'bio';
+  static const profileImageUrl = 'profileImageUrl';
+  static const publicId = 'publicId';
+}
+
 class UserConfigsCollection {
   static const collectionName = 'UserConfigs';
 
@@ -62,11 +72,3 @@ class UserFollowCountsCollection {
   static const followingCount = 'followingCount';
 }
 
-class UserProfilesCollection {
-  static const collectionName = 'UserProfiles';
-
-  // Field
-  static const name = 'name';
-  static const bio = 'bio';
-  static const profileImageUrl = 'profileImageUrl';
-}

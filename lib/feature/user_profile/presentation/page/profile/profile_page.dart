@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
+import '../../../../../core/common_widget/button/to_search_user_button.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
 import '../../../../../util/logger.dart';
 import '../../../../auth/application/auth_state.dart';
@@ -54,12 +54,7 @@ class ProfilePage extends ConsumerWidget {
                   ),
                   actions: [
                     isMyProfile
-                        ? IconButton(
-                            icon: const Icon(CupertinoIcons.person_add),
-                            onPressed: () {
-                              // TODO(me): ユーザー検索画面を表示する
-                            },
-                          )
+                        ? const ToSearchUserButton()
                         : OtherUserActionIconButton(ownerId: targetUserId),
                   ],
                 ),

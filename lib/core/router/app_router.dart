@@ -16,6 +16,8 @@ import '../../feature/user_profile/presentation/page/edit_profile/edit_profile_p
 import '../../feature/user_profile/presentation/page/following_and_follower_list/following_and_follower_list_page.dart';
 import '../../feature/user_profile/presentation/page/like_user_page.dart/like_user_page.dart';
 import '../../feature/user_profile/presentation/page/profile/profile_page.dart';
+import '../../feature/user_profile/presentation/page/search_user/search_user_page.dart';
+import '../../feature/user_profile/presentation/page/search_user_result/search_user_result_page.dart';
 import '../../feature/word/presentation/page/everyone_dictionary/everyone_dictionary_page.dart';
 import '../../feature/word/presentation/page/individual_dictionary/individual_dictionary_page.dart';
 import '../../feature/word/presentation/page/individual_dictionary_definition_list/individual_dictionary_definition_list.dart';
@@ -63,6 +65,14 @@ class AppRouter extends _$AppRouter {
     AdaptiveRoute(
       path: 'individual_dictionary_definition_list',
       page: IndividualDictionaryDefinitionListRoute.page,
+    ),
+    AdaptiveRoute(
+      path: 'search_user',
+      page: SearchUserRoute.page,
+    ),
+    AdaptiveRoute(
+      path: 'search_user_result',
+      page: SearchUserResultRoute.page,
     ),
   ];
 

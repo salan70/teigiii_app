@@ -138,7 +138,7 @@ class _$_WordListState implements _WordListState {
     return EqualUnmodifiableListView(_list);
   }
 
-  /// これがnullの場合、1件もwordを取得していない（[list]が空）
+  /// 最後に読み取られたQueryDocumentSnapshot
   /// これがnullの場合、1件もwordを取得していない（[wordList]が空）
   @override
   final QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot;

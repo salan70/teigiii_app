@@ -5,7 +5,7 @@ part 'entered_text_state.g.dart';
 @riverpod
 class EnteredTextNotifier extends _$EnteredTextNotifier {
   @override
-  String build() {
+  String build(EnterField enterField) {
     return '';
   }
 
@@ -17,4 +17,9 @@ class EnteredTextNotifier extends _$EnteredTextNotifier {
   void clearText() {
     state = '';
   }
+}
+
+enum EnterField {
+  searchWord,
+  searchUser,
 }

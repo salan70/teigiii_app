@@ -174,6 +174,22 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    SearchUserRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SearchUserPage(),
+      );
+    },
+    SearchUserResultRoute.name: (routeData) {
+      final args = routeData.argsAs<SearchUserResultRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: SearchUserResultPage(
+          key: args.key,
+          searchId: args.searchId,
+        ),
+      );
+    },
     SearchWordResultRoute.name: (routeData) {
       final args = routeData.argsAs<SearchWordResultRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -747,6 +763,58 @@ class ProfileRouteArgs {
   @override
   String toString() {
     return 'ProfileRouteArgs{key: $key, targetUserId: $targetUserId}';
+  }
+}
+
+/// generated route for
+/// [SearchUserPage]
+class SearchUserRoute extends PageRouteInfo<void> {
+  const SearchUserRoute({List<PageRouteInfo>? children})
+      : super(
+          SearchUserRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SearchUserRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SearchUserResultPage]
+class SearchUserResultRoute extends PageRouteInfo<SearchUserResultRouteArgs> {
+  SearchUserResultRoute({
+    Key? key,
+    required String searchId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SearchUserResultRoute.name,
+          args: SearchUserResultRouteArgs(
+            key: key,
+            searchId: searchId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SearchUserResultRoute';
+
+  static const PageInfo<SearchUserResultRouteArgs> page =
+      PageInfo<SearchUserResultRouteArgs>(name);
+}
+
+class SearchUserResultRouteArgs {
+  const SearchUserResultRouteArgs({
+    this.key,
+    required this.searchId,
+  });
+
+  final Key? key;
+
+  final String searchId;
+
+  @override
+  String toString() {
+    return 'SearchUserResultRouteArgs{key: $key, searchId: $searchId}';
   }
 }
 
