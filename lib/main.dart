@@ -13,9 +13,7 @@ import 'core/router/app_router.dart';
 import 'feature/auth/application/auth_service.dart';
 import 'feature/auth/application/auth_state.dart';
 import 'firebase_options/firebase_options.dart';
-import 'util/constant/color_scheme.dart';
-import 'util/constant/tab_bar_theme.dart';
-import 'util/constant/text_theme.dart';
+import 'util/constant/theme_data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -83,52 +81,8 @@ class _MyAppState extends ConsumerState<MyApp> {
       ],
       supportedLocales: const [Locale('ja')],
       routerConfig: ref.watch(appRouterProvider).config(),
-      // scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
-      theme: ThemeData(
-        fontFamily: lineFontFamily,
-        colorScheme: lightColorScheme,
-        textTheme: textTheme,
-        appBarTheme: AppBarTheme(
-          backgroundColor: lightColorScheme.surface,
-          elevation: 0.1,
-          titleTextStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
-                fontFamily: lineFontFamily,
-                color: Theme.of(context).colorScheme.onSurface,
-                fontWeight: FontWeight.bold,
-              ),
-          iconTheme: IconThemeData(
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-        ),
-        iconButtonTheme: IconButtonThemeData(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(
-              Theme.of(context).colorScheme.surface,
-            ),
-            iconColor: MaterialStateProperty.all<Color>(
-              Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          selectedItemColor: lightColorScheme.primary,
-          selectedLabelStyle: const TextStyle(
-            fontFamily: lineFontFamily,
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontFamily: lineFontFamily,
-          ),
-          elevation: 0.1,
-        ),
-        tabBarTheme: lightTabBarTheme,
-        scaffoldBackgroundColor: lightColorScheme.surface,
-        // タップ時のエフェクトを無効化
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-      ),
+      theme: getThemeData(ThemeMode.light, context),
+      darkTheme: getThemeData(ThemeMode.dark, context),
       builder: (context, child) {
         final isSignedIn = ref.watch(isSignedInProvider);
         if (isSignedIn) {
