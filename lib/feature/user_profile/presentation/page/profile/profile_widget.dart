@@ -56,7 +56,13 @@ class ProfileWidget extends ConsumerWidget {
                 targetUserProfile.name,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(height: 16),
+              Text(
+                'ID ${targetUserProfile.publicIdForUi}',
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+              ),
+              const SizedBox(height: 8),
               Text(
                 targetUserProfile.bio,
                 style: Theme.of(context).textTheme.bodyMedium,

@@ -80,7 +80,10 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
           );
     } on Exception catch (e) {
       logger.e('定義投稿時にエラーが発生 error: $e');
-      toastNotifier.showToast('投稿できませんでした。もう一度お試しください。', causeError: true);
+      toastNotifier.showToast(
+        '投稿できませんでした。もう一度お試しください。',
+        causeError: true,
+      );
       isLoadingOverlayNotifier.finishLoading();
       return;
     }
@@ -114,7 +117,10 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
           );
     } on Exception catch (e) {
       logger.e('定義編集時にエラーが発生 error: $e');
-      toastNotifier.showToast('保存できませんでした。もう一度お試しください。', causeError: true);
+      toastNotifier.showToast(
+        '保存できませんでした。もう一度お試しください。',
+        causeError: true,
+      );
       isLoadingOverlayNotifier.finishLoading();
       return;
     }

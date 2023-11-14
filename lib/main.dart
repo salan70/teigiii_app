@@ -104,6 +104,8 @@ class _MyAppState extends ConsumerState<MyApp> {
             },
             error: (error, stack) {
               // TODO(me): エラー画面を作成し、表示させる
+              // publicIdの重複でエラーが発生する可能性があるため、
+              // 少なくとも再試行できるボタンを表示させる
               return Scaffold(
                 body: Center(
                   child: Text('エラーが発生しました\n$error'),

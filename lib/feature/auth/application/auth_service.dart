@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../util/constant/default_value.dart';
 import '../../../util/logger.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_config/repository/device_info_repository.dart';
@@ -24,6 +23,8 @@ class AuthService extends _$AuthService {
   /// この場合、以降のアプリ上での操作の大半ができなくなることを考慮して、エラーハンドリングを行うこと
   Future<void> onAppLaunch() async {
     state = const AsyncValue.loading();
+    // TODO(me): デバッグ用。リリース時に削除する
+    // await ref.read(authRepositoryProvider).signOut();
 
     final isSignedIn = ref.read(isSignedInProvider);
     // ログインしている場合
@@ -84,9 +85,7 @@ class AuthService extends _$AuthService {
   Future<void> _addUserProfile() async {
     final userId = ref.read(userIdProvider)!;
 
-    await ref
-        .read(userProfileRepositoryProvider)
-        .addUserProfile(userId, defaultUserName);
+    await ref.read(userProfileRepositoryProvider).addUserProfile(userId);
   }
 
   /// ユーザーのフォロー/フォロワー数を登録する

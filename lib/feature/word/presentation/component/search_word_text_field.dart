@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common_provider/entered_text_state.dart';
 import '../../../../core/router/app_router.dart';
 
-class WordSearchTextField extends ConsumerWidget {
-  const WordSearchTextField({
+class SearchWordTextField extends ConsumerWidget {
+  const SearchWordTextField({
     super.key,
     this.defaultText,
   });
@@ -23,7 +23,9 @@ class WordSearchTextField extends ConsumerWidget {
     return TextField(
       controller: controller,
       textInputAction: TextInputAction.search,
-      onChanged: ref.read(enteredTextNotifierProvider.notifier).updateText,
+      onChanged: ref
+          .read(enteredTextNotifierProvider(EnterField.searchWord).notifier)
+          .updateText,
       onSubmitted: (value) {
         if (value.isEmpty) {
           return;
@@ -41,13 +43,17 @@ class WordSearchTextField extends ConsumerWidget {
         prefixIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
         suffixIcon: Consumer(
           builder: (context, ref, child) {
-            final enteredText = ref.watch(enteredTextNotifierProvider);
+            final enteredText =
+                ref.watch(enteredTextNotifierProvider(EnterField.searchWord));
             return enteredText.isNotEmpty
                 ? GestureDetector(
                     onTap: () {
                       controller.clear();
                       ref
-                          .read(enteredTextNotifierProvider.notifier)
+                          .read(
+                            enteredTextNotifierProvider(EnterField.searchWord)
+                                .notifier,
+                          )
                           .clearText();
                     },
                     child: const Icon(

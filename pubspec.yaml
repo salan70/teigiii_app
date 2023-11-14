@@ -25,6 +25,7 @@ dependencies:
   image_cropper: ^5.0.0
   image_picker: ^1.0.4
   intl: ^0.18.1
+  keyboard_actions: ^4.2.0
   like_button: ^2.0.5
   mockito: ^5.4.2
   package_info_plus: ^4.2.0

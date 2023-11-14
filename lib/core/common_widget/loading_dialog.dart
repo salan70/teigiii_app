@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// TODO(me): ダークモード時に、色が適切か確認する
 // TODO(me): cupertinoActivityIndicatorがAndroid端末でも違和感ないか確認する
 
 /// 端末のバックキーや画面操作を受け付けないローディングWidget

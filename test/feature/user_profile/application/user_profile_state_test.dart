@@ -83,6 +83,7 @@ void main() {
       // * Assert
       final expected = UserProfile(
         id: mockUserProfileDoc.id,
+        publicId: mockUserProfileDoc.publicId,
         name: mockUserProfileDoc.name,
         bio: mockUserProfileDoc.bio,
         profileImageUrl: mockUserProfileDoc.profileImageUrl,

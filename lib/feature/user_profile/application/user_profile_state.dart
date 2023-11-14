@@ -13,13 +13,19 @@ Future<UserProfile> userProfile(UserProfileRef ref, String userId) async {
   final userProfileDoc =
       await ref.read(userProfileRepositoryProvider).fetchUserProfile(userId);
 
-  return UserProfile(
-    id: userId,
-    name: userProfileDoc.name,
-    bio: userProfileDoc.bio,
-    profileImageUrl: userProfileDoc.profileImageUrl,
-    croppedFile: null,
-  );
+  return userProfileDoc.toUserProfile();
+}
+
+@Riverpod(keepAlive: true)
+Future<String?> userIdSearchByPublicId(
+  UserIdSearchByPublicIdRef ref,
+  String publicId,
+) async {
+  final userProfileDoc = await ref
+      .read(userProfileRepositoryProvider)
+      .searchUserProfileByPublicId(publicId);
+
+  return userProfileDoc?.id;
 }
 
 @Riverpod(keepAlive: true)

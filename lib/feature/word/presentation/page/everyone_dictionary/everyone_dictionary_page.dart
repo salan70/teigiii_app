@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../util/dictionary_page_type.dart';
 import '../../component/initial_main_group_list.dart';
-import '../../component/word_search_text_field.dart';
+import '../../component/search_word_text_field.dart';
 
 @RoutePage()
 class EveryoneDictionaryRouterPage extends AutoRouter {
@@ -36,7 +36,7 @@ class EveryoneDictionaryPage extends StatelessWidget {
                   vertical: 24,
                   horizontal: 36,
                 ),
-                child: WordSearchTextField(),
+                child: SearchWordTextField(),
               ),
               SizedBox(height: 8),
               InitialMainGroupList(
