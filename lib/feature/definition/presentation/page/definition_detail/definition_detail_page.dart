@@ -8,8 +8,10 @@ import '../../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
 import '../../../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
+import '../../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/extension/date_time_extension.dart';
+import '../../../../../util/logger.dart';
 import '../../../../auth/application/auth_state.dart';
 import '../../../application/definition_state.dart';
 import '../../component/like_widget.dart';
@@ -210,14 +212,36 @@ class DefinitionDetailPage extends ConsumerWidget {
           body: const DefinitionDeitailShimmer(),
         );
       },
-      error: (error, _) {
-        // TODO(me): いい感じのエラー画面を表示させる
+      error: (error, stackTrace) {
+        // エラー発生後の再読み込み中の場合、trueになる
+        if (asyncDefinition.isRefreshing) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('詳細'),
+            ),
+            body: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: CupertinoActivityIndicator(),
+              ),
+            ),
+          );
+        }
+
+        logger.e('定義[$definitionId]の取得に失敗しました。'
+            'error: $error, stackTrace: $stackTrace');
         return Scaffold(
           appBar: AppBar(
             title: const Text('詳細'),
           ),
-          body: Center(
-            child: Text(error.toString()),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            child: Center(
+              child: ErrorAndRetryWidget(
+                onRetry: () => ref.invalidate(definitionProvider(definitionId)),
+              ),
+            ),
           ),
         );
       },

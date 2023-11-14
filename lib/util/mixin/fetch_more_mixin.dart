@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/common_provider/toast_controller.dart';
 import '../interface/list_state.dart';
-import '../logger.dart';
 
 /// 無限スクロールの追加ローディング用のmixin
 mixin FetchMoreMixin<T extends ListState> {
@@ -31,10 +29,6 @@ mixin FetchMoreMixin<T extends ListState> {
       final nextState = mergeFunction(state.value!, newData);
       state = AsyncData(nextState);
     } on Exception catch (e, s) {
-      logger.e('$e');
-      ref
-          .read(toastControllerProvider.notifier)
-          .showToast('読み込めませんでした。もう一度お試しください。', causeError: true);
       state = AsyncError(e, s);
     }
   }

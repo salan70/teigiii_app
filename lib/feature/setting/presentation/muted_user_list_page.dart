@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common_widget/button/other_user_action_icon_button.dart';
+import '../../../core/common_widget/error_and_retry_widget.dart';
+import '../../../util/logger.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_profile/presentation/page/following_and_follower_list/profile_tile.dart';
 
@@ -29,9 +31,7 @@ class MutedUserListPage extends ConsumerWidget {
                 final mutedUserId = mutedUserIdList[index];
                 return ProfileTile(
                   targetUserId: mutedUserId,
-                  button: OtherUserActionIconButton(
-                    ownerId: mutedUserId,
-                  ),
+                  button: OtherUserActionIconButton(ownerId: mutedUserId),
                   transitionToProfilePage: false,
                 );
               },
@@ -39,15 +39,30 @@ class MutedUserListPage extends ConsumerWidget {
           );
         },
         error: (error, stackTrace) {
-          return const Center(
-            child: Text('エラーが発生しました。'),
+          // エラーが発生し、再読み込み中の場合
+          if (asyncMutedUserIdList.isRefreshing) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: CupertinoActivityIndicator(),
+              ),
+            );
+          }
+
+          logger.e('ミュートユーザーの取得に失敗しました。'
+              'error: $error, stackTrace: $stackTrace');
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ErrorAndRetryWidget(
+                onRetry: () => ref.invalidate(mutedUserIdListProvider),
+              ),
+            ),
           );
         },
-        loading: () {
-          return const Center(
-            child: CupertinoActivityIndicator(),
-          );
-        },
+        loading: () => const Center(child: CupertinoActivityIndicator()),
       ),
     );
   }

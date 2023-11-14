@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$DefinitionIdListState {
-  List<String> get definitionIdList => throw _privateConstructorUsedError;
+  List<String> get list => throw _privateConstructorUsedError;
 
   /// 最後に読み取られたQueryDocumentSnapshot
   /// これがnullの場合、1件もDefinitionIdを取得していない（[definitionIdList]が空）
@@ -36,7 +36,7 @@ abstract class $DefinitionIdListStateCopyWith<$Res> {
       _$DefinitionIdListStateCopyWithImpl<$Res, DefinitionIdListState>;
   @useResult
   $Res call(
-      {List<String> definitionIdList,
+      {List<String> list,
       QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
       bool hasMore});
 }
@@ -55,14 +55,14 @@ class _$DefinitionIdListStateCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? definitionIdList = null,
+    Object? list = null,
     Object? lastReadQueryDocumentSnapshot = freezed,
     Object? hasMore = null,
   }) {
     return _then(_value.copyWith(
-      definitionIdList: null == definitionIdList
-          ? _value.definitionIdList
-          : definitionIdList // ignore: cast_nullable_to_non_nullable
+      list: null == list
+          ? _value.list
+          : list // ignore: cast_nullable_to_non_nullable
               as List<String>,
       lastReadQueryDocumentSnapshot: freezed == lastReadQueryDocumentSnapshot
           ? _value.lastReadQueryDocumentSnapshot
@@ -85,7 +85,7 @@ abstract class _$$_DefinitionIdListStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<String> definitionIdList,
+      {List<String> list,
       QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
       bool hasMore});
 }
@@ -101,14 +101,14 @@ class __$$_DefinitionIdListStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? definitionIdList = null,
+    Object? list = null,
     Object? lastReadQueryDocumentSnapshot = freezed,
     Object? hasMore = null,
   }) {
     return _then(_$_DefinitionIdListState(
-      definitionIdList: null == definitionIdList
-          ? _value._definitionIdList
-          : definitionIdList // ignore: cast_nullable_to_non_nullable
+      list: null == list
+          ? _value._list
+          : list // ignore: cast_nullable_to_non_nullable
               as List<String>,
       lastReadQueryDocumentSnapshot: freezed == lastReadQueryDocumentSnapshot
           ? _value.lastReadQueryDocumentSnapshot
@@ -126,18 +126,17 @@ class __$$_DefinitionIdListStateCopyWithImpl<$Res>
 
 class _$_DefinitionIdListState implements _DefinitionIdListState {
   const _$_DefinitionIdListState(
-      {required final List<String> definitionIdList,
+      {required final List<String> list,
       required this.lastReadQueryDocumentSnapshot,
       required this.hasMore})
-      : _definitionIdList = definitionIdList;
+      : _list = list;
 
-  final List<String> _definitionIdList;
+  final List<String> _list;
   @override
-  List<String> get definitionIdList {
-    if (_definitionIdList is EqualUnmodifiableListView)
-      return _definitionIdList;
+  List<String> get list {
+    if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_definitionIdList);
+    return EqualUnmodifiableListView(_list);
   }
 
   /// 最後に読み取られたQueryDocumentSnapshot
@@ -149,7 +148,7 @@ class _$_DefinitionIdListState implements _DefinitionIdListState {
 
   @override
   String toString() {
-    return 'DefinitionIdListState(definitionIdList: $definitionIdList, lastReadQueryDocumentSnapshot: $lastReadQueryDocumentSnapshot, hasMore: $hasMore)';
+    return 'DefinitionIdListState(list: $list, lastReadQueryDocumentSnapshot: $lastReadQueryDocumentSnapshot, hasMore: $hasMore)';
   }
 
   @override
@@ -157,8 +156,7 @@ class _$_DefinitionIdListState implements _DefinitionIdListState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_DefinitionIdListState &&
-            const DeepCollectionEquality()
-                .equals(other._definitionIdList, _definitionIdList) &&
+            const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.lastReadQueryDocumentSnapshot,
                     lastReadQueryDocumentSnapshot) ||
                 other.lastReadQueryDocumentSnapshot ==
@@ -169,7 +167,7 @@ class _$_DefinitionIdListState implements _DefinitionIdListState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_definitionIdList),
+      const DeepCollectionEquality().hash(_list),
       lastReadQueryDocumentSnapshot,
       hasMore);
 
@@ -183,13 +181,13 @@ class _$_DefinitionIdListState implements _DefinitionIdListState {
 
 abstract class _DefinitionIdListState implements DefinitionIdListState {
   const factory _DefinitionIdListState(
-      {required final List<String> definitionIdList,
+      {required final List<String> list,
       required final QueryDocumentSnapshot<Object?>?
           lastReadQueryDocumentSnapshot,
       required final bool hasMore}) = _$_DefinitionIdListState;
 
   @override
-  List<String> get definitionIdList;
+  List<String> get list;
   @override
 
   /// 最後に読み取られたQueryDocumentSnapshot

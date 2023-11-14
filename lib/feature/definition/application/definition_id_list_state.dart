@@ -1,6 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/constant/initial_main_group.dart';
+import '../../../util/logger.dart';
 import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
@@ -186,8 +188,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
       ref: ref,
       fetchFunction: () => _fetchBasedOnType(isFirstFetch: false),
       mergeFunction: (currentData, newData) => DefinitionIdListState(
-        definitionIdList:
-            currentData.definitionIdList + newData.definitionIdList,
+        list: currentData.list + newData.list,
         lastReadQueryDocumentSnapshot: newData.lastReadQueryDocumentSnapshot,
         hasMore: newData.hasMore,
       ),
@@ -197,32 +198,45 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
   Future<DefinitionIdListState> _fetchBasedOnType({
     required bool isFirstFetch,
   }) async {
-    switch (definitionFeedType) {
-      case DefinitionFeedType.homeRecommend:
-        return _fetchForHomeRecommend(isFirstFetch: isFirstFetch);
+    try {
+      switch (definitionFeedType) {
+        case DefinitionFeedType.homeRecommend:
+          return await _fetchForHomeRecommend(isFirstFetch: isFirstFetch);
 
-      case DefinitionFeedType.homeFollowing:
-        return _fetchForHomeFollowing(isFirstFetch: isFirstFetch);
+        case DefinitionFeedType.homeFollowing:
+          return await _fetchForHomeFollowing(isFirstFetch: isFirstFetch);
 
-      case DefinitionFeedType.wordTopOrderByCreatedAt:
-        return _fetchForWordTop(
-          WordTopOrderByType.createdAt,
-          isFirstFetch: isFirstFetch,
-        );
+        case DefinitionFeedType.wordTopOrderByCreatedAt:
+          return await _fetchForWordTop(
+            WordTopOrderByType.createdAt,
+            isFirstFetch: isFirstFetch,
+          );
 
-      case DefinitionFeedType.wordTopOrderByLikesCount:
-        return _fetchForWordTop(
-          WordTopOrderByType.likesCount,
-          isFirstFetch: isFirstFetch,
-        );
+        case DefinitionFeedType.wordTopOrderByLikesCount:
+          return await _fetchForWordTop(
+            WordTopOrderByType.likesCount,
+            isFirstFetch: isFirstFetch,
+          );
 
-      case DefinitionFeedType.profileOrderByCreatedAt:
-        return _fetchForProfileCreatedAt(isFirstFetch: isFirstFetch);
+        case DefinitionFeedType.profileOrderByCreatedAt:
+          return await _fetchForProfileCreatedAt(isFirstFetch: isFirstFetch);
 
-      case DefinitionFeedType.profileLiked:
-        return _fetchForProfileLiked(isFirstFetch: isFirstFetch);
-      case DefinitionFeedType.individualIndex:
-        return _fetchForIndividualDictionary(isFirstFetch: isFirstFetch);
+        case DefinitionFeedType.profileLiked:
+          return await _fetchForProfileLiked(isFirstFetch: isFirstFetch);
+
+        case DefinitionFeedType.individualIndex:
+          return await _fetchForIndividualDictionary(
+            isFirstFetch: isFirstFetch,
+          );
+      }
+    } on Exception catch (e, _) {
+      logger.e('$e');
+      ref
+          .read(toastControllerProvider.notifier)
+          .showToast('読み込めませんでした。もう一度お試しください。', causeError: true);
+
+      // stateの更新を移譲するため、rethrow
+      rethrow;
     }
   }
 }

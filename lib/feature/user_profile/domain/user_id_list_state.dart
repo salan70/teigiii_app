@@ -8,7 +8,7 @@ part 'user_id_list_state.freezed.dart';
 @freezed
 class UserIdListState with _$UserIdListState implements ListState {
   const factory UserIdListState({
-    required List<String> userIdList,
+    required List<String> list,
 
     /// 最後に読み取られたQueryDocumentSnapshot
     /// これがnullの場合、1件もuserIdを取得していない（[userIdList]が空）

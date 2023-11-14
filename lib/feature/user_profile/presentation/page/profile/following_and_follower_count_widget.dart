@@ -86,6 +86,8 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
       ),
       error: (error, stackTrace) {
         logger.e('followCountの取得時にエラーが発生しました。 error: $error');
+        // フォローカウントのみのエラーはユーザーへの影響が少ないため、何も表示しない
+        // フォローカウント以外にもエラーが有る場合、他画面でエラーが表示される想定
         return const SizedBox.shrink();
       },
     );

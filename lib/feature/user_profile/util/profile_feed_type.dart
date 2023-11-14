@@ -3,8 +3,8 @@ enum UserListType {
   following,
 
   /// フォロワー一覧
-  follower, 
+  follower,
 
   /// いいねしたユーザー一覧
-  likedUser,
+  liked,
 }

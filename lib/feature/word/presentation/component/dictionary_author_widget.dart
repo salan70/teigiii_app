@@ -1,9 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common_widget/avatar_network_image_widget.dart';
+import '../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../util/logger.dart';
 import '../../../user_profile/application/user_profile_state.dart';
 
 class DictionaryAuthorWidget extends ConsumerWidget {
@@ -17,17 +20,18 @@ class DictionaryAuthorWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncTargetUserProfile = ref.watch(userProfileProvider(targetUserId));
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Written by',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(width: 16),
-        asyncTargetUserProfile.when(
-          data: (targetUserProfile) {
-            return InkWell(
+
+    return asyncTargetUserProfile.when(
+      data: (targetUserProfile) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Written by',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(width: 16),
+            InkWell(
               onTap: () {
                 context.pushRoute(
                   ProfileRoute(
@@ -47,16 +51,25 @@ class DictionaryAuthorWidget extends ConsumerWidget {
                   ),
                 ],
               ),
-            );
-          },
-          loading: () => const SizedBox(
-            height: 24,
-            width: 24,
-            child: CircularProgressIndicator(),
+            ),
+          ],
+        );
+      },
+      loading: () => const Center(child: CupertinoActivityIndicator()),
+      error: (error, stackTrace) {
+        // エラー発生後の再読み込み中の場合、trueになる
+        if (asyncTargetUserProfile.isRefreshing) {
+          return const Center(child: CupertinoActivityIndicator());
+        }
+
+        logger.e('ユーザー[$targetUserId]の取得に失敗しました。'
+            'error: $error, stackTrace: $stackTrace');
+        return Center(
+          child: SimpleErrorAndRetryWidget(
+            onRetry: () => ref.invalidate(userProfileProvider(targetUserId)),
           ),
-          error: (error, stackTrace) => const Text('エラーが発生しました'),
-        ),
-      ],
+        );
+      },
     );
   }
 }

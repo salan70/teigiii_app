@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$WordListState {
-  List<Word> get wordList => throw _privateConstructorUsedError;
+  List<Word> get list => throw _privateConstructorUsedError;
 
   /// 最後に読み取られたQueryDocumentSnapshot
   /// これがnullの場合、1件もwordを取得していない（[wordList]が空）
@@ -36,7 +36,7 @@ abstract class $WordListStateCopyWith<$Res> {
       _$WordListStateCopyWithImpl<$Res, WordListState>;
   @useResult
   $Res call(
-      {List<Word> wordList,
+      {List<Word> list,
       QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
       bool hasMore});
 }
@@ -54,14 +54,14 @@ class _$WordListStateCopyWithImpl<$Res, $Val extends WordListState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? wordList = null,
+    Object? list = null,
     Object? lastReadQueryDocumentSnapshot = freezed,
     Object? hasMore = null,
   }) {
     return _then(_value.copyWith(
-      wordList: null == wordList
-          ? _value.wordList
-          : wordList // ignore: cast_nullable_to_non_nullable
+      list: null == list
+          ? _value.list
+          : list // ignore: cast_nullable_to_non_nullable
               as List<Word>,
       lastReadQueryDocumentSnapshot: freezed == lastReadQueryDocumentSnapshot
           ? _value.lastReadQueryDocumentSnapshot
@@ -84,7 +84,7 @@ abstract class _$$_WordListStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<Word> wordList,
+      {List<Word> list,
       QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
       bool hasMore});
 }
@@ -100,14 +100,14 @@ class __$$_WordListStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? wordList = null,
+    Object? list = null,
     Object? lastReadQueryDocumentSnapshot = freezed,
     Object? hasMore = null,
   }) {
     return _then(_$_WordListState(
-      wordList: null == wordList
-          ? _value._wordList
-          : wordList // ignore: cast_nullable_to_non_nullable
+      list: null == list
+          ? _value._list
+          : list // ignore: cast_nullable_to_non_nullable
               as List<Word>,
       lastReadQueryDocumentSnapshot: freezed == lastReadQueryDocumentSnapshot
           ? _value.lastReadQueryDocumentSnapshot
@@ -125,20 +125,20 @@ class __$$_WordListStateCopyWithImpl<$Res>
 
 class _$_WordListState implements _WordListState {
   const _$_WordListState(
-      {required final List<Word> wordList,
+      {required final List<Word> list,
       required this.lastReadQueryDocumentSnapshot,
       required this.hasMore})
-      : _wordList = wordList;
+      : _list = list;
 
-  final List<Word> _wordList;
+  final List<Word> _list;
   @override
-  List<Word> get wordList {
-    if (_wordList is EqualUnmodifiableListView) return _wordList;
+  List<Word> get list {
+    if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_wordList);
+    return EqualUnmodifiableListView(_list);
   }
 
-  /// 最後に読み取られたQueryDocumentSnapshot
+  /// これがnullの場合、1件もwordを取得していない（[list]が空）
   /// これがnullの場合、1件もwordを取得していない（[wordList]が空）
   @override
   final QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot;
@@ -147,7 +147,7 @@ class _$_WordListState implements _WordListState {
 
   @override
   String toString() {
-    return 'WordListState(wordList: $wordList, lastReadQueryDocumentSnapshot: $lastReadQueryDocumentSnapshot, hasMore: $hasMore)';
+    return 'WordListState(list: $list, lastReadQueryDocumentSnapshot: $lastReadQueryDocumentSnapshot, hasMore: $hasMore)';
   }
 
   @override
@@ -155,7 +155,7 @@ class _$_WordListState implements _WordListState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_WordListState &&
-            const DeepCollectionEquality().equals(other._wordList, _wordList) &&
+            const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.lastReadQueryDocumentSnapshot,
                     lastReadQueryDocumentSnapshot) ||
                 other.lastReadQueryDocumentSnapshot ==
@@ -166,7 +166,7 @@ class _$_WordListState implements _WordListState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_wordList),
+      const DeepCollectionEquality().hash(_list),
       lastReadQueryDocumentSnapshot,
       hasMore);
 
@@ -179,13 +179,13 @@ class _$_WordListState implements _WordListState {
 
 abstract class _WordListState implements WordListState {
   const factory _WordListState(
-      {required final List<Word> wordList,
+      {required final List<Word> list,
       required final QueryDocumentSnapshot<Object?>?
           lastReadQueryDocumentSnapshot,
       required final bool hasMore}) = _$_WordListState;
 
   @override
-  List<Word> get wordList;
+  List<Word> get list;
   @override
 
   /// 最後に読み取られたQueryDocumentSnapshot

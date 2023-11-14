@@ -7,7 +7,7 @@ part of 'word_list_state_by_initial.dart';
 // **************************************************************************
 
 String _$wordListStateByInitialNotifierHash() =>
-    r'70ea119cf2b7b8d67868436e10eb4850f62604e0';
+    r'95059dde307c5d832fd3802e0cd1ff3ccd757202';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,7 +31,7 @@ class _SystemHash {
 }
 
 abstract class _$WordListStateByInitialNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<WordListState> {
+    extends BuildlessAsyncNotifier<WordListState> {
   late final String initial;
 
   FutureOr<WordListState> build(
@@ -84,9 +84,8 @@ class WordListStateByInitialNotifierFamily
 }
 
 /// See also [WordListStateByInitialNotifier].
-class WordListStateByInitialNotifierProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<WordListStateByInitialNotifier,
-        WordListState> {
+class WordListStateByInitialNotifierProvider extends AsyncNotifierProviderImpl<
+    WordListStateByInitialNotifier, WordListState> {
   /// See also [WordListStateByInitialNotifier].
   WordListStateByInitialNotifierProvider(
     String initial,
@@ -142,8 +141,8 @@ class WordListStateByInitialNotifierProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<WordListStateByInitialNotifier,
-      WordListState> createElement() {
+  AsyncNotifierProviderElement<WordListStateByInitialNotifier, WordListState>
+      createElement() {
     return _WordListStateByInitialNotifierProviderElement(this);
   }
 
@@ -163,14 +162,13 @@ class WordListStateByInitialNotifierProvider
 }
 
 mixin WordListStateByInitialNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<WordListState> {
+    on AsyncNotifierProviderRef<WordListState> {
   /// The parameter `initial` of this provider.
   String get initial;
 }
 
 class _WordListStateByInitialNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<
-        WordListStateByInitialNotifier,
+    extends AsyncNotifierProviderElement<WordListStateByInitialNotifier,
         WordListState> with WordListStateByInitialNotifierRef {
   _WordListStateByInitialNotifierProviderElement(super.provider);
 

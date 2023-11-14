@@ -3,16 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common_widget/button/follow_or_unfollow_button.dart';
-import '../../../../core/common_widget/cupertino_refresh_indicator.dart';
-import '../../../../core/common_widget/infinite_scroll_bottom_indicator.dart';
-import '../../../../util/logger.dart';
+import '../../../../core/common_widget/infinity_scroll_widget.dart';
 import '../../../auth/application/auth_state.dart';
 import '../../application/user_id_list_state.dart';
 import '../../util/profile_feed_type.dart';
 import '../page/following_and_follower_list/profile_tile.dart';
+import '../page/following_and_follower_list/profile_tile_shimmer.dart';
 
 class ProfileList extends ConsumerWidget {
-  ProfileList({
+  const ProfileList({
     super.key,
     required this.userListType,
     required this.targetUserId,
@@ -23,98 +22,28 @@ class ProfileList extends ConsumerWidget {
   final String? targetUserId;
   final String? targetDefinitionId;
 
-  final scrollController = ScrollController();
-  // エラーが発生してリビルドした際、スクロール位置を保持するためのキー
-  final globalKey = GlobalKey();
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncUserIdListState = ref.watch(
-      UserIdListStateNotifierProvider(
-        userListType,
-        targetUserId: targetUserId,
-        targetDefinitionId: targetDefinitionId,
-      ),
+    final currentUserId = ref.watch(userIdProvider)!;
+    final userIdListProvider = userIdListStateNotifierProvider(
+      userListType,
+      targetUserId: targetUserId,
+      targetDefinitionId: targetDefinitionId,
     );
 
-    return asyncUserIdListState.when(
-      data: (userIdListState) {
-        final userIdList = userIdListState.userIdList;
-
-        return NotificationListener<ScrollEndNotification>(
-          onNotification: (notification) {
-            // 画面の一番下までスクロールしたかどうかを判定
-            if (notification.metrics.extentAfter == 0) {
-              ref
-                  .read(
-                    userIdListStateNotifierProvider(
-                      userListType,
-                      targetUserId: targetUserId,
-                      targetDefinitionId: targetDefinitionId,
-                    ).notifier,
-                  )
-                  .fetchMore();
-              return true;
-            }
-            return false;
-          },
-          child: Scrollbar(
-            key: globalKey,
-            controller: scrollController,
-            child: CustomScrollView(
-              slivers: [
-                CupertinoSliverRefreshControl(
-                  builder: buildCustomRefreshIndicator,
-                  onRefresh: () async {
-                    ref.invalidate(
-                      userIdListStateNotifierProvider(
-                        userListType,
-                        targetUserId: targetUserId,
-                        targetDefinitionId: targetDefinitionId,
-                      ),
-                    );
-                  },
-                ),
-                SliverToBoxAdapter(
-                  child: ListView.builder(
-                    controller: scrollController,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: userIdList.length,
-                    itemBuilder: (context, index) {
-                      final currentUserId = ref.watch(userIdProvider)!;
-                      final targetUserId = userIdList[index];
-                      return ProfileTile(
-                        targetUserId: targetUserId,
-                        button: currentUserId == targetUserId
-                            ? const SizedBox.shrink()
-                            : FollowOrUnfollowButton(
-                                targetUserId: targetUserId,
-                              ),
-                      );
-                    },
-                  ),
-                ),
-                InfiniteScrollBottomIndicator(hasMore: userIdListState.hasMore),
-              ],
-            ),
-          ),
+    return InfinityScrollWidget(
+      listStateNotifierProvider: userIdListProvider,
+      fetchMore: ref.read(userIdListProvider.notifier).fetchMore,
+      tileBuilder: (userId) {
+        return ProfileTile(
+          targetUserId: userId as String,
+          button: currentUserId == userId
+              ? const SizedBox.shrink()
+              : FollowOrUnfollowButton(targetUserId: userId),
         );
       },
-      error: (error, _) {
-        logger.e('$error');
-
-        // 取得済みのデータがない（初回読み込みが失敗した）場合のエラー表示
-        // TODO(me): エラー画面を表示させる
-        return Center(
-          child: Text(
-            error.toString(),
-          ),
-        );
-      },
-      loading: () {
-        return const CupertinoActivityIndicator();
-      },
+      shimmerTile: const ProfileTileShimmer(),
+      shimmerTileNumber: 4,
     );
   }
 }

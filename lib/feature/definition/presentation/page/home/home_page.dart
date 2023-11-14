@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
                 ),
               ];
             },
-            body: TabBarView(
+            body: const TabBarView(
               children: <Widget>[
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.homeRecommend,

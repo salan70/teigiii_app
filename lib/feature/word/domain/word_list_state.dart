@@ -9,7 +9,7 @@ part 'word_list_state.freezed.dart';
 @freezed
 class WordListState with _$WordListState implements ListState {
   const factory WordListState({
-    required List<Word> wordList,
+    required List<Word> list,
 
     /// 最後に読み取られたQueryDocumentSnapshot
     /// これがnullの場合、1件もwordを取得していない（[wordList]が空）

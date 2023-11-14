@@ -7,7 +7,7 @@ part of 'word_list_state_by_search_word.dart';
 // **************************************************************************
 
 String _$wordListStateBySearchWordNotifierHash() =>
-    r'501f80ca90340576ff3989c93941b2911f5b4712';
+    r'7b5097dd44bf9d619b4b9b9b88692753c567bbec';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,7 +31,7 @@ class _SystemHash {
 }
 
 abstract class _$WordListStateBySearchWordNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<WordListState> {
+    extends BuildlessAsyncNotifier<WordListState> {
   late final String searchWord;
 
   FutureOr<WordListState> build(
@@ -85,8 +85,8 @@ class WordListStateBySearchWordNotifierFamily
 
 /// See also [WordListStateBySearchWordNotifier].
 class WordListStateBySearchWordNotifierProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<
-        WordListStateBySearchWordNotifier, WordListState> {
+    extends AsyncNotifierProviderImpl<WordListStateBySearchWordNotifier,
+        WordListState> {
   /// See also [WordListStateBySearchWordNotifier].
   WordListStateBySearchWordNotifierProvider(
     String searchWord,
@@ -142,8 +142,8 @@ class WordListStateBySearchWordNotifierProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<WordListStateBySearchWordNotifier,
-      WordListState> createElement() {
+  AsyncNotifierProviderElement<WordListStateBySearchWordNotifier, WordListState>
+      createElement() {
     return _WordListStateBySearchWordNotifierProviderElement(this);
   }
 
@@ -163,14 +163,13 @@ class WordListStateBySearchWordNotifierProvider
 }
 
 mixin WordListStateBySearchWordNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<WordListState> {
+    on AsyncNotifierProviderRef<WordListState> {
   /// The parameter `searchWord` of this provider.
   String get searchWord;
 }
 
 class _WordListStateBySearchWordNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<
-        WordListStateBySearchWordNotifier,
+    extends AsyncNotifierProviderElement<WordListStateBySearchWordNotifier,
         WordListState> with WordListStateBySearchWordNotifierRef {
   _WordListStateBySearchWordNotifierProviderElement(super.provider);
 

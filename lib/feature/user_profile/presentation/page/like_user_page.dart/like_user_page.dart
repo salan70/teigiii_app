@@ -20,7 +20,7 @@ class LikeUserPage extends ConsumerWidget {
         title: const Text('いいね！'),
       ),
       body: ProfileList(
-        userListType: UserListType.likedUser,
+        userListType: UserListType.liked,
         targetUserId: null,
         targetDefinitionId: definitionId,
       ),

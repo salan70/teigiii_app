@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
 import '../../../../../core/common_widget/button/primary_outlined_button.dart';
+import '../../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../../core/router/app_router.dart';
+import '../../../../../util/logger.dart';
 import '../../../../auth/application/auth_state.dart';
 import '../../../application/user_profile_state.dart';
 import 'following_and_follower_count_widget.dart';
@@ -91,9 +93,27 @@ class ProfileWidget extends ConsumerWidget {
           ),
         );
       },
-      loading: ProfileWidgetShimmer.new,
-      // TODO(me): 良い感じのエラー画面を作成（ダイアログをオーバーレイで出すのがいいかも）
-      error: (error, stackTrace) => const Center(child: Text('エラー')),
+      loading: () {
+        return const ProfileWidgetShimmer();
+      },
+      error: (error, stackTrace) {
+        // エラー発生後の再読み込み中の場合、trueになる
+        if (asyncTargetUserProfile.isRefreshing) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 24),
+            child: CupertinoActivityIndicator(),
+          );
+        }
+
+        logger.e('ユーザー[$targetUserId]のプロフィールの取得に失敗しました。'
+            'error: $error, stackTrace: $stackTrace');
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          child: ErrorAndRetryWidget(
+            onRetry: () => ref.invalidate(userProfileProvider(targetUserId)),
+          ),
+        );
+      },
     );
   }
 }

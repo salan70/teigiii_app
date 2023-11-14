@@ -45,6 +45,7 @@ class WordTopPage extends ConsumerWidget {
                     },
                   ),
                   leading: const BackIconButton(),
+                  leadingWidth: 48,
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate(
@@ -72,11 +73,13 @@ class WordTopPage extends ConsumerWidget {
                   definitionFeedType:
                       DefinitionFeedType.wordTopOrderByCreatedAt,
                   wordId: wordId,
+                  shimmerTileNumber: 2,
                 ),
                 DefinitionList(
                   definitionFeedType:
                       DefinitionFeedType.wordTopOrderByLikesCount,
                   wordId: wordId,
+                  shimmerTileNumber: 2,
                 ),
               ],
             ),

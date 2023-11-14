@@ -10,8 +10,6 @@ part 'definition_state.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<Definition> definition(DefinitionRef ref, String definitionId) async {
-  final userId = ref.read(userIdProvider)!;
-
   final definitionDoc = await ref
       .read(fetchDefinitionRepositoryProvider)
       .fetchDefinition(definitionId);
@@ -20,6 +18,7 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
   final userProfile =
       await ref.watch(userProfileProvider(definitionDoc.authorId).future);
 
+  final userId = ref.read(userIdProvider)!;
   final isLikedByUser = await ref
       .read(writeDefinitionRepositoryProvider)
       .isLikedByUser(userId, definitionDoc.id);
