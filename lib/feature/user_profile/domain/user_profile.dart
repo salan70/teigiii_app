@@ -21,8 +21,10 @@ class UserProfile with _$UserProfile {
 
   /// [name]の初期値
   static String get defaultName => '見習い辞書編纂者';
+
   /// [bio]の初期値
   static String get defaultBio => '';
+
   /// [profileImageUrl]の初期値
   static String get defaultImageUrl => '';
 
@@ -54,6 +56,16 @@ class UserProfile with _$UserProfile {
   /// 全てのフィールド（[name], [bio]）が有効かどうか
   bool isValidAllFields() {
     return outputNameError() == null && outputBioError() == null;
+  }
+
+  /// UIで表示するように加工した[publicId]
+  ///
+  /// publicIdを3桁毎に区切った文字列を返す
+  String get publicIdForUi {
+    return publicId.replaceAllMapped(
+      RegExp(r'(.{3})(?!$)'),
+      (match) => '${match.group(0)}-',
+    );
   }
 
   /// [publicId]を生成する
