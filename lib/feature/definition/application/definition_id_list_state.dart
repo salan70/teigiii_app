@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/toast_controller.dart';
@@ -201,12 +199,6 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     required bool isFirstFetch,
   }) async {
     try {
-      // TODO(me): デバッグ用のためリリース時に削除する
-      // 1/2の確率でエラーを発生させる
-      if (Random().nextBool()) {
-        // await Future<void>.delayed(const Duration(seconds: 2));
-        throw Exception('やばいで！！！！！');
-      }
       switch (definitionFeedType) {
         case DefinitionFeedType.homeRecommend:
           return await _fetchForHomeRecommend(isFirstFetch: isFirstFetch);

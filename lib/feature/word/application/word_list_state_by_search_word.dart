@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/toast_controller.dart';
@@ -26,13 +24,6 @@ class WordListStateBySearchWordNotifier
     final lastDocument =
         isFirstFetch ? null : state.value!.lastReadQueryDocumentSnapshot;
     try {
-      // TODO(me): デバッグ用のためリリース時に削除する
-      // 1/2の確率でエラーを発生させる
-      if (Random().nextBool()) {
-        // await Future<void>.delayed(const Duration(seconds: 2));
-        throw Exception('やばいで！！！！！');
-      }
-
       final currentUserId = ref.read(userIdProvider)!;
       final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
 

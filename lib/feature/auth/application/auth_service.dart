@@ -25,9 +25,6 @@ class AuthService extends _$AuthService {
   Future<void> onAppLaunch() async {
     state = const AsyncValue.loading();
 
-    // TODO(me): デバッグ用のコード。リリース時に削除する
-    // await ref.read(authRepositoryProvider).signOut();
-
     final isSignedIn = ref.read(isSignedInProvider);
     // ログインしている場合
     if (isSignedIn) {
