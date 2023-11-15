@@ -58,11 +58,16 @@ class OtherUserActionIconButton extends ConsumerWidget {
     return asyncMutedUserIdList.maybeWhen(
       orElse: () => const SizedBox.shrink(),
       data: (mutedUserIdList) {
-        // TODO(me): 雑に!で取得しているが、問題ないか確認する
-        final ownerProfile = ref.read(userProfileProvider(ownerId)).value!;
+        final ownerProfile = ref.read(userProfileProvider(ownerId)).value;
+
         final currentUserId = ref.read(userIdProvider)!;
         final currentUserProfile =
-            ref.read(userProfileProvider(currentUserId)).value!;
+            ref.read(userProfileProvider(currentUserId)).value;
+
+        // ownerもしくはcurrentUserがnullの場合はなにも表示しない
+        if (ownerProfile == null || currentUserProfile == null) {
+          return const SizedBox.shrink();
+        }
 
         final items = createMenuItems(
           mutedUserIdList,

@@ -53,9 +53,8 @@ class ErrorAndRetryWidget extends ConsumerWidget {
                       final currentUserId = ref.read(userIdProvider)!;
                       final currentUserProfile =
                           ref.read(userProfileProvider(currentUserId)).value;
-                      final url = inquireFormUrl(
-                        currentUserPublicId: currentUserProfile?.publicId,
-                      );
+                      final url =
+                          inquireFormUrl(currentUserProfile?.publicId ?? '');
 
                       ref.read(launchURLProvider(url));
                     },
