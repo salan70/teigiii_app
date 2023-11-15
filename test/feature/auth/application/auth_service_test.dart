@@ -5,20 +5,15 @@ import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/auth/application/auth_service.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/auth/repository/auth_repository.dart';
+import 'package:teigi_app/feature/auth/repository/register_user_repository.dart';
 import 'package:teigi_app/feature/auth/util/constant.dart';
 import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart';
-import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
-import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart';
-import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
 
-import '../../../mock/mock_data.dart';
 import 'auth_service_test.mocks.dart';
 
 @GenerateNiceMocks([
-  MockSpec<UserProfileRepository>(),
-  MockSpec<UserFollowRepository>(),
-  MockSpec<UserConfigRepository>(),
+  MockSpec<RegisterUserRepository>(),
   MockSpec<DeviceInfoRepository>(),
   MockSpec<AuthRepository>(),
   MockSpec<Listener<AsyncValue<void>>>(),
@@ -31,9 +26,7 @@ abstract class Listener<T> {
 }
 
 void main() {
-  final mockUserProfileRepository = MockUserProfileRepository();
-  final mockUserFollowRepository = MockUserFollowRepository();
-  final mockUserConfigRepository = MockUserConfigRepository();
+  final mockRegisterUserRepository = MockRegisterUserRepository();
   final mockDeviceInfoRepository = MockDeviceInfoRepository();
   final mockAuthRepository = MockAuthRepository();
   final listener = MockListener();
@@ -51,12 +44,8 @@ void main() {
         isSignedInProvider.overrideWithValue(false),
         userIdProvider.overrideWithValue(mockUserId),
         appVersionProvider.overrideWith((ref) => Future.value(mockAppVersion)),
-        userProfileRepositoryProvider
-            .overrideWithValue(mockUserProfileRepository),
-        userFollowRepositoryProvider
-            .overrideWithValue(mockUserFollowRepository),
-        userConfigRepositoryProvider
-            .overrideWithValue(mockUserConfigRepository),
+        registerUserRepositoryProvider
+            .overrideWithValue(mockRegisterUserRepository),
         deviceInfoRepositoryProvider
             .overrideWithValue(mockDeviceInfoRepository),
         authRepositoryProvider.overrideWithValue(mockAuthRepository),
@@ -79,9 +68,7 @@ void main() {
   }
 
   tearDown(() {
-    reset(mockUserProfileRepository);
-    reset(mockUserFollowRepository);
-    reset(mockUserConfigRepository);
+    reset(mockRegisterUserRepository);
     reset(mockDeviceInfoRepository);
     reset(mockAuthRepository);
     reset(listener);
@@ -93,10 +80,8 @@ void main() {
       isSignedInProvider.overrideWithValue(isSignedIn),
       userIdProvider.overrideWithValue(mockUserId),
       appVersionProvider.overrideWith((ref) => Future.value(mockAppVersion)),
-      userProfileRepositoryProvider
-          .overrideWithValue(mockUserProfileRepository),
-      userFollowRepositoryProvider.overrideWithValue(mockUserFollowRepository),
-      userConfigRepositoryProvider.overrideWithValue(mockUserConfigRepository),
+      registerUserRepositoryProvider
+          .overrideWithValue(mockRegisterUserRepository),
       deviceInfoRepositoryProvider.overrideWithValue(mockDeviceInfoRepository),
       authRepositoryProvider.overrideWithValue(mockAuthRepository),
     ]);
@@ -105,8 +90,6 @@ void main() {
   void setupMock(String? osVersion) {
     when(mockDeviceInfoRepository.fetchOsVersion())
         .thenAnswer((_) async => osVersion);
-    when(mockUserFollowRepository.addUserFollowCount(any))
-        .thenAnswer((_) async => mockUserFollowCountDoc);
   }
 
   group('onAppLaunch()', () {
@@ -134,18 +117,10 @@ void main() {
       verify(mockAuthRepository.signInAnonymously()).called(1);
       verify(mockDeviceInfoRepository.fetchOsVersion()).called(1);
       verify(
-        mockUserConfigRepository.addUserConfig(
+        mockRegisterUserRepository.initUser(
           mockUserId,
           mockOsVersion,
           mockAppVersion,
-        ),
-      ).called(1);
-      verify(
-        mockUserProfileRepository.addUserProfile(mockUserId),
-      ).called(1);
-      verify(
-        mockUserFollowRepository.addUserFollowCount(
-          mockUserId,
         ),
       ).called(1);
     });
@@ -173,7 +148,7 @@ void main() {
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(mockDeviceInfoRepository.fetchOsVersion()).called(1);
       verify(
-        mockUserConfigRepository.updateVersionInfo(
+        mockRegisterUserRepository.updateVersionInfo(
           mockUserId,
           mockOsVersion,
           mockAppVersion,
@@ -187,16 +162,15 @@ void main() {
     test('未ログイン（OSがiOSでもAndroidでもない場合）: 処理の中で渡される引数が想定通りであることを検証', () async {
       // * Arrange
       final authService = init();
-      setupMock(
-        null, // iOSでもAndroidでもないOSを再現
-      );
+      // iOSでもAndroidでもないOSを再現
+      setupMock(null);
 
       // * Act
       await authService.onAppLaunch();
 
       // * Assert
       verify(
-        mockUserConfigRepository.addUserConfig(
+        mockRegisterUserRepository.initUser(
           any,
           unexpectedOsText, // 検証対象
           any,
@@ -208,16 +182,15 @@ void main() {
       // * Arrange
       final authService = init();
       updateContainersOverride(isSignedIn: true);
-      setupMock(
-        null, // iOSでもAndroidでもないOSを再現
-      );
+      // iOSでもAndroidでもないOSを再現
+      setupMock(null);
 
       // * Act
       await authService.onAppLaunch();
 
       // * Assert
       verify(
-        mockUserConfigRepository.updateVersionInfo(
+        mockRegisterUserRepository.updateVersionInfo(
           any,
           unexpectedOsText, // 検証対象
           any,
@@ -257,7 +230,7 @@ void main() {
       final authService = init();
       updateContainersOverride(isSignedIn: true);
       final testException = Exception('updateUserConfig()で例外発生！！！');
-      when(mockUserConfigRepository.updateVersionInfo(any, any, any))
+      when(mockRegisterUserRepository.updateVersionInfo(any, any, any))
           .thenThrow(testException);
 
       // * Act

@@ -23,35 +23,7 @@ class UserConfigRepository {
 
   Future<UserConfigDocument> fetchUserConfig(String userId) async {
     final snapshot = await _userConfigsCollectionRef.doc(userId).get();
-
     return UserConfigDocument.fromFirestore(snapshot);
-  }
-
-  Future<void> addUserConfig(
-    String userId,
-    String osVersion,
-    String appVersion,
-  ) async {
-    await _userConfigsCollectionRef.doc(userId).set({
-      UserConfigsCollection.mutedUserIdList: <dynamic>[],
-      UserConfigsCollection.osVersion: osVersion,
-      UserConfigsCollection.appVersion: appVersion,
-      createdAtFieldName: FieldValue.serverTimestamp(),
-      updatedAtFieldName: FieldValue.serverTimestamp(),
-    });
-  }
-
-  /// ユーザーが使用しているos, appのバージョン情報を更新する
-  Future<void> updateVersionInfo(
-    String userId,
-    String osVersion,
-    String appVersion,
-  ) async {
-    await _userConfigsCollectionRef.doc(userId).update({
-      UserConfigsCollection.osVersion: osVersion,
-      UserConfigsCollection.appVersion: appVersion,
-      updatedAtFieldName: FieldValue.serverTimestamp(),
-    });
   }
 
   /// [mutedUserId]をmutedUserIdListに追加する

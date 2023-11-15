@@ -121,16 +121,6 @@ class UserFollowRepository {
     return snapshot.docs.isNotEmpty;
   }
 
-  /// UserFollowCountドキュメントを追加する
-  Future<void> addUserFollowCount(String userId) async {
-    await _userFollowCountsCollectionRef.doc(userId).set({
-      UserFollowCountsCollection.followerCount: 0,
-      UserFollowCountsCollection.followingCount: 0,
-      createdAtFieldName: FieldValue.serverTimestamp(),
-      updatedAtFieldName: FieldValue.serverTimestamp(),
-    });
-  }
-
   /// [userId]がフォローしているユーザーのIDリストを全て取得
   Future<List<String>> fetchAllFollowingIdList(String userId) async {
     final snapshot = await _userFollowsCollectionRef

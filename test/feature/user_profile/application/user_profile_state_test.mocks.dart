@@ -130,16 +130,6 @@ class MockUserProfileRepository extends _i1.Mock
       ) as _i7.Future<_i3.UserProfileDocument?>);
 
   @override
-  _i7.Future<void> addUserProfile(String? userId) => (super.noSuchMethod(
-        Invocation.method(
-          #addUserProfile,
-          [userId],
-        ),
-        returnValue: _i7.Future<void>.value(),
-        returnValueForMissingStub: _i7.Future<void>.value(),
-      ) as _i7.Future<void>);
-
-  @override
   _i7.Future<void> updateUserProfile(_i8.UserProfile? userProfileForWrite) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -246,16 +236,6 @@ class MockUserFollowRepository extends _i1.Mock
         returnValue: _i7.Future<bool>.value(false),
         returnValueForMissingStub: _i7.Future<bool>.value(false),
       ) as _i7.Future<bool>);
-
-  @override
-  _i7.Future<void> addUserFollowCount(String? userId) => (super.noSuchMethod(
-        Invocation.method(
-          #addUserFollowCount,
-          [userId],
-        ),
-        returnValue: _i7.Future<void>.value(),
-        returnValueForMissingStub: _i7.Future<void>.value(),
-      ) as _i7.Future<void>);
 
   @override
   _i7.Future<List<String>> fetchAllFollowingIdList(String? userId) =>
