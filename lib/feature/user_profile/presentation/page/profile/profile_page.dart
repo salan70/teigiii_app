@@ -92,7 +92,7 @@ class ProfilePage extends ConsumerWidget {
               ],
             ),
           ),
-          floatingActionButton: const PostDefinitionFAB(definition: null),
+          floatingActionButton: const PostDefinitionFAB(),
         ),
       ),
     );

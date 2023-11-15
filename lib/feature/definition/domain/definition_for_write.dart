@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../util/constant/firestore_collections.dart';
 import '../../../util/constant/initial_main_group.dart';
 import '../../../util/constant/string_regex.dart';
+import '../../word/domain/word.dart';
 
 part 'definition_for_write.freezed.dart';
 
@@ -17,6 +18,28 @@ class DefinitionForWrite with _$DefinitionForWrite {
     required bool isPublic,
     required String definition,
   }) = _DefinitionForWrite;
+
+  factory DefinitionForWrite.empty() {
+    return const DefinitionForWrite(
+      id: null,
+      word: '',
+      wordReading: '',
+      isPublic: true,
+      definition: '',
+    );
+  }
+
+  /// [Word]から[DefinitionForWrite]を生成する
+  factory DefinitionForWrite.fromWord(Word word) {
+    return  DefinitionForWrite(
+      id: null,
+      word: word.word,
+      wordReading: word.reading,
+      isPublic: true,
+      definition: '',
+    );
+  }
+
   const DefinitionForWrite._();
 
   int get maxWordLength => 30;
@@ -80,7 +103,8 @@ class DefinitionForWrite with _$DefinitionForWrite {
     final isValidWord = outputWordError() == null && word.isNotEmpty;
     final isValidWordReading =
         outputWordReadingError() == null && wordReading.isNotEmpty;
-    final isValidDefinition = definition.isNotEmpty && definition.length <= maxDefinitionLength;
+    final isValidDefinition =
+        definition.isNotEmpty && definition.length <= maxDefinitionLength;
 
     return isValidWord && isValidWordReading && isValidDefinition;
   }

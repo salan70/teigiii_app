@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../util/constant/initial_main_group.dart';
 import '../../../../definition/presentation/component/definition_list.dart';
 import '../../../../definition/util/definition_feed_type.dart';
@@ -46,6 +47,7 @@ class IndividualDictionaryDefinitionListPage extends ConsumerWidget {
           ],
         ),
       ),
+      floatingActionButton: const PostDefinitionFAB(),
     );
   }
 }

@@ -114,7 +114,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
                   ..popRoute()
                   ..pushRoute(
                     PostDefinitionRoute(
-                      initialDefinition: definition,
+                      initialDefinitionForWrite: definition.toDefinitionForWrite(),
                       autoFocusForm: null,
                     ),
                   );
