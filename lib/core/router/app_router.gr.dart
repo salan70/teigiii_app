@@ -159,7 +159,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: PostDefinitionPage(
           key: args.key,
-          initialDefinition: args.initialDefinition,
+          initialDefinitionForWrite: args.initialDefinitionForWrite,
           autoFocusForm: args.autoFocusForm,
         ),
       );
@@ -690,14 +690,14 @@ class MyLicenseRoute extends PageRouteInfo<void> {
 class PostDefinitionRoute extends PageRouteInfo<PostDefinitionRouteArgs> {
   PostDefinitionRoute({
     Key? key,
-    required Definition? initialDefinition,
+    required DefinitionForWrite? initialDefinitionForWrite,
     required WriteDefinitionFormType? autoFocusForm,
     List<PageRouteInfo>? children,
   }) : super(
           PostDefinitionRoute.name,
           args: PostDefinitionRouteArgs(
             key: key,
-            initialDefinition: initialDefinition,
+            initialDefinitionForWrite: initialDefinitionForWrite,
             autoFocusForm: autoFocusForm,
           ),
           initialChildren: children,
@@ -712,19 +712,19 @@ class PostDefinitionRoute extends PageRouteInfo<PostDefinitionRouteArgs> {
 class PostDefinitionRouteArgs {
   const PostDefinitionRouteArgs({
     this.key,
-    required this.initialDefinition,
+    required this.initialDefinitionForWrite,
     required this.autoFocusForm,
   });
 
   final Key? key;
 
-  final Definition? initialDefinition;
+  final DefinitionForWrite? initialDefinitionForWrite;
 
   final WriteDefinitionFormType? autoFocusForm;
 
   @override
   String toString() {
-    return 'PostDefinitionRouteArgs{key: $key, initialDefinition: $initialDefinition, autoFocusForm: $autoFocusForm}';
+    return 'PostDefinitionRouteArgs{key: $key, initialDefinitionForWrite: $initialDefinitionForWrite, autoFocusForm: $autoFocusForm}';
   }
 }
 

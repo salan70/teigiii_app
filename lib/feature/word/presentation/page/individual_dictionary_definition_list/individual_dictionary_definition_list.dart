@@ -47,7 +47,7 @@ class IndividualDictionaryDefinitionListPage extends ConsumerWidget {
           ],
         ),
       ),
-      floatingActionButton: const PostDefinitionFAB(definition: null),
+      floatingActionButton: const PostDefinitionFAB(),
     );
   }
 }

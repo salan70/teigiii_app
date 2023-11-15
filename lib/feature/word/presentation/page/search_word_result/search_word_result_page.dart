@@ -51,7 +51,7 @@ class SearchWordResultPage extends ConsumerWidget {
           ),
         ],
       ),
-      floatingActionButton: const PostDefinitionFAB(definition: null),
+      floatingActionButton: const PostDefinitionFAB(),
     );
   }
 }

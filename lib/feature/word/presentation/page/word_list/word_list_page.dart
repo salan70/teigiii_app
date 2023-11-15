@@ -38,7 +38,7 @@ class WordListPage extends ConsumerWidget {
         shimmerTile: const WordTileShimmer(),
         shimmerTileNumber: 10,
       ),
-      floatingActionButton: const PostDefinitionFAB(definition: null),
+      floatingActionButton: const PostDefinitionFAB(),
     );
   }
 }

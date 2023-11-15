@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../base_page.dart';
 import '../../feature/definition/domain/definition.dart';
+import '../../feature/definition/domain/definition_for_write.dart';
 import '../../feature/definition/presentation/page/definition_detail/definition_detail_page.dart';
 import '../../feature/definition/presentation/page/edit_definition/edit_definition_page.dart';
 import '../../feature/definition/presentation/page/home/home_page.dart';

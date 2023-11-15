@@ -23,13 +23,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     DefinitionForWrite? definitionForWrite,
   ) async {
     if (definitionForWrite == null) {
-      _initialState = const DefinitionForWrite(
-        id: null,
-        word: '',
-        wordReading: '',
-        isPublic: true,
-        definition: '',
-      );
+      _initialState = DefinitionForWrite.empty();
     } else {
       _initialState = definitionForWrite;
     }

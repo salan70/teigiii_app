@@ -1,9 +1,14 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../core/common_widget/button/primary_filled_button.dart';
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
+import '../../../../../core/router/app_router.dart';
 import '../../../../../util/logger.dart';
+import '../../../../definition/domain/definition_for_write.dart';
+import '../../../../definition/util/write_definition_form_type.dart';
 import '../../../application/word_state.dart';
 import 'word_widget_shimmer.dart';
 
@@ -42,6 +47,23 @@ class WordWidget extends ConsumerWidget {
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
               ),
+              const SizedBox(height: 8),
+              Center(
+                child: PrimaryFilledButton(
+                  onPressed: () {
+                    final definitionForWrite =
+                        DefinitionForWrite.fromWord(word);
+                    context.pushRoute(
+                      PostDefinitionRoute(
+                        initialDefinitionForWrite: definitionForWrite,
+                        autoFocusForm: WriteDefinitionFormType.definition,
+                      ),
+                    );
+                  },
+                  text: 'この語句の定義を投稿する',
+                ),
+              ),
+              const SizedBox(height: 8),
             ],
           ),
         );
