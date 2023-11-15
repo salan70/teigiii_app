@@ -130,8 +130,8 @@ enum PullDownMenuItemForUserAction {
         return PullDownMenuItem(
           onTap: () {
             final url = userReportFormUrl(
-              targetUserProfile.publicId,
-              currentUserProfile.publicId,
+              currentUserPublicId: currentUserProfile.publicId,
+              targetUserPublicId: targetUserProfile.publicId,
             );
             ref.read(launchURLProvider(url));
           },
