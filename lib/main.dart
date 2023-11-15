@@ -8,12 +8,16 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/common_provider/is_loading_overlay_state.dart';
+import 'core/common_widget/error_and_retry_widget.dart';
 import 'core/common_widget/loading_dialog.dart';
 import 'core/router/app_router.dart';
 import 'feature/auth/application/auth_service.dart';
 import 'feature/auth/application/auth_state.dart';
+import 'feature/force_event/application/app_config_state.dart';
+import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
 import 'firebase_options/firebase_options.dart';
 import 'util/constant/theme_data.dart';
+import 'util/logger.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -84,40 +88,59 @@ class _MyAppState extends ConsumerState<MyApp> {
       theme: getThemeData(ThemeMode.light, context),
       darkTheme: getThemeData(ThemeMode.dark, context),
       builder: (context, child) {
-        final isSignedIn = ref.watch(isSignedInProvider);
-        if (isSignedIn) {
-          final async = ref.watch(authServiceProvider);
-          return async.when(
-            data: (_) {
-              return Stack(
-                children: [
-                  child!,
-                  if (ref.watch(isLoadingOverlayNotifierProvider))
-                    const OverlayLoadingWidget(),
-                ],
-              );
-            },
-            loading: () {
-              return const Scaffold(
-                body: OverlayLoadingWidget(),
-              );
-            },
-            error: (error, stack) {
-              // TODO(me): エラー画面を作成し、表示させる
-              // publicIdの重複でエラーが発生する可能性があるため、
-              // 少なくとも再試行できるボタンを表示させる
-              return Scaffold(
-                body: Center(
-                  child: Text('エラーが発生しました\n$error'),
-                ),
-              );
-            },
-          );
-        }
-        // 起動直後にisSignedInがfalseになる想定
-        return const Scaffold(
-          body: OverlayLoadingWidget(),
-        );
+        // TODO(me): asyncValue.whenがネストしているのなんとかしたい
+
+        // 強制アップデート関連の処理
+        return ref.watch(isRequiredAppUpdateProvider).when(
+              loading: () => const Scaffold(body: OverlayLoadingWidget()),
+              error: (e, s) {
+                logger.e('[asyncIsRequiredUpdate]の取得時にエラーが発生しました。'
+                    ' error: $e, stackTrace: $s');
+                return ErrorAndRetryWidget(
+                  onRetry: () => ref.invalidate(isRequiredAppUpdateProvider),
+                );
+              },
+              data: (isRequiredUpdate) {
+                if (isRequiredUpdate) {
+                  // アップデートが必要な場合
+                  return Stack(
+                    children: [
+                      child!,
+                      const OverlayForceUpdateDialog(),
+                    ],
+                  );
+                }
+
+                // アップデートが不要な場合
+                if (ref.watch(isSignedInProvider)) {
+                  final async = ref.watch(authServiceProvider);
+                  return async.when(
+                    data: (_) {
+                      return Stack(
+                        children: [
+                          child!,
+                          if (ref.watch(isLoadingOverlayNotifierProvider))
+                            const OverlayLoadingWidget(),
+                        ],
+                      );
+                    },
+                    loading: () => const Scaffold(body: OverlayLoadingWidget()),
+                    error: (error, stack) {
+                      // TODO(me): エラー画面を作成し、表示させる
+                      // publicIdの重複でエラーが発生する可能性があるため、
+                      // 少なくとも再試行できるボタンを表示させる
+                      return Scaffold(
+                        body: Center(
+                          child: Text('エラーが発生しました\n$error'),
+                        ),
+                      );
+                    },
+                  );
+                }
+                // 起動直後にisSignedInがfalseになる想定
+                return const Scaffold(body: OverlayLoadingWidget());
+              },
+            );
       },
     );
   }

@@ -33,6 +33,7 @@ dependencies:
   riverpod_annotation: ^2.2.0
   roggle: ^0.4.2+1
   shimmer: ^3.0.0
+  version: ^3.0.2
 
   # Firebase関連
   cloud_firestore: ^4.9.2

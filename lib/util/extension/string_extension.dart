@@ -31,4 +31,6 @@ extension StringExtension on String {
     // カタカナからひらがなに変換
     return String.fromCharCode(code - 0x0060);
   }
+
+  
 }
