@@ -111,7 +111,7 @@ class ProfileTile extends ConsumerWidget {
           );
         }
 
-        logger.e('userId [$targetUserId]の取得時にエラーが発生: $error');
+        logger.e('userId [$targetUserId]の取得時にエラーが発生: $error, stackTrace: $stackTrace');
         return Column(
           children: [
             const SizedBox(height: 16),

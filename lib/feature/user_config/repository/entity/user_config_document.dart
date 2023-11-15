@@ -22,9 +22,10 @@ class UserConfigDocument with _$UserConfigDocument {
       id: doc.id,
       appVersion: data[UserConfigsCollection.appVersion] as String,
       osVersion: data[UserConfigsCollection.osVersion] as String,
-      mutedUserIdList: ((data[UserConfigsCollection.mutedUserIdList]) as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      mutedUserIdList:
+          ((data[UserConfigsCollection.mutedUserIdList]) as List<dynamic>)
+              .map((e) => e as String)
+              .toList(),
       createdAt: (data[createdAtFieldName] as Timestamp).toDate(),
       updatedAt: (data[updatedAtFieldName] as Timestamp).toDate(),
     );

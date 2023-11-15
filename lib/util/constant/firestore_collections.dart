@@ -71,3 +71,11 @@ class UserFollowCountsCollection {
   static const followerCount = 'followerCount';
   static const followingCount = 'followingCount';
 }
+
+class AppConfigCollection {
+  static const collectionName = 'AppConfig';
+
+  // Field
+  static const minAppVersionForIos = 'minAppVersionForIos';
+  static const minAppVersionForAndroid = 'minAppVersionForAndroid';
+}

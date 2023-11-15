@@ -72,8 +72,8 @@ class InfinityScrollWidget extends ConsumerWidget {
           ),
         );
       },
-      error: (error, _) {
-        logger.e('$error');
+      error: (error, stackTrace) {
+        logger.e('error: $error, stackTrace: $stackTrace');
 
         // 初回読み込み時にエラーが発生し、再読み込みしている場合
         if (asyncListState.isRefreshing && !asyncListState.hasValue) {

@@ -15,7 +15,7 @@ Future<List<String>> mutedUserIdList(MutedUserIdListRef ref) async {
   return userProfileDoc.mutedUserIdList;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<String> appVersion(AppVersionRef ref) async {
   return ref.read(packageInfoRepositoryProvider).fetchAppVersion();
 }
