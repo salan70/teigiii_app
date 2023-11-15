@@ -15,6 +15,7 @@ import 'feature/auth/application/auth_service.dart';
 import 'feature/auth/application/auth_state.dart';
 import 'feature/force_event/application/app_config_state.dart';
 import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
+import 'feature/force_event/presentation/overlay_in_maintenance_dialog.dart';
 import 'firebase_options/firebase_options.dart';
 import 'util/constant/theme_data.dart';
 import 'util/logger.dart';
@@ -88,6 +89,21 @@ class _MyAppState extends ConsumerState<MyApp> {
       theme: getThemeData(ThemeMode.light, context),
       darkTheme: getThemeData(ThemeMode.dark, context),
       builder: (context, child) {
+        final appMaintenance = ref.watch(appMaintenanceProvider);
+        if (appMaintenance == null) {
+          // ロード中の場合
+          return const Scaffold(body: OverlayLoadingWidget());
+        }
+        if (appMaintenance.inMaintenance) {
+          // メンテナンス中の場合
+          return Stack(
+            children: [
+              child!,
+              OverlayInMaintenanceDialog(appMaintenance: appMaintenance),
+            ],
+          );
+        }
+
         // TODO(me): asyncValue.whenがネストしているのなんとかしたい
         // 強制アップデート関連の処理
         final asyncIsRequiredUpdate = ref.watch(isRequiredAppUpdateProvider);
