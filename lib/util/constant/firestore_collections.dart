@@ -78,4 +78,9 @@ class AppConfigCollection {
   // Field
   static const minAppVersionForIos = 'minAppVersionForIos';
   static const minAppVersionForAndroid = 'minAppVersionForAndroid';
+  static const maintenanceMap = 'maintenanceMap';
+
+  // [maintenanceMap] のKey
+  static const inMaintenance = 'inMaintenance';
+  static const scheduledEndTime = 'scheduledEndTime';
 }

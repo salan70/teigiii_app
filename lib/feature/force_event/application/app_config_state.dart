@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:version/version.dart';
 
 import '../../user_config/application/user_config_state.dart';
+import '../domain/app_maintenance.dart';
 import '../repository/app_config_repository.dart';
 import '../repository/entity/app_config_document.dart';
 
@@ -45,4 +46,20 @@ Future<bool> isRequiredAppUpdate(IsRequiredAppUpdateRef ref) async {
   }
 
   return parsedRequiredVersion > parsedCurrentVersion;
+}
+
+/// アプリのメンテナンス情報を保持する
+///
+/// [AppMaintenance]のinMaintenanceがfalse,
+/// もしくは nullの場合はメンテナンス中でない
+@Riverpod(keepAlive: true)
+AppMaintenance? appMaintenance(AppMaintenanceRef ref) {
+  final appConfig = ref.watch(appConfigProvider).value;
+
+  // ロード中の場合、nullを返す
+  if (appConfig == null) {
+    return null;
+  }
+
+  return appConfig.toAppMaintenance();
 }

@@ -23,7 +23,7 @@ final appConfigProvider = StreamProvider<AppConfigDocument>.internal(
 
 typedef AppConfigRef = StreamProviderRef<AppConfigDocument>;
 String _$isRequiredAppUpdateHash() =>
-    r'cb5a7589b46bea1e28263e5ecd4370192b74e81e';
+    r'ad6191ba4d20745d89938655fbaa4a643dc5e5d9';
 
 /// アプリのアップデートが必要かどうか
 ///
@@ -40,5 +40,25 @@ final isRequiredAppUpdateProvider = FutureProvider<bool>.internal(
 );
 
 typedef IsRequiredAppUpdateRef = FutureProviderRef<bool>;
+String _$appMaintenanceHash() => r'235fe44d1299e9bd787d26b51f397f095bb3acf6';
+
+/// アプリのメンテナンス情報を保持する
+///
+/// [AppMaintenance]のinMaintenanceがfalse,
+/// もしくは nullの場合はメンテナンス中でない
+///
+/// Copied from [appMaintenance].
+@ProviderFor(appMaintenance)
+final appMaintenanceProvider = Provider<AppMaintenance?>.internal(
+  appMaintenance,
+  name: r'appMaintenanceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$appMaintenanceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AppMaintenanceRef = ProviderRef<AppMaintenance?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

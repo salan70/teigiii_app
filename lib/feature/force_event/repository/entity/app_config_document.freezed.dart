@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AppConfigDocument {
   String get minAppVersionForIos => throw _privateConstructorUsedError;
   String get minAppVersionForAndroid => throw _privateConstructorUsedError;
+  Map<String, Map<String, Object>> get maintenanceMap =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AppConfigDocumentCopyWith<AppConfigDocument> get copyWith =>
@@ -30,7 +32,10 @@ abstract class $AppConfigDocumentCopyWith<$Res> {
           AppConfigDocument value, $Res Function(AppConfigDocument) then) =
       _$AppConfigDocumentCopyWithImpl<$Res, AppConfigDocument>;
   @useResult
-  $Res call({String minAppVersionForIos, String minAppVersionForAndroid});
+  $Res call(
+      {String minAppVersionForIos,
+      String minAppVersionForAndroid,
+      Map<String, Map<String, Object>> maintenanceMap});
 }
 
 /// @nodoc
@@ -48,6 +53,7 @@ class _$AppConfigDocumentCopyWithImpl<$Res, $Val extends AppConfigDocument>
   $Res call({
     Object? minAppVersionForIos = null,
     Object? minAppVersionForAndroid = null,
+    Object? maintenanceMap = null,
   }) {
     return _then(_value.copyWith(
       minAppVersionForIos: null == minAppVersionForIos
@@ -58,6 +64,10 @@ class _$AppConfigDocumentCopyWithImpl<$Res, $Val extends AppConfigDocument>
           ? _value.minAppVersionForAndroid
           : minAppVersionForAndroid // ignore: cast_nullable_to_non_nullable
               as String,
+      maintenanceMap: null == maintenanceMap
+          ? _value.maintenanceMap
+          : maintenanceMap // ignore: cast_nullable_to_non_nullable
+              as Map<String, Map<String, Object>>,
     ) as $Val);
   }
 }
@@ -70,7 +80,10 @@ abstract class _$$_AppConfigDocumentCopyWith<$Res>
       __$$_AppConfigDocumentCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String minAppVersionForIos, String minAppVersionForAndroid});
+  $Res call(
+      {String minAppVersionForIos,
+      String minAppVersionForAndroid,
+      Map<String, Map<String, Object>> maintenanceMap});
 }
 
 /// @nodoc
@@ -86,6 +99,7 @@ class __$$_AppConfigDocumentCopyWithImpl<$Res>
   $Res call({
     Object? minAppVersionForIos = null,
     Object? minAppVersionForAndroid = null,
+    Object? maintenanceMap = null,
   }) {
     return _then(_$_AppConfigDocument(
       minAppVersionForIos: null == minAppVersionForIos
@@ -96,25 +110,39 @@ class __$$_AppConfigDocumentCopyWithImpl<$Res>
           ? _value.minAppVersionForAndroid
           : minAppVersionForAndroid // ignore: cast_nullable_to_non_nullable
               as String,
+      maintenanceMap: null == maintenanceMap
+          ? _value._maintenanceMap
+          : maintenanceMap // ignore: cast_nullable_to_non_nullable
+              as Map<String, Map<String, Object>>,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_AppConfigDocument implements _AppConfigDocument {
+class _$_AppConfigDocument extends _AppConfigDocument {
   const _$_AppConfigDocument(
       {required this.minAppVersionForIos,
-      required this.minAppVersionForAndroid});
+      required this.minAppVersionForAndroid,
+      required final Map<String, Map<String, Object>> maintenanceMap})
+      : _maintenanceMap = maintenanceMap,
+        super._();
 
   @override
   final String minAppVersionForIos;
   @override
   final String minAppVersionForAndroid;
+  final Map<String, Map<String, Object>> _maintenanceMap;
+  @override
+  Map<String, Map<String, Object>> get maintenanceMap {
+    if (_maintenanceMap is EqualUnmodifiableMapView) return _maintenanceMap;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_maintenanceMap);
+  }
 
   @override
   String toString() {
-    return 'AppConfigDocument(minAppVersionForIos: $minAppVersionForIos, minAppVersionForAndroid: $minAppVersionForAndroid)';
+    return 'AppConfigDocument(minAppVersionForIos: $minAppVersionForIos, minAppVersionForAndroid: $minAppVersionForAndroid, maintenanceMap: $maintenanceMap)';
   }
 
   @override
@@ -126,12 +154,17 @@ class _$_AppConfigDocument implements _AppConfigDocument {
                 other.minAppVersionForIos == minAppVersionForIos) &&
             (identical(
                     other.minAppVersionForAndroid, minAppVersionForAndroid) ||
-                other.minAppVersionForAndroid == minAppVersionForAndroid));
+                other.minAppVersionForAndroid == minAppVersionForAndroid) &&
+            const DeepCollectionEquality()
+                .equals(other._maintenanceMap, _maintenanceMap));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, minAppVersionForIos, minAppVersionForAndroid);
+  int get hashCode => Object.hash(
+      runtimeType,
+      minAppVersionForIos,
+      minAppVersionForAndroid,
+      const DeepCollectionEquality().hash(_maintenanceMap));
 
   @JsonKey(ignore: true)
   @override
@@ -141,15 +174,20 @@ class _$_AppConfigDocument implements _AppConfigDocument {
           this, _$identity);
 }
 
-abstract class _AppConfigDocument implements AppConfigDocument {
+abstract class _AppConfigDocument extends AppConfigDocument {
   const factory _AppConfigDocument(
-      {required final String minAppVersionForIos,
-      required final String minAppVersionForAndroid}) = _$_AppConfigDocument;
+          {required final String minAppVersionForIos,
+          required final String minAppVersionForAndroid,
+          required final Map<String, Map<String, Object>> maintenanceMap}) =
+      _$_AppConfigDocument;
+  const _AppConfigDocument._() : super._();
 
   @override
   String get minAppVersionForIos;
   @override
   String get minAppVersionForAndroid;
+  @override
+  Map<String, Map<String, Object>> get maintenanceMap;
   @override
   @JsonKey(ignore: true)
   _$$_AppConfigDocumentCopyWith<_$_AppConfigDocument> get copyWith =>
