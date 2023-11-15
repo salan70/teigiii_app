@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
+import '../../../feature/auth/application/auth_state.dart';
 import '../../../feature/user_config/application/user_config_service.dart';
 import '../../../feature/user_config/application/user_config_state.dart';
+import '../../../feature/user_profile/application/user_profile_state.dart';
+import '../../../feature/user_profile/domain/user_profile.dart';
+import '../../../util/constant/url.dart';
+import '../../common_provider/launch_url.dart';
 
 class OtherUserActionIconButton extends ConsumerWidget {
   OtherUserActionIconButton({
@@ -21,19 +26,22 @@ class OtherUserActionIconButton extends ConsumerWidget {
 
     // プルダウンメニューの項目を作成する
     List<PullDownMenuEntry> createMenuItems(
-      String ownerId,
-      List<String> mutedUserIdList,
-    ) {
+      List<String> mutedUserIdList, {
+      required UserProfile ownerProfile,
+      required UserProfile currentUserProfile,
+    }) {
       late final PullDownMenuEntry firstItem;
       if (mutedUserIdList.contains(ownerId)) {
         firstItem = PullDownMenuItemForUserAction.unmuteUser.item(
           ref: ref,
-          targetUser: ownerId,
+          targetUserProfile: ownerProfile,
+          currentUserProfile: currentUserProfile,
         );
       } else {
         firstItem = PullDownMenuItemForUserAction.muteUser.item(
           ref: ref,
-          targetUser: ownerId,
+          targetUserProfile: ownerProfile,
+          currentUserProfile: currentUserProfile,
         );
       }
 
@@ -41,7 +49,8 @@ class OtherUserActionIconButton extends ConsumerWidget {
         firstItem,
         PullDownMenuItemForUserAction.reportUser.item(
           ref: ref,
-          targetUser: ownerId,
+          targetUserProfile: ownerProfile,
+          currentUserProfile: currentUserProfile,
         ),
       ];
     }
@@ -49,9 +58,16 @@ class OtherUserActionIconButton extends ConsumerWidget {
     return asyncMutedUserIdList.maybeWhen(
       orElse: () => const SizedBox.shrink(),
       data: (mutedUserIdList) {
+        // TODO(me): 雑に!で取得しているが、問題ないか確認する
+        final ownerProfile = ref.read(userProfileProvider(ownerId)).value!;
+        final currentUserId = ref.read(userIdProvider)!;
+        final currentUserProfile =
+            ref.read(userProfileProvider(currentUserId)).value!;
+
         final items = createMenuItems(
-          ownerId,
           mutedUserIdList,
+          ownerProfile: ownerProfile,
+          currentUserProfile: currentUserProfile,
         );
         return IconButton(
           key: globalKey,
@@ -86,7 +102,8 @@ enum PullDownMenuItemForUserAction {
 
   PullDownMenuItem item({
     required WidgetRef ref,
-    required String targetUser,
+    required UserProfile targetUserProfile,
+    required UserProfile currentUserProfile,
   }) {
     switch (this) {
       case PullDownMenuItemForUserAction.muteUser:
@@ -94,7 +111,7 @@ enum PullDownMenuItemForUserAction {
           onTap: () async {
             await ref
                 .read(userConfigServiceProvider.notifier)
-                .muteUser(targetUser);
+                .muteUser(targetUserProfile.id);
           },
           title: 'このユーザーをミュート',
           icon: CupertinoIcons.speaker_slash,
@@ -104,7 +121,7 @@ enum PullDownMenuItemForUserAction {
           onTap: () async {
             await ref
                 .read(userConfigServiceProvider.notifier)
-                .unmuteUser(targetUser);
+                .unmuteUser(targetUserProfile.id);
           },
           title: 'このユーザーのミュートを解除',
           icon: CupertinoIcons.speaker,
@@ -112,7 +129,11 @@ enum PullDownMenuItemForUserAction {
       case PullDownMenuItemForUserAction.reportUser:
         return PullDownMenuItem(
           onTap: () {
-            // TODO(me): ユーザー報告を実装する
+            final url = userReportFormUrl(
+              targetUserProfile.publicId,
+              currentUserProfile.publicId,
+            );
+            ref.read(launchURLProvider(url));
           },
           title: 'このユーザーを報告',
           icon: CupertinoIcons.flag,
