@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/common_provider/launch_url.dart';
 import '../../../core/common_widget/button/primary_filled_button.dart';
+import '../../../util/constant/url.dart';
 import '../domain/app_maintenance.dart';
 
 /// 端末のバックキーや画面操作を受け付けないWidget
 ///
 /// 透明のWidgetで囲い、ダイアログ表示を模している
-class OverlayInMaintenanceDialog extends StatelessWidget {
+class OverlayInMaintenanceDialog extends ConsumerWidget {
   const OverlayInMaintenanceDialog({super.key, required this.appMaintenance});
 
   final AppMaintenance appMaintenance;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return WillPopScope(
       onWillPop: () async => false,
       child: Container(
@@ -47,7 +50,7 @@ class OverlayInMaintenanceDialog extends StatelessWidget {
                   const SizedBox(height: 16),
                   PrimaryFilledButton(
                     onPressed: () {
-                      // TODO(me): 更新情報が記載されているWebページ（Notion）へ遷移する
+                      ref.read(launchURLProvider(latestInformationPage));
                     },
                     text: '最新情報を確認する',
                   ),
