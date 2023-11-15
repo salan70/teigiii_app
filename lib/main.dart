@@ -125,6 +125,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                     child: ErrorAndRetryWidget(
                       onRetry: () =>
                           ref.invalidate(isRequiredAppUpdateProvider),
+                      showInquireButton: true,
                     ),
                   ),
                 ],

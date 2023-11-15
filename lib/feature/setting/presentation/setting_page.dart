@@ -3,9 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/common_provider/launch_url.dart';
 import '../../../core/common_widget/shimmer_widget.dart';
 import '../../../core/router/app_router.dart';
+import '../../../util/constant/url.dart';
+import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
+import '../../user_profile/application/user_profile_state.dart';
 
 @RoutePage()
 class SettingRouterPage extends AutoRouter {
@@ -70,7 +74,14 @@ class SettingPage extends ConsumerWidget {
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.mail),
               label: 'お問い合わせ',
-              onTap: () {}, // TODO(me): お問い合わせフォームへ遷移（WebToでGoogleフォーム）
+              onTap: () {
+                final currentUserId = ref.read(userIdProvider)!;
+                final currentUserProfile =
+                    ref.read(userProfileProvider(currentUserId)).value;
+                final url = inquireFormUrl(currentUserProfile?.publicId ?? '');
+
+                ref.read(launchURLProvider(url));
+              },
             ),
             const SizedBox(height: 24),
             SettingTileButton(

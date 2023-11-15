@@ -1,18 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../feature/auth/application/auth_state.dart';
+import '../../feature/user_profile/application/user_profile_state.dart';
+import '../../util/constant/url.dart';
+import '../common_provider/launch_url.dart';
 import 'button/primary_filled_button.dart';
+import 'button/secondary_outlined_button.dart';
 
-class ErrorAndRetryWidget extends StatelessWidget {
+class ErrorAndRetryWidget extends ConsumerWidget {
   const ErrorAndRetryWidget({
     super.key,
     required this.onRetry,
+    this.showInquireButton = false,
   });
 
   final VoidCallback onRetry;
+  final bool showInquireButton;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Icon(
@@ -36,6 +44,25 @@ class ErrorAndRetryWidget extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         PrimaryFilledButton(onPressed: onRetry, text: '再読み込み'),
+        showInquireButton
+            ? Column(
+                children: [
+                  const SizedBox(height: 24),
+                  SecondaryOutlinedButton(
+                    onPressed: () {
+                      final currentUserId = ref.read(userIdProvider)!;
+                      final currentUserProfile =
+                          ref.read(userProfileProvider(currentUserId)).value;
+                      final url =
+                          inquireFormUrl(currentUserProfile?.publicId ?? '');
+
+                      ref.read(launchURLProvider(url));
+                    },
+                    text: '運営へお問い合わせ',
+                  ),
+                ],
+              )
+            : const SizedBox.shrink(),
       ],
     );
   }
