@@ -47,8 +47,8 @@ class ProfilePage extends ConsumerWidget {
                       );
                     },
                     loading: () => const Text(''),
-                    error: (error, _) {
-                      logger.e(error);
+                    error: (error, stackTrace) {
+                      logger.e('error: $error, stackTrace: $stackTrace');
                       return const Text('エラー');
                     },
                   ),

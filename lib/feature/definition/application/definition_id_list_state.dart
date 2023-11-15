@@ -229,8 +229,8 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
             isFirstFetch: isFirstFetch,
           );
       }
-    } on Exception catch (e, _) {
-      logger.e('$e');
+    } on Exception catch (e, stackTrace) {
+      logger.e('error: $e, stackTrace: $stackTrace');
       ref
           .read(toastControllerProvider.notifier)
           .showToast('読み込めませんでした。もう一度お試しください。', causeError: true);

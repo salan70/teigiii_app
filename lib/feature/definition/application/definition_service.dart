@@ -24,8 +24,8 @@ class DefinitionService extends _$DefinitionService {
 
     try {
       await _updateLikeStatus(definition);
-    } on Exception catch (e) {
-      logger.e('いいね登録もしくは解除時にエラーが発生: $e');
+    } on Exception catch (e, stackTrace) {
+      logger.e('いいね登録もしくは解除時にエラーが発生。error: $e, stackTrace: $stackTrace');
       ref
           .read(toastControllerProvider.notifier)
           .showToast('失敗しました。もう一度お試しください。', causeError: true);

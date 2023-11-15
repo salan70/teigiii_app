@@ -78,8 +78,8 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
             existingWordId,
             definitionForWrite,
           );
-    } on Exception catch (e) {
-      logger.e('定義投稿時にエラーが発生 error: $e');
+    } on Exception catch (e, stackTrace) {
+      logger.e('定義投稿時にエラーが発生 error: $e, stackTrace: $stackTrace');
       toastNotifier.showToast(
         '投稿できませんでした。もう一度お試しください。',
         causeError: true,
@@ -115,8 +115,8 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
             existingWordId,
             definitionForWrite,
           );
-    } on Exception catch (e) {
-      logger.e('定義編集時にエラーが発生 error: $e');
+    } on Exception catch (e, stackTrace) {
+      logger.e('定義編集時にエラーが発生 error: $e, stackTrace: $stackTrace');
       toastNotifier.showToast(
         '保存できませんでした。もう一度お試しください。',
         causeError: true,

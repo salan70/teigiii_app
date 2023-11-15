@@ -26,8 +26,8 @@ class UserFollowService extends _$UserFollowService {
             currentUserId,
             targetUserId,
           );
-    } on Exception catch (e) {
-      logger.e('フォロー時にエラーが発生: $e');
+    } on Exception catch (e, stackTrace) {
+      logger.e('フォロー時にエラーが発生しました。error: $e, stackTrace: $stackTrace');
       ref
           .read(toastControllerProvider.notifier)
           .showToast('フォローに失敗しました', causeError: true);
@@ -53,8 +53,8 @@ class UserFollowService extends _$UserFollowService {
             currentUserId,
             targetUserId,
           );
-    } on Exception catch (e) {
-      logger.e('フォロー解除時にエラーが発生: $e');
+    } on Exception catch (e, stackTrace) {
+      logger.e('フォロー解除時にエラーが発生しました。error: $e, stackTrace: $stackTrace');
       ref.read(toastControllerProvider.notifier).showToast(
             'フォロー解除に失敗しました',
             causeError: true,

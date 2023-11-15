@@ -131,7 +131,7 @@ class DefinitionTile extends ConsumerWidget {
           );
         }
 
-        logger.e('definitionId [$definitionId]の取得時にエラーが発生: $error');
+        logger.e('definitionId [$definitionId]の取得時にエラーが発生: $error, stackTrace: $stackTrace');
         return Column(
           children: [
             const SizedBox(height: 16),

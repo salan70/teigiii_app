@@ -53,9 +53,9 @@ class UserConfigService extends _$UserConfigService {
               targetUserId,
             );
       }
-    } on Exception catch (e) {
+    } on Exception catch (e, stackTrace) {
       final action = willMute ? 'ミュート登録' : 'ミュート解除';
-      logger.e('$action時にエラーが発生: $e');
+      logger.e('$action時にエラーが発生しました。 error: $e, stackTrace: $stackTrace');
       ref
           .read(toastControllerProvider.notifier)
           .showToast('失敗しました。もう一度お試しください。', causeError: true);

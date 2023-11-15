@@ -90,8 +90,8 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
           );
 
       // プロフィールを更新
-    } on Exception catch (e) {
-      logger.e('プロフィール編集時にエラーが発生 error: $e');
+    } on Exception catch (e, stackTrace) {
+      logger.e('プロフィール編集時にエラーが発生 error: $e, stackTrace: $stackTrace');
       toastNotifier.showToast(
         '保存できませんでした。もう一度お試しください。',
         causeError: true,
