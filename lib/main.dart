@@ -89,32 +89,47 @@ class _MyAppState extends ConsumerState<MyApp> {
       darkTheme: getThemeData(ThemeMode.dark, context),
       builder: (context, child) {
         // TODO(me): asyncValue.whenがネストしているのなんとかしたい
-
         // 強制アップデート関連の処理
-        return ref.watch(isRequiredAppUpdateProvider).when(
-              loading: () => const Scaffold(body: OverlayLoadingWidget()),
-              error: (e, s) {
-                logger.e('[asyncIsRequiredUpdate]の取得時にエラーが発生しました。'
-                    ' error: $e, stackTrace: $s');
-                return ErrorAndRetryWidget(
-                  onRetry: () => ref.invalidate(isRequiredAppUpdateProvider),
-                );
-              },
-              data: (isRequiredUpdate) {
-                if (isRequiredUpdate) {
-                  // アップデートが必要な場合
-                  return Stack(
-                    children: [
-                      child!,
-                      const OverlayForceUpdateDialog(),
-                    ],
-                  );
-                }
+        final asyncIsRequiredUpdate = ref.watch(isRequiredAppUpdateProvider);
+        return asyncIsRequiredUpdate.when(
+          loading: () => const Scaffold(body: OverlayLoadingWidget()),
+          error: (e, s) {
+            // エラーが発生後、再読み込み時にtrueになる
+            if (asyncIsRequiredUpdate.isLoading) {
+              return const Scaffold(body: OverlayLoadingWidget());
+            }
 
-                // アップデートが不要な場合
-                if (ref.watch(isSignedInProvider)) {
-                  final async = ref.watch(authServiceProvider);
-                  return async.when(
+            logger.e('[asyncIsRequiredUpdate]の取得時にエラーが発生しました。'
+                ' error: $e, stackTrace: $s');
+            return Scaffold(
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: ErrorAndRetryWidget(
+                      onRetry: () =>
+                          ref.invalidate(isRequiredAppUpdateProvider),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+          data: (isRequiredUpdate) {
+            if (isRequiredUpdate) {
+              // アップデートが必要な場合
+              return Stack(
+                children: [
+                  child!,
+                  const OverlayForceUpdateDialog(),
+                ],
+              );
+            }
+
+            // アップデートが不要な場合
+            if (ref.watch(isSignedInProvider)) {
+              // サインイン済みの場合
+              return ref.watch(authServiceProvider).when(
                     data: (_) {
                       return Stack(
                         children: [
@@ -136,11 +151,13 @@ class _MyAppState extends ConsumerState<MyApp> {
                       );
                     },
                   );
-                }
-                // 起動直後にisSignedInがfalseになる想定
-                return const Scaffold(body: OverlayLoadingWidget());
-              },
-            );
+            }
+
+            // サインインしていない場合
+            // 起動直後にisSignedInがfalseになる想定
+            return const Scaffold(body: OverlayLoadingWidget());
+          },
+        );
       },
     );
   }
