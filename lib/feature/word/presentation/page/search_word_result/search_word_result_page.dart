@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../../core/common_widget/button/back_icon_button.dart';
+import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/infinity_scroll_widget.dart';
 import '../../../application/word_list_state_by_search_word.dart';
 import '../../../domain/word.dart';
@@ -50,6 +51,7 @@ class SearchWordResultPage extends ConsumerWidget {
           ),
         ],
       ),
+      floatingActionButton: const PostDefinitionFAB(definition: null),
     );
   }
 }
