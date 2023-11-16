@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
+import '../../../../../util/extension/scroll_controller_extension.dart';
 import '../../../../definition/presentation/component/definition_list.dart';
 import '../../../../definition/util/definition_feed_type.dart';
 import '../../../application/word_state.dart';
@@ -62,6 +63,15 @@ class WordTopPage extends ConsumerWidget {
                         Tab(text: '投稿順'),
                         Tab(text: 'いいね数順'),
                       ],
+                      onTap: (_) {
+                        if (DefaultTabController.of(context).indexIsChanging) {
+                          // * タブを切り替えた場合
+                          return;
+                        }
+
+                        // * 同じタブをタップした場合
+                        PrimaryScrollController.of(context).scrollToTop();
+                      },
                     ),
                   ),
                 ),

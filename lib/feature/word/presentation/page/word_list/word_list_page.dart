@@ -6,6 +6,7 @@ import '../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/infinity_scroll_widget.dart';
 import '../../../../../util/constant/initial_main_group.dart';
+import '../../../../../util/extension/scroll_controller_extension.dart';
 import '../../../application/word_list_state_by_initial.dart';
 import '../../../domain/word.dart';
 import '../../component/word_tile.dart';
@@ -27,9 +28,15 @@ class WordListPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(selectedInitialSubGroup.label),
+        title: InkWell(
+          child: Text(selectedInitialSubGroup.label),
+          onTap: () => PrimaryScrollController.of(context).scrollToTop(),
+        ),
         leading: const BackIconButton(),
         leadingWidth: 48,
+        flexibleSpace: InkWell(
+          onTap: () => PrimaryScrollController.of(context).scrollToTop(),
+        ),
       ),
       body: InfinityScrollWidget(
         listStateNotifierProvider: wordListProvider,
