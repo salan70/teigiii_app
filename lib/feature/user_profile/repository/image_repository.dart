@@ -26,7 +26,9 @@ class ImageRepository {
           toolbarTitle: '',
           showCropGrid: false,
           hideBottomControls: true,
-          initAspectRatio: CropAspectRatioPreset.original,
+          // 動作確認した漢字、Androidでは [cropStyle] が動作してない。
+          // [CropAspectRatioPreset] に丸がないため、一番差が少ない正方形を指定
+          initAspectRatio: CropAspectRatioPreset.square,
         ),
         IOSUiSettings(
           hidesNavigationBar: true,
