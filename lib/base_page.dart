@@ -37,7 +37,9 @@ class _BasePageState extends ConsumerState<BasePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.read(toastControllerProvider.notifier).initFToast(context);
       await ref.read(authServiceProvider.notifier).onAppLaunch();
-      _doneInit = true;
+      setState(() {
+        _doneInit = true;
+      });
     });
   }
 
@@ -131,9 +133,13 @@ class _BasePageState extends ConsumerState<BasePage> {
               Center(
                 child: ErrorAndRetryWidget(
                   onRetry: () async {
-                    _doneInit = false;
+                    setState(() {
+                      _doneInit = false;
+                    });
                     await ref.read(authServiceProvider.notifier).onAppLaunch();
-                    _doneInit = true;
+                    setState(() {
+                      _doneInit = true;
+                    });
                   },
                   showInquireButton: true,
                 ),
