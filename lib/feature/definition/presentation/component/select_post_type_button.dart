@@ -48,7 +48,7 @@ class SelectPostTypeButton extends ConsumerWidget {
                     isPublic: true,
                   );
                 },
-                title: DefinitionPostType.public.label,
+                title: DefinitionPostType.public.labelForWrite,
                 icon: DefinitionPostType.public.icon,
               ),
               PullDownMenuItem(
@@ -57,7 +57,7 @@ class SelectPostTypeButton extends ConsumerWidget {
                     isPublic: false,
                   );
                 },
-                title: DefinitionPostType.private.label,
+                title: DefinitionPostType.private.labelForWrite,
                 icon: DefinitionPostType.private.icon,
               ),
             ],
@@ -70,11 +70,11 @@ class SelectPostTypeButton extends ConsumerWidget {
             Icon(
               postType.icon,
               color: Theme.of(context).colorScheme.onSurface,
-              size: postType.lergeIconSize,
+              size: postType.largeIconSize,
             ),
             const SizedBox(width: 8),
             Text(
-              postType.label,
+              postType.labelForWrite,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(width: 8),

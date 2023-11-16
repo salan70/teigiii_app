@@ -6,6 +6,7 @@ import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../domain/definition.dart';
 import '../repository/write_definition_repository.dart';
+import '../util/definition_post_type.dart';
 import 'definition_state.dart';
 
 part 'definition_service.g.dart';
@@ -58,5 +59,35 @@ class DefinitionService extends _$DefinitionService {
           definition.id,
           userId,
         );
+  }
+
+  Future<void> updatePostType(Definition definition) async {
+    final isLoadingOverlayNotifier =
+        ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
+    final toastNotifier = ref.read(toastControllerProvider.notifier);
+
+    try {
+      await ref.read(writeDefinitionRepositoryProvider).updatePostType(
+            definitionId: definition.id,
+            isPublic: !definition.isPublic,
+          );
+    } on Exception catch (e, stackTrace) {
+      logger.e('公開設定更新時にエラーが発生 error: $e, stackTrace: $stackTrace');
+      toastNotifier.showToast(
+        'エラーが発生しました。もう一度お試しください。',
+        causeError: true,
+      );
+      isLoadingOverlayNotifier.finishLoading();
+      return;
+    }
+
+    // 遷移元の画面を更新するためにinvalidateする
+    ref.invalidate(definitionProvider(definition.id));
+
+    isLoadingOverlayNotifier.finishLoading();
+    final afterUpdatePostType = definition.isPublic
+        ? DefinitionPostType.private
+        : DefinitionPostType.public;
+    toastNotifier.showToast(afterUpdatePostType.completeChangeMessage);
   }
 }

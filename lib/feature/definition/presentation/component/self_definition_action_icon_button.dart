@@ -6,7 +6,9 @@ import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
+import '../../application/definition_service.dart';
 import '../../domain/definition.dart';
+import '../../util/definition_post_type.dart';
 
 class SelfDefinitionActionIconButton extends ConsumerWidget {
   const SelfDefinitionActionIconButton({super.key, required this.definition});
@@ -18,9 +20,22 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
     final globalKey = GlobalKey();
 
     // プルダウンメニューの項目を作成する
-    List<PullDownMenuEntry> createMenuItems(Definition definition) {
+    List<PullDownMenuEntry> createMenuItems() {
+      final targetPostType = definition.isPublic
+          ? DefinitionPostType.private
+          : DefinitionPostType.public;
+
       return [
-        PullDownMenuItemForDefinitionAction.editDefinition.item(
+        PullDownMenuItem(
+          title: targetPostType.labelForChange,
+          icon: targetPostType.icon,
+          onTap: () {
+            _showChangePostTypeConfirmDialog(context, ref);
+          },
+        ),
+        PullDownMenuItem(
+          title: 'この定義を編集',
+          icon: CupertinoIcons.pencil,
           onTap: () {
             // 投稿から1時間以内の定義のみ編集可能
             final canEdit = !definition.createdAt.hasOneHourPassed();
@@ -34,7 +49,9 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
             );
           },
         ),
-        PullDownMenuItemForDefinitionAction.deleteDefinition.item(
+        PullDownMenuItem(
+          title: 'この定義を削除',
+          icon: CupertinoIcons.trash,
           onTap: () {},
         ),
       ];
@@ -55,7 +72,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
         await showPullDownMenu(
           context: context,
           position: position,
-          items: createMenuItems(definition),
+          items: createMenuItems(),
         );
       },
     );
@@ -114,7 +131,8 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
                   ..popRoute()
                   ..pushRoute(
                     PostDefinitionRoute(
-                      initialDefinitionForWrite: definition.toDefinitionForWrite(),
+                      initialDefinitionForWrite:
+                          definition.toDefinitionForWrite(),
                       autoFocusForm: null,
                     ),
                   );
@@ -134,26 +152,73 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
       },
     );
   }
-}
 
-enum PullDownMenuItemForDefinitionAction {
-  editDefinition,
-  deleteDefinition;
+  /// 公開設定を変更してもいいか確認するダイアログを表示する
+  Future<void> _showChangePostTypeConfirmDialog(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final afterUpdatePostType = definition.isPublic
+        ? DefinitionPostType.private
+        : DefinitionPostType.public;
 
-  PullDownMenuItem item({required VoidCallback onTap}) {
-    switch (this) {
-      case PullDownMenuItemForDefinitionAction.editDefinition:
-        return PullDownMenuItem(
-          onTap: onTap,
-          title: 'この定義を編集',
-          icon: CupertinoIcons.pencil,
+    await showDialog<dynamic>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          contentPadding: const EdgeInsets.only(
+            top: 16,
+            bottom: 8,
+          ),
+          title: const Center(child: Text('確認')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                afterUpdatePostType.confirmChangeMessage,
+                overflow: TextOverflow.clip,
+              ),
+            ],
+          ),
+          actionsAlignment: MainAxisAlignment.spaceEvenly,
+          actionsPadding: const EdgeInsets.only(bottom: 16),
+          actions: [
+            InkWell(
+              onTap: () {
+                context.popRoute();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'しない',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                ref
+                    .read(definitionServiceProvider.notifier)
+                    .updatePostType(definition);
+                context.popRoute();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'する',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                ),
+              ),
+            ),
+          ],
         );
-      case PullDownMenuItemForDefinitionAction.deleteDefinition:
-        return PullDownMenuItem(
-          onTap: onTap,
-          title: 'この定義を削除',
-          icon: CupertinoIcons.trash,
-        );
-    }
+      },
+    );
   }
 }
