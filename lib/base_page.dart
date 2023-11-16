@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/common_provider/toast_controller.dart';
+import 'core/common_widget/error_and_retry_widget.dart';
+import 'core/common_widget/loading_dialog.dart';
 import 'core/router/app_router.dart';
 import 'feature/auth/application/auth_service.dart';
 import 'feature/auth/application/auth_state.dart';
+import 'util/logger.dart';
 
 // 参考
 // https://zenn.dev/flutteruniv_dev/articles/20230427-095829-flutter-auto-route#うまくいくパターン
@@ -24,12 +27,17 @@ class BasePage extends ConsumerStatefulWidget {
 }
 
 class _BasePageState extends ConsumerState<BasePage> {
+  /// ユーザーの初期処理が完了したかどうか
+  bool _doneInit = false;
+
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.read(toastControllerProvider.notifier).initFToast(context);
+      await ref.read(authServiceProvider.notifier).onAppLaunch();
+      _doneInit = true;
     });
   }
 
@@ -39,6 +47,18 @@ class _BasePageState extends ConsumerState<BasePage> {
 
     return async.when(
       data: (_) {
+        if (!ref.watch(isSignedInProvider)) {
+          // * サインインしていない場合
+          return const Scaffold(body: OverlayLoadingWidget());
+        }
+
+        // * サインインしている場合
+        // 本当は [async] のstateで制御したかったが、
+        // 処理の途中でAsyncLoadingが勝手にAsyncDataになるため、
+        // [_doneInit] を作成して制御している
+        if (!_doneInit) {
+          return const Scaffold(body: OverlayLoadingWidget());
+        }
         final currentUserId = ref.watch(userIdProvider)!;
         return AutoTabsRouter(
           routes: [
@@ -83,7 +103,9 @@ class _BasePageState extends ConsumerState<BasePage> {
                       if (tabsRouter.activeIndex == index) {
                         // ネストされたルーターのスタック情報を破棄
                         tabsRouter
-                            .innerRouterOf<StackRouter>(tabsRouter.current.name)
+                            .innerRouterOf<StackRouter>(
+                              tabsRouter.current.name,
+                            )
                             ?.popUntilRoot();
 
                         return;
@@ -98,20 +120,28 @@ class _BasePageState extends ConsumerState<BasePage> {
           },
         );
       },
-      loading: () => const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-      error: (error, stackTrace) => const Scaffold(
-        body: Center(
-          child: Text('エラーが発生しました'),
-        ),
-      ),
+      loading: () => const Scaffold(body: OverlayLoadingWidget()),
+      error: (error, stack) {
+        logger.e('サインイン時にエラーが発生しました。'
+            ' error: $error, stackTrace: $stack');
+        return Scaffold(
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: ErrorAndRetryWidget(
+                  onRetry: () async {
+                    _doneInit = false;
+                    await ref.read(authServiceProvider.notifier).onAppLaunch();
+                    _doneInit = true;
+                  },
+                  showInquireButton: true,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
-}
-
-class IndexTopRouterRoute {
-  const IndexTopRouterRoute();
 }
