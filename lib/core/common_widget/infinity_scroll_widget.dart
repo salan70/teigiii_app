@@ -150,6 +150,7 @@ class _StateScrollBar extends StatelessWidget {
       key: globalKey,
       controller: scrollController,
       child: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
         slivers: [
           CupertinoSliverRefreshControl(
             builder: buildCustomRefreshIndicator,
