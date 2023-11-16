@@ -6,7 +6,9 @@ import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
+import '../../application/definition_service.dart';
 import '../../domain/definition.dart';
+import '../../util/definition_post_type.dart';
 
 class SelfDefinitionActionIconButton extends ConsumerWidget {
   const SelfDefinitionActionIconButton({super.key, required this.definition});
@@ -19,8 +21,23 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
 
     // プルダウンメニューの項目を作成する
     List<PullDownMenuEntry> createMenuItems(Definition definition) {
+      final targetPostType = definition.isPublic
+          ? DefinitionPostType.private
+          : DefinitionPostType.public;
+
       return [
-        PullDownMenuItemForDefinitionAction.editDefinition.item(
+        PullDownMenuItem(
+          title: targetPostType.labelForChange,
+          icon: targetPostType.icon,
+          onTap: () {
+            ref
+                .read(definitionServiceProvider.notifier)
+                .updatePostType(definition);
+          },
+        ),
+        PullDownMenuItem(
+          title: 'この定義を編集',
+          icon: CupertinoIcons.pencil,
           onTap: () {
             // 投稿から1時間以内の定義のみ編集可能
             final canEdit = !definition.createdAt.hasOneHourPassed();
@@ -34,7 +51,9 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
             );
           },
         ),
-        PullDownMenuItemForDefinitionAction.deleteDefinition.item(
+        PullDownMenuItem(
+          title: 'この定義を削除',
+          icon: CupertinoIcons.trash,
           onTap: () {},
         ),
       ];
@@ -114,7 +133,8 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
                   ..popRoute()
                   ..pushRoute(
                     PostDefinitionRoute(
-                      initialDefinitionForWrite: definition.toDefinitionForWrite(),
+                      initialDefinitionForWrite:
+                          definition.toDefinitionForWrite(),
                       autoFocusForm: null,
                     ),
                   );
@@ -133,27 +153,5 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
         );
       },
     );
-  }
-}
-
-enum PullDownMenuItemForDefinitionAction {
-  editDefinition,
-  deleteDefinition;
-
-  PullDownMenuItem item({required VoidCallback onTap}) {
-    switch (this) {
-      case PullDownMenuItemForDefinitionAction.editDefinition:
-        return PullDownMenuItem(
-          onTap: onTap,
-          title: 'この定義を編集',
-          icon: CupertinoIcons.pencil,
-        );
-      case PullDownMenuItemForDefinitionAction.deleteDefinition:
-        return PullDownMenuItem(
-          onTap: onTap,
-          title: 'この定義を削除',
-          icon: CupertinoIcons.trash,
-        );
-    }
   }
 }

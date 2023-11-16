@@ -121,6 +121,16 @@ class WriteDefinitionRepository {
     return docRef.id;
   }
 
+  Future<void> updatePostType({
+    required String definitionId,
+    required bool isPublic,
+  }) async {
+    await _definitionsCollectionRef.doc(definitionId).update({
+      DefinitionsCollection.isPublic: isPublic,
+      updatedAtFieldName: FieldValue.serverTimestamp(),
+    });
+  }
+
   Future<void> likeDefinition(String definitionId, String userId) async {
     // transactionを使い、複数の処理が全て成功した場合のみ、処理を完了させる
     await firestore.runTransaction((transaction) async {
