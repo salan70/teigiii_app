@@ -52,10 +52,8 @@ class ErrorAndRetryWidget extends ConsumerWidget {
                     onPressed: () {
                       final currentUserId = ref.read(userIdProvider);
 
-                      late String? publicId;
-                      if (currentUserId == null) {
-                        publicId = null;
-                      } else {
+                      String? publicId;
+                      if (currentUserId != null) {
                         publicId = ref
                             .read(userProfileProvider(currentUserId))
                             .value
