@@ -20,7 +20,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
     final globalKey = GlobalKey();
 
     // プルダウンメニューの項目を作成する
-    List<PullDownMenuEntry> createMenuItems(Definition definition) {
+    List<PullDownMenuEntry> createMenuItems() {
       final targetPostType = definition.isPublic
           ? DefinitionPostType.private
           : DefinitionPostType.public;
@@ -30,9 +30,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
           title: targetPostType.labelForChange,
           icon: targetPostType.icon,
           onTap: () {
-            ref
-                .read(definitionServiceProvider.notifier)
-                .updatePostType(definition);
+            _showChangePostTypeConfirmDialog(context, ref);
           },
         ),
         PullDownMenuItem(
@@ -74,7 +72,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
         await showPullDownMenu(
           context: context,
           position: position,
-          items: createMenuItems(definition),
+          items: createMenuItems(),
         );
       },
     );
@@ -145,6 +143,75 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
                   '作成する',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// 公開設定を変更してもいいか確認するダイアログを表示する
+  Future<void> _showChangePostTypeConfirmDialog(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final afterUpdatePostType = definition.isPublic
+        ? DefinitionPostType.private
+        : DefinitionPostType.public;
+
+    await showDialog<dynamic>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          contentPadding: const EdgeInsets.only(
+            top: 16,
+            bottom: 8,
+          ),
+          title: const Center(child: Text('確認')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                afterUpdatePostType.confirmChangeMessage,
+                overflow: TextOverflow.clip,
+              ),
+            ],
+          ),
+          actionsAlignment: MainAxisAlignment.spaceEvenly,
+          actionsPadding: const EdgeInsets.only(bottom: 16),
+          actions: [
+            InkWell(
+              onTap: () {
+                context.popRoute();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'しない',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                ref
+                    .read(definitionServiceProvider.notifier)
+                    .updatePostType(definition);
+                context.popRoute();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'する',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.error,
                       ),
                 ),
               ),

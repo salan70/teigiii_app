@@ -22,6 +22,15 @@ enum DefinitionPostType {
     }
   }
 
+  String get confirmChangeMessage {
+    switch (this) {
+      case DefinitionPostType.public:
+        return '全体に公開しますか？';
+      case DefinitionPostType.private:
+        return '非公開にしますか？';
+    }
+  }
+
   String get completeChangeMessage {
     switch (this) {
       case DefinitionPostType.public:
