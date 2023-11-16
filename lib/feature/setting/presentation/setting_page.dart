@@ -157,8 +157,9 @@ class SettingPage extends ConsumerWidget {
             Align(
               alignment: Alignment.topCenter,
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
                   // TODO(me): アカウント削除の処理
+                  // await ref.read(authServiceProvider.notifier).deleteUser();
                 },
                 child: Text(
                   'アカウント削除',

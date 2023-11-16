@@ -50,11 +50,16 @@ class ErrorAndRetryWidget extends ConsumerWidget {
                   const SizedBox(height: 24),
                   SecondaryOutlinedButton(
                     onPressed: () {
-                      final currentUserId = ref.read(userIdProvider)!;
-                      final currentUserProfile =
-                          ref.read(userProfileProvider(currentUserId)).value;
-                      final url =
-                          inquireFormUrl(currentUserProfile?.publicId ?? '');
+                      final currentUserId = ref.read(userIdProvider);
+
+                      String? publicId;
+                      if (currentUserId != null) {
+                        publicId = ref
+                            .read(userProfileProvider(currentUserId))
+                            .value
+                            ?.publicId;
+                      }
+                      final url = inquireFormUrl(publicId ?? '');
 
                       ref.read(launchURLProvider(url));
                     },

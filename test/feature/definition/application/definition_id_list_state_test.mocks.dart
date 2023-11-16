@@ -666,16 +666,6 @@ class MockUserProfileRepository extends _i1.Mock
       ) as _i12.Future<_i6.UserProfileDocument?>);
 
   @override
-  _i12.Future<void> addUserProfile(String? userId) => (super.noSuchMethod(
-        Invocation.method(
-          #addUserProfile,
-          [userId],
-        ),
-        returnValue: _i12.Future<void>.value(),
-        returnValueForMissingStub: _i12.Future<void>.value(),
-      ) as _i12.Future<void>);
-
-  @override
   _i12.Future<void> updateUserProfile(_i18.UserProfile? userProfileForWrite) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -729,44 +719,6 @@ class MockUserConfigRepository extends _i1.Mock
           ),
         )),
       ) as _i12.Future<_i7.UserConfigDocument>);
-
-  @override
-  _i12.Future<void> addUserConfig(
-    String? userId,
-    String? osVersion,
-    String? appVersion,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #addUserConfig,
-          [
-            userId,
-            osVersion,
-            appVersion,
-          ],
-        ),
-        returnValue: _i12.Future<void>.value(),
-        returnValueForMissingStub: _i12.Future<void>.value(),
-      ) as _i12.Future<void>);
-
-  @override
-  _i12.Future<void> updateVersionInfo(
-    String? userId,
-    String? osVersion,
-    String? appVersion,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #updateVersionInfo,
-          [
-            userId,
-            osVersion,
-            appVersion,
-          ],
-        ),
-        returnValue: _i12.Future<void>.value(),
-        returnValueForMissingStub: _i12.Future<void>.value(),
-      ) as _i12.Future<void>);
 
   @override
   _i12.Future<void> appendMutedUserIdList(
@@ -898,16 +850,6 @@ class MockUserFollowRepository extends _i1.Mock
         returnValue: _i12.Future<bool>.value(false),
         returnValueForMissingStub: _i12.Future<bool>.value(false),
       ) as _i12.Future<bool>);
-
-  @override
-  _i12.Future<void> addUserFollowCount(String? userId) => (super.noSuchMethod(
-        Invocation.method(
-          #addUserFollowCount,
-          [userId],
-        ),
-        returnValue: _i12.Future<void>.value(),
-        returnValueForMissingStub: _i12.Future<void>.value(),
-      ) as _i12.Future<void>);
 
   @override
   _i12.Future<List<String>> fetchAllFollowingIdList(String? userId) =>

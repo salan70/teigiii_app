@@ -637,16 +637,6 @@ class MockUserProfileRepository extends _i1.Mock
       ) as _i10.Future<_i6.UserProfileDocument?>);
 
   @override
-  _i10.Future<void> addUserProfile(String? userId) => (super.noSuchMethod(
-        Invocation.method(
-          #addUserProfile,
-          [userId],
-        ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
-
-  @override
   _i10.Future<void> updateUserProfile(_i16.UserProfile? userProfileForWrite) =>
       (super.noSuchMethod(
         Invocation.method(

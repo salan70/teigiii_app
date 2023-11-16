@@ -11,8 +11,6 @@ import 'core/common_provider/is_loading_overlay_state.dart';
 import 'core/common_widget/error_and_retry_widget.dart';
 import 'core/common_widget/loading_dialog.dart';
 import 'core/router/app_router.dart';
-import 'feature/auth/application/auth_service.dart';
-import 'feature/auth/application/auth_state.dart';
 import 'feature/force_event/application/app_config_state.dart';
 import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
 import 'feature/force_event/presentation/overlay_in_maintenance_dialog.dart';
@@ -59,25 +57,11 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends ConsumerStatefulWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  ConsumerState<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends ConsumerState<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(authServiceProvider.notifier).onAppLaunch();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -89,13 +73,14 @@ class _MyAppState extends ConsumerState<MyApp> {
       theme: getThemeData(ThemeMode.light, context),
       darkTheme: getThemeData(ThemeMode.dark, context),
       builder: (context, child) {
+        // メンテナンス関連の処理
         final appMaintenance = ref.watch(appMaintenanceProvider);
         if (appMaintenance == null) {
-          // ロード中の場合
+          // * ロード中の場合
           return const Scaffold(body: OverlayLoadingWidget());
         }
         if (appMaintenance.inMaintenance) {
-          // メンテナンス中の場合
+          // * メンテナンス中の場合
           return Stack(
             children: [
               child!,
@@ -104,7 +89,6 @@ class _MyAppState extends ConsumerState<MyApp> {
           );
         }
 
-        // TODO(me): asyncValue.whenがネストしているのなんとかしたい
         // 強制アップデート関連の処理
         final asyncIsRequiredUpdate = ref.watch(isRequiredAppUpdateProvider);
         return asyncIsRequiredUpdate.when(
@@ -134,7 +118,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           },
           data: (isRequiredUpdate) {
             if (isRequiredUpdate) {
-              // アップデートが必要な場合
+              // * アップデートが必要な場合
               return Stack(
                 children: [
                   child!,
@@ -143,36 +127,14 @@ class _MyAppState extends ConsumerState<MyApp> {
               );
             }
 
-            // アップデートが不要な場合
-            if (ref.watch(isSignedInProvider)) {
-              // サインイン済みの場合
-              return ref.watch(authServiceProvider).when(
-                    data: (_) {
-                      return Stack(
-                        children: [
-                          child!,
-                          if (ref.watch(isLoadingOverlayNotifierProvider))
-                            const OverlayLoadingWidget(),
-                        ],
-                      );
-                    },
-                    loading: () => const Scaffold(body: OverlayLoadingWidget()),
-                    error: (error, stack) {
-                      // TODO(me): エラー画面を作成し、表示させる
-                      // publicIdの重複でエラーが発生する可能性があるため、
-                      // 少なくとも再試行できるボタンを表示させる
-                      return Scaffold(
-                        body: Center(
-                          child: Text('エラーが発生しました\n$error'),
-                        ),
-                      );
-                    },
-                  );
-            }
-
-            // サインインしていない場合
-            // 起動直後にisSignedInがfalseになる想定
-            return const Scaffold(body: OverlayLoadingWidget());
+            // * アップデートが不要な場合
+            return Stack(
+              children: [
+                child!,
+                if (ref.watch(isLoadingOverlayNotifierProvider))
+                  const OverlayLoadingWidget(),
+              ],
+            );
           },
         );
       },

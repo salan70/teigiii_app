@@ -29,4 +29,7 @@ class AuthRepository {
 
   /// ログアウトを行う
   Future<void> signOut() => firebaseAuth.signOut();
+
+  /// ユーザーを削除する
+  Future<void> deleteUser() => currentUser!.delete();
 }
