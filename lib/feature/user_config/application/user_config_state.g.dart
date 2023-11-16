@@ -6,7 +6,7 @@ part of 'user_config_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mutedUserIdListHash() => r'22ea552e7cf529c8507045f16e07945164d31f13';
+String _$mutedUserIdListHash() => r'48eeec49c4c4127fd5690a2f12d2620cf1231e1b';
 
 /// See also [mutedUserIdList].
 @ProviderFor(mutedUserIdList)

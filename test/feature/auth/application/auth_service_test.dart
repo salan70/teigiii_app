@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/core/common_provider/toast_controller.dart';
 import 'package:teigi_app/feature/auth/application/auth_service.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/auth/repository/auth_repository.dart';
@@ -18,6 +19,10 @@ import 'auth_service_test.mocks.dart';
   MockSpec<AuthRepository>(),
   MockSpec<Listener<AsyncValue<void>>>(),
 ])
+
+class MockToastController extends Notifier<void>
+    with Mock
+    implements ToastController {}
 
 // ignore: one_member_abstracts, unreachable_from_main
 abstract class Listener<T> {
@@ -49,6 +54,9 @@ void main() {
         deviceInfoRepositoryProvider
             .overrideWithValue(mockDeviceInfoRepository),
         authRepositoryProvider.overrideWithValue(mockAuthRepository),
+                toastControllerProvider.overrideWith(
+          MockToastController.new,
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -84,6 +92,9 @@ void main() {
           .overrideWithValue(mockRegisterUserRepository),
       deviceInfoRepositoryProvider.overrideWithValue(mockDeviceInfoRepository),
       authRepositoryProvider.overrideWithValue(mockAuthRepository),
+              toastControllerProvider.overrideWith(
+        MockToastController.new,
+      ),
     ]);
   }
 
@@ -210,9 +221,8 @@ void main() {
       // * Assert
       verifyInOrder([
         listener.call(null, const AsyncLoading()),
-        listener.call(const AsyncLoading(), const AsyncData(null)),
         listener.call(
-          const AsyncData(null),
+          const AsyncLoading(),
           // AsyncErrorが格納されていることを検証
           argThat(
             isA<AsyncError<void>>().having(
