@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../util/constant/initial_main_group.dart';
@@ -41,7 +42,7 @@ class IndividualDictionaryDefinitionListPage extends ConsumerWidget {
         },
         body: Column(
           children: [
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             DictionaryAuthorWidget(targetUserId: targetUserId),
             Expanded(
               child: DefinitionList(

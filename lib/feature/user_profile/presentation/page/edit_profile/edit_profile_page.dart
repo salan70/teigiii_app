@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
@@ -90,16 +91,16 @@ class EditProfilePage extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 24),
+              SizedBox(width: 24.w),
             ],
           ),
           body: GestureDetector(
             onTap: () => primaryFocus?.unfocus(),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: REdgeInsets.symmetric(horizontal: 24),
               child: ListView(
                 children: [
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
                   InkWell(
                     key: globalKey,
                     onTap: () async {
@@ -152,7 +153,7 @@ class EditProfilePage extends ConsumerWidget {
                           height: avatarSize.diameter,
                           child: Icon(
                             CupertinoIcons.camera_fill,
-                            size: 28,
+                            size: 28.sp,
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface
@@ -162,7 +163,7 @@ class EditProfilePage extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
                   TextFormField(
                     initialValue: userProfileForWrite.name,
                     maxLength: userProfileForWrite.maxNameLength,
@@ -176,7 +177,7 @@ class EditProfilePage extends ConsumerWidget {
                       border: InputBorder.none,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8.h),
                   TextFormField(
                     initialValue: userProfileForWrite.bio,
                     maxLength: userProfileForWrite.maxBioLength,
@@ -224,7 +225,7 @@ class EditProfilePage extends ConsumerWidget {
             title: const Text('プロフィール編集'),
           ),
           body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24),
+            padding: REdgeInsets.symmetric(vertical: 24),
             child: Center(
               child: ErrorAndRetryWidget(
                 onRetry: () =>

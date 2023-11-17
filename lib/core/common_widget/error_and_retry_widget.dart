@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../feature/auth/application/auth_state.dart';
 import '../../feature/user_profile/application/user_profile_state.dart';
@@ -26,14 +27,14 @@ class ErrorAndRetryWidget extends ConsumerWidget {
         Icon(
           CupertinoIcons.exclamationmark_circle_fill,
           color: Theme.of(context).colorScheme.error,
-          size: 24,
+          size: 24.sp,
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Text(
           'エラーが発生しました。',
           style: Theme.of(context).textTheme.titleLarge,
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Text(
           '再読み込みをお試しください。',
           style: Theme.of(context).textTheme.bodyMedium,
@@ -42,12 +43,12 @@ class ErrorAndRetryWidget extends ConsumerWidget {
           '繰り返し発生する場合は、運営へお問い合わせください。',
           style: Theme.of(context).textTheme.bodyMedium,
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
         PrimaryFilledButton(onPressed: onRetry, text: '再読み込み'),
         showInquireButton
             ? Column(
                 children: [
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
                   SecondaryOutlinedButton(
                     onPressed: () {
                       final currentUserId = ref.read(userIdProvider);
@@ -94,9 +95,9 @@ class SimpleErrorAndRetryWidget extends StatelessWidget {
               Icon(
                 CupertinoIcons.exclamationmark_circle_fill,
                 color: Theme.of(context).colorScheme.error,
-                size: 24,
+                size: 24.sp,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
               Text(
                 'エラー',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -105,7 +106,7 @@ class SimpleErrorAndRetryWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(
             'タップで再読み込み',
             style: Theme.of(context).textTheme.titleMedium,

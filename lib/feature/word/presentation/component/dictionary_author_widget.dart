@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../core/common_widget/error_and_retry_widget.dart';
@@ -30,7 +31,7 @@ class DictionaryAuthorWidget extends ConsumerWidget {
               'Written by',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16.w),
             InkWell(
               onTap: () {
                 context.pushRoute(
@@ -44,7 +45,7 @@ class DictionaryAuthorWidget extends ConsumerWidget {
                   AvatarNetworkImageWidget(
                     imageUrl: targetUserProfile.profileImageUrl,
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16.w),
                   Text(
                     targetUserProfile.name,
                     style: Theme.of(context).textTheme.titleMedium,

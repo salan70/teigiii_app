@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/common_provider/launch_url.dart';
 import '../../../core/common_widget/button/primary_filled_button.dart';
@@ -26,28 +27,28 @@ class OverlayInMaintenanceDialog extends ConsumerWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8).r,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: REdgeInsets.all(24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8.h),
                   Text(
                     '🤖現在メンテナンス中です🤖'
                     '\n終了予定は${appMaintenance.scheduledEndTime}です。',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
                   Text(
                     'ご不便をおかけし申し訳ございません🙇‍♂\n'
                     '詳しい情報は下記からご確認いただけます。',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
                   PrimaryFilledButton(
                     onPressed: () {
                       ref.read(launchURLProvider(latestInformationPage));

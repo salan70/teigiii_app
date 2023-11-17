@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
@@ -27,11 +28,11 @@ class ProfileWidget extends ConsumerWidget {
     return asyncTargetUserProfile.when(
       data: (targetUserProfile) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: REdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 24),
+              SizedBox(height: 24.w),
               Row(
                 children: [
                   AvatarNetworkImageWidget(
@@ -51,7 +52,7 @@ class ProfileWidget extends ConsumerWidget {
                         ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               Text(
                 targetUserProfile.name,
                 style: Theme.of(context).textTheme.titleLarge,
@@ -62,14 +63,14 @@ class ProfileWidget extends ConsumerWidget {
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
               Text(
                 targetUserProfile.bio,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               FollowingAndFollowerCountWidget(targetUserId: targetUserId),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               InkWell(
                 onTap: () async {
                   await context.pushRoute(
@@ -85,16 +86,16 @@ class ProfileWidget extends ConsumerWidget {
                       '辞書を見る',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4.w),
                     Icon(
                       CupertinoIcons.chevron_forward,
-                      size: 16,
+                      size: 16.sp,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
             ],
           ),
         );
@@ -114,7 +115,7 @@ class ProfileWidget extends ConsumerWidget {
         logger.e('ユーザー[$targetUserId]のプロフィールの取得に失敗しました。'
             'error: $error, stackTrace: $stackTrace');
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24),
+          padding: REdgeInsets.symmetric(vertical: 24),
           child: ErrorAndRetryWidget(
             onRetry: () => ref.invalidate(userProfileProvider(targetUserId)),
           ),

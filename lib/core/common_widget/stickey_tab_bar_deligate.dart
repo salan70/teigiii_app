@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// SliverPersistentHeaderDelegateが必要なため、SliverPersistentHeaderを
 /// 継承したクラスを作成
@@ -26,7 +27,7 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
         border: Border(
           bottom: BorderSide(
             color: Theme.of(context).colorScheme.outlineVariant,
-            width: 0.3,
+            width: 0.3.w,
           ),
         ),
       ),

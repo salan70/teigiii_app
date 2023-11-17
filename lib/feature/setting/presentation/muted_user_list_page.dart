@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../core/common_widget/error_and_retry_widget.dart';
@@ -24,7 +25,7 @@ class MutedUserListPage extends ConsumerWidget {
       body: asyncMutedUserIdList.when(
         data: (mutedUserIdList) {
           return Padding(
-            padding: const EdgeInsets.only(top: 24),
+            padding: REdgeInsets.only(top: 24),
             child: ListView.builder(
               itemCount: mutedUserIdList.length,
               itemBuilder: (context, index) {
@@ -53,7 +54,7 @@ class MutedUserListPage extends ConsumerWidget {
           logger.e('ミュートユーザーの取得に失敗しました。'
               'error: $error, stackTrace: $stackTrace');
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24),
+            padding: REdgeInsets.symmetric(vertical: 24),
             child: Align(
               alignment: Alignment.topCenter,
               child: ErrorAndRetryWidget(

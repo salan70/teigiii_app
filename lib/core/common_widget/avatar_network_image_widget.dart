@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'shimmer_widget.dart';
 
@@ -18,16 +19,16 @@ class AvatarNetworkImageWidget extends StatelessWidget {
     return CachedNetworkImage(
       imageUrl: imageUrl,
       imageBuilder: (context, imageProvider) => Container(
-        width: avatarSize.diameter,
-        height: avatarSize.diameter,
+        width: avatarSize.diameter.w,
+        height: avatarSize.diameter.h,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           image: DecorationImage(image: imageProvider),
         ),
       ),
       placeholder: (context, url) => ShimmerWidget.circular(
-        width: avatarSize.diameter,
-        height: avatarSize.diameter,
+        width: avatarSize.diameter.w,
+        height: avatarSize.diameter.h,
       ),
     );
   }

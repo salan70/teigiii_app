@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/router/app_router.dart';
 import '../../domain/word.dart';
@@ -16,7 +17,7 @@ class WordTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
+      padding: REdgeInsets.only(
         top: 8,
         right: 16,
         left: 16,
@@ -60,11 +61,11 @@ class WordTile extends StatelessWidget {
                                 Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4.w),
                     Icon(
                       CupertinoIcons.chevron_forward,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      size: 20,
+                      size: 20.sp,
                     ),
                   ],
                 ),

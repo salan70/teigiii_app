@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
@@ -29,14 +30,14 @@ class SearchUserResultPage extends ConsumerWidget {
           title: const Text('ユーザーを探す'),
         ),
         body: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
+          padding: REdgeInsets.only(left: 16, right: 16),
           child: asyncUserProfileByPublicId.when(
             data: (userId) {
               final currentUserId = ref.watch(userIdProvider)!;
               return ListView(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
+                    padding: REdgeInsets.symmetric(
                       vertical: 24,
                       horizontal: 36,
                     ),

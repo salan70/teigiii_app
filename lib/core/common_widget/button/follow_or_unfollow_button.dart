@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../feature/user_profile/application/user_follow_service.dart';
 import '../../../feature/user_profile/application/user_profile_state.dart';
@@ -26,10 +27,10 @@ class FollowOrUnfollowButton extends ConsumerWidget {
             : _FollowButton(targetUserId: targetUserId);
       },
       orElse: () => ShimmerWidget.circular(
-        width: 144,
-        height: 40,
+        width: 144.w,
+        height: 40.h,
         shapeBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(48),
+          borderRadius: BorderRadius.circular(48).r,
         ),
       ),
     );

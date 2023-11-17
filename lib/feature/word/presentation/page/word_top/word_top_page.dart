@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
@@ -46,7 +47,7 @@ class WordTopPage extends ConsumerWidget {
                     },
                   ),
                   leading: const BackIconButton(),
-                  leadingWidth: 48,
+                  leadingWidth: 48.w,
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate(

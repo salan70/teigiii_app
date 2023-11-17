@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../component/search_user_text_field.dart';
 
@@ -16,7 +17,7 @@ class SearchUserPage extends StatelessWidget {
           title: const Text('ユーザーを探す'),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(
+          padding: REdgeInsets.symmetric(
             vertical: 24,
             horizontal: 52,
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/shimmer_widget.dart';
 
@@ -10,7 +11,7 @@ class ProfileTileShimmer extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(
+          padding: REdgeInsets.only(
             top: 16,
             left: 16,
             right: 16,
@@ -18,37 +19,38 @@ class ProfileTileShimmer extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const ShimmerWidget.circular(width: 48, height: 48),
-              const SizedBox(width: 8),
+              ShimmerWidget.circular(width: 48.w, height: 48.h),
+              SizedBox(width: 8.w),
               Expanded(
                 child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const ShimmerWidget.rectangular(
-                          width: 120,
-                          height: 24,
+                        ShimmerWidget.rectangular(
+                          width: 120.w,
+                          height: 24.h,
                         ),
                         ShimmerWidget.circular(
-                          width: 144,
-                          height: 40,
+                          width: 144.w,
+                          height: 40.h,
                           shapeBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(48),
+                            borderRadius: BorderRadius.circular(48).r,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    const ShimmerWidget.rectangular(height: 16),
-                    const SizedBox(height: 8),
-                    const ShimmerWidget.rectangular(height: 16),
-                    const SizedBox(height: 8),
-                    const Align(
+                    SizedBox(height: 8.h),
+                    ShimmerWidget.rectangular(height: 16.w),
+                    SizedBox(height: 8.h),
+                    ShimmerWidget.rectangular(height: 16.h),
+                    SizedBox(height: 8.h),
+                    Align(
                       alignment: Alignment.centerLeft,
-                      child: ShimmerWidget.rectangular(width: 240, height: 16),
+                      child:
+                          ShimmerWidget.rectangular(width: 240.w, height: 16.h),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
                   ],
                 ),
               ),

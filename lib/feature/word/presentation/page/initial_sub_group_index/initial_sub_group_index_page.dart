@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/router/app_router.dart';
@@ -33,25 +34,25 @@ class InitialSubGroupIndexPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(selectedInitialMainGroup.label),
         leading: const BackIconButton(),
-        leadingWidth: 48,
+        leadingWidth: 48.w,
       ),
       body: ListView(
         children: [
           dictionaryPageType == DictionaryPageType.individual
               ? Column(
                   children: [
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
+                      padding: REdgeInsets.only(bottom: 16),
                       child:
                           DictionaryAuthorWidget(targetUserId: targetUserId!),
                     ),
                   ],
                 )
               : const SizedBox.shrink(),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Padding(
-            padding: const EdgeInsets.only(
+            padding: REdgeInsets.only(
               left: 16,
               right: 16,
             ),

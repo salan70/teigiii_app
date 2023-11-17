@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/adaptive_overflow_text.dart';
 import '../../../../../core/common_widget/avatar_network_image_widget.dart';
@@ -49,7 +50,7 @@ class ProfileTile extends ConsumerWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(
+                padding: REdgeInsets.only(
                   top: 16,
                   left: 16,
                   right: 16,
@@ -60,7 +61,7 @@ class ProfileTile extends ConsumerWidget {
                     AvatarNetworkImageWidget(
                       imageUrl: targetUserProfile.profileImageUrl,
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,16 +78,16 @@ class ProfileTile extends ConsumerWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              const SizedBox(width: 4),
+                              SizedBox(width: 4.w),
                               button,
                             ],
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 8.h),
                           AdaptiveOverflowText(
                             text: targetUserProfile.bio,
                             maxLines: 5,
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 8.h),
                         ],
                       ),
                     ),
@@ -101,24 +102,26 @@ class ProfileTile extends ConsumerWidget {
       error: (error, stackTrace) {
         // エラー発生後の再読み込み中の場合、trueになる
         if (asyncTargetUserProfile.isRefreshing) {
-          return const Column(
+          return Column(
             children: [
-              SizedBox(height: 16),
-              CupertinoActivityIndicator(),
-              SizedBox(height: 24),
-              Divider(),
+              SizedBox(height: 16.h),
+              const CupertinoActivityIndicator(),
+              SizedBox(height: 24.h),
+              const Divider(),
             ],
           );
         }
 
-        logger.e('userId [$targetUserId]の取得時にエラーが発生: $error, stackTrace: $stackTrace');
+        logger.e(
+          'userId [$targetUserId]の取得時にエラーが発生: $error, stackTrace: $stackTrace',
+        );
         return Column(
           children: [
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             SimpleErrorAndRetryWidget(
               onRetry: () => ref.invalidate(userProfileProvider(targetUserId)),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             const Divider(),
           ],
         );

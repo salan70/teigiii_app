@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 無限スクロールの一番下に表示するインジケータ
 ///
@@ -14,13 +15,13 @@ class InfiniteScrollBottomIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.only(top: 8, bottom: 40),
+      padding: REdgeInsets.only(top: 8, bottom: 40),
       sliver: SliverToBoxAdapter(
         child: hasMore
-            ? const Column(
+            ? Column(
                 children: [
-                  CupertinoActivityIndicator(),
-                  SizedBox(height: 40),
+                  const CupertinoActivityIndicator(),
+                  SizedBox(height: 40.h),
                 ],
               )
             : const SizedBox.shrink(),

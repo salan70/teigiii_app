@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'color_scheme.dart';
 import 'text_theme.dart';
@@ -39,10 +40,10 @@ ThemeData getThemeData(ThemeMode themeMode, BuildContext context) {
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: colorScheme.surface,
       selectedItemColor: colorScheme.primary,
-      selectedLabelStyle: const TextStyle(
+      selectedLabelStyle:  TextStyle(
         fontFamily: lineFontFamily,
         fontWeight: FontWeight.bold,
-        fontSize: 12,
+        fontSize: 12.sp,
       ),
       unselectedLabelStyle: const TextStyle(
         fontFamily: lineFontFamily,

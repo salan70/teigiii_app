@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:like_button/like_button.dart';
 
 import '../../../../util/constant/color_scheme.dart';
@@ -34,7 +35,7 @@ class LikeWidget extends ConsumerWidget {
               isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
               color:
                   isLiked ? likeColor : Theme.of(context).colorScheme.outline,
-              size: 20,
+              size: 20.sp,
             );
           },
           countBuilder: (int? count, bool isLiked, String text) {
@@ -42,7 +43,7 @@ class LikeWidget extends ConsumerWidget {
                 ? Text(
                     text,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       color: isLiked
                           ? likeColor
                           : Theme.of(context).colorScheme.outline,

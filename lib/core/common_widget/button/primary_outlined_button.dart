@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// primaryカラーを使用したoutlinedボタン
 class PrimaryOutlinedButton extends StatelessWidget {
@@ -16,7 +17,7 @@ class PrimaryOutlinedButton extends StatelessWidget {
     return TextButton(
       style: TextButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(48).copyWith(),
+          borderRadius: BorderRadius.circular(48).r,
         ),
         side: BorderSide(
           color: Theme.of(context).colorScheme.primary,
@@ -25,7 +26,7 @@ class PrimaryOutlinedButton extends StatelessWidget {
       ),
       onPressed: onPressed,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
+        padding: REdgeInsets.symmetric(
           horizontal: 24,
         ),
         child: Text(

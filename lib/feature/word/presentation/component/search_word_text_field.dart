@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/common_provider/entered_text_state.dart';
 import '../../../../core/router/app_router.dart';
@@ -36,9 +37,9 @@ class SearchWordTextField extends ConsumerWidget {
         );
       },
       decoration: InputDecoration(
-        prefixIcon: const Icon(
+        prefixIcon: Icon(
           CupertinoIcons.search,
-          size: 20,
+          size: 20.sp,
         ),
         prefixIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
         suffixIcon: Consumer(
@@ -56,9 +57,9 @@ class SearchWordTextField extends ConsumerWidget {
                           )
                           .clearText();
                     },
-                    child: const Icon(
+                    child: Icon(
                       CupertinoIcons.clear_thick_circled,
-                      size: 20,
+                      size: 20.sp,
                     ),
                   )
                 : const SizedBox.shrink();
@@ -69,7 +70,7 @@ class SearchWordTextField extends ConsumerWidget {
         filled: true,
         contentPadding: EdgeInsets.zero,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(40).r,
           borderSide: BorderSide.none,
         ),
       ),

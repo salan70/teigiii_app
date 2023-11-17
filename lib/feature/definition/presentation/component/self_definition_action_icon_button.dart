@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../../core/router/app_router.dart';
@@ -86,38 +87,38 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
         return AlertDialog(
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16).r,
           ),
-          contentPadding: const EdgeInsets.only(
+          contentPadding: REdgeInsets.only(
             top: 32,
             right: 24,
             left: 32,
             bottom: 8,
           ),
-          content: const Column(
+          content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 '編集は投稿してから1時間以内にしかできません。',
                 overflow: TextOverflow.clip,
               ),
-              SizedBox(height: 8),
-              Text(
+              SizedBox(height: 8.h),
+              const Text(
                 '代わりに、この投稿の内容をもとに新規投稿を作成しませんか？',
                 overflow: TextOverflow.clip,
               ),
             ],
           ),
           actionsAlignment: MainAxisAlignment.spaceEvenly,
-          actionsPadding: const EdgeInsets.only(bottom: 16),
+          actionsPadding: REdgeInsets.only(bottom: 16),
           actions: [
             InkWell(
               onTap: () {
                 context.popRoute();
               },
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: REdgeInsets.all(16),
                 child: Text(
                   'キャンセル',
                   style: Theme.of(context).textTheme.titleMedium,
@@ -138,7 +139,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
                   );
               },
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: REdgeInsets.all(16),
                 child: Text(
                   '作成する',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -168,9 +169,9 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
         return AlertDialog(
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16).r,
           ),
-          contentPadding: const EdgeInsets.only(
+          contentPadding: REdgeInsets.only(
             top: 16,
             bottom: 8,
           ),
@@ -185,14 +186,14 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
             ],
           ),
           actionsAlignment: MainAxisAlignment.spaceEvenly,
-          actionsPadding: const EdgeInsets.only(bottom: 16),
+          actionsPadding: REdgeInsets.only(bottom: 16),
           actions: [
             InkWell(
               onTap: () {
                 context.popRoute();
               },
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: REdgeInsets.all(16),
                 child: Text(
                   'しない',
                   style: Theme.of(context).textTheme.titleMedium,
@@ -207,7 +208,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
                 context.popRoute();
               },
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: REdgeInsets.all(16),
                 child: Text(
                   'する',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(

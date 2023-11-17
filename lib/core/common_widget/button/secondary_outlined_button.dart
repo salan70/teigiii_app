@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 白黒を基調としたoutlinedボタン
 class SecondaryOutlinedButton extends StatelessWidget {
@@ -16,7 +17,7 @@ class SecondaryOutlinedButton extends StatelessWidget {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(48).copyWith(),
+          borderRadius: BorderRadius.circular(48).r,
         ),
         side: BorderSide(
           color: Theme.of(context).colorScheme.tertiary,
@@ -25,7 +26,7 @@ class SecondaryOutlinedButton extends StatelessWidget {
       ),
       onPressed: onPressed,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
+        padding: REdgeInsets.symmetric(
           horizontal: 24,
         ),
         child: Text(

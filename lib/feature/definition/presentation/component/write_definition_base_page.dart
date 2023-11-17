@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/common_widget/show_write_close_confirm_dialog.dart';
 import '../../application/definition_for_write_notifier.dart';
@@ -54,17 +55,17 @@ class WriteDefinitionBasePage extends ConsumerWidget {
         ),
         actions: [
           Center(child: appBarActionWidget),
-          const SizedBox(width: 24),
+          SizedBox(width: 24.w),
         ],
       ),
       body: GestureDetector(
         onTap: () => primaryFocus?.unfocus(),
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: REdgeInsets.all(24),
             child: ListView(
               children: [
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 TextFormField(
                   initialValue: definitionForWrite.word,
                   autofocus: autoFocusForm == WriteDefinitionFormType.word,
@@ -96,7 +97,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                     border: InputBorder.none,
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 TextFormField(
                   initialValue: definitionForWrite.definition,
                   autofocus:
@@ -112,7 +113,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                     border: InputBorder.none,
                   ),
                 ),
-                const SizedBox(height: 300),
+                SizedBox(height: 300.h),
               ],
             ),
           ),
@@ -120,5 +121,4 @@ class WriteDefinitionBasePage extends ConsumerWidget {
       ),
     );
   }
-
-  }
+}

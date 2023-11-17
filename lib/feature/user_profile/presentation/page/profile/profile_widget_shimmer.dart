@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/shimmer_widget.dart';
 
@@ -8,34 +9,33 @@ class ProfileWidgetShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: REdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 24),
-          const Row(
+          SizedBox(height: 24.h),
+          Row(
             children: [
-              ShimmerWidget.circular(width: 72, height: 72),
-              Spacer(),
-              
+              ShimmerWidget.circular(width: 72.w, height: 72.h),
+              const Spacer(),
             ],
           ),
-          const SizedBox(height: 16),
-          const ShimmerWidget.rectangular(width: 240, height: 24),
-          const SizedBox(height: 16),
-          const ShimmerWidget.rectangular(height: 16),
-          const SizedBox(height: 8),
-          const ShimmerWidget.rectangular(height: 16),
-          const SizedBox(height: 8),
-          const ShimmerWidget.rectangular(width: 240, height: 16),
-          const SizedBox(height: 24),
+          SizedBox(height: 16.h),
+          ShimmerWidget.rectangular(width: 240.w, height: 24.h),
+          SizedBox(height: 16.h),
+          ShimmerWidget.rectangular(height: 16.h),
+          SizedBox(height: 8.h),
+          ShimmerWidget.rectangular(height: 16.w),
+          SizedBox(height: 8.h),
+          ShimmerWidget.rectangular(width: 240.w, height: 16.h),
+          SizedBox(height: 24.h),
           Align(
             alignment: Alignment.topCenter,
             child: ShimmerWidget.circular(
-              width: 144,
-              height: 40,
+              width: 144.w,
+              height: 40.h,
               shapeBorder: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(48),
+                borderRadius: BorderRadius.circular(48).r,
               ),
             ),
           ),

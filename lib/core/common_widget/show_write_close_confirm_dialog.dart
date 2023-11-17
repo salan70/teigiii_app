@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 入力系の画面を閉じる際に確認ダイアログを表示する
 Future<void> showCloseConfirmDialog(BuildContext context) async {
@@ -8,7 +9,7 @@ Future<void> showCloseConfirmDialog(BuildContext context) async {
     builder: (context) {
       return AlertDialog(
         elevation: 0,
-        contentPadding: const EdgeInsets.only(
+        contentPadding: REdgeInsets.only(
           top: 40,
           bottom: 16,
         ),
@@ -23,14 +24,14 @@ Future<void> showCloseConfirmDialog(BuildContext context) async {
           ],
         ),
         actionsAlignment: MainAxisAlignment.spaceEvenly,
-        actionsPadding: const EdgeInsets.only(bottom: 16),
+        actionsPadding: REdgeInsets.only(bottom: 16),
         actions: [
           InkWell(
             onTap: () {
               context.popRoute();
             },
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: REdgeInsets.all(16),
               child: Text(
                 'キャンセル',
                 style: Theme.of(context).textTheme.titleMedium,
@@ -42,7 +43,7 @@ Future<void> showCloseConfirmDialog(BuildContext context) async {
               Navigator.of(context).popUntil((route) => route.isFirst);
             },
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: REdgeInsets.all(16),
               child: Text(
                 'OK',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(

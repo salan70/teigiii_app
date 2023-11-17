@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../util/dictionary_page_type.dart';
@@ -25,21 +26,21 @@ class EveryoneDictionaryPage extends StatelessWidget {
           leading: const ToSettingButton(),
         ),
         body: Padding(
-          padding: const EdgeInsets.only(
+          padding: REdgeInsets.only(
             left: 16,
             right: 16,
           ),
           child: ListView(
-            children: const [
-              Padding(
+            children: [
+              const Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: 24,
                   horizontal: 36,
                 ),
                 child: SearchWordTextField(),
               ),
-              SizedBox(height: 8),
-              InitialMainGroupList(
+              SizedBox(height: 8.h),
+              const InitialMainGroupList(
                 dictionaryPageType: DictionaryPageType.everyone,
                 targetUserId: null,
               ),
