@@ -8,6 +8,7 @@ import '../../auth/application/auth_state.dart';
 import '../../word/repository/word_repository.dart';
 import '../domain/definition_for_write.dart';
 import '../repository/write_definition_repository.dart';
+import 'definition_id_list_state.dart';
 import 'definition_state.dart';
 
 part 'definition_for_write_notifier.g.dart';
@@ -82,7 +83,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
       return;
     }
 
-    // TODO(me): 適宜providerをinvalidateする
+    ref.invalidate(definitionIdListStateNotifierProvider);
 
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
@@ -118,8 +119,9 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
       return;
     }
 
-    // 遷移元の画面を更新するためにinvalidateする
-    ref.invalidate(definitionProvider(definitionForWrite.id!));
+    ref
+      ..invalidate(definitionProvider(definitionForWrite.id!))
+      ..invalidate(definitionIdListStateNotifierProvider);
 
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
