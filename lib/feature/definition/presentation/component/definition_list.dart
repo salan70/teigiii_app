@@ -13,6 +13,7 @@ class DefinitionList extends ConsumerWidget {
   const DefinitionList({
     super.key,
     required this.definitionFeedType,
+    required this.emptyWidget,
     this.wordId,
     this.targetUserId,
     this.initialSubGroup,
@@ -28,6 +29,9 @@ class DefinitionList extends ConsumerWidget {
   ///
   /// デフォルト値は恐らく画面を埋め尽くされるであろう数として8を設定
   final int shimmerTileNumber;
+
+  /// 扱うstateの中身が空の場合に表示させるWidget
+  final Widget? emptyWidget;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,6 +50,7 @@ class DefinitionList extends ConsumerWidget {
       },
       shimmerTile: const DefinitionTileShimmer(),
       shimmerTileNumber: shimmerTileNumber,
+      emptyWidget: emptyWidget,
     );
   }
 }

@@ -18,6 +18,7 @@ class ShimmerWidget extends StatelessWidget {
     required this.height,
     this.shapeBorder = const CircleBorder(),
   });
+
   final double width;
   final double height;
   final ShapeBorder shapeBorder;

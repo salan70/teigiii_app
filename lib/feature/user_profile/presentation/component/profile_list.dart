@@ -16,11 +16,13 @@ class ProfileList extends ConsumerWidget {
     required this.userListType,
     required this.targetUserId,
     required this.targetDefinitionId,
+    required this.emptyWidget,
   });
 
   final UserListType userListType;
   final String? targetUserId;
   final String? targetDefinitionId;
+  final Widget? emptyWidget;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,6 +46,7 @@ class ProfileList extends ConsumerWidget {
       },
       shimmerTile: const ProfileTileShimmer(),
       shimmerTileNumber: 4,
+      emptyWidget: emptyWidget,
     );
   }
 }

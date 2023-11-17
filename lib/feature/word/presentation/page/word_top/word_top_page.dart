@@ -75,6 +75,7 @@ class WordTopPage extends ConsumerWidget {
                 ),
               ];
             },
+            // WordTopは定義が投稿されていないと開けないので、emptyWidgetはnull
             body: TabBarView(
               children: [
                 DefinitionList(
@@ -82,12 +83,14 @@ class WordTopPage extends ConsumerWidget {
                       DefinitionFeedType.wordTopOrderByCreatedAt,
                   wordId: wordId,
                   shimmerTileNumber: 2,
+                  emptyWidget: null,
                 ),
                 DefinitionList(
                   definitionFeedType:
                       DefinitionFeedType.wordTopOrderByLikesCount,
                   wordId: wordId,
                   shimmerTileNumber: 2,
+                  emptyWidget: null,
                 ),
               ],
             ),
