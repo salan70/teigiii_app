@@ -126,7 +126,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
             ),
             InkWell(
               onTap: () {
-                // TODO(me): 適切な画面へ遷移させる
+                // TODO(me): ここから投稿した場合、投稿完了時に投稿した定義の詳細画面へ遷移したい
                 context
                   ..popRoute()
                   ..pushRoute(
