@@ -15,6 +15,7 @@ class InfinityScrollWidget extends ConsumerWidget {
     required this.tileBuilder,
     required this.shimmerTile,
     required this.shimmerTileNumber,
+    required this.emptyWidget,
   });
 
   /// 扱うstate ([ListState]型)を保持するProvider
@@ -29,6 +30,9 @@ class InfinityScrollWidget extends ConsumerWidget {
 
   /// [shimmerTile]を表示させる数
   final int shimmerTileNumber;
+
+  /// 扱うstate ([ListState]型) の中身が空の場合に表示させるWidget
+  final Widget? emptyWidget;
 
   final scrollController = ScrollController();
   // エラーが発生してリビルドした際、スクロール位置を保持するためのキー
@@ -69,6 +73,7 @@ class InfinityScrollWidget extends ConsumerWidget {
                     ],
                   )
                 : const SizedBox(),
+            emptyWidget: emptyWidget,
           ),
         );
       },
@@ -94,6 +99,7 @@ class InfinityScrollWidget extends ConsumerWidget {
               fetchMore: fetchMore,
               asyncListState: asyncListState,
             ),
+            emptyWidget: emptyWidget,
           );
         }
 
@@ -135,6 +141,7 @@ class _StateScrollBar extends StatelessWidget {
     required this.asyncListState,
     required this.tileBuilder,
     required this.bottomWidget,
+    required this.emptyWidget,
   });
 
   final GlobalKey globalKey;
@@ -143,6 +150,7 @@ class _StateScrollBar extends StatelessWidget {
   final AsyncValue<ListState?> asyncListState;
   final Widget Function(dynamic item) tileBuilder;
   final Widget bottomWidget;
+  final Widget? emptyWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -157,15 +165,17 @@ class _StateScrollBar extends StatelessWidget {
             onRefresh: onRefresh,
           ),
           SliverToBoxAdapter(
-            child: ListView.builder(
-              controller: scrollController,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: asyncListState.value!.list.length,
-              itemBuilder: (context, index) {
-                return tileBuilder(asyncListState.value!.list[index]);
-              },
-            ),
+            child: asyncListState.value!.list.isEmpty
+                ? emptyWidget ?? const SizedBox.shrink()
+                : ListView.builder(
+                    controller: scrollController,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: asyncListState.value!.list.length,
+                    itemBuilder: (context, index) {
+                      return tileBuilder(asyncListState.value!.list[index]);
+                    },
+                  ),
           ),
           SliverPadding(
             padding: const EdgeInsets.only(top: 8, bottom: 40),

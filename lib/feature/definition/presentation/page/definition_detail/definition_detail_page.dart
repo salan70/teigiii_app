@@ -188,6 +188,11 @@ class DefinitionDetailPage extends ConsumerWidget {
                         LikeWidget(definition: definition, showCount: false),
                         InkWell(
                           onTap: () async {
+                            if (definition.likesCount == 0) {
+                              // いいねが0件の場合は何もしない
+                              return;
+                            }
+
                             await context.pushRoute(
                               LikeUserRoute(definitionId: definition.id),
                             );

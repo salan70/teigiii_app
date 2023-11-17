@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/button/to_search_user_button.dart';
+import '../../../../../core/common_widget/simple_widget_for_empty.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
 import '../../../../../util/extension/scroll_controller_extension.dart';
 import '../../../../auth/application/auth_state.dart';
@@ -77,11 +78,17 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                   userListType: UserListType.following,
                   targetUserId: targetUserId,
                   targetDefinitionId: null,
+                  emptyWidget: const SimpleWidgetForEmpty(
+                    message: 'フォロー中のユーザーがいません',
+                  ),
                 ),
                 ProfileList(
                   userListType: UserListType.follower,
                   targetUserId: targetUserId,
                   targetDefinitionId: null,
+                  emptyWidget: const SimpleWidgetForEmpty(
+                    message: 'フォロワーがいません',
+                  ),
                 ),
               ],
             ),

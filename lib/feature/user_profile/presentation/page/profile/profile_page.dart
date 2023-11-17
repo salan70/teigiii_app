@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/button/to_search_user_button.dart';
+import '../../../../../core/common_widget/simple_widget_for_empty.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
 import '../../../../../util/extension/scroll_controller_extension.dart';
 import '../../../../../util/logger.dart';
@@ -28,14 +29,14 @@ class ProfilePage extends ConsumerWidget {
     final currentUserId = ref.watch(userIdProvider)!;
     final asyncTargetUserProfile = ref.watch(userProfileProvider(targetUserId));
 
+    final isMyProfile = currentUserId == targetUserId;
+
     return DefaultTabController(
       length: 2,
       child: SafeArea(
         child: Scaffold(
           body: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool _) {
-              final isMyProfile = currentUserId == targetUserId;
-
               return <Widget>[
                 SliverAppBar(
                   forceElevated: true,
@@ -94,10 +95,16 @@ class ProfilePage extends ConsumerWidget {
                   definitionFeedType:
                       DefinitionFeedType.profileOrderByCreatedAt,
                   targetUserId: targetUserId,
+                  emptyWidget: SimpleWidgetForEmpty(
+                    message: isMyProfile ? '🙃んせまりあは稿投だま' : '投稿がありません。',
+                  ),
                 ),
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.profileLiked,
                   targetUserId: targetUserId,
+                  emptyWidget: SimpleWidgetForEmpty(
+                    message: isMyProfile ? 'いいねした投稿が表示されます💖' : 'いいねした投稿がありません',
+                  ),
                 ),
               ],
             ),
