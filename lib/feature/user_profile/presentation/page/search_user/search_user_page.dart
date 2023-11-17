@@ -19,7 +19,7 @@ class SearchUserPage extends StatelessWidget {
         body: Padding(
           padding: REdgeInsets.symmetric(
             vertical: 24,
-            horizontal: 52,
+            horizontal: 40,
           ),
           child: SearchUserTextField(autoFocus: true),
         ),

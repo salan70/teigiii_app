@@ -32,14 +32,14 @@ class EveryoneDictionaryPage extends StatelessWidget {
           ),
           child: ListView(
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 24,
-                  horizontal: 36,
+              SizedBox(height: 24.h),
+              SizedBox(
+                height: 80.h,
+                child: Padding(
+                  padding: REdgeInsets.symmetric(horizontal: 24),
+                  child: const SearchWordTextField(),
                 ),
-                child: SearchWordTextField(),
               ),
-              SizedBox(height: 8.h),
               const InitialMainGroupList(
                 dictionaryPageType: DictionaryPageType.everyone,
                 targetUserId: null,

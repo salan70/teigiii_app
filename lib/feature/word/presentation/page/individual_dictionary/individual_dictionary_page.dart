@@ -41,9 +41,12 @@ class IndividualDictionaryPage extends ConsumerWidget {
           ),
           body: ListView(
             children: [
+              SizedBox(height: 8.h),
+              SizedBox(
+                height: 80.h,
+                child: DictionaryAuthorWidget(targetUserId: targetUserId),
+              ),
               SizedBox(height: 16.h),
-              DictionaryAuthorWidget(targetUserId: targetUserId),
-              SizedBox(height: 24.h),
               Padding(
                 padding: REdgeInsets.only(left: 16, right: 16),
                 child: InitialMainGroupList(
