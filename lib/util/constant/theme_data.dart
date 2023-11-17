@@ -14,13 +14,14 @@ ThemeData getThemeData(ThemeMode themeMode, BuildContext context) {
     colorScheme: colorScheme,
     textTheme: textTheme,
     appBarTheme: AppBarTheme(
+      centerTitle: false,
       backgroundColor: colorScheme.surface,
       elevation: 0.1,
       titleTextStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
-        fontFamily: lineFontFamily,
-        color: colorScheme.onSurface,
-        fontWeight: FontWeight.bold,
-      ),
+            fontFamily: lineFontFamily,
+            color: colorScheme.onSurface,
+            fontWeight: FontWeight.bold,
+          ),
       iconTheme: IconThemeData(
         color: colorScheme.onSurface,
       ),
