@@ -84,7 +84,6 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
 
     // TODO(me): 適宜providerをinvalidateする
 
-    // TODO(me): 画面がカクつくのなんとかする
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
     toastNotifier.showToast('投稿しました！');

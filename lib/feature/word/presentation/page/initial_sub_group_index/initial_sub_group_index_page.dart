@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/constant/initial_main_group.dart';
 import '../../../util/dictionary_page_type.dart';
@@ -32,8 +31,7 @@ class InitialSubGroupIndexPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedInitialMainGroup.label),
-        leading: const BackIconButton(),
-        leadingWidth: 48,
+        leading: const BackButton(),
       ),
       body: ListView(
         children: [

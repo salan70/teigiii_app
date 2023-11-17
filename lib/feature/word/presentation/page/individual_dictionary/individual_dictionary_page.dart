@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../../util/logger.dart';
@@ -37,14 +36,15 @@ class IndividualDictionaryPage extends ConsumerWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text('${targetUserProfile.name}の辞書'),
-            leading:
-                isTopRoute ? const ToSettingButton() : const BackIconButton(),
+            leading: isTopRoute ? const ToSettingButton() : const BackButton(),
             leadingWidth: 48,
           ),
           body: ListView(
             children: [
-              const SizedBox(height: 16),
-              DictionaryAuthorWidget(targetUserId: targetUserId),
+              SizedBox(
+                height: 80,
+                child: DictionaryAuthorWidget(targetUserId: targetUserId),
+              ),
               const SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/button/to_search_user_button.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
+import '../../../../../util/extension/scroll_controller_extension.dart';
 import '../../../../auth/application/auth_state.dart';
 import '../../../util/profile_feed_type.dart';
 import '../../component/profile_list.dart';
@@ -56,6 +57,15 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                         Tab(text: 'フォロー中'),
                         Tab(text: 'フォロワー'),
                       ],
+                      onTap: (_) {
+                        if (DefaultTabController.of(context).indexIsChanging) {
+                          // * タブを切り替えた場合
+                          return;
+                        }
+
+                        // * 同じタブをタップした場合
+                        PrimaryScrollController.of(context).scrollToTop();
+                      },
                     ),
                   ),
                 ),

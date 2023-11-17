@@ -1,9 +1,11 @@
 import 'dart:ui';
 
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -50,11 +52,21 @@ Future<void> main() async {
   // await addDefinitionDummy0to29(flavorName);
   // await addLikesToFirestore(flavorName);
 
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(
+      ProviderScope(
+        child: DevicePreview(
+          enabled: false,
+          builder: (context) {
+            return const MyApp();
+          },
+        ),
+      ),
+    );
+  });
 }
 
 class MyApp extends ConsumerWidget {

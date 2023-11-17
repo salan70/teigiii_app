@@ -6,6 +6,7 @@ import '../../../../../core/common_widget/button/other_user_action_icon_button.d
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/button/to_search_user_button.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
+import '../../../../../util/extension/scroll_controller_extension.dart';
 import '../../../../../util/logger.dart';
 import '../../../../auth/application/auth_state.dart';
 import '../../../../definition/presentation/component/definition_list.dart';
@@ -73,6 +74,15 @@ class ProfilePage extends ConsumerWidget {
                         Tab(text: '投稿順'),
                         Tab(text: 'いいね'),
                       ],
+                      onTap: (_) {
+                        if (DefaultTabController.of(context).indexIsChanging) {
+                          // * タブを切り替えた場合
+                          return;
+                        }
+
+                        // * 同じタブをタップした場合
+                        PrimaryScrollController.of(context).scrollToTop();
+                      },
                     ),
                   ),
                 ),

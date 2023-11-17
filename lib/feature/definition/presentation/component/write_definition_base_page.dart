@@ -106,8 +106,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                   onChanged: notifier.changeDefinition,
                   style: Theme.of(context).textTheme.titleLarge,
                   decoration: const InputDecoration(
-                    // TODO(me): いいヒントテキストを考える
-                    hintText: '例: ばり美味い',
+                    hintText: '例: 作ってから一晩経ったカレー。ばり美味い',
                     labelText: '定義',
                     border: InputBorder.none,
                   ),
@@ -120,5 +119,4 @@ class WriteDefinitionBasePage extends ConsumerWidget {
       ),
     );
   }
-
-  }
+}

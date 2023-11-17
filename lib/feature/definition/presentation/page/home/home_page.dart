@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
+import '../../../../../util/extension/scroll_controller_extension.dart';
 import '../../../util/definition_feed_type.dart';
 import '../../component/definition_list.dart';
 
@@ -40,6 +41,15 @@ class HomePage extends StatelessWidget {
                         Tab(text: 'おすすめ'),
                         Tab(text: 'フォロー中'),
                       ],
+                      onTap: (_) {
+                        if (DefaultTabController.of(context).indexIsChanging) {
+                          // * タブを切り替えた場合
+                          return;
+                        }
+
+                        // * 同じタブをタップした場合
+                        PrimaryScrollController.of(context).scrollToTop();
+                      },
                     ),
                   ),
                 ),
