@@ -120,7 +120,7 @@ Future<void> addDefinitionDummy0to29(String flavorName) async {
       'word': words[i],
       'wordReading': readings[i],
       'wordReadingInitialSubGroupLabel':
-          InitialSubGroup.labelFromString(readings[i]),
+          InitialSubGroup.fromString(readings[i]),
       'authorId': 'user${Random().nextInt(20) + 1}',
       'definition': definitions[i],
       'likesCount': Random().nextInt(100),

@@ -290,23 +290,23 @@ enum InitialSubGroup {
     }
   }
 
-  static String labelFromString(String input) {
+  static InitialSubGroup fromString(String input) {
     final trimmed = input.trim();
     if (trimmed.isEmpty) {
-      return InitialSubGroup.other.label;
+      return InitialSubGroup.other;
     }
 
     final initial = trimmed.substring(0, 1);
 
     // ひらがな
     if (hiraganaRegex.hasMatch(initial)) {
-      return kanaMapping[initial]!.label;
+      return kanaMapping[initial]!;
     }
 
     // カタカナ
     if (katakanaRegex.hasMatch(initial)) {
       final hiraganaInitial = initial.katakanaToHiragana();
-      return kanaMapping[hiraganaInitial]!.label;
+      return kanaMapping[hiraganaInitial]!;
     }
 
     // アルファベット
@@ -315,21 +315,21 @@ enum InitialSubGroup {
           .firstWhere(
             (element) => element.label == initial.toUpperCase(),
           )
-          .label;
+          ;
     }
 
     // 数字
     if (numberRegex.hasMatch(initial)) {
-      return InitialSubGroup.number.label;
+      return InitialSubGroup.number;
     }
 
     // 記号
     if (basicSymbolRegex.hasMatch(initial)) {
-      return InitialSubGroup.basicSymbol.label;
+      return InitialSubGroup.basicSymbol;
     }
 
     // その他
-    return InitialSubGroup.other.label;
+    return InitialSubGroup.other;
   }
 }
 

@@ -112,7 +112,7 @@ class WriteDefinitionRepository {
         WordsCollection.word: word,
         WordsCollection.reading: wordReading,
         WordsCollection.initialSubGroupLabel:
-            InitialSubGroup.labelFromString(wordReading),
+            InitialSubGroup.fromString(wordReading).label,
         createdAtFieldName: FieldValue.serverTimestamp(),
         updatedAtFieldName: FieldValue.serverTimestamp(),
       },

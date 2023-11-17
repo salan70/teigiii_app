@@ -31,7 +31,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
 
   /// [Word]から[DefinitionForWrite]を生成する
   factory DefinitionForWrite.fromWord(Word word) {
-    return  DefinitionForWrite(
+    return DefinitionForWrite(
       id: null,
       word: word.word,
       wordReading: word.reading,
@@ -114,7 +114,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
       DefinitionsCollection.word: word,
       DefinitionsCollection.wordReading: wordReading,
       DefinitionsCollection.wordReadingInitialSubGroupLabel:
-          _wordReadingInitialLabel,
+          wordReadingInitialLabel,
       DefinitionsCollection.definition: definition,
       DefinitionsCollection.likesCount: 0,
       DefinitionsCollection.isPublic: isPublic,
@@ -127,7 +127,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
       DefinitionsCollection.word: word,
       DefinitionsCollection.wordReading: wordReading,
       DefinitionsCollection.wordReadingInitialSubGroupLabel:
-          _wordReadingInitialLabel,
+          wordReadingInitialLabel,
       DefinitionsCollection.definition: definition,
       DefinitionsCollection.isPublic: isPublic,
       DefinitionsCollection.isEdited: true,
@@ -137,6 +137,5 @@ class DefinitionForWrite with _$DefinitionForWrite {
   bool get isEmptyAllFields =>
       word.isEmpty && wordReading.isEmpty && definition.isEmpty;
 
-  String get _wordReadingInitialLabel =>
-      InitialSubGroup.labelFromString(wordReading);
+  String get wordReadingInitialLabel => InitialSubGroup.fromString(wordReading).label;
 }

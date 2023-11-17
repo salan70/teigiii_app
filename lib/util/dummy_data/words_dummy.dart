@@ -177,7 +177,7 @@ Future<void> _addWordsDummyToFirestore(
       'id': wordId,
       'word': words[i],
       'reading': readings[i],
-      'initialSubGroupLabel': InitialSubGroup.labelFromString(readings[i]),
+      'initialSubGroupLabel': InitialSubGroup.fromString(readings[i]),
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
     };

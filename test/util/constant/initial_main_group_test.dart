@@ -28,7 +28,7 @@ void main() {
 
       for (var i = 0; i < hiraganaList.length; i++) {
         // * Act
-        final actual = InitialSubGroup.labelFromString(hiraganaList[i]);
+        final actual = InitialSubGroup.fromString(hiraganaList[i]);
 
         // * Assert
         final expected = expectedList[i];
@@ -61,7 +61,7 @@ void main() {
 
       for (var i = 0; i < katakanaList.length; i++) {
         // * Act
-        final actual = InitialSubGroup.labelFromString(katakanaList[i]);
+        final actual = InitialSubGroup.fromString(katakanaList[i]);
 
         // * Assert
         final expected = expectedList[i];
@@ -82,7 +82,7 @@ void main() {
 
       for (var i = 0; i < alphabetList.length; i++) {
         // * Act
-        final actual = InitialSubGroup.labelFromString(alphabetList[i]);
+        final actual = InitialSubGroup.fromString(alphabetList[i]);
 
         // * Assert
         final expected = expectedList[i];
@@ -97,7 +97,7 @@ void main() {
 
       for (var i = 0; i < numberList.length; i++) {
         // * Act
-        final actual = InitialSubGroup.labelFromString(numberList[i]);
+        final actual = InitialSubGroup.fromString(numberList[i]);
 
         // * Assert
         expect(actual, InitialSubGroup.number.label);
@@ -111,7 +111,7 @@ void main() {
 
       for (var i = 0; i < symbolList.length; i++) {
         // * Act
-        final actual = InitialSubGroup.labelFromString(symbolList[i]);
+        final actual = InitialSubGroup.fromString(symbolList[i]);
 
         // * Assert
         expect(actual, InitialSubGroup.basicSymbol.label);
@@ -125,7 +125,7 @@ void main() {
 
       for (var i = 0; i < otherList.length; i++) {
         // * Act
-        final actual = InitialSubGroup.labelFromString(otherList[i]);
+        final actual = InitialSubGroup.fromString(otherList[i]);
 
         // * Assert
         expect(actual, InitialSubGroup.other.label);
@@ -134,7 +134,7 @@ void main() {
 
     test('2文字', () {
       // * Arrange & Act
-      final actual = InitialSubGroup.labelFromString('とり');
+      final actual = InitialSubGroup.fromString('とり');
 
       // * Assert
       expect(actual, InitialSubGroup.to.label);
@@ -142,7 +142,7 @@ void main() {
 
     test('空文字', () {
       // * Arrange & Act
-      final actual = InitialSubGroup.labelFromString('');
+      final actual = InitialSubGroup.fromString('');
 
       // * Assert
       expect(actual, InitialSubGroup.other.label);
