@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// TODO(me): cupertinoActivityIndicatorがAndroid端末でも違和感ないか確認する
-
 /// 端末のバックキーや画面操作を受け付けないローディングWidget
 ///
 /// 透明のWidgetで囲い、ダイアログ表示を模している

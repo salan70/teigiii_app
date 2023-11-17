@@ -99,7 +99,6 @@ class DefinitionTile extends ConsumerWidget {
                           const SizedBox(height: 8),
                           AdaptiveOverflowText(
                             text: definition.definition,
-                            // TODO(me): maxLinesの値を検討する
                             maxLines: 5,
                           ),
                           const SizedBox(height: 8),

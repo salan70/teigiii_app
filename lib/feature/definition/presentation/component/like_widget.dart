@@ -7,7 +7,6 @@ import '../../../../util/constant/color_scheme.dart';
 import '../../application/definition_service.dart';
 import '../../domain/definition.dart';
 
-// TODO(me): UIの左に余白があるのでそれをなくす
 class LikeWidget extends ConsumerWidget {
   const LikeWidget({
     super.key,
@@ -27,14 +26,25 @@ class LikeWidget extends ConsumerWidget {
           isLiked: definition.isLikedByUser,
           likeCount: definition.likesCount,
           likeCountPadding: EdgeInsets.only(
+            left: 4,
+            top: 2,
             right: showCount ? 24 : 0,
           ),
+          padding: const EdgeInsets.only(
+            top: 4,
+            right: 4,
+            bottom: 4,
+          ),
+          size: 20,
           likeBuilder: (bool isLiked) {
-            return Icon(
-              isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
-              color:
-                  isLiked ? likeColor : Theme.of(context).colorScheme.outline,
-              size: 20,
+            return Align(
+              alignment: Alignment.centerLeft,
+              child: Icon(
+                isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+                color:
+                    isLiked ? likeColor : Theme.of(context).colorScheme.outline,
+                size: 20,
+              ),
             );
           },
           countBuilder: (int? count, bool isLiked, String text) {

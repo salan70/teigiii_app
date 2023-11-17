@@ -25,6 +25,8 @@ class UserProfile with _$UserProfile {
   /// [bio]の初期値
   static String get defaultBio => '';
 
+  // TODO(me): 良い画像用意する
+
   /// [profileImageUrl]の初期値
   static String get defaultImageUrl => 'https://firebasestorage.googleapis.com/v0/b/everyone-teigi-dev.appspot.com/o/common%2Fghost_writer.png?alt=media&token=c35daacd-5d12-403e-a12c-528fa4247a7a';
 
