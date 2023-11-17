@@ -29,7 +29,6 @@ class SearchWordResultPage extends ConsumerWidget {
         wordListStateBySearchWordNotifierProvider(searchWord);
 
     String generateEmptyMessage(String label) {
-      // * 自分の辞書の場合
       final messageList = [
         '検索した語句は見つかりませんでした。',
         '検索した語句は見つかりませんでした。。\nどうでしょう、あなたが投稿しませんか？😎',
