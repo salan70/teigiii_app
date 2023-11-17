@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../../core/common_widget/button/back_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/infinity_scroll_widget.dart';
 import '../../../../../util/extension/scroll_controller_extension.dart';
@@ -33,7 +32,7 @@ class SearchWordResultPage extends ConsumerWidget {
           child: const Text('検索結果'),
           onTap: () => PrimaryScrollController.of(context).scrollToTop(),
         ),
-        leading: const BackIconButton(),
+        leading: const BackButton(),
         flexibleSpace: InkWell(
           onTap: () => PrimaryScrollController.of(context).scrollToTop(),
         ),

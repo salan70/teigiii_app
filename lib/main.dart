@@ -60,7 +60,7 @@ Future<void> main() async {
     runApp(
       ProviderScope(
         child: DevicePreview(
-          // enabled: false,
+          enabled: false,
           builder: (context) {
             return const MyApp();
           },
