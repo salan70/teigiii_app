@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/common_widget/adaptive_overflow_text.dart';
 import '../../../../core/common_widget/avatar_network_image_widget.dart';
@@ -38,7 +37,7 @@ class DefinitionTile extends ConsumerWidget {
           child: Column(
             children: [
               Padding(
-                padding: REdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 16,
                   left: 16,
                   right: 16,
@@ -56,7 +55,7 @@ class DefinitionTile extends ConsumerWidget {
                         imageUrl: definition.authorImageUrl,
                       ),
                     ),
-                    SizedBox(width: 8.w),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,19 +71,19 @@ class DefinitionTile extends ConsumerWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              SizedBox(width: 4.w),
+                              const SizedBox(width: 4),
                               definition.isPublic
                                   ? const SizedBox.shrink()
                                   : Row(
                                       children: [
                                         Icon(
                                           CupertinoIcons.lock_fill,
-                                          size: 16.sp,
+                                          size: 16,
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onSurfaceVariant,
                                         ),
-                                        SizedBox(width: 4.w),
+                                        const SizedBox(width: 4),
                                       ],
                                     ),
                               Text(
@@ -97,13 +96,13 @@ class DefinitionTile extends ConsumerWidget {
                             overflow: TextOverflow.clip,
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
-                          SizedBox(height: 8.h),
+                          const SizedBox(height: 8),
                           AdaptiveOverflowText(
                             text: definition.definition,
                             // TODO(me): maxLinesの値を検討する
                             maxLines: 5,
                           ),
-                          SizedBox(height: 8.h),
+                          const SizedBox(height: 8),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: LikeWidget(definition: definition),
@@ -122,26 +121,24 @@ class DefinitionTile extends ConsumerWidget {
       error: (error, stackTrace) {
         // エラー発生後の再読み込み中の場合、trueになる
         if (asyncDefinition.isRefreshing) {
-          return Column(
+          return const Column(
             children: [
-              SizedBox(height: 16.h),
-              const CupertinoActivityIndicator(),
-              SizedBox(height: 24.h),
-              const Divider(),
+              SizedBox(height: 16),
+              CupertinoActivityIndicator(),
+              SizedBox(height: 24),
+              Divider(),
             ],
           );
         }
 
-        logger.e(
-          'definitionId [$definitionId]の取得時にエラーが発生: $error, stackTrace: $stackTrace',
-        );
+        logger.e('definitionId [$definitionId]の取得時にエラーが発生: $error, stackTrace: $stackTrace');
         return Column(
           children: [
-            SizedBox(height: 16.h),
+            const SizedBox(height: 16),
             SimpleErrorAndRetryWidget(
               onRetry: () => ref.invalidate(definitionProvider(definitionId)),
             ),
-            SizedBox(height: 16.h),
+            const SizedBox(height: 16),
             const Divider(),
           ],
         );

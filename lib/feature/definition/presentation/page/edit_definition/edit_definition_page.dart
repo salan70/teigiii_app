@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_provider/toast_controller.dart';
 import '../../../../../core/router/app_router.dart';
@@ -38,38 +37,38 @@ class EditDefinitionPage extends ConsumerWidget {
           return AlertDialog(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16).r,
+              borderRadius: BorderRadius.circular(16),
             ),
-            contentPadding: REdgeInsets.only(
+            contentPadding: const EdgeInsets.only(
               top: 32,
               right: 24,
               left: 32,
               bottom: 8,
             ),
-            content: Column(
+            content: const Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   '投稿から1時間が経過したため保存できませんでした。',
                   overflow: TextOverflow.clip,
                 ),
-                SizedBox(height: 8.h),
-                const Text(
+                SizedBox(height: 8),
+                Text(
                   '代わりに、入力した内容で新規投稿しませんか？',
                   overflow: TextOverflow.clip,
                 ),
               ],
             ),
             actionsAlignment: MainAxisAlignment.spaceEvenly,
-            actionsPadding: REdgeInsets.only(bottom: 16),
+            actionsPadding: const EdgeInsets.only(bottom: 16),
             actions: [
               InkWell(
                 onTap: () {
                   context.popRoute();
                 },
                 child: Padding(
-                  padding: REdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Text(
                     'キャンセル',
                     style: Theme.of(context).textTheme.titleMedium,
@@ -85,7 +84,7 @@ class EditDefinitionPage extends ConsumerWidget {
                   await context.navigateTo(const HomeRoute());
                 },
                 child: Padding(
-                  padding: REdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Text(
                     '新規投稿する',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(

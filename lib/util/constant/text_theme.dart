@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const lineFontFamily = 'LINESeedJP';
 
-final textTheme = TextTheme(
-  titleLarge: const TextStyle(
+const textTheme = TextTheme(
+  titleLarge: TextStyle(
     fontWeight: FontWeight.bold,
   ),
-  titleMedium: const TextStyle(
+  titleMedium: TextStyle(
     fontWeight: FontWeight.bold,
   ),
   bodyLarge: TextStyle(
-    fontSize: 18.sp,
+    fontSize: 18,
   ),
 );

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/common_widget/cupertino_refresh_indicator.dart';
 import '../../../core/common_widget/error_and_retry_widget.dart';
@@ -63,10 +62,10 @@ class InfinityScrollWidget extends ConsumerWidget {
             asyncListState: asyncListState,
             tileBuilder: tileBuilder,
             bottomWidget: listState.hasMore
-                ? Column(
+                ? const Column(
                     children: [
-                      const CupertinoActivityIndicator(),
-                      SizedBox(height: 40.h),
+                      CupertinoActivityIndicator(),
+                      SizedBox(height: 40),
                     ],
                   )
                 : const SizedBox(),
@@ -100,7 +99,7 @@ class InfinityScrollWidget extends ConsumerWidget {
 
         // 取得済みのデータがない（初回読み込みが失敗した）場合を想定したエラー表示
         return Padding(
-          padding: REdgeInsets.only(top: 32),
+          padding: const EdgeInsets.only(top: 32),
           child: Center(
             child: ErrorAndRetryWidget(
               onRetry: () => ref.invalidate(listStateNotifierProvider),
@@ -169,7 +168,7 @@ class _StateScrollBar extends StatelessWidget {
             ),
           ),
           SliverPadding(
-            padding: REdgeInsets.only(top: 8, bottom: 40),
+            padding: const EdgeInsets.only(top: 8, bottom: 40),
             sliver: SliverToBoxAdapter(
               child: bottomWidget,
             ),
@@ -208,7 +207,7 @@ class _BottomWidgetWhenError extends StatelessWidget {
                           CupertinoIcons.exclamationmark_circle_fill,
                           color: Theme.of(context).colorScheme.error,
                         ),
-                  SizedBox(height: 4.h),
+                  const SizedBox(height: 4),
                   asyncListState.isRefreshing
                       ? Text(
                           '読み込み中...',
@@ -224,7 +223,7 @@ class _BottomWidgetWhenError extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
-                  SizedBox(height: 40.h),
+                  const SizedBox(height: 40),
                 ],
               ),
             ),

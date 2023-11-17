@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/common_widget/shimmer_widget.dart';
 
@@ -8,10 +7,10 @@ class DefinitionTileShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
         Padding(
-          padding: REdgeInsets.only(
+          padding: EdgeInsets.only(
             top: 16,
             left: 16,
             right: 16,
@@ -19,8 +18,8 @@ class DefinitionTileShimmer extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ShimmerWidget.circular(width: 48.w, height: 48.h),
-              SizedBox(width: 16.w),
+              ShimmerWidget.circular(width: 48, height: 48),
+              SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,31 +28,31 @@ class DefinitionTileShimmer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ShimmerWidget.rectangular(
-                          height: 16.h,
-                          width: 160.w,
+                          height: 16,
+                          width: 160,
                         ),
                         ShimmerWidget.rectangular(
-                          height: 16.h,
-                          width: 40.w,
+                          height: 16,
+                          width: 40,
                         ),
                       ],
                     ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 8),
                     ShimmerWidget.rectangular(
-                      height: 24.h,
-                      width: 200.w,
+                      height: 24,
+                      width: 200,
                     ),
-                    SizedBox(height: 8.h),
-                    ShimmerWidget.rectangular(height: 72.h),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 8),
+                    ShimmerWidget.rectangular(height: 72),
+                    SizedBox(height: 8),
                   ],
                 ),
               ),
-              SizedBox(width: 8.w),
+              SizedBox(width: 8),
             ],
           ),
         ),
-        const Divider(),
+        Divider(),
       ],
     );
   }

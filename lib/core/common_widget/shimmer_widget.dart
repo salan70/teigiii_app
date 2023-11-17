@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerWidget extends StatelessWidget {
-  ShimmerWidget.rectangular({
+  const ShimmerWidget.rectangular({
     super.key,
     this.width = double.infinity,
     required this.height,
-  }) : shapeBorder = RoundedRectangleBorder(
+  }) : shapeBorder = const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
-            Radius.circular(2.w),
+            Radius.circular(2),
           ),
         );
 
@@ -28,8 +27,8 @@ class ShimmerWidget extends StatelessWidget {
         baseColor: Theme.of(context).colorScheme.surfaceVariant,
         highlightColor: Theme.of(context).colorScheme.surface,
         child: Container(
-          height: height.h,
-          width: width.w,
+          height: height,
+          width: width,
           decoration: ShapeDecoration(
             color: Theme.of(context).colorScheme.surfaceVariant,
             shape: shapeBorder,

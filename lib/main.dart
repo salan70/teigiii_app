@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'core/common_provider/is_loading_overlay_state.dart';
 import 'core/common_widget/error_and_retry_widget.dart';
@@ -75,85 +74,78 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ScreenUtilInit(
-      // iPhone13, 13 Pro, 14, 14 Pro のサイズを指定
-      designSize: const Size(390, 844),
+    return MaterialApp.router(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('ja')],
+      routerConfig: ref.watch(appRouterProvider).config(),
+      theme: getThemeData(ThemeMode.light, context),
+      darkTheme: getThemeData(ThemeMode.dark, context),
       builder: (context, child) {
-        return MaterialApp.router(
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [Locale('ja')],
-          routerConfig: ref.watch(appRouterProvider).config(),
-          theme: getThemeData(ThemeMode.light, context),
-          darkTheme: getThemeData(ThemeMode.dark, context),
-          builder: (context, child) {
-            // メンテナンス関連の処理
-            final appMaintenance = ref.watch(appMaintenanceProvider);
-            if (appMaintenance == null) {
-              // * ロード中の場合
+        // メンテナンス関連の処理
+        final appMaintenance = ref.watch(appMaintenanceProvider);
+        if (appMaintenance == null) {
+          // * ロード中の場合
+          return const Scaffold(body: OverlayLoadingWidget());
+        }
+        if (appMaintenance.inMaintenance) {
+          // * メンテナンス中の場合
+          return Stack(
+            children: [
+              child!,
+              OverlayInMaintenanceDialog(appMaintenance: appMaintenance),
+            ],
+          );
+        }
+
+        // 強制アップデート関連の処理
+        final asyncIsRequiredUpdate = ref.watch(isRequiredAppUpdateProvider);
+        return asyncIsRequiredUpdate.when(
+          loading: () => const Scaffold(body: OverlayLoadingWidget()),
+          error: (e, s) {
+            // エラーが発生後、再読み込み時にtrueになる
+            if (asyncIsRequiredUpdate.isLoading) {
               return const Scaffold(body: OverlayLoadingWidget());
             }
-            if (appMaintenance.inMaintenance) {
-              // * メンテナンス中の場合
+
+            logger.e('[asyncIsRequiredUpdate]の取得時にエラーが発生しました。'
+                ' error: $e, stackTrace: $s');
+            return Scaffold(
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: ErrorAndRetryWidget(
+                      onRetry: () =>
+                          ref.invalidate(isRequiredAppUpdateProvider),
+                      showInquireButton: true,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+          data: (isRequiredUpdate) {
+            if (isRequiredUpdate) {
+              // * アップデートが必要な場合
               return Stack(
                 children: [
                   child!,
-                  OverlayInMaintenanceDialog(appMaintenance: appMaintenance),
+                  const OverlayForceUpdateDialog(),
                 ],
               );
             }
 
-            // 強制アップデート関連の処理
-            final asyncIsRequiredUpdate =
-                ref.watch(isRequiredAppUpdateProvider);
-            return asyncIsRequiredUpdate.when(
-              loading: () => const Scaffold(body: OverlayLoadingWidget()),
-              error: (e, s) {
-                // エラーが発生後、再読み込み時にtrueになる
-                if (asyncIsRequiredUpdate.isLoading) {
-                  return const Scaffold(body: OverlayLoadingWidget());
-                }
-
-                logger.e('[asyncIsRequiredUpdate]の取得時にエラーが発生しました。'
-                    ' error: $e, stackTrace: $s');
-                return Scaffold(
-                  body: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: ErrorAndRetryWidget(
-                          onRetry: () =>
-                              ref.invalidate(isRequiredAppUpdateProvider),
-                          showInquireButton: true,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              data: (isRequiredUpdate) {
-                if (isRequiredUpdate) {
-                  // * アップデートが必要な場合
-                  return Stack(
-                    children: [
-                      child!,
-                      const OverlayForceUpdateDialog(),
-                    ],
-                  );
-                }
-
-                // * アップデートが不要な場合
-                return Stack(
-                  children: [
-                    child!,
-                    if (ref.watch(isLoadingOverlayNotifierProvider))
-                      const OverlayLoadingWidget(),
-                  ],
-                );
-              },
+            // * アップデートが不要な場合
+            return Stack(
+              children: [
+                child!,
+                if (ref.watch(isLoadingOverlayNotifierProvider))
+                  const OverlayLoadingWidget(),
+              ],
             );
           },
         );

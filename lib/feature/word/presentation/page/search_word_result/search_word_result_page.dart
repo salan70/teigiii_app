@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/infinity_scroll_widget.dart';
@@ -40,13 +39,13 @@ class SearchWordResultPage extends ConsumerWidget {
       body: Column(
         children: [
           Padding(
-            padding: REdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               vertical: 24,
               horizontal: 36,
             ),
             child: SearchWordTextField(defaultText: searchWord),
           ),
-          SizedBox(height: 8.h),
+          const SizedBox(height: 8),
           Expanded(
             child: InfinityScrollWidget(
               listStateNotifierProvider: wordListProvider,

@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 import '../../../../core/common_provider/entered_text_state.dart';
@@ -32,7 +31,7 @@ class SearchUserTextField extends ConsumerWidget {
     // 詳しいことは分かっていないが、高さを指定しないとエラーになるため、[SizedBox]でラップしている
     // heightは、TextFieldより大きくする必要がある
     return SizedBox(
-      height: 80.h,
+      height: 80,
       child: KeyboardActions(
         config: KeyboardActionsConfig(
           keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
@@ -46,7 +45,7 @@ class SearchUserTextField extends ConsumerWidget {
               toolbarButtons: [
                 (node) {
                   return Padding(
-                    padding: REdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: InkWell(
                       onTap: () {
                         if (controller.text.length ==
@@ -104,9 +103,9 @@ class SearchUserTextField extends ConsumerWidget {
             context.pushRoute(SearchUserResultRoute(searchWord: value));
           },
           decoration: InputDecoration(
-            prefixIcon: Icon(
+            prefixIcon: const Icon(
               CupertinoIcons.search,
-              size: 20.sp,
+              size: 20,
             ),
             prefixIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
             suffixIcon: Consumer(
@@ -131,7 +130,7 @@ class SearchUserTextField extends ConsumerWidget {
             filled: true,
             contentPadding: EdgeInsets.zero,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(40).r,
+              borderRadius: BorderRadius.circular(40),
               borderSide: BorderSide.none,
             ),
           ),

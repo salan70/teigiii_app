@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/common_provider/launch_url.dart';
 import '../../../core/common_widget/shimmer_widget.dart';
@@ -38,19 +37,19 @@ class SettingPage extends ConsumerWidget {
         ],
       ),
       body: Padding(
-        padding: REdgeInsets.only(
+        padding: const EdgeInsets.only(
           left: 24,
           right: 20,
         ),
         child: ListView(
           children: [
-            SizedBox(height: 24.h),
+            const SizedBox(height: 24),
             // 一般
             Text(
               '一般',
               style: Theme.of(context).textTheme.titleSmall,
             ),
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.speaker_slash),
               label: 'ミュートの管理',
@@ -58,20 +57,20 @@ class SettingPage extends ConsumerWidget {
                 context.navigateTo(const MutedUserListRoute());
               },
             ),
-            SizedBox(height: 32.h),
+            const SizedBox(height: 32),
 
             // サポート
             Text(
               'サポート',
               style: Theme.of(context).textTheme.titleSmall,
             ),
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.question_square),
               label: '使い方',
               onTap: () {}, // TODO(me): 使い方画面へ遷移（WebToでNotion）
             ),
-            SizedBox(height: 24.h),
+            const SizedBox(height: 24),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.mail),
               label: 'お問い合わせ',
@@ -84,32 +83,32 @@ class SettingPage extends ConsumerWidget {
                 ref.read(launchURLProvider(url));
               },
             ),
-            SizedBox(height: 24.h),
+            const SizedBox(height: 24),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.star),
               label: 'レビューで応援する',
               onTap: () {}, // TODO(me): レビューダイアログを表示
             ),
-            SizedBox(height: 32.h),
+            const SizedBox(height: 32),
 
             // アプリについて
             Text(
               'アプリについて',
               style: Theme.of(context).textTheme.titleSmall,
             ),
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.doc_text),
               label: '利用規約',
               onTap: () {}, // TODO(me): 利用規約画面へ遷移（WebToでNotion）
             ),
-            SizedBox(height: 24.h),
+            const SizedBox(height: 24),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.exclamationmark_shield),
               label: 'プライバシーポリシー',
               onTap: () {}, // TODO(me): プライバシーポリシー画面へ遷移（WebToでNotion）
             ),
-            SizedBox(height: 24.h),
+            const SizedBox(height: 24),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.tag),
               label: 'ライセンス',
@@ -117,11 +116,11 @@ class SettingPage extends ConsumerWidget {
                 await context.navigateTo(const MyLicenseRoute());
               },
             ),
-            SizedBox(height: 24.h),
+            const SizedBox(height: 24),
             Row(
               children: [
                 const Icon(CupertinoIcons.info),
-                SizedBox(width: 8.w),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     'バージョン',
@@ -138,9 +137,9 @@ class SettingPage extends ConsumerWidget {
                       );
                     },
                     loading: () {
-                      return ShimmerWidget.rectangular(
-                        height: 16.h,
-                        width: 48.w,
+                      return const ShimmerWidget.rectangular(
+                        height: 16,
+                        width: 48,
                       );
                     },
                     error: (error, stackTrace) {
@@ -151,10 +150,10 @@ class SettingPage extends ConsumerWidget {
                     },
                   ),
                 ),
-                SizedBox(width: 4.w),
+                const SizedBox(width: 4),
               ],
             ),
-            SizedBox(height: 72.h),
+            const SizedBox(height: 72),
             Align(
               alignment: Alignment.topCenter,
               child: GestureDetector(
@@ -197,7 +196,7 @@ class SettingTileButton extends StatelessWidget {
       child: Row(
         children: [
           trailingIcon,
-          SizedBox(width: 8.w),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               label,
@@ -208,7 +207,7 @@ class SettingTileButton extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: Icon(
               CupertinoIcons.chevron_forward,
-              size: 20.sp,
+              size: 20,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),

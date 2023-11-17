@@ -3,7 +3,6 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
@@ -53,7 +52,7 @@ class DefinitionDetailPage extends ConsumerWidget {
             },
             child: SingleChildScrollView(
               child: Padding(
-                padding: REdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 24,
                   left: 24,
                   right: 24,
@@ -73,12 +72,12 @@ class DefinitionDetailPage extends ConsumerWidget {
                                   children: [
                                     Icon(
                                       CupertinoIcons.lock_fill,
-                                      size: 16.sp,
+                                      size: 16,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurfaceVariant,
                                     ),
-                                    SizedBox(width: 2.w),
+                                    const SizedBox(width: 2),
                                     Text(
                                       'この投稿はあなただけに見えています',
                                       style: Theme.of(context)
@@ -93,7 +92,7 @@ class DefinitionDetailPage extends ConsumerWidget {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 16.h),
+                                const SizedBox(height: 16),
                               ],
                             ),
                           ),
@@ -109,7 +108,7 @@ class DefinitionDetailPage extends ConsumerWidget {
                           AvatarNetworkImageWidget(
                             imageUrl: definition.authorImageUrl,
                           ),
-                          SizedBox(width: 16.w),
+                          const SizedBox(width: 16),
                           Expanded(
                             child: Text(
                               definition.authorName,
@@ -130,7 +129,8 @@ class DefinitionDetailPage extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 16.h),
+                    const SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     InkWell(
                       onTap: () async {
                         await context.pushRoute(
@@ -161,12 +161,12 @@ class DefinitionDetailPage extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 16.h),
+                    const SizedBox(height: 16),
                     Text(
                       definition.definition,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    SizedBox(height: 16.h),
+                    const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -236,7 +236,7 @@ class DefinitionDetailPage extends ConsumerWidget {
             title: const Text('詳細'),
           ),
           body: Padding(
-            padding: REdgeInsets.symmetric(vertical: 24),
+            padding: const EdgeInsets.symmetric(vertical: 24),
             child: Center(
               child: ErrorAndRetryWidget(
                 onRetry: () => ref.invalidate(definitionProvider(definitionId)),

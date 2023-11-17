@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // TODO(me): cupertinoActivityIndicatorがAndroid端末でも違和感ないか確認する
 
@@ -22,10 +21,10 @@ class OverlayLoadingWidget extends StatelessWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(4).r,
+              borderRadius: BorderRadius.circular(4),
             ),
             child: Padding(
-              padding: REdgeInsets.all(24),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

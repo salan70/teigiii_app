@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/button/primary_filled_button.dart';
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
@@ -25,11 +24,11 @@ class WordWidget extends ConsumerWidget {
     return asyncWord.when(
       data: (word) {
         return Padding(
-          padding: REdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 24.h),
+              const SizedBox(height: 24),
               Text(
                 word.word,
                 style: Theme.of(context).textTheme.titleLarge,
@@ -41,14 +40,14 @@ class WordWidget extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
               ),
-              SizedBox(height: 24.h),
+              const SizedBox(height: 24),
               Text(
                 '${word.postedDefinitionCount}投稿',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
               ),
-              SizedBox(height: 8.h),
+              const SizedBox(height: 8),
               Center(
                 child: PrimaryFilledButton(
                   onPressed: () {
@@ -64,7 +63,7 @@ class WordWidget extends ConsumerWidget {
                   text: 'この語句の定義を投稿する',
                 ),
               ),
-              SizedBox(height: 8.h),
+              const SizedBox(height: 8),
             ],
           ),
         );
@@ -82,7 +81,7 @@ class WordWidget extends ConsumerWidget {
         logger.e('語句[$wordId]の取得に失敗しました。'
             'error: $error, stackTrace: $stackTrace');
         return Padding(
-          padding: REdgeInsets.symmetric(vertical: 24),
+          padding: const EdgeInsets.symmetric(vertical: 24),
           child: ErrorAndRetryWidget(
             onRetry: () => ref.invalidate(wordProvider(wordId)),
           ),

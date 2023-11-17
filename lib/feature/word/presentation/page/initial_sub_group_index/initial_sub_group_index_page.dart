@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/constant/initial_main_group.dart';
@@ -39,18 +38,18 @@ class InitialSubGroupIndexPage extends ConsumerWidget {
           dictionaryPageType == DictionaryPageType.individual
               ? Column(
                   children: [
-                    SizedBox(height: 16.h),
+                    const SizedBox(height: 16),
                     Padding(
-                      padding: REdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.only(bottom: 16),
                       child:
                           DictionaryAuthorWidget(targetUserId: targetUserId!),
                     ),
                   ],
                 )
               : const SizedBox.shrink(),
-          SizedBox(height: 8.h),
+          const SizedBox(height: 8),
           Padding(
-            padding: REdgeInsets.only(
+            padding: const EdgeInsets.only(
               left: 16,
               right: 16,
             ),

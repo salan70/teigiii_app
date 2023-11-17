@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/common_widget/button/primary_filled_button.dart';
 
@@ -21,20 +20,20 @@ class OverlayForceUpdateDialog extends StatelessWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(8).r,
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Padding(
-              padding: REdgeInsets.all(24),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 8.h),
+                  const SizedBox(height: 8),
                   Text(
                     '新たなバージョンが配信されています。\nアップデートをお願いします',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  SizedBox(height: 16.h),
+                  const SizedBox(height: 16),
                   PrimaryFilledButton(
                     onPressed: () {
                       // TODO(me): Storeに遷移させる

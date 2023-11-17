@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -28,9 +27,9 @@ class ToastController extends _$ToastController {
     _fToast.removeCustomToast();
 
     final Widget toast = Container(
-      padding:  REdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8).r,
+        borderRadius: BorderRadius.circular(8),
         color: lightColorScheme.onSurface.withOpacity(0.8),
       ),
       child: Row(

@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/shimmer_widget.dart';
 import '../../../../../core/router/app_router.dart';
@@ -41,12 +40,12 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
                         .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(width: 4.w),
+                  const SizedBox(width: 4),
                   const Text('フォロー中'),
                 ],
               ),
             ),
-            SizedBox(width: 16.w),
+            const SizedBox(width: 16),
             InkWell(
               onTap: () async {
                 await context.pushRoute(
@@ -65,7 +64,7 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
                         .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(width: 4.w),
+                  const SizedBox(width: 4),
                   const Text('フォロワー'),
                 ],
               ),
@@ -73,22 +72,20 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
           ],
         );
       },
-      loading: () => Row(
+      loading: () => const Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ShimmerWidget.rectangular(width: 16.w, height: 24.h),
-          SizedBox(height: 8.h),
-          ShimmerWidget.rectangular(width: 48.w, height: 16.h),
-          SizedBox(width: 16.w),
-          ShimmerWidget.rectangular(width: 16.w, height: 24.h),
-          SizedBox(height: 8.w),
-          ShimmerWidget.rectangular(width: 48.w, height: 16.h),
+          ShimmerWidget.rectangular(width: 16, height: 24),
+          SizedBox(height: 8),
+          ShimmerWidget.rectangular(width: 48, height: 16),
+          SizedBox(width: 16),
+          ShimmerWidget.rectangular(width: 16, height: 24),
+          SizedBox(height: 8),
+          ShimmerWidget.rectangular(width: 48, height: 16),
         ],
       ),
       error: (error, stackTrace) {
-        logger.e(
-          'followCountの取得時にエラーが発生しました。 error: $error, stackTrace: $stackTrace',
-        );
+        logger.e('followCountの取得時にエラーが発生しました。 error: $error, stackTrace: $stackTrace');
         // フォローカウントのみのエラーはユーザーへの影響が少ないため、何も表示しない
         // フォローカウント以外にもエラーが有る場合、他画面でエラーが表示される想定
         return const SizedBox.shrink();

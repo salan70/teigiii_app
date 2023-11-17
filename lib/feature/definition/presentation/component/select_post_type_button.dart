@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../application/definition_for_write_notifier.dart';
@@ -26,7 +25,7 @@ class SelectPostTypeButton extends ConsumerWidget {
         : DefinitionPostType.private;
 
     return Padding(
-      padding: REdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: InkWell(
         onTap: () async {
           // IconButtonの位置を取得
@@ -71,18 +70,18 @@ class SelectPostTypeButton extends ConsumerWidget {
             Icon(
               postType.icon,
               color: Theme.of(context).colorScheme.onSurface,
-              size: postType.largeIconSize.sp,
+              size: postType.largeIconSize,
             ),
-            SizedBox(width: 8.w),
+            const SizedBox(width: 8),
             Text(
               postType.labelForWrite,
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            SizedBox(width: 8.w),
+            const SizedBox(width: 8),
             Icon(
               CupertinoIcons.arrowtriangle_down_fill,
               color: Theme.of(context).colorScheme.onSurface,
-              size: 8.sp,
+              size: 8,
             ),
           ],
         ),

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IndexTile extends StatelessWidget {
   const IndexTile({
@@ -13,7 +12,7 @@ class IndexTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: REdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -24,7 +23,7 @@ class IndexTile extends StatelessWidget {
           Icon(
             CupertinoIcons.chevron_forward,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
-            size: 20.sp,
+            size: 20,
           ),
         ],
       ),

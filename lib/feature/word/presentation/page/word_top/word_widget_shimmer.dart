@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/shimmer_widget.dart';
 
@@ -8,17 +7,17 @@ class WordWidgetShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: REdgeInsets.symmetric(horizontal: 24),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 24.h),
-          ShimmerWidget.rectangular(width: 80.w, height: 24.h),
-          SizedBox(height: 8.h),
-          ShimmerWidget.rectangular(width: 120.w, height: 16.h),
-          SizedBox(height: 24.h),
-          ShimmerWidget.rectangular(width: 32.w, height: 16.h),
+          SizedBox(height: 24),
+          ShimmerWidget.rectangular(width: 80, height: 24),
+          SizedBox(height: 8),
+          ShimmerWidget.rectangular(width: 120, height: 16),
+          SizedBox(height: 24),
+          ShimmerWidget.rectangular(width: 32, height: 16),
         ],
       ),
     );

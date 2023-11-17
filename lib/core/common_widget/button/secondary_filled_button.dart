@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 白黒を基調とした塗りつぶしボタン
 class SecondaryFilledButton extends StatelessWidget {
@@ -17,13 +16,13 @@ class SecondaryFilledButton extends StatelessWidget {
     return TextButton(
       style: TextButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(48).r,
+          borderRadius: BorderRadius.circular(48),
         ),
         backgroundColor: Theme.of(context).colorScheme.tertiary,
       ),
       onPressed: onPressed,
       child: Padding(
-        padding: REdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 24,
         ),
         child: Text(

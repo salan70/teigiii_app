@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
@@ -38,17 +37,17 @@ class IndividualDictionaryPage extends ConsumerWidget {
           appBar: AppBar(
             title: Text('${targetUserProfile.name}の辞書'),
             leading: isTopRoute ? const ToSettingButton() : const BackButton(),
+            leadingWidth: 48,
           ),
           body: ListView(
             children: [
-              SizedBox(height: 8.h),
               SizedBox(
-                height: 80.h,
+                height: 80,
                 child: DictionaryAuthorWidget(targetUserId: targetUserId),
               ),
-              SizedBox(height: 16.h),
+              const SizedBox(height: 24),
               Padding(
-                padding: REdgeInsets.only(left: 16, right: 16),
+                padding: const EdgeInsets.only(left: 16, right: 16),
                 child: InitialMainGroupList(
                   dictionaryPageType: DictionaryPageType.individual,
                   targetUserId: targetUserId,
@@ -87,7 +86,7 @@ class IndividualDictionaryPage extends ConsumerWidget {
             title: const Text('辞書'),
           ),
           body: Padding(
-            padding: REdgeInsets.symmetric(vertical: 24),
+            padding: const EdgeInsets.symmetric(vertical: 24),
             child: Center(
               child: ErrorAndRetryWidget(
                 onRetry: () =>
