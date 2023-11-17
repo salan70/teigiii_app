@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -51,8 +52,12 @@ Future<void> main() async {
   // await addLikesToFirestore(flavorName);
 
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    ProviderScope(
+      child: DevicePreview(
+        builder: (context) {
+          return const MyApp();
+        },
+      ),
     ),
   );
 }
