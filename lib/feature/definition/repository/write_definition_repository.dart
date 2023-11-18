@@ -13,6 +13,8 @@ part 'write_definition_repository.g.dart';
 // TODO(me): 処理が長い関数多いのでなんとかしたい
 // transaction実行している関係で難しいかも。。
 
+// TODO(me): transactionで実行している処理をbatchに変更できないか（したほうがいいか）検討する
+
 // TODO(me): いいね関連の処理クラスとして切り出す
 @Riverpod(keepAlive: true)
 WriteDefinitionRepository writeDefinitionRepository(
@@ -255,6 +257,35 @@ class WriteDefinitionRepository {
       final needDeleteWord = await _needDeleteWord(previousWordId);
       if (needDeleteWord) {
         transaction.delete(_wordsCollectionRef.doc(previousWordId));
+      }
+    });
+  }
+
+  Future<void> deleteDefinition(
+    String definitionId,
+    String wordId,
+  ) async {
+    await firestore.runTransaction((transaction) async {
+      // Definitionドキュメントを削除
+      transaction.delete(_definitionsCollectionRef.doc(definitionId));
+
+      // WordDefinitionRelationドキュメントを削除
+      final snapshot = await _searchWordDefinitionRelationDoc(
+        wordId,
+        definitionId,
+      );
+      // 念のため、ドキュメントが存在しているかチェック
+      if (snapshot.docs.isEmpty) {
+        logger.i('WordDefinitionRelationドキュメントが見つからないという想定外の事態が発生しました。'
+            'wordId: $wordId, definitionId: $definitionId');
+        return;
+      }
+      transaction.delete(snapshot.docs.first.reference);
+
+      // 必要であればWordドキュメントを削除する
+      final needDeleteWord = await _needDeleteWord(wordId);
+      if (needDeleteWord) {
+        transaction.delete(_wordsCollectionRef.doc(wordId));
       }
     });
   }

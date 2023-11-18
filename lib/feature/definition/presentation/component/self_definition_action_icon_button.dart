@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
+import '../../../../core/common_provider/dialog_controller.dart';
+import '../../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../application/definition_service.dart';
@@ -52,7 +54,19 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
         PullDownMenuItem(
           title: 'この定義を削除',
           icon: CupertinoIcons.trash,
-          onTap: () {},
+          onTap: () {
+            ref.read(dialogControllerProvider.notifier).show(
+                  ConfirmDialog(
+                    confirmMessage: '本当に削除してもよろしいですか？',
+                    onConfirm: () {
+                      ref
+                          .read(definitionServiceProvider.notifier)
+                          .deleteDefinition(definition);
+                    },
+                    confirmButtonText: '削除する',
+                  ),
+                );
+          },
         ),
       ];
     }

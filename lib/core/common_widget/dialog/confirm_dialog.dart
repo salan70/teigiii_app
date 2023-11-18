@@ -18,15 +18,18 @@ class ConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseDialog(
-      content: Text(confirmMessage),
+      content: Text(confirmMessage, textAlign: TextAlign.center),
       actions: [
         InkWell(
           onTap: () {
             context.popRoute();
           },
-          child: Text(
-            'キャンセル',
-            style: Theme.of(context).textTheme.titleMedium,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              'キャンセル',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
         ),
         InkWell(

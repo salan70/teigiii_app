@@ -2,11 +2,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/is_loading_overlay_state.dart';
 import '../../../core/common_provider/toast_controller.dart';
+import '../../../core/router/app_router.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
+import '../../word/application/word_list_state_by_initial.dart';
+import '../../word/application/word_list_state_by_search_word.dart';
 import '../domain/definition.dart';
 import '../repository/write_definition_repository.dart';
 import '../util/definition_post_type.dart';
+import 'definition_id_list_state.dart';
 import 'definition_state.dart';
 
 part 'definition_service.g.dart';
@@ -22,12 +26,14 @@ class DefinitionService extends _$DefinitionService {
     final toastNotifier = ref.read(toastControllerProvider.notifier);
 
     try {
-      // todo
-      // await ref
-      //     .read(writeDefinitionRepositoryProvider)
-      //     .deleteDefinition(definition.id);
+      await ref
+          .read(writeDefinitionRepositoryProvider)
+          .deleteDefinition(definition.id, definition.wordId);
+      // TODO(me): いいねも削除する
     } on Exception catch (e, stackTrace) {
-      logger.e('定義[${definition.id}]を削除時にエラーが発生 error: $e, stackTrace: $stackTrace');
+      logger.e(
+        '定義[${definition.id}]を削除時にエラーが発生 error: $e, stackTrace: $stackTrace',
+      );
       toastNotifier.showToast(
         'エラーが発生しました。もう一度お試しください。',
         causeError: true,
@@ -36,11 +42,13 @@ class DefinitionService extends _$DefinitionService {
       return;
     }
 
-    // TODO これいらないかも。かわりに、definitionIdListStateNotifierProfiderをinvalidateする
-    // 遷移元の画面を更新するためにinvalidateする
-    ref.invalidate(definitionProvider(definition.id));
+    ref
+      ..invalidate(definitionIdListStateNotifierProvider)
+      ..invalidate(wordListStateByInitialNotifierProvider)
+      ..invalidate(wordListStateBySearchWordNotifierProvider);
 
     // TODO 2画面戻る
+    await ref.read(appRouterProvider).pop();
 
     isLoadingOverlayNotifier.finishLoading();
     toastNotifier.showToast('削除しました');

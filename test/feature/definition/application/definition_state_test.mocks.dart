@@ -171,6 +171,18 @@ class MockWriteDefinitionRepository extends _i1.Mock
       ) as _i10.Future<void>);
 
   @override
+  _i10.Future<void> updateDefinition(
+          _i11.DefinitionForWrite? definitionForWrite) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateDefinition,
+          [definitionForWrite],
+        ),
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
+
+  @override
   _i10.Future<void> updateWordChangedDefinition(
     String? previousWordId,
     String? newWordId,
@@ -207,12 +219,17 @@ class MockWriteDefinitionRepository extends _i1.Mock
       ) as _i10.Future<void>);
 
   @override
-  _i10.Future<void> updateDefinition(
-          _i11.DefinitionForWrite? definitionForWrite) =>
+  _i10.Future<void> deleteDefinition(
+    String? definitionId,
+    String? wordId,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #updateDefinition,
-          [definitionForWrite],
+          #deleteDefinition,
+          [
+            definitionId,
+            wordId,
+          ],
         ),
         returnValue: _i10.Future<void>.value(),
         returnValueForMissingStub: _i10.Future<void>.value(),
