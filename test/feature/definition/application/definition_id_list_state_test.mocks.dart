@@ -281,57 +281,6 @@ class MockWriteDefinitionRepository extends _i1.Mock
         returnValue: _i12.Future<void>.value(),
         returnValueForMissingStub: _i12.Future<void>.value(),
       ) as _i12.Future<void>);
-
-  @override
-  _i12.Future<void> likeDefinition(
-    String? definitionId,
-    String? userId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #likeDefinition,
-          [
-            definitionId,
-            userId,
-          ],
-        ),
-        returnValue: _i12.Future<void>.value(),
-        returnValueForMissingStub: _i12.Future<void>.value(),
-      ) as _i12.Future<void>);
-
-  @override
-  _i12.Future<void> unlikeDefinition(
-    String? definitionId,
-    String? userId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #unlikeDefinition,
-          [
-            definitionId,
-            userId,
-          ],
-        ),
-        returnValue: _i12.Future<void>.value(),
-        returnValueForMissingStub: _i12.Future<void>.value(),
-      ) as _i12.Future<void>);
-
-  @override
-  _i12.Future<bool> isLikedByUser(
-    String? userId,
-    String? definitionId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #isLikedByUser,
-          [
-            userId,
-            definitionId,
-          ],
-        ),
-        returnValue: _i12.Future<bool>.value(false),
-        returnValueForMissingStub: _i12.Future<bool>.value(false),
-      ) as _i12.Future<bool>);
 }
 
 /// A class which mocks [FetchDefinitionRepository].

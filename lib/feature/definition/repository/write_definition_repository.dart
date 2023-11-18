@@ -4,7 +4,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/firestore_collections.dart';
 import '../../../util/constant/initial_main_group.dart';
-import '../../../util/extension/firestore_extension.dart';
 import '../../../util/logger.dart';
 import '../domain/definition_for_write.dart';
 
@@ -15,7 +14,6 @@ part 'write_definition_repository.g.dart';
 
 // TODO(me): transactionで実行している処理をbatchに変更できないか（したほうがいいか）検討する
 
-// TODO(me): いいね関連の処理クラスとして切り出す
 @Riverpod(keepAlive: true)
 WriteDefinitionRepository writeDefinitionRepository(
   WriteDefinitionRepositoryRef ref,
@@ -36,9 +34,6 @@ class WriteDefinitionRepository {
 
   CollectionReference get _wordDefinitionRelationsCollectionRef =>
       firestore.collection(WordDefinitionRelationsCollection.collectionName);
-
-  CollectionReference get _likesCollectionRef =>
-      firestore.collection(LikesCollection.collectionName);
 
   /// Definitionドキュメントと
   /// WordDefinitionRelationドキュメントの作成をtransaction実行する。
@@ -304,7 +299,8 @@ class WriteDefinitionRepository {
     return snapshot.docs.length < 2;
   }
 
-  /// [previousWordId], [definitionId] に一致するWordDefinitionRelationドキュメントを返す
+  /// [previousWordId], [definitionId] に一致する
+  /// WordDefinitionRelationドキュメントを返す
   Future<QuerySnapshot<Object?>> _searchWordDefinitionRelationDoc(
     String previousWordId,
     String definitionId,
@@ -330,62 +326,5 @@ class WriteDefinitionRepository {
       DefinitionsCollection.isPublic: isPublic,
       updatedAtFieldName: FieldValue.serverTimestamp(),
     });
-  }
-
-  // * ---------------------- 以下 Like関連 ------------------------ * //
-
-  Future<void> likeDefinition(String definitionId, String userId) async {
-    // TODO(me): transactionよりbatchのほうが良さそう
-    // transactionを使い、複数の処理が全て成功した場合のみ、処理を完了させる
-    await firestore.runTransaction((transaction) async {
-      // Likesコレクションにドキュメントを登録
-      final likesCollection = _likesCollectionRef;
-      transaction.set(likesCollection.doc(), {
-        LikesCollection.definitionId: definitionId,
-        LikesCollection.userId: userId,
-        createdAtFieldName: FieldValue.serverTimestamp(),
-        updatedAtFieldName: FieldValue.serverTimestamp(),
-      });
-
-      // DefinitionコレクションからドキュメントのlikesCountを+1する
-      final definitionDocRef = _definitionsCollectionRef.doc(definitionId);
-      transaction.update(definitionDocRef, {
-        DefinitionsCollection.likesCount: FieldValue.increment(1),
-      });
-    });
-  }
-
-  Future<void> unlikeDefinition(String definitionId, String userId) async {
-    // TODO(me): transactionよりbatchのほうが良さそう
-    await firestore.runTransaction((transaction) async {
-      // Likesコレクションからドキュメントを取得して削除
-      final likeSnapshot = await _likesCollectionRef
-          .where(LikesCollection.definitionId, isEqualTo: definitionId)
-          .where(LikesCollection.userId, isEqualTo: userId)
-          .get()
-          .then((snapshot) => snapshot.docs.firstOrNull);
-
-      if (likeSnapshot == null) {
-        throw Exception('いいね解除が失敗しました。');
-      }
-
-      transaction.delete(likeSnapshot.reference);
-
-      // DefinitionコレクションからドキュメントのlikesCountを-1する
-      final definitionDocRef = _definitionsCollectionRef.doc(definitionId);
-      transaction.update(definitionDocRef, {
-        DefinitionsCollection.likesCount: FieldValue.increment(-1),
-      });
-    });
-  }
-
-  Future<bool> isLikedByUser(String userId, String definitionId) async {
-    final likeSnapshot = await _likesCollectionRef
-        .where(LikesCollection.definitionId, isEqualTo: definitionId)
-        .where(LikesCollection.userId, isEqualTo: userId)
-        .get()
-        .then((snapshot) => snapshot.docs.firstOrNull);
-
-    return likeSnapshot != null;
   }
 }

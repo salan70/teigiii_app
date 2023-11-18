@@ -4,7 +4,7 @@ import '../../auth/application/auth_state.dart';
 import '../../user_profile/application/user_profile_state.dart';
 import '../domain/definition.dart';
 import '../repository/fetch_definition_repository.dart';
-import '../repository/write_definition_repository.dart';
+import '../repository/like_definition_repository.dart';
 
 part 'definition_state.g.dart';
 
@@ -20,7 +20,7 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
 
   final userId = ref.read(userIdProvider)!;
   final isLikedByUser = await ref
-      .read(writeDefinitionRepositoryProvider)
+      .read(likeDefinitionRepositoryProvider)
       .isLikedByUser(userId, definitionDoc.id);
 
   return Definition(

@@ -7,13 +7,11 @@ import 'dart:async' as _i4;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i7;
-import 'package:teigi_app/feature/definition/domain/definition_for_write.dart'
-    as _i5;
-import 'package:teigi_app/feature/definition/repository/write_definition_repository.dart'
+import 'package:riverpod_annotation/riverpod_annotation.dart' as _i6;
+import 'package:teigi_app/feature/definition/repository/like_definition_repository.dart'
     as _i3;
 
-import 'definition_service_test.dart' as _i6;
+import 'definition_service_test.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -37,11 +35,11 @@ class _FakeFirebaseFirestore_0 extends _i1.SmartFake
         );
 }
 
-/// A class which mocks [WriteDefinitionRepository].
+/// A class which mocks [LikeDefinitionRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWriteDefinitionRepository extends _i1.Mock
-    implements _i3.WriteDefinitionRepository {
+class MockLikeDefinitionRepository extends _i1.Mock
+    implements _i3.LikeDefinitionRepository {
   @override
   _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
         Invocation.getter(#firestore),
@@ -54,118 +52,6 @@ class MockWriteDefinitionRepository extends _i1.Mock
           Invocation.getter(#firestore),
         ),
       ) as _i2.FirebaseFirestore);
-
-  @override
-  _i4.Future<void> createDefinition(
-    _i5.DefinitionForWrite? definitionForWrite,
-    String? wordId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #createDefinition,
-          [
-            definitionForWrite,
-            wordId,
-          ],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> createDefinitionAndWord(
-          _i5.DefinitionForWrite? definitionForWrite) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #createDefinitionAndWord,
-          [definitionForWrite],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> updateDefinition(
-          _i5.DefinitionForWrite? definitionForWrite) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #updateDefinition,
-          [definitionForWrite],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> updateWordChangedDefinition(
-    String? previousWordId,
-    String? newWordId,
-    _i5.DefinitionForWrite? definitionForWrite,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #updateWordChangedDefinition,
-          [
-            previousWordId,
-            newWordId,
-            definitionForWrite,
-          ],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> updateDefinitionAndCreateWord(
-    _i5.DefinitionForWrite? definitionForWrite,
-    String? previousWordId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #updateDefinitionAndCreateWord,
-          [
-            definitionForWrite,
-            previousWordId,
-          ],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> deleteDefinition(
-    String? definitionId,
-    String? wordId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #deleteDefinition,
-          [
-            definitionId,
-            wordId,
-          ],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> updatePostType({
-    required String? definitionId,
-    required bool? isPublic,
-  }) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #updatePostType,
-          [],
-          {
-            #definitionId: definitionId,
-            #isPublic: isPublic,
-          },
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
 
   @override
   _i4.Future<void> likeDefinition(
@@ -223,11 +109,11 @@ class MockWriteDefinitionRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockListener extends _i1.Mock
-    implements _i6.Listener<_i7.AsyncValue<void>> {
+    implements _i5.Listener<_i6.AsyncValue<void>> {
   @override
   void call(
-    _i7.AsyncValue<void>? previous,
-    _i7.AsyncValue<void>? next,
+    _i6.AsyncValue<void>? previous,
+    _i6.AsyncValue<void>? next,
   ) =>
       super.noSuchMethod(
         Invocation.method(

@@ -8,6 +8,7 @@ import '../../auth/application/auth_state.dart';
 import '../../word/application/word_list_state_by_initial.dart';
 import '../../word/application/word_list_state_by_search_word.dart';
 import '../domain/definition.dart';
+import '../repository/like_definition_repository.dart';
 import '../repository/write_definition_repository.dart';
 import '../util/definition_post_type.dart';
 import 'definition_id_list_state.dart';
@@ -29,7 +30,7 @@ class DefinitionService extends _$DefinitionService {
       await ref
           .read(writeDefinitionRepositoryProvider)
           .deleteDefinition(definition.id, definition.wordId);
-      // TODO(me): いいねも削除する
+      // TODO いいねも削除する
     } on Exception catch (e, stackTrace) {
       logger.e(
         '定義[${definition.id}]を削除時にエラーが発生 error: $e, stackTrace: $stackTrace',
@@ -85,7 +86,7 @@ class DefinitionService extends _$DefinitionService {
 
     if (definition.isLikedByUser) {
       // いいね解除
-      await ref.read(writeDefinitionRepositoryProvider).unlikeDefinition(
+      await ref.read(likeDefinitionRepositoryProvider).unlikeDefinition(
             definition.id,
             userId,
           );
@@ -93,7 +94,7 @@ class DefinitionService extends _$DefinitionService {
     }
 
     // いいね登録
-    await ref.read(writeDefinitionRepositoryProvider).likeDefinition(
+    await ref.read(likeDefinitionRepositoryProvider).likeDefinition(
           definition.id,
           userId,
         );
