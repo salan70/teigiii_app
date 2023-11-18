@@ -7,8 +7,6 @@ import '../../../util/extension/firestore_extension.dart';
 
 part 'like_definition_repository.g.dart';
 
-// TODO(me): transactionで実行している処理をbatchに変更できないか（したほうがいいか）検討する
-
 @Riverpod(keepAlive: true)
 LikeDefinitionRepository likeDefinitionRepository(
   LikeDefinitionRepositoryRef ref,
@@ -28,48 +26,46 @@ class LikeDefinitionRepository {
       firestore.collection(LikesCollection.collectionName);
 
   Future<void> likeDefinition(String definitionId, String userId) async {
-    // TODO(me): transactionよりbatchのほうが良さそう
-    // transactionを使い、複数の処理が全て成功した場合のみ、処理を完了させる
-    await firestore.runTransaction((transaction) async {
+    final batch = firestore.batch()
+
       // Likesコレクションにドキュメントを登録
-      final likesCollection = _likesCollectionRef;
-      transaction.set(likesCollection.doc(), {
+      ..set(_likesCollectionRef.doc(), {
         LikesCollection.definitionId: definitionId,
         LikesCollection.userId: userId,
         createdAtFieldName: FieldValue.serverTimestamp(),
         updatedAtFieldName: FieldValue.serverTimestamp(),
-      });
+      })
 
-      // DefinitionコレクションからドキュメントのlikesCountを+1する
-      final definitionDocRef = _definitionsCollectionRef.doc(definitionId);
-      transaction.update(definitionDocRef, {
+      // DefinitionドキュメントのlikesCountを+1する
+      ..update(_definitionsCollectionRef.doc(definitionId), {
         DefinitionsCollection.likesCount: FieldValue.increment(1),
       });
-    });
+
+    await batch.commit();
   }
 
   Future<void> unlikeDefinition(String definitionId, String userId) async {
-    // TODO(me): transactionよりbatchのほうが良さそう
-    await firestore.runTransaction((transaction) async {
-      // Likesコレクションからドキュメントを取得して削除
-      final likeSnapshot = await _likesCollectionRef
-          .where(LikesCollection.definitionId, isEqualTo: definitionId)
-          .where(LikesCollection.userId, isEqualTo: userId)
-          .get()
-          .then((snapshot) => snapshot.docs.firstOrNull);
+    // Likesコレクションからドキュメントを取得して削除
+    final likeSnapshot = await _likesCollectionRef
+        .where(LikesCollection.definitionId, isEqualTo: definitionId)
+        .where(LikesCollection.userId, isEqualTo: userId)
+        .get()
+        .then((snapshot) => snapshot.docs.firstOrNull);
 
-      if (likeSnapshot == null) {
-        throw Exception('いいね解除が失敗しました。');
-      }
+    // 念のためnullチェック
+    if (likeSnapshot == null) {
+      throw Exception('いいね解除が失敗しました。');
+    }
 
-      transaction.delete(likeSnapshot.reference);
+    final batch = firestore.batch()
+      ..delete(likeSnapshot.reference)
 
-      // DefinitionコレクションからドキュメントのlikesCountを-1する
-      final definitionDocRef = _definitionsCollectionRef.doc(definitionId);
-      transaction.update(definitionDocRef, {
+      // DefinitionドキュメントのlikesCountを-1する
+      ..update(_definitionsCollectionRef.doc(definitionId), {
         DefinitionsCollection.likesCount: FieldValue.increment(-1),
       });
-    });
+
+    await batch.commit();
   }
 
   Future<bool> isLikedByUser(String userId, String definitionId) async {
