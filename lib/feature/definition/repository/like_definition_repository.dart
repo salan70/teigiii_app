@@ -13,7 +13,7 @@ LikeDefinitionRepository likeDefinitionRepository(
 ) =>
     LikeDefinitionRepository(ref.watch(firestoreProvider));
 
-/// 定義の書き込み（新規作成、更新、削除）に関する処理を記述するRepository
+/// 定義のいいねに関する処理を記述するRepository
 class LikeDefinitionRepository {
   LikeDefinitionRepository(this.firestore);
 
@@ -66,6 +66,19 @@ class LikeDefinitionRepository {
       });
 
     await batch.commit();
+  }
+
+  /// [definitionId]に紐づくいいねを全て削除する
+  Future<void> deleteLikeByDefinitionId(String definitionId) async {
+    // Likesコレクションからドキュメントを取得して削除
+    final likeSnapshots = await _likesCollectionRef
+        .where(LikesCollection.definitionId, isEqualTo: definitionId)
+        .get()
+        .then((snapshot) => snapshot.docs);
+
+    for (final likeSnapshot in likeSnapshots) {
+      await likeSnapshot.reference.delete();
+    }
   }
 
   Future<bool> isLikedByUser(String userId, String definitionId) async {

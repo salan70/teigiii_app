@@ -30,7 +30,11 @@ class DefinitionService extends _$DefinitionService {
       await ref
           .read(writeDefinitionRepositoryProvider)
           .deleteDefinition(definition.id, definition.wordId);
-      // TODO いいねも削除する
+
+      // 紐づくいいねを削除
+      await ref.read(likeDefinitionRepositoryProvider).deleteLikeByDefinitionId(
+            definition.id,
+          );
     } on Exception catch (e, stackTrace) {
       logger.e(
         '定義[${definition.id}]を削除時にエラーが発生 error: $e, stackTrace: $stackTrace',
