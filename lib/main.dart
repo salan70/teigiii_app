@@ -10,8 +10,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/common_provider/is_loading_overlay_state.dart';
+import 'core/common_widget/dialog/loading_dialog.dart';
 import 'core/common_widget/error_and_retry_widget.dart';
-import 'core/common_widget/loading_dialog.dart';
 import 'core/router/app_router.dart';
 import 'feature/force_event/application/app_config_state.dart';
 import 'feature/force_event/presentation/overlay_force_update_dialog.dart';

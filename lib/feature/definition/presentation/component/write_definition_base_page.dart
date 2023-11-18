@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/show_write_close_confirm_dialog.dart';
+import '../../../../core/common_provider/dialog_controller.dart';
+import '../../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../application/definition_for_write_notifier.dart';
 import '../../domain/definition_for_write.dart';
 import '../../util/write_definition_form_type.dart';
@@ -22,8 +23,8 @@ class WriteDefinitionBasePage extends ConsumerWidget {
     required this.appBarActionWidget,
   });
 
-  /// 遷移時にフォーカスするTextFormField。
-  /// どのTextFormFieldにもフォーカスしない場合はnullを渡す。
+  /// 遷移時にフォーカスする [TextFormField]
+  /// どの [TextFormField] にもフォーカスしない場合はnullを渡す。
   final WriteDefinitionFormType? autoFocusForm;
   final DefinitionForWrite definitionForWrite;
   final DefinitionForWriteNotifier notifier;
@@ -45,7 +46,16 @@ class WriteDefinitionBasePage extends ConsumerWidget {
               await context.popRoute();
               return;
             }
-            await showCloseConfirmDialog(context);
+
+            // 確認ダイアログを表示
+            ref.read(dialogControllerProvider.notifier).show(
+                  ConfirmDialog(
+                    confirmMessage: '入力した内容は保存されません。\nよろしいですか？',
+                    onConfirm: () => Navigator.of(context)
+                        .popUntil((route) => route.isFirst),
+                    confirmButtonText: 'OK',
+                  ),
+                );
           },
         ),
         title: SelectPostTypeButton(

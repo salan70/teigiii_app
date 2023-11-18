@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/common_provider/toast_controller.dart';
+import 'core/common_widget/dialog/loading_dialog.dart';
 import 'core/common_widget/error_and_retry_widget.dart';
-import 'core/common_widget/loading_dialog.dart';
 import 'core/router/app_router.dart';
 import 'feature/auth/application/auth_service.dart';
 import 'feature/auth/application/auth_state.dart';
