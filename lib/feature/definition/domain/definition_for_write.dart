@@ -13,15 +13,17 @@ class DefinitionForWrite with _$DefinitionForWrite {
   const factory DefinitionForWrite({
     /// 更新時のみ使用する。新規投稿時はnull
     required String? id,
+    required String authorId,
     required String word,
     required String wordReading,
     required bool isPublic,
     required String definition,
   }) = _DefinitionForWrite;
 
-  factory DefinitionForWrite.empty() {
-    return const DefinitionForWrite(
+  factory DefinitionForWrite.empty(String authorId) {
+    return DefinitionForWrite(
       id: null,
+      authorId: authorId,
       word: '',
       wordReading: '',
       isPublic: true,
@@ -30,9 +32,10 @@ class DefinitionForWrite with _$DefinitionForWrite {
   }
 
   /// [Word]から[DefinitionForWrite]を生成する
-  factory DefinitionForWrite.fromWord(Word word) {
+  factory DefinitionForWrite.fromWord(Word word, String authorId) {
     return DefinitionForWrite(
       id: null,
+      authorId: authorId,
       word: word.word,
       wordReading: word.reading,
       isPublic: true,
@@ -111,6 +114,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
 
   Map<String, dynamic> toFirestoreForCreate() {
     return {
+      DefinitionsCollection.authorId: authorId,
       DefinitionsCollection.word: word,
       DefinitionsCollection.wordReading: wordReading,
       DefinitionsCollection.wordReadingInitialSubGroupLabel:
@@ -124,6 +128,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
 
   Map<String, dynamic> toFirestoreForUpdate() {
     return {
+      DefinitionsCollection.authorId: authorId,
       DefinitionsCollection.word: word,
       DefinitionsCollection.wordReading: wordReading,
       DefinitionsCollection.wordReadingInitialSubGroupLabel:
@@ -137,5 +142,6 @@ class DefinitionForWrite with _$DefinitionForWrite {
   bool get isEmptyAllFields =>
       word.isEmpty && wordReading.isEmpty && definition.isEmpty;
 
-  String get wordReadingInitialLabel => InitialSubGroup.fromString(wordReading).label;
+  String get wordReadingInitialLabel =>
+      InitialSubGroup.fromString(wordReading).label;
 }

@@ -16,6 +16,36 @@ class DefinitionService extends _$DefinitionService {
   @override
   FutureOr<void> build() {}
 
+  Future<void> deleteDefinition(Definition definition) async {
+    final isLoadingOverlayNotifier =
+        ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
+    final toastNotifier = ref.read(toastControllerProvider.notifier);
+
+    try {
+      // todo
+      // await ref
+      //     .read(writeDefinitionRepositoryProvider)
+      //     .deleteDefinition(definition.id);
+    } on Exception catch (e, stackTrace) {
+      logger.e('定義[${definition.id}]を削除時にエラーが発生 error: $e, stackTrace: $stackTrace');
+      toastNotifier.showToast(
+        'エラーが発生しました。もう一度お試しください。',
+        causeError: true,
+      );
+      isLoadingOverlayNotifier.finishLoading();
+      return;
+    }
+
+    // TODO これいらないかも。かわりに、definitionIdListStateNotifierProfiderをinvalidateする
+    // 遷移元の画面を更新するためにinvalidateする
+    ref.invalidate(definitionProvider(definition.id));
+
+    // TODO 2画面戻る
+
+    isLoadingOverlayNotifier.finishLoading();
+    toastNotifier.showToast('削除しました');
+  }
+
   /// いいねをタップした際の処理
   Future<void> tapLike(Definition definition) async {
     // 二度押し防止とUX向上のため、オーバーレイローディングを表示させる

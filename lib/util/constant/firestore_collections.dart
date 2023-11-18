@@ -29,6 +29,14 @@ class DefinitionsCollection {
   static const isEdited = 'isEdited';
 }
 
+class WordDefinitionRelationsCollection {
+  static const collectionName = 'WordDefinitionRelations';
+
+  // Field
+  static const wordId = 'wordId';
+  static const definitionId = 'definitionId';
+}
+
 class LikesCollection {
   static const collectionName = 'Likes';
 

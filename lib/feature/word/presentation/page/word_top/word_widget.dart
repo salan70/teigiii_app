@@ -7,6 +7,7 @@ import '../../../../../core/common_widget/button/primary_filled_button.dart';
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/logger.dart';
+import '../../../../auth/application/auth_state.dart';
 import '../../../../definition/domain/definition_for_write.dart';
 import '../../../../definition/util/write_definition_form_type.dart';
 import '../../../application/word_state.dart';
@@ -51,11 +52,12 @@ class WordWidget extends ConsumerWidget {
               Center(
                 child: PrimaryFilledButton(
                   onPressed: () {
-                    final definitionForWrite =
-                        DefinitionForWrite.fromWord(word);
                     context.pushRoute(
                       PostDefinitionRoute(
-                        initialDefinitionForWrite: definitionForWrite,
+                        initialDefinitionForWrite: DefinitionForWrite.fromWord(
+                          word,
+                          ref.read(userIdProvider)!,
+                        ),
                         autoFocusForm: WriteDefinitionFormType.definition,
                       ),
                     );

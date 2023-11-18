@@ -171,17 +171,46 @@ class MockWriteDefinitionRepository extends _i1.Mock
       ) as _i2.FirebaseFirestore);
 
   @override
-  _i12.Future<void> createDefinitionAndMaybeWord(
-    String? authorId,
-    String? existingWordId,
+  _i12.Future<void> createDefinition(
+    _i13.DefinitionForWrite? definitionForWrite,
+    String? wordId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #createDefinition,
+          [
+            definitionForWrite,
+            wordId,
+          ],
+        ),
+        returnValue: _i12.Future<void>.value(),
+        returnValueForMissingStub: _i12.Future<void>.value(),
+      ) as _i12.Future<void>);
+
+  @override
+  _i12.Future<void> createDefinitionAndWord(
+          _i13.DefinitionForWrite? definitionForWrite) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #createDefinitionAndWord,
+          [definitionForWrite],
+        ),
+        returnValue: _i12.Future<void>.value(),
+        returnValueForMissingStub: _i12.Future<void>.value(),
+      ) as _i12.Future<void>);
+
+  @override
+  _i12.Future<void> updateWordChangedDefinition(
+    String? previousWordId,
+    String? newWordId,
     _i13.DefinitionForWrite? definitionForWrite,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #createDefinitionAndMaybeWord,
+          #updateWordChangedDefinition,
           [
-            authorId,
-            existingWordId,
+            previousWordId,
+            newWordId,
             definitionForWrite,
           ],
         ),
@@ -190,17 +219,47 @@ class MockWriteDefinitionRepository extends _i1.Mock
       ) as _i12.Future<void>);
 
   @override
-  _i12.Future<void> updateDefinitionAndMaybeCreateWord(
-    String? existingWordId,
+  _i12.Future<void> updateDefinitionAndCreateWord(
     _i13.DefinitionForWrite? definitionForWrite,
+    String? previousWordId,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #updateDefinitionAndMaybeCreateWord,
+          #updateDefinitionAndCreateWord,
           [
-            existingWordId,
             definitionForWrite,
+            previousWordId,
           ],
+        ),
+        returnValue: _i12.Future<void>.value(),
+        returnValueForMissingStub: _i12.Future<void>.value(),
+      ) as _i12.Future<void>);
+
+  @override
+  _i12.Future<void> updateDefinition(
+          _i13.DefinitionForWrite? definitionForWrite) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateDefinition,
+          [definitionForWrite],
+        ),
+        returnValue: _i12.Future<void>.value(),
+        returnValueForMissingStub: _i12.Future<void>.value(),
+      ) as _i12.Future<void>);
+
+  @override
+  _i12.Future<void> updatePostType({
+    required String? definitionId,
+    required bool? isPublic,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updatePostType,
+          [],
+          {
+            #definitionId: definitionId,
+            #isPublic: isPublic,
+          },
         ),
         returnValue: _i12.Future<void>.value(),
         returnValueForMissingStub: _i12.Future<void>.value(),

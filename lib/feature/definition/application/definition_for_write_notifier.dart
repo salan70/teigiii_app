@@ -24,7 +24,8 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     DefinitionForWrite? definitionForWrite,
   ) async {
     if (definitionForWrite == null) {
-      _initialState = DefinitionForWrite.empty();
+      final currentUserId = ref.read(userIdProvider)!;
+      _initialState = DefinitionForWrite.empty(currentUserId);
     } else {
       _initialState = definitionForWrite;
     }
@@ -55,24 +56,10 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
   Future<void> post() async {
     final isLoadingOverlayNotifier =
         ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
-
-    final definitionForWrite = state.value!;
     final toastNotifier = ref.read(toastControllerProvider.notifier);
 
     try {
-      final existingWordId = await ref.read(wordRepositoryProvider).findWordId(
-            definitionForWrite.word,
-            definitionForWrite.wordReading,
-          );
-      final currentUserId = ref.read(userIdProvider)!;
-
-      await ref
-          .read(writeDefinitionRepositoryProvider)
-          .createDefinitionAndMaybeWord(
-            currentUserId,
-            existingWordId,
-            definitionForWrite,
-          );
+      await _executeCreate();
     } on Exception catch (e, stackTrace) {
       logger.e('定義投稿時にエラーが発生 error: $e, stackTrace: $stackTrace');
       toastNotifier.showToast(
@@ -90,6 +77,31 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     toastNotifier.showToast('投稿しました！');
   }
 
+  Future<void> _executeCreate() async {
+    final definitionForWrite = state.value!;
+
+    final existingCurrentWordId =
+        await ref.read(wordRepositoryProvider).findWordId(
+              definitionForWrite.word,
+              definitionForWrite.wordReading,
+            );
+
+    // Wordドキュメントを新たに作成する必要があるかを判定
+    if (existingCurrentWordId == null) {
+      // * 必要ある場合
+      await ref.read(writeDefinitionRepositoryProvider).createDefinitionAndWord(
+            definitionForWrite,
+          );
+      return;
+    }
+
+    // * 必要ない場合
+    await ref.read(writeDefinitionRepositoryProvider).createDefinition(
+          definitionForWrite,
+          existingCurrentWordId,
+        );
+  }
+
   Future<void> edit() async {
     final isLoadingOverlayNotifier =
         ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
@@ -98,17 +110,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     final toastNotifier = ref.read(toastControllerProvider.notifier);
 
     try {
-      final existingWordId = await ref.read(wordRepositoryProvider).findWordId(
-            definitionForWrite.word,
-            definitionForWrite.wordReading,
-          );
-
-      await ref
-          .read(writeDefinitionRepositoryProvider)
-          .updateDefinitionAndMaybeCreateWord(
-            existingWordId,
-            definitionForWrite,
-          );
+      await _executeUpdate();
     } on Exception catch (e, stackTrace) {
       logger.e('定義編集時にエラーが発生 error: $e, stackTrace: $stackTrace');
       toastNotifier.showToast(
@@ -126,6 +128,49 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
     toastNotifier.showToast('保存しました！');
+  }
+
+  Future<void> _executeUpdate() async {
+    final definitionForWrite = state.value!;
+
+    // 編集前のwordId
+    final previousWordId = await ref
+        .read(wordRepositoryProvider)
+        .findWordId(_initialState.word, _initialState.wordReading);
+    if (previousWordId == null) {
+      throw Exception('編集前のwordIdがnullです');
+    }
+
+    // 編集後のwordId。 [initialWordId] と同じ可能性あり
+    final existingNewWordId = await ref.read(wordRepositoryProvider).findWordId(
+          definitionForWrite.word,
+          definitionForWrite.wordReading,
+        );
+
+    if (existingNewWordId == null) {
+      // * 新たにWordを作成する場合
+      await ref
+          .read(writeDefinitionRepositoryProvider)
+          .updateDefinitionAndCreateWord(definitionForWrite, previousWordId);
+      return;
+    }
+
+    if (previousWordId == existingNewWordId) {
+      // * Wordに変更がない場合
+      await ref
+          .read(writeDefinitionRepositoryProvider)
+          .updateDefinition(definitionForWrite);
+      return;
+    }
+
+    // * 「既にWordがある」かつ「Wordに変更がある」場合
+    await ref
+        .read(writeDefinitionRepositoryProvider)
+        .updateWordChangedDefinition(
+          previousWordId,
+          existingNewWordId,
+          definitionForWrite,
+        );
   }
 
   bool canPost() {

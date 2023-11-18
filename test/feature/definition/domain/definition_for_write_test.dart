@@ -4,6 +4,7 @@ import 'package:teigi_app/feature/definition/domain/definition_for_write.dart';
 void main() {
   const baseDefinitionForWrite = DefinitionForWrite(
     id: '1',
+    authorId: 'userId',
     word: 'word',
     wordReading: 'wordReading',
     isPublic: true,
@@ -359,12 +360,14 @@ void main() {
     test('想定通りにMap型が返されることを検証', () {
       // * Arrange
       const word = '冒険';
+      const userId = 'userId';
       const wordReading = 'ぼうけん';
       const definition = 'かかんに挑むこと';
       const isPublic = true;
 
       const definitionForWrite = DefinitionForWrite(
         id: null,
+        authorId: userId,
         word: word,
         wordReading: wordReading,
         isPublic: isPublic,
@@ -376,6 +379,7 @@ void main() {
 
       // * Assert
       expect(actual, isA<Map<String, dynamic>>());
+      expect(actual['authorId'], userId);
       expect(actual['word'], word);
       expect(actual['wordReadingInitialSubGroupLabel'], 'ほ');
       expect(actual['definition'], definition);
