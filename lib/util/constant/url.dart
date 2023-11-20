@@ -4,8 +4,11 @@ const latestInformationPageUrl =
 const termPageUrl =
     'https://almondine-ixora-d9e.notion.site/cf91474015864ce381297e89be7a6e1e?pvs=4';
 
-const privacyPolicyUrl =
+const privacyPolicyPageUrl =
     'https://almondine-ixora-d9e.notion.site/d6aee44eb66a4d4b88fe0a89c6e3da00?pvs=4';
+
+const howToPageUrl =
+    'https://almondine-ixora-d9e.notion.site/c1c523c7a9e949208dc814c50b2c4477?pvs=4';
 
 String userReportFormUrl({
   required String targetUserPublicId,
