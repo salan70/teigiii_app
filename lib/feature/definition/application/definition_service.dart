@@ -6,6 +6,7 @@ import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../../word/application/word_list_state_by_initial.dart';
 import '../../word/application/word_list_state_by_search_word.dart';
+import '../../word/application/word_state.dart';
 import '../domain/definition.dart';
 import '../repository/like_definition_repository.dart';
 import '../repository/write_definition_repository.dart';
@@ -49,7 +50,11 @@ class DefinitionService extends _$DefinitionService {
     ref
       ..invalidate(definitionIdListStateNotifierProvider)
       ..invalidate(wordListStateByInitialNotifierProvider)
-      ..invalidate(wordListStateBySearchWordNotifierProvider);
+      ..invalidate(wordListStateBySearchWordNotifierProvider)
+      ..invalidate(wordProvider(definition.wordId));
+
+    // uiでのラグを回避するため、wordが再生成されるまで待機する
+    await ref.read(wordProvider(definition.wordId).future);
 
     isLoadingOverlayNotifier.finishLoading();
     toastNotifier.showToast('削除しました');

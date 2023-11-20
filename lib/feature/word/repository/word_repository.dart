@@ -26,10 +26,18 @@ class WordRepository {
   CollectionReference get _definitionsCollectionRef =>
       firestore.collection(DefinitionsCollection.collectionName);
 
-  Future<WordDocument> fetchWordById(String wordId) async {
+  /// [wordId] に一致するWordドキュメントを返す
+  ///
+  /// 該当するWordドキュメントが見つからない場合、nullを返す
+  Future<WordDocument?> fetchWordById(String wordId) async {
     final snapshot = await _wordsCollectionRef.doc(wordId).get();
 
-    return WordDocument.fromFirestore(snapshot);
+    if (snapshot.exists) {
+      return WordDocument.fromFirestore(snapshot);
+    }
+
+    // 該当するWordドキュメントが見つからない場合、nullを返す
+    return null;
   }
 
   /// [word], [wordReading]両方が一致するWordドキュメントのidを返す

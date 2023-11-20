@@ -58,14 +58,17 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
             ref.read(dialogControllerProvider.notifier).show(
                   ConfirmDialog(
                     confirmMessage: '本当に削除してもよろしいですか？',
-                    onConfirm: () {
-                      ref
+                    onConfirm: () async {
+                      await ref
                           .read(definitionServiceProvider.notifier)
                           .deleteDefinition(definition);
 
                       // [SelfDefinitionActionIconButton] を表示している画面の
                       // 前の画面まで戻る
-                      context.popRoute();
+                      if (!context.mounted) {
+                        return;
+                      }
+                      await context.popRoute();
                     },
                     confirmButtonText: '削除する',
                   ),
