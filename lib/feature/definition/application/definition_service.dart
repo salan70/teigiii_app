@@ -2,7 +2,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/is_loading_overlay_state.dart';
 import '../../../core/common_provider/toast_controller.dart';
-import '../../../core/router/app_router.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../../word/application/word_list_state_by_initial.dart';
@@ -51,9 +50,6 @@ class DefinitionService extends _$DefinitionService {
       ..invalidate(definitionIdListStateNotifierProvider)
       ..invalidate(wordListStateByInitialNotifierProvider)
       ..invalidate(wordListStateBySearchWordNotifierProvider);
-
-    // TODO 2画面戻る
-    await ref.read(appRouterProvider).pop();
 
     isLoadingOverlayNotifier.finishLoading();
     toastNotifier.showToast('削除しました');

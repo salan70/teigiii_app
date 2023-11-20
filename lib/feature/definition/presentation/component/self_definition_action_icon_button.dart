@@ -62,6 +62,10 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
                       ref
                           .read(definitionServiceProvider.notifier)
                           .deleteDefinition(definition);
+
+                      // [SelfDefinitionActionIconButton] を表示している画面の
+                      // 前の画面まで戻る
+                      context.popRoute();
                     },
                     confirmButtonText: '削除する',
                   ),
@@ -127,9 +131,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
           actionsPadding: const EdgeInsets.only(bottom: 16),
           actions: [
             InkWell(
-              onTap: () {
-                context.popRoute();
-              },
+              onTap: context.popRoute,
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
