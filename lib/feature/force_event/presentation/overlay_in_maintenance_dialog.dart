@@ -50,7 +50,7 @@ class OverlayInMaintenanceDialog extends ConsumerWidget {
                   const SizedBox(height: 16),
                   PrimaryFilledButton(
                     onPressed: () {
-                      ref.read(launchURLProvider(latestInformationPage));
+                      ref.read(launchURLProvider(latestInformationPageUrl));
                     },
                     text: '最新情報を確認する',
                   ),

@@ -68,7 +68,7 @@ class SettingPage extends ConsumerWidget {
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.question_square),
               label: '使い方',
-              onTap: () {}, // TODO(me): 使い方画面へ遷移（WebToでNotion）
+              onTap: () => ref.read(launchURLProvider(howToPageUrl)),
             ),
             const SizedBox(height: 24),
             SettingTileButton(
@@ -100,13 +100,13 @@ class SettingPage extends ConsumerWidget {
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.doc_text),
               label: '利用規約',
-              onTap: () {}, // TODO(me): 利用規約画面へ遷移（WebToでNotion）
+              onTap: () => ref.read(launchURLProvider(termPageUrl)),
             ),
             const SizedBox(height: 24),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.exclamationmark_shield),
               label: 'プライバシーポリシー',
-              onTap: () {}, // TODO(me): プライバシーポリシー画面へ遷移（WebToでNotion）
+              onTap: () => ref.read(launchURLProvider(privacyPolicyPageUrl)),
             ),
             const SizedBox(height: 24),
             SettingTileButton(
