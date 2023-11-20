@@ -32,5 +32,8 @@ extension StringExtension on String {
     return String.fromCharCode(code - 0x0060);
   }
 
-  
+  // 末尾の空白文字を削除
+  String trimEnd() {
+    return replaceAll(RegExp(r'\s+$'), '');
+  }
 }

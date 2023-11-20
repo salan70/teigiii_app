@@ -97,4 +97,29 @@ void main() {
       );
     });
   });
+
+  group('trimEnd()', () {
+    test('末尾の空白を削除する', () {
+      // * Act & Assert
+      expect('Hello World   '.trimEnd(), 'Hello World');
+      expect('Some text\n\n'.trimEnd(), 'Some text');
+      expect('  A  '.trimEnd(), '  A');
+      expect('NoWhitespace'.trimEnd(), 'NoWhitespace');
+    });
+
+    test('先頭の空白はそのままにする', () {
+      // * Act & Assert
+      expect('  Hello World'.trimEnd(), '  Hello World');
+    });
+
+    test('空文字列の場合は空文字列のままにする', () {
+      // * Act & Assert
+      expect(''.trimEnd(), '');
+    });
+
+    test('文字列に空白がない場合はそのままにする', () {
+      // * Act & Assert
+      expect('HelloWorld'.trimEnd(), 'HelloWorld');
+    });
+  });
 }

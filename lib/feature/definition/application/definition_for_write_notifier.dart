@@ -82,8 +82,8 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
 
     final existingCurrentWordId =
         await ref.read(wordRepositoryProvider).findWordId(
-              definitionForWrite.word,
-              definitionForWrite.wordReading,
+              definitionForWrite.trimmedWord,
+              definitionForWrite.trimmedWordReading,
             );
 
     // Wordドキュメントを新たに作成する必要があるかを判定
@@ -143,8 +143,8 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
 
     // 編集後のwordId。 [initialWordId] と同じ可能性あり
     final existingNewWordId = await ref.read(wordRepositoryProvider).findWordId(
-          definitionForWrite.word,
-          definitionForWrite.wordReading,
+          definitionForWrite.trimmedWord,
+          definitionForWrite.trimmedWordReading,
         );
 
     if (existingNewWordId == null) {
