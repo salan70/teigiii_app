@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
+import '../../../../core/common_provider/dialog_controller.dart';
+import '../../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../application/definition_service.dart';
@@ -52,7 +54,26 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
         PullDownMenuItem(
           title: 'この定義を削除',
           icon: CupertinoIcons.trash,
-          onTap: () {},
+          onTap: () {
+            ref.read(dialogControllerProvider.notifier).show(
+                  ConfirmDialog(
+                    confirmMessage: '本当に削除してもよろしいですか？',
+                    onConfirm: () async {
+                      await ref
+                          .read(definitionServiceProvider.notifier)
+                          .deleteDefinition(definition);
+
+                      // [SelfDefinitionActionIconButton] を表示している画面の
+                      // 前の画面まで戻る
+                      if (!context.mounted) {
+                        return;
+                      }
+                      await context.popRoute();
+                    },
+                    confirmButtonText: '削除する',
+                  ),
+                );
+          },
         ),
       ];
     }
@@ -113,9 +134,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
           actionsPadding: const EdgeInsets.only(bottom: 16),
           actions: [
             InkWell(
-              onTap: () {
-                context.popRoute();
-              },
+              onTap: context.popRoute,
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(

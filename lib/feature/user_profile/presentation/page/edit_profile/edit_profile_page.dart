@@ -7,9 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
+import '../../../../../core/common_provider/dialog_controller.dart';
 import '../../../../../core/common_widget/avatar_network_image_widget.dart';
+import '../../../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
-import '../../../../../core/common_widget/show_write_close_confirm_dialog.dart';
 import '../../../../../util/logger.dart';
 import '../../../application/user_profile_for_write_notifier.dart';
 
@@ -63,7 +64,16 @@ class EditProfilePage extends ConsumerWidget {
                   await context.popRoute();
                   return;
                 }
-                await showCloseConfirmDialog(context);
+
+                // 確認ダイアログを表示
+                ref.read(dialogControllerProvider.notifier).show(
+                      ConfirmDialog(
+                        confirmMessage: '入力した内容は保存されません。\nよろしいですか？',
+                        onConfirm: () => Navigator.of(context)
+                            .popUntil((route) => route.isFirst),
+                        confirmButtonText: 'OK',
+                      ),
+                    );
               },
             ),
             title: const Center(child: Text('プロフィール編集')),

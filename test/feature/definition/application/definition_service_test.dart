@@ -4,13 +4,13 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition/application/definition_service.dart';
-import 'package:teigi_app/feature/definition/repository/write_definition_repository.dart';
+import 'package:teigi_app/feature/definition/repository/like_definition_repository.dart';
 
 import '../../../mock/mock_data.dart';
 import 'definition_service_test.mocks.dart';
 
 @GenerateNiceMocks([
-  MockSpec<WriteDefinitionRepository>(),
+  MockSpec<LikeDefinitionRepository>(),
   MockSpec<Listener<AsyncValue<void>>>(),
 ])
 
@@ -21,7 +21,7 @@ abstract class Listener<T> {
 }
 
 void main() {
-  final mockWriteDefinitionRepository = MockWriteDefinitionRepository();
+  final mockLikeDefinitionRepository = MockLikeDefinitionRepository();
   final listener = MockListener();
 
   late ProviderContainer container;
@@ -30,15 +30,15 @@ void main() {
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => 'userId'),
-        writeDefinitionRepositoryProvider
-            .overrideWithValue(mockWriteDefinitionRepository),
+        likeDefinitionRepositoryProvider
+            .overrideWithValue(mockLikeDefinitionRepository),
       ],
     );
     addTearDown(container.dispose);
   });
 
   tearDown(() {
-    reset(mockWriteDefinitionRepository);
+    reset(mockLikeDefinitionRepository);
     reset(listener);
   });
 
@@ -77,11 +77,11 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockWriteDefinitionRepository.likeDefinition(definition.id, any),
+        mockLikeDefinitionRepository.likeDefinition(definition.id, any),
       ).called(1);
 
       // 想定外の関数が呼ばれていないか検証
-      verifyNever(mockWriteDefinitionRepository.unlikeDefinition(any, any));
+      verifyNever(mockLikeDefinitionRepository.unlikeDefinition(any, any));
     });
 
     test('いいね解除: stateと、想定通りにrepositoryの関数が呼ばれることを検証', () async {
@@ -105,11 +105,11 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockWriteDefinitionRepository.unlikeDefinition(definition.id, any),
+        mockLikeDefinitionRepository.unlikeDefinition(definition.id, any),
       ).called(1);
 
       // 想定外の関数が呼ばれていないか検証
-      verifyNever(mockWriteDefinitionRepository.likeDefinition(any, any));
+      verifyNever(mockLikeDefinitionRepository.likeDefinition(any, any));
     });
 
     // TODO(me): エラー発生時のテストを書く

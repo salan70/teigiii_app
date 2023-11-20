@@ -219,7 +219,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WordListPage(
           key: args.key,
           selectedInitialSubGroup: args.selectedInitialSubGroup,
-          
         ),
       );
     },

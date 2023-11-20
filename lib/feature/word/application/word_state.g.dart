@@ -6,7 +6,7 @@ part of 'word_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$wordHash() => r'c1da987087d1c757d9c7f9dd91bec61de24cc5cf';
+String _$wordHash() => r'7345548e8bb8980de76c6cfd08b5566bf1c9d775';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,16 +29,32 @@ class _SystemHash {
   }
 }
 
-/// See also [word].
+/// [wordId] に一致するWordを返す
+///
+/// 該当するWordが見つからない場合、nullを返す
+///
+/// Copied from [word].
 @ProviderFor(word)
 const wordProvider = WordFamily();
 
-/// See also [word].
-class WordFamily extends Family<AsyncValue<Word>> {
-  /// See also [word].
+/// [wordId] に一致するWordを返す
+///
+/// 該当するWordが見つからない場合、nullを返す
+///
+/// Copied from [word].
+class WordFamily extends Family<AsyncValue<Word?>> {
+  /// [wordId] に一致するWordを返す
+  ///
+  /// 該当するWordが見つからない場合、nullを返す
+  ///
+  /// Copied from [word].
   const WordFamily();
 
-  /// See also [word].
+  /// [wordId] に一致するWordを返す
+  ///
+  /// 該当するWordが見つからない場合、nullを返す
+  ///
+  /// Copied from [word].
   WordProvider call(
     String wordId,
   ) {
@@ -71,9 +87,17 @@ class WordFamily extends Family<AsyncValue<Word>> {
   String? get name => r'wordProvider';
 }
 
-/// See also [word].
-class WordProvider extends FutureProvider<Word> {
-  /// See also [word].
+/// [wordId] に一致するWordを返す
+///
+/// 該当するWordが見つからない場合、nullを返す
+///
+/// Copied from [word].
+class WordProvider extends FutureProvider<Word?> {
+  /// [wordId] に一致するWordを返す
+  ///
+  /// 該当するWordが見つからない場合、nullを返す
+  ///
+  /// Copied from [word].
   WordProvider(
     String wordId,
   ) : this._internal(
@@ -104,7 +128,7 @@ class WordProvider extends FutureProvider<Word> {
 
   @override
   Override overrideWith(
-    FutureOr<Word> Function(WordRef provider) create,
+    FutureOr<Word?> Function(WordRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -121,7 +145,7 @@ class WordProvider extends FutureProvider<Word> {
   }
 
   @override
-  FutureProviderElement<Word> createElement() {
+  FutureProviderElement<Word?> createElement() {
     return _WordProviderElement(this);
   }
 
@@ -139,12 +163,12 @@ class WordProvider extends FutureProvider<Word> {
   }
 }
 
-mixin WordRef on FutureProviderRef<Word> {
+mixin WordRef on FutureProviderRef<Word?> {
   /// The parameter `wordId` of this provider.
   String get wordId;
 }
 
-class _WordProviderElement extends FutureProviderElement<Word> with WordRef {
+class _WordProviderElement extends FutureProviderElement<Word?> with WordRef {
   _WordProviderElement(super.provider);
 
   @override

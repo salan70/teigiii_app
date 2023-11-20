@@ -25,6 +25,7 @@ class Definition with _$Definition {
   DefinitionForWrite toDefinitionForWrite() {
     return DefinitionForWrite(
       id: id,
+      authorId: authorId,
       word: word,
       wordReading: wordReading,
       isPublic: isPublic,
