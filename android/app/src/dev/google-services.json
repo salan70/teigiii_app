@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:225028441501:android:2c9df4c1b709cc4db5db74",
+        "mobilesdk_app_id": "1:225028441501:android:b16db106541fa9f1b5db74",
         "android_client_info": {
-          "package_name": "com.toda.teigi_app.dev"
+          "package_name": "com.toda.teigiii.dev"
         }
       },
       "oauth_client": [],
