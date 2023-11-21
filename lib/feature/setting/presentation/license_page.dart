@@ -18,10 +18,9 @@ class MyLicensePage extends ConsumerWidget {
       body: appVersion.when(
         data: (appVersion) {
           return LicensePage(
-            applicationName: 'MyApp', // TODO(me): アプリの名前入れる
+            // TODO(me): ロゴを指定する
+            applicationName: 'Teigiii',
             applicationVersion: appVersion,
-            applicationLegalese:
-                'All rights reserved', // TODO(me): 著作権表示これでいいか調べる
           );
         },
         loading: OverlayLoadingWidget.new,
