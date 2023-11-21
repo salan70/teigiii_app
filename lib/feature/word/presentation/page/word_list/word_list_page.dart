@@ -47,28 +47,39 @@ class WordListPage extends ConsumerWidget {
       return messageList[Random().nextInt(messageList.length)];
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: InkWell(
-          child: Text(selectedInitialSubGroup.label),
-          onTap: () => PrimaryScrollController.of(context).scrollToTop(),
+    return SafeArea(
+      child: Scaffold(
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool _) {
+            return [
+              SliverAppBar(
+                pinned: true,
+                title: InkWell(
+                  child: Text(selectedInitialSubGroup.label),
+                  onTap: () =>
+                      PrimaryScrollController.of(context).scrollToTop(),
+                ),
+                leading: const BackButton(),
+                flexibleSpace: InkWell(
+                  onTap: () =>
+                      PrimaryScrollController.of(context).scrollToTop(),
+                ),
+              ),
+            ];
+          },
+          body: InfinityScrollWidget(
+            listStateNotifierProvider: wordListProvider,
+            fetchMore: ref.read(wordListProvider.notifier).fetchMore,
+            tileBuilder: (item) => WordTile(word: item as Word),
+            shimmerTile: const WordTileShimmer(),
+            shimmerTileNumber: 10,
+            emptyWidget: SimpleWidgetForEmpty(
+              message: generateEmptyMessage(selectedInitialSubGroup.label),
+            ),
+          ),
         ),
-        leading: const BackButton(),
-        flexibleSpace: InkWell(
-          onTap: () => PrimaryScrollController.of(context).scrollToTop(),
-        ),
+        floatingActionButton: const PostDefinitionFAB(),
       ),
-      body: InfinityScrollWidget(
-        listStateNotifierProvider: wordListProvider,
-        fetchMore: ref.read(wordListProvider.notifier).fetchMore,
-        tileBuilder: (item) => WordTile(word: item as Word),
-        shimmerTile: const WordTileShimmer(),
-        shimmerTileNumber: 10,
-        emptyWidget: SimpleWidgetForEmpty(
-          message: generateEmptyMessage(selectedInitialSubGroup.label),
-        ),
-      ),
-      floatingActionButton: const PostDefinitionFAB(),
     );
   }
 }

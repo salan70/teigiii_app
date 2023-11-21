@@ -52,42 +52,47 @@ class IndividualDictionaryDefinitionListPage extends ConsumerWidget {
       return messageList[Random().nextInt(messageList.length)];
     }
 
-    return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool _) {
-          return <Widget>[
-            SliverAppBar(
-              forceElevated: true,
-              pinned: true,
-              title: InkWell(
-                child: Text(initialSubGroup.label),
-                onTap: () => PrimaryScrollController.of(context).scrollToTop(),
-              ),
-              flexibleSpace: InkWell(
-                onTap: () => PrimaryScrollController.of(context).scrollToTop(),
-              ),
-            ),
-          ];
-        },
-        body: Column(
-          children: [
-            const SizedBox(height: 16),
-            DictionaryAuthorWidget(targetUserId: targetUserId),
-            Expanded(
-              child: DefinitionList(
-                definitionFeedType: DefinitionFeedType.individualIndex,
-                targetUserId: targetUserId,
-                initialSubGroup: initialSubGroup,
-                shimmerTileNumber: 1,
-                emptyWidget: SimpleWidgetForEmpty(
-                  message: generateEmptyMessage(initialSubGroup.label),
+    return SafeArea(
+      child: Scaffold(
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool _) {
+            return <Widget>[
+              SliverAppBar(
+                forceElevated: true,
+                pinned: true,
+                title: InkWell(
+                  child: Text(initialSubGroup.label),
+                  onTap: () =>
+                      PrimaryScrollController.of(context).scrollToTop(),
+                ),
+                flexibleSpace: InkWell(
+                  onTap: () =>
+                      PrimaryScrollController.of(context).scrollToTop(),
                 ),
               ),
-            ),
-          ],
+            ];
+          },
+          body: Column(
+            children: [
+              const SizedBox(height: 16),
+              DictionaryAuthorWidget(targetUserId: targetUserId),
+              const SizedBox(height: 16),
+              Expanded(
+                child: DefinitionList(
+                  definitionFeedType: DefinitionFeedType.individualIndex,
+                  targetUserId: targetUserId,
+                  initialSubGroup: initialSubGroup,
+                  shimmerTileNumber: 1,
+                  emptyWidget: SimpleWidgetForEmpty(
+                    message: generateEmptyMessage(initialSubGroup.label),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
+        floatingActionButton: const PostDefinitionFAB(),
       ),
-      floatingActionButton: const PostDefinitionFAB(),
     );
   }
 }
