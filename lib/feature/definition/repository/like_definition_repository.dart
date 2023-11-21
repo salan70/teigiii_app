@@ -68,6 +68,19 @@ class LikeDefinitionRepository {
     await batch.commit();
   }
 
+  /// [userId]がいいねしたdefinitionIdのリストを取得する
+  Future<List<String>> fetchAllLikedDefinitionIdList(String userId) async {
+    final likeSnapshots = await _likesCollectionRef
+        .where(LikesCollection.userId, isEqualTo: userId)
+        .get()
+        .then((snapshot) => snapshot.docs);
+
+    return likeSnapshots.map((snapshot) {
+      final data = snapshot.data()! as Map<String, dynamic>;
+      return data[LikesCollection.definitionId] as String;
+    }).toList();
+  }
+
   /// [definitionId]に紐づくいいねを全て削除する
   Future<void> deleteLikeByDefinitionId(String definitionId) async {
     // Likesコレクションからドキュメントを取得して削除

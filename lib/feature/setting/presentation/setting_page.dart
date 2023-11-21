@@ -178,6 +178,7 @@ class SettingPage extends ConsumerWidget {
                                           .deleteUser();
 
                                       // TODO(me): 削除完了ダイアログ出す
+                                      // 「はじめから」的なボタンタップで初回登録（onAppLaunch）実行
                                       
                                     },
                                     confirmButtonText: '削除する',

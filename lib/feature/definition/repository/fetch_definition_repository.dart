@@ -447,6 +447,19 @@ class FetchDefinitionRepository {
     return DefinitionDocument.fromFirestore(snapshot);
   }
 
+  /// [userId] が投稿した全てのDefinitionDocリストを取得する
+  ///
+  /// 取得数にlimitを設定していないため、大量のデータを取得する可能性があることに注意。
+  Future<List<DefinitionDocument>> fetchAllPostedDefinitionDocList(
+    String userId,
+  ) async {
+    final snapshot = await _definitionsCollectionRef
+        .where(DefinitionsCollection.authorId, isEqualTo: userId)
+        .get();
+
+    return snapshot.docs.map(DefinitionDocument.fromFirestore).toList();
+  }
+
   /// 「ユーザー毎の辞書 -> InitialSubGroup毎の定義一覧 画面」
   /// で表示するDefinitionIDのListを取得する
   ///

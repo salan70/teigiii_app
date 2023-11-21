@@ -3,6 +3,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/common_provider/is_loading_overlay_state.dart';
 import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/logger.dart';
+import '../../definition/repository/fetch_definition_repository.dart';
+import '../../definition/repository/like_definition_repository.dart';
 import '../../definition/repository/write_definition_repository.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_config/repository/device_info_repository.dart';
@@ -95,9 +97,10 @@ class AuthService extends _$AuthService {
     final currentUserId = ref.read(userIdProvider)!;
 
     // * definition
-    await ref
-        .read(writeDefinitionRepositoryProvider)
-        .deleteAllDefinition(currentUserId);
+    await deleteAllDefinition();
+
+    // * like
+    await unlikeAllLikedDefinition();
 
     // * follow関連
     await unfollowAllFollowing(currentUserId);
@@ -115,6 +118,42 @@ class AuthService extends _$AuthService {
     await ref
         .read(userConfigRepositoryProvider)
         .deleteUserConfig(currentUserId);
+  }
+
+  /// ユーザーが投稿したDefinitionと紐づくLikeを全て削除する
+  Future<void> deleteAllDefinition() async {
+    final currentUserId = ref.read(userIdProvider)!;
+
+    final allPostedDefinitionDocList = await ref
+        .read(fetchDefinitionRepositoryProvider)
+        .fetchAllPostedDefinitionDocList(currentUserId);
+
+    for (final definitionDoc in allPostedDefinitionDocList) {
+      // Definitionを削除
+      await ref
+          .read(writeDefinitionRepositoryProvider)
+          .deleteDefinition(definitionDoc.id, definitionDoc.wordId);
+
+      // 紐づくLikeを削除
+      await ref
+          .read(likeDefinitionRepositoryProvider)
+          .deleteLikeByDefinitionId(definitionDoc.id);
+    }
+  }
+
+  /// ユーザーがいいねした全てのDefinitionのいいねを解除する
+  Future<void> unlikeAllLikedDefinition() async {
+    final currentUserId = ref.read(userIdProvider)!;
+
+    final likedDefinitionIdList = await ref
+        .read(likeDefinitionRepositoryProvider)
+        .fetchAllLikedDefinitionIdList(currentUserId);
+
+    for (final definitionId in likedDefinitionIdList) {
+      await ref
+          .read(likeDefinitionRepositoryProvider)
+          .unlikeDefinition(definitionId, currentUserId);
+    }
   }
 
   /// 全てのフォロワーが、currentUser をフォロー解除する
