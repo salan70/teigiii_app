@@ -7,6 +7,7 @@ import '../../../../../core/common_widget/simple_widget_for_empty.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
 import '../../../../../util/extension/scroll_controller_extension.dart';
 import '../../../../auth/application/auth_state.dart';
+import '../../../application/user_profile_state.dart';
 import '../../../util/user_list_type.dart';
 import '../../component/profile_list.dart';
 
@@ -39,8 +40,18 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                   forceElevated: true,
                   floating: true,
                   elevation: 0,
-                  // TODO(me): ユーザー名を表示させる
-                  title: const Text('プロフィール'),
+                  title: Consumer(
+                    builder: (context, ref, child) {
+                      return ref
+                          .watch(userProfileProvider(targetUserId))
+                          .maybeWhen(
+                            data: (userProfile) {
+                              return Text(userProfile.name);
+                            },
+                            orElse: SizedBox.shrink,
+                          );
+                    },
+                  ),
                   actions: [
                     // 自分のフォロー/フォロー一覧画面の場合は編集ボタンを表示
                     isMyPage
