@@ -57,4 +57,8 @@ class UserProfileRepository {
       updatedAtFieldName: FieldValue.serverTimestamp(),
     });
   }
+
+  Future<void> deleteUserProfile(String userId) async {
+    await _userProfilesCollectionRef.doc(userId).delete();
+  }
 }

@@ -3,10 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/common_provider/dialog_controller.dart';
 import '../../../core/common_provider/launch_url.dart';
+import '../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../../core/common_widget/shimmer_widget.dart';
 import '../../../core/router/app_router.dart';
 import '../../../util/constant/url.dart';
+import '../../auth/application/auth_service.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_profile/application/user_profile_state.dart';
@@ -158,8 +161,32 @@ class SettingPage extends ConsumerWidget {
               alignment: Alignment.topCenter,
               child: GestureDetector(
                 onTap: () async {
-                  // TODO(me): アカウント削除の処理
-                  // await ref.read(authServiceProvider.notifier).deleteUser();
+                  ref.read(dialogControllerProvider.notifier).show(
+                        // * 初回確認
+                        ConfirmDialog(
+                          confirmMessage:
+                              '全ての投稿が削除されます。\n本当にアカウントを削除しても\nよろしいですか？',
+                          onConfirm: () {
+                            // * 最終確認
+                            ref.read(dialogControllerProvider.notifier).show(
+                                  ConfirmDialog(
+                                    confirmMessage:
+                                        '最終確認です。\n本当にアカウントを削除しても\nよろしいですか？',
+                                    onConfirm: () async {
+                                      await ref
+                                          .read(authServiceProvider.notifier)
+                                          .deleteUser();
+
+                                      // TODO(me): 削除完了ダイアログ出す
+                                      
+                                    },
+                                    confirmButtonText: '削除する',
+                                  ),
+                                );
+                          },
+                          confirmButtonText: '削除する',
+                        ),
+                      );
                 },
                 child: Text(
                   'アカウント削除',

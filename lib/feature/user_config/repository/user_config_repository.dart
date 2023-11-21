@@ -49,4 +49,8 @@ class UserConfigRepository {
       updatedAtFieldName: FieldValue.serverTimestamp(),
     });
   }
+
+  Future<void> deleteUserConfig(String userId) async {
+    await _userConfigsCollectionRef.doc(userId).delete();
+  }
 }

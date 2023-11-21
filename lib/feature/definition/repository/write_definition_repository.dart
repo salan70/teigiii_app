@@ -256,6 +256,23 @@ class WriteDefinitionRepository {
     });
   }
 
+  Future<void> deleteAllDefinition(String userId) async {
+    // Definitionドキュメントを削除
+    final definitionsSnapshot = await _definitionsCollectionRef
+        .where(
+          DefinitionsCollection.authorId,
+          isEqualTo: userId,
+        )
+        .get();
+    for (final doc in definitionsSnapshot.docs) {
+      final data = doc.data()! as Map<String, dynamic>;
+      await deleteDefinition(
+        doc.id,
+        data[DefinitionsCollection.wordId] as String,
+      );
+    }
+  }
+
   Future<void> deleteDefinition(
     String definitionId,
     String wordId,

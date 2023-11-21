@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/simple_widget_for_empty.dart';
 import '../../../../../util/extension/scroll_controller_extension.dart';
-import '../../../util/profile_feed_type.dart';
+import '../../../util/user_list_type.dart';
 import '../../component/profile_list.dart';
 
 @RoutePage()

@@ -33,8 +33,8 @@ class ConfirmDialog extends StatelessWidget {
           ),
         ),
         InkWell(
-          onTap: (){
-            context.popRoute();
+          onTap: () async {
+            await context.popRoute();
             onConfirm();
           },
           child: Padding(
