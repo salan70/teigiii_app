@@ -79,7 +79,7 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                   targetUserId: targetUserId,
                   targetDefinitionId: null,
                   emptyWidget: const SimpleWidgetForEmpty(
-                    message: 'フォロー中のユーザーがいません',
+                    message: 'フォロー中のユーザーがいません🌱',
                   ),
                 ),
                 ProfileList(
@@ -87,7 +87,7 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                   targetUserId: targetUserId,
                   targetDefinitionId: null,
                   emptyWidget: const SimpleWidgetForEmpty(
-                    message: 'フォロワーがいません',
+                    message: 'フォロワーがいません🌴',
                   ),
                 ),
               ],
