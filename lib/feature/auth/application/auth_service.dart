@@ -73,9 +73,6 @@ class AuthService extends _$AuthService {
     state = const AsyncValue.data(null);
   }
 
-  // todo
-  // muteの考慮（このユーザーをmuteしているユーザーのミュート一覧画面うまいことやる）
-  // userが存在しない場合、UIに表示させず、mutedUserIdListから削除とか良さそう
   Future<void> deleteUser() async {
     ref.read(isLoadingOverlayNotifierProvider.notifier).startLoading();
 
