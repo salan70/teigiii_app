@@ -3,16 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/common_provider/dialog_controller.dart';
 import '../../../core/common_provider/launch_url.dart';
-import '../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../../core/common_widget/shimmer_widget.dart';
 import '../../../core/router/app_router.dart';
 import '../../../util/constant/url.dart';
-import '../../auth/application/auth_service.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_profile/application/user_profile_state.dart';
+import 'delete_account_button.dart';
 
 @RoutePage()
 class SettingRouterPage extends AutoRouter {
@@ -157,45 +155,9 @@ class SettingPage extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 72),
-            Align(
+            const Align(
               alignment: Alignment.topCenter,
-              child: GestureDetector(
-                onTap: () async {
-                  ref.read(dialogControllerProvider.notifier).show(
-                        // * 初回確認
-                        ConfirmDialog(
-                          confirmMessage:
-                              '全ての投稿が削除されます。\n本当にアカウントを削除しても\nよろしいですか？',
-                          onConfirm: () {
-                            // * 最終確認
-                            ref.read(dialogControllerProvider.notifier).show(
-                                  ConfirmDialog(
-                                    confirmMessage:
-                                        '最終確認です。\n本当にアカウントを削除しても\nよろしいですか？',
-                                    onConfirm: () async {
-                                      await ref
-                                          .read(authServiceProvider.notifier)
-                                          .deleteUser();
-
-                                      // TODO(me): 削除完了ダイアログ出す
-                                      // 「はじめから」的なボタンタップで初回登録（onAppLaunch）実行
-                                      
-                                    },
-                                    confirmButtonText: '削除する',
-                                  ),
-                                );
-                          },
-                          confirmButtonText: '削除する',
-                        ),
-                      );
-                },
-                child: Text(
-                  'アカウント削除',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                ),
-              ),
+              child: DeleteAccountButton(),
             ),
           ],
         ),

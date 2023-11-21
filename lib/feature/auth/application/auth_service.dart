@@ -82,6 +82,7 @@ class AuthService extends _$AuthService {
     try {
       await _deleteUserRelatedData();
       await ref.read(authRepositoryProvider).deleteUser();
+      logger.i('ユーザー削除が完了しました。');
     } on Exception catch (e, s) {
       logger.e('ユーザー削除時にエラーが発生しました。 error:$e, stackTrace:$s');
       ref

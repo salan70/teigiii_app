@@ -10,8 +10,9 @@ class DialogController extends _$DialogController {
   @override
   void build() {}
 
-  void show(Widget dialog) {
+  void show(Widget dialog, {bool barrierDismissible = false}) {
     showDialog<void>(
+      barrierDismissible: barrierDismissible,
       context: ref.read(appRouterProvider).navigatorKey.currentContext!,
       builder: (context) => dialog,
     );
