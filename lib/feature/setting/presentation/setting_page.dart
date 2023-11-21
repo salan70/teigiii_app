@@ -10,6 +10,7 @@ import '../../../util/constant/url.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_profile/application/user_profile_state.dart';
+import 'delete_account_button.dart';
 
 @RoutePage()
 class SettingRouterPage extends AutoRouter {
@@ -154,20 +155,9 @@ class SettingPage extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 72),
-            Align(
+            const Align(
               alignment: Alignment.topCenter,
-              child: GestureDetector(
-                onTap: () async {
-                  // TODO(me): アカウント削除の処理
-                  // await ref.read(authServiceProvider.notifier).deleteUser();
-                },
-                child: Text(
-                  'アカウント削除',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                ),
-              ),
+              child: DeleteAccountButton(),
             ),
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/firestore_collections.dart';
+import '../../../util/exception/database_exception.dart';
 import '../domain/user_profile.dart';
 import 'entity/user_profile_document.dart';
 
@@ -24,6 +25,10 @@ class UserProfileRepository {
 
   Future<UserProfileDocument> fetchUserProfile(String userId) async {
     final snapshot = await _userProfilesCollectionRef.doc(userId).get();
+
+    if (!snapshot.exists) {
+      throw const DatabaseException(DatabaseExceptionCode.notFound);
+    }
 
     return UserProfileDocument.fromFirestore(snapshot);
   }
@@ -56,5 +61,9 @@ class UserProfileRepository {
           userProfileForWrite.profileImageUrl,
       updatedAtFieldName: FieldValue.serverTimestamp(),
     });
+  }
+
+  Future<void> deleteUserProfile(String userId) async {
+    await _userProfilesCollectionRef.doc(userId).delete();
   }
 }

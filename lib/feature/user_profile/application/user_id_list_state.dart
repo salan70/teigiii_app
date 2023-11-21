@@ -6,7 +6,7 @@ import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../definition/repository/fetch_definition_repository.dart';
 import '../domain/user_id_list_state.dart';
 import '../repository/user_follow_repository.dart';
-import '../util/profile_feed_type.dart';
+import '../util/user_list_type.dart';
 
 part 'user_id_list_state.g.dart';
 

@@ -183,6 +183,10 @@ class UserFollowRepository {
     return _toUserIdListState(snapshot, followingIdList);
   }
 
+  Future<void> deleteUserFollowCount(String userId) async {
+    await _userFollowCountsCollectionRef.doc(userId).delete();
+  }
+
   UserIdListState _toUserIdListState(
     QuerySnapshot snapshot,
     List<String> userIdList,

@@ -7,6 +7,7 @@ import '../../../../../core/common_widget/adaptive_overflow_text.dart';
 import '../../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../../core/router/app_router.dart';
+import '../../../../../util/exception/database_exception.dart';
 import '../../../../../util/logger.dart';
 import '../../../application/user_profile_state.dart';
 import 'profile_tile_shimmer.dart';
@@ -99,6 +100,37 @@ class ProfileTile extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
+        // ユーザーが存在しない場合
+        if (error == const DatabaseException(DatabaseExceptionCode.notFound)) {
+          logger.i('user:[$targetUserId]は存在しません');
+          return Column(
+            children: [
+              Row(
+                children: [
+                  const SizedBox(width: 20),
+                  Icon(
+                    CupertinoIcons.exclamationmark_circle_fill,
+                    color: Theme.of(context).colorScheme.error,
+                    size: 40,
+                  ),
+                  const SizedBox(width: 16),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 16),
+                        Text('存在しないユーザーです。\n削除された可能性があります。'),
+                        SizedBox(height: 16),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(),
+            ],
+          );
+        }
+
         // エラー発生後の再読み込み中の場合、trueになる
         if (asyncTargetUserProfile.isRefreshing) {
           return const Column(
@@ -111,7 +143,9 @@ class ProfileTile extends ConsumerWidget {
           );
         }
 
-        logger.e('userId [$targetUserId]の取得時にエラーが発生: $error, stackTrace: $stackTrace');
+        logger.e(
+          'userId [$targetUserId]の取得時にエラーが発生: $error, stackTrace: $stackTrace',
+        );
         return Column(
           children: [
             const SizedBox(height: 16),
