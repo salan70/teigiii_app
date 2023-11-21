@@ -5,6 +5,8 @@ import '../../../core/common_provider/toast_controller.dart';
 import '../../../core/router/app_router.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
+import '../../word/application/word_list_state_by_initial.dart';
+import '../../word/application/word_list_state_by_search_word.dart';
 import '../../word/repository/word_repository.dart';
 import '../domain/definition_for_write.dart';
 import '../repository/write_definition_repository.dart';
@@ -74,7 +76,10 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
       return;
     }
 
-    ref.invalidate(definitionIdListStateNotifierProvider);
+    ref
+      ..invalidate(definitionIdListStateNotifierProvider)
+      ..invalidate(wordListStateByInitialNotifierProvider)
+      ..invalidate(wordListStateBySearchWordNotifierProvider);
     isLoadingOverlayNotifier.finishLoading();
 
     // トースト表示
@@ -151,7 +156,9 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
 
     ref
       ..invalidate(definitionProvider(definitionForWrite.id!))
-      ..invalidate(definitionIdListStateNotifierProvider);
+      ..invalidate(definitionIdListStateNotifierProvider)
+      ..invalidate(wordListStateByInitialNotifierProvider)
+      ..invalidate(wordListStateBySearchWordNotifierProvider);
 
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
