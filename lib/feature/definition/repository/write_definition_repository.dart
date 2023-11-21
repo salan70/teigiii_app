@@ -37,9 +37,11 @@ class WriteDefinitionRepository {
 
   /// Definitionドキュメントと
   /// WordDefinitionRelationドキュメントの作成をtransaction実行する。
+  /// 
+  /// 完了後、作成したDefinitionドキュメントのidを返す。
   ///
   /// Definition作成時、「紐づくWordドキュメントが既にある」場合に使用する
-  Future<void> createDefinition(
+  Future<String> createDefinition(
     DefinitionForWrite definitionForWrite,
     String wordId,
   ) async {
@@ -69,13 +71,16 @@ class WriteDefinitionRepository {
       );
 
     await batch.commit();
+    return definitionDocRef.id;
   }
 
   /// Definitionドキュメントの作成とWordドキュメントの作成、
   /// WordDefinitionRelationドキュメントの作成をtransaction実行する。
+  /// 
+  /// 完了後、作成したDefinitionドキュメントのidを返す。
   ///
   /// Definition作成時、「wordIdに紐づくWordドキュメントがない」場合に使用する
-  Future<void> createDefinitionAndWord(
+  Future<String> createDefinitionAndWord(
     DefinitionForWrite definitionForWrite,
   ) async {
     final batch = firestore.batch();
@@ -118,6 +123,7 @@ class WriteDefinitionRepository {
       );
 
     await batch.commit();
+    return definitionDocRef.id;
   }
 
   /// Definitionドキュメントの更新を行う

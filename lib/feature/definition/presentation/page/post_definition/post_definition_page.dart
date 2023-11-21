@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../application/definition_for_write_notifier.dart';
 import '../../../domain/definition_for_write.dart';
+import '../../../util/after_post_navigation_type.dart';
 import '../../../util/write_definition_form_type.dart';
 import '../../component/write_definition_base_page.dart';
 
@@ -14,6 +15,7 @@ class PostDefinitionPage extends ConsumerWidget {
     super.key,
     required this.initialDefinitionForWrite,
     required this.autoFocusForm,
+    this.afterPostNavigation = AfterPostNavigationType.pop,
   });
 
   /// 遷移時にフォーカスするTextFormField。
@@ -22,6 +24,12 @@ class PostDefinitionPage extends ConsumerWidget {
   /// 初期値として持つ [DefinitionForWrite]。
   /// TextFieldなどに初期表示させたい値がある場合はこの値を渡す。
   final DefinitionForWrite? initialDefinitionForWrite;
+
+  /// 投稿完了後の遷移先
+  ///
+  /// - [AfterPostNavigationType.pop]（デフォルト）の場合、前の画面に戻る
+  /// - [AfterPostNavigationType.toDetail] の場合、投稿した定義の詳細画面に遷移する
+  final AfterPostNavigationType afterPostNavigation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,7 +51,8 @@ class PostDefinitionPage extends ConsumerWidget {
             onTap: canPost
                 ? () async {
                     primaryFocus?.unfocus();
-                    await notifier.post();
+
+                    await notifier.post(afterPostNavigation);
                   }
                 : null,
             child: Text(

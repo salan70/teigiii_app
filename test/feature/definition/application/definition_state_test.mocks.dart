@@ -164,6 +164,17 @@ class MockLikeDefinitionRepository extends _i1.Mock
       ) as _i9.Future<void>);
 
   @override
+  _i9.Future<List<String>> fetchAllLikedDefinitionIdList(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchAllLikedDefinitionIdList,
+          [userId],
+        ),
+        returnValue: _i9.Future<List<String>>.value(<String>[]),
+        returnValueForMissingStub: _i9.Future<List<String>>.value(<String>[]),
+      ) as _i9.Future<List<String>>);
+
+  @override
   _i9.Future<void> deleteLikeByDefinitionId(String? definitionId) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -455,6 +466,21 @@ class MockFetchDefinitionRepository extends _i1.Mock
       ) as _i9.Future<_i4.DefinitionDocument>);
 
   @override
+  _i9.Future<List<_i4.DefinitionDocument>> fetchAllPostedDefinitionDocList(
+          String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchAllPostedDefinitionDocList,
+          [userId],
+        ),
+        returnValue: _i9.Future<List<_i4.DefinitionDocument>>.value(
+            <_i4.DefinitionDocument>[]),
+        returnValueForMissingStub:
+            _i9.Future<List<_i4.DefinitionDocument>>.value(
+                <_i4.DefinitionDocument>[]),
+      ) as _i9.Future<List<_i4.DefinitionDocument>>);
+
+  @override
   _i9.Future<_i3.DefinitionIdListState>
       fetchIndividualDictionaryDefinitionIdListState(
     String? currentUserId,
@@ -600,6 +626,16 @@ class MockUserProfileRepository extends _i1.Mock
         Invocation.method(
           #updateUserProfile,
           [userProfileForWrite],
+        ),
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
+
+  @override
+  _i9.Future<void> deleteUserProfile(String? userId) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteUserProfile,
+          [userId],
         ),
         returnValue: _i9.Future<void>.value(),
         returnValueForMissingStub: _i9.Future<void>.value(),

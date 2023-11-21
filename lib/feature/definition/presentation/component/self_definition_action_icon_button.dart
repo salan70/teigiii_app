@@ -10,6 +10,7 @@ import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../application/definition_service.dart';
 import '../../domain/definition.dart';
+import '../../util/after_post_navigation_type.dart';
 import '../../util/definition_post_type.dart';
 
 class SelfDefinitionActionIconButton extends ConsumerWidget {
@@ -145,7 +146,6 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
             ),
             InkWell(
               onTap: () {
-                // TODO(me): ここから投稿した場合、投稿完了時に投稿した定義の詳細画面へ遷移したい
                 context
                   ..popRoute()
                   ..pushRoute(
@@ -153,6 +153,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
                       initialDefinitionForWrite:
                           definition.toDefinitionForWrite(),
                       autoFocusForm: null,
+                      afterPostNavigation: AfterPostNavigationType.toDetail,
                     ),
                   );
               },

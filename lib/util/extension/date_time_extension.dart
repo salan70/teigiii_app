@@ -37,6 +37,7 @@ extension DateTimeExtension on DateTime {
   bool hasOneHourPassed() {
     final currentTime = DateTime.now();
     // 現在時刻が、呼び出したインスタンスの時刻に1時間加えた時刻を過ぎているかどうかを確認
-    return currentTime.isAfter(add(const Duration(hours: 1)));
+    // return currentTime.isAfter(add(const Duration(hours: 1)));
+    return currentTime.isAfter(add(const Duration(minutes: 1)));
   }
 }

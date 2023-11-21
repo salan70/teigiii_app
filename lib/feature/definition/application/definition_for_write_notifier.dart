@@ -8,6 +8,7 @@ import '../../auth/application/auth_state.dart';
 import '../../word/repository/word_repository.dart';
 import '../domain/definition_for_write.dart';
 import '../repository/write_definition_repository.dart';
+import '../util/after_post_navigation_type.dart';
 import 'definition_id_list_state.dart';
 import 'definition_state.dart';
 
@@ -53,31 +54,57 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     state = AsyncData(state.value!.copyWith(definition: definition));
   }
 
-  Future<void> post() async {
+  /// 定義を投稿し、投稿した定義のIdを返す
+  ///
+  /// 投稿が失敗したらnullを返す
+  Future<void> post(AfterPostNavigationType afterPostNavigation) async {
     final isLoadingOverlayNotifier =
         ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
-    final toastNotifier = ref.read(toastControllerProvider.notifier);
 
+    late String definitionId;
     try {
-      await _executeCreate();
+      definitionId = await _executeCreate();
     } on Exception catch (e, stackTrace) {
       logger.e('定義投稿時にエラーが発生 error: $e, stackTrace: $stackTrace');
-      toastNotifier.showToast(
-        '投稿できませんでした。もう一度お試しください。',
-        causeError: true,
-      );
+      ref.read(toastControllerProvider.notifier).showToast(
+            '投稿できませんでした。もう一度お試しください。',
+            causeError: true,
+          );
       isLoadingOverlayNotifier.finishLoading();
       return;
     }
 
     ref.invalidate(definitionIdListStateNotifierProvider);
-
     isLoadingOverlayNotifier.finishLoading();
-    await ref.read(appRouterProvider).pop();
-    toastNotifier.showToast('投稿しました！');
+
+    // トースト表示
+    ref.read(toastControllerProvider.notifier).showToast('投稿しました！');
+
+    // 画面遷移
+    await _navigateAfterPost(afterPostNavigation, definitionId);
   }
 
-  Future<void> _executeCreate() async {
+  Future<void> _navigateAfterPost(
+    AfterPostNavigationType afterPostNavigation,
+    String definitionId,
+  ) async {
+    switch (afterPostNavigation) {
+      case AfterPostNavigationType.pop:
+        await ref.read(appRouterProvider).pop();
+        return;
+
+      case AfterPostNavigationType.toDetail:
+        await ref.read(appRouterProvider).pop();
+        await ref.read(appRouterProvider).push(
+              DefinitionDetailRoute(
+                definitionId: definitionId,
+              ),
+            );
+        return;
+    }
+  }
+
+  Future<String> _executeCreate() async {
     final definitionForWrite = state.value!;
 
     final existingCurrentWordId =
@@ -89,14 +116,15 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     // Wordドキュメントを新たに作成する必要があるかを判定
     if (existingCurrentWordId == null) {
       // * 必要ある場合
-      await ref.read(writeDefinitionRepositoryProvider).createDefinitionAndWord(
+      return ref
+          .read(writeDefinitionRepositoryProvider)
+          .createDefinitionAndWord(
             definitionForWrite,
           );
-      return;
     }
 
     // * 必要ない場合
-    await ref.read(writeDefinitionRepositoryProvider).createDefinition(
+    return ref.read(writeDefinitionRepositoryProvider).createDefinition(
           definitionForWrite,
           existingCurrentWordId,
         );

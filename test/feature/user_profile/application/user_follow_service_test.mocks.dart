@@ -241,6 +241,16 @@ class MockUserFollowRepository extends _i1.Mock
           ),
         )),
       ) as _i6.Future<_i4.UserIdListState>);
+
+  @override
+  _i6.Future<void> deleteUserFollowCount(String? userId) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteUserFollowCount,
+          [userId],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
 }
 
 /// A class which mocks [Listener].

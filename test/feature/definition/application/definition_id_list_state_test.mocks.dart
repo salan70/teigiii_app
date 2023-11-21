@@ -161,7 +161,7 @@ class MockWriteDefinitionRepository extends _i1.Mock
       ) as _i2.FirebaseFirestore);
 
   @override
-  _i11.Future<void> createDefinition(
+  _i11.Future<String> createDefinition(
     _i12.DefinitionForWrite? definitionForWrite,
     String? wordId,
   ) =>
@@ -173,21 +173,21 @@ class MockWriteDefinitionRepository extends _i1.Mock
             wordId,
           ],
         ),
-        returnValue: _i11.Future<void>.value(),
-        returnValueForMissingStub: _i11.Future<void>.value(),
-      ) as _i11.Future<void>);
+        returnValue: _i11.Future<String>.value(''),
+        returnValueForMissingStub: _i11.Future<String>.value(''),
+      ) as _i11.Future<String>);
 
   @override
-  _i11.Future<void> createDefinitionAndWord(
+  _i11.Future<String> createDefinitionAndWord(
           _i12.DefinitionForWrite? definitionForWrite) =>
       (super.noSuchMethod(
         Invocation.method(
           #createDefinitionAndWord,
           [definitionForWrite],
         ),
-        returnValue: _i11.Future<void>.value(),
-        returnValueForMissingStub: _i11.Future<void>.value(),
-      ) as _i11.Future<void>);
+        returnValue: _i11.Future<String>.value(''),
+        returnValueForMissingStub: _i11.Future<String>.value(''),
+      ) as _i11.Future<String>);
 
   @override
   _i11.Future<void> updateDefinition(
@@ -540,6 +540,21 @@ class MockFetchDefinitionRepository extends _i1.Mock
       ) as _i11.Future<_i4.DefinitionDocument>);
 
   @override
+  _i11.Future<List<_i4.DefinitionDocument>> fetchAllPostedDefinitionDocList(
+          String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchAllPostedDefinitionDocList,
+          [userId],
+        ),
+        returnValue: _i11.Future<List<_i4.DefinitionDocument>>.value(
+            <_i4.DefinitionDocument>[]),
+        returnValueForMissingStub:
+            _i11.Future<List<_i4.DefinitionDocument>>.value(
+                <_i4.DefinitionDocument>[]),
+      ) as _i11.Future<List<_i4.DefinitionDocument>>);
+
+  @override
   _i11.Future<_i3.DefinitionIdListState>
       fetchIndividualDictionaryDefinitionIdListState(
     String? currentUserId,
@@ -690,6 +705,16 @@ class MockUserProfileRepository extends _i1.Mock
         returnValue: _i11.Future<void>.value(),
         returnValueForMissingStub: _i11.Future<void>.value(),
       ) as _i11.Future<void>);
+
+  @override
+  _i11.Future<void> deleteUserProfile(String? userId) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteUserProfile,
+          [userId],
+        ),
+        returnValue: _i11.Future<void>.value(),
+        returnValueForMissingStub: _i11.Future<void>.value(),
+      ) as _i11.Future<void>);
 }
 
 /// A class which mocks [UserConfigRepository].
@@ -764,6 +789,16 @@ class MockUserConfigRepository extends _i1.Mock
             userId,
             mutedUserId,
           ],
+        ),
+        returnValue: _i11.Future<void>.value(),
+        returnValueForMissingStub: _i11.Future<void>.value(),
+      ) as _i11.Future<void>);
+
+  @override
+  _i11.Future<void> deleteUserConfig(String? userId) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteUserConfig,
+          [userId],
         ),
         returnValue: _i11.Future<void>.value(),
         returnValueForMissingStub: _i11.Future<void>.value(),
@@ -950,6 +985,17 @@ class MockUserFollowRepository extends _i1.Mock
           ),
         )),
       ) as _i11.Future<_i5.UserIdListState>);
+
+  @override
+  _i11.Future<void> deleteUserFollowCount(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteUserFollowCount,
+          [userId],
+        ),
+        returnValue: _i11.Future<void>.value(),
+        returnValueForMissingStub: _i11.Future<void>.value(),
+      ) as _i11.Future<void>);
 }
 
 /// A class which mocks [WordRepository].

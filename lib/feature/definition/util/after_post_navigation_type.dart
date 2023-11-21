@@ -1,0 +1,4 @@
+enum AfterPostNavigationType {
+  pop,
+  toDetail;
+}

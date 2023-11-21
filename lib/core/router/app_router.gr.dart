@@ -161,6 +161,7 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           initialDefinitionForWrite: args.initialDefinitionForWrite,
           autoFocusForm: args.autoFocusForm,
+          afterPostNavigation: args.afterPostNavigation,
         ),
       );
     },
@@ -692,6 +693,7 @@ class PostDefinitionRoute extends PageRouteInfo<PostDefinitionRouteArgs> {
     Key? key,
     required DefinitionForWrite? initialDefinitionForWrite,
     required WriteDefinitionFormType? autoFocusForm,
+    AfterPostNavigationType afterPostNavigation = AfterPostNavigationType.pop,
     List<PageRouteInfo>? children,
   }) : super(
           PostDefinitionRoute.name,
@@ -699,6 +701,7 @@ class PostDefinitionRoute extends PageRouteInfo<PostDefinitionRouteArgs> {
             key: key,
             initialDefinitionForWrite: initialDefinitionForWrite,
             autoFocusForm: autoFocusForm,
+            afterPostNavigation: afterPostNavigation,
           ),
           initialChildren: children,
         );
@@ -714,6 +717,7 @@ class PostDefinitionRouteArgs {
     this.key,
     required this.initialDefinitionForWrite,
     required this.autoFocusForm,
+    this.afterPostNavigation = AfterPostNavigationType.pop,
   });
 
   final Key? key;
@@ -722,9 +726,11 @@ class PostDefinitionRouteArgs {
 
   final WriteDefinitionFormType? autoFocusForm;
 
+  final AfterPostNavigationType afterPostNavigation;
+
   @override
   String toString() {
-    return 'PostDefinitionRouteArgs{key: $key, initialDefinitionForWrite: $initialDefinitionForWrite, autoFocusForm: $autoFocusForm}';
+    return 'PostDefinitionRouteArgs{key: $key, initialDefinitionForWrite: $initialDefinitionForWrite, autoFocusForm: $autoFocusForm, afterPostNavigation: $afterPostNavigation}';
   }
 }
 
