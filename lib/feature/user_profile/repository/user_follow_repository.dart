@@ -89,7 +89,7 @@ class UserFollowRepository {
             .then((snapshot) => snapshot.docs.first.reference),
       )
 
-      // フォローしたユーザーのUserFollowCountsドキュメントを更新
+      // フォロー解除したユーザーのUserFollowCountsドキュメントを更新
       ..update(
         _userFollowCountsCollectionRef.doc(currentUserId),
         {
@@ -98,7 +98,7 @@ class UserFollowRepository {
         },
       )
 
-      // フォローされたユーザーのUserFollowCountsドキュメントを更新
+      // フォロー解除されたユーザーのUserFollowCountsドキュメントを更新
       ..update(
         _userFollowCountsCollectionRef.doc(targetUserId),
         {
