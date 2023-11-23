@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../core/common_widget/error_and_retry_widget.dart';
+import '../../../core/common_widget/simple_widget_for_empty.dart';
 import '../../../util/logger.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_profile/presentation/page/following_and_follower_list/profile_tile.dart';
@@ -23,6 +24,10 @@ class MutedUserListPage extends ConsumerWidget {
       ),
       body: asyncMutedUserIdList.when(
         data: (mutedUserIdList) {
+          if (mutedUserIdList.isEmpty) {
+            return const SimpleWidgetForEmpty(message: 'ミュート中のユーザーはいません。🌻');
+          }
+
           return Padding(
             padding: const EdgeInsets.only(top: 24),
             child: ListView.builder(

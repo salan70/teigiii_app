@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_provider/toast_controller.dart';
-import '../../../../../core/router/app_router.dart';
 import '../../../../../util/extension/date_time_extension.dart';
 import '../../../../../util/logger.dart';
 import '../../../application/definition_for_write_notifier.dart';
 import '../../../domain/definition.dart';
+import '../../../util/after_post_navigation_type.dart';
 import '../../component/write_definition_base_page.dart';
 
 @RoutePage()
@@ -77,11 +77,8 @@ class EditDefinitionPage extends ConsumerWidget {
               ),
               InkWell(
                 onTap: () async {
-                  await notifier.post();
-                  if (!context.mounted) {
-                    return;
-                  }
-                  await context.navigateTo(const HomeRoute());
+                  await context.popRoute();
+                  await notifier.post(AfterPostNavigationType.toDetail);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16),

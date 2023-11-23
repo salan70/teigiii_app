@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../core/common_provider/key_provider.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/button/to_setting_button.dart';
 import '../../../../../core/common_widget/simple_widget_for_empty.dart';
@@ -15,16 +17,17 @@ class HomeRouterPage extends AutoRouter {
 }
 
 @RoutePage()
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
       length: 2,
-      child: SafeArea(
-        child: Scaffold(
-          body: NestedScrollView(
+      child: Scaffold(
+        body: SafeArea(
+          child: NestedScrollView(
+            key: ref.watch(globalKeyProvider),
             headerSliverBuilder: (BuildContext context, bool _) {
               return <Widget>[
                 const SliverAppBar(
@@ -47,7 +50,7 @@ class HomePage extends StatelessWidget {
                           // * タブを切り替えた場合
                           return;
                         }
-
+        
                         // * 同じタブをタップした場合
                         PrimaryScrollController.of(context).scrollToTop();
                       },
@@ -73,8 +76,8 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          floatingActionButton: const PostDefinitionFAB(),
         ),
+        floatingActionButton: const PostDefinitionFAB(),
       ),
     );
   }

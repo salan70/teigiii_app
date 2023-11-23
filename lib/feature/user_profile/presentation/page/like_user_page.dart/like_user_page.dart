@@ -18,22 +18,34 @@ class LikeUserPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: InkWell(
-          child: const Text('いいね！'),
-          onTap: () => PrimaryScrollController.of(context).scrollToTop(),
-        ),
-        flexibleSpace: InkWell(
-          onTap: () => PrimaryScrollController.of(context).scrollToTop(),
-        ),
-      ),
-      body: ProfileList(
-        userListType: UserListType.liked,
-        targetUserId: null,
-        targetDefinitionId: definitionId,
-        // いいねが0件の場合、[LikeUserPage] には遷移しない想定だが念のため設定しておく
-        emptyWidget: const SimpleWidgetForEmpty(
-          message: 'まだいいね！されていません',
+      body: SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool _) {
+            return [
+              SliverAppBar(
+                pinned: true,
+                title: InkWell(
+                  child: const Text('いいね！したユーザー'),
+                  onTap: () =>
+                      PrimaryScrollController.of(context).scrollToTop(),
+                ),
+                leading: const BackButton(),
+                flexibleSpace: InkWell(
+                  onTap: () =>
+                      PrimaryScrollController.of(context).scrollToTop(),
+                ),
+              ),
+            ];
+          },
+          body: ProfileList(
+            userListType: UserListType.liked,
+            targetUserId: null,
+            targetDefinitionId: definitionId,
+            // いいねが0件の場合、[LikeUserPage] には遷移しない想定だが念のため設定しておく
+            emptyWidget: const SimpleWidgetForEmpty(
+              message: 'まだいいね！されていません',
+            ),
+          ),
         ),
       ),
     );

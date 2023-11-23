@@ -1,24 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_service.dart';
+part of 'key_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authServiceHash() => r'c1257138f46aa0f6418548f718b70912a731d8b5';
+String _$globalKeyHash() => r'c9b683949cb6cc7d2b9ae4df52a749fb1646b81e';
 
-/// See also [AuthService].
-@ProviderFor(AuthService)
-final authServiceProvider = AsyncNotifierProvider<AuthService, void>.internal(
-  AuthService.new,
-  name: r'authServiceProvider',
+/// See also [globalKey].
+@ProviderFor(globalKey)
+final globalKeyProvider =
+    AutoDisposeProvider<GlobalKey<State<StatefulWidget>>>.internal(
+  globalKey,
+  name: r'globalKeyProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$authServiceHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$globalKeyHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$AuthService = AsyncNotifier<void>;
+typedef GlobalKeyRef = AutoDisposeProviderRef<GlobalKey<State<StatefulWidget>>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

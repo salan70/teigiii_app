@@ -88,6 +88,17 @@ class MockLikeDefinitionRepository extends _i1.Mock
       ) as _i4.Future<void>);
 
   @override
+  _i4.Future<List<String>> fetchAllLikedDefinitionIdList(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchAllLikedDefinitionIdList,
+          [userId],
+        ),
+        returnValue: _i4.Future<List<String>>.value(<String>[]),
+        returnValueForMissingStub: _i4.Future<List<String>>.value(<String>[]),
+      ) as _i4.Future<List<String>>);
+
+  @override
   _i4.Future<void> deleteLikeByDefinitionId(String? definitionId) =>
       (super.noSuchMethod(
         Invocation.method(

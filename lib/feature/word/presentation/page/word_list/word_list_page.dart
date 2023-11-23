@@ -48,24 +48,35 @@ class WordListPage extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: InkWell(
-          child: Text(selectedInitialSubGroup.label),
-          onTap: () => PrimaryScrollController.of(context).scrollToTop(),
-        ),
-        leading: const BackButton(),
-        flexibleSpace: InkWell(
-          onTap: () => PrimaryScrollController.of(context).scrollToTop(),
-        ),
-      ),
-      body: InfinityScrollWidget(
-        listStateNotifierProvider: wordListProvider,
-        fetchMore: ref.read(wordListProvider.notifier).fetchMore,
-        tileBuilder: (item) => WordTile(word: item as Word),
-        shimmerTile: const WordTileShimmer(),
-        shimmerTileNumber: 10,
-        emptyWidget: SimpleWidgetForEmpty(
-          message: generateEmptyMessage(selectedInitialSubGroup.label),
+      body: SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool _) {
+            return [
+              SliverAppBar(
+                pinned: true,
+                title: InkWell(
+                  child: Text(selectedInitialSubGroup.label),
+                  onTap: () =>
+                      PrimaryScrollController.of(context).scrollToTop(),
+                ),
+                leading: const BackButton(),
+                flexibleSpace: InkWell(
+                  onTap: () =>
+                      PrimaryScrollController.of(context).scrollToTop(),
+                ),
+              ),
+            ];
+          },
+          body: InfinityScrollWidget(
+            listStateNotifierProvider: wordListProvider,
+            fetchMore: ref.read(wordListProvider.notifier).fetchMore,
+            tileBuilder: (item) => WordTile(word: item as Word),
+            shimmerTile: const WordTileShimmer(),
+            shimmerTileNumber: 10,
+            emptyWidget: SimpleWidgetForEmpty(
+              message: generateEmptyMessage(selectedInitialSubGroup.label),
+            ),
+          ),
         ),
       ),
       floatingActionButton: const PostDefinitionFAB(),

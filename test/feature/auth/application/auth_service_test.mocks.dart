@@ -8,14 +8,15 @@ import 'dart:async' as _i5;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:firebase_auth/firebase_auth.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i9;
-import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i7;
+import 'package:riverpod_annotation/riverpod_annotation.dart' as _i10;
+import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i8;
 import 'package:teigi_app/feature/auth/repository/register_user_repository.dart'
     as _i4;
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart'
-    as _i6;
+    as _i7;
+import 'package:teigi_app/feature/user_profile/domain/user_profile.dart' as _i6;
 
-import 'auth_service_test.dart' as _i8;
+import 'auth_service_test.dart' as _i9;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -70,6 +71,7 @@ class MockRegisterUserRepository extends _i1.Mock
   @override
   _i5.Future<void> initUser(
     String? userId,
+    _i6.UserProfile? userProfile,
     String? osVersion,
     String? appVersion,
   ) =>
@@ -78,6 +80,7 @@ class MockRegisterUserRepository extends _i1.Mock
           #initUser,
           [
             userId,
+            userProfile,
             osVersion,
             appVersion,
           ],
@@ -110,7 +113,7 @@ class MockRegisterUserRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDeviceInfoRepository extends _i1.Mock
-    implements _i6.DeviceInfoRepository {
+    implements _i7.DeviceInfoRepository {
   @override
   _i5.Future<String?> fetchOsVersion() => (super.noSuchMethod(
         Invocation.method(
@@ -125,7 +128,7 @@ class MockDeviceInfoRepository extends _i1.Mock
 /// A class which mocks [AuthRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthRepository extends _i1.Mock implements _i7.AuthRepository {
+class MockAuthRepository extends _i1.Mock implements _i8.AuthRepository {
   @override
   _i3.FirebaseAuth get firebaseAuth => (super.noSuchMethod(
         Invocation.getter(#firebaseAuth),
@@ -181,11 +184,11 @@ class MockAuthRepository extends _i1.Mock implements _i7.AuthRepository {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockListener extends _i1.Mock
-    implements _i8.Listener<_i9.AsyncValue<void>> {
+    implements _i9.Listener<_i10.AsyncValue<void>> {
   @override
   void call(
-    _i9.AsyncValue<void>? previous,
-    _i9.AsyncValue<void>? next,
+    _i10.AsyncValue<void>? previous,
+    _i10.AsyncValue<void>? next,
   ) =>
       super.noSuchMethod(
         Invocation.method(

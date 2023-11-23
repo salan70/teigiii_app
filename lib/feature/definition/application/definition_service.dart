@@ -44,7 +44,9 @@ class DefinitionService extends _$DefinitionService {
         causeError: true,
       );
       isLoadingOverlayNotifier.finishLoading();
-      return;
+
+      // 例外が発生したことをpresentationに伝えるため、rethrowする
+      rethrow;
     }
 
     ref

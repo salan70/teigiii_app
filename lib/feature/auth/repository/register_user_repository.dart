@@ -28,6 +28,7 @@ class RegisterUserRepository {
   /// 初回登録時に必要なユーザー情報を登録する
   Future<void> initUser(
     String userId,
+    UserProfile userProfile,
     String osVersion,
     String appVersion,
   ) async {
@@ -36,9 +37,7 @@ class RegisterUserRepository {
       // * UserProfileドキュメント
       ..set(_userProfilesCollectionRef.doc(userId), {
         UserProfilesCollection.publicId: await _generateValidPublicId(),
-        UserProfilesCollection.name: UserProfile.defaultName,
-        UserProfilesCollection.bio: UserProfile.defaultBio,
-        UserProfilesCollection.profileImageUrl: UserProfile.defaultImageUrl,
+        ...userProfile.toFirestoreForCreate(),
         createdAtFieldName: FieldValue.serverTimestamp(),
         updatedAtFieldName: FieldValue.serverTimestamp(),
       })

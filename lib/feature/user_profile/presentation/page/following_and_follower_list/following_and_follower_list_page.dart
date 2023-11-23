@@ -7,6 +7,7 @@ import '../../../../../core/common_widget/simple_widget_for_empty.dart';
 import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
 import '../../../../../util/extension/scroll_controller_extension.dart';
 import '../../../../auth/application/auth_state.dart';
+import '../../../application/user_profile_state.dart';
 import '../../../util/user_list_type.dart';
 import '../../component/profile_list.dart';
 
@@ -28,19 +29,29 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
     return DefaultTabController(
       length: 2,
       initialIndex: willShowFollowing ? 0 : 1,
-      child: SafeArea(
-        child: Scaffold(
-          body: NestedScrollView(
+      child: Scaffold(
+        body: SafeArea(
+          child: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool _) {
               final isMyPage = currentUserId == targetUserId;
-
+        
               return <Widget>[
                 SliverAppBar(
                   forceElevated: true,
                   floating: true,
                   elevation: 0,
-                  // TODO(me): ユーザー名を表示させる
-                  title: const Text('プロフィール'),
+                  title: Consumer(
+                    builder: (context, ref, child) {
+                      return ref
+                          .watch(userProfileProvider(targetUserId))
+                          .maybeWhen(
+                            data: (userProfile) {
+                              return Text(userProfile.name);
+                            },
+                            orElse: SizedBox.shrink,
+                          );
+                    },
+                  ),
                   actions: [
                     // 自分のフォロー/フォロー一覧画面の場合は編集ボタンを表示
                     isMyPage
@@ -63,7 +74,7 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                           // * タブを切り替えた場合
                           return;
                         }
-
+        
                         // * 同じタブをタップした場合
                         PrimaryScrollController.of(context).scrollToTop();
                       },
@@ -79,7 +90,7 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                   targetUserId: targetUserId,
                   targetDefinitionId: null,
                   emptyWidget: const SimpleWidgetForEmpty(
-                    message: 'フォロー中のユーザーがいません',
+                    message: 'フォロー中のユーザーがいません🌱',
                   ),
                 ),
                 ProfileList(
@@ -87,7 +98,7 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                   targetUserId: targetUserId,
                   targetDefinitionId: null,
                   emptyWidget: const SimpleWidgetForEmpty(
-                    message: 'フォロワーがいません',
+                    message: 'フォロワーがいません🌴',
                   ),
                 ),
               ],

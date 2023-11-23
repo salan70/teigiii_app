@@ -39,44 +39,48 @@ class SearchWordResultPage extends ConsumerWidget {
     }
 
     return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool _) {
-          return <Widget>[
-            SliverAppBar(
-              forceElevated: true,
-              pinned: true,
-              title: InkWell(
-                child: const Text('検索結果'),
-                onTap: () => PrimaryScrollController.of(context).scrollToTop(),
-              ),
-              leading: const BackButton(),
-              flexibleSpace: InkWell(
-                onTap: () => PrimaryScrollController.of(context).scrollToTop(),
-              ),
-            ),
-          ];
-        },
-        body: Column(
-          children: [
-            const SizedBox(height: 24),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 36),
-              child: SearchWordTextField(defaultText: searchWord),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: InfinityScrollWidget(
-                listStateNotifierProvider: wordListProvider,
-                fetchMore: ref.read(wordListProvider.notifier).fetchMore,
-                tileBuilder: (item) => WordTile(word: item as Word),
-                shimmerTile: const WordTileShimmer(),
-                shimmerTileNumber: 2,
-                emptyWidget: SimpleWidgetForEmpty(
-                  message: generateEmptyMessage(searchWord),
+      body: SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool _) {
+            return <Widget>[
+              SliverAppBar(
+                forceElevated: true,
+                pinned: true,
+                title: InkWell(
+                  child: const Text('検索結果'),
+                  onTap: () =>
+                      PrimaryScrollController.of(context).scrollToTop(),
+                ),
+                leading: const BackButton(),
+                flexibleSpace: InkWell(
+                  onTap: () =>
+                      PrimaryScrollController.of(context).scrollToTop(),
                 ),
               ),
-            ),
-          ],
+            ];
+          },
+          body: Column(
+            children: [
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 36),
+                child: SearchWordTextField(defaultText: searchWord),
+              ),
+              const SizedBox(height: 32),
+              Expanded(
+                child: InfinityScrollWidget(
+                  listStateNotifierProvider: wordListProvider,
+                  fetchMore: ref.read(wordListProvider.notifier).fetchMore,
+                  tileBuilder: (item) => WordTile(word: item as Word),
+                  shimmerTile: const WordTileShimmer(),
+                  shimmerTileNumber: 2,
+                  emptyWidget: SimpleWidgetForEmpty(
+                    message: generateEmptyMessage(searchWord),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: const PostDefinitionFAB(),

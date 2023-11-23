@@ -3,12 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/common_provider/key_provider.dart';
 import 'core/common_provider/toast_controller.dart';
 import 'core/common_widget/dialog/loading_dialog.dart';
 import 'core/common_widget/error_and_retry_widget.dart';
 import 'core/router/app_router.dart';
 import 'feature/auth/application/auth_service.dart';
 import 'feature/auth/application/auth_state.dart';
+import 'util/extension/scroll_controller_extension.dart';
 import 'util/logger.dart';
 
 // 参考
@@ -109,7 +111,10 @@ class _BasePageState extends ConsumerState<BasePage> {
                               tabsRouter.current.name,
                             )
                             ?.popUntilRoot();
-                        // TODO(me): 画面上部へのジャンプを実装したい
+                            
+                        PrimaryScrollController.of(
+                          ref.read(globalKeyProvider).currentContext!,
+                        ).scrollToTop();
                         return;
                       }
                       // 選択中でないタブをTapした場合
