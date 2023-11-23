@@ -26,9 +26,7 @@ class UserProfileDocument with _$UserProfileDocument {
       publicId: data[UserProfilesCollection.publicId] as String,
       name: data[UserProfilesCollection.name] as String,
       bio: data[UserProfilesCollection.bio] as String,
-      profileImageUrl:
-          data[UserProfilesCollection.profileImageUrl] as String? ??
-              UserProfile.defaultImageUrl,
+      profileImageUrl: data[UserProfilesCollection.profileImageUrl] as String,
       createdAt: (data[createdAtFieldName] as Timestamp).toDate(),
       updatedAt: (data[updatedAtFieldName] as Timestamp).toDate(),
     );

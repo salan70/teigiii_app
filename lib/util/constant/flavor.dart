@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'url.dart';
+
 enum Flavor {
   prod,
   dev;
@@ -21,6 +25,15 @@ enum Flavor {
         throw UnsupportedError(
           'this flavor is not expected',
         );
+    }
+  }
+
+  String generateRandomIconImageUrl() {
+    switch (this) {
+      case Flavor.prod:
+        return defaultIconImageUrlListForProd[Random().nextInt(defaultIconImageUrlListForProd.length)];
+      case Flavor.dev:      
+        return defaultIconImageUrlListForDev[Random().nextInt(defaultIconImageUrlListForDev.length)];
     }
   }
 }

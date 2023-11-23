@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_cropper/image_cropper.dart';
 
+import '../../../util/constant/firestore_collections.dart';
+
 part 'user_profile.freezed.dart';
 
 @freezed
@@ -19,16 +21,23 @@ class UserProfile with _$UserProfile {
   }) = _UserProfile;
   const UserProfile._();
 
+  /// [UserProfile] の初期値（初回登録時に保存する値）
+  factory UserProfile.defaultValue(String userId, String imageUrl) {
+    return UserProfile(
+      id: userId,
+      publicId: '',
+      name: defaultName,
+      bio: defaultBio,
+      profileImageUrl: imageUrl,
+      croppedFile: null,
+    );
+  }
+
   /// [name]の初期値
-  static String get defaultName => '見習い辞書編纂者';
+  static String get defaultName => '新人さん';
 
   /// [bio]の初期値
   static String get defaultBio => '';
-
-  // TODO(me): 良い画像用意する
-
-  /// [profileImageUrl]の初期値
-  static String get defaultImageUrl => 'https://firebasestorage.googleapis.com/v0/b/everyone-teigi-dev.appspot.com/o/common%2Fghost_writer.png?alt=media&token=c35daacd-5d12-403e-a12c-528fa4247a7a';
 
   int get maxNameLength => 15;
   int get maxBioLength => 150;
@@ -74,6 +83,18 @@ class UserProfile with _$UserProfile {
   /// [publicId]を生成する
   static String generatePublicId() {
     // 9桁のランダムな数字を生成し、文字列に変換したものを返す
-    return List.generate(publicIdLength, (_) => Random.secure().nextInt(10)).join();
+    return List.generate(publicIdLength, (_) => Random.secure().nextInt(10))
+        .join();
+  }
+
+  /// Firestore に保存する用の Map を返す
+  /// 
+  /// [publicId] は生成後に存在するか確認する必要があるため、未指定
+  Map<String, dynamic> toFirestoreForCreate() {
+    return {
+      UserProfilesCollection.name: name,
+      UserProfilesCollection.bio: bio,
+      UserProfilesCollection.profileImageUrl: profileImageUrl,
+    };
   }
 }

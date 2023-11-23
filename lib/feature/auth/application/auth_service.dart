@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/common_provider/flavor_provider.dart';
 import '../../../core/common_provider/is_loading_overlay_state.dart';
 import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/logger.dart';
@@ -10,6 +11,7 @@ import '../../user_config/application/user_config_state.dart';
 import '../../user_config/repository/device_info_repository.dart';
 import '../../user_config/repository/user_config_repository.dart';
 import '../../user_profile/application/user_id_list_state.dart';
+import '../../user_profile/domain/user_profile.dart';
 import '../../user_profile/repository/user_follow_repository.dart';
 import '../../user_profile/repository/user_profile_repository.dart';
 import '../../user_profile/util/user_list_type.dart';
@@ -194,6 +196,9 @@ class AuthService extends _$AuthService {
     // ここでuserIdを出力しておく
     logger.i('[$userId]として新規ログインしました。ユーザー情報を登録します。');
 
+    final imageUrl = ref.read(flavorProvider).generateRandomIconImageUrl();
+    final userProfile = UserProfile.defaultValue(userId, imageUrl);
+
     final osVersion =
         await ref.read(deviceInfoRepositoryProvider).fetchOsVersion() ??
             unexpectedOsText;
@@ -201,7 +206,7 @@ class AuthService extends _$AuthService {
 
     await ref
         .read(registerUserRepositoryProvider)
-        .initUser(userId, osVersion, appVersion);
+        .initUser(userId, userProfile, osVersion, appVersion);
     logger.i('ユーザー情報の登録が完了しました。');
   }
 
