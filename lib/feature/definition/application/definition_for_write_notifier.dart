@@ -7,6 +7,7 @@ import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../../word/application/word_list_state_by_initial.dart';
 import '../../word/application/word_list_state_by_search_word.dart';
+import '../../word/application/word_state.dart';
 import '../../word/repository/word_repository.dart';
 import '../domain/definition_for_write.dart';
 import '../repository/write_definition_repository.dart';
@@ -79,10 +80,10 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     ref
       ..invalidate(definitionIdListStateNotifierProvider)
       ..invalidate(wordListStateByInitialNotifierProvider)
-      ..invalidate(wordListStateBySearchWordNotifierProvider);
-    isLoadingOverlayNotifier.finishLoading();
+      ..invalidate(wordListStateBySearchWordNotifierProvider)
+      ..invalidate(wordProvider);
 
-    // トースト表示
+    isLoadingOverlayNotifier.finishLoading();
     ref.read(toastControllerProvider.notifier).showToast('投稿しました！');
 
     // 画面遷移
@@ -138,8 +139,6 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
   Future<void> edit() async {
     final isLoadingOverlayNotifier =
         ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
-
-    final definitionForWrite = state.value!;
     final toastNotifier = ref.read(toastControllerProvider.notifier);
 
     try {
@@ -155,10 +154,11 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     }
 
     ref
-      ..invalidate(definitionProvider(definitionForWrite.id!))
+      ..invalidate(definitionProvider(state.value!.id!))
       ..invalidate(definitionIdListStateNotifierProvider)
       ..invalidate(wordListStateByInitialNotifierProvider)
-      ..invalidate(wordListStateBySearchWordNotifierProvider);
+      ..invalidate(wordListStateBySearchWordNotifierProvider)
+      ..invalidate(wordProvider);
 
     isLoadingOverlayNotifier.finishLoading();
     await ref.read(appRouterProvider).pop();
