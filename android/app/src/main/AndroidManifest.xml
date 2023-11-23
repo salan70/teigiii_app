@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.toda.teigiii">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="Teigiii"
         android:name="${applicationName}"
