@@ -1,15 +1,19 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/common_provider/launch_url.dart';
 import '../../../core/common_widget/button/primary_filled_button.dart';
+import '../../../util/constant/url.dart';
 
 /// 端末のバックキーや画面操作を受け付けないWidget
 ///
 /// 透明のWidgetで囲い、ダイアログ表示を模している
-class OverlayForceUpdateDialog extends StatelessWidget {
+class OverlayForceUpdateDialog extends ConsumerWidget {
   const OverlayForceUpdateDialog({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return WillPopScope(
       onWillPop: () async => false,
       child: Container(
@@ -36,7 +40,22 @@ class OverlayForceUpdateDialog extends StatelessWidget {
                   const SizedBox(height: 16),
                   PrimaryFilledButton(
                     onPressed: () {
-                      // TODO(me): Storeに遷移させる
+                      switch (defaultTargetPlatform) {
+                        case TargetPlatform.iOS:
+                          ref.read(launchURLProvider(appStoreUrl));
+                          return;
+                        case TargetPlatform.android:
+                          ref.read(launchURLProvider(googlePlayStoreUrl));
+                          return;
+
+                        case TargetPlatform.fuchsia:
+                        case TargetPlatform.linux:
+                        case TargetPlatform.macOS:
+                        case TargetPlatform.windows:
+                          throw UnsupportedError(
+                            '想定外のプラットフォームです。 defaultTargetPlatform: $defaultTargetPlatform',
+                          );
+                      }
                     },
                     text: 'アップデートする',
                   ),
