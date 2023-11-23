@@ -18,7 +18,6 @@ class MyLicensePage extends ConsumerWidget {
       body: appVersion.when(
         data: (appVersion) {
           return LicensePage(
-            // TODO(me): アプリアイコンを指定する
             applicationName: 'Teigiii',
             applicationVersion: appVersion,
           );

@@ -26,6 +26,7 @@ dependencies:
   freezed_annotation: ^2.4.1
   image_cropper: ^5.0.0
   image_picker: ^1.0.4
+  in_app_review: ^2.0.8
   intl: ^0.18.1
   keyboard_actions: ^4.2.0
   like_button: ^2.0.5
