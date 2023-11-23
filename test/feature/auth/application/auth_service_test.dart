@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/core/common_provider/flavor_provider.dart';
 import 'package:teigi_app/core/common_provider/toast_controller.dart';
 import 'package:teigi_app/feature/auth/application/auth_service.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
@@ -10,6 +11,7 @@ import 'package:teigi_app/feature/auth/repository/register_user_repository.dart'
 import 'package:teigi_app/feature/auth/util/constant.dart';
 import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart';
+import 'package:teigi_app/util/constant/flavor.dart';
 
 import 'auth_service_test.mocks.dart';
 
@@ -46,6 +48,7 @@ void main() {
   setUp(() {
     container = ProviderContainer(
       overrides: [
+        flavorProvider.overrideWithValue(Flavor.dev),
         isSignedInProvider.overrideWithValue(false),
         userIdProvider.overrideWithValue(mockUserId),
         appVersionProvider.overrideWith((ref) => Future.value(mockAppVersion)),
@@ -85,6 +88,7 @@ void main() {
   /// containerのoverrideを更新する
   void updateContainersOverride({required bool isSignedIn}) {
     container.updateOverrides([
+      flavorProvider.overrideWithValue(Flavor.dev),
       isSignedInProvider.overrideWithValue(isSignedIn),
       userIdProvider.overrideWithValue(mockUserId),
       appVersionProvider.overrideWith((ref) => Future.value(mockAppVersion)),
@@ -130,6 +134,7 @@ void main() {
       verify(
         mockRegisterUserRepository.initUser(
           mockUserId,
+          any,
           mockOsVersion,
           mockAppVersion,
         ),
@@ -182,6 +187,7 @@ void main() {
       // * Assert
       verify(
         mockRegisterUserRepository.initUser(
+          any,
           any,
           unexpectedOsText, // 検証対象
           any,
