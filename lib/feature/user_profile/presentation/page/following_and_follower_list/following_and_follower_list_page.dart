@@ -29,12 +29,12 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
     return DefaultTabController(
       length: 2,
       initialIndex: willShowFollowing ? 0 : 1,
-      child: SafeArea(
-        child: Scaffold(
-          body: NestedScrollView(
+      child: Scaffold(
+        body: SafeArea(
+          child: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool _) {
               final isMyPage = currentUserId == targetUserId;
-
+        
               return <Widget>[
                 SliverAppBar(
                   forceElevated: true,
@@ -74,7 +74,7 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                           // * タブを切り替えた場合
                           return;
                         }
-
+        
                         // * 同じタブをタップした場合
                         PrimaryScrollController.of(context).scrollToTop();
                       },

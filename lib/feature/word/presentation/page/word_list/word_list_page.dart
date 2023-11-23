@@ -47,9 +47,9 @@ class WordListPage extends ConsumerWidget {
       return messageList[Random().nextInt(messageList.length)];
     }
 
-    return SafeArea(
-      child: Scaffold(
-        body: NestedScrollView(
+    return Scaffold(
+      body: SafeArea(
+        child: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool _) {
             return [
               SliverAppBar(
@@ -78,8 +78,8 @@ class WordListPage extends ConsumerWidget {
             ),
           ),
         ),
-        floatingActionButton: const PostDefinitionFAB(),
       ),
+      floatingActionButton: const PostDefinitionFAB(),
     );
   }
 }

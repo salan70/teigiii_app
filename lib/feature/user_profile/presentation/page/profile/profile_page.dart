@@ -33,9 +33,9 @@ class ProfilePage extends ConsumerWidget {
 
     return DefaultTabController(
       length: 2,
-      child: SafeArea(
-        child: Scaffold(
-          body: NestedScrollView(
+      child: Scaffold(
+        body: SafeArea(
+          child: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool _) {
               return <Widget>[
                 SliverAppBar(
@@ -109,8 +109,8 @@ class ProfilePage extends ConsumerWidget {
               ],
             ),
           ),
-          floatingActionButton: const PostDefinitionFAB(),
         ),
+        floatingActionButton: const PostDefinitionFAB(),
       ),
     );
   }

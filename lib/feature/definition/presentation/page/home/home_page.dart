@@ -24,9 +24,9 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
       length: 2,
-      child: SafeArea(
-        child: Scaffold(
-          body: NestedScrollView(
+      child: Scaffold(
+        body: SafeArea(
+          child: NestedScrollView(
             key: ref.watch(globalKeyProvider),
             headerSliverBuilder: (BuildContext context, bool _) {
               return <Widget>[
@@ -50,7 +50,7 @@ class HomePage extends ConsumerWidget {
                           // * タブを切り替えた場合
                           return;
                         }
-
+        
                         // * 同じタブをタップした場合
                         PrimaryScrollController.of(context).scrollToTop();
                       },
@@ -76,8 +76,8 @@ class HomePage extends ConsumerWidget {
               ],
             ),
           ),
-          floatingActionButton: const PostDefinitionFAB(),
         ),
+        floatingActionButton: const PostDefinitionFAB(),
       ),
     );
   }

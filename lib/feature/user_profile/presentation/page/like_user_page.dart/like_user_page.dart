@@ -17,9 +17,9 @@ class LikeUserPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SafeArea(
-      child: Scaffold(
-        body: NestedScrollView(
+    return Scaffold(
+      body: SafeArea(
+        child: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool _) {
             return [
               SliverAppBar(

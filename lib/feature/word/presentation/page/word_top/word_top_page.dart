@@ -63,9 +63,9 @@ class WordTopPage extends ConsumerWidget {
           }
 
           // * 該当するWordがある場合
-          return SafeArea(
-            child: Scaffold(
-              body: NestedScrollView(
+          return Scaffold(
+            body: SafeArea(
+              child: NestedScrollView(
                 headerSliverBuilder: (BuildContext context, bool _) {
                   return <Widget>[
                     SliverAppBar(
@@ -96,7 +96,7 @@ class WordTopPage extends ConsumerWidget {
                               // * タブを切り替えた場合
                               return;
                             }
-
+            
                             // * 同じタブをタップした場合
                             PrimaryScrollController.of(context).scrollToTop();
                           },
@@ -125,8 +125,8 @@ class WordTopPage extends ConsumerWidget {
                   ],
                 ),
               ),
-              floatingActionButton: const PostDefinitionFAB(),
             ),
+            floatingActionButton: const PostDefinitionFAB(),
           );
         },
         loading: () => Scaffold(

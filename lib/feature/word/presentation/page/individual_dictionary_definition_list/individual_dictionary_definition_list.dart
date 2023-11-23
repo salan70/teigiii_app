@@ -52,9 +52,9 @@ class IndividualDictionaryDefinitionListPage extends ConsumerWidget {
       return messageList[Random().nextInt(messageList.length)];
     }
 
-    return SafeArea(
-      child: Scaffold(
-        body: NestedScrollView(
+    return Scaffold(
+      body: SafeArea(
+        child: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool _) {
             return <Widget>[
               SliverAppBar(
@@ -91,8 +91,8 @@ class IndividualDictionaryDefinitionListPage extends ConsumerWidget {
             ],
           ),
         ),
-        floatingActionButton: const PostDefinitionFAB(),
       ),
+      floatingActionButton: const PostDefinitionFAB(),
     );
   }
 }
