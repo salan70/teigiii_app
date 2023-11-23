@@ -1,6 +1,5 @@
 name: teigi_app
 description: A new Flutter project.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
@@ -54,6 +53,7 @@ dev_dependencies:
   auto_route_generator: ^7.3.1
   build_runner: ^2.4.6
   custom_lint: ^0.5.3
+  flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.0
   freezed: ^2.4.1
   pedantic_mono: ^1.24.0+1
@@ -75,3 +75,7 @@ flutter:
         weight: 700
       - asset: assets/fonts/LINESeedJP_A_OTF_Eb.otf
         weight: 800
+
+flutter_launcher_icons:
+  android: true
+  ios: true
