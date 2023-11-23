@@ -60,9 +60,15 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
                   ConfirmDialog(
                     confirmMessage: '本当に削除してもよろしいですか？',
                     onConfirm: () async {
-                      await ref
-                          .read(definitionServiceProvider.notifier)
-                          .deleteDefinition(definition);
+                      // エラーが発生しなかった場合のみ画面遷移するよう、try catchで囲む
+                      // ? もっといい方法があるそう
+                      try {
+                        await ref
+                            .read(definitionServiceProvider.notifier)
+                            .deleteDefinition(definition);
+                      } on Exception catch (_) {
+                        rethrow;
+                      } 
 
                       // [SelfDefinitionActionIconButton] を表示している画面の
                       // 前の画面まで戻る
