@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/common_provider/in_app_review_provider.dart';
 import '../../../core/common_provider/launch_url.dart';
 import '../../../core/common_widget/shimmer_widget.dart';
 import '../../../core/router/app_router.dart';
@@ -88,7 +89,12 @@ class SettingPage extends ConsumerWidget {
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.star),
               label: 'レビューで応援する',
-              onTap: () {}, // TODO(me): レビューダイアログを表示
+              onTap: () {
+                // TODO(me): Application層に移譲したほうがいいかも
+                ref.read(inAppReviewProvider).openStoreListing(
+                      appStoreId: appleId,
+                );
+              },
             ),
             const SizedBox(height: 32),
 

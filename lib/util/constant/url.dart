@@ -1,3 +1,10 @@
+const appleId = '6472884411';
+
+const appStoreUrl = 'https://apps.apple.com/jp/app/id$appleId';
+
+const googlePlayStoreUrl =
+    'https://play.google.com/store/apps/details?id=com.toda.teigiii';
+
 const latestInformationPageUrl =
     'https://almondine-ixora-d9e.notion.site/8e8ca7ad482a473099743dddb3b930ab?pvs=4';
 
