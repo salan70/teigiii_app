@@ -89,12 +89,9 @@ class SettingPage extends ConsumerWidget {
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.star),
               label: 'レビューで応援する',
-              onTap: () {
-                // TODO(me): Application層に移譲したほうがいいかも
-                ref.read(inAppReviewProvider).openStoreListing(
-                      appStoreId: appleId,
-                );
-              },
+              onTap: () => ref
+                  .read(inAppReviewProvider)
+                  .openStoreListing(appStoreId: appleId),
             ),
             const SizedBox(height: 32),
 
