@@ -1,27 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'banner_ad_unit_id_provider.dart';
+part of 'is_first_launch_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bannerAdUnitIdHash() => r'4d160c2725c82a7eda8531a18a742a638d3e87a1';
+String _$isFirstLaunchRepositoryHash() =>
+    r'4a08facfa65572bf61f48521ec43c0ed5f6c016b';
 
-/// flavor と platform に応じた BannerAd のId を保持する。
-///
-/// Copied from [bannerAdUnitId].
-@ProviderFor(bannerAdUnitId)
-final bannerAdUnitIdProvider = AutoDisposeProvider<String>.internal(
-  bannerAdUnitId,
-  name: r'bannerAdUnitIdProvider',
+/// See also [isFirstLaunchRepository].
+@ProviderFor(isFirstLaunchRepository)
+final isFirstLaunchRepositoryProvider =
+    AutoDisposeProvider<IsFirstLaunchRepository>.internal(
+  isFirstLaunchRepository,
+  name: r'isFirstLaunchRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$bannerAdUnitIdHash,
+      : _$isFirstLaunchRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef BannerAdUnitIdRef = AutoDisposeProviderRef<String>;
+typedef IsFirstLaunchRepositoryRef
+    = AutoDisposeProviderRef<IsFirstLaunchRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

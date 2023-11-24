@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../base_page.dart';
@@ -11,6 +12,7 @@ import '../../feature/definition/presentation/page/home/home_page.dart';
 import '../../feature/definition/presentation/page/post_definition/post_definition_page.dart';
 import '../../feature/definition/util/after_post_navigation_type.dart';
 import '../../feature/definition/util/write_definition_form_type.dart';
+import '../../feature/introduction/presentation/introduction_page.dart';
 import '../../feature/setting/presentation/license_page.dart';
 import '../../feature/setting/presentation/muted_user_list_page.dart';
 import '../../feature/setting/presentation/setting_page.dart';
@@ -29,16 +31,21 @@ import '../../feature/word/presentation/page/word_list/word_list_page.dart';
 import '../../feature/word/presentation/page/word_top/word_top_page.dart';
 import '../../feature/word/util/dictionary_page_type.dart';
 import '../../util/constant/initial_main_group.dart';
+import 'first_launch_guard.dart';
 
 part 'app_router.g.dart';
 part 'app_router.gr.dart';
 
 @riverpod
-Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter();
+Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter(ref);
 
 // TODO(me): 一部Routeのpathにidを含める
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends _$AppRouter {
+  AppRouter(this.ref);
+
+  final Ref ref;
+
   final List<AdaptiveRoute> commonRouteList = [
     AdaptiveRoute(
       path: 'definition_detail',
@@ -81,8 +88,13 @@ class AppRouter extends _$AppRouter {
   @override
   List<AdaptiveRoute> get routes => [
         AdaptiveRoute(
+          path: '/introduction',
+          page: IntroductionRoute.page,
+        ),
+        AdaptiveRoute(
           path: '/',
           page: BaseRoute.page,
+          guards: [ref.read(firstLaunchGuardProvider)],
           children: [
             AdaptiveRoute(
               path: 'home',

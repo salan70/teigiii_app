@@ -131,6 +131,12 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    IntroductionRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const IntroductionPage(),
+      );
+    },
     LikeUserRoute.name: (routeData) {
       final args = routeData.argsAs<LikeUserRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -618,6 +624,20 @@ class InitialSubGroupIndexRouteArgs {
   String toString() {
     return 'InitialSubGroupIndexRouteArgs{key: $key, selectedInitialMainGroup: $selectedInitialMainGroup, dictionaryPageType: $dictionaryPageType, targetUserId: $targetUserId}';
   }
+}
+
+/// generated route for
+/// [IntroductionPage]
+class IntroductionRoute extends PageRouteInfo<void> {
+  const IntroductionRoute({List<PageRouteInfo>? children})
+      : super(
+          IntroductionRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'IntroductionRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
