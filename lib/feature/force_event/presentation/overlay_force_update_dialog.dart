@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/common_provider/launch_url.dart';
 import '../../../core/common_widget/button/primary_filled_button.dart';
 import '../../../util/constant/url.dart';
+import '../../../util/extension/target_platform_extension.dart';
 
 /// 端末のバックキーや画面操作を受け付けないWidget
 ///
@@ -40,22 +41,12 @@ class OverlayForceUpdateDialog extends ConsumerWidget {
                   const SizedBox(height: 16),
                   PrimaryFilledButton(
                     onPressed: () {
-                      switch (defaultTargetPlatform) {
-                        case TargetPlatform.iOS:
-                          ref.read(launchURLProvider(appStoreUrl));
-                          return;
-                        case TargetPlatform.android:
-                          ref.read(launchURLProvider(googlePlayStoreUrl));
-                          return;
-
-                        case TargetPlatform.fuchsia:
-                        case TargetPlatform.linux:
-                        case TargetPlatform.macOS:
-                        case TargetPlatform.windows:
-                          throw UnsupportedError(
-                            '想定外のプラットフォームです。 defaultTargetPlatform: $defaultTargetPlatform',
-                          );
-                      }
+                      // platform に応じたURLを開く。
+                      defaultTargetPlatform.when(
+                        onIOS: () => ref.read(launchURLProvider(appStoreUrl)),
+                        onAndroid: () =>
+                            ref.read(launchURLProvider(googlePlayStoreUrl)),
+                      );
                     },
                     text: 'アップデートする',
                   ),

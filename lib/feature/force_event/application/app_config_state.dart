@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:version/version.dart';
 
+import '../../../util/extension/target_platform_extension.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../domain/app_maintenance.dart';
 import '../repository/app_config_repository.dart';
@@ -25,27 +26,12 @@ Future<bool> isRequiredAppUpdate(IsRequiredAppUpdateRef ref) async {
     return false;
   }
 
-  final parsedCurrentVersion = Version.parse(currentAppVersion);
-  late final Version parsedRequiredVersion;
-  switch (defaultTargetPlatform) {
-    case TargetPlatform.iOS:
-      parsedRequiredVersion = Version.parse(appConfig.minAppVersionForIos);
-      break;
+  final parsedRequiredVersion = defaultTargetPlatform.when(
+    onIOS: () => Version.parse(appConfig.minAppVersionForIos),
+    onAndroid: () => Version.parse(appConfig.minAppVersionForAndroid),
+  );
 
-    case TargetPlatform.android:
-      parsedRequiredVersion = Version.parse(appConfig.minAppVersionForAndroid);
-      break;
-
-    case TargetPlatform.fuchsia:
-    case TargetPlatform.linux:
-    case TargetPlatform.macOS:
-    case TargetPlatform.windows:
-      throw UnsupportedError(
-        '想定外のプラットフォームです。 defaultTargetPlatform: $defaultTargetPlatform',
-      );
-  }
-
-  return parsedRequiredVersion > parsedCurrentVersion;
+  return parsedRequiredVersion > Version.parse(currentAppVersion);
 }
 
 /// アプリのメンテナンス情報を保持する
