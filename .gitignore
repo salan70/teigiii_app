@@ -47,6 +47,7 @@ app.*.map.json
 
 **/android/app/src/main/res/mipmap*/
 **/android/app/src/main/res/drawwable*/
+**/android/app/src/main/res/values/colors.xml
 **/android/app/google-services.json
 
 **/ios/GoogleService-Info.plist
