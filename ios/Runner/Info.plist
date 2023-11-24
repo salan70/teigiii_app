@@ -53,5 +53,14 @@
 	<string>写真を撮るにはカメラへのアクセスが必要です。</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>マイクへのアクセスが必要です。</string>
+	<key>GADApplicationIdentifier</key>
+    <string>ca-app-pub-8953668343211620~8262506548</string>
+    <key>SKAdNetworkItems</key>
+      <array>
+        <dict>
+          <key>SKAdNetworkIdentifier</key>
+          <string>cstr6suwn9.skadnetwork</string>
+        </dict>
+      </array>
 </dict>
 </plist>

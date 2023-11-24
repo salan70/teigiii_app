@@ -18,9 +18,7 @@ extension TargetPlatformExtension on TargetPlatform {
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'Unsupported platform $this',
-        );
+        throw UnsupportedError('Unsupported platform $this');
     }
   }
 }

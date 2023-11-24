@@ -21,6 +21,10 @@ class DefinitionList extends ConsumerWidget {
   });
 
   final DefinitionFeedType definitionFeedType;
+
+  /// 扱うstateの中身が空の場合に表示させるWidget
+  final Widget? emptyWidget;
+
   final String? wordId;
   final String? targetUserId;
   final InitialSubGroup? initialSubGroup;
@@ -29,9 +33,6 @@ class DefinitionList extends ConsumerWidget {
   ///
   /// デフォルト値は恐らく画面を埋め尽くされるであろう数として8を設定
   final int shimmerTileNumber;
-
-  /// 扱うstateの中身が空の場合に表示させるWidget
-  final Widget? emptyWidget;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,9 +49,11 @@ class DefinitionList extends ConsumerWidget {
       tileBuilder: (item) {
         return DefinitionTile(definitionId: item as String);
       },
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       shimmerTile: const DefinitionTileShimmer(),
       shimmerTileNumber: shimmerTileNumber,
       emptyWidget: emptyWidget,
+      showBannerAd: true,
     );
   }
 }

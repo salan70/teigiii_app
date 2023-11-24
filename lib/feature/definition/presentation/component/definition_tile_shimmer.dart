@@ -10,11 +10,7 @@ class DefinitionTileShimmer extends StatelessWidget {
     return const Column(
       children: [
         Padding(
-          padding: EdgeInsets.only(
-            top: 16,
-            left: 16,
-            right: 16,
-          ),
+          padding: EdgeInsets.only(top: 16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

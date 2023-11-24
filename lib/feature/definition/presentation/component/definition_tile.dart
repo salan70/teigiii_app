@@ -37,11 +37,7 @@ class DefinitionTile extends ConsumerWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  left: 16,
-                  right: 16,
-                ),
+                padding: const EdgeInsets.only(top: 16),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -130,7 +126,9 @@ class DefinitionTile extends ConsumerWidget {
           );
         }
 
-        logger.e('definitionId [$definitionId]の取得時にエラーが発生: $error, stackTrace: $stackTrace');
+        logger.e(
+          'definitionId [$definitionId]の取得時にエラーが発生: $error, stackTrace: $stackTrace',
+        );
         return Column(
           children: [
             const SizedBox(height: 16),
