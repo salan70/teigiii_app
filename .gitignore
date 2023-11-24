@@ -46,7 +46,7 @@ app.*.map.json
 .fvm/flutter_sdk
 
 **/android/app/src/main/res/mipmap*/
-**/android/app/src/main/res/drawwable*/
+**/android/app/src/main/res/drawable*/
 **/android/app/src/main/res/values/colors.xml
 **/android/app/google-services.json
 
