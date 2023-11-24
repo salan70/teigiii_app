@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 import '../../../../core/common_provider/entered_text_state.dart';
+import '../../../../core/common_provider/toast_controller.dart';
 import '../../../../core/router/app_router.dart';
 import '../../domain/user_profile.dart';
 
@@ -93,10 +94,11 @@ class SearchUserTextField extends ConsumerWidget {
           maxLength: UserProfile.publicIdLength,
           autofocus: autoFocus,
           onChanged: ref.read(enteredTextProvider.notifier).updateText,
-          // TODO(me): Android端末にて、現状のonSubmittedで使用感に問題ないか確認する
-          // 空の場合や、文字数が足りない場合など、値が無効な場合の処理を追加する必要があるかも
           onSubmitted: (value) {
-            if (value.isEmpty) {
+            if (value.length != UserProfile.publicIdLength) {
+              ref
+                  .read(toastControllerProvider.notifier)
+                  .showToast('9文字入力してください');
               return;
             }
             controller.text = defaultText ?? '';
