@@ -46,8 +46,11 @@ app.*.map.json
 .fvm/flutter_sdk
 
 **/android/app/src/main/res/mipmap*/
+**/android/app/src/main/res/drawwable*/
 **/android/app/google-services.json
 
 **/ios/GoogleService-Info.plist
 
 /coverage/
+
+*.env
