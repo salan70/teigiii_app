@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -27,6 +29,13 @@ Future<void> main() async {
 
   final flavor = Flavor.fromString(const String.fromEnvironment('flavor'));
   await Firebase.initializeApp(options: firebaseOptionsWithFlavor(flavor));
+
+  await FirebaseAppCheck.instance.activate(
+    androidProvider:
+        kReleaseMode ? AndroidProvider.playIntegrity : AndroidProvider.debug,
+    appleProvider:
+        kReleaseMode ? AppleProvider.deviceCheck : AppleProvider.debug,
+  );
 
   await FirebaseAnalytics.instance.logEvent(
     name: 'launch App',
