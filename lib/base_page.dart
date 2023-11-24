@@ -81,45 +81,48 @@ class _BasePageState extends ConsumerState<BasePage> {
             final tabsRouter = context.tabsRouter;
             return Stack(
               children: [
-                Scaffold(
-                  body: child,
-                  bottomNavigationBar: BottomNavigationBar(
-                    items: const [
-                      BottomNavigationBarItem(
-                        icon: Icon(CupertinoIcons.house),
-                        activeIcon: Icon(CupertinoIcons.house_fill),
-                        label: 'ホーム',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(CupertinoIcons.person),
-                        activeIcon: Icon(CupertinoIcons.person_fill),
-                        label: 'あなたの辞書',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(CupertinoIcons.person_3),
-                        activeIcon: Icon(CupertinoIcons.person_3_fill),
-                        label: 'みんなの辞書',
-                      ),
-                    ],
-                    currentIndex: tabsRouter.activeIndex,
-                    onTap: (index) {
-                      // 選択中のタブをTapした場合
-                      if (tabsRouter.activeIndex == index) {
-                        // ネストされたルーターのスタック情報を破棄
-                        tabsRouter
-                            .innerRouterOf<StackRouter>(
-                              tabsRouter.current.name,
-                            )
-                            ?.popUntilRoot();
-                            
-                        PrimaryScrollController.of(
-                          ref.read(globalKeyProvider).currentContext!,
-                        ).scrollToTop();
-                        return;
-                      }
-                      // 選択中でないタブをTapした場合
-                      tabsRouter.setActiveIndex(index);
-                    },
+                WillPopScope(
+                  onWillPop: () async => false,
+                  child: Scaffold(
+                    body: child,
+                    bottomNavigationBar: BottomNavigationBar(
+                      items: const [
+                        BottomNavigationBarItem(
+                          icon: Icon(CupertinoIcons.house),
+                          activeIcon: Icon(CupertinoIcons.house_fill),
+                          label: 'ホーム',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(CupertinoIcons.person),
+                          activeIcon: Icon(CupertinoIcons.person_fill),
+                          label: 'あなたの辞書',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(CupertinoIcons.person_3),
+                          activeIcon: Icon(CupertinoIcons.person_3_fill),
+                          label: 'みんなの辞書',
+                        ),
+                      ],
+                      currentIndex: tabsRouter.activeIndex,
+                      onTap: (index) {
+                        // 選択中のタブをTapした場合
+                        if (tabsRouter.activeIndex == index) {
+                          // ネストされたルーターのスタック情報を破棄
+                          tabsRouter
+                              .innerRouterOf<StackRouter>(
+                                tabsRouter.current.name,
+                              )
+                              ?.popUntilRoot();
+
+                          PrimaryScrollController.of(
+                            ref.read(globalKeyProvider).currentContext!,
+                          ).scrollToTop();
+                          return;
+                        }
+                        // 選択中でないタブをTapした場合
+                        tabsRouter.setActiveIndex(index);
+                      },
+                    ),
                   ),
                 ),
               ],

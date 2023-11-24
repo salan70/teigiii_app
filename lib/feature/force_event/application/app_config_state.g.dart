@@ -23,7 +23,7 @@ final appConfigProvider = StreamProvider<AppConfigDocument>.internal(
 
 typedef AppConfigRef = StreamProviderRef<AppConfigDocument>;
 String _$isRequiredAppUpdateHash() =>
-    r'ad6191ba4d20745d89938655fbaa4a643dc5e5d9';
+    r'a6a6c3be45ef4b3e9263274e8e1b9e59e96ba20f';
 
 /// アプリのアップデートが必要かどうか
 ///
