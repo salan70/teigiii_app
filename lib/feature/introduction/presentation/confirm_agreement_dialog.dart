@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common_widget/dialog/base_dialog.dart';
-import '../../../core/router/app_router.dart';
-import '../repository/is_first_launch_repository.dart';
+import '../application/introduction_service.dart';
 
 class ConfirmAgreementDialog extends ConsumerWidget {
   const ConfirmAgreementDialog({
@@ -33,18 +32,7 @@ class ConfirmAgreementDialog extends ConsumerWidget {
           ),
         ),
         InkWell(
-          onTap: () async {
-            // TODO(me):  repository 層に依存しないようにしたい。
-            // ただ、そのために application 層にクラスを作るのも微妙な感じがする。
-            await ref.read(isFirstLaunchRepositoryProvider).saveFirstLaunch();
-
-            // todo: trackingうんたらのダイアログ出す。
-
-            if (!context.mounted) {
-              return;
-            }
-            await context.pushRoute(const BaseRoute());
-          },
+          onTap: ref.read(introductionServiceProvider.notifier).onAgreePolicy,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(

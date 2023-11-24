@@ -12,13 +12,15 @@ IsFirstLaunchRepository isFirstLaunchRepository(
 class IsFirstLaunchRepository {
   IsFirstLaunchRepository();
 
+  final _isFirstLaunch = 'isFirstLaunch';
+
   Future<bool> isFirstLaunch() async {
     final preference = await SharedPreferences.getInstance();
-    return preference.getBool('isFirstLaunch') ?? true;
+    return preference.getBool(_isFirstLaunch) ?? true;
   }
 
   Future<void> saveFirstLaunch() async {
     final preference = await SharedPreferences.getInstance();
-    await preference.setBool('isFirstLaunch', false);
+    await preference.setBool(_isFirstLaunch, false);
   }
 }
