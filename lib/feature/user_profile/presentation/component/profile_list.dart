@@ -44,6 +44,7 @@ class ProfileList extends ConsumerWidget {
               : FollowOrUnfollowButton(targetUserId: userId),
         );
       },
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       shimmerTile: const ProfileTileShimmer(),
       shimmerTileNumber: 4,
       emptyWidget: emptyWidget,

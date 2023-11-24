@@ -72,6 +72,7 @@ class SearchWordResultPage extends ConsumerWidget {
                   listStateNotifierProvider: wordListProvider,
                   fetchMore: ref.read(wordListProvider.notifier).fetchMore,
                   tileBuilder: (item) => WordTile(word: item as Word),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   shimmerTile: const WordTileShimmer(),
                   shimmerTileNumber: 2,
                   emptyWidget: SimpleWidgetForEmpty(

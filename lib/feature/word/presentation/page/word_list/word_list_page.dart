@@ -71,11 +71,13 @@ class WordListPage extends ConsumerWidget {
             listStateNotifierProvider: wordListProvider,
             fetchMore: ref.read(wordListProvider.notifier).fetchMore,
             tileBuilder: (item) => WordTile(word: item as Word),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             shimmerTile: const WordTileShimmer(),
             shimmerTileNumber: 10,
             emptyWidget: SimpleWidgetForEmpty(
               message: generateEmptyMessage(selectedInitialSubGroup.label),
             ),
+            showBannerAd: true,
           ),
         ),
       ),

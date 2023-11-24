@@ -21,9 +21,11 @@ dependencies:
   device_preview: ^1.1.0
   device_info_plus: ^9.1.0
   easy_refresh: ^3.3.2+1
+  flutter_dotenv: ^5.1.0
   flutter_riverpod: ^2.4.3
   fluttertoast: ^8.2.3
   freezed_annotation: ^2.4.1
+  google_mobile_ads: ^3.1.0
   image_cropper: ^5.0.0
   image_picker: ^1.0.4
   in_app_review: ^2.0.8
@@ -77,6 +79,9 @@ flutter:
         weight: 700
       - asset: assets/fonts/LINESeedJP_A_OTF_Eb.otf
         weight: 800
+
+  assets:
+    - .env
 
 flutter_launcher_icons:
   android: true

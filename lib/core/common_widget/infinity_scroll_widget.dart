@@ -6,6 +6,7 @@ import '../../../core/common_widget/cupertino_refresh_indicator.dart';
 import '../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../util/interface/list_state.dart';
 import '../../../util/logger.dart';
+import '../../feature/admob/presentation/banner_ad_widget.dart';
 
 class InfinityScrollWidget extends ConsumerWidget {
   InfinityScrollWidget({
@@ -13,29 +14,39 @@ class InfinityScrollWidget extends ConsumerWidget {
     required this.listStateNotifierProvider,
     required this.fetchMore,
     required this.tileBuilder,
+    required this.contentPadding,
     required this.shimmerTile,
     required this.shimmerTileNumber,
     required this.emptyWidget,
+    this.showBannerAd = false,
   });
 
-  /// 扱うstate ([ListState]型)を保持するProvider
+  /// 扱う state ([ListState]型)を保持する Provider。
   final AsyncNotifierProvider<dynamic, ListState> listStateNotifierProvider;
   final VoidCallback fetchMore;
 
-  /// [ListState] の中身（tile）を作成するための関数
+  /// [ListState] の中身（tile）を作成するための関数。
   final Widget Function(dynamic item) tileBuilder;
 
-  /// 初回読み込み時に表示させるShimmer
+  /// [tileBuilder] で作成した tile を表示する ListView の padding。
+  final EdgeInsetsGeometry contentPadding;
+
+  /// 初回読み込み時に表示させる Shimmer。
   final Widget shimmerTile;
 
-  /// [shimmerTile]を表示させる数
+  /// [shimmerTile] を表示させる数。
   final int shimmerTileNumber;
 
-  /// 扱うstate ([ListState]型) の中身が空の場合に表示させるWidget
+  /// 扱う state ([ListState]型) の中身が空の場合に表示させる Widget。
   final Widget? emptyWidget;
 
+  /// バナー広告を表示させるかどうか。
+  ///
+  /// true の場合、 [tileBuilder] で作成した tile 7件ごとにバナー広告を表示させる。
+  final bool showBannerAd;
+
   final scrollController = ScrollController();
-  // エラーが発生してリビルドした際、スクロール位置を保持するためのキー
+  // エラーが発生してリビルドした際、スクロール位置を保持するためのキー。
   final globalKey = GlobalKey();
 
   @override
@@ -65,6 +76,7 @@ class InfinityScrollWidget extends ConsumerWidget {
             onRefresh: onRefresh,
             asyncListState: asyncListState,
             tileBuilder: tileBuilder,
+            contentPadding: contentPadding,
             bottomWidget: listState.hasMore
                 ? const Column(
                     children: [
@@ -74,6 +86,7 @@ class InfinityScrollWidget extends ConsumerWidget {
                   )
                 : const SizedBox(),
             emptyWidget: emptyWidget,
+            showBannerAd: showBannerAd,
           ),
         );
       },
@@ -95,11 +108,13 @@ class InfinityScrollWidget extends ConsumerWidget {
             onRefresh: onRefresh,
             asyncListState: asyncListState,
             tileBuilder: tileBuilder,
+            contentPadding: contentPadding,
             bottomWidget: _BottomWidgetWhenError(
               fetchMore: fetchMore,
               asyncListState: asyncListState,
             ),
             emptyWidget: emptyWidget,
+            showBannerAd: showBannerAd,
           );
         }
 
@@ -115,24 +130,27 @@ class InfinityScrollWidget extends ConsumerWidget {
       },
       // 初回読み込み時
       loading: () {
-        return ListView.builder(
-          controller: scrollController,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: shimmerTileNumber,
-          itemBuilder: (context, index) {
-            return shimmerTile;
-          },
+        return Padding(
+          padding: contentPadding,
+          child: ListView.builder(
+            controller: scrollController,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: shimmerTileNumber,
+            itemBuilder: (context, index) {
+              return shimmerTile;
+            },
+          ),
         );
       },
     );
   }
 }
 
-/// [ListState] を無限スクロールで表示するWidget
+/// [ListState] を無限スクロールで表示するWidget。
 ///
-/// スワイプリフレッシュ, ListView,
-/// ListViewの一番下に表示するWidget ([bottomWidget]) を内包している
+/// スワイプリフレッシュ, ListView , ListView の一番下に表示する Widget ([bottomWidget]) 
+/// を内包している。
 class _StateScrollBar extends StatelessWidget {
   const _StateScrollBar({
     required this.globalKey,
@@ -140,8 +158,10 @@ class _StateScrollBar extends StatelessWidget {
     required this.onRefresh,
     required this.asyncListState,
     required this.tileBuilder,
+    required this.contentPadding,
     required this.bottomWidget,
     required this.emptyWidget,
+    required this.showBannerAd,
   });
 
   final GlobalKey globalKey;
@@ -149,8 +169,12 @@ class _StateScrollBar extends StatelessWidget {
   final Future<void> Function() onRefresh;
   final AsyncValue<ListState?> asyncListState;
   final Widget Function(dynamic item) tileBuilder;
+  final EdgeInsetsGeometry contentPadding;
   final Widget bottomWidget;
   final Widget? emptyWidget;
+
+  /// バナー広告を表示させるかどうか。
+  final bool showBannerAd;
 
   @override
   Widget build(BuildContext context) {
@@ -164,18 +188,35 @@ class _StateScrollBar extends StatelessWidget {
             builder: buildCustomRefreshIndicator,
             onRefresh: onRefresh,
           ),
-          SliverToBoxAdapter(
-            child: asyncListState.value!.list.isEmpty
-                ? emptyWidget ?? const SizedBox.shrink()
-                : ListView.builder(
-                    controller: scrollController,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: asyncListState.value!.list.length,
-                    itemBuilder: (context, index) {
-                      return tileBuilder(asyncListState.value!.list[index]);
-                    },
-                  ),
+          SliverPadding(
+            padding: contentPadding,
+            sliver: SliverToBoxAdapter(
+              child: asyncListState.value!.list.isEmpty
+                  ? emptyWidget ?? const SizedBox.shrink()
+                  : ListView.builder(
+                      controller: scrollController,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: asyncListState.value!.list.length,
+                      itemBuilder: (context, index) {
+                        // バナー広告を表示させる場合
+                        if (showBannerAd) {
+                          return Column(
+                            children: [
+                              // 7件ごとにバナー広告を表示させる
+                              (index % 7 == 0 && index != 0)
+                                  ? const _BannerAdTile()
+                                  : const SizedBox.shrink(),
+                              tileBuilder(asyncListState.value!.list[index]),
+                            ],
+                          );
+                        }
+
+                        // バナー広告を表示させない場合
+                        return tileBuilder(asyncListState.value!.list[index]);
+                      },
+                    ),
+            ),
           ),
           SliverPadding(
             padding: const EdgeInsets.only(top: 8, bottom: 40),
@@ -189,7 +230,7 @@ class _StateScrollBar extends StatelessWidget {
   }
 }
 
-/// 無限スクロールにて、エラー発生時にListの下部に表示させるWidget
+/// 無限スクロールにて、エラー発生時にListの下部に表示させる Widget
 class _BottomWidgetWhenError extends StatelessWidget {
   const _BottomWidgetWhenError({
     required this.fetchMore,
@@ -239,5 +280,25 @@ class _BottomWidgetWhenError extends StatelessWidget {
             ),
           )
         : const SizedBox();
+  }
+}
+
+/// 無限スクロールにて、表示させるバナー広告
+class _BannerAdTile extends StatelessWidget {
+  const _BannerAdTile();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 64,
+          width: double.infinity,
+          color: Theme.of(context).colorScheme.surface,
+          child: const BannerAdWidget(),
+        ),
+        const Divider(),
+      ],
+    );
   }
 }
