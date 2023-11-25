@@ -50,19 +50,29 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
     final imageRepository = ref.read(imageRepositoryProvider);
 
     // 画像を選択
-    final pickedFile = await imageRepository.pickImage(imageSource);
-    if (pickedFile == null) {
-      isLoadingOverlayNotifier.finishLoading();
-      return;
-    }
+    try {
+      final pickedFile = await imageRepository.pickImage(imageSource);
+      if (pickedFile == null) {
+        isLoadingOverlayNotifier.finishLoading();
+        return;
+      }
 
-    // 画像を切り抜き
-    final croppedFile = await imageRepository.cropImage(pickedFile.path);
-    if (croppedFile == null) {
+      // 画像を切り抜き
+      final croppedFile = await imageRepository.cropImage(pickedFile.path);
+      if (croppedFile == null) {
+        isLoadingOverlayNotifier.finishLoading();
+        return;
+      }
+      state = AsyncData(state.value!.copyWith(croppedFile: croppedFile));
+    } on Exception catch (e, stackTrace) {
+      logger.e('画像選択もしくは切り抜き時にエラーが発生 error: $e, stackTrace: $stackTrace');
+
+      ref
+          .read(toastControllerProvider.notifier)
+          .showToast('エラーが発生しました。もう一度お試しください');
       isLoadingOverlayNotifier.finishLoading();
       return;
     }
-    state = AsyncData(state.value!.copyWith(croppedFile: croppedFile));
 
     isLoadingOverlayNotifier.finishLoading();
   }
