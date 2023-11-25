@@ -87,6 +87,7 @@ class AuthService extends _$AuthService {
       ref
           .read(toastControllerProvider.notifier)
           .showToast('エラーが発生しました。再度お試しください。');
+      rethrow;
     } finally {
       ref.read(isLoadingOverlayNotifierProvider.notifier).finishLoading();
     }
