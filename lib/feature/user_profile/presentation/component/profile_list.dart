@@ -17,12 +17,17 @@ class ProfileList extends ConsumerWidget {
     required this.targetUserId,
     required this.targetDefinitionId,
     required this.emptyWidget,
+    this.additionalOnRefresh,
   });
 
   final UserListType userListType;
   final String? targetUserId;
   final String? targetDefinitionId;
   final Widget? emptyWidget;
+
+  /// スワイプリフレッシュ時、[userIdListStateNotifierProvider] の invalidate
+  /// 以外に行う処理。
+  final VoidCallback? additionalOnRefresh;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,6 +53,7 @@ class ProfileList extends ConsumerWidget {
       shimmerTile: const ProfileTileShimmer(),
       shimmerTileNumber: 4,
       emptyWidget: emptyWidget,
+      additionalOnRefresh: additionalOnRefresh,
     );
   }
 }

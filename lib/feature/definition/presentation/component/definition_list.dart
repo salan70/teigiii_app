@@ -18,6 +18,7 @@ class DefinitionList extends ConsumerWidget {
     this.targetUserId,
     this.initialSubGroup,
     this.shimmerTileNumber = 8,
+    this.additionalOnRefresh,
   });
 
   final DefinitionFeedType definitionFeedType;
@@ -33,6 +34,10 @@ class DefinitionList extends ConsumerWidget {
   ///
   /// デフォルト値は恐らく画面を埋め尽くされるであろう数として8を設定
   final int shimmerTileNumber;
+
+  /// スワイプリフレッシュ時、[definitionIdListStateNotifierProvider] の invalidate
+  /// 以外に行う処理。
+  final VoidCallback? additionalOnRefresh;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,6 +59,7 @@ class DefinitionList extends ConsumerWidget {
       shimmerTileNumber: shimmerTileNumber,
       emptyWidget: emptyWidget,
       showBannerAd: true,
+      additionalOnRefresh: additionalOnRefresh,
     );
   }
 }

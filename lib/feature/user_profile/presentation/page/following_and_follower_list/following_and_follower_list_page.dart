@@ -34,7 +34,7 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
           child: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool _) {
               final isMyPage = currentUserId == targetUserId;
-        
+
               return <Widget>[
                 SliverAppBar(
                   forceElevated: true,
@@ -74,7 +74,7 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                           // * タブを切り替えた場合
                           return;
                         }
-        
+
                         // * 同じタブをタップした場合
                         PrimaryScrollController.of(context).scrollToTop();
                       },
@@ -92,6 +92,8 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                   emptyWidget: const SimpleWidgetForEmpty(
                     message: 'フォロー中のユーザーがいません🌱',
                   ),
+                  additionalOnRefresh: () =>
+                      ref.invalidate(followCountProvider(targetUserId)),
                 ),
                 ProfileList(
                   userListType: UserListType.follower,
@@ -100,6 +102,8 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                   emptyWidget: const SimpleWidgetForEmpty(
                     message: 'フォロワーがいません🌴',
                   ),
+                  additionalOnRefresh: () =>
+                      ref.invalidate(followCountProvider(targetUserId)),
                 ),
               ],
             ),

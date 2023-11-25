@@ -18,11 +18,13 @@ class InfinityScrollWidget extends ConsumerWidget {
     required this.shimmerTile,
     required this.shimmerTileNumber,
     required this.emptyWidget,
+    this.additionalOnRefresh,
     this.showBannerAd = false,
   });
 
   /// 扱う state ([ListState]型)を保持する Provider。
   final AsyncNotifierProvider<dynamic, ListState> listStateNotifierProvider;
+
   final VoidCallback fetchMore;
 
   /// [ListState] の中身（tile）を作成するための関数。
@@ -40,6 +42,10 @@ class InfinityScrollWidget extends ConsumerWidget {
   /// 扱う state ([ListState]型) の中身が空の場合に表示させる Widget。
   final Widget? emptyWidget;
 
+  /// スワイプリフレッシュ時、[listStateNotifierProvider] の invalidate
+  /// 以外に行う処理。
+  final VoidCallback? additionalOnRefresh;
+
   /// バナー広告を表示させるかどうか。
   ///
   /// true の場合、 [tileBuilder] で作成した tile 7件ごとにバナー広告を表示させる。
@@ -55,6 +61,11 @@ class InfinityScrollWidget extends ConsumerWidget {
 
     Future<void> onRefresh() async {
       ref.invalidate(listStateNotifierProvider);
+
+      if (additionalOnRefresh != null) {
+        additionalOnRefresh!();
+      }
+
       // indicatorを表示し続けるため、取得が完了するまで待つ
       await ref.read(listStateNotifierProvider.future);
     }
@@ -149,7 +160,7 @@ class InfinityScrollWidget extends ConsumerWidget {
 
 /// [ListState] を無限スクロールで表示するWidget。
 ///
-/// スワイプリフレッシュ, ListView , ListView の一番下に表示する Widget ([bottomWidget]) 
+/// スワイプリフレッシュ, ListView , ListView の一番下に表示する Widget ([bottomWidget])
 /// を内包している。
 class _StateScrollBar extends StatelessWidget {
   const _StateScrollBar({

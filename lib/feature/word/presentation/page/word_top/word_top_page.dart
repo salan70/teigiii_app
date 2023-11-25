@@ -96,7 +96,7 @@ class WordTopPage extends ConsumerWidget {
                               // * タブを切り替えた場合
                               return;
                             }
-            
+
                             // * 同じタブをタップした場合
                             PrimaryScrollController.of(context).scrollToTop();
                           },
@@ -114,6 +114,8 @@ class WordTopPage extends ConsumerWidget {
                       wordId: wordId,
                       shimmerTileNumber: 2,
                       emptyWidget: null,
+                      additionalOnRefresh: () =>
+                          ref.invalidate(wordProvider(wordId)),
                     ),
                     DefinitionList(
                       definitionFeedType:
@@ -121,6 +123,8 @@ class WordTopPage extends ConsumerWidget {
                       wordId: wordId,
                       shimmerTileNumber: 2,
                       emptyWidget: null,
+                      additionalOnRefresh: () =>
+                          ref.invalidate(wordProvider(wordId)),
                     ),
                   ],
                 ),
