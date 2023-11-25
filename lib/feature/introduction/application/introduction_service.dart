@@ -26,6 +26,6 @@ class IntroductionService extends _$IntroductionService {
     }
 
     // [BaseRoute] に遷移する。
-    await ref.read(appRouterProvider).push(const BaseRoute());
+    await ref.read(appRouterProvider).popAndPush(const BaseRoute());
   }
 }
