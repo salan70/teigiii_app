@@ -29,7 +29,7 @@ class MutedUserListPage extends ConsumerWidget {
           }
 
           return Padding(
-            padding: const EdgeInsets.only(top: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ListView.builder(
               itemCount: mutedUserIdList.length,
               itemBuilder: (context, index) {
@@ -47,7 +47,7 @@ class MutedUserListPage extends ConsumerWidget {
           // エラーが発生し、再読み込み中の場合
           if (asyncMutedUserIdList.isRefreshing) {
             return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 24),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Align(
                 alignment: Alignment.topCenter,
                 child: CupertinoActivityIndicator(),
@@ -58,7 +58,7 @@ class MutedUserListPage extends ConsumerWidget {
           logger.e('ミュートユーザーの取得に失敗しました。'
               'error: $error, stackTrace: $stackTrace');
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Align(
               alignment: Alignment.topCenter,
               child: ErrorAndRetryWidget(
