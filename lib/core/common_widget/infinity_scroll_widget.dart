@@ -61,13 +61,12 @@ class InfinityScrollWidget extends ConsumerWidget {
 
     Future<void> onRefresh() async {
       ref.invalidate(listStateNotifierProvider);
+      // indicatorを表示し続けるため、取得が完了するまで待つ
+      await ref.read(listStateNotifierProvider.future);
 
       if (additionalOnRefresh != null) {
         additionalOnRefresh!();
       }
-
-      // indicatorを表示し続けるため、取得が完了するまで待つ
-      await ref.read(listStateNotifierProvider.future);
     }
 
     return asyncListState.when(

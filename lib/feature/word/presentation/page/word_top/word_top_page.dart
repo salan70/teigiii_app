@@ -114,6 +114,7 @@ class WordTopPage extends ConsumerWidget {
                       wordId: wordId,
                       shimmerTileNumber: 2,
                       emptyWidget: null,
+                      // TODO(me): スワイプリフレッシュ時、インジケータの表示がなめらかじゃないの直したい。
                       additionalOnRefresh: () =>
                           ref.invalidate(wordProvider(wordId)),
                     ),
