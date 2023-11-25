@@ -23,8 +23,11 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     String? targetUserId,
     InitialSubGroup? initialSubGroup,
   }) async {
-    // ミュートユーザーが更新されるたびに、本Notifierも更新されるよう監視
-    ref.watch(mutedUserIdListProvider);
+    // ミュートユーザー, currentUser が更新されるたびに、
+    // 本Notifierも更新されるよう監視する。
+    ref
+      ..watch(mutedUserIdListProvider)
+      ..watch(userIdProvider);
 
     return await _fetchBasedOnType(isFirstFetch: true);
   }
