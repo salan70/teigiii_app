@@ -105,7 +105,7 @@ class AuthService extends _$AuthService {
 
     // * follow関連
     await unfollowAllFollowing(currentUserId);
-    await unfollowedByAllFollower(currentUserId);
+    await unfollowByAllFollower(currentUserId);
     await ref
         .read(userFollowRepositoryProvider)
         .deleteUserFollowCount(currentUserId);
@@ -158,7 +158,7 @@ class AuthService extends _$AuthService {
   }
 
   /// 全てのフォロワーが、currentUser をフォロー解除する
-  Future<void> unfollowedByAllFollower(String currentUserId) async {
+  Future<void> unfollowByAllFollower(String currentUserId) async {
     final followerIdList = await ref.read(
       userIdListStateNotifierProvider(
         UserListType.follower,
