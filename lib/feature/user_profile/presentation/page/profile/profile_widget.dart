@@ -41,7 +41,7 @@ class ProfileWidget extends ConsumerWidget {
                   const Spacer(),
                   currentUserId == targetUserId
                       ? PrimaryOutlinedButton(
-                          text: 'プロフィールを編集する',
+                          text: 'プロフィールを編集',
                           onPressed: () {
                             context.pushRoute(EditProfileRoute());
                           },
