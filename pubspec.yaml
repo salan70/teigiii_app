@@ -58,6 +58,7 @@ dev_dependencies:
     
   auto_route_generator: ^7.3.1
   build_runner: ^2.4.6
+  cider: ^0.2.4
   custom_lint: ^0.5.3
   flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.0
