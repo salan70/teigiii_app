@@ -162,6 +162,7 @@ class SettingPage extends ConsumerWidget {
               alignment: Alignment.topCenter,
               child: DeleteAccountButton(),
             ),
+            const SizedBox(height: 40),
           ],
         ),
       ),

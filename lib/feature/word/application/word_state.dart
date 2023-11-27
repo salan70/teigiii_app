@@ -15,7 +15,6 @@ Future<Word?> word(WordRef ref, String wordId) async {
   final wordRepository = ref.read(wordRepositoryProvider);
 
   final wordDoc = await wordRepository.fetchWordById(wordId);
-
   if (wordDoc == null) {
     return null;
   }

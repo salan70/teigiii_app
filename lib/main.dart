@@ -57,18 +57,6 @@ Future<void> main() async {
 
   await MobileAds.instance.initialize();
 
-  // TODO(me): リリース時に削除する
-  // デバッグ用にダミーデータを登録する
-  // await addUserConfigsToFirestore(flavorName);
-  // await addUserProfilesToFirestore(flavorName);
-  // await addUserFollowCountsToFirestore(flavorName);
-  // await addUserFollowsToFirestore2(flavorName);
-  // await addUserFollowsToFirestore3(flavorName);
-  // await addWordsDummy0to29(flavorName);
-  // await addWordsDummy30to59(flavorName);
-  // await addDefinitionDummy0to29(flavorName);
-  // await addLikesToFirestore(flavorName);
-
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

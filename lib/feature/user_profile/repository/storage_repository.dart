@@ -31,4 +31,11 @@ class StorageRepository {
 
     return snapshot.ref.getDownloadURL();
   }
+
+  /// [userId] のプロフィール画像を削除する
+  Future<void> deleteFile(String userId) async {
+    final storageRef =
+        FirebaseStorage.instance.ref().child('users/$userId/$_fileName');
+    await storageRef.delete();
+  }
 }

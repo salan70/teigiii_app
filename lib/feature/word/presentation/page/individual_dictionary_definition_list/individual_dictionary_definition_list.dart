@@ -42,7 +42,7 @@ class IndividualDictionaryDefinitionListPage extends ConsumerWidget {
         '「$initialLabel」はまだ投稿されていません😭',
         '「$initialLabel」デビューしませんか🥺',
         'やあ✋私は「$initialLabel」である👴。\nここに来た記念に私を投稿してくれ',
-        'やっほー！私は「$initialLabel」だよ。投稿してくれるよね？🥺',
+        'やっほー！私は「$initialLabel」だよ。\n投稿してくれるよね？🥺',
         '「$initialLabel」を開くとはお目が高い！',
         '無理にとは言わんけぇ、\n「$initialLabel」を投稿してはくれまいか？👴',
         '🙃んせまりあは稿投だま',

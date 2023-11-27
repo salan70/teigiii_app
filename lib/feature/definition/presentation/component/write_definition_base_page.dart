@@ -51,8 +51,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
             ref.read(dialogControllerProvider.notifier).show(
                   ConfirmDialog(
                     confirmMessage: '入力した内容は保存されません。\nよろしいですか？',
-                    onConfirm: () => Navigator.of(context)
-                        .popUntil((route) => route.isFirst),
+                    onConfirm: context.popRoute,
                     confirmButtonText: 'OK',
                   ),
                 );

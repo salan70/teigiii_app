@@ -12,6 +12,7 @@ import '../../user_config/repository/device_info_repository.dart';
 import '../../user_config/repository/user_config_repository.dart';
 import '../../user_profile/application/user_id_list_state.dart';
 import '../../user_profile/domain/user_profile.dart';
+import '../../user_profile/repository/storage_repository.dart';
 import '../../user_profile/repository/user_follow_repository.dart';
 import '../../user_profile/repository/user_profile_repository.dart';
 import '../../user_profile/util/user_list_type.dart';
@@ -87,6 +88,7 @@ class AuthService extends _$AuthService {
       ref
           .read(toastControllerProvider.notifier)
           .showToast('エラーが発生しました。再度お試しください。');
+      rethrow;
     } finally {
       ref.read(isLoadingOverlayNotifierProvider.notifier).finishLoading();
     }
@@ -104,7 +106,7 @@ class AuthService extends _$AuthService {
 
     // * follow関連
     await unfollowAllFollowing(currentUserId);
-    await unfollowedByAllFollower(currentUserId);
+    await unfollowByAllFollower(currentUserId);
     await ref
         .read(userFollowRepositoryProvider)
         .deleteUserFollowCount(currentUserId);
@@ -113,6 +115,7 @@ class AuthService extends _$AuthService {
     await ref
         .read(userProfileRepositoryProvider)
         .deleteUserProfile(currentUserId);
+    await ref.read(storageRepositoryProvider).deleteFile(currentUserId);
 
     // * userConfig
     await ref
@@ -157,7 +160,7 @@ class AuthService extends _$AuthService {
   }
 
   /// 全てのフォロワーが、currentUser をフォロー解除する
-  Future<void> unfollowedByAllFollower(String currentUserId) async {
+  Future<void> unfollowByAllFollower(String currentUserId) async {
     final followerIdList = await ref.read(
       userIdListStateNotifierProvider(
         UserListType.follower,
