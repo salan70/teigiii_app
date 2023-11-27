@@ -1,115 +1,163 @@
+import 'dart:ui';
+
+import 'package:device_preview/device_preview.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'core/common_provider/flavor_provider.dart';
+import 'core/common_provider/is_loading_overlay_state.dart';
+import 'core/common_widget/dialog/loading_dialog.dart';
+import 'core/common_widget/error_and_retry_widget.dart';
+import 'core/router/app_router.dart';
+import 'feature/force_event/application/app_config_state.dart';
+import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
+import 'feature/force_event/presentation/overlay_in_maintenance_dialog.dart';
+import 'firebase_options/firebase_options.dart';
+import 'util/constant/flavor.dart';
+import 'util/constant/theme_data.dart';
+import 'util/logger.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
+  await dotenv.load();
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  final flavor = Flavor.fromString(const String.fromEnvironment('flavor'));
+  await Firebase.initializeApp(options: firebaseOptionsWithFlavor(flavor));
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+  await FirebaseAppCheck.instance.activate(
+    androidProvider:
+        kReleaseMode ? AndroidProvider.playIntegrity : AndroidProvider.debug,
+    appleProvider:
+        kReleaseMode ? AppleProvider.deviceCheck : AppleProvider.debug,
+  );
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  await FirebaseAnalytics.instance.logEvent(
+    name: 'launch App',
+  );
 
-  final String title;
+  // Flutterフレームワークがキャッチしたエラーを記録する
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Flutterフレームワークでキャッチできない非同期エラーを記録する
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  await MobileAds.instance.initialize();
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(
+      ProviderScope(
+        overrides: [
+          flavorProvider.overrideWithValue(flavor),
+        ],
+        child: DevicePreview(
+          enabled: false,
+          builder: (context) {
+            return const MyApp();
+          },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  });
+}
+
+class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('ja')],
+      routerConfig: ref.watch(appRouterProvider).config(),
+      theme: getThemeData(ThemeMode.light, context),
+      darkTheme: getThemeData(ThemeMode.dark, context),
+      builder: (context, child) {
+        // メンテナンス関連の処理
+        final appMaintenance = ref.watch(appMaintenanceProvider);
+        if (appMaintenance == null) {
+          // * ロード中の場合
+          return const Scaffold(body: OverlayLoadingWidget());
+        }
+        if (appMaintenance.inMaintenance) {
+          // * メンテナンス中の場合
+          return Stack(
+            children: [
+              child!,
+              OverlayInMaintenanceDialog(appMaintenance: appMaintenance),
+            ],
+          );
+        }
+
+        // 強制アップデート関連の処理
+        final asyncIsRequiredUpdate = ref.watch(isRequiredAppUpdateProvider);
+        return asyncIsRequiredUpdate.when(
+          loading: () => const Scaffold(body: OverlayLoadingWidget()),
+          error: (e, s) {
+            // エラーが発生後、再読み込み時にtrueになる
+            if (asyncIsRequiredUpdate.isLoading) {
+              return const Scaffold(body: OverlayLoadingWidget());
+            }
+
+            logger.e('[asyncIsRequiredUpdate]の取得時にエラーが発生しました。'
+                ' error: $e, stackTrace: $s');
+            return Scaffold(
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: ErrorAndRetryWidget(
+                      onRetry: () =>
+                          ref.invalidate(isRequiredAppUpdateProvider),
+                      showInquireButton: true,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+          data: (isRequiredUpdate) {
+            if (isRequiredUpdate) {
+              // * アップデートが必要な場合
+              return Stack(
+                children: [
+                  child!,
+                  const OverlayForceUpdateDialog(),
+                ],
+              );
+            }
+
+            // * アップデートが不要な場合
+            return Stack(
+              children: [
+                child!,
+                if (ref.watch(isLoadingOverlayNotifierProvider))
+                  const OverlayLoadingWidget(),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }
