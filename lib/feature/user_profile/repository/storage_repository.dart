@@ -22,8 +22,7 @@ class StorageRepository {
   /// [file] をアップロードし、
   /// 完了したらダウンロードURLを返す
   Future<String> uploadFile(String userId, File file) async {
-    final storageRef =
-        FirebaseStorage.instance.ref().child('users/$userId/$_fileName');
+    final storageRef = storage.ref().child('users/$userId/$_fileName');
     final metaData = SettableMetadata(contentType: 'image/png');
 
     final uploadTask = storageRef.putFile(file, metaData);
@@ -33,13 +32,13 @@ class StorageRepository {
   }
 
   /// [userId] のプロフィール画像を削除する。
-  /// 
+  ///
   /// ファイルが存在しない場合は何もしない。（例外のスローもしない）
   Future<void> deleteFile(String userId) async {
-    final storageRef =
-        FirebaseStorage.instance.ref().child('users/$userId/$_fileName');
-    try {await storageRef.delete();}
-    on FirebaseException catch (e) {
+    final storageRef = storage.ref().child('users/$userId/$_fileName');
+    try {
+      await storageRef.delete();
+    } on FirebaseException catch (e) {
       if (e.code == 'object-not-found') {
         // ファイルが存在しない場合は何もしない。
         return;
