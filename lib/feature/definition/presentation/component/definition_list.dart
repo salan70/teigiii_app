@@ -23,20 +23,22 @@ class DefinitionList extends ConsumerWidget {
 
   final DefinitionFeedType definitionFeedType;
 
-  /// 扱うstateの中身が空の場合に表示させるWidget
+  /// 扱う state の中身が空の場合に表示させる Widget 。
   final Widget? emptyWidget;
 
   final String? wordId;
   final String? targetUserId;
   final InitialSubGroup? initialSubGroup;
 
-  /// ローディング時に何タイル分のshimmerを表示させるか
+  /// ローディング時に何タイル分の shimmer を表示させるか。
   ///
-  /// デフォルト値は恐らく画面を埋め尽くされるであろう数として8を設定
+  /// デフォルト値は恐らく画面を埋め尽くされるであろう数として8を設定。
   final int shimmerTileNumber;
 
   /// スワイプリフレッシュ時、[definitionIdListStateNotifierProvider] の invalidate
   /// 以外に行う処理。
+  ///
+  /// null の場合は、[definitionIdListStateNotifierProvider] の invalidate のみ行う。
   final VoidCallback? additionalOnRefresh;
 
   @override
