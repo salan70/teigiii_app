@@ -32,10 +32,19 @@ class StorageRepository {
     return snapshot.ref.getDownloadURL();
   }
 
-  /// [userId] のプロフィール画像を削除する
+  /// [userId] のプロフィール画像を削除する。
+  /// 
+  /// ファイルが存在しない場合は何もしない。（例外のスローもしない）
   Future<void> deleteFile(String userId) async {
     final storageRef =
         FirebaseStorage.instance.ref().child('users/$userId/$_fileName');
-    await storageRef.delete();
+    try {await storageRef.delete();}
+    on FirebaseException catch (e) {
+      if (e.code == 'object-not-found') {
+        // ファイルが存在しない場合は何もしない。
+        return;
+      }
+      rethrow;
+    }
   }
 }
