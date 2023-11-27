@@ -32,7 +32,7 @@ jobs:
       - name: install flutter
         uses: subosito/flutter-action@v2
         with:
-            # TODO:  ハードコーディング避けたい。
+          # TODO:  ハードコーディング避けたい。
           flutter-version: '3.13.6'
           channel: 'stable'
           cache: true
@@ -59,7 +59,7 @@ jobs:
           git add -u pubspec.yaml
           echo "Bumped version number to $BUMP_VERSION" | git commit --file=-
 
-      - name: create releaser branch
+      - name: create release branch
         run: |
           git checkout -b releases/$BUMP_VERSION
           echo "RELEASE_BRANCH=releases/$BUMP_VERSION" >> $GITHUB_ENV
