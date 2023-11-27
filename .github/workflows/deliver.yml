@@ -34,6 +34,14 @@ jobs:
           echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
           echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
 
+      # .env ファイルを作成する。
+      - name: Create dot env file
+        shell: bash
+        run: |
+          touch .env
+          echo "BANNER_ID_IOS=${{ secrets.BANNER_ID_IOS }}" >> .env
+          echo "BANNER_ID_ANDROID=${{ secrets.BANNER_ID_ANDROID }}" >> .env
+
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -111,6 +119,15 @@ jobs:
           # import certificate to keychain
           security import $CERTIFICATE_PATH -P "$IOS_CERTIFICATE_P12_P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
+          
+      # .env ファイルを作成する。
+      - name: Create dot env file
+        shell: bash
+        run: |
+          touch .env
+          echo "BANNER_ID_IOS=${{ secrets.BANNER_ID_IOS }}" >> .env
+          echo "BANNER_ID_ANDROID=${{ secrets.BANNER_ID_ANDROID }}" >> .env
+
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
