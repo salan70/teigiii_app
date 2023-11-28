@@ -78,6 +78,7 @@ class UserFollowService extends _$UserFollowService {
     ref
       ..invalidate(followCountProvider(currentUserId))
       ..invalidate(followCountProvider(targetUserId))
-      ..invalidate(isFollowingProvider(targetUserId));
+      ..invalidate(isFollowingProvider(targetUserId))
+      ..invalidate(followingIdListProvider(currentUserId));
   }
 }

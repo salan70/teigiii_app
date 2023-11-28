@@ -200,7 +200,12 @@ class _StateScrollBar extends StatelessWidget {
             padding: contentPadding,
             sliver: SliverToBoxAdapter(
               child: asyncListState.value!.list.isEmpty
-                  ? emptyWidget ?? const SizedBox.shrink()
+                  // 表示件数がある程度多い状態から、0件になるような refresh を
+                  // した際のエラーを回避するために、[SingleChildScrollView]で囲っている。
+                  ? SingleChildScrollView(
+                      controller: scrollController,
+                      child: emptyWidget ?? const SizedBox.shrink(),
+                    )
                   : ListView.builder(
                       controller: scrollController,
                       shrinkWrap: true,
