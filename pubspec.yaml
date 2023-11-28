@@ -1,7 +1,7 @@
 name: teigi_app
 description: A new Flutter project.
 
-version: 1.0.0+5
+version: 1.0.0+6
 
 environment:
   sdk: '>=2.19.2 <3.0.0'
