@@ -487,7 +487,7 @@ class FetchDefinitionRepository {
             Filter(DefinitionsCollection.isPublic, isEqualTo: true),
           ),
         )
-        .orderBy(DefinitionsCollection.wordReading, descending: true)
+        .orderBy(DefinitionsCollection.wordReading)
         .limit(fetchLimitForDefinitionList);
 
     if (lastDocument != null) {

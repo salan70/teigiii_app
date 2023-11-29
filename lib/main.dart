@@ -57,6 +57,14 @@ Future<void> main() async {
 
   await MobileAds.instance.initialize();
 
+  // iOS 端末にてステータスバーを表示させるための設定。
+  //
+  // 参考: https://halzoblog.com/error-bug-diary/20220922-2/
+  await SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+    overlays: SystemUiOverlay.values,
+  );
+
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -83,6 +91,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
