@@ -1,6 +1,15 @@
 import 'dart:math';
 
-import 'url.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../util/constant/url.dart';
+
+part 'flavor_state.g.dart';
+
+@riverpod
+Flavor flavor(FlavorRef ref) {
+  throw UnimplementedError();
+}
 
 enum Flavor {
   prod,
@@ -31,9 +40,11 @@ enum Flavor {
   String generateRandomIconImageUrl() {
     switch (this) {
       case Flavor.prod:
-        return defaultIconImageUrlListForProd[Random().nextInt(defaultIconImageUrlListForProd.length)];
-      case Flavor.dev:      
-        return defaultIconImageUrlListForDev[Random().nextInt(defaultIconImageUrlListForDev.length)];
+        return defaultIconImageUrlListForProd[
+            Random().nextInt(defaultIconImageUrlListForProd.length)];
+      case Flavor.dev:
+        return defaultIconImageUrlListForDev[
+            Random().nextInt(defaultIconImageUrlListForDev.length)];
     }
   }
 }

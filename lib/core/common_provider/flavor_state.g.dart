@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'flavor_provider.dart';
+part of 'flavor_state.dart';
 
 // **************************************************************************
 // RiverpodGenerator

@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:teigi_app/core/common_provider/flavor_provider.dart';
+import 'package:teigi_app/core/common_provider/flavor_state.dart';
 import 'package:teigi_app/core/common_provider/toast_controller.dart';
 import 'package:teigi_app/feature/auth/application/auth_service.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
@@ -11,7 +11,6 @@ import 'package:teigi_app/feature/auth/repository/register_user_repository.dart'
 import 'package:teigi_app/feature/auth/util/constant.dart';
 import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart';
-import 'package:teigi_app/util/constant/flavor.dart';
 
 import 'auth_service_test.mocks.dart';
 
@@ -21,7 +20,6 @@ import 'auth_service_test.mocks.dart';
   MockSpec<AuthRepository>(),
   MockSpec<Listener<AsyncValue<void>>>(),
 ])
-
 class MockToastController extends Notifier<void>
     with Mock
     implements ToastController {}
@@ -57,7 +55,7 @@ void main() {
         deviceInfoRepositoryProvider
             .overrideWithValue(mockDeviceInfoRepository),
         authRepositoryProvider.overrideWithValue(mockAuthRepository),
-                toastControllerProvider.overrideWith(
+        toastControllerProvider.overrideWith(
           MockToastController.new,
         ),
       ],
@@ -96,7 +94,7 @@ void main() {
           .overrideWithValue(mockRegisterUserRepository),
       deviceInfoRepositoryProvider.overrideWithValue(mockDeviceInfoRepository),
       authRepositoryProvider.overrideWithValue(mockAuthRepository),
-              toastControllerProvider.overrideWith(
+      toastControllerProvider.overrideWith(
         MockToastController.new,
       ),
     ]);

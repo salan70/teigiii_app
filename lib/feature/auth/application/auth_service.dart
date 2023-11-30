@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/common_provider/flavor_provider.dart';
+import '../../../core/common_provider/flavor_state.dart';
 import '../../../core/common_provider/is_loading_overlay_state.dart';
 import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/logger.dart';
