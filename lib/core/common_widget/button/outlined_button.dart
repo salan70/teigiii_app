@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// アプリ内で使用する Filled ボタンの基底クラス。
-class _BaseFilledButton extends StatelessWidget {
-  const _BaseFilledButton({
+/// アプリ内で使用する Outlined ボタンの基底クラス。
+class _BaseOutlinedButton extends StatelessWidget {
+  const _BaseOutlinedButton({
     required this.onPressed,
     required this.text,
     required this.backgroundColor,
     required this.textColor,
+    required this.borderColor,
   });
 
   /// ボタンタップ時の処理。
@@ -21,12 +22,18 @@ class _BaseFilledButton extends StatelessWidget {
   /// [text] の色。
   final Color textColor;
 
+  /// ボタンの枠線の色。
+  final Color borderColor;
+
   @override
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(48),
+        ),
+        side: BorderSide(
+          color: borderColor,
         ),
         backgroundColor: backgroundColor,
       ),
@@ -47,8 +54,8 @@ class _BaseFilledButton extends StatelessWidget {
 }
 
 /// primary カラーで塗りつぶされたボタン。
-class PrimaryFilledButton extends StatelessWidget {
-  const PrimaryFilledButton({
+class PrimaryOutlinedButton extends StatelessWidget {
+  const PrimaryOutlinedButton({
     super.key,
     required this.onPressed,
     required this.text,
@@ -62,18 +69,19 @@ class PrimaryFilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BaseFilledButton(
+    return _BaseOutlinedButton(
       onPressed: onPressed,
       text: text,
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      textColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.onPrimary,
+      textColor: Theme.of(context).colorScheme.primary,
+      borderColor: Theme.of(context).colorScheme.primary,
     );
   }
 }
 
 /// tertiary カラーで塗りつぶされたボタン。
-class TertiaryFilledButton extends StatelessWidget {
-  const TertiaryFilledButton({
+class TertiaryOutlinedButton extends StatelessWidget {
+  const TertiaryOutlinedButton({
     super.key,
     required this.onPressed,
     required this.text,
@@ -87,11 +95,12 @@ class TertiaryFilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BaseFilledButton(
+    return _BaseOutlinedButton(
       onPressed: onPressed,
       text: text,
-      backgroundColor: Theme.of(context).colorScheme.tertiary,
-      textColor: Theme.of(context).colorScheme.onTertiary,
+      backgroundColor: Theme.of(context).colorScheme.onTertiary,
+      textColor: Theme.of(context).colorScheme.tertiary,
+      borderColor: Theme.of(context).colorScheme.tertiary,
     );
   }
 }

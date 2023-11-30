@@ -7,7 +7,7 @@ import '../../feature/user_profile/application/user_profile_state.dart';
 import '../../util/constant/url.dart';
 import '../common_provider/launch_url.dart';
 import 'button/filled_button.dart';
-import 'button/secondary_outlined_button.dart';
+import 'button/outlined_button.dart';
 
 class ErrorAndRetryWidget extends ConsumerWidget {
   const ErrorAndRetryWidget({
@@ -48,7 +48,7 @@ class ErrorAndRetryWidget extends ConsumerWidget {
             ? Column(
                 children: [
                   const SizedBox(height: 24),
-                  SecondaryOutlinedButton(
+                  TertiaryOutlinedButton(
                     onPressed: () {
                       final currentUserId = ref.read(userIdProvider);
 
