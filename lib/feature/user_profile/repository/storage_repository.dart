@@ -7,7 +7,7 @@ import '../../../core/common_provider/firebase_providers.dart';
 
 part 'storage_repository.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 StorageRepository storageRepository(StorageRepositoryRef ref) {
   return StorageRepository(ref.watch(firebaseStorageProvider));
 }

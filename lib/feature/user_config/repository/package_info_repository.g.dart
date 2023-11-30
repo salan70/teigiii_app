@@ -7,11 +7,12 @@ part of 'package_info_repository.dart';
 // **************************************************************************
 
 String _$packageInfoRepositoryHash() =>
-    r'82f68b712fa80fbf8a299e9d6dd87d91b8da37d3';
+    r'823877d45a23166e53f0d799eee5471aacb5add4';
 
 /// See also [packageInfoRepository].
 @ProviderFor(packageInfoRepository)
-final packageInfoRepositoryProvider = Provider<PackageInfoRepository>.internal(
+final packageInfoRepositoryProvider =
+    AutoDisposeProvider<PackageInfoRepository>.internal(
   packageInfoRepository,
   name: r'packageInfoRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +22,7 @@ final packageInfoRepositoryProvider = Provider<PackageInfoRepository>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef PackageInfoRepositoryRef = ProviderRef<PackageInfoRepository>;
+typedef PackageInfoRepositoryRef
+    = AutoDisposeProviderRef<PackageInfoRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

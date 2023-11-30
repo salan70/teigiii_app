@@ -7,7 +7,7 @@ import '../../../util/extension/firestore_extension.dart';
 
 part 'like_definition_repository.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 LikeDefinitionRepository likeDefinitionRepository(
   LikeDefinitionRepositoryRef ref,
 ) =>

@@ -6,7 +6,7 @@ part of 'definition_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$definitionHash() => r'85a88e798d3c5cbe9360104b603b3868c55f8f4b';
+String _$definitionHash() => r'e41863cc2be938130dddc85541e2e63d25033961';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -72,7 +72,7 @@ class DefinitionFamily extends Family<AsyncValue<Definition>> {
 }
 
 /// See also [definition].
-class DefinitionProvider extends FutureProvider<Definition> {
+class DefinitionProvider extends AutoDisposeFutureProvider<Definition> {
   /// See also [definition].
   DefinitionProvider(
     String definitionId,
@@ -124,7 +124,7 @@ class DefinitionProvider extends FutureProvider<Definition> {
   }
 
   @override
-  FutureProviderElement<Definition> createElement() {
+  AutoDisposeFutureProviderElement<Definition> createElement() {
     return _DefinitionProviderElement(this);
   }
 
@@ -142,13 +142,13 @@ class DefinitionProvider extends FutureProvider<Definition> {
   }
 }
 
-mixin DefinitionRef on FutureProviderRef<Definition> {
+mixin DefinitionRef on AutoDisposeFutureProviderRef<Definition> {
   /// The parameter `definitionId` of this provider.
   String get definitionId;
 }
 
-class _DefinitionProviderElement extends FutureProviderElement<Definition>
-    with DefinitionRef {
+class _DefinitionProviderElement
+    extends AutoDisposeFutureProviderElement<Definition> with DefinitionRef {
   _DefinitionProviderElement(super.provider);
 
   @override

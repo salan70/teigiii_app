@@ -5,12 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
-import '../../../../core/common_provider/entered_text_state.dart';
 import '../../../../core/common_provider/toast_controller.dart';
 import '../../../../core/router/app_router.dart';
 import '../../domain/user_profile.dart';
 
-class SearchUserTextField extends ConsumerWidget {
+class SearchUserTextField extends ConsumerStatefulWidget {
   SearchUserTextField({
     super.key,
     this.autoFocus = false,
@@ -23,14 +22,38 @@ class SearchUserTextField extends ConsumerWidget {
   final focusNode = FocusNode();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final enteredTextProvider =
-        enteredTextNotifierProvider(EnterField.searchUser);
+  ConsumerState<SearchUserTextField> createState() =>
+      _SearchUserTextFieldState();
+}
 
-    final controller = TextEditingController(text: defaultText);
+class _SearchUserTextFieldState extends ConsumerState<SearchUserTextField> {
+  late final TextEditingController controller;
+  late bool isEmpty;
 
-    // 詳しいことは分かっていないが、高さを指定しないとエラーになるため、[SizedBox]でラップしている
-    // heightは、TextFieldより大きくする必要がある
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController(text: widget.defaultText);
+
+    isEmpty = controller.text.isEmpty;
+
+    controller.addListener(() {
+      setState(() {
+        isEmpty = controller.text.isEmpty;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 高さを指定しないとエラーになるため、[SizedBox] でラップしている。
+    // height は、TextField より大きくする必要がある。
     return SizedBox(
       height: 80,
       child: KeyboardActions(
@@ -41,7 +64,7 @@ class SearchUserTextField extends ConsumerWidget {
           nextFocus: false,
           actions: [
             KeyboardActionsItem(
-              focusNode: focusNode,
+              focusNode: widget.focusNode,
               displayArrows: false,
               toolbarButtons: [
                 (node) {
@@ -54,19 +77,14 @@ class SearchUserTextField extends ConsumerWidget {
                           context.pushRoute(
                             SearchUserResultRoute(searchWord: controller.text),
                           );
-                          controller.text = defaultText ?? '';
+                          controller.text = widget.defaultText ?? '';
                         }
                       },
-                      child: Consumer(
-                        builder: (context, ref, child) {
-                          final enteredText = ref.watch(enteredTextProvider);
-                          return Text(
-                            '検索',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(
-                                  color: enteredText.length ==
+                      child: Text(
+                        '検索',
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  color: controller.text.length ==
                                           UserProfile.publicIdLength
                                       ? Theme.of(context).colorScheme.onSurface
                                       : Theme.of(context)
@@ -74,8 +92,6 @@ class SearchUserTextField extends ConsumerWidget {
                                           .onSurfaceVariant
                                           .withOpacity(0.4),
                                 ),
-                          );
-                        },
                       ),
                     ),
                   );
@@ -85,15 +101,14 @@ class SearchUserTextField extends ConsumerWidget {
           ],
         ),
         child: TextField(
-          focusNode: focusNode,
+          focusNode: widget.focusNode,
           controller: controller,
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.search,
           // 数字のみ入力可能
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           maxLength: UserProfile.publicIdLength,
-          autofocus: autoFocus,
-          onChanged: ref.read(enteredTextProvider.notifier).updateText,
+          autofocus: widget.autoFocus,
           onSubmitted: (value) {
             if (value.length != UserProfile.publicIdLength) {
               ref
@@ -101,7 +116,7 @@ class SearchUserTextField extends ConsumerWidget {
                   .showToast('9文字入力してください');
               return;
             }
-            controller.text = defaultText ?? '';
+            controller.text = widget.defaultText ?? '';
             context.pushRoute(SearchUserResultRoute(searchWord: value));
           },
           decoration: InputDecoration(
@@ -112,19 +127,15 @@ class SearchUserTextField extends ConsumerWidget {
             prefixIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
             suffixIcon: Consumer(
               builder: (context, ref, child) {
-                final enteredText = ref.watch(enteredTextProvider);
-                return enteredText.isNotEmpty
-                    ? GestureDetector(
-                        onTap: () {
-                          controller.clear();
-                          ref.read(enteredTextProvider.notifier).clearText();
-                        },
+                return isEmpty
+                    ? const SizedBox.shrink()
+                    : GestureDetector(
+                        onTap: controller.clear,
                         child: const Icon(
                           CupertinoIcons.clear_thick_circled,
                           size: 20,
                         ),
-                      )
-                    : const SizedBox.shrink();
+                      );
               },
             ),
             suffixIconColor: Theme.of(context).colorScheme.onSurfaceVariant,

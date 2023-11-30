@@ -10,7 +10,7 @@ import 'entity/word_document.dart';
 
 part 'word_repository.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 WordRepository wordRepository(WordRepositoryRef ref) => WordRepository(
       ref.watch(firestoreProvider),
     );

@@ -7,11 +7,12 @@ part of 'device_info_repository.dart';
 // **************************************************************************
 
 String _$deviceInfoRepositoryHash() =>
-    r'dad03fad81d9325f040860fe4b81ec0046ace8e2';
+    r'4755d8d1202f019d06d667d1977f1f67a59aa8ef';
 
 /// See also [deviceInfoRepository].
 @ProviderFor(deviceInfoRepository)
-final deviceInfoRepositoryProvider = Provider<DeviceInfoRepository>.internal(
+final deviceInfoRepositoryProvider =
+    AutoDisposeProvider<DeviceInfoRepository>.internal(
   deviceInfoRepository,
   name: r'deviceInfoRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +22,6 @@ final deviceInfoRepositoryProvider = Provider<DeviceInfoRepository>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef DeviceInfoRepositoryRef = ProviderRef<DeviceInfoRepository>;
+typedef DeviceInfoRepositoryRef = AutoDisposeProviderRef<DeviceInfoRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

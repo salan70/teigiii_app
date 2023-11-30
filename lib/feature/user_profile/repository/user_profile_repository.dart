@@ -9,7 +9,7 @@ import 'entity/user_profile_document.dart';
 
 part 'user_profile_repository.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 UserProfileRepository userProfileRepository(UserProfileRepositoryRef ref) =>
     UserProfileRepository(
       ref.watch(firestoreProvider),

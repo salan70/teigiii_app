@@ -13,7 +13,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'core/common_provider/flavor_provider.dart';
+import 'core/common_provider/flavor_state.dart';
 import 'core/common_provider/is_loading_overlay_state.dart';
 import 'core/common_widget/dialog/loading_dialog.dart';
 import 'core/common_widget/error_and_retry_widget.dart';
@@ -22,7 +22,6 @@ import 'feature/force_event/application/app_config_state.dart';
 import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
 import 'feature/force_event/presentation/overlay_in_maintenance_dialog.dart';
 import 'firebase_options/firebase_options.dart';
-import 'util/constant/flavor.dart';
 import 'util/constant/theme_data.dart';
 import 'util/logger.dart';
 

@@ -6,7 +6,7 @@ part of 'user_profile_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userProfileHash() => r'685b04108915f8bf276435a3a34460680b9a5dbf';
+String _$userProfileHash() => r'a7743a0223bb6af5424453f27bc0e2acf027afb3';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -72,7 +72,7 @@ class UserProfileFamily extends Family<AsyncValue<UserProfile>> {
 }
 
 /// See also [userProfile].
-class UserProfileProvider extends FutureProvider<UserProfile> {
+class UserProfileProvider extends AutoDisposeFutureProvider<UserProfile> {
   /// See also [userProfile].
   UserProfileProvider(
     String userId,
@@ -124,7 +124,7 @@ class UserProfileProvider extends FutureProvider<UserProfile> {
   }
 
   @override
-  FutureProviderElement<UserProfile> createElement() {
+  AutoDisposeFutureProviderElement<UserProfile> createElement() {
     return _UserProfileProviderElement(this);
   }
 
@@ -142,13 +142,13 @@ class UserProfileProvider extends FutureProvider<UserProfile> {
   }
 }
 
-mixin UserProfileRef on FutureProviderRef<UserProfile> {
+mixin UserProfileRef on AutoDisposeFutureProviderRef<UserProfile> {
   /// The parameter `userId` of this provider.
   String get userId;
 }
 
-class _UserProfileProviderElement extends FutureProviderElement<UserProfile>
-    with UserProfileRef {
+class _UserProfileProviderElement
+    extends AutoDisposeFutureProviderElement<UserProfile> with UserProfileRef {
   _UserProfileProviderElement(super.provider);
 
   @override
@@ -156,7 +156,7 @@ class _UserProfileProviderElement extends FutureProviderElement<UserProfile>
 }
 
 String _$userIdSearchByPublicIdHash() =>
-    r'0a9f9dc257f45dcdd7e3f6843ad13c9175e8dbd6';
+    r'86648bcf5976ad09545803334dc02975c5c4f268';
 
 /// See also [userIdSearchByPublicId].
 @ProviderFor(userIdSearchByPublicId)
@@ -201,7 +201,8 @@ class UserIdSearchByPublicIdFamily extends Family<AsyncValue<String?>> {
 }
 
 /// See also [userIdSearchByPublicId].
-class UserIdSearchByPublicIdProvider extends FutureProvider<String?> {
+class UserIdSearchByPublicIdProvider
+    extends AutoDisposeFutureProvider<String?> {
   /// See also [userIdSearchByPublicId].
   UserIdSearchByPublicIdProvider(
     String publicId,
@@ -253,7 +254,7 @@ class UserIdSearchByPublicIdProvider extends FutureProvider<String?> {
   }
 
   @override
-  FutureProviderElement<String?> createElement() {
+  AutoDisposeFutureProviderElement<String?> createElement() {
     return _UserIdSearchByPublicIdProviderElement(this);
   }
 
@@ -272,20 +273,21 @@ class UserIdSearchByPublicIdProvider extends FutureProvider<String?> {
   }
 }
 
-mixin UserIdSearchByPublicIdRef on FutureProviderRef<String?> {
+mixin UserIdSearchByPublicIdRef on AutoDisposeFutureProviderRef<String?> {
   /// The parameter `publicId` of this provider.
   String get publicId;
 }
 
 class _UserIdSearchByPublicIdProviderElement
-    extends FutureProviderElement<String?> with UserIdSearchByPublicIdRef {
+    extends AutoDisposeFutureProviderElement<String?>
+    with UserIdSearchByPublicIdRef {
   _UserIdSearchByPublicIdProviderElement(super.provider);
 
   @override
   String get publicId => (origin as UserIdSearchByPublicIdProvider).publicId;
 }
 
-String _$followCountHash() => r'7a55134e2b960a0378e6d6156e39c8dafcfd43c3';
+String _$followCountHash() => r'17ba6de4c566b77df797082d93c76bd14add16d1';
 
 /// See also [followCount].
 @ProviderFor(followCount)
@@ -330,7 +332,7 @@ class FollowCountFamily extends Family<AsyncValue<FollowCount>> {
 }
 
 /// See also [followCount].
-class FollowCountProvider extends FutureProvider<FollowCount> {
+class FollowCountProvider extends AutoDisposeFutureProvider<FollowCount> {
   /// See also [followCount].
   FollowCountProvider(
     String userId,
@@ -382,7 +384,7 @@ class FollowCountProvider extends FutureProvider<FollowCount> {
   }
 
   @override
-  FutureProviderElement<FollowCount> createElement() {
+  AutoDisposeFutureProviderElement<FollowCount> createElement() {
     return _FollowCountProviderElement(this);
   }
 
@@ -400,20 +402,20 @@ class FollowCountProvider extends FutureProvider<FollowCount> {
   }
 }
 
-mixin FollowCountRef on FutureProviderRef<FollowCount> {
+mixin FollowCountRef on AutoDisposeFutureProviderRef<FollowCount> {
   /// The parameter `userId` of this provider.
   String get userId;
 }
 
-class _FollowCountProviderElement extends FutureProviderElement<FollowCount>
-    with FollowCountRef {
+class _FollowCountProviderElement
+    extends AutoDisposeFutureProviderElement<FollowCount> with FollowCountRef {
   _FollowCountProviderElement(super.provider);
 
   @override
   String get userId => (origin as FollowCountProvider).userId;
 }
 
-String _$isFollowingHash() => r'ba64a7ffacfc214a92102ab8a7516ab16bcfe9d5';
+String _$isFollowingHash() => r'3a25ba5e47b330d5f84f70d1e11e8a5a55640529';
 
 /// See also [isFollowing].
 @ProviderFor(isFollowing)
@@ -458,7 +460,7 @@ class IsFollowingFamily extends Family<AsyncValue<bool>> {
 }
 
 /// See also [isFollowing].
-class IsFollowingProvider extends FutureProvider<bool> {
+class IsFollowingProvider extends AutoDisposeFutureProvider<bool> {
   /// See also [isFollowing].
   IsFollowingProvider(
     String targetUserId,
@@ -510,7 +512,7 @@ class IsFollowingProvider extends FutureProvider<bool> {
   }
 
   @override
-  FutureProviderElement<bool> createElement() {
+  AutoDisposeFutureProviderElement<bool> createElement() {
     return _IsFollowingProviderElement(this);
   }
 
@@ -528,12 +530,12 @@ class IsFollowingProvider extends FutureProvider<bool> {
   }
 }
 
-mixin IsFollowingRef on FutureProviderRef<bool> {
+mixin IsFollowingRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `targetUserId` of this provider.
   String get targetUserId;
 }
 
-class _IsFollowingProviderElement extends FutureProviderElement<bool>
+class _IsFollowingProviderElement extends AutoDisposeFutureProviderElement<bool>
     with IsFollowingRef {
   _IsFollowingProviderElement(super.provider);
 
@@ -541,7 +543,7 @@ class _IsFollowingProviderElement extends FutureProviderElement<bool>
   String get targetUserId => (origin as IsFollowingProvider).targetUserId;
 }
 
-String _$followingIdListHash() => r'97748b18939111d29472b2a72ce5c0a325496cf4';
+String _$followingIdListHash() => r'89b4adb2e2544be84286f1dff92397cefc8f04a1';
 
 /// See also [followingIdList].
 @ProviderFor(followingIdList)
@@ -586,7 +588,7 @@ class FollowingIdListFamily extends Family<AsyncValue<List<String>>> {
 }
 
 /// See also [followingIdList].
-class FollowingIdListProvider extends FutureProvider<List<String>> {
+class FollowingIdListProvider extends AutoDisposeFutureProvider<List<String>> {
   /// See also [followingIdList].
   FollowingIdListProvider(
     String targetUserId,
@@ -638,7 +640,7 @@ class FollowingIdListProvider extends FutureProvider<List<String>> {
   }
 
   @override
-  FutureProviderElement<List<String>> createElement() {
+  AutoDisposeFutureProviderElement<List<String>> createElement() {
     return _FollowingIdListProviderElement(this);
   }
 
@@ -657,13 +659,14 @@ class FollowingIdListProvider extends FutureProvider<List<String>> {
   }
 }
 
-mixin FollowingIdListRef on FutureProviderRef<List<String>> {
+mixin FollowingIdListRef on AutoDisposeFutureProviderRef<List<String>> {
   /// The parameter `targetUserId` of this provider.
   String get targetUserId;
 }
 
 class _FollowingIdListProviderElement
-    extends FutureProviderElement<List<String>> with FollowingIdListRef {
+    extends AutoDisposeFutureProviderElement<List<String>>
+    with FollowingIdListRef {
   _FollowingIdListProviderElement(super.provider);
 
   @override

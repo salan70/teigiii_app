@@ -7,7 +7,7 @@ import 'entity/user_config_document.dart';
 
 part 'user_config_repository.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 UserConfigRepository userConfigRepository(UserConfigRepositoryRef ref) =>
     UserConfigRepository(
       ref.watch(firestoreProvider),

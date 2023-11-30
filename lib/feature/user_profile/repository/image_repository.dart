@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'image_repository.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 ImageRepository imageRepository(ImageRepositoryRef ref) => ImageRepository();
 
 class ImageRepository {

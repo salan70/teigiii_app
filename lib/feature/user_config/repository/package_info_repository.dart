@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'package_info_repository.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 PackageInfoRepository packageInfoRepository(PackageInfoRepositoryRef ref) =>
     PackageInfoRepository();
 

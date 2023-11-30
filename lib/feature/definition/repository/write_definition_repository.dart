@@ -14,7 +14,7 @@ part 'write_definition_repository.g.dart';
 
 // TODO(me): transactionで実行している処理をbatchに変更できないか（したほうがいいか）検討する
 
-@Riverpod(keepAlive: true)
+@riverpod
 WriteDefinitionRepository writeDefinitionRepository(
   WriteDefinitionRepositoryRef ref,
 ) =>

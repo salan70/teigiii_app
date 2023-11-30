@@ -2,8 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/common_provider/flavor_provider.dart';
-import '../../../util/constant/flavor.dart';
+import '../../../core/common_provider/flavor_state.dart';
 import '../../../util/extension/target_platform_extension.dart';
 
 part 'banner_ad_unit_id_provider.g.dart';

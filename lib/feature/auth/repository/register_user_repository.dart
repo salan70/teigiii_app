@@ -7,7 +7,7 @@ import '../../user_profile/domain/user_profile.dart';
 
 part 'register_user_repository.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 RegisterUserRepository registerUserRepository(RegisterUserRepositoryRef ref) =>
     RegisterUserRepository(ref.watch(firestoreProvider));
 

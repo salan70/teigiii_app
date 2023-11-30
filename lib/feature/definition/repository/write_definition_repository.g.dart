@@ -7,12 +7,12 @@ part of 'write_definition_repository.dart';
 // **************************************************************************
 
 String _$writeDefinitionRepositoryHash() =>
-    r'b14aaf37668b49e50ef461dca75eae46a69cf8fc';
+    r'fcc95fe38b2e864efa218c3031412592078de07e';
 
 /// See also [writeDefinitionRepository].
 @ProviderFor(writeDefinitionRepository)
 final writeDefinitionRepositoryProvider =
-    Provider<WriteDefinitionRepository>.internal(
+    AutoDisposeProvider<WriteDefinitionRepository>.internal(
   writeDefinitionRepository,
   name: r'writeDefinitionRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,7 @@ final writeDefinitionRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
-typedef WriteDefinitionRepositoryRef = ProviderRef<WriteDefinitionRepository>;
+typedef WriteDefinitionRepositoryRef
+    = AutoDisposeProviderRef<WriteDefinitionRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
