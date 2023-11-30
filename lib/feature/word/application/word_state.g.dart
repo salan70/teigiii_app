@@ -6,7 +6,7 @@ part of 'word_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$wordHash() => r'59e85afb4e94d7054f08c19ee2ec49e5f7bdc34d';
+String _$wordHash() => r'78a024fc8401661aa0c91c527de12b8e1f3b34f5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -92,7 +92,7 @@ class WordFamily extends Family<AsyncValue<Word?>> {
 /// 該当するWordが見つからない場合、nullを返す
 ///
 /// Copied from [word].
-class WordProvider extends FutureProvider<Word?> {
+class WordProvider extends AutoDisposeFutureProvider<Word?> {
   /// [wordId] に一致するWordを返す
   ///
   /// 該当するWordが見つからない場合、nullを返す
@@ -145,7 +145,7 @@ class WordProvider extends FutureProvider<Word?> {
   }
 
   @override
-  FutureProviderElement<Word?> createElement() {
+  AutoDisposeFutureProviderElement<Word?> createElement() {
     return _WordProviderElement(this);
   }
 
@@ -163,12 +163,13 @@ class WordProvider extends FutureProvider<Word?> {
   }
 }
 
-mixin WordRef on FutureProviderRef<Word?> {
+mixin WordRef on AutoDisposeFutureProviderRef<Word?> {
   /// The parameter `wordId` of this provider.
   String get wordId;
 }
 
-class _WordProviderElement extends FutureProviderElement<Word?> with WordRef {
+class _WordProviderElement extends AutoDisposeFutureProviderElement<Word?>
+    with WordRef {
   _WordProviderElement(super.provider);
 
   @override

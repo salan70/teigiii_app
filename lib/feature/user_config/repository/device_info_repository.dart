@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'device_info_repository.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 DeviceInfoRepository deviceInfoRepository(DeviceInfoRepositoryRef ref) =>
     DeviceInfoRepository();
 

@@ -9,7 +9,7 @@ import 'user_profile_state.dart';
 
 part 'user_follow_service.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class UserFollowService extends _$UserFollowService {
   @override
   FutureOr<void> build() {}

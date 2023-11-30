@@ -8,7 +8,7 @@ import '../repository/like_definition_repository.dart';
 
 part 'definition_state.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<Definition> definition(DefinitionRef ref, String definitionId) async {
   final definitionDoc = await ref
       .read(fetchDefinitionRepositoryProvider)

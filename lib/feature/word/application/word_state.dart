@@ -10,7 +10,7 @@ part 'word_state.g.dart';
 /// [wordId] に一致するWordを返す
 ///
 /// 該当するWordが見つからない場合、nullを返す
-@Riverpod(keepAlive: true)
+@riverpod
 Future<Word?> word(WordRef ref, String wordId) async {
   final wordRepository = ref.read(wordRepositoryProvider);
 

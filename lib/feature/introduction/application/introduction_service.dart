@@ -6,7 +6,7 @@ import '../repository/is_first_launch_repository.dart';
 
 part 'introduction_service.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class IntroductionService extends _$IntroductionService {
   @override
   FutureOr<void> build() {}

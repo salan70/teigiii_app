@@ -23,7 +23,7 @@ import 'auth_state.dart';
 
 part 'auth_service.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class AuthService extends _$AuthService {
   @override
   FutureOr<void> build() async {}

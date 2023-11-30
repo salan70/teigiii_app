@@ -8,7 +8,7 @@ import '../repository/user_follow_repository.dart';
 
 part 'user_profile_state.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<UserProfile> userProfile(UserProfileRef ref, String userId) async {
   final userProfileDoc =
       await ref.read(userProfileRepositoryProvider).fetchUserProfile(userId);
@@ -16,7 +16,7 @@ Future<UserProfile> userProfile(UserProfileRef ref, String userId) async {
   return userProfileDoc.toUserProfile();
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<String?> userIdSearchByPublicId(
   UserIdSearchByPublicIdRef ref,
   String publicId,
@@ -28,7 +28,7 @@ Future<String?> userIdSearchByPublicId(
   return userProfileDoc?.id;
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<FollowCount> followCount(
   FollowCountRef ref,
   String userId,
@@ -39,7 +39,7 @@ Future<FollowCount> followCount(
   return FollowCount.fromDocument(userFollowCountDoc);
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<bool> isFollowing(IsFollowingRef ref, String targetUserId) async {
   final currentUserId = ref.read(userIdProvider)!;
 
@@ -48,7 +48,7 @@ Future<bool> isFollowing(IsFollowingRef ref, String targetUserId) async {
       .isFollowing(currentUserId, targetUserId);
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<List<String>> followingIdList(
   FollowingIdListRef ref,
   String targetUserId,

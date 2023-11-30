@@ -11,6 +11,6 @@ FirebaseFirestore firestore(FirestoreRef ref) => FirebaseFirestore.instance;
 @Riverpod(keepAlive: true)
 FirebaseAuth firebaseAuth(FirebaseAuthRef ref) => FirebaseAuth.instance;
 
-@Riverpod(keepAlive: true)
+@riverpod
 FirebaseStorage firebaseStorage(FirebaseStorageRef ref) =>
     FirebaseStorage.instance;

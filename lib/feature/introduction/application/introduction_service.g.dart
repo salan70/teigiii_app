@@ -7,12 +7,12 @@ part of 'introduction_service.dart';
 // **************************************************************************
 
 String _$introductionServiceHash() =>
-    r'6ba6fa6b0421cd00c2e91bd1a4f539b4cc46991f';
+    r'08d7f5e8f64d9692dea03200a6630e988c7bd6ec';
 
 /// See also [IntroductionService].
 @ProviderFor(IntroductionService)
 final introductionServiceProvider =
-    AsyncNotifierProvider<IntroductionService, void>.internal(
+    AutoDisposeAsyncNotifierProvider<IntroductionService, void>.internal(
   IntroductionService.new,
   name: r'introductionServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final introductionServiceProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$IntroductionService = AsyncNotifier<void>;
+typedef _$IntroductionService = AutoDisposeAsyncNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

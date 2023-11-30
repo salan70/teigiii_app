@@ -7,11 +7,12 @@ part of 'user_config_repository.dart';
 // **************************************************************************
 
 String _$userConfigRepositoryHash() =>
-    r'57dc2759eabaa848dbe2436e51a7d170de5a3bcc';
+    r'd67a8de20d0a9e5252bf13379dcaf413cd7fe40c';
 
 /// See also [userConfigRepository].
 @ProviderFor(userConfigRepository)
-final userConfigRepositoryProvider = Provider<UserConfigRepository>.internal(
+final userConfigRepositoryProvider =
+    AutoDisposeProvider<UserConfigRepository>.internal(
   userConfigRepository,
   name: r'userConfigRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +22,6 @@ final userConfigRepositoryProvider = Provider<UserConfigRepository>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef UserConfigRepositoryRef = ProviderRef<UserConfigRepository>;
+typedef UserConfigRepositoryRef = AutoDisposeProviderRef<UserConfigRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

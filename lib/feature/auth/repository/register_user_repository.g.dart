@@ -7,12 +7,12 @@ part of 'register_user_repository.dart';
 // **************************************************************************
 
 String _$registerUserRepositoryHash() =>
-    r'b0688086acf4f95addb9d8bb1190f3c82a85ee5d';
+    r'2ac75cb9f5726f9e898f87b10ad8b0b4df75f972';
 
 /// See also [registerUserRepository].
 @ProviderFor(registerUserRepository)
 final registerUserRepositoryProvider =
-    Provider<RegisterUserRepository>.internal(
+    AutoDisposeProvider<RegisterUserRepository>.internal(
   registerUserRepository,
   name: r'registerUserRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,7 @@ final registerUserRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
-typedef RegisterUserRepositoryRef = ProviderRef<RegisterUserRepository>;
+typedef RegisterUserRepositoryRef
+    = AutoDisposeProviderRef<RegisterUserRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

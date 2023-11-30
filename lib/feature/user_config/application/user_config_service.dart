@@ -9,7 +9,7 @@ import 'user_config_state.dart';
 
 part 'user_config_service.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class UserConfigService extends _$UserConfigService {
   @override
   FutureOr<void> build() {}
