@@ -5,7 +5,6 @@ class _BaseOutlinedButton extends StatelessWidget {
   const _BaseOutlinedButton({
     required this.onPressed,
     required this.text,
-    required this.backgroundColor,
     required this.textColor,
     required this.borderColor,
   });
@@ -15,9 +14,6 @@ class _BaseOutlinedButton extends StatelessWidget {
 
   /// ボタンに表示するテキスト。
   final String text;
-
-  /// ボタンの背景色。
-  final Color backgroundColor;
 
   /// [text] の色。
   final Color textColor;
@@ -35,7 +31,6 @@ class _BaseOutlinedButton extends StatelessWidget {
         side: BorderSide(
           color: borderColor,
         ),
-        backgroundColor: backgroundColor,
       ),
       onPressed: onPressed,
       child: Padding(
@@ -72,7 +67,6 @@ class PrimaryOutlinedButton extends StatelessWidget {
     return _BaseOutlinedButton(
       onPressed: onPressed,
       text: text,
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
       textColor: Theme.of(context).colorScheme.primary,
       borderColor: Theme.of(context).colorScheme.primary,
     );
@@ -98,7 +92,6 @@ class TertiaryOutlinedButton extends StatelessWidget {
     return _BaseOutlinedButton(
       onPressed: onPressed,
       text: text,
-      backgroundColor: Theme.of(context).colorScheme.onTertiary,
       textColor: Theme.of(context).colorScheme.tertiary,
       borderColor: Theme.of(context).colorScheme.tertiary,
     );
