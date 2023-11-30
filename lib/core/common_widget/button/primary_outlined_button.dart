@@ -16,7 +16,7 @@ class PrimaryOutlinedButton extends StatelessWidget {
     return TextButton(
       style: TextButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(48).copyWith(),
+          borderRadius: BorderRadius.circular(48),
         ),
         side: BorderSide(
           color: Theme.of(context).colorScheme.primary,

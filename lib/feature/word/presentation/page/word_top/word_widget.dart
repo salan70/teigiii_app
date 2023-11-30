@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_widget/button/primary_filled_button.dart';
+import '../../../../../core/common_widget/button/filled_button.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../auth/application/auth_state.dart';
 import '../../../../definition/domain/definition_for_write.dart';

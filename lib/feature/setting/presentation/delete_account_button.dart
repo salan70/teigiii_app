@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common_provider/dialog_controller.dart';
-import '../../../core/common_widget/button/primary_filled_button.dart';
+import '../../../core/common_widget/button/filled_button.dart';
 import '../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../../core/router/app_router.dart';
 import '../../auth/application/auth_service.dart';

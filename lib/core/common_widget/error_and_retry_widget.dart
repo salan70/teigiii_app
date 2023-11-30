@@ -6,7 +6,7 @@ import '../../feature/auth/application/auth_state.dart';
 import '../../feature/user_profile/application/user_profile_state.dart';
 import '../../util/constant/url.dart';
 import '../common_provider/launch_url.dart';
-import 'button/primary_filled_button.dart';
+import 'button/filled_button.dart';
 import 'button/secondary_outlined_button.dart';
 
 class ErrorAndRetryWidget extends ConsumerWidget {
