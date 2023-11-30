@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../feature/user_profile/application/user_follow_service.dart';
 import '../../../feature/user_profile/application/user_profile_state.dart';
 import '../shimmer_widget.dart';
-import 'primary_filled_button.dart';
-import 'primary_outlined_button.dart';
+import 'filled_button.dart';
+import 'outlined_button.dart';
 
 class FollowOrUnfollowButton extends ConsumerWidget {
   const FollowOrUnfollowButton({

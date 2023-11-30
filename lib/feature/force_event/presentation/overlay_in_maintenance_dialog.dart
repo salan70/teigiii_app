@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common_provider/launch_url.dart';
-import '../../../core/common_widget/button/primary_filled_button.dart';
+import '../../../core/common_widget/button/filled_button.dart';
 import '../../../util/constant/url.dart';
 import '../domain/app_maintenance.dart';
 

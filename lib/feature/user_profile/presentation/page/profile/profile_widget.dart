@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
-import '../../../../../core/common_widget/button/primary_outlined_button.dart';
+import '../../../../../core/common_widget/button/outlined_button.dart';
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/logger.dart';
