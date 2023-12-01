@@ -4,10 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:like_button/like_button.dart';
 
 import '../../../../util/constant/color_scheme.dart';
+import '../../../util/mixin/presentation_mixin.dart';
 import '../../definition/domain/definition.dart';
 import '../application/like_definition_service.dart';
 
-class LikeWidget extends ConsumerWidget {
+class LikeWidget extends ConsumerWidget with PresentationMixin {
   const LikeWidget({
     super.key,
     required this.definition,
@@ -61,14 +62,25 @@ class LikeWidget extends ConsumerWidget {
                 : const SizedBox.shrink();
           },
           onTap: (_) async {
-            try {
-              await ref.read(likeDefinitionServiceProvider).tapLike(definition);
-            } on Exception catch (_) {
-              // 例外発生時は、もともとのisLikedByUserの値を返す
+            var isActionCompleted = false;
+            await executeWithOverlayLoading(
+              ref,
+              action: () async {
+                await ref
+                    .read(likeDefinitionServiceProvider)
+                    .tapLike(definition);
+                isActionCompleted = true;
+                
+              },
+              errorLogMessage: 'いいねの登録もしくは解除時にエラーが発生。',
+              errorToastMessage: '失敗しました。もう一度お試しください。',
+            );
+
+            if (isActionCompleted) {
+              return !definition.isLikedByUser;
+            } else {
               return definition.isLikedByUser;
             }
-
-            return !definition.isLikedByUser;
           },
         ),
       ],
