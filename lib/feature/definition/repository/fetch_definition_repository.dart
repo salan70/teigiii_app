@@ -5,8 +5,6 @@ import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/config_constant.dart';
 import '../../../util/constant/firestore_collections.dart';
 import '../../../util/constant/initial_main_group.dart';
-import '../../../util/extension/firestore_extension.dart';
-import '../../user_profile/domain/user_id_list_state.dart';
 import '../domain/definition_id_list_state.dart';
 import '../util/definition_feed_type.dart';
 import 'entity/definition_document.dart';
@@ -497,35 +495,5 @@ class FetchDefinitionRepository {
     final snapshot = await query.get();
 
     return _toDefinitionIdListState(snapshot.docs);
-  }
-
-  /// [definitionId]をいいねしたユーザーのIDリストを[fetchLimitForUserIdList]件取得
-  ///
-  /// [lastDocument]がnullの場合、最初のdocumentから取得する。
-  /// 無限スクロールなどで、2回目以降の取得の場合、
-  /// [lastDocument]に前回取得した最後のdocumentを指定すること。
-  Future<UserIdListState> fetchLikedUserIdList(
-    String definitionId,
-    QueryDocumentSnapshot? lastDocument,
-  ) async {
-    var query = _likesCollectionRef
-        .where(LikesCollection.definitionId, isEqualTo: definitionId)
-        .orderBy(createdAtFieldName, descending: true)
-        .limit(fetchLimitForUserIdList);
-
-    if (lastDocument != null) {
-      query = query.startAfterDocument(lastDocument);
-    }
-
-    final snapshot = await query.get();
-    final favoriteUserIdList = snapshot.docs
-        .map((doc) => doc[LikesCollection.userId] as String)
-        .toList();
-
-    return UserIdListState(
-      list: favoriteUserIdList,
-      lastReadQueryDocumentSnapshot: snapshot.docs.lastOrNull,
-      hasMore: favoriteUserIdList.length == fetchLimitForUserIdList,
-    );
   }
 }

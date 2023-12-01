@@ -8,7 +8,6 @@ import 'user_follow_state.dart';
 part 'user_follow_service.g.dart';
 
 @riverpod
-@riverpod
 UserFollowService userFollowService(UserFollowServiceRef ref) =>
     UserFollowService(ref);
 

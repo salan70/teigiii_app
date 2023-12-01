@@ -11,7 +11,7 @@ import '../../user_config/application/user_config_state.dart';
 import '../../user_config/repository/device_info_repository.dart';
 import '../../user_config/repository/user_config_repository.dart';
 import '../../user_follow/repository/user_follow_repository.dart';
-import '../../user_profile/application/user_id_list_state.dart';
+import '../../user_list/application/user_id_list_state_notifier.dart';
 import '../../user_profile/domain/user_profile.dart';
 import '../../user_profile/repository/storage_repository.dart';
 import '../../user_profile/repository/user_profile_repository.dart';

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common_widget/shimmer_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/logger.dart';
+import '../../../user_list/presentation/following_and_follower_list_page.dart';
 import '../../application/user_follow_state.dart';
 
 class FollowingAndFollowerCountWidget extends ConsumerWidget {
@@ -27,6 +28,7 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
               onTap: () async {
                 await context.pushRoute(
                   FollowingAndFollowerListRoute(
+                    initialTab: FollowingAndFollowerListTab.following,
                     targetUserId: targetUserId,
                   ),
                 );
@@ -50,7 +52,7 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
               onTap: () async {
                 await context.pushRoute(
                   FollowingAndFollowerListRoute(
-                    willShowFollowing: false,
+                    initialTab: FollowingAndFollowerListTab.follower,
                     targetUserId: targetUserId,
                   ),
                 );

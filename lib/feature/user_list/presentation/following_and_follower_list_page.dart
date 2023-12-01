@@ -2,25 +2,26 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/button/to_search_user_button.dart';
-import '../../../../core/common_widget/simple_widget_for_empty.dart';
-import '../../../../core/common_widget/stickey_tab_bar_deligate.dart';
-import '../../../../util/extension/scroll_controller_extension.dart';
-import '../../../auth/application/auth_state.dart';
-import '../../../user_profile/application/user_profile_state.dart';
-import '../../../user_profile/presentation/component/profile_list.dart';
-import '../../../user_profile/util/user_list_type.dart';
-import '../../application/user_follow_state.dart';
+import '../../../core/common_widget/button/to_search_user_button.dart';
+import '../../../core/common_widget/simple_widget_for_empty.dart';
+import '../../../core/common_widget/stickey_tab_bar_deligate.dart';
+import '../../../util/extension/scroll_controller_extension.dart';
+import '../../auth/application/auth_state.dart';
+import '../../user_follow/application/user_follow_state.dart';
+import '../../user_profile/application/user_profile_state.dart';
+import '../../user_profile/util/user_list_type.dart';
+import 'profile_list.dart';
 
 @RoutePage()
 class FollowingAndFollowerListPage extends ConsumerWidget {
   const FollowingAndFollowerListPage({
     super.key,
-    this.willShowFollowing = true,
+    required this.initialTab,
     required this.targetUserId,
   });
 
-  final bool willShowFollowing;
+  /// 最初に表示させるタブ。
+  final FollowingAndFollowerListTab initialTab;
   final String targetUserId;
 
   @override
@@ -29,7 +30,7 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
 
     return DefaultTabController(
       length: 2,
-      initialIndex: willShowFollowing ? 0 : 1,
+      initialIndex: initialTab.tabIndex,
       child: Scaffold(
         body: SafeArea(
           child: NestedScrollView(
@@ -54,7 +55,6 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                     },
                   ),
                   actions: [
-                    // 自分のフォロー/フォロー一覧画面の場合は編集ボタンを表示
                     isMyPage
                         ? const ToSearchUserButton()
                         : const SizedBox.shrink(),
@@ -71,8 +71,8 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
                         Tab(text: 'フォロワー'),
                       ],
                       onTap: (_) {
+                        // * タブを切り替えた場合
                         if (DefaultTabController.of(context).indexIsChanging) {
-                          // * タブを切り替えた場合
                           return;
                         }
 
@@ -112,5 +112,19 @@ class FollowingAndFollowerListPage extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+enum FollowingAndFollowerListTab {
+  following,
+  follower;
+
+  int get tabIndex {
+    switch (this) {
+      case FollowingAndFollowerListTab.following:
+        return 0;
+      case FollowingAndFollowerListTab.follower:
+        return 1;
+    }
   }
 }

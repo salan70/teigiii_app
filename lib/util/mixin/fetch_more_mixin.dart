@@ -12,12 +12,12 @@ mixin FetchMoreMixin<T extends ListState> {
     required Future<T> Function() fetchFunction,
     required T Function(T currentData, T newData) mergeFunction,
   }) async {
-    // これ以上取得できるDefinitionIdがない場合、何もしない
+    // これ以上取得できるデータがない場合は何もしない。
     if (!state.value!.hasMore) {
       return;
     }
 
-    // ローディング中の場合、何もしない
+    // ローディング中の場合は何もしない。
     if (state.isLoading || state.isRefreshing) {
       return;
     }

@@ -2,10 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/firebase_providers.dart';
-import '../../../util/constant/config_constant.dart';
 import '../../../util/constant/firestore_collections.dart';
-import '../../../util/extension/firestore_extension.dart';
-import '../../user_profile/domain/user_id_list_state.dart';
 import 'entity/user_follow_count_document.dart';
 
 part 'user_follow_repository.g.dart';
@@ -33,11 +30,11 @@ class UserFollowRepository {
     return UserFollowCountDocument.fromFirestore(snapshot);
   }
 
-  /// [currentUserId]が[targetUserId]をフォローする
+  /// [currentUserId] が [targetUserId] をフォローする。
   Future<void> follow(String currentUserId, String targetUserId) async {
     final batch = firestore.batch()
 
-      // UserFollowsドキュメントを追加
+      // UserFollows ドキュメントを追加する。
       ..set(
         _userFollowsCollectionRef.doc(),
         {
@@ -48,7 +45,7 @@ class UserFollowRepository {
         },
       )
 
-      // フォローしたユーザーのUserFollowCountsドキュメントを更新
+      // フォローしたユーザーの UserFollowCounts ドキュメントを更新する。
       ..update(
         _userFollowCountsCollectionRef.doc(currentUserId),
         {
@@ -57,7 +54,7 @@ class UserFollowRepository {
         },
       )
 
-      // フォローされたユーザーのUserFollowCountsドキュメントを更新
+      // フォローされたユーザーの UserFollowCounts ドキュメントを更新する。
       ..update(
         _userFollowCountsCollectionRef.doc(targetUserId),
         {
@@ -69,11 +66,11 @@ class UserFollowRepository {
     await batch.commit();
   }
 
-  /// [currentUserId]が[targetUserId]のフォローを解除する
+  /// [currentUserId] が [targetUserId] のフォローを解除する。
   Future<void> unfollow(String currentUserId, String targetUserId) async {
     final batch = firestore.batch()
 
-      // UserFollowsドキュメントを探して削除
+      // UserFollowsドキュメントを探して削除する。
       ..delete(
         await _userFollowsCollectionRef
             .where(
@@ -89,7 +86,7 @@ class UserFollowRepository {
             .then((snapshot) => snapshot.docs.first.reference),
       )
 
-      // フォロー解除したユーザーのUserFollowCountsドキュメントを更新
+      // フォロー解除したユーザーのUserFollowCountsドキュメントを更新する。
       ..update(
         _userFollowCountsCollectionRef.doc(currentUserId),
         {
@@ -98,7 +95,7 @@ class UserFollowRepository {
         },
       )
 
-      // フォロー解除されたユーザーのUserFollowCountsドキュメントを更新
+      // フォロー解除されたユーザーのUserFollowCountsドキュメントを更新する。
       ..update(
         _userFollowCountsCollectionRef.doc(targetUserId),
         {
@@ -110,7 +107,7 @@ class UserFollowRepository {
     await batch.commit();
   }
 
-  /// [currentUserId]が[targetUserId]をフォローしているかどうかを返す
+  /// [currentUserId] が [targetUserId] をフォローしているかどうかを返す。
   Future<bool> isFollowing(String currentUserId, String targetUserId) async {
     final snapshot = await _userFollowsCollectionRef
         .where(UserFollowsCollection.followingId, isEqualTo: currentUserId)
@@ -121,7 +118,7 @@ class UserFollowRepository {
     return snapshot.docs.isNotEmpty;
   }
 
-  /// [userId]がフォローしているユーザーのIDリストを全て取得
+  /// [userId] がフォローしているユーザーのIDリストを全て取得する。
   Future<List<String>> fetchAllFollowingIdList(String userId) async {
     final snapshot = await _userFollowsCollectionRef
         .where(UserFollowsCollection.followingId, isEqualTo: userId)
@@ -132,69 +129,7 @@ class UserFollowRepository {
         .toList();
   }
 
-  /// [userId]がフォローしているユーザーのIDリストを[fetchLimitForUserIdList]件取得
-  /// [lastDocument]がnullの場合、最初のdocumentから取得する。
-  /// 無限スクロールなどで、2回目以降の取得の場合、
-  /// [lastDocument]に前回取得した最後のdocumentを指定すること。
-  Future<UserIdListState> fetchFollowingIdList(
-    String userId,
-    QueryDocumentSnapshot? lastDocument,
-  ) async {
-    var query = _userFollowsCollectionRef
-        .where(UserFollowsCollection.followingId, isEqualTo: userId)
-        .orderBy(createdAtFieldName, descending: true)
-        .limit(fetchLimitForUserIdList);
-
-    if (lastDocument != null) {
-      query = query.startAfterDocument(lastDocument);
-    }
-
-    final snapshot = await query.get();
-    final followerIdList = snapshot.docs
-        .map((doc) => doc[UserFollowsCollection.followerId] as String)
-        .toList();
-
-    return _toUserIdListState(snapshot, followerIdList);
-  }
-
-  /// [userId]をフォローしているユーザーのIDリストを[fetchLimitForUserIdList]件取得
-  ///
-  /// [lastDocument]がnullの場合、最初のdocumentから取得する。
-  /// 無限スクロールなどで、2回目以降の取得の場合、
-  /// [lastDocument]に前回取得した最後のdocumentを指定すること。
-  Future<UserIdListState> fetchFollowerIdList(
-    String userId,
-    QueryDocumentSnapshot? lastDocument,
-  ) async {
-    var query = _userFollowsCollectionRef
-        .where(UserFollowsCollection.followerId, isEqualTo: userId)
-        .orderBy(createdAtFieldName, descending: true)
-        .limit(fetchLimitForUserIdList);
-
-    if (lastDocument != null) {
-      query = query.startAfterDocument(lastDocument);
-    }
-
-    final snapshot = await query.get();
-    final followingIdList = snapshot.docs
-        .map((doc) => doc[UserFollowsCollection.followingId] as String)
-        .toList();
-
-    return _toUserIdListState(snapshot, followingIdList);
-  }
-
   Future<void> deleteUserFollowCount(String userId) async {
     await _userFollowCountsCollectionRef.doc(userId).delete();
-  }
-
-  UserIdListState _toUserIdListState(
-    QuerySnapshot snapshot,
-    List<String> userIdList,
-  ) {
-    return UserIdListState(
-      list: userIdList,
-      lastReadQueryDocumentSnapshot: snapshot.docs.lastOrNull,
-      hasMore: userIdList.length == fetchLimitForUserIdList,
-    );
   }
 }

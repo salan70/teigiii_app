@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_id_list_state.dart';
+part of 'user_id_list_state_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
 String _$userIdListStateNotifierHash() =>
-    r'cecb1e110501c686ba9127454d376310e248f37e';
+    r'3e7be60cd6155786150f6524e125928dd40c7bb4';
 
 /// Copied from Dart SDK
 class _SystemHash {

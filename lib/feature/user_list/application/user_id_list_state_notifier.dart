@@ -3,12 +3,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/logger.dart';
 import '../../../util/mixin/fetch_more_mixin.dart';
-import '../../definition/repository/fetch_definition_repository.dart';
-import '../../user_follow/repository/user_follow_repository.dart';
+import '../../user_profile/util/user_list_type.dart';
 import '../domain/user_id_list_state.dart';
-import '../util/user_list_type.dart';
+import '../repository/fetch_user_list_repository.dart';
 
-part 'user_id_list_state.g.dart';
+part 'user_id_list_state_notifier.g.dart';
 
 @Riverpod(keepAlive: true)
 class UserIdListStateNotifier extends _$UserIdListStateNotifier
@@ -19,17 +18,13 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
     required String? targetUserId,
     required String? targetDefinitionId,
   }) async {
-    return await _fetchUserIdListStateBasedOnType(
-      isFirstFetch: true,
-    );
+    return await _fetchBasedOnType(isFirstFetch: true);
   }
 
   Future<void> fetchMore() async {
     await fetchMoreHelper(
       ref: ref,
-      fetchFunction: () async => _fetchUserIdListStateBasedOnType(
-        isFirstFetch: false,
-      ),
+      fetchFunction: () async => _fetchBasedOnType(isFirstFetch: false),
       mergeFunction: (currentData, newData) => UserIdListState(
         list: currentData.list + newData.list,
         lastReadQueryDocumentSnapshot: newData.lastReadQueryDocumentSnapshot,
@@ -38,7 +33,7 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
     );
   }
 
-  Future<UserIdListState> _fetchUserIdListStateBasedOnType({
+  Future<UserIdListState> _fetchBasedOnType({
     required bool isFirstFetch,
   }) async {
     final lastDocument =
@@ -50,7 +45,7 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
             throw ArgumentError('targetUserIdがnullです');
           }
           return await ref
-              .read(userFollowRepositoryProvider)
+              .read(fetchUserListRepositoryProvider)
               .fetchFollowingIdList(
                 targetUserId!,
                 lastDocument,
@@ -61,7 +56,7 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
             throw ArgumentError('targetUserIdがnullです');
           }
           return await ref
-              .read(userFollowRepositoryProvider)
+              .read(fetchUserListRepositoryProvider)
               .fetchFollowerIdList(
                 targetUserId!,
                 lastDocument,
@@ -72,7 +67,7 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
             throw ArgumentError('targetDefinitionIdがnullです');
           }
           return await ref
-              .read(fetchDefinitionRepositoryProvider)
+              .read(fetchUserListRepositoryProvider)
               .fetchLikedUserIdList(
                 targetDefinitionId!,
                 lastDocument,

@@ -73,7 +73,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: FollowingAndFollowerListPage(
           key: args.key,
-          willShowFollowing: args.willShowFollowing,
+          initialTab: args.initialTab,
           targetUserId: args.targetUserId,
         ),
       );
@@ -409,14 +409,14 @@ class FollowingAndFollowerListRoute
     extends PageRouteInfo<FollowingAndFollowerListRouteArgs> {
   FollowingAndFollowerListRoute({
     Key? key,
-    bool willShowFollowing = true,
+    required FollowingAndFollowerListTab initialTab,
     required String targetUserId,
     List<PageRouteInfo>? children,
   }) : super(
           FollowingAndFollowerListRoute.name,
           args: FollowingAndFollowerListRouteArgs(
             key: key,
-            willShowFollowing: willShowFollowing,
+            initialTab: initialTab,
             targetUserId: targetUserId,
           ),
           initialChildren: children,
@@ -431,19 +431,19 @@ class FollowingAndFollowerListRoute
 class FollowingAndFollowerListRouteArgs {
   const FollowingAndFollowerListRouteArgs({
     this.key,
-    this.willShowFollowing = true,
+    required this.initialTab,
     required this.targetUserId,
   });
 
   final Key? key;
 
-  final bool willShowFollowing;
+  final FollowingAndFollowerListTab initialTab;
 
   final String targetUserId;
 
   @override
   String toString() {
-    return 'FollowingAndFollowerListRouteArgs{key: $key, willShowFollowing: $willShowFollowing, targetUserId: $targetUserId}';
+    return 'FollowingAndFollowerListRouteArgs{key: $key, initialTab: $initialTab, targetUserId: $targetUserId}';
   }
 }
 

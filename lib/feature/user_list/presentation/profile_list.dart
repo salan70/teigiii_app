@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/infinity_scroll_widget.dart';
-import '../../../auth/application/auth_state.dart';
-import '../../../user_follow/presentation/component/follow_or_unfollow_button.dart';
-import '../../application/user_id_list_state.dart';
-import '../../util/user_list_type.dart';
-import 'profile_tile.dart';
-import 'profile_tile_shimmer.dart';
+import '../../../core/common_widget/infinity_scroll_widget.dart';
+import '../../auth/application/auth_state.dart';
+import '../../user_follow/presentation/component/follow_or_unfollow_button.dart';
+import '../../user_profile/presentation/component/profile_tile.dart';
+import '../../user_profile/presentation/component/profile_tile_shimmer.dart';
+import '../../user_profile/util/user_list_type.dart';
+import '../application/user_id_list_state_notifier.dart';
 
 class ProfileList extends ConsumerWidget {
   const ProfileList({
@@ -25,8 +25,8 @@ class ProfileList extends ConsumerWidget {
   final String? targetDefinitionId;
   final Widget? emptyWidget;
 
-  /// スワイプリフレッシュ時、[userIdListStateNotifierProvider] の invalidate
-  /// 以外に行う処理。
+  /// スワイプリフレッシュ時、[userIdListStateNotifierProvider] の 
+  /// invalidate 以外に行う処理。
   final VoidCallback? additionalOnRefresh;
 
   @override

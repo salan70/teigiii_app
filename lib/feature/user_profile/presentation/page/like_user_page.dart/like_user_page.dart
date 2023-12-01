@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/simple_widget_for_empty.dart';
 import '../../../../../util/extension/scroll_controller_extension.dart';
+import '../../../../user_list/presentation/profile_list.dart';
 import '../../../util/user_list_type.dart';
-import '../../component/profile_list.dart';
 
 @RoutePage()
 class LikeUserPage extends ConsumerWidget {

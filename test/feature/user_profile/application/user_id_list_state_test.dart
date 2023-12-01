@@ -3,16 +3,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/core/common_provider/toast_controller.dart';
-import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart';
-import 'package:teigi_app/feature/user_profile/application/user_id_list_state.dart';
-import 'package:teigi_app/feature/user_profile/domain/user_id_list_state.dart';
+import 'package:teigi_app/feature/user_list/application/user_id_list_state_notifier.dart';
+import 'package:teigi_app/feature/user_list/domain/user_id_list_state.dart';
+import 'package:teigi_app/feature/user_list/repository/fetch_user_list_repository.dart';
 import 'package:teigi_app/feature/user_profile/util/user_list_type.dart';
 
 import '../../../mock/mock_data.dart';
 import 'user_id_list_state_test.mocks.dart';
 
 @GenerateNiceMocks([
-  MockSpec<UserFollowRepository>(),
+  MockSpec<FetchUserListRepository>(),
   MockSpec<Listener<AsyncValue<UserIdListState>>>(),
 ])
 class MockToastController extends Notifier<void>
@@ -28,7 +28,7 @@ abstract class Listener<T> {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final mockUserFollowRepository = MockUserFollowRepository();
+  final mockFetchUserListRepository = MockFetchUserListRepository();
   final listener = MockListener();
 
   late ProviderContainer container;
@@ -36,8 +36,8 @@ void main() {
   setUp(() {
     container = ProviderContainer(
       overrides: [
-        userFollowRepositoryProvider
-            .overrideWithValue(mockUserFollowRepository),
+        fetchUserListRepositoryProvider
+            .overrideWithValue(mockFetchUserListRepository),
         toastControllerProvider.overrideWith(
           MockToastController.new,
         ),
@@ -47,14 +47,14 @@ void main() {
   });
 
   tearDown(() {
-    reset(mockUserFollowRepository);
+    reset(mockFetchUserListRepository);
   });
   group('build()', () {
     test('following: stateの更新、repositoryで定義している関数の呼び出しを検証', () async {
       // * Arrange
       // Mockの設定
       when(
-        mockUserFollowRepository.fetchFollowingIdList(any, any),
+        mockFetchUserListRepository.fetchFollowingIdList(any, any),
       ).thenAnswer((_) async => mockUserIdListState);
       const targetUserId = 'targetUserId';
       container.listen(
@@ -98,7 +98,7 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockUserFollowRepository.fetchFollowingIdList(
+        mockFetchUserListRepository.fetchFollowingIdList(
           targetUserId,
           null,
         ),
@@ -109,7 +109,7 @@ void main() {
       // * Arrange
       // Mockの設定
       when(
-        mockUserFollowRepository.fetchFollowerIdList(any, any),
+        mockFetchUserListRepository.fetchFollowerIdList(any, any),
       ).thenAnswer((_) async => mockUserIdListState);
 
       const targetUserId = 'targetUserId';
@@ -154,7 +154,7 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockUserFollowRepository.fetchFollowerIdList(
+        mockFetchUserListRepository.fetchFollowerIdList(
           targetUserId,
           null,
         ),
@@ -172,7 +172,7 @@ void main() {
         hasMore: true,
       );
       when(
-        mockUserFollowRepository.fetchFollowingIdList(any, null),
+        mockFetchUserListRepository.fetchFollowingIdList(any, null),
       ).thenAnswer((_) async => firstState);
 
       final secondState = UserIdListState(
@@ -181,7 +181,7 @@ void main() {
         hasMore: false,
       );
       when(
-        mockUserFollowRepository.fetchFollowingIdList(
+        mockFetchUserListRepository.fetchFollowingIdList(
           any,
           firstState.lastReadQueryDocumentSnapshot,
         ),
@@ -255,7 +255,7 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockUserFollowRepository.fetchFollowingIdList(
+        mockFetchUserListRepository.fetchFollowingIdList(
           targetUserId,
           firstState.lastReadQueryDocumentSnapshot,
         ),
@@ -271,7 +271,7 @@ void main() {
         hasMore: true,
       );
       when(
-        mockUserFollowRepository.fetchFollowerIdList(any, null),
+        mockFetchUserListRepository.fetchFollowerIdList(any, null),
       ).thenAnswer((_) async => firstState);
 
       final secondState = UserIdListState(
@@ -280,7 +280,7 @@ void main() {
         hasMore: false,
       );
       when(
-        mockUserFollowRepository.fetchFollowerIdList(
+        mockFetchUserListRepository.fetchFollowerIdList(
           any,
           firstState.lastReadQueryDocumentSnapshot,
         ),
@@ -354,7 +354,7 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockUserFollowRepository.fetchFollowerIdList(
+        mockFetchUserListRepository.fetchFollowerIdList(
           targetUserId,
           firstState.lastReadQueryDocumentSnapshot,
         ),
@@ -365,7 +365,7 @@ void main() {
       // * Arrange
       // Mockの設定
       when(
-        mockUserFollowRepository.fetchFollowingIdList(any, null),
+        mockFetchUserListRepository.fetchFollowingIdList(any, null),
       ).thenAnswer((_) async => mockUserIdListState.copyWith(hasMore: false));
 
       final userIdListProvider = userIdListStateNotifierProvider(
@@ -399,7 +399,7 @@ void main() {
 
       // 想定通り、repositoryの関数が1回のみ呼ばれているか検証
       verify(
-        mockUserFollowRepository.fetchFollowingIdList(any, any),
+        mockFetchUserListRepository.fetchFollowingIdList(any, any),
       ).called(1);
     });
 
@@ -414,11 +414,11 @@ void main() {
         hasMore: true,
       );
       when(
-        mockUserFollowRepository.fetchFollowingIdList(any, null),
+        mockFetchUserListRepository.fetchFollowingIdList(any, null),
       ).thenAnswer((_) async => firstState);
       final testException = Exception('fetchFollowingIdListFirst()で例外発生！！！');
       when(
-        mockUserFollowRepository.fetchFollowingIdList(
+        mockFetchUserListRepository.fetchFollowingIdList(
           any,
           firstState.lastReadQueryDocumentSnapshot,
         ),
