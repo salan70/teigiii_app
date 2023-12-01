@@ -9,9 +9,9 @@ import '../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../../../util/logger.dart';
+import '../../definition_like/presentation/like_widget.dart';
 import '../application/definition_state.dart';
 import 'definition_tile_shimmer.dart';
-import 'like_widget.dart';
 
 class DefinitionTile extends ConsumerWidget {
   const DefinitionTile({

@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:like_button/like_button.dart';
 
 import '../../../../util/constant/color_scheme.dart';
-import '../application/definition_service.dart';
-import '../domain/definition.dart';
+import '../../definition/domain/definition.dart';
+import '../application/like_definition_service.dart';
 
 class LikeWidget extends ConsumerWidget {
   const LikeWidget({
@@ -62,9 +62,7 @@ class LikeWidget extends ConsumerWidget {
           },
           onTap: (_) async {
             try {
-              await ref
-                  .read(definitionServiceProvider.notifier)
-                  .tapLike(definition);
+              await ref.read(likeDefinitionServiceProvider).tapLike(definition);
             } on Exception catch (_) {
               // 例外発生時は、もともとのisLikedByUserの値を返す
               return definition.isLikedByUser;

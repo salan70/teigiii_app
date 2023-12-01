@@ -7,11 +7,8 @@ import 'dart:async' as _i4;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i6;
-import 'package:teigi_app/feature/definition/repository/like_definition_repository.dart'
+import 'package:teigi_app/feature/definition_like/repository/like_definition_repository.dart'
     as _i3;
-
-import 'definition_service_test.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -125,26 +122,4 @@ class MockLikeDefinitionRepository extends _i1.Mock
         returnValue: _i4.Future<bool>.value(false),
         returnValueForMissingStub: _i4.Future<bool>.value(false),
       ) as _i4.Future<bool>);
-}
-
-/// A class which mocks [Listener].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockListener extends _i1.Mock
-    implements _i5.Listener<_i6.AsyncValue<void>> {
-  @override
-  void call(
-    _i6.AsyncValue<void>? previous,
-    _i6.AsyncValue<void>? next,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #call,
-          [
-            previous,
-            next,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
 }

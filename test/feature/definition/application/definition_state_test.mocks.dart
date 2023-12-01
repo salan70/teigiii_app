@@ -13,7 +13,7 @@ import 'package:teigi_app/feature/definition/repository/entity/definition_docume
     as _i3;
 import 'package:teigi_app/feature/definition/repository/fetch_definition_repository.dart'
     as _i8;
-import 'package:teigi_app/feature/definition/repository/like_definition_repository.dart'
+import 'package:teigi_app/feature/definition_like/repository/like_definition_repository.dart'
     as _i6;
 import 'package:teigi_app/feature/user_profile/domain/user_profile.dart'
     as _i10;

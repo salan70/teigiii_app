@@ -6,7 +6,7 @@ import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition/application/definition_state.dart';
 import 'package:teigi_app/feature/definition/domain/definition.dart';
 import 'package:teigi_app/feature/definition/repository/fetch_definition_repository.dart';
-import 'package:teigi_app/feature/definition/repository/like_definition_repository.dart';
+import 'package:teigi_app/feature/definition_like/repository/like_definition_repository.dart';
 import 'package:teigi_app/feature/user_profile/application/user_profile_state.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
 import 'package:teigi_app/feature/word/repository/word_repository.dart';
