@@ -2,10 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../../util/logger.dart';
 import '../../../../auth/application/auth_state.dart';
+import '../../../../user_follow/presentation/component/follow_or_unfollow_button.dart';
 import '../../../application/user_profile_state.dart';
 import '../../component/profile_tile.dart';
 import '../../component/profile_tile_shimmer.dart';

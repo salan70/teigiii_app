@@ -7,15 +7,12 @@ import 'dart:async' as _i6;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i8;
 import 'package:teigi_app/feature/user_follow/repository/entity/user_follow_count_document.dart'
     as _i3;
 import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart'
     as _i5;
 import 'package:teigi_app/feature/user_profile/domain/user_id_list_state.dart'
     as _i4;
-
-import 'user_follow_service_test.dart' as _i7;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -251,26 +248,4 @@ class MockUserFollowRepository extends _i1.Mock
         returnValue: _i6.Future<void>.value(),
         returnValueForMissingStub: _i6.Future<void>.value(),
       ) as _i6.Future<void>);
-}
-
-/// A class which mocks [Listener].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockListener extends _i1.Mock
-    implements _i7.Listener<_i8.AsyncValue<void>> {
-  @override
-  void call(
-    _i8.AsyncValue<void>? previous,
-    _i8.AsyncValue<void>? next,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #call,
-          [
-            previous,
-            next,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
 }

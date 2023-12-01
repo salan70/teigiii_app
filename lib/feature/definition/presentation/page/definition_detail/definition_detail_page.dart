@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/avatar_network_image_widget.dart';
-import '../../../../../core/common_widget/button/follow_or_unfollow_button.dart';
 import '../../../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../../../core/common_widget/button/post_definition_fab.dart';
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
@@ -13,6 +12,7 @@ import '../../../../../core/router/app_router.dart';
 import '../../../../../util/extension/date_time_extension.dart';
 import '../../../../../util/logger.dart';
 import '../../../../auth/application/auth_state.dart';
+import '../../../../user_follow/presentation/component/follow_or_unfollow_button.dart';
 import '../../../application/definition_state.dart';
 import '../../component/like_widget.dart';
 import '../../component/self_definition_action_icon_button.dart';

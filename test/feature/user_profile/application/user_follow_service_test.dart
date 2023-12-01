@@ -10,18 +10,10 @@ import 'user_follow_service_test.mocks.dart';
 
 @GenerateNiceMocks([
   MockSpec<UserFollowRepository>(),
-  MockSpec<Listener<AsyncValue<void>>>(),
 ])
-
-// ignore: one_member_abstracts, unreachable_from_main
-abstract class Listener<T> {
-// ignore: unreachable_from_main
-  void call(T? previous, T next);
-}
 
 void main() {
   final mockUserFollowRepository = MockUserFollowRepository();
-  final listener = MockListener();
   const currentUserId = 'userId';
 
   late ProviderContainer container;
@@ -39,41 +31,18 @@ void main() {
 
   tearDown(() {
     reset(mockUserFollowRepository);
-    reset(listener);
   });
-
-  /// [userFollowServiceProvider]をlistenし、[UserFollowService]を返す
-  UserFollowService init() {
-    container.listen(
-      userFollowServiceProvider,
-      listener,
-      fireImmediately: true,
-    );
-
-    return container.read(
-      userFollowServiceProvider.notifier,
-    );
-  }
 
   group('follow', () {
     test('いいね登録: stateと、想定通りにrepositoryの関数が呼ばれることを検証', () async {
       // * Arrange
-      final userFollowService = init();
+      final userFollowService = container.read(userFollowServiceProvider);
       const targetUserId = 'targetUser';
 
       // * Act
       await userFollowService.follow(targetUserId);
 
       // * Assert
-      // stateの検証
-      verifyInOrder([
-        // build()時
-        listener.call(null, const AsyncData(null)),
-        // tapLike()時もstateは変わらない
-      ]);
-      // 他にlistenerが発火されないことを検証
-      verifyNoMoreInteractions(listener);
-
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
         mockUserFollowRepository.follow(currentUserId, targetUserId),
@@ -84,29 +53,18 @@ void main() {
         mockUserFollowRepository.unfollow(any, any),
       );
     });
-
-    // TODO(me): エラー発生時のテスト書く
   });
 
   group('unfollow', () {
     test('いいね登録: stateと、想定通りにrepositoryの関数が呼ばれることを検証', () async {
       // * Arrange
-      final userFollowService = init();
+      final userFollowService = container.read(userFollowServiceProvider);
       const targetUserId = 'targetUser';
 
       // * Act
       await userFollowService.unfollow(targetUserId);
 
       // * Assert
-      // stateの検証
-      verifyInOrder([
-        // build()時
-        listener.call(null, const AsyncData(null)),
-        // tapLike()時もstateは変わらない
-      ]);
-      // 他にlistenerが発火されないことを検証
-      verifyNoMoreInteractions(listener);
-
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
         mockUserFollowRepository.unfollow(currentUserId, targetUserId),
@@ -117,7 +75,5 @@ void main() {
         mockUserFollowRepository.follow(any, any),
       );
     });
-
-    // TODO(me): エラー発生時のテスト書く
   });
 }

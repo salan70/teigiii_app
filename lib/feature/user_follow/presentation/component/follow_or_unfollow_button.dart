@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../feature/user_follow/application/user_follow_service.dart';
-import '../../../feature/user_follow/application/user_follow_state.dart';
-import '../shimmer_widget.dart';
-import 'filled_button.dart';
-import 'outlined_button.dart';
+import '../../../../core/common_widget/button/filled_button.dart';
+import '../../../../core/common_widget/button/outlined_button.dart';
+import '../../../../core/common_widget/shimmer_widget.dart';
+import '../../../../util/mixin/presentation_mixin.dart';
+import '../../application/user_follow_service.dart';
+import '../../application/user_follow_state.dart';
 
 class FollowOrUnfollowButton extends ConsumerWidget {
   const FollowOrUnfollowButton({
@@ -36,7 +37,7 @@ class FollowOrUnfollowButton extends ConsumerWidget {
   }
 }
 
-class _FollowButton extends ConsumerWidget {
+class _FollowButton extends ConsumerWidget with PresentationMixin {
   const _FollowButton({
     required this.targetUserId,
   });
@@ -48,13 +49,19 @@ class _FollowButton extends ConsumerWidget {
     return PrimaryFilledButton(
       text: 'フォローする',
       onPressed: () async {
-        await ref.read(userFollowServiceProvider.notifier).follow(targetUserId);
+        await executeWithOverlayLoading(
+          ref,
+          action: () async =>
+              ref.read(userFollowServiceProvider).follow(targetUserId),
+          errorLogMessage: 'フォローが失敗しました。もう一度お試しください。',
+          errorToastMessage: 'フォロー時にエラーが発生。',
+        );
       },
     );
   }
 }
 
-class _UnfollowButton extends ConsumerWidget {
+class _UnfollowButton extends ConsumerWidget with PresentationMixin {
   const _UnfollowButton({
     required this.targetUserId,
   });
@@ -66,9 +73,13 @@ class _UnfollowButton extends ConsumerWidget {
     return PrimaryOutlinedButton(
       text: 'フォロー解除',
       onPressed: () async {
-        await ref
-            .read(userFollowServiceProvider.notifier)
-            .unfollow(targetUserId);
+        await executeWithOverlayLoading(
+          ref,
+          action: () async =>
+              ref.read(userFollowServiceProvider).unfollow(targetUserId),
+          errorLogMessage: 'フォロー解除が失敗しました。もう一度お試しください。',
+          errorToastMessage: 'フォロー解除時にエラーが発生。',
+        );
       },
     );
   }
