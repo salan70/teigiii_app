@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common_widget/infinity_scroll_widget.dart';
 import '../../../util/constant/initial_main_group.dart';
-import '../../definition/presentation/component/definition_tile.dart';
-import '../../definition/presentation/component/definition_tile_shimmer.dart';
+import '../../definition/presentation/definition_tile.dart';
+import '../../definition/presentation/definition_tile_shimmer.dart';
 import '../appication/definition_id_list_state.dart';
 import '../util/definition_feed_type.dart';
 

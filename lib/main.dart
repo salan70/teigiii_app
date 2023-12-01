@@ -21,7 +21,7 @@ import 'core/router/app_router.dart';
 import 'feature/force_event/application/app_config_state.dart';
 import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
 import 'feature/force_event/presentation/overlay_in_maintenance_dialog.dart';
-import 'firebase_options/firebase_options.dart';
+import 'util/firebase_options/firebase_options.dart';
 import 'util/constant/theme_data.dart';
 import 'util/logger.dart';
 

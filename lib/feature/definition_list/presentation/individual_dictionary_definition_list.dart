@@ -9,9 +9,9 @@ import '../../../core/common_widget/simple_widget_for_empty.dart';
 import '../../../util/constant/initial_main_group.dart';
 import '../../../util/extension/scroll_controller_extension.dart';
 import '../../auth/application/auth_state.dart';
-import 'definition_list.dart';
+import '../../word/presentation/dictionary_author_widget.dart';
 import '../util/definition_feed_type.dart';
-import '../../word/presentation/component/dictionary_author_widget.dart';
+import 'definition_list.dart';
 
 @RoutePage()
 class IndividualDictionaryDefinitionListPage extends ConsumerWidget {

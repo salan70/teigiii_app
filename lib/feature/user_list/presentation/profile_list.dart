@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common_widget/infinity_scroll_widget.dart';
 import '../../auth/application/auth_state.dart';
-import '../../user_follow/presentation/component/follow_or_unfollow_button.dart';
-import '../../user_profile/presentation/component/profile_tile.dart';
-import '../../user_profile/presentation/component/profile_tile_shimmer.dart';
+import '../../user_follow/presentation/follow_or_unfollow_button.dart';
+import '../../user_profile/presentation/profile_tile.dart';
+import '../../user_profile/presentation/profile_tile_shimmer.dart';
 import '../application/user_id_list_state_notifier.dart';
 import '../util/user_list_type.dart';
 
