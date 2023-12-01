@@ -6,7 +6,7 @@ import 'package:teigi_app/core/common_provider/toast_controller.dart';
 import 'package:teigi_app/feature/user_list/application/user_id_list_state_notifier.dart';
 import 'package:teigi_app/feature/user_list/domain/user_id_list_state.dart';
 import 'package:teigi_app/feature/user_list/repository/fetch_user_list_repository.dart';
-import 'package:teigi_app/feature/user_profile/util/user_list_type.dart';
+import 'package:teigi_app/feature/user_list/util/user_list_type.dart';
 
 import '../../../mock/mock_data.dart';
 import 'user_id_list_state_test.mocks.dart';
@@ -403,8 +403,6 @@ void main() {
       ).called(1);
     });
 
-    // TODO(me): 「ローディング中の場合、何もしない」ことを検証するテスト書く
-
     test('例外発生', () async {
       // * Arrange
       // Mockの設定
@@ -489,8 +487,6 @@ void main() {
       ]);
       // 他にlistenerが発火されないことを検証
       verifyNoMoreInteractions(listener);
-
-      // TODO(me): toastを表示させる関数が呼ばれていることを検証する
     });
   });
 }

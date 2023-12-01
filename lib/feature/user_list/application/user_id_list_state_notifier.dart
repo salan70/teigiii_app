@@ -3,9 +3,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/logger.dart';
 import '../../../util/mixin/fetch_more_mixin.dart';
-import '../../user_profile/util/user_list_type.dart';
 import '../domain/user_id_list_state.dart';
 import '../repository/fetch_user_list_repository.dart';
+import '../util/user_list_type.dart';
 
 part 'user_id_list_state_notifier.g.dart';
 
@@ -38,6 +38,8 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
   }) async {
     final lastDocument =
         isFirstFetch ? null : state.value!.lastReadQueryDocumentSnapshot;
+
+    // todo: ここのエラーハンドリング presentation でやる
     try {
       switch (userListType) {
         case UserListType.following:

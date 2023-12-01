@@ -11,7 +11,7 @@ import '../../../../../core/router/app_router.dart';
 import '../../../../../util/logger.dart';
 import '../../../../../util/mixin/presentation_mixin.dart';
 import '../../../application/user_profile_for_write_notifier.dart';
-import '../../component/changeable_profile_image.dart';
+import 'changeable_profile_image.dart';
 
 @RoutePage()
 class EditProfilePage extends ConsumerWidget with PresentationMixin {

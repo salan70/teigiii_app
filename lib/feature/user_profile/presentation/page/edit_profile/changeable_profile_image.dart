@@ -6,11 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-import '../../../../core/common_widget/avatar_network_image_widget.dart';
-import '../../../../util/constant/default_text_for_ui.dart';
-import '../../../../util/mixin/presentation_mixin.dart';
-import '../../application/user_profile_for_write_notifier.dart';
-import '../../domain/user_profile.dart';
+import '../../../../../core/common_widget/avatar_network_image_widget.dart';
+import '../../../../../util/constant/default_text_for_ui.dart';
+import '../../../../../util/mixin/presentation_mixin.dart';
+import '../../../application/user_profile_for_write_notifier.dart';
+import '../../../domain/user_profile.dart';
 
 class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
   ChangeableProfileImage({

@@ -502,8 +502,6 @@ void main() {
       ).called(1);
     });
 
-    // TODO(me): 「ローディング中の場合、何もしない」ことを検証するテスト書く
-
     test('例外発生', () async {
       // * Arrange
       // Mockの設定
@@ -603,8 +601,6 @@ void main() {
       ]);
       // 他にlistenerが発火されないことを検証
       verifyNoMoreInteractions(listener);
-
-      // TODO(me): toastを表示させる関数が呼ばれていることを検証する
     });
   });
 }

@@ -9,7 +9,7 @@ import '../../../util/extension/scroll_controller_extension.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user_follow/application/user_follow_state.dart';
 import '../../user_profile/application/user_profile_state.dart';
-import '../../user_profile/util/user_list_type.dart';
+import '../util/user_list_type.dart';
 import 'profile_list.dart';
 
 @RoutePage()
