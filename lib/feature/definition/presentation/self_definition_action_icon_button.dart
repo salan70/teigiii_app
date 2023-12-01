@@ -8,12 +8,16 @@ import '../../../../core/common_provider/dialog_controller.dart';
 import '../../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
+import '../../../util/constant/default_text_for_ui.dart';
+import '../../../util/mixin/presentation_mixin.dart';
+import '../../word/application/word_state.dart';
 import '../application/definition_service.dart';
 import '../domain/definition.dart';
 import '../util/after_post_navigation_type.dart';
 import '../util/definition_post_type.dart';
 
-class SelfDefinitionActionIconButton extends ConsumerWidget {
+class SelfDefinitionActionIconButton extends ConsumerWidget
+    with PresentationMixin {
   const SelfDefinitionActionIconButton({super.key, required this.definition});
 
   final Definition definition;
@@ -60,22 +64,29 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
                   ConfirmDialog(
                     confirmMessage: '本当に削除してもよろしいですか？',
                     onConfirm: () async {
-                      // エラーが発生しなかった場合のみ画面遷移するよう、try catchで囲む
-                      // ? もっといい方法があるそう
-                      try {
-                        await ref
-                            .read(definitionServiceProvider.notifier)
-                            .deleteDefinition(definition);
-                      } on Exception catch (_) {
-                        rethrow;
-                      }
+                      await executeWithOverlayLoading(
+                        ref,
+                        action: () async {
+                          await ref
+                              .read(definitionServiceProvider)
+                              .deleteDefinition(definition);
 
-                      // [SelfDefinitionActionIconButton] を表示している画面の
-                      // 前の画面まで戻る
-                      if (!context.mounted) {
-                        return;
-                      }
-                      await context.popRoute();
+                          // ラグを防ぐため、待機する。
+                          await ref
+                              .read(wordProvider(definition.wordId).future);
+
+                          // [SelfDefinitionActionIconButton] を
+                          // 表示している画面の前の画面まで戻る。
+                          // if (!context.mounted) {
+                          //   return;
+                          // }
+                          // await context.popRoute();
+                          await ref.read(appRouterProvider).pop();
+                        },
+                        errorLogMessage: '定義[${definition.id}]を削除時にエラーが発生。',
+                        errorToastMessage: defaultErrorToastText,
+                        successToastMessage: '削除しました。',
+                      );
                     },
                     confirmButtonText: '削除する',
                   ),
@@ -227,10 +238,23 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
             ),
             InkWell(
               onTap: () {
-                ref
-                    .read(definitionServiceProvider.notifier)
-                    .updatePostType(definition);
-                context.popRoute();
+                final afterUpdatePostType = definition.isPublic
+                    ? DefinitionPostType.private
+                    : DefinitionPostType.public;
+
+                executeWithOverlayLoading(
+                  ref,
+                  action: () async {
+                    await ref
+                        .read(definitionServiceProvider)
+                        .updatePostType(definition);
+                    await ref.read(appRouterProvider).pop();
+                  },
+                  errorLogMessage: '公開設定更新時にエラーが発生。',
+                  errorToastMessage: defaultErrorToastText,
+                  successToastMessage:
+                      afterUpdatePostType.completeChangeMessage,
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.all(16),

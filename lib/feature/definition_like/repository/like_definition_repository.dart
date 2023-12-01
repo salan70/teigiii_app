@@ -81,7 +81,7 @@ class LikeDefinitionRepository {
     }).toList();
   }
 
-  /// [definitionId]に紐づくいいねを全て削除する
+  /// [definitionId] に紐づくいいねを全て削除する。
   Future<void> deleteLikeByDefinitionId(String definitionId) async {
     // Likesコレクションからドキュメントを取得して削除
     final likeSnapshots = await _likesCollectionRef

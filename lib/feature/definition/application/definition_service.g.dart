@@ -6,13 +6,13 @@ part of 'definition_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$definitionServiceHash() => r'094256bc459e52cb01f2866dcdc252b9b54bf70e';
+String _$definitionServiceHash() => r'ff6f7c3f812dca75bd2fd4e82d177c2f78465bb5';
 
-/// See also [DefinitionService].
-@ProviderFor(DefinitionService)
+/// See also [definitionService].
+@ProviderFor(definitionService)
 final definitionServiceProvider =
-    AutoDisposeAsyncNotifierProvider<DefinitionService, void>.internal(
-  DefinitionService.new,
+    AutoDisposeProvider<DefinitionService>.internal(
+  definitionService,
   name: r'definitionServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -21,6 +21,6 @@ final definitionServiceProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$DefinitionService = AutoDisposeAsyncNotifier<void>;
+typedef DefinitionServiceRef = AutoDisposeProviderRef<DefinitionService>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
