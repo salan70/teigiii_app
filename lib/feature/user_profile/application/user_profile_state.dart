@@ -12,15 +12,3 @@ Future<UserProfile> userProfile(UserProfileRef ref, String userId) async {
 
   return userProfileDoc.toUserProfile();
 }
-
-@riverpod
-Future<String?> userIdSearchByPublicId(
-  UserIdSearchByPublicIdRef ref,
-  String publicId,
-) async {
-  final userProfileDoc = await ref
-      .read(userProfileRepositoryProvider)
-      .searchUserProfileByPublicId(publicId);
-
-  return userProfileDoc?.id;
-}

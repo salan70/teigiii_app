@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
-import '../../../../core/common_provider/toast_controller.dart';
-import '../../../../core/router/app_router.dart';
-import '../../domain/user_profile.dart';
+import '../../../core/common_provider/toast_controller.dart';
+import '../../../core/router/app_router.dart';
+import '../../user_profile/domain/user_profile.dart';
 
 class SearchUserTextField extends ConsumerStatefulWidget {
   SearchUserTextField({

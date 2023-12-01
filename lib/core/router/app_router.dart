@@ -20,8 +20,8 @@ import '../../feature/user_list/presentation/following_and_follower_list_page.da
 import '../../feature/user_list/presentation/like_user_page.dart';
 import '../../feature/user_profile/presentation/page/edit_profile/edit_profile_page.dart';
 import '../../feature/user_profile/presentation/page/profile/profile_page.dart';
-import '../../feature/user_profile/presentation/page/search_user/search_user_page.dart';
-import '../../feature/user_profile/presentation/page/search_user_result/search_user_result_page.dart';
+import '../../feature/user_search/presentation/search_user_page.dart';
+import '../../feature/user_search/presentation/search_user_result_page.dart';
 import '../../feature/word/presentation/page/everyone_dictionary/everyone_dictionary_page.dart';
 import '../../feature/word/presentation/page/individual_dictionary/individual_dictionary_page.dart';
 import '../../feature/word/presentation/page/individual_dictionary_definition_list/individual_dictionary_definition_list.dart';

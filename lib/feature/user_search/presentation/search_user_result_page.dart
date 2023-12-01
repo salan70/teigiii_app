@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../../util/logger.dart';
-import '../../../../auth/application/auth_state.dart';
-import '../../../../user_follow/presentation/component/follow_or_unfollow_button.dart';
-import '../../../application/user_profile_state.dart';
-import '../../component/profile_tile.dart';
-import '../../component/profile_tile_shimmer.dart';
-import '../../component/search_user_text_field.dart';
+import '../../auth/application/auth_state.dart';
+import '../../user_follow/presentation/component/follow_or_unfollow_button.dart';
+import '../../user_profile/presentation/component/profile_tile.dart';
+import '../../user_profile/presentation/component/profile_tile_shimmer.dart';
+import '../application/user_search_state.dart';
+import 'search_user_text_field.dart';
 
 @RoutePage()
 class SearchUserResultPage extends ConsumerWidget {

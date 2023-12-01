@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import '../../component/search_user_text_field.dart';
+import 'search_user_text_field.dart';
 
 @RoutePage()
 class SearchUserPage extends StatelessWidget {
