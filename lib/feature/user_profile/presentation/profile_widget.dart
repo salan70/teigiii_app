@@ -43,7 +43,7 @@ class ProfileWidget extends ConsumerWidget {
                       ? PrimaryOutlinedButton(
                           text: 'プロフィールを編集',
                           onPressed: () {
-                            context.pushRoute(EditProfileRoute());
+                            context.pushRoute(ProfileEditRoute());
                           },
                         )
                       : FollowOrUnfollowButton(
@@ -73,7 +73,7 @@ class ProfileWidget extends ConsumerWidget {
               InkWell(
                 onTap: () async {
                   await context.pushRoute(
-                    IndividualDictionaryRoute(
+                    DictionaryIndividualRoute(
                       targetUserId: targetUserProfile.id,
                     ),
                   );

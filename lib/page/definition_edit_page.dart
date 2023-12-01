@@ -11,8 +11,8 @@ import '../util/extension/date_time_extension.dart';
 import '../util/logger.dart';
 
 @RoutePage()
-class EditDefinitionPage extends ConsumerWidget {
-  const EditDefinitionPage({
+class DefinitionEditPage extends ConsumerWidget {
+  const DefinitionEditPage({
     super.key,
     required this.initialDefinition,
   });

@@ -16,8 +16,8 @@ import '../util/extension/scroll_controller_extension.dart';
 import '../util/logger.dart';
 
 @RoutePage()
-class ProfilePage extends ConsumerWidget {
-  const ProfilePage({
+class ProfileTopPage extends ConsumerWidget {
+  const ProfileTopPage({
     super.key,
     required this.targetUserId,
   });

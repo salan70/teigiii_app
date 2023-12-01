@@ -8,8 +8,8 @@ import '../feature/user_list/presentation/profile_list.dart';
 import '../feature/user_list/util/user_list_type.dart';
 
 @RoutePage()
-class LikeUserPage extends ConsumerWidget {
-  const LikeUserPage({
+class UserListLikedPage extends ConsumerWidget {
+  const UserListLikedPage({
     super.key,
     required this.definitionId,
   });

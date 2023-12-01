@@ -13,8 +13,8 @@ import '../feature/user_list/util/user_list_type.dart';
 import '../feature/user_profile/application/user_profile_state.dart';
 
 @RoutePage()
-class FollowingAndFollowerListPage extends ConsumerWidget {
-  const FollowingAndFollowerListPage({
+class UserListFollowingOrFollowerPage extends ConsumerWidget {
+  const UserListFollowingOrFollowerPage({
     super.key,
     required this.initialTab,
     required this.targetUserId,

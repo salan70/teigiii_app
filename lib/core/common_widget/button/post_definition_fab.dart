@@ -16,7 +16,7 @@ class PostDefinitionFAB extends StatelessWidget {
       elevation: 3,
       onPressed: () {
         context.pushRoute(
-          PostDefinitionRoute(
+          DefinitionPostRoute(
             initialDefinitionForWrite: null,
             autoFocusForm: WriteDefinitionFormType.word,
           ),

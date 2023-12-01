@@ -9,8 +9,8 @@ import '../feature/word/util/dictionary_page_type.dart';
 import '../util/constant/initial_main_group.dart';
 
 @RoutePage()
-class InitialSubGroupIndexPage extends ConsumerWidget {
-  const InitialSubGroupIndexPage({
+class DictionarySubIndexPage extends ConsumerWidget {
+  const DictionarySubIndexPage({
     super.key,
     required this.selectedInitialMainGroup,
     required this.dictionaryPageType,
@@ -20,8 +20,8 @@ class InitialSubGroupIndexPage extends ConsumerWidget {
   final InitialMainGroup selectedInitialMainGroup;
   final DictionaryPageType dictionaryPageType;
 
-  /// [dictionaryPageType]が[DictionaryPageType.everyone]の場合、nullを渡す
-  /// [DictionaryPageType.individual]の場合、表示対象のユーザーidを渡す
+  /// [dictionaryPageType] が [DictionaryPageType.everyone] の場合、nullを渡す。
+  /// [DictionaryPageType.individual] の場合、表示対象のユーザーidを渡す。
   final String? targetUserId;
 
   @override

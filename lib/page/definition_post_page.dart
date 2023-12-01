@@ -9,8 +9,8 @@ import '../feature/definition/util/after_post_navigation_type.dart';
 
 /// 定義を投稿するページ
 @RoutePage()
-class PostDefinitionPage extends ConsumerWidget {
-  const PostDefinitionPage({
+class DefinitionPostPage extends ConsumerWidget {
+  const DefinitionPostPage({
     super.key,
     required this.initialDefinitionForWrite,
     required this.autoFocusForm,

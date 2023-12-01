@@ -11,8 +11,8 @@ import '../feature/user_config/application/user_config_state.dart';
 import '../feature/user_profile/presentation/profile_tile.dart';
 
 @RoutePage()
-class MutedUserListPage extends ConsumerWidget {
-  const MutedUserListPage({super.key});
+class UserListMutedPage extends ConsumerWidget {
+  const UserListMutedPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

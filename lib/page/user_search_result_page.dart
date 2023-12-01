@@ -12,8 +12,8 @@ import '../feature/user_search/application/user_search_state.dart';
 import '../feature/user_search/presentation/search_user_text_field.dart';
 
 @RoutePage()
-class SearchUserResultPage extends ConsumerWidget {
-  const SearchUserResultPage({super.key, required this.searchWord});
+class UserSearchResultPage extends ConsumerWidget {
+  const UserSearchResultPage({super.key, required this.searchWord});
 
   final String searchWord;
 

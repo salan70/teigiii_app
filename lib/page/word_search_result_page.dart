@@ -15,8 +15,8 @@ import '../feature/word/presentation/word_tile_shimmer.dart';
 import '../util/extension/scroll_controller_extension.dart';
 
 @RoutePage()
-class SearchWordResultPage extends ConsumerWidget {
-  const SearchWordResultPage({
+class WordSearchResultPage extends ConsumerWidget {
+  const WordSearchResultPage({
     super.key,
     required this.searchWord,
   });

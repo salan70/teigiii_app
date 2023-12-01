@@ -99,7 +99,7 @@ class DefinitionDetailPage extends ConsumerWidget {
                     InkWell(
                       onTap: () async {
                         await context.pushRoute(
-                          ProfileRoute(targetUserId: definition.authorId),
+                          ProfileTopRoute(targetUserId: definition.authorId),
                         );
                       },
                       child: Row(
@@ -194,7 +194,7 @@ class DefinitionDetailPage extends ConsumerWidget {
                             }
 
                             await context.pushRoute(
-                              LikeUserRoute(definitionId: definition.id),
+                              UserListLikedRoute(definitionId: definition.id),
                             );
                           },
                           child: Text('${definition.likesCount}件のいいね'),

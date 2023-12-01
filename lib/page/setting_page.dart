@@ -56,7 +56,7 @@ class SettingPage extends ConsumerWidget {
               trailingIcon: const Icon(CupertinoIcons.speaker_slash),
               label: 'ミュートの管理',
               onTap: () {
-                context.navigateTo(const MutedUserListRoute());
+                context.navigateTo(const UserListMutedRoute());
               },
             ),
             const SizedBox(height: 32),

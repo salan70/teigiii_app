@@ -48,7 +48,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
             }
 
             context.pushRoute(
-              EditDefinitionRoute(initialDefinition: definition),
+              DefinitionEditRoute(initialDefinition: definition),
             );
           },
         ),
@@ -68,7 +68,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
                             .deleteDefinition(definition);
                       } on Exception catch (_) {
                         rethrow;
-                      } 
+                      }
 
                       // [SelfDefinitionActionIconButton] を表示している画面の
                       // 前の画面まで戻る
@@ -155,7 +155,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
                 context
                   ..popRoute()
                   ..pushRoute(
-                    PostDefinitionRoute(
+                    DefinitionPostRoute(
                       initialDefinitionForWrite:
                           definition.toDefinitionForWrite(),
                       autoFocusForm: null,

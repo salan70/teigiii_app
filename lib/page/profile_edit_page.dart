@@ -14,8 +14,8 @@ import '../util/logger.dart';
 import '../util/mixin/presentation_mixin.dart';
 
 @RoutePage()
-class EditProfilePage extends ConsumerWidget with PresentationMixin {
-  EditProfilePage({
+class ProfileEditPage extends ConsumerWidget with PresentationMixin {
+  ProfileEditPage({
     super.key,
   });
 

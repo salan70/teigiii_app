@@ -7,13 +7,13 @@ import '../feature/word/presentation/search_word_text_field.dart';
 import '../feature/word/util/dictionary_page_type.dart';
 
 @RoutePage()
-class EveryoneDictionaryRouterPage extends AutoRouter {
-  const EveryoneDictionaryRouterPage({super.key});
+class DictionaryEveryoneRouterPage extends AutoRouter {
+  const DictionaryEveryoneRouterPage({super.key});
 }
 
 @RoutePage()
-class EveryoneDictionaryPage extends StatelessWidget {
-  const EveryoneDictionaryPage({super.key});
+class DictionaryEveryonePage extends StatelessWidget {
+  const DictionaryEveryonePage({super.key});
 
   @override
   Widget build(BuildContext context) {

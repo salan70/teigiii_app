@@ -45,7 +45,7 @@ class WordWidget extends ConsumerWidget {
             child: PrimaryFilledButton(
               onPressed: () {
                 context.pushRoute(
-                  PostDefinitionRoute(
+                  DefinitionPostRoute(
                     initialDefinitionForWrite: DefinitionForWrite.fromWord(
                       word,
                       ref.read(userIdProvider)!,

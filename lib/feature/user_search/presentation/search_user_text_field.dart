@@ -75,7 +75,7 @@ class _SearchUserTextFieldState extends ConsumerState<SearchUserTextField> {
                         if (controller.text.length ==
                             UserProfile.publicIdLength) {
                           context.pushRoute(
-                            SearchUserResultRoute(searchWord: controller.text),
+                            UserSearchResultRoute(searchWord: controller.text),
                           );
                           controller.text = widget.defaultText ?? '';
                         }
@@ -117,7 +117,7 @@ class _SearchUserTextFieldState extends ConsumerState<SearchUserTextField> {
               return;
             }
             controller.text = widget.defaultText ?? '';
-            context.pushRoute(SearchUserResultRoute(searchWord: value));
+            context.pushRoute(UserSearchResultRoute(searchWord: value));
           },
           decoration: InputDecoration(
             prefixIcon: const Icon(

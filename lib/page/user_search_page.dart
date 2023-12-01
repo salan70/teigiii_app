@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../feature/user_search/presentation/search_user_text_field.dart';
 
-
 @RoutePage()
-class SearchUserPage extends StatelessWidget {
-  const SearchUserPage({super.key});
+class UserSearchPage extends StatelessWidget {
+  const UserSearchPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -30,7 +30,7 @@ class InitialMainGroupList extends StatelessWidget {
         return InkWell(
           onTap: () async {
             await context.pushRoute(
-              InitialSubGroupIndexRoute(
+              DictionarySubIndexRoute(
                 selectedInitialMainGroup: initialMainGroup,
                 dictionaryPageType: dictionaryPageType,
                 targetUserId: targetUserId,

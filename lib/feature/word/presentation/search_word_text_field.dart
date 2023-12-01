@@ -53,7 +53,7 @@ class _SearchWordTextFieldState extends State<SearchWordTextField> {
         }
         controller.text = widget.defaultText ?? '';
         context.pushRoute(
-          SearchWordResultRoute(searchWord: value),
+          WordSearchResultRoute(searchWord: value),
         );
       },
       decoration: InputDecoration(

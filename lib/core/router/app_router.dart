@@ -3,32 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../page/base_page.dart';
 import '../../feature/definition/domain/definition.dart';
 import '../../feature/definition/domain/definition_for_write.dart';
 import '../../feature/definition/presentation/write_definition_base_page.dart';
 import '../../feature/definition/util/after_post_navigation_type.dart';
 import '../../feature/definition_list/presentation/individual_dictionary_definition_list.dart';
 import '../../feature/word/util/dictionary_page_type.dart';
+import '../../page/base_page.dart';
 import '../../page/definition_detail_page.dart';
-import '../../page/edit_definition_page.dart';
-import '../../page/edit_profile_page.dart';
-import '../../page/everyone_dictionary_page.dart';
-import '../../page/following_and_follower_list_page.dart';
+import '../../page/definition_edit_page.dart';
+import '../../page/definition_post_page.dart';
+import '../../page/dictionary_everyone_page.dart';
+import '../../page/dictionary_individual_page.dart';
+import '../../page/dictionary_sub_index_page.dart';
 import '../../page/home_page.dart';
-import '../../page/individual_dictionary_page.dart';
-import '../../page/initial_sub_group_index_page.dart';
 import '../../page/introduction_page.dart';
 import '../../page/license_page.dart';
-import '../../page/like_user_page.dart';
-import '../../page/muted_user_list_page.dart';
-import '../../page/post_definition_page.dart';
-import '../../page/profile_page.dart';
-import '../../page/search_user_page.dart';
-import '../../page/search_user_result_page.dart';
-import '../../page/search_word_result_page.dart';
+import '../../page/profile_edit_page.dart';
+import '../../page/profile_top_page.dart';
 import '../../page/setting_page.dart';
+import '../../page/user_list_following_or_follower_page.dart';
+import '../../page/user_list_liked_page.dart';
+import '../../page/user_list_muted_page.dart';
+import '../../page/user_search_page.dart';
+import '../../page/user_search_result_page.dart';
 import '../../page/word_list_page.dart';
+import '../../page/word_search_result_page.dart';
 import '../../page/word_top_page.dart';
 import '../../util/constant/initial_main_group.dart';
 import 'first_launch_guard.dart';
@@ -52,36 +52,36 @@ class AppRouter extends _$AppRouter {
       page: DefinitionDetailRoute.page,
     ),
     AdaptiveRoute(
-      path: 'like_user_list',
-      page: LikeUserRoute.page,
+      path: 'user_list_liked',
+      page: UserListLikedRoute.page,
     ),
     AdaptiveRoute(
       path: 'word_top',
       page: WordTopRoute.page,
     ),
     AdaptiveRoute(
-      path: 'profile',
-      page: ProfileRoute.page,
+      path: 'profile_top',
+      page: ProfileTopRoute.page,
     ),
     AdaptiveRoute(
-      path: 'following_and_follower_list',
-      page: FollowingAndFollowerListRoute.page,
+      path: 'user_list_following_or_follower',
+      page: UserListFollowingOrFollowerRoute.page,
     ),
     AdaptiveRoute(
-      path: 'initial_sub_group_index',
-      page: InitialSubGroupIndexRoute.page,
+      path: 'dictionary_sub_index',
+      page: DictionarySubIndexRoute.page,
     ),
     AdaptiveRoute(
       path: 'individual_dictionary_definition_list',
       page: IndividualDictionaryDefinitionListRoute.page,
     ),
     AdaptiveRoute(
-      path: 'search_user',
-      page: SearchUserRoute.page,
+      path: 'user_search',
+      page: UserSearchRoute.page,
     ),
     AdaptiveRoute(
-      path: 'search_user_result',
-      page: SearchUserResultRoute.page,
+      path: 'user_search_result',
+      page: UserSearchResultRoute.page,
     ),
   ];
 
@@ -105,42 +105,42 @@ class AppRouter extends _$AppRouter {
                   page: HomeRoute.page,
                 ),
                 AdaptiveRoute(
-                  path: 'individual_dictionary',
-                  page: IndividualDictionaryRoute.page,
+                  path: 'dictionary_individual',
+                  page: DictionaryIndividualRoute.page,
                 ),
                 ...commonRouteList,
               ],
             ),
             AdaptiveRoute(
-              path: 'individual_dictionary',
-              page: IndividualDictionaryRouterRoute.page,
+              path: 'dictionary_individual',
+              page: DictionaryIndividualRouterRoute.page,
               children: [
                 AdaptiveRoute(
                   initial: true,
-                  page: IndividualDictionaryRoute.page,
+                  page: DictionaryIndividualRoute.page,
                 ),
                 ...commonRouteList,
               ],
             ),
             AdaptiveRoute(
-              path: 'index',
-              page: EveryoneDictionaryRouterRoute.page,
+              path: 'dictionary_everyone',
+              page: DictionaryEveryoneRouterRoute.page,
               children: [
                 AdaptiveRoute(
                   initial: true,
-                  page: EveryoneDictionaryRoute.page,
+                  page: DictionaryEveryoneRoute.page,
                 ),
                 AdaptiveRoute(
                   path: 'word_list',
                   page: WordListRoute.page,
                 ),
                 AdaptiveRoute(
-                  path: 'search_word_result',
-                  page: SearchWordResultRoute.page,
+                  path: 'word_search_result',
+                  page: WordSearchResultRoute.page,
                 ),
                 AdaptiveRoute(
-                  path: 'individual_dictionary',
-                  page: IndividualDictionaryRoute.page,
+                  path: 'dictionary_individual',
+                  page: DictionaryIndividualRoute.page,
                 ),
                 ...commonRouteList,
               ],
@@ -161,24 +161,24 @@ class AppRouter extends _$AppRouter {
               page: MyLicenseRoute.page,
             ),
             AdaptiveRoute(
-              path: 'muted_user_list',
-              page: MutedUserListRoute.page,
+              path: 'user_list_muted',
+              page: UserListMutedRoute.page,
             ),
           ],
         ),
         AdaptiveRoute(
-          path: '/post_definition',
-          page: PostDefinitionRoute.page,
+          path: '/definition_post',
+          page: DefinitionPostRoute.page,
           fullscreenDialog: true,
         ),
         AdaptiveRoute(
-          path: '/edit_definition',
-          page: EditDefinitionRoute.page,
+          path: '/definition_edit',
+          page: DefinitionEditRoute.page,
           fullscreenDialog: true,
         ),
         AdaptiveRoute(
-          path: '/edit_profile',
-          page: EditProfileRoute.page,
+          path: '/profile_edit',
+          page: ProfileEditRoute.page,
           fullscreenDialog: true,
         ),
       ];

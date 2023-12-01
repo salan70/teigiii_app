@@ -34,7 +34,7 @@ class DictionaryAuthorWidget extends ConsumerWidget {
             InkWell(
               onTap: () {
                 context.pushRoute(
-                  ProfileRoute(
+                  ProfileTopRoute(
                     targetUserId: targetUserProfile.id,
                   ),
                 );

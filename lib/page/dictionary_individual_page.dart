@@ -12,13 +12,13 @@ import '../feature/word/util/dictionary_page_type.dart';
 import '../util/logger.dart';
 
 @RoutePage()
-class IndividualDictionaryRouterPage extends AutoRouter {
-  const IndividualDictionaryRouterPage({super.key});
+class DictionaryIndividualRouterPage extends AutoRouter {
+  const DictionaryIndividualRouterPage({super.key});
 }
 
 @RoutePage()
-class IndividualDictionaryPage extends ConsumerWidget {
-  const IndividualDictionaryPage({
+class DictionaryIndividualPage extends ConsumerWidget {
+  const DictionaryIndividualPage({
     super.key,
     required this.targetUserId,
     this.isTopRoute = false,

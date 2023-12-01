@@ -37,43 +37,65 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    EditDefinitionRoute.name: (routeData) {
-      final args = routeData.argsAs<EditDefinitionRouteArgs>();
+    DefinitionEditRoute.name: (routeData) {
+      final args = routeData.argsAs<DefinitionEditRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: EditDefinitionPage(
+        child: DefinitionEditPage(
           key: args.key,
           initialDefinition: args.initialDefinition,
         ),
       );
     },
-    EditProfileRoute.name: (routeData) {
-      final args = routeData.argsAs<EditProfileRouteArgs>(
-          orElse: () => const EditProfileRouteArgs());
+    DefinitionPostRoute.name: (routeData) {
+      final args = routeData.argsAs<DefinitionPostRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: EditProfilePage(key: args.key),
-      );
-    },
-    EveryoneDictionaryRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const EveryoneDictionaryPage(),
-      );
-    },
-    EveryoneDictionaryRouterRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const EveryoneDictionaryRouterPage(),
-      );
-    },
-    FollowingAndFollowerListRoute.name: (routeData) {
-      final args = routeData.argsAs<FollowingAndFollowerListRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: FollowingAndFollowerListPage(
+        child: DefinitionPostPage(
           key: args.key,
-          initialTab: args.initialTab,
+          initialDefinitionForWrite: args.initialDefinitionForWrite,
+          autoFocusForm: args.autoFocusForm,
+          afterPostNavigation: args.afterPostNavigation,
+        ),
+      );
+    },
+    DictionaryEveryoneRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const DictionaryEveryonePage(),
+      );
+    },
+    DictionaryEveryoneRouterRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const DictionaryEveryoneRouterPage(),
+      );
+    },
+    DictionaryIndividualRoute.name: (routeData) {
+      final args = routeData.argsAs<DictionaryIndividualRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DictionaryIndividualPage(
+          key: args.key,
+          targetUserId: args.targetUserId,
+          isTopRoute: args.isTopRoute,
+        ),
+      );
+    },
+    DictionaryIndividualRouterRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const DictionaryIndividualRouterPage(),
+      );
+    },
+    DictionarySubIndexRoute.name: (routeData) {
+      final args = routeData.argsAs<DictionarySubIndexRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DictionarySubIndexPage(
+          key: args.key,
+          selectedInitialMainGroup: args.selectedInitialMainGroup,
+          dictionaryPageType: args.dictionaryPageType,
           targetUserId: args.targetUserId,
         ),
       );
@@ -102,55 +124,10 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    IndividualDictionaryRoute.name: (routeData) {
-      final args = routeData.argsAs<IndividualDictionaryRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: IndividualDictionaryPage(
-          key: args.key,
-          targetUserId: args.targetUserId,
-          isTopRoute: args.isTopRoute,
-        ),
-      );
-    },
-    IndividualDictionaryRouterRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const IndividualDictionaryRouterPage(),
-      );
-    },
-    InitialSubGroupIndexRoute.name: (routeData) {
-      final args = routeData.argsAs<InitialSubGroupIndexRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: InitialSubGroupIndexPage(
-          key: args.key,
-          selectedInitialMainGroup: args.selectedInitialMainGroup,
-          dictionaryPageType: args.dictionaryPageType,
-          targetUserId: args.targetUserId,
-        ),
-      );
-    },
     IntroductionRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const IntroductionPage(),
-      );
-    },
-    LikeUserRoute.name: (routeData) {
-      final args = routeData.argsAs<LikeUserRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: LikeUserPage(
-          key: args.key,
-          definitionId: args.definitionId,
-        ),
-      );
-    },
-    MutedUserListRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const MutedUserListPage(),
       );
     },
     MyLicenseRoute.name: (routeData) {
@@ -159,51 +136,21 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const MyLicensePage(),
       );
     },
-    PostDefinitionRoute.name: (routeData) {
-      final args = routeData.argsAs<PostDefinitionRouteArgs>();
+    ProfileEditRoute.name: (routeData) {
+      final args = routeData.argsAs<ProfileEditRouteArgs>(
+          orElse: () => const ProfileEditRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: PostDefinitionPage(
-          key: args.key,
-          initialDefinitionForWrite: args.initialDefinitionForWrite,
-          autoFocusForm: args.autoFocusForm,
-          afterPostNavigation: args.afterPostNavigation,
-        ),
+        child: ProfileEditPage(key: args.key),
       );
     },
-    ProfileRoute.name: (routeData) {
-      final args = routeData.argsAs<ProfileRouteArgs>();
+    ProfileTopRoute.name: (routeData) {
+      final args = routeData.argsAs<ProfileTopRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ProfilePage(
+        child: ProfileTopPage(
           key: args.key,
           targetUserId: args.targetUserId,
-        ),
-      );
-    },
-    SearchUserRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SearchUserPage(),
-      );
-    },
-    SearchUserResultRoute.name: (routeData) {
-      final args = routeData.argsAs<SearchUserResultRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: SearchUserResultPage(
-          key: args.key,
-          searchWord: args.searchWord,
-        ),
-      );
-    },
-    SearchWordResultRoute.name: (routeData) {
-      final args = routeData.argsAs<SearchWordResultRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: SearchWordResultPage(
-          key: args.key,
-          searchWord: args.searchWord,
         ),
       );
     },
@@ -219,6 +166,49 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SettingRouterPage(),
       );
     },
+    UserListFollowingOrFollowerRoute.name: (routeData) {
+      final args = routeData.argsAs<UserListFollowingOrFollowerRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UserListFollowingOrFollowerPage(
+          key: args.key,
+          initialTab: args.initialTab,
+          targetUserId: args.targetUserId,
+        ),
+      );
+    },
+    UserListLikedRoute.name: (routeData) {
+      final args = routeData.argsAs<UserListLikedRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UserListLikedPage(
+          key: args.key,
+          definitionId: args.definitionId,
+        ),
+      );
+    },
+    UserListMutedRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const UserListMutedPage(),
+      );
+    },
+    UserSearchRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const UserSearchPage(),
+      );
+    },
+    UserSearchResultRoute.name: (routeData) {
+      final args = routeData.argsAs<UserSearchResultRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UserSearchResultPage(
+          key: args.key,
+          searchWord: args.searchWord,
+        ),
+      );
+    },
     WordListRoute.name: (routeData) {
       final args = routeData.argsAs<WordListRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -226,6 +216,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WordListPage(
           key: args.key,
           selectedInitialSubGroup: args.selectedInitialSubGroup,
+        ),
+      );
+    },
+    WordSearchResultRoute.name: (routeData) {
+      final args = routeData.argsAs<WordSearchResultRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: WordSearchResultPage(
+          key: args.key,
+          searchWord: args.searchWord,
         ),
       );
     },
@@ -309,29 +309,29 @@ class DefinitionDetailRouteArgs {
 }
 
 /// generated route for
-/// [EditDefinitionPage]
-class EditDefinitionRoute extends PageRouteInfo<EditDefinitionRouteArgs> {
-  EditDefinitionRoute({
+/// [DefinitionEditPage]
+class DefinitionEditRoute extends PageRouteInfo<DefinitionEditRouteArgs> {
+  DefinitionEditRoute({
     Key? key,
     required Definition initialDefinition,
     List<PageRouteInfo>? children,
   }) : super(
-          EditDefinitionRoute.name,
-          args: EditDefinitionRouteArgs(
+          DefinitionEditRoute.name,
+          args: DefinitionEditRouteArgs(
             key: key,
             initialDefinition: initialDefinition,
           ),
           initialChildren: children,
         );
 
-  static const String name = 'EditDefinitionRoute';
+  static const String name = 'DefinitionEditRoute';
 
-  static const PageInfo<EditDefinitionRouteArgs> page =
-      PageInfo<EditDefinitionRouteArgs>(name);
+  static const PageInfo<DefinitionEditRouteArgs> page =
+      PageInfo<DefinitionEditRouteArgs>(name);
 }
 
-class EditDefinitionRouteArgs {
-  const EditDefinitionRouteArgs({
+class DefinitionEditRouteArgs {
+  const DefinitionEditRouteArgs({
     this.key,
     required this.initialDefinition,
   });
@@ -342,108 +342,190 @@ class EditDefinitionRouteArgs {
 
   @override
   String toString() {
-    return 'EditDefinitionRouteArgs{key: $key, initialDefinition: $initialDefinition}';
+    return 'DefinitionEditRouteArgs{key: $key, initialDefinition: $initialDefinition}';
   }
 }
 
 /// generated route for
-/// [EditProfilePage]
-class EditProfileRoute extends PageRouteInfo<EditProfileRouteArgs> {
-  EditProfileRoute({
+/// [DefinitionPostPage]
+class DefinitionPostRoute extends PageRouteInfo<DefinitionPostRouteArgs> {
+  DefinitionPostRoute({
     Key? key,
+    required DefinitionForWrite? initialDefinitionForWrite,
+    required WriteDefinitionFormType? autoFocusForm,
+    AfterPostNavigationType afterPostNavigation = AfterPostNavigationType.pop,
     List<PageRouteInfo>? children,
   }) : super(
-          EditProfileRoute.name,
-          args: EditProfileRouteArgs(key: key),
+          DefinitionPostRoute.name,
+          args: DefinitionPostRouteArgs(
+            key: key,
+            initialDefinitionForWrite: initialDefinitionForWrite,
+            autoFocusForm: autoFocusForm,
+            afterPostNavigation: afterPostNavigation,
+          ),
           initialChildren: children,
         );
 
-  static const String name = 'EditProfileRoute';
+  static const String name = 'DefinitionPostRoute';
 
-  static const PageInfo<EditProfileRouteArgs> page =
-      PageInfo<EditProfileRouteArgs>(name);
+  static const PageInfo<DefinitionPostRouteArgs> page =
+      PageInfo<DefinitionPostRouteArgs>(name);
 }
 
-class EditProfileRouteArgs {
-  const EditProfileRouteArgs({this.key});
+class DefinitionPostRouteArgs {
+  const DefinitionPostRouteArgs({
+    this.key,
+    required this.initialDefinitionForWrite,
+    required this.autoFocusForm,
+    this.afterPostNavigation = AfterPostNavigationType.pop,
+  });
 
   final Key? key;
 
+  final DefinitionForWrite? initialDefinitionForWrite;
+
+  final WriteDefinitionFormType? autoFocusForm;
+
+  final AfterPostNavigationType afterPostNavigation;
+
   @override
   String toString() {
-    return 'EditProfileRouteArgs{key: $key}';
+    return 'DefinitionPostRouteArgs{key: $key, initialDefinitionForWrite: $initialDefinitionForWrite, autoFocusForm: $autoFocusForm, afterPostNavigation: $afterPostNavigation}';
   }
 }
 
 /// generated route for
-/// [EveryoneDictionaryPage]
-class EveryoneDictionaryRoute extends PageRouteInfo<void> {
-  const EveryoneDictionaryRoute({List<PageRouteInfo>? children})
+/// [DictionaryEveryonePage]
+class DictionaryEveryoneRoute extends PageRouteInfo<void> {
+  const DictionaryEveryoneRoute({List<PageRouteInfo>? children})
       : super(
-          EveryoneDictionaryRoute.name,
+          DictionaryEveryoneRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'EveryoneDictionaryRoute';
+  static const String name = 'DictionaryEveryoneRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
-/// [EveryoneDictionaryRouterPage]
-class EveryoneDictionaryRouterRoute extends PageRouteInfo<void> {
-  const EveryoneDictionaryRouterRoute({List<PageRouteInfo>? children})
+/// [DictionaryEveryoneRouterPage]
+class DictionaryEveryoneRouterRoute extends PageRouteInfo<void> {
+  const DictionaryEveryoneRouterRoute({List<PageRouteInfo>? children})
       : super(
-          EveryoneDictionaryRouterRoute.name,
+          DictionaryEveryoneRouterRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'EveryoneDictionaryRouterRoute';
+  static const String name = 'DictionaryEveryoneRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
-/// [FollowingAndFollowerListPage]
-class FollowingAndFollowerListRoute
-    extends PageRouteInfo<FollowingAndFollowerListRouteArgs> {
-  FollowingAndFollowerListRoute({
+/// [DictionaryIndividualPage]
+class DictionaryIndividualRoute
+    extends PageRouteInfo<DictionaryIndividualRouteArgs> {
+  DictionaryIndividualRoute({
     Key? key,
-    required FollowingAndFollowerListTab initialTab,
     required String targetUserId,
+    bool isTopRoute = false,
     List<PageRouteInfo>? children,
   }) : super(
-          FollowingAndFollowerListRoute.name,
-          args: FollowingAndFollowerListRouteArgs(
+          DictionaryIndividualRoute.name,
+          args: DictionaryIndividualRouteArgs(
             key: key,
-            initialTab: initialTab,
+            targetUserId: targetUserId,
+            isTopRoute: isTopRoute,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DictionaryIndividualRoute';
+
+  static const PageInfo<DictionaryIndividualRouteArgs> page =
+      PageInfo<DictionaryIndividualRouteArgs>(name);
+}
+
+class DictionaryIndividualRouteArgs {
+  const DictionaryIndividualRouteArgs({
+    this.key,
+    required this.targetUserId,
+    this.isTopRoute = false,
+  });
+
+  final Key? key;
+
+  final String targetUserId;
+
+  final bool isTopRoute;
+
+  @override
+  String toString() {
+    return 'DictionaryIndividualRouteArgs{key: $key, targetUserId: $targetUserId, isTopRoute: $isTopRoute}';
+  }
+}
+
+/// generated route for
+/// [DictionaryIndividualRouterPage]
+class DictionaryIndividualRouterRoute extends PageRouteInfo<void> {
+  const DictionaryIndividualRouterRoute({List<PageRouteInfo>? children})
+      : super(
+          DictionaryIndividualRouterRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'DictionaryIndividualRouterRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [DictionarySubIndexPage]
+class DictionarySubIndexRoute
+    extends PageRouteInfo<DictionarySubIndexRouteArgs> {
+  DictionarySubIndexRoute({
+    Key? key,
+    required InitialMainGroup selectedInitialMainGroup,
+    required DictionaryPageType dictionaryPageType,
+    required String? targetUserId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DictionarySubIndexRoute.name,
+          args: DictionarySubIndexRouteArgs(
+            key: key,
+            selectedInitialMainGroup: selectedInitialMainGroup,
+            dictionaryPageType: dictionaryPageType,
             targetUserId: targetUserId,
           ),
           initialChildren: children,
         );
 
-  static const String name = 'FollowingAndFollowerListRoute';
+  static const String name = 'DictionarySubIndexRoute';
 
-  static const PageInfo<FollowingAndFollowerListRouteArgs> page =
-      PageInfo<FollowingAndFollowerListRouteArgs>(name);
+  static const PageInfo<DictionarySubIndexRouteArgs> page =
+      PageInfo<DictionarySubIndexRouteArgs>(name);
 }
 
-class FollowingAndFollowerListRouteArgs {
-  const FollowingAndFollowerListRouteArgs({
+class DictionarySubIndexRouteArgs {
+  const DictionarySubIndexRouteArgs({
     this.key,
-    required this.initialTab,
+    required this.selectedInitialMainGroup,
+    required this.dictionaryPageType,
     required this.targetUserId,
   });
 
   final Key? key;
 
-  final FollowingAndFollowerListTab initialTab;
+  final InitialMainGroup selectedInitialMainGroup;
 
-  final String targetUserId;
+  final DictionaryPageType dictionaryPageType;
+
+  final String? targetUserId;
 
   @override
   String toString() {
-    return 'FollowingAndFollowerListRouteArgs{key: $key, initialTab: $initialTab, targetUserId: $targetUserId}';
+    return 'DictionarySubIndexRouteArgs{key: $key, selectedInitialMainGroup: $selectedInitialMainGroup, dictionaryPageType: $dictionaryPageType, targetUserId: $targetUserId}';
   }
 }
 
@@ -520,113 +602,6 @@ class IndividualDictionaryDefinitionListRouteArgs {
 }
 
 /// generated route for
-/// [IndividualDictionaryPage]
-class IndividualDictionaryRoute
-    extends PageRouteInfo<IndividualDictionaryRouteArgs> {
-  IndividualDictionaryRoute({
-    Key? key,
-    required String targetUserId,
-    bool isTopRoute = false,
-    List<PageRouteInfo>? children,
-  }) : super(
-          IndividualDictionaryRoute.name,
-          args: IndividualDictionaryRouteArgs(
-            key: key,
-            targetUserId: targetUserId,
-            isTopRoute: isTopRoute,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'IndividualDictionaryRoute';
-
-  static const PageInfo<IndividualDictionaryRouteArgs> page =
-      PageInfo<IndividualDictionaryRouteArgs>(name);
-}
-
-class IndividualDictionaryRouteArgs {
-  const IndividualDictionaryRouteArgs({
-    this.key,
-    required this.targetUserId,
-    this.isTopRoute = false,
-  });
-
-  final Key? key;
-
-  final String targetUserId;
-
-  final bool isTopRoute;
-
-  @override
-  String toString() {
-    return 'IndividualDictionaryRouteArgs{key: $key, targetUserId: $targetUserId, isTopRoute: $isTopRoute}';
-  }
-}
-
-/// generated route for
-/// [IndividualDictionaryRouterPage]
-class IndividualDictionaryRouterRoute extends PageRouteInfo<void> {
-  const IndividualDictionaryRouterRoute({List<PageRouteInfo>? children})
-      : super(
-          IndividualDictionaryRouterRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'IndividualDictionaryRouterRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [InitialSubGroupIndexPage]
-class InitialSubGroupIndexRoute
-    extends PageRouteInfo<InitialSubGroupIndexRouteArgs> {
-  InitialSubGroupIndexRoute({
-    Key? key,
-    required InitialMainGroup selectedInitialMainGroup,
-    required DictionaryPageType dictionaryPageType,
-    required String? targetUserId,
-    List<PageRouteInfo>? children,
-  }) : super(
-          InitialSubGroupIndexRoute.name,
-          args: InitialSubGroupIndexRouteArgs(
-            key: key,
-            selectedInitialMainGroup: selectedInitialMainGroup,
-            dictionaryPageType: dictionaryPageType,
-            targetUserId: targetUserId,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'InitialSubGroupIndexRoute';
-
-  static const PageInfo<InitialSubGroupIndexRouteArgs> page =
-      PageInfo<InitialSubGroupIndexRouteArgs>(name);
-}
-
-class InitialSubGroupIndexRouteArgs {
-  const InitialSubGroupIndexRouteArgs({
-    this.key,
-    required this.selectedInitialMainGroup,
-    required this.dictionaryPageType,
-    required this.targetUserId,
-  });
-
-  final Key? key;
-
-  final InitialMainGroup selectedInitialMainGroup;
-
-  final DictionaryPageType dictionaryPageType;
-
-  final String? targetUserId;
-
-  @override
-  String toString() {
-    return 'InitialSubGroupIndexRouteArgs{key: $key, selectedInitialMainGroup: $selectedInitialMainGroup, dictionaryPageType: $dictionaryPageType, targetUserId: $targetUserId}';
-  }
-}
-
-/// generated route for
 /// [IntroductionPage]
 class IntroductionRoute extends PageRouteInfo<void> {
   const IntroductionRoute({List<PageRouteInfo>? children})
@@ -636,58 +611,6 @@ class IntroductionRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'IntroductionRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [LikeUserPage]
-class LikeUserRoute extends PageRouteInfo<LikeUserRouteArgs> {
-  LikeUserRoute({
-    Key? key,
-    required String definitionId,
-    List<PageRouteInfo>? children,
-  }) : super(
-          LikeUserRoute.name,
-          args: LikeUserRouteArgs(
-            key: key,
-            definitionId: definitionId,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'LikeUserRoute';
-
-  static const PageInfo<LikeUserRouteArgs> page =
-      PageInfo<LikeUserRouteArgs>(name);
-}
-
-class LikeUserRouteArgs {
-  const LikeUserRouteArgs({
-    this.key,
-    required this.definitionId,
-  });
-
-  final Key? key;
-
-  final String definitionId;
-
-  @override
-  String toString() {
-    return 'LikeUserRouteArgs{key: $key, definitionId: $definitionId}';
-  }
-}
-
-/// generated route for
-/// [MutedUserListPage]
-class MutedUserListRoute extends PageRouteInfo<void> {
-  const MutedUserListRoute({List<PageRouteInfo>? children})
-      : super(
-          MutedUserListRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'MutedUserListRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -707,77 +630,58 @@ class MyLicenseRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [PostDefinitionPage]
-class PostDefinitionRoute extends PageRouteInfo<PostDefinitionRouteArgs> {
-  PostDefinitionRoute({
+/// [ProfileEditPage]
+class ProfileEditRoute extends PageRouteInfo<ProfileEditRouteArgs> {
+  ProfileEditRoute({
     Key? key,
-    required DefinitionForWrite? initialDefinitionForWrite,
-    required WriteDefinitionFormType? autoFocusForm,
-    AfterPostNavigationType afterPostNavigation = AfterPostNavigationType.pop,
     List<PageRouteInfo>? children,
   }) : super(
-          PostDefinitionRoute.name,
-          args: PostDefinitionRouteArgs(
-            key: key,
-            initialDefinitionForWrite: initialDefinitionForWrite,
-            autoFocusForm: autoFocusForm,
-            afterPostNavigation: afterPostNavigation,
-          ),
+          ProfileEditRoute.name,
+          args: ProfileEditRouteArgs(key: key),
           initialChildren: children,
         );
 
-  static const String name = 'PostDefinitionRoute';
+  static const String name = 'ProfileEditRoute';
 
-  static const PageInfo<PostDefinitionRouteArgs> page =
-      PageInfo<PostDefinitionRouteArgs>(name);
+  static const PageInfo<ProfileEditRouteArgs> page =
+      PageInfo<ProfileEditRouteArgs>(name);
 }
 
-class PostDefinitionRouteArgs {
-  const PostDefinitionRouteArgs({
-    this.key,
-    required this.initialDefinitionForWrite,
-    required this.autoFocusForm,
-    this.afterPostNavigation = AfterPostNavigationType.pop,
-  });
+class ProfileEditRouteArgs {
+  const ProfileEditRouteArgs({this.key});
 
   final Key? key;
 
-  final DefinitionForWrite? initialDefinitionForWrite;
-
-  final WriteDefinitionFormType? autoFocusForm;
-
-  final AfterPostNavigationType afterPostNavigation;
-
   @override
   String toString() {
-    return 'PostDefinitionRouteArgs{key: $key, initialDefinitionForWrite: $initialDefinitionForWrite, autoFocusForm: $autoFocusForm, afterPostNavigation: $afterPostNavigation}';
+    return 'ProfileEditRouteArgs{key: $key}';
   }
 }
 
 /// generated route for
-/// [ProfilePage]
-class ProfileRoute extends PageRouteInfo<ProfileRouteArgs> {
-  ProfileRoute({
+/// [ProfileTopPage]
+class ProfileTopRoute extends PageRouteInfo<ProfileTopRouteArgs> {
+  ProfileTopRoute({
     Key? key,
     required String targetUserId,
     List<PageRouteInfo>? children,
   }) : super(
-          ProfileRoute.name,
-          args: ProfileRouteArgs(
+          ProfileTopRoute.name,
+          args: ProfileTopRouteArgs(
             key: key,
             targetUserId: targetUserId,
           ),
           initialChildren: children,
         );
 
-  static const String name = 'ProfileRoute';
+  static const String name = 'ProfileTopRoute';
 
-  static const PageInfo<ProfileRouteArgs> page =
-      PageInfo<ProfileRouteArgs>(name);
+  static const PageInfo<ProfileTopRouteArgs> page =
+      PageInfo<ProfileTopRouteArgs>(name);
 }
 
-class ProfileRouteArgs {
-  const ProfileRouteArgs({
+class ProfileTopRouteArgs {
+  const ProfileTopRouteArgs({
     this.key,
     required this.targetUserId,
   });
@@ -788,97 +692,7 @@ class ProfileRouteArgs {
 
   @override
   String toString() {
-    return 'ProfileRouteArgs{key: $key, targetUserId: $targetUserId}';
-  }
-}
-
-/// generated route for
-/// [SearchUserPage]
-class SearchUserRoute extends PageRouteInfo<void> {
-  const SearchUserRoute({List<PageRouteInfo>? children})
-      : super(
-          SearchUserRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SearchUserRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [SearchUserResultPage]
-class SearchUserResultRoute extends PageRouteInfo<SearchUserResultRouteArgs> {
-  SearchUserResultRoute({
-    Key? key,
-    required String searchWord,
-    List<PageRouteInfo>? children,
-  }) : super(
-          SearchUserResultRoute.name,
-          args: SearchUserResultRouteArgs(
-            key: key,
-            searchWord: searchWord,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'SearchUserResultRoute';
-
-  static const PageInfo<SearchUserResultRouteArgs> page =
-      PageInfo<SearchUserResultRouteArgs>(name);
-}
-
-class SearchUserResultRouteArgs {
-  const SearchUserResultRouteArgs({
-    this.key,
-    required this.searchWord,
-  });
-
-  final Key? key;
-
-  final String searchWord;
-
-  @override
-  String toString() {
-    return 'SearchUserResultRouteArgs{key: $key, searchWord: $searchWord}';
-  }
-}
-
-/// generated route for
-/// [SearchWordResultPage]
-class SearchWordResultRoute extends PageRouteInfo<SearchWordResultRouteArgs> {
-  SearchWordResultRoute({
-    Key? key,
-    required String searchWord,
-    List<PageRouteInfo>? children,
-  }) : super(
-          SearchWordResultRoute.name,
-          args: SearchWordResultRouteArgs(
-            key: key,
-            searchWord: searchWord,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'SearchWordResultRoute';
-
-  static const PageInfo<SearchWordResultRouteArgs> page =
-      PageInfo<SearchWordResultRouteArgs>(name);
-}
-
-class SearchWordResultRouteArgs {
-  const SearchWordResultRouteArgs({
-    this.key,
-    required this.searchWord,
-  });
-
-  final Key? key;
-
-  final String searchWord;
-
-  @override
-  String toString() {
-    return 'SearchWordResultRouteArgs{key: $key, searchWord: $searchWord}';
+    return 'ProfileTopRouteArgs{key: $key, targetUserId: $targetUserId}';
   }
 }
 
@@ -908,6 +722,154 @@ class SettingRouterRoute extends PageRouteInfo<void> {
   static const String name = 'SettingRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [UserListFollowingOrFollowerPage]
+class UserListFollowingOrFollowerRoute
+    extends PageRouteInfo<UserListFollowingOrFollowerRouteArgs> {
+  UserListFollowingOrFollowerRoute({
+    Key? key,
+    required FollowingAndFollowerListTab initialTab,
+    required String targetUserId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UserListFollowingOrFollowerRoute.name,
+          args: UserListFollowingOrFollowerRouteArgs(
+            key: key,
+            initialTab: initialTab,
+            targetUserId: targetUserId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UserListFollowingOrFollowerRoute';
+
+  static const PageInfo<UserListFollowingOrFollowerRouteArgs> page =
+      PageInfo<UserListFollowingOrFollowerRouteArgs>(name);
+}
+
+class UserListFollowingOrFollowerRouteArgs {
+  const UserListFollowingOrFollowerRouteArgs({
+    this.key,
+    required this.initialTab,
+    required this.targetUserId,
+  });
+
+  final Key? key;
+
+  final FollowingAndFollowerListTab initialTab;
+
+  final String targetUserId;
+
+  @override
+  String toString() {
+    return 'UserListFollowingOrFollowerRouteArgs{key: $key, initialTab: $initialTab, targetUserId: $targetUserId}';
+  }
+}
+
+/// generated route for
+/// [UserListLikedPage]
+class UserListLikedRoute extends PageRouteInfo<UserListLikedRouteArgs> {
+  UserListLikedRoute({
+    Key? key,
+    required String definitionId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UserListLikedRoute.name,
+          args: UserListLikedRouteArgs(
+            key: key,
+            definitionId: definitionId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UserListLikedRoute';
+
+  static const PageInfo<UserListLikedRouteArgs> page =
+      PageInfo<UserListLikedRouteArgs>(name);
+}
+
+class UserListLikedRouteArgs {
+  const UserListLikedRouteArgs({
+    this.key,
+    required this.definitionId,
+  });
+
+  final Key? key;
+
+  final String definitionId;
+
+  @override
+  String toString() {
+    return 'UserListLikedRouteArgs{key: $key, definitionId: $definitionId}';
+  }
+}
+
+/// generated route for
+/// [UserListMutedPage]
+class UserListMutedRoute extends PageRouteInfo<void> {
+  const UserListMutedRoute({List<PageRouteInfo>? children})
+      : super(
+          UserListMutedRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'UserListMutedRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [UserSearchPage]
+class UserSearchRoute extends PageRouteInfo<void> {
+  const UserSearchRoute({List<PageRouteInfo>? children})
+      : super(
+          UserSearchRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'UserSearchRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [UserSearchResultPage]
+class UserSearchResultRoute extends PageRouteInfo<UserSearchResultRouteArgs> {
+  UserSearchResultRoute({
+    Key? key,
+    required String searchWord,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UserSearchResultRoute.name,
+          args: UserSearchResultRouteArgs(
+            key: key,
+            searchWord: searchWord,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UserSearchResultRoute';
+
+  static const PageInfo<UserSearchResultRouteArgs> page =
+      PageInfo<UserSearchResultRouteArgs>(name);
+}
+
+class UserSearchResultRouteArgs {
+  const UserSearchResultRouteArgs({
+    this.key,
+    required this.searchWord,
+  });
+
+  final Key? key;
+
+  final String searchWord;
+
+  @override
+  String toString() {
+    return 'UserSearchResultRouteArgs{key: $key, searchWord: $searchWord}';
+  }
 }
 
 /// generated route for
@@ -945,6 +907,44 @@ class WordListRouteArgs {
   @override
   String toString() {
     return 'WordListRouteArgs{key: $key, selectedInitialSubGroup: $selectedInitialSubGroup}';
+  }
+}
+
+/// generated route for
+/// [WordSearchResultPage]
+class WordSearchResultRoute extends PageRouteInfo<WordSearchResultRouteArgs> {
+  WordSearchResultRoute({
+    Key? key,
+    required String searchWord,
+    List<PageRouteInfo>? children,
+  }) : super(
+          WordSearchResultRoute.name,
+          args: WordSearchResultRouteArgs(
+            key: key,
+            searchWord: searchWord,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'WordSearchResultRoute';
+
+  static const PageInfo<WordSearchResultRouteArgs> page =
+      PageInfo<WordSearchResultRouteArgs>(name);
+}
+
+class WordSearchResultRouteArgs {
+  const WordSearchResultRouteArgs({
+    this.key,
+    required this.searchWord,
+  });
+
+  final Key? key;
+
+  final String searchWord;
+
+  @override
+  String toString() {
+    return 'WordSearchResultRouteArgs{key: $key, searchWord: $searchWord}';
   }
 }
 

@@ -67,15 +67,15 @@ class _BasePageState extends ConsumerState<BasePage> {
         return AutoTabsRouter(
           routes: [
             const HomeRouterRoute(),
-            IndividualDictionaryRouterRoute(
+            DictionaryIndividualRouterRoute(
               children: [
-                IndividualDictionaryRoute(
+                DictionaryIndividualRoute(
                   targetUserId: currentUserId,
                   isTopRoute: true,
                 ),
               ],
             ),
-            const EveryoneDictionaryRouterRoute(),
+            const DictionaryEveryoneRouterRoute(),
           ],
           builder: (context, child) {
             final tabsRouter = context.tabsRouter;
