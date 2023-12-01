@@ -11,11 +11,14 @@ import '../../../../../core/common_provider/dialog_controller.dart';
 import '../../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../../../../core/common_widget/error_and_retry_widget.dart';
+import '../../../../../core/router/app_router.dart';
+import '../../../../../util/constant/default_text_for_ui.dart';
 import '../../../../../util/logger.dart';
+import '../../../../../util/mixin/presentation_mixin.dart';
 import '../../../application/user_profile_for_write_notifier.dart';
 
 @RoutePage()
-class EditProfilePage extends ConsumerWidget {
+class EditProfilePage extends ConsumerWidget with PresentationMixin {
   EditProfilePage({
     super.key,
   });
@@ -59,7 +62,7 @@ class EditProfilePage extends ConsumerWidget {
                 // キーボードを閉じる
                 primaryFocus?.unfocus();
 
-                if (!notifier.isChanged()) {
+                if (!notifier.isStateChanged()) {
                   // 初期表示時から入力内容に変更がない場合、確認ダイアログを表示せずに画面を閉じる
                   await context.popRoute();
                   return;
@@ -84,7 +87,17 @@ class EditProfilePage extends ConsumerWidget {
                       ? () async {
                           // キーボードを閉じる
                           primaryFocus?.unfocus();
-                          await notifier.edit();
+
+                          await executeWithOverlayLoading(
+                            ref,
+                            action: () async {
+                              await notifier.edit();
+                              await ref.read(appRouterProvider).pop();
+                            },
+                            successToastMessage: '保存しました！',
+                            errorToastMessage: '保存できませんでした。もう一度お試しください。',
+                            errorLogMessage: 'プロフィール編集時にエラーが発生。',
+                          );
                         }
                       : null,
                   child: Text(
@@ -128,22 +141,34 @@ class EditProfilePage extends ConsumerWidget {
                         position: position,
                         items: [
                           PullDownMenuItem(
-                            onTap: () {
-                              notifier.pickAndCropImage(ImageSource.camera);
+                            onTap: () async {
+                              await executeWithOverlayLoading(
+                                ref,
+                                action: () async => notifier
+                                    .pickAndCropImage(ImageSource.camera),
+                                errorLogMessage: '画像選択もしくは切り抜き時にエラーが発生。',
+                                errorToastMessage: defaultErrorToastText,
+                              );
                             },
                             title: '写真を撮る',
                             icon: CupertinoIcons.camera_fill,
                           ),
                           PullDownMenuItem(
-                            onTap: () {
-                              notifier.pickAndCropImage(ImageSource.gallery);
+                            onTap: () async {
+                              await executeWithOverlayLoading(
+                                ref,
+                                action: () async => notifier
+                                    .pickAndCropImage(ImageSource.gallery),
+                                errorLogMessage: '画像選択もしくは切り抜き時にエラーが発生。',
+                                errorToastMessage: defaultErrorToastText,
+                              );
                             },
                             title: 'アルバムから選択',
                             icon: CupertinoIcons.photo_fill,
                           ),
                           PullDownMenuItem(
                             isDestructive: true,
-                            onTap: notifier.resetCroppedFile,
+                            onTap: () => notifier.updateCroppedFileState(null),
                             title: 'もとの画像に戻す',
                             icon: CupertinoIcons.trash_fill,
                           ),
@@ -178,7 +203,7 @@ class EditProfilePage extends ConsumerWidget {
                     maxLength: userProfileForWrite.maxNameLength,
                     maxLines: null,
                     textInputAction: TextInputAction.next,
-                    onChanged: notifier.changeName,
+                    onChanged: notifier.updateNameState,
                     style: Theme.of(context).textTheme.titleLarge,
                     decoration: InputDecoration(
                       labelText: '名前',
@@ -191,7 +216,7 @@ class EditProfilePage extends ConsumerWidget {
                     initialValue: userProfileForWrite.bio,
                     maxLength: userProfileForWrite.maxBioLength,
                     maxLines: null,
-                    onChanged: notifier.changeBio,
+                    onChanged: notifier.updateBioState,
                     style: Theme.of(context).textTheme.titleLarge,
                     decoration: InputDecoration(
                       labelText: '自己紹介',
