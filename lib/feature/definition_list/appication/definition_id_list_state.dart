@@ -8,7 +8,7 @@ import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_follow/application/user_follow_state.dart';
 import '../domain/definition_id_list_state.dart';
-import '../repository/fetch_definition_repository.dart';
+import '../repository/definition_id_list_repository.dart';
 import '../util/definition_feed_type.dart';
 
 part 'definition_id_list_state.g.dart';
@@ -43,9 +43,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     final lastDoc =
         isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
-    return ref
-        .watch(fetchDefinitionRepositoryProvider)
-        .fetchHomeRecommendDefinitionIdListState(
+    return ref.watch(definitionIdListRepositoryProvider).fetchForHomeRecommend(
           currentUserId,
           mutedUserIdList,
           lastDoc,
@@ -74,9 +72,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     final lastDoc =
         isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
-    return ref
-        .read(fetchDefinitionRepositoryProvider)
-        .fetchHomeFollowingDefinitionIdListState(
+    return ref.read(definitionIdListRepositoryProvider).fetchForHomeFollowing(
           currentUserId,
           targetUserIdList,
           lastDoc,
@@ -99,9 +95,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     final lastDoc =
         isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
-    return ref
-        .watch(fetchDefinitionRepositoryProvider)
-        .fetchWordTopDefinitionIdListState(
+    return ref.watch(definitionIdListRepositoryProvider).fetchForWordTop(
           orderByType,
           currentUserId,
           mutedUserIdList,
@@ -125,8 +119,8 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
     return ref
-        .watch(fetchDefinitionRepositoryProvider)
-        .fetchProfileCreatedAtDefinitionIdListState(
+        .watch(definitionIdListRepositoryProvider)
+        .fetchForProfileCreatedAt(
           currentUserId,
           targetUserId!,
           lastDoc,
@@ -148,9 +142,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     final lastDoc =
         isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
-    return ref
-        .watch(fetchDefinitionRepositoryProvider)
-        .fetchLikedByUserDefinitionIdListState(
+    return ref.watch(definitionIdListRepositoryProvider).fetchForLikedByUser(
           currentUserId,
           targetUserId!,
           mutedUserIdList,
@@ -177,8 +169,8 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         isFirstFetch ? null : state.value?.lastReadQueryDocumentSnapshot;
 
     return ref
-        .watch(fetchDefinitionRepositoryProvider)
-        .fetchIndividualDictionaryDefinitionIdListState(
+        .watch(definitionIdListRepositoryProvider)
+        .fetchForIndividualDictionary(
           currentUserId,
           targetUserId!,
           initialSubGroup!,

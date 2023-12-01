@@ -10,8 +10,8 @@ import '../../../../../core/common_widget/stickey_tab_bar_deligate.dart';
 import '../../../../../util/extension/scroll_controller_extension.dart';
 import '../../../../../util/logger.dart';
 import '../../../../auth/application/auth_state.dart';
-import '../../../../definition/presentation/component/definition_list.dart';
-import '../../../../definition/util/definition_feed_type.dart';
+import '../../../../definition_list/presentation/definition_list.dart';
+import '../../../../definition_list/util/definition_feed_type.dart';
 import '../../../application/user_profile_state.dart';
 import 'profile_widget.dart';
 

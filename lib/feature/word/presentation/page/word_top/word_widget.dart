@@ -6,7 +6,7 @@ import '../../../../../core/common_widget/button/filled_button.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../auth/application/auth_state.dart';
 import '../../../../definition/domain/definition_for_write.dart';
-import '../../../../definition/util/write_definition_form_type.dart';
+import '../../../../definition/presentation/component/write_definition_base_page.dart';
 import '../../../domain/word.dart';
 
 class WordWidget extends ConsumerWidget {

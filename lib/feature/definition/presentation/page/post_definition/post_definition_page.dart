@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../application/definition_for_write_notifier.dart';
 import '../../../domain/definition_for_write.dart';
 import '../../../util/after_post_navigation_type.dart';
-import '../../../util/write_definition_form_type.dart';
 import '../../component/write_definition_base_page.dart';
 
 /// 定義を投稿するページ

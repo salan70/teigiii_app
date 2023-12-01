@@ -7,7 +7,6 @@ import '../../../../core/common_provider/dialog_controller.dart';
 import '../../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../application/definition_for_write_notifier.dart';
 import '../../domain/definition_for_write.dart';
-import '../../util/write_definition_form_type.dart';
 import 'select_post_type_button.dart';
 
 /// 定義を入力する画面のベースとなる画面。
@@ -128,4 +127,11 @@ class WriteDefinitionBasePage extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Definition新規投稿/編集時に入力するフォームの種類
+enum WriteDefinitionFormType {
+  word,
+  wordReading,
+  definition,
 }

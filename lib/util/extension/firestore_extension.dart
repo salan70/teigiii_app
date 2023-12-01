@@ -10,6 +10,6 @@ extension QueryDocumentSnapshotListExtension on List<QueryDocumentSnapshot> {
 
 extension QueryExtension on Query {
   /// [lastDocument] がnullの場合、最初のdocumentから取得する。
-  Query maybeStartAfterDocument(QueryDocumentSnapshot? lastDocument) =>
+  Query maybeStartAfterDocument(DocumentSnapshot? lastDocument) =>
       lastDocument == null ? this : startAfterDocument(lastDocument);
 }

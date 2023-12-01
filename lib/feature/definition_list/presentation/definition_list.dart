@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/infinity_scroll_widget.dart';
-import '../../../../util/constant/initial_main_group.dart';
-import '../../application/definition_id_list_state.dart';
-import '../../util/definition_feed_type.dart';
-import 'definition_tile.dart';
-import 'definition_tile_shimmer.dart';
+import '../../../core/common_widget/infinity_scroll_widget.dart';
+import '../../../util/constant/initial_main_group.dart';
+import '../../definition/presentation/component/definition_tile.dart';
+import '../../definition/presentation/component/definition_tile_shimmer.dart';
+import '../appication/definition_id_list_state.dart';
+import '../util/definition_feed_type.dart';
 
 class DefinitionList extends ConsumerWidget {
   const DefinitionList({

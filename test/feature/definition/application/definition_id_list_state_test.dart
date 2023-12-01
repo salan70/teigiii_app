@@ -4,11 +4,11 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/core/common_provider/toast_controller.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
-import 'package:teigi_app/feature/definition/application/definition_id_list_state.dart';
-import 'package:teigi_app/feature/definition/domain/definition_id_list_state.dart';
-import 'package:teigi_app/feature/definition/repository/fetch_definition_repository.dart';
 import 'package:teigi_app/feature/definition/repository/write_definition_repository.dart';
-import 'package:teigi_app/feature/definition/util/definition_feed_type.dart';
+import 'package:teigi_app/feature/definition_list/appication/definition_id_list_state.dart';
+import 'package:teigi_app/feature/definition_list/domain/definition_id_list_state.dart';
+import 'package:teigi_app/feature/definition_list/repository/definition_id_list_repository.dart';
+import 'package:teigi_app/feature/definition_list/util/definition_feed_type.dart';
 import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
 import 'package:teigi_app/feature/user_follow/application/user_follow_state.dart';
@@ -21,7 +21,7 @@ import 'definition_id_list_state_test.mocks.dart';
 
 @GenerateNiceMocks([
   MockSpec<WriteDefinitionRepository>(),
-  MockSpec<FetchDefinitionRepository>(),
+  MockSpec<DefinitionIdListRepository>(),
   MockSpec<UserProfileRepository>(),
   MockSpec<UserConfigRepository>(),
   MockSpec<UserFollowRepository>(),
@@ -42,7 +42,8 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   final mockWriteDefinitionRepository = MockWriteDefinitionRepository();
-  final mockFetchDefinitionRepository = MockFetchDefinitionRepository();
+  final mockDefinitionIdListRepository =
+      MockDefinitionIdListRepository();
   final mockUserProfileRepository = MockUserProfileRepository();
   final mockUserFollowRepository = MockUserFollowRepository();
   final mockUserConfigRepository = MockUserConfigRepository();
@@ -68,8 +69,8 @@ void main() {
             .overrideWith((ref) => mockFollowingUserIdList),
         writeDefinitionRepositoryProvider
             .overrideWithValue(mockWriteDefinitionRepository),
-        fetchDefinitionRepositoryProvider
-            .overrideWithValue(mockFetchDefinitionRepository),
+        definitionIdListRepositoryProvider
+            .overrideWithValue(mockDefinitionIdListRepository),
         userProfileRepositoryProvider
             .overrideWithValue(mockUserProfileRepository),
         userConfigRepositoryProvider
@@ -85,7 +86,7 @@ void main() {
 
   tearDown(() {
     reset(mockWriteDefinitionRepository);
-    reset(mockFetchDefinitionRepository);
+    reset(mockDefinitionIdListRepository);
     reset(mockUserProfileRepository);
     reset(mockUserFollowRepository);
     reset(mockUserConfigRepository);
@@ -96,7 +97,8 @@ void main() {
       // Mockの設定
       final mockDefinitionIdList = [mockDefinitionDoc.id];
       when(
-        mockFetchDefinitionRepository.fetchHomeRecommendDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeRecommend(
           any,
           any,
           any,
@@ -147,7 +149,8 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockFetchDefinitionRepository.fetchHomeRecommendDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeRecommend(
           userId,
           mockUserConfigDoc.mutedUserIdList,
           null,
@@ -162,7 +165,8 @@ void main() {
       ).thenAnswer((_) async => mockUserProfileDoc);
       final mockDefinitionIdList = [mockDefinitionDoc.id];
       when(
-        mockFetchDefinitionRepository.fetchHomeFollowingDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeRecommend(
           any,
           any,
           any,
@@ -214,7 +218,8 @@ void main() {
       // 想定通りにrepositoryの関数が呼ばれているか検証
       // TODO(me): mutedUserIdListを除外したuserIdListを引数に渡していることを検証
       verify(
-        mockFetchDefinitionRepository.fetchHomeFollowingDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeFollowing(
           any,
           any,
           null,
@@ -233,7 +238,8 @@ void main() {
         hasMore: true,
       );
       when(
-        mockFetchDefinitionRepository.fetchHomeRecommendDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeRecommend(
           any,
           any,
           null,
@@ -243,7 +249,8 @@ void main() {
       );
       final mockDefinitionIdList = [mockDefinitionDoc.id];
       when(
-        mockFetchDefinitionRepository.fetchHomeRecommendDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeRecommend(
           any,
           any,
           mockDefinitionIdListState.lastReadQueryDocumentSnapshot,
@@ -324,7 +331,8 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockFetchDefinitionRepository.fetchHomeRecommendDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeRecommend(
           userId,
           mockUserConfigDoc.mutedUserIdList,
           mockDefinitionIdListState.lastReadQueryDocumentSnapshot,
@@ -341,7 +349,8 @@ void main() {
         hasMore: true,
       );
       when(
-        mockFetchDefinitionRepository.fetchHomeFollowingDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeFollowing(
           any,
           any,
           any,
@@ -351,7 +360,8 @@ void main() {
       );
       final mockDefinitionIdList = [mockDefinitionDoc.id];
       when(
-        mockFetchDefinitionRepository.fetchHomeFollowingDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeFollowing(
           any,
           any,
           mockDefinitionIdListState.lastReadQueryDocumentSnapshot,
@@ -432,7 +442,8 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockFetchDefinitionRepository.fetchHomeFollowingDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeFollowing(
           any,
           any,
           mockDefinitionIdListState.lastReadQueryDocumentSnapshot,
@@ -449,7 +460,8 @@ void main() {
         hasMore: false,
       );
       when(
-        mockFetchDefinitionRepository.fetchHomeRecommendDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeRecommend(
           any,
           any,
           null,
@@ -494,7 +506,8 @@ void main() {
 
       // 1回しかrepositoryの関数が呼ばれていないことを検証
       verify(
-        mockFetchDefinitionRepository.fetchHomeRecommendDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeRecommend(
           any,
           any,
           any,
@@ -511,7 +524,8 @@ void main() {
         hasMore: true,
       );
       when(
-        mockFetchDefinitionRepository.fetchHomeRecommendDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeRecommend(
           any,
           any,
           any,
@@ -522,7 +536,8 @@ void main() {
       final testException =
           Exception('fetchHomeRecommendDefinitionIdList()で例外発生！！！');
       when(
-        mockFetchDefinitionRepository.fetchHomeRecommendDefinitionIdListState(
+        mockDefinitionIdListRepository
+            .fetchForHomeRecommend(
           any,
           any,
           mockDefinitionIdListState.lastReadQueryDocumentSnapshot,

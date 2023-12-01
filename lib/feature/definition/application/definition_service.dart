@@ -4,6 +4,7 @@ import '../../../core/common_provider/is_loading_overlay_state.dart';
 import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
+import '../../definition_list/appication/definition_id_list_state.dart';
 import '../../word/application/word_list_state_by_initial.dart';
 import '../../word/application/word_list_state_by_search_word.dart';
 import '../../word/application/word_state.dart';
@@ -11,7 +12,6 @@ import '../domain/definition.dart';
 import '../repository/like_definition_repository.dart';
 import '../repository/write_definition_repository.dart';
 import '../util/definition_post_type.dart';
-import 'definition_id_list_state.dart';
 import 'definition_state.dart';
 
 part 'definition_service.g.dart';
