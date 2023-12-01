@@ -6,7 +6,7 @@ import '../../../util/logger.dart';
 import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
-import '../../user_profile/application/user_profile_state.dart';
+import '../../user_follow/application/user_follow_state.dart';
 import '../domain/definition_id_list_state.dart';
 import '../repository/fetch_definition_repository.dart';
 import '../util/definition_feed_type.dart';

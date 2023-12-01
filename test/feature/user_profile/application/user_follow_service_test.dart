@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
-import 'package:teigi_app/feature/user_profile/application/user_follow_service.dart';
-import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart';
+import 'package:teigi_app/feature/user_follow/application/user_follow_service.dart';
+import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart';
 
 import 'user_follow_service_test.mocks.dart';
 

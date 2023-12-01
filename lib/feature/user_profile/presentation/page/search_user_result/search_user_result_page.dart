@@ -7,9 +7,9 @@ import '../../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../../util/logger.dart';
 import '../../../../auth/application/auth_state.dart';
 import '../../../application/user_profile_state.dart';
+import '../../component/profile_tile.dart';
+import '../../component/profile_tile_shimmer.dart';
 import '../../component/search_user_text_field.dart';
-import '../following_and_follower_list/profile_tile.dart';
-import '../following_and_follower_list/profile_tile_shimmer.dart';
 
 @RoutePage()
 class SearchUserResultPage extends ConsumerWidget {

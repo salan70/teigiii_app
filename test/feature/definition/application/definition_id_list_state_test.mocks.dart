@@ -24,16 +24,16 @@ import 'package:teigi_app/feature/user_config/repository/entity/user_config_docu
     as _i7;
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart'
     as _i18;
+import 'package:teigi_app/feature/user_follow/repository/entity/user_follow_count_document.dart'
+    as _i8;
+import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart'
+    as _i19;
 import 'package:teigi_app/feature/user_profile/domain/user_id_list_state.dart'
     as _i5;
 import 'package:teigi_app/feature/user_profile/domain/user_profile.dart'
     as _i17;
-import 'package:teigi_app/feature/user_profile/repository/entity/user_follow_count_document.dart'
-    as _i8;
 import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart'
     as _i6;
-import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart'
-    as _i19;
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart'
     as _i16;
 import 'package:teigi_app/feature/word/domain/word_list_state.dart' as _i9;

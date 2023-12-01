@@ -10,8 +10,8 @@ import '../../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../util/logger.dart';
 import '../../../../auth/application/auth_state.dart';
+import '../../../../user_follow/presentation/component/following_and_follower_count_widget.dart';
 import '../../../application/user_profile_state.dart';
-import 'following_and_follower_count_widget.dart';
 import 'profile_widget_shimmer.dart';
 
 class ProfileWidget extends ConsumerWidget {

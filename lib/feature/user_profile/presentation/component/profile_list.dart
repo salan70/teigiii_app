@@ -7,8 +7,8 @@ import '../../../../core/common_widget/infinity_scroll_widget.dart';
 import '../../../auth/application/auth_state.dart';
 import '../../application/user_id_list_state.dart';
 import '../../util/user_list_type.dart';
-import '../page/following_and_follower_list/profile_tile.dart';
-import '../page/following_and_follower_list/profile_tile_shimmer.dart';
+import 'profile_tile.dart';
+import 'profile_tile_shimmer.dart';
 
 class ProfileList extends ConsumerWidget {
   const ProfileList({

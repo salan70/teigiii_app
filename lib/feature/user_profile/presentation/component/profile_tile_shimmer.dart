@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/common_widget/shimmer_widget.dart';
+import '../../../../core/common_widget/shimmer_widget.dart';
 
 class ProfileTileShimmer extends StatelessWidget {
   const ProfileTileShimmer({super.key});

@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/core/common_provider/toast_controller.dart';
+import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart';
 import 'package:teigi_app/feature/user_profile/application/user_id_list_state.dart';
 import 'package:teigi_app/feature/user_profile/domain/user_id_list_state.dart';
-import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart';
 import 'package:teigi_app/feature/user_profile/util/user_list_type.dart';
 
 import '../../../mock/mock_data.dart';

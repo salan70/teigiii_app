@@ -3,9 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
+import 'package:teigi_app/feature/user_follow/application/user_follow_state.dart';
+import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart';
 import 'package:teigi_app/feature/user_profile/application/user_profile_state.dart';
 import 'package:teigi_app/feature/user_profile/domain/user_profile.dart';
-import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
 
 import '../../../mock/mock_data.dart';

@@ -11,8 +11,8 @@ import 'package:teigi_app/feature/definition/repository/write_definition_reposit
 import 'package:teigi_app/feature/definition/util/definition_feed_type.dart';
 import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
-import 'package:teigi_app/feature/user_profile/application/user_profile_state.dart';
-import 'package:teigi_app/feature/user_profile/repository/user_follow_repository.dart';
+import 'package:teigi_app/feature/user_follow/application/user_follow_state.dart';
+import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
 import 'package:teigi_app/feature/word/repository/word_repository.dart';
 

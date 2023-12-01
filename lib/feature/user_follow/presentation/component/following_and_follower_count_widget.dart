@@ -2,10 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_widget/shimmer_widget.dart';
-import '../../../../../core/router/app_router.dart';
-import '../../../../../util/logger.dart';
-import '../../../application/user_profile_state.dart';
+import '../../../../core/common_widget/shimmer_widget.dart';
+import '../../../../core/router/app_router.dart';
+import '../../../../util/logger.dart';
+import '../../application/user_follow_state.dart';
 
 class FollowingAndFollowerCountWidget extends ConsumerWidget {
   const FollowingAndFollowerCountWidget({
@@ -85,7 +85,9 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
         ],
       ),
       error: (error, stackTrace) {
-        logger.e('followCountの取得時にエラーが発生しました。 error: $error, stackTrace: $stackTrace');
+        logger.e(
+          'followCountの取得時にエラーが発生しました。 error: $error, stackTrace: $stackTrace',
+        );
         // フォローカウントのみのエラーはユーザーへの影響が少ないため、何も表示しない
         // フォローカウント以外にもエラーが有る場合、他画面でエラーが表示される想定
         return const SizedBox.shrink();

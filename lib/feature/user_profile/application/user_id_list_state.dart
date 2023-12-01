@@ -4,8 +4,8 @@ import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/logger.dart';
 import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../definition/repository/fetch_definition_repository.dart';
+import '../../user_follow/repository/user_follow_repository.dart';
 import '../domain/user_id_list_state.dart';
-import '../repository/user_follow_repository.dart';
 import '../util/user_list_type.dart';
 
 part 'user_id_list_state.g.dart';

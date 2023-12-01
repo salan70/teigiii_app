@@ -5,7 +5,7 @@ import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/config_constant.dart';
 import '../../../util/constant/firestore_collections.dart';
 import '../../../util/extension/firestore_extension.dart';
-import '../domain/user_id_list_state.dart';
+import '../../user_profile/domain/user_id_list_state.dart';
 import 'entity/user_follow_count_document.dart';
 
 part 'user_follow_repository.g.dart';

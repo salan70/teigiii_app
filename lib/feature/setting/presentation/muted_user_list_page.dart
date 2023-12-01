@@ -8,7 +8,7 @@ import '../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../core/common_widget/simple_widget_for_empty.dart';
 import '../../../util/logger.dart';
 import '../../user_config/application/user_config_state.dart';
-import '../../user_profile/presentation/page/following_and_follower_list/profile_tile.dart';
+import '../../user_profile/presentation/component/profile_tile.dart';
 
 @RoutePage()
 class MutedUserListPage extends ConsumerWidget {

@@ -5,7 +5,7 @@ import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../repository/user_follow_repository.dart';
-import 'user_profile_state.dart';
+import 'user_follow_state.dart';
 
 part 'user_follow_service.g.dart';
 
