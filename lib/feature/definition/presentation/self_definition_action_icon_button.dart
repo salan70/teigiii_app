@@ -8,7 +8,6 @@ import '../../../../core/common_provider/dialog_controller.dart';
 import '../../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
-import '../../../util/constant/default_text_for_ui.dart';
 import '../../../util/mixin/presentation_mixin.dart';
 import '../../word/application/word_state.dart';
 import '../application/definition_service.dart';
@@ -16,7 +15,8 @@ import '../domain/definition.dart';
 import '../util/after_post_navigation_type.dart';
 import '../util/definition_post_type.dart';
 
-class SelfDefinitionActionIconButton extends ConsumerWidget {
+class SelfDefinitionActionIconButton extends ConsumerWidget
+    with PresentationMixin {
   SelfDefinitionActionIconButton({super.key, required this.definition});
 
   final Definition definition;
@@ -60,12 +60,36 @@ class SelfDefinitionActionIconButton extends ConsumerWidget {
         PullDownMenuItem(
           title: 'この定義を削除',
           icon: CupertinoIcons.trash,
-          onTap: () => ref.read(dialogControllerProvider.notifier).show(
-                _DeleteConfirmDialog(
-                  definition: definition,
-                  onConfirmCompleted: context.popRoute,
-                ),
-              ),
+          onTap: () {
+            ref.read(dialogControllerProvider.notifier).show(
+                  ConfirmDialog(
+                    confirmMessage: '本当に削除してもよろしいですか？',
+                    onAccept: () async {
+                      await executeWithOverlayLoading(
+                        ref,
+                        action: () async {
+                          await ref
+                              .read(definitionServiceProvider)
+                              .deleteDefinition(definition);
+
+                          // ラグを防ぐため、待機する。
+                          await ref.read(
+                            wordProvider(definition.wordId).future,
+                          );
+
+                          if (!context.mounted) {
+                            return;
+                          }
+                          await context.popRoute();
+                        },
+                        showErrorToast: true,
+                        successToastMessage: '削除しました。',
+                      );
+                    },
+                    confirmButtonText: '削除する',
+                  ),
+                );
+          },
         ),
       ];
     }
@@ -165,55 +189,6 @@ class _CannotEditAlertDialog extends StatelessWidget {
   }
 }
 
-class _DeleteConfirmDialog extends ConsumerWidget with PresentationMixin {
-  const _DeleteConfirmDialog({
-    required this.definition,
-    required this.onConfirmCompleted,
-  });
-
-  final Definition definition;
-
-  // TODO(me): 削除完了後の画面遷移を、引数としてではなく、onConfirm 内に直接書きたい。
-  // この Widget の build 内で削除完了後の画面遷移を書いても
-  // うまく行かないため、引数として受け取っている。
-  // context をうまく扱えていないのが原因だと思われる。
-
-  /// 削除完了後に実行する処理で、画面遷移（`context.popRoute`）を想定している。
-  final VoidCallback onConfirmCompleted;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ConfirmDialog(
-      confirmMessage: '本当に削除してもよろしいですか？',
-      onConfirm: () async {
-        await executeWithOverlayLoading(
-          ref,
-          action: () async {
-            await ref
-                .read(definitionServiceProvider)
-                .deleteDefinition(definition);
-
-            // ラグを防ぐため、待機する。
-            await ref.read(wordProvider(definition.wordId).future);
-
-            // 削除完了後に、ダイアログを閉じる。
-            // 本来は ConfirmDialog の willPopOnConfirm を true にして閉じたい。
-            // が、そうすると、ref を破棄する関係でエラーになるため、このような実装にしている。
-            await ref.read(appRouterProvider).pop();
-
-            onConfirmCompleted();
-          },
-          errorLogMessage: '定義[${definition.id}]を削除時にエラーが発生。',
-          errorToastMessage: defaultErrorToastText,
-          successToastMessage: '削除しました。',
-        );
-      },
-      confirmButtonText: '削除する',
-      willPopOnConfirm: false,
-    );
-  }
-}
-
 class _ChangePostTypeConfirmDialog extends ConsumerWidget
     with PresentationMixin {
   const _ChangePostTypeConfirmDialog({required this.definition});
@@ -272,8 +247,7 @@ class _ChangePostTypeConfirmDialog extends ConsumerWidget
                     .updatePostType(definition);
                 await ref.read(appRouterProvider).pop();
               },
-              errorLogMessage: '公開設定更新時にエラーが発生。',
-              errorToastMessage: defaultErrorToastText,
+              showErrorToast: true,
               successToastMessage: afterUpdatePostType.completeChangeMessage,
             );
           },
