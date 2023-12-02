@@ -2,10 +2,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../auth/application/auth_state.dart';
 import '../../definition_list/appication/definition_id_list_state.dart';
-import '../../word/application/word_list_state_by_initial.dart';
-import '../../word/application/word_list_state_by_search_word.dart';
 import '../../word/application/word_state.dart';
 import '../../word/repository/word_repository.dart';
+import '../../word_list/application/word_list_state_by_initial.dart';
+import '../../word_list/application/word_list_state_by_search_word.dart';
 import '../domain/definition_for_write.dart';
 import '../repository/write_definition_repository.dart';
 import 'definition_state.dart';

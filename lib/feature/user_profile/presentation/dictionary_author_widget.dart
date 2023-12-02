@@ -7,7 +7,7 @@ import '../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/logger.dart';
-import '../../user_profile/application/user_profile_state.dart';
+import '../application/user_profile_state.dart';
 
 class DictionaryAuthorWidget extends ConsumerWidget {
   const DictionaryAuthorWidget({

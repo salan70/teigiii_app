@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/common_widget/button/to_setting_button.dart';
 import '../core/common_widget/error_and_retry_widget.dart';
 import '../feature/user_profile/application/user_profile_state.dart';
-import '../feature/word/presentation/dictionary_author_widget.dart';
+import '../feature/user_profile/presentation/dictionary_author_widget.dart';
 import '../feature/word/presentation/initial_main_group_list.dart';
 import '../feature/word/util/dictionary_page_type.dart';
 import '../util/logger.dart';

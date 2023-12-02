@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../core/common_widget/button/to_setting_button.dart';
 import '../feature/word/presentation/initial_main_group_list.dart';
-import '../feature/word/presentation/search_word_text_field.dart';
 import '../feature/word/util/dictionary_page_type.dart';
+import '../feature/word_list/presentation/search_word_text_field.dart';
 
 @RoutePage()
 class DictionaryEveryoneRouterPage extends AutoRouter {

@@ -6,7 +6,7 @@ part of 'word_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$wordHash() => r'78a024fc8401661aa0c91c527de12b8e1f3b34f5';
+String _$wordHash() => r'f49fb13fae49f1abda9610bdfb49bd782734f0c6';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,30 +29,30 @@ class _SystemHash {
   }
 }
 
-/// [wordId] に一致するWordを返す
+/// [wordId] に一致する [Word] を返す。
 ///
-/// 該当するWordが見つからない場合、nullを返す
+/// 該当する [Word] が見つからない場合、nullを返す。
 ///
 /// Copied from [word].
 @ProviderFor(word)
 const wordProvider = WordFamily();
 
-/// [wordId] に一致するWordを返す
+/// [wordId] に一致する [Word] を返す。
 ///
-/// 該当するWordが見つからない場合、nullを返す
+/// 該当する [Word] が見つからない場合、nullを返す。
 ///
 /// Copied from [word].
 class WordFamily extends Family<AsyncValue<Word?>> {
-  /// [wordId] に一致するWordを返す
+  /// [wordId] に一致する [Word] を返す。
   ///
-  /// 該当するWordが見つからない場合、nullを返す
+  /// 該当する [Word] が見つからない場合、nullを返す。
   ///
   /// Copied from [word].
   const WordFamily();
 
-  /// [wordId] に一致するWordを返す
+  /// [wordId] に一致する [Word] を返す。
   ///
-  /// 該当するWordが見つからない場合、nullを返す
+  /// 該当する [Word] が見つからない場合、nullを返す。
   ///
   /// Copied from [word].
   WordProvider call(
@@ -87,15 +87,15 @@ class WordFamily extends Family<AsyncValue<Word?>> {
   String? get name => r'wordProvider';
 }
 
-/// [wordId] に一致するWordを返す
+/// [wordId] に一致する [Word] を返す。
 ///
-/// 該当するWordが見つからない場合、nullを返す
+/// 該当する [Word] が見つからない場合、nullを返す。
 ///
 /// Copied from [word].
 class WordProvider extends AutoDisposeFutureProvider<Word?> {
-  /// [wordId] に一致するWordを返す
+  /// [wordId] に一致する [Word] を返す。
   ///
-  /// 該当するWordが見つからない場合、nullを返す
+  /// 該当する [Word] が見つからない場合、nullを返す。
   ///
   /// Copied from [word].
   WordProvider(

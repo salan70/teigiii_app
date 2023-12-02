@@ -7,10 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/common_widget/button/post_definition_fab.dart';
 import '../core/common_widget/infinity_scroll_widget.dart';
 import '../core/common_widget/simple_widget_for_empty.dart';
-import '../feature/word/application/word_list_state_by_initial.dart';
 import '../feature/word/domain/word.dart';
 import '../feature/word/presentation/word_tile.dart';
 import '../feature/word/presentation/word_tile_shimmer.dart';
+import '../feature/word_list/application/word_list_state_by_initial.dart';
 import '../util/constant/initial_main_group.dart';
 import '../util/extension/scroll_controller_extension.dart';
 

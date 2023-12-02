@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/router/app_router.dart';
-import '../feature/word/presentation/dictionary_author_widget.dart';
+import '../feature/user_profile/presentation/dictionary_author_widget.dart';
 import '../feature/word/presentation/index_tile.dart';
 import '../feature/word/util/dictionary_page_type.dart';
 import '../util/constant/initial_main_group.dart';

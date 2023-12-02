@@ -6,7 +6,7 @@ import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../domain/word_list_state.dart';
-import '../repository/word_repository.dart';
+import '../repository/fetch_word_list_repository.dart';
 
 part 'word_list_state_by_initial.g.dart';
 
@@ -27,7 +27,7 @@ class WordListStateByInitialNotifier extends _$WordListStateByInitialNotifier
       final currentUserId = ref.read(userIdProvider)!;
       final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
 
-      return ref.read(wordRepositoryProvider).fetchWordListStateByInitial(
+      return ref.read(fetchWordListRepositoryProvider).fetchWordListStateByInitial(
             initial,
             currentUserId,
             mutedUserIdList,
