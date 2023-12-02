@@ -7,13 +7,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../core/common_widget/avatar_network_image_widget.dart';
-import '../../../util/constant/default_text_for_ui.dart';
 import '../../../util/mixin/presentation_mixin.dart';
 import '../application/user_profile_for_write_notifier.dart';
 import '../domain/user_profile.dart';
 
 class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
-  ChangeableProfileImage({
+  const ChangeableProfileImage({
     super.key,
     required this.userProfileForWrite,
     required this.globalKey,
@@ -22,7 +21,7 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
   final UserProfile userProfileForWrite;
   final GlobalKey globalKey;
 
-  final avatarSize = AvatarSize.large;
+  AvatarSize get avatarSize => AvatarSize.large;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,7 +33,7 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
         final position = box!.localToGlobal(Offset.zero) & const Size(400, 80);
 
         final notifier = ref.read(userProfileForWriteNotifierProvider.notifier);
-        
+
         await showPullDownMenu(
           context: context,
           position: position,
@@ -45,8 +44,7 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
                   ref,
                   action: () async =>
                       notifier.pickAndCropImage(ImageSource.camera),
-                  errorLogMessage: '画像選択もしくは切り抜き時にエラーが発生。',
-                  errorToastMessage: defaultErrorToastText,
+                  showErrorToast: true,
                 );
               },
               title: '写真を撮る',
@@ -58,8 +56,7 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
                   ref,
                   action: () async =>
                       notifier.pickAndCropImage(ImageSource.gallery),
-                  errorLogMessage: '画像選択もしくは切り抜き時にエラーが発生。',
-                  errorToastMessage: defaultErrorToastText,
+                  showErrorToast: true,
                 );
               },
               title: 'アルバムから選択',
