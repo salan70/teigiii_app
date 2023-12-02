@@ -2,16 +2,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/common_provider/toast_controller.dart';
+import '../core/common_provider/dialog_controller.dart';
+import '../core/router/app_router.dart';
 import '../feature/definition/application/definition_for_write_notifier.dart';
 import '../feature/definition/domain/definition.dart';
 import '../feature/definition/presentation/write_definition_base_page.dart';
-import '../feature/definition/util/after_post_navigation_type.dart';
 import '../util/extension/date_time_extension.dart';
-import '../util/logger.dart';
+import '../util/mixin/presentation_mixin.dart';
 
 @RoutePage()
-class DefinitionEditPage extends ConsumerWidget {
+class DefinitionEditPage extends ConsumerWidget with PresentationMixin {
   const DefinitionEditPage({
     super.key,
     required this.initialDefinition,
@@ -23,117 +23,67 @@ class DefinitionEditPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final initialDefinitionForWrite = initialDefinition.toDefinitionForWrite();
 
-    final asyncDefinitionForWrite = ref
-        .watch(definitionForWriteNotifierProvider(initialDefinitionForWrite));
-    final notifier = ref.watch(
-      definitionForWriteNotifierProvider(initialDefinitionForWrite).notifier,
-    );
+    final definitionForWriteProvider =
+        definitionForWriteNotifierProvider(initialDefinitionForWrite);
 
-    /// 編集（保存）ができない旨を伝えるダイアログを表示する
-    Future<void> showAlertCannotEditDialog() async {
-      await showDialog<dynamic>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            contentPadding: const EdgeInsets.only(
-              top: 32,
-              right: 24,
-              left: 32,
-              bottom: 8,
-            ),
-            content: const Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '投稿から1時間が経過したため保存できませんでした。',
-                  overflow: TextOverflow.clip,
-                ),
-                SizedBox(height: 8),
-                Text(
-                  '代わりに、入力した内容で新規投稿しませんか？',
-                  overflow: TextOverflow.clip,
-                ),
-              ],
-            ),
-            actionsAlignment: MainAxisAlignment.spaceEvenly,
-            actionsPadding: const EdgeInsets.only(bottom: 16),
-            actions: [
-              InkWell(
-                onTap: () {
-                  context.popRoute();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    'キャンセル',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () async {
-                  await context.popRoute();
-                  await notifier.post(AfterPostNavigationType.toDetail);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    '新規投稿する',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    final asyncDefinitionForWrite = ref.watch(definitionForWriteProvider);
+    final notifier = ref.watch(definitionForWriteProvider.notifier);
 
     return asyncDefinitionForWrite.when(
       data: (definitionForWrite) {
-        final canEdit = notifier.canEdit();
-
         return WriteDefinitionBasePage(
           definitionForWrite: definitionForWrite,
           notifier: notifier,
           appBarActionWidget: InkWell(
-            onTap: canEdit
+            onTap: notifier.canEdit()
                 ? () async {
                     primaryFocus?.unfocus();
 
+                    // 投稿から1時間以内であれば、編集を保存する。
                     if (!initialDefinition.createdAt.hasOneHourPassed()) {
-                      // 投稿から1時間以内であれば、編集できる
-                      await notifier.edit();
+                      await executeWithOverlayLoading(
+                        ref,
+                        action: () async {
+                          await notifier.edit();
+                          await ref.read(appRouterProvider).pop();
+                        },
+                        showErrorToast: true,
+                        errorToastMessage: '保存できませんでした。もう一度お試しください。',
+                        successToastMessage: '保存しました！',
+                      );
+
                       return;
                     }
 
-                    if (notifier.canPost()) {
-                      await showAlertCannotEditDialog();
-                      return;
-                    }
+                    // 投稿から1時間以上経過している場合、新規投稿するかどうかを確認する。
+                    ref.read(dialogControllerProvider.notifier).show(
+                      _AlertCannotEditDialog(
+                        onPost: () async {
+                          late final String definitionId;
+                          await executeWithOverlayLoading(
+                            ref,
+                            action: () async {
+                              definitionId = await notifier.post();
+                            },
+                            showErrorToast: true,
+                            errorToastMessage: '投稿できませんでした。もう一度お試しください。',
+                            successToastMessage: '投稿しました！',
+                          );
 
-                    // canEdit()がtrueの場合、canPost()もtrueのため、
-                    // ここに到達することはない想定
-                    ref.read(toastControllerProvider.notifier).showToast(
-                          '保存できませんでした。もう一度お試しください。',
-                          causeError: true,
-                        );
-                    logger.e(
-                      '定義編集画面にて、canEdit()がtrueなのにcanPost()がfalseという想定外の事態が発生しました。',
+                          // 新規投稿した定義の詳細画面に遷移する。
+                          await ref.read(appRouterProvider).popAndPush(
+                                DefinitionDetailRoute(
+                                  definitionId: definitionId,
+                                ),
+                              );
+                        },
+                      ),
                     );
-                    return;
                   }
                 : null,
             child: Text(
               '保存',
-              style: canEdit
+              style: notifier.canEdit()
                   ? Theme.of(context).textTheme.titleLarge
                   : Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Theme.of(context)
@@ -161,6 +111,73 @@ class DefinitionEditPage extends ConsumerWidget {
           child: Text(error.toString()),
         ),
       ),
+    );
+  }
+}
+
+class _AlertCannotEditDialog extends ConsumerWidget {
+  const _AlertCannotEditDialog({required this.onPost});
+
+  /// 編集ができない際に、新規として投稿する場合に行う処理。
+  final VoidCallback onPost;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      contentPadding: const EdgeInsets.only(
+        top: 32,
+        right: 24,
+        left: 32,
+        bottom: 8,
+      ),
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '投稿から1時間が経過したため保存できませんでした。',
+            overflow: TextOverflow.clip,
+          ),
+          SizedBox(height: 8),
+          Text(
+            '代わりに、入力した内容で新規投稿しませんか？',
+            overflow: TextOverflow.clip,
+          ),
+        ],
+      ),
+      actionsAlignment: MainAxisAlignment.spaceEvenly,
+      actionsPadding: const EdgeInsets.only(bottom: 16),
+      actions: [
+        InkWell(
+          onTap: context.popRoute,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              'キャンセル',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            await context.popRoute();
+            onPost();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              '新規投稿する',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
