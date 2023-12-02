@@ -46,7 +46,7 @@ class IntroductionPage extends ConsumerWidget {
               const SizedBox(height: 24),
               PrimaryFilledButton(
                 onPressed: () {
-                  ref.read(dialogControllerProvider.notifier).show(
+                  ref.read(dialogControllerProvider).show(
                         const ConfirmAgreementDialog(),
                       );
                 },

@@ -32,7 +32,7 @@ class ConfirmAgreementDialog extends ConsumerWidget {
           ),
         ),
         InkWell(
-          onTap: ref.read(introductionServiceProvider.notifier).onAgreePolicy,
+          onTap: ref.read(introductionServiceProvider).onAgreePolicy,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(

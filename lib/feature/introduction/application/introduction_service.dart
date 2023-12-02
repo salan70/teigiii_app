@@ -1,4 +1,5 @@
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/router/app_router.dart';
@@ -7,9 +8,13 @@ import '../repository/is_first_launch_repository.dart';
 part 'introduction_service.g.dart';
 
 @riverpod
-class IntroductionService extends _$IntroductionService {
-  @override
-  FutureOr<void> build() {}
+IntroductionService introductionService(IntroductionServiceRef ref) =>
+    IntroductionService(ref);
+
+class IntroductionService {
+  IntroductionService(this.ref);
+
+  final Ref ref;
 
   /// 利用規約とプライバシーポリシーに同意した直後に行う処理。
   ///

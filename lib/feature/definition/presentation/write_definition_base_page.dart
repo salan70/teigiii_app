@@ -47,7 +47,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
             }
 
             // 確認ダイアログを表示
-            ref.read(dialogControllerProvider.notifier).show(
+            ref.read(dialogControllerProvider).show(
                   ConfirmDialog(
                     confirmMessage: '入力した内容は保存されません。\nよろしいですか？',
                     onAccept: context.popRoute,

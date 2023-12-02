@@ -16,7 +16,7 @@ class DeleteAccountButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Future<void> showCompleteDeleteAccountDialog() async {
-      ref.read(dialogControllerProvider.notifier).show(
+      ref.read(dialogControllerProvider).show(
             WillPopScope(
               onWillPop: () async => false,
               child: AlertDialog(
@@ -53,7 +53,7 @@ class DeleteAccountButton extends ConsumerWidget {
     }
 
     Future<void> showFinalConfirmDialog() async {
-      ref.read(dialogControllerProvider.notifier).show(
+      ref.read(dialogControllerProvider).show(
             ConfirmDialog(
               confirmMessage: '最終確認です。\n本当にアカウントを削除しても\nよろしいですか？',
               onAccept: () async {
@@ -66,7 +66,7 @@ class DeleteAccountButton extends ConsumerWidget {
     }
 
     Future<void> showInitialConfirmDialog() async {
-      ref.read(dialogControllerProvider.notifier).show(
+      ref.read(dialogControllerProvider).show(
             ConfirmDialog(
               confirmMessage: '全ての投稿が削除されます。\n本当にアカウントを削除しても\nよろしいですか？',
               onAccept: showFinalConfirmDialog,

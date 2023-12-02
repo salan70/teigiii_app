@@ -6,13 +6,13 @@ part of 'user_config_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userConfigServiceHash() => r'6bc807ee3c2ed862540e2154d1d59eca88947798';
+String _$userConfigServiceHash() => r'22ddd3bef2bfaf1376e3f88ddf008e7ddea1810a';
 
-/// See also [UserConfigService].
-@ProviderFor(UserConfigService)
+/// See also [userConfigService].
+@ProviderFor(userConfigService)
 final userConfigServiceProvider =
-    AutoDisposeAsyncNotifierProvider<UserConfigService, void>.internal(
-  UserConfigService.new,
+    AutoDisposeProvider<UserConfigService>.internal(
+  userConfigService,
   name: r'userConfigServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -21,6 +21,6 @@ final userConfigServiceProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$UserConfigService = AutoDisposeAsyncNotifier<void>;
+typedef UserConfigServiceRef = AutoDisposeProviderRef<UserConfigService>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

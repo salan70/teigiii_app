@@ -6,13 +6,12 @@ part of 'dialog_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dialogControllerHash() => r'5096357dd6ee1f0c791532a07cdf15fdc0078556';
+String _$dialogControllerHash() => r'e16ae15b97ca9f76f117a8b3f9b7edaa1efd46c8';
 
-/// See also [DialogController].
-@ProviderFor(DialogController)
-final dialogControllerProvider =
-    AutoDisposeNotifierProvider<DialogController, void>.internal(
-  DialogController.new,
+/// See also [dialogController].
+@ProviderFor(dialogController)
+final dialogControllerProvider = AutoDisposeProvider<DialogController>.internal(
+  dialogController,
   name: r'dialogControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -21,6 +20,6 @@ final dialogControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$DialogController = AutoDisposeNotifier<void>;
+typedef DialogControllerRef = AutoDisposeProviderRef<DialogController>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

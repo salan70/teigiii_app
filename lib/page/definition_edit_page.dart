@@ -56,7 +56,7 @@ class DefinitionEditPage extends ConsumerWidget with PresentationMixin {
                     }
 
                     // 投稿から1時間以上経過している場合、新規投稿するかどうかを確認する。
-                    ref.read(dialogControllerProvider.notifier).show(
+                    ref.read(dialogControllerProvider).show(
                       _AlertCannotEditDialog(
                         onPost: () async {
                           late final String definitionId;

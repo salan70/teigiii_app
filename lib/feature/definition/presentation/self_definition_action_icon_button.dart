@@ -36,7 +36,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget
           title: targetPostType.labelForChange,
           icon: targetPostType.icon,
           onTap: () => ref
-              .read(dialogControllerProvider.notifier)
+              .read(dialogControllerProvider)
               .show(_ChangePostTypeConfirmDialog(definition: definition)),
         ),
         PullDownMenuItem(
@@ -47,7 +47,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget
             final canEdit = !definition.createdAt.hasOneHourPassed();
             if (!canEdit) {
               ref
-                  .read(dialogControllerProvider.notifier)
+                  .read(dialogControllerProvider)
                   .show(_CannotEditAlertDialog(definition: definition));
               return;
             }
@@ -61,7 +61,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget
           title: 'この定義を削除',
           icon: CupertinoIcons.trash,
           onTap: () {
-            ref.read(dialogControllerProvider.notifier).show(
+            ref.read(dialogControllerProvider).show(
                   ConfirmDialog(
                     confirmMessage: '本当に削除してもよろしいですか？',
                     onAccept: () async {

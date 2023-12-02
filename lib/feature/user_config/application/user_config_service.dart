@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/is_loading_overlay_state.dart';
@@ -10,11 +11,15 @@ import 'user_config_state.dart';
 part 'user_config_service.g.dart';
 
 @riverpod
-class UserConfigService extends _$UserConfigService {
-  @override
-  FutureOr<void> build() {}
+UserConfigService userConfigService(UserConfigServiceRef ref) =>
+    UserConfigService(ref);
 
-  /// [targetUserId]をミュートする
+class UserConfigService {
+  UserConfigService(this.ref);
+
+  final Ref ref;
+
+  /// [targetUserId] をミュートする
   Future<void> muteUser(String targetUserId) async {
     await _modifyMutedUserList(
       targetUserId,
@@ -23,7 +28,7 @@ class UserConfigService extends _$UserConfigService {
     );
   }
 
-  /// [targetUserId]のミュートを解除削除する
+  /// [targetUserId] のミュートを解除削除する
   Future<void> unmuteUser(String targetUserId) async {
     await _modifyMutedUserList(
       targetUserId,

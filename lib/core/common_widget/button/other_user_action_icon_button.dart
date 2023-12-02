@@ -115,7 +115,7 @@ enum PullDownMenuItemForUserAction {
         return PullDownMenuItem(
           onTap: () async {
             await ref
-                .read(userConfigServiceProvider.notifier)
+                .read(userConfigServiceProvider)
                 .muteUser(targetUserProfile.id);
           },
           title: 'このユーザーをミュート',
@@ -125,7 +125,7 @@ enum PullDownMenuItemForUserAction {
         return PullDownMenuItem(
           onTap: () async {
             await ref
-                .read(userConfigServiceProvider.notifier)
+                .read(userConfigServiceProvider)
                 .unmuteUser(targetUserProfile.id);
           },
           title: 'このユーザーのミュートを解除',
