@@ -9,10 +9,22 @@ class ConfirmDialog extends StatelessWidget {
     required this.confirmMessage,
     required this.onConfirm,
     required this.confirmButtonText,
+    this.willPopOnConfirm = true,
   });
 
+  /// 本文として表示するメッセージ。
   final String confirmMessage;
+
+  /// [confirmMessage] をタップした際の処理。
+  ///
+  /// [willPopOnConfirm] が `true` の場合、
+  /// ここで指定した処理の前に、`context.popRoute()` が実行される。
   final VoidCallback onConfirm;
+
+  /// [onConfirm] が実行される前に、`context.popRoute()` を実行するかどうか。
+  final bool willPopOnConfirm;
+
+  /// 了承する旨のボタンのテキスト。
   final String confirmButtonText;
 
   @override
@@ -21,9 +33,7 @@ class ConfirmDialog extends StatelessWidget {
       content: Text(confirmMessage, textAlign: TextAlign.center),
       actions: [
         InkWell(
-          onTap: () {
-            context.popRoute();
-          },
+          onTap: context.popRoute,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
@@ -34,7 +44,10 @@ class ConfirmDialog extends StatelessWidget {
         ),
         InkWell(
           onTap: () async {
-            await context.popRoute();
+            if (willPopOnConfirm) {
+              await context.popRoute();
+            }
+
             onConfirm();
           },
           child: Padding(
