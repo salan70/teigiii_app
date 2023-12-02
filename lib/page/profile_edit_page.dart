@@ -50,7 +50,7 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
                 ref.read(dialogControllerProvider.notifier).show(
                       ConfirmDialog(
                         confirmMessage: '入力した内容は保存されません。\nよろしいですか？',
-                        onConfirm: () async => Navigator.of(context)
+                        onAccept: () async => Navigator.of(context)
                             .popUntil((route) => route.isFirst),
                         confirmButtonText: 'OK',
                       ),

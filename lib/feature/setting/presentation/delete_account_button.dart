@@ -56,7 +56,7 @@ class DeleteAccountButton extends ConsumerWidget {
       ref.read(dialogControllerProvider.notifier).show(
             ConfirmDialog(
               confirmMessage: '最終確認です。\n本当にアカウントを削除しても\nよろしいですか？',
-              onConfirm: () async {
+              onAccept: () async {
                 await ref.read(authServiceProvider.notifier).deleteUser();
                 await showCompleteDeleteAccountDialog();
               },
@@ -69,7 +69,7 @@ class DeleteAccountButton extends ConsumerWidget {
       ref.read(dialogControllerProvider.notifier).show(
             ConfirmDialog(
               confirmMessage: '全ての投稿が削除されます。\n本当にアカウントを削除しても\nよろしいですか？',
-              onConfirm: showFinalConfirmDialog,
+              onAccept: showFinalConfirmDialog,
               confirmButtonText: '削除する',
             ),
           );
