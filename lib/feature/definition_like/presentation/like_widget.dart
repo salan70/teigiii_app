@@ -65,16 +65,14 @@ class LikeWidget extends ConsumerWidget with PresentationMixin {
             var isActionCompleted = false;
             await executeWithOverlayLoading(
               ref,
-              action: () async {
-                await ref
-                    .read(likeDefinitionServiceProvider)
-                    .tapLike(definition);
-                isActionCompleted = true;
-                
-              },
-              errorLogMessage: 'いいねの登録もしくは解除時にエラーが発生。',
-              errorToastMessage: '失敗しました。もう一度お試しください。',
-            );
+                  action: () async {
+                    await ref
+                        .read(likeDefinitionServiceProvider)
+                        .tapLike(definition);
+                    isActionCompleted = true;
+                  },
+                  showErrorToast: true,
+                );
 
             if (isActionCompleted) {
               return !definition.isLikedByUser;

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common_widget/button/filled_button.dart';
 import '../../../../core/common_widget/button/outlined_button.dart';
 import '../../../../core/common_widget/shimmer_widget.dart';
-import '../../../../util/mixin/presentation_mixin.dart';
+import '../../../util/mixin/presentation_mixin.dart';
 import '../application/user_follow_service.dart';
 import '../application/user_follow_state.dart';
 
@@ -53,8 +53,8 @@ class _FollowButton extends ConsumerWidget with PresentationMixin {
           ref,
           action: () async =>
               ref.read(userFollowServiceProvider).follow(targetUserId),
-          errorLogMessage: 'フォローが失敗しました。もう一度お試しください。',
-          errorToastMessage: 'フォロー時にエラーが発生。',
+          showErrorToast: true,
+          errorToastMessage: 'フォローが失敗しました。もう一度お試しください。',
         );
       },
     );
@@ -77,8 +77,8 @@ class _UnfollowButton extends ConsumerWidget with PresentationMixin {
           ref,
           action: () async =>
               ref.read(userFollowServiceProvider).unfollow(targetUserId),
-          errorLogMessage: 'フォロー解除が失敗しました。もう一度お試しください。',
-          errorToastMessage: 'フォロー解除時にエラーが発生。',
+          showErrorToast: true,
+          errorToastMessage: 'フォロー解除が失敗しました。もう一度お試しください。',
         );
       },
     );
