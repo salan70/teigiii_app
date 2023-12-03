@@ -37,12 +37,8 @@ class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
                     ),
                     const SizedBox(height: 8),
                     PrimaryFilledButton(
-                      onPressed: () async {
-                        await context.navigateTo(const BaseRoute());
-                        await ref
-                            .read(authServiceProvider.notifier)
-                            .onAppLaunch();
-                      },
+                      onPressed: () async =>
+                          context.navigateTo(const BaseRoute()),
                       text: '新規作成',
                     ),
                   ],
@@ -61,7 +57,7 @@ class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
                 await executeWithOverlayLoading(
                   ref,
                   action: () async {
-                    await ref.read(authServiceProvider.notifier).deleteUser();
+                    await ref.read(authServiceProvider).deleteUser();
                     await showCompleteDeleteAccountDialog();
                   },
                 );

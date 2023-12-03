@@ -63,19 +63,6 @@ void main() {
     addTearDown(container.dispose);
   });
 
-  /// authServiceProviderをlistenし、AuthServiceを返す
-  AuthService init() {
-    container.listen(
-      authServiceProvider,
-      listener,
-      fireImmediately: true,
-    );
-
-    return container.read(
-      authServiceProvider.notifier,
-    );
-  }
-
   tearDown(() {
     reset(mockRegisterUserRepository);
     reset(mockDeviceInfoRepository);
@@ -108,13 +95,13 @@ void main() {
   group('onAppLaunch()', () {
     test('未ログイン: stateと、想定通りにrepositoryの関数が呼ばれることを検証', () async {
       // * Arrange
-      final authService = init();
+      final authService = container.read(authServiceProvider);
       const mockOsVersion = 'iOS 14.4';
       const mockAppVersion = '1.0.0';
       setupMock(mockOsVersion);
 
       // * Act
-      await authService.onAppLaunch();
+      await authService.signIn();
 
       // * Assert
       // stateの検証
@@ -141,13 +128,13 @@ void main() {
 
     test('ログイン済: stateと、想定通りにrepositoryの関数が呼ばれることを検証', () async {
       // * Arrange
-      final authService = init();
+      final authService = container.read(authServiceProvider);
       const mockOsVersion = 'iOS 14.4';
       setupMock(mockOsVersion);
       updateContainersOverride(isSignedIn: true);
 
       // * Act
-      await authService.onAppLaunch();
+      await authService.updateUserConfig();
 
       // * Assert
       // stateの検証
@@ -175,12 +162,12 @@ void main() {
 
     test('未ログイン（OSがiOSでもAndroidでもない場合）: 処理の中で渡される引数が想定通りであることを検証', () async {
       // * Arrange
-      final authService = init();
+      final authService = container.read(authServiceProvider);
       // iOSでもAndroidでもないOSを再現
       setupMock(null);
 
       // * Act
-      await authService.onAppLaunch();
+      await authService.signIn();
 
       // * Assert
       verify(
@@ -195,13 +182,13 @@ void main() {
 
     test('ログイン済（OSがiOSでもAndroidでもない場合）: 処理の中で渡される引数が想定通りであることを検証', () async {
       // * Arrange
-      final authService = init();
+      final authService = container.read(authServiceProvider);
       updateContainersOverride(isSignedIn: true);
       // iOSでもAndroidでもないOSを再現
       setupMock(null);
 
       // * Act
-      await authService.onAppLaunch();
+      await authService.updateUserConfig();
 
       // * Assert
       verify(
@@ -215,12 +202,12 @@ void main() {
 
     test('未ログイン（例外発生）: stateにAsyncErrorが入ることを検証', () async {
       // * Arrange
-      final authService = init();
+      final authService = container.read(authServiceProvider);
       final testException = Exception('signInAnonymously()で例外発生！！！');
       when(mockAuthRepository.signInAnonymously()).thenThrow(testException);
 
       // * Act
-      await authService.onAppLaunch();
+      await authService.signIn();
 
       // * Assert
       verifyInOrder([
@@ -241,14 +228,14 @@ void main() {
 
     test('ログイン済み（例外発生）: stateにAsyncErrorが入らないことを検証', () async {
       // * Arrange
-      final authService = init();
+      final authService = container.read(authServiceProvider);
       updateContainersOverride(isSignedIn: true);
       final testException = Exception('updateUserConfig()で例外発生！！！');
       when(mockRegisterUserRepository.updateVersionInfo(any, any, any))
           .thenThrow(testException);
 
       // * Act
-      await authService.onAppLaunch();
+      await authService.updateUserConfig();
 
       // * Assert
       verifyInOrder([

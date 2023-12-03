@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/firebase_providers.dart';
 import '../../../util/constant/firestore_collections.dart';
+import '../../../util/logger.dart';
 import 'entity/user_config_document.dart';
 
 part 'user_config_repository.g.dart';
@@ -22,6 +23,7 @@ class UserConfigRepository {
       firestore.collection(UserConfigsCollection.collectionName);
 
   Future<UserConfigDocument> fetchUserConfig(String userId) async {
+    logger.i('ユーザー設定情報を取得します。userId: $userId');
     final snapshot = await _userConfigsCollectionRef.doc(userId).get();
     return UserConfigDocument.fromFirestore(snapshot);
   }

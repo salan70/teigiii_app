@@ -5,6 +5,8 @@ import '../../core/common_provider/toast_controller.dart';
 import '../constant/default_text_for_ui.dart';
 import '../logger.dart';
 
+// TODO(me): トーストではなく、SnackBar を表示するようにする。
+
 /// Presentation 層で使用する Mixin.
 mixin PresentationMixin {
   /// オーバーレイローディングを伴い、

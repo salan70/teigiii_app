@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_service.dart';
+part of 'auth_guard.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authServiceHash() => r'59ada87680839a45e80351b4c22389be1c061875';
+String _$authGuardHash() => r'ca0593bb139c88d8f1aaa3c45b038e438ee3facd';
 
-/// See also [authService].
-@ProviderFor(authService)
-final authServiceProvider = AutoDisposeProvider<AuthService>.internal(
-  authService,
-  name: r'authServiceProvider',
+/// See also [authGuard].
+@ProviderFor(authGuard)
+final authGuardProvider = AutoDisposeProvider<AuthGuard>.internal(
+  authGuard,
+  name: r'authGuardProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$authServiceHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$authGuardHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef AuthServiceRef = AutoDisposeProviderRef<AuthService>;
+typedef AuthGuardRef = AutoDisposeProviderRef<AuthGuard>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

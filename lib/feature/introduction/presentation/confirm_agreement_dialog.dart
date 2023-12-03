@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common_widget/dialog/base_dialog.dart';
+import '../../../core/router/app_router.dart';
 import '../application/introduction_service.dart';
 
 class ConfirmAgreementDialog extends ConsumerWidget {
@@ -32,7 +33,14 @@ class ConfirmAgreementDialog extends ConsumerWidget {
           ),
         ),
         InkWell(
-          onTap: ref.read(introductionServiceProvider).onAgreePolicy,
+          onTap: () {
+            ref.read(introductionServiceProvider).onAgreePolicy();
+
+            if (!context.mounted) {
+              return;
+            }
+            context.pushRoute(const BaseRoute());
+          },
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(

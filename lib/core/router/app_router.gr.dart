@@ -166,6 +166,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SettingRouterPage(),
       );
     },
+    SignInFailureRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SignInFailurePage(),
+      );
+    },
     UserListFollowingOrFollowerRoute.name: (routeData) {
       final args = routeData.argsAs<UserListFollowingOrFollowerRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -720,6 +726,20 @@ class SettingRouterRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'SettingRouterRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SignInFailurePage]
+class SignInFailureRoute extends PageRouteInfo<void> {
+  const SignInFailureRoute({List<PageRouteInfo>? children})
+      : super(
+          SignInFailureRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SignInFailureRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

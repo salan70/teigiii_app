@@ -29,8 +29,5 @@ class IntroductionService {
     if (status == TrackingStatus.notDetermined) {
       await AppTrackingTransparency.requestTrackingAuthorization();
     }
-
-    // [BaseRoute] に遷移する。
-    await ref.read(appRouterProvider).popAndPush(const BaseRoute());
   }
 }

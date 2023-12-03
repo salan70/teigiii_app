@@ -23,6 +23,7 @@ import '../page/license_page.dart';
 import '../page/profile_edit_page.dart';
 import '../page/profile_top_page.dart';
 import '../page/setting_page.dart';
+import '../page/sign_in_failure_page.dart';
 import '../page/user_list_following_or_follower_page.dart';
 import '../page/user_list_liked_page.dart';
 import '../page/user_list_muted_page.dart';
@@ -31,6 +32,7 @@ import '../page/user_search_result_page.dart';
 import '../page/word_list_page.dart';
 import '../page/word_search_result_page.dart';
 import '../page/word_top_page.dart';
+import 'auth_guard.dart';
 import 'first_launch_guard.dart';
 
 part 'app_router.g.dart';
@@ -94,7 +96,7 @@ class AppRouter extends _$AppRouter {
         AdaptiveRoute(
           path: '/',
           page: BaseRoute.page,
-          guards: [ref.read(firstLaunchGuardProvider)],
+          guards: [ref.read(firstLaunchGuardProvider), ref.read(authGuardProvider)],
           children: [
             AdaptiveRoute(
               path: 'home',
@@ -179,6 +181,11 @@ class AppRouter extends _$AppRouter {
         AdaptiveRoute(
           path: '/profile_edit',
           page: ProfileEditRoute.page,
+          fullscreenDialog: true,
+        ),
+        AdaptiveRoute(
+          path: '/sign_in_failure',
+          page: SignInFailureRoute.page,
           fullscreenDialog: true,
         ),
       ];
