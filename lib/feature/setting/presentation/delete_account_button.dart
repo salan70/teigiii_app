@@ -6,9 +6,10 @@ import '../../../core/common_provider/dialog_controller.dart';
 import '../../../core/common_widget/button/filled_button.dart';
 import '../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../../core/router/app_router.dart';
+import '../../../util/mixin/presentation_mixin.dart';
 import '../../auth/application/auth_service.dart';
 
-class DeleteAccountButton extends ConsumerWidget {
+class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
   const DeleteAccountButton({
     super.key,
   });
@@ -57,8 +58,13 @@ class DeleteAccountButton extends ConsumerWidget {
             ConfirmDialog(
               confirmMessage: '最終確認です。\n本当にアカウントを削除しても\nよろしいですか？',
               onAccept: () async {
-                await ref.read(authServiceProvider.notifier).deleteUser();
-                await showCompleteDeleteAccountDialog();
+                await executeWithOverlayLoading(
+                  ref,
+                  action: () async {
+                    await ref.read(authServiceProvider.notifier).deleteUser();
+                    await showCompleteDeleteAccountDialog();
+                  },
+                );
               },
               confirmButtonText: '削除する',
             ),
