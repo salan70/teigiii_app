@@ -2,15 +2,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/common_widget/button/to_search_user_button.dart';
-import '../../../core/common_widget/simple_widget_for_empty.dart';
-import '../../../core/common_widget/stickey_tab_bar_deligate.dart';
-import '../../../util/extension/scroll_controller_extension.dart';
-import '../feature/auth/application/auth_state.dart';
-import '../feature/user_follow/application/user_follow_state.dart';
-import '../feature/user_list/presentation/profile_list.dart';
-import '../feature/user_list/util/user_list_type.dart';
-import '../feature/user_profile/application/user_profile_state.dart';
+import '../../../../core/common_widget/button/to_search_user_button.dart';
+import '../../../../core/common_widget/simple_widget_for_empty.dart';
+import '../../../../core/common_widget/stickey_tab_bar_deligate.dart';
+import '../../../../util/extension/scroll_controller_extension.dart';
+import '../../feature/auth/application/auth_state.dart';
+import '../../feature/user_follow/application/user_follow_state.dart';
+import '../../feature/user_list/presentation/profile_list.dart';
+import '../../feature/user_list/util/user_list_type.dart';
+import '../../feature/user_profile/application/user_profile_state.dart';
 
 @RoutePage()
 class UserListFollowingOrFollowerPage extends ConsumerWidget {

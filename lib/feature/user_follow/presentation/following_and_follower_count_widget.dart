@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common_widget/shimmer_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/logger.dart';
-import '../../../page/user_list_following_or_follower_page.dart';
+import '../../../core/page/user_list_following_or_follower_page.dart';
 import '../application/user_follow_state.dart';
 
 class FollowingAndFollowerCountWidget extends ConsumerWidget {

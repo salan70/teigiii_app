@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import '../core/common_widget/button/to_setting_button.dart';
-import '../feature/word/presentation/initial_main_group_list.dart';
-import '../feature/word/util/dictionary_page_type.dart';
-import '../feature/word_list/presentation/search_word_text_field.dart';
+import '../../feature/word/presentation/initial_main_group_list.dart';
+import '../../feature/word/util/dictionary_page_type.dart';
+import '../../feature/word_list/presentation/search_word_text_field.dart';
+import '../common_widget/button/to_setting_button.dart';
 
 @RoutePage()
 class DictionaryEveryoneRouterPage extends AutoRouter {

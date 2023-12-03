@@ -3,16 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/common_widget/button/post_definition_fab.dart';
-import '../core/common_widget/error_and_retry_widget.dart';
-import '../core/common_widget/stickey_tab_bar_deligate.dart';
-import '../feature/definition_list/presentation/definition_list.dart';
-import '../feature/definition_list/util/definition_feed_type.dart';
-import '../feature/word/application/word_state.dart';
-import '../feature/word/presentation/word_page_shimmer.dart';
-import '../feature/word/presentation/word_widget.dart';
-import '../util/extension/scroll_controller_extension.dart';
-import '../util/logger.dart';
+import '../../feature/definition_list/presentation/definition_list.dart';
+import '../../feature/definition_list/util/definition_feed_type.dart';
+import '../../feature/word/application/word_state.dart';
+import '../../feature/word/presentation/word_page_shimmer.dart';
+import '../../feature/word/presentation/word_widget.dart';
+import '../../util/extension/scroll_controller_extension.dart';
+import '../../util/logger.dart';
+import '../common_widget/button/post_definition_fab.dart';
+import '../common_widget/error_and_retry_widget.dart';
+import '../common_widget/stickey_tab_bar_deligate.dart';
 
 @RoutePage()
 class WordTopPage extends ConsumerWidget {

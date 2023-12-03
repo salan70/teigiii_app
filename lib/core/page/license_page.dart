@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/common_widget/dialog/loading_dialog.dart';
-import '../feature/user_config/application/user_config_state.dart';
+import '../../../../core/common_widget/dialog/loading_dialog.dart';
+import '../../feature/user_config/application/user_config_state.dart';
 
 // TODO(me): CircleProgressIndicatorをCupertinoのにしたい
 @RoutePage()

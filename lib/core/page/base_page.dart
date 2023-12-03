@@ -3,15 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/common_provider/key_provider.dart';
-import '../core/common_provider/toast_controller.dart';
-import '../core/common_widget/dialog/loading_dialog.dart';
-import '../core/common_widget/error_and_retry_widget.dart';
-import '../core/router/app_router.dart';
-import '../feature/auth/application/auth_service.dart';
-import '../feature/auth/application/auth_state.dart';
-import '../util/extension/scroll_controller_extension.dart';
-import '../util/logger.dart';
+import '../../feature/auth/application/auth_service.dart';
+import '../../feature/auth/application/auth_state.dart';
+import '../../util/extension/scroll_controller_extension.dart';
+import '../../util/logger.dart';
+import '../common_provider/key_provider.dart';
+import '../common_provider/toast_controller.dart';
+import '../common_widget/dialog/loading_dialog.dart';
+import '../common_widget/error_and_retry_widget.dart';
+import '../router/app_router.dart';
 
 // 参考
 // https://zenn.dev/flutteruniv_dev/articles/20230427-095829-flutter-auto-route#うまくいくパターン

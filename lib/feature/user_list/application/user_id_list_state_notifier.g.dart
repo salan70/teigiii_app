@@ -7,7 +7,7 @@ part of 'user_id_list_state_notifier.dart';
 // **************************************************************************
 
 String _$userIdListStateNotifierHash() =>
-    r'3e7be60cd6155786150f6524e125928dd40c7bb4';
+    r'7957cc89931257af2edfd333da8f2e0a6685fdc9';
 
 /// Copied from Dart SDK
 class _SystemHash {

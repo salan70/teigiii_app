@@ -2,14 +2,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../core/common_widget/error_and_retry_widget.dart';
-import '../../../../../util/logger.dart';
-import '../feature/auth/application/auth_state.dart';
-import '../feature/user_follow/presentation/follow_or_unfollow_button.dart';
-import '../feature/user_profile/presentation/profile_tile.dart';
-import '../feature/user_profile/presentation/profile_tile_shimmer.dart';
-import '../feature/user_search/application/user_search_state.dart';
-import '../feature/user_search/presentation/search_user_text_field.dart';
+import '../../../../../../core/common_widget/error_and_retry_widget.dart';
+import '../../../../../../util/logger.dart';
+import '../../feature/auth/application/auth_state.dart';
+import '../../feature/user_follow/presentation/follow_or_unfollow_button.dart';
+import '../../feature/user_profile/presentation/profile_tile.dart';
+import '../../feature/user_profile/presentation/profile_tile_shimmer.dart';
+import '../../feature/user_search/application/user_search_state.dart';
+import '../../feature/user_search/presentation/search_user_text_field.dart';
 
 @RoutePage()
 class UserSearchResultPage extends ConsumerWidget {

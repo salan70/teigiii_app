@@ -3,15 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/common_provider/dialog_controller.dart';
-import '../core/common_widget/avatar_network_image_widget.dart';
-import '../core/common_widget/dialog/confirm_dialog.dart';
-import '../core/common_widget/error_and_retry_widget.dart';
-import '../core/router/app_router.dart';
-import '../feature/user_profile/application/user_profile_for_write_notifier.dart';
-import '../feature/user_profile/presentation/changeable_profile_image.dart';
-import '../util/logger.dart';
-import '../util/mixin/presentation_mixin.dart';
+import '../../feature/user_profile/application/user_profile_for_write_notifier.dart';
+import '../../feature/user_profile/presentation/changeable_profile_image.dart';
+import '../../util/logger.dart';
+import '../../util/mixin/presentation_mixin.dart';
+import '../common_provider/dialog_controller.dart';
+import '../common_widget/avatar_network_image_widget.dart';
+import '../common_widget/dialog/confirm_dialog.dart';
+import '../common_widget/error_and_retry_widget.dart';
+import '../router/app_router.dart';
 
 @RoutePage()
 class ProfileEditPage extends ConsumerWidget with PresentationMixin {

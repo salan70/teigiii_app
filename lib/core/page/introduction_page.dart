@@ -2,11 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/common_provider/dialog_controller.dart';
-import '../core/common_provider/launch_url.dart';
-import '../core/common_widget/button/filled_button.dart';
-import '../feature/introduction/presentation/confirm_agreement_dialog.dart';
-import '../util/constant/url.dart';
+import '../../feature/introduction/presentation/confirm_agreement_dialog.dart';
+import '../../util/constant/url.dart';
+import '../common_provider/dialog_controller.dart';
+import '../common_provider/launch_url.dart';
+import '../common_widget/button/filled_button.dart';
 
 @RoutePage()
 class IntroductionPage extends ConsumerWidget {

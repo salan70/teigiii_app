@@ -2,14 +2,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/common_provider/key_provider.dart';
-import '../core/common_widget/button/post_definition_fab.dart';
-import '../core/common_widget/button/to_setting_button.dart';
-import '../core/common_widget/simple_widget_for_empty.dart';
-import '../core/common_widget/stickey_tab_bar_deligate.dart';
-import '../feature/definition_list/presentation/definition_list.dart';
-import '../feature/definition_list/util/definition_feed_type.dart';
-import '../util/extension/scroll_controller_extension.dart';
+import '../../feature/definition_list/presentation/definition_list.dart';
+import '../../feature/definition_list/util/definition_feed_type.dart';
+import '../../util/extension/scroll_controller_extension.dart';
+import '../common_provider/key_provider.dart';
+import '../common_widget/button/post_definition_fab.dart';
+import '../common_widget/button/to_setting_button.dart';
+import '../common_widget/simple_widget_for_empty.dart';
+import '../common_widget/stickey_tab_bar_deligate.dart';
 
 @RoutePage()
 class HomeRouterPage extends AutoRouter {

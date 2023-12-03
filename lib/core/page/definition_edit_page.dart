@@ -2,13 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/common_provider/dialog_controller.dart';
-import '../core/router/app_router.dart';
-import '../feature/definition/application/definition_for_write_notifier.dart';
-import '../feature/definition/domain/definition.dart';
-import '../feature/definition/presentation/write_definition_base_page.dart';
-import '../util/extension/date_time_extension.dart';
-import '../util/mixin/presentation_mixin.dart';
+import '../../feature/definition/application/definition_for_write_notifier.dart';
+import '../../feature/definition/domain/definition.dart';
+import '../../feature/definition/presentation/write_definition_base_page.dart';
+import '../../util/extension/date_time_extension.dart';
+import '../../util/mixin/presentation_mixin.dart';
+import '../common_provider/dialog_controller.dart';
+import '../router/app_router.dart';
 
 @RoutePage()
 class DefinitionEditPage extends ConsumerWidget with PresentationMixin {

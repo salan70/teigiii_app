@@ -2,18 +2,18 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/common_widget/button/other_user_action_icon_button.dart';
-import '../core/common_widget/button/post_definition_fab.dart';
-import '../core/common_widget/button/to_search_user_button.dart';
-import '../core/common_widget/simple_widget_for_empty.dart';
-import '../core/common_widget/stickey_tab_bar_deligate.dart';
-import '../feature/auth/application/auth_state.dart';
-import '../feature/definition_list/presentation/definition_list.dart';
-import '../feature/definition_list/util/definition_feed_type.dart';
-import '../feature/user_profile/application/user_profile_state.dart';
-import '../feature/user_profile/presentation/profile_widget.dart';
-import '../util/extension/scroll_controller_extension.dart';
-import '../util/logger.dart';
+import '../../feature/auth/application/auth_state.dart';
+import '../../feature/definition_list/presentation/definition_list.dart';
+import '../../feature/definition_list/util/definition_feed_type.dart';
+import '../../feature/user_profile/application/user_profile_state.dart';
+import '../../feature/user_profile/presentation/profile_widget.dart';
+import '../../util/extension/scroll_controller_extension.dart';
+import '../../util/logger.dart';
+import '../common_widget/button/other_user_action_icon_button.dart';
+import '../common_widget/button/post_definition_fab.dart';
+import '../common_widget/button/to_search_user_button.dart';
+import '../common_widget/simple_widget_for_empty.dart';
+import '../common_widget/stickey_tab_bar_deligate.dart';
 
 @RoutePage()
 class ProfileTopPage extends ConsumerWidget {
