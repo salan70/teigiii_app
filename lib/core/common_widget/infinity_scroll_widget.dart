@@ -7,6 +7,7 @@ import '../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../util/interface/list_state.dart';
 import '../../../util/logger.dart';
 import '../../feature/admob/presentation/banner_ad_widget.dart';
+import '../common_provider/toast_controller.dart';
 
 class InfinityScrollWidget extends ConsumerWidget {
   InfinityScrollWidget({
@@ -67,11 +68,26 @@ class InfinityScrollWidget extends ConsumerWidget {
       additionalOnRefresh?.call();
     }
 
+    // エラーが発生した場合、ログ出力とトースト表示を行う。
+    ref.listen(listStateNotifierProvider, (previous, next) {
+      next.when(
+        data: (_) {},
+        error: (e, s) {
+          // ログ表示する。
+          logger.e('error: $e, stackTrace: $s');
+          ref
+              .read(toastControllerProvider.notifier)
+              .showToast('読み込めませんでした。もう一度お試しください。', causeError: true);
+        },
+        loading: () {},
+      );
+    });
+
     return asyncListState.when(
       data: (listState) {
         return NotificationListener<ScrollEndNotification>(
           onNotification: (notification) {
-            // 画面の一番下までスクロールしたかどうかを判定
+            // 画面の一番下までスクロールしたかどうかを判定する。
             if (notification.metrics.extentAfter == 0) {
               fetchMore();
               return true;
@@ -99,16 +115,12 @@ class InfinityScrollWidget extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        logger.e('error: $error, stackTrace: $stackTrace');
-
-        // 初回読み込み時にエラーが発生し、再読み込みしている場合
+        // 初回読み込み時にエラーが発生し、再読み込みしている場合。
         if (asyncListState.isRefreshing && !asyncListState.hasValue) {
-          return const Center(
-            child: CupertinoActivityIndicator(),
-          );
+          return const Center(child: CupertinoActivityIndicator());
         }
 
-        // 取得済みのデータがある場合、それを表示する
+        // 取得済みのデータがある場合、それを表示する。
         if (asyncListState.hasValue) {
           return _StateScrollBar(
             globalKey: globalKey,
@@ -126,7 +138,7 @@ class InfinityScrollWidget extends ConsumerWidget {
           );
         }
 
-        // 取得済みのデータがない（初回読み込みが失敗した）場合を想定したエラー表示
+        // 取得済みのデータがない（初回読み込みが失敗した）場合を想定したエラー表示。
         return Padding(
           padding: const EdgeInsets.only(top: 32),
           child: Center(
@@ -136,7 +148,7 @@ class InfinityScrollWidget extends ConsumerWidget {
           ),
         );
       },
-      // 初回読み込み時
+      // 初回ローディング時。
       loading: () {
         return Padding(
           padding: contentPadding,
@@ -155,9 +167,9 @@ class InfinityScrollWidget extends ConsumerWidget {
   }
 }
 
-/// [ListState] を無限スクロールで表示するWidget。
+/// [ListState] を無限スクロールで表示する Widget.
 ///
-/// スワイプリフレッシュ, ListView , ListView の一番下に表示する Widget ([bottomWidget])
+/// スワイプリフレッシュ, ListView, ListView の一番下に表示する Widget ([bottomWidget])
 /// を内包している。
 class _StateScrollBar extends StatelessWidget {
   const _StateScrollBar({
@@ -201,7 +213,7 @@ class _StateScrollBar extends StatelessWidget {
             sliver: SliverToBoxAdapter(
               child: asyncListState.value!.list.isEmpty
                   // 表示件数がある程度多い状態から、0件になるような refresh を
-                  // した際のエラーを回避するために、[SingleChildScrollView]で囲っている。
+                  // した際のエラーを回避するために、SingleChildScrollView で囲っている。
                   ? SingleChildScrollView(
                       controller: scrollController,
                       child: emptyWidget ?? const SizedBox.shrink(),
@@ -212,11 +224,11 @@ class _StateScrollBar extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: asyncListState.value!.list.length,
                       itemBuilder: (context, index) {
-                        // バナー広告を表示させる場合
+                        // バナー広告を表示させる場合。
                         if (showBannerAd) {
                           return Column(
                             children: [
-                              // 7件ごとにバナー広告を表示させる
+                              // 7件ごとにバナー広告を表示させる。
                               (index % 7 == 0 && index != 0)
                                   ? const _BannerAdTile()
                                   : const SizedBox.shrink(),
@@ -225,7 +237,7 @@ class _StateScrollBar extends StatelessWidget {
                           );
                         }
 
-                        // バナー広告を表示させない場合
+                        // バナー広告を表示させない場合。
                         return tileBuilder(asyncListState.value!.list[index]);
                       },
                     ),
@@ -243,17 +255,17 @@ class _StateScrollBar extends StatelessWidget {
   }
 }
 
-/// 無限スクロールにて、エラー発生時にListの下部に表示させる Widget
+/// 無限スクロールにて、エラー発生時にListの下部に表示させる Widget.
 class _BottomWidgetWhenError extends StatelessWidget {
   const _BottomWidgetWhenError({
     required this.fetchMore,
     required this.asyncListState,
   });
 
-  /// 再読み込みで行う処理
+  /// 再読み込みで行う処理。
   ///
   /// 無限スクロールの追加読み込みでエラーが発生した場合に、
-  /// 再読み込みとして行う処理のため、fetchMore（追加読み込み）を想定している
+  /// 再読み込みとして行う処理のため、 fetchMore （追加読み込み）を想定している。
   final VoidCallback fetchMore;
   final AsyncValue<ListState?> asyncListState;
 
@@ -296,7 +308,7 @@ class _BottomWidgetWhenError extends StatelessWidget {
   }
 }
 
-/// 無限スクロールにて、表示させるバナー広告
+/// 無限スクロールにて、表示させるバナー広告。
 class _BannerAdTile extends StatelessWidget {
   const _BannerAdTile();
 

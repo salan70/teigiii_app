@@ -9,7 +9,6 @@ import '../../../feature/user_config/application/user_config_state.dart';
 import '../../../feature/user_profile/application/user_profile_state.dart';
 import '../../../feature/user_profile/domain/user_profile.dart';
 import '../../../util/constant/url.dart';
-import '../../../util/logger.dart';
 import '../../../util/mixin/presentation_mixin.dart';
 import '../../common_provider/launch_url.dart';
 
@@ -25,7 +24,6 @@ class OtherUserActionIconButton extends ConsumerWidget with PresentationMixin {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncMutedUserIdList = ref.watch(mutedUserIdListProvider);
-    logger.i('build async: $asyncMutedUserIdList');
 
     // プルダウンメニューの項目を作成する。
     List<PullDownMenuEntry> createMenuItems({

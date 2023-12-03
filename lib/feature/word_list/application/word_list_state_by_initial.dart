@@ -1,7 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/common_provider/toast_controller.dart';
-import '../../../util/logger.dart';
 import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../auth/application/auth_state.dart';
 import '../../user_config/application/user_config_state.dart';
@@ -20,28 +18,19 @@ class WordListStateByInitialNotifier extends _$WordListStateByInitialNotifier
       _fetchList(isFirstFetch: true);
 
   Future<WordListState> _fetchList({required bool isFirstFetch}) async {
+    final currentUserId = ref.read(userIdProvider)!;
+    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
     final lastDocument =
         isFirstFetch ? null : state.value!.lastReadQueryDocumentSnapshot;
 
-    try {
-      final currentUserId = ref.read(userIdProvider)!;
-      final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
-
-      return ref.read(fetchWordListRepositoryProvider).fetchWordListStateByInitial(
-            initial,
-            currentUserId,
-            mutedUserIdList,
-            lastDocument,
-          );
-    } on Exception catch (e, stackTrace) {
-      logger.e('$e, stackTrace: $stackTrace');
-      ref
-          .read(toastControllerProvider.notifier)
-          .showToast('読み込めませんでした。もう一度お試しください。', causeError: true);
-
-      // stateの更新を移譲するため、rethrow
-      rethrow;
-    }
+    return ref
+        .read(fetchWordListRepositoryProvider)
+        .fetchWordListStateByInitial(
+          initial,
+          currentUserId,
+          mutedUserIdList,
+          lastDocument,
+        );
   }
 
   Future<void> fetchMore() async {
