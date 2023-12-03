@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../util/constant/initial_main_group.dart';
@@ -193,12 +191,6 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
   Future<DefinitionIdListState> _fetchBasedOnType({
     required bool isFirstFetch,
   }) async {
-    // TODO(me): デバッグ用のためリリース時に削除する
-    // 1/2の確率でエラーを発生させる
-    if (Random().nextBool()) {
-      // await Future<void>.delayed(const Duration(seconds: 2));
-      throw Exception('やばいで！！！！！');
-    }
     switch (definitionFeedType) {
       case DefinitionFeedType.homeRecommend:
         return _fetchForHomeRecommend(isFirstFetch: isFirstFetch);
