@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../feature/definition/util/write_definition_form_type.dart';
+import '../../../feature/definition/presentation/write_definition_base_page.dart';
 import '../../router/app_router.dart';
 
 /// 定義投稿画面へ遷移するFAB
@@ -16,7 +16,7 @@ class PostDefinitionFAB extends StatelessWidget {
       elevation: 3,
       onPressed: () {
         context.pushRoute(
-          PostDefinitionRoute(
+          DefinitionPostRoute(
             initialDefinitionForWrite: null,
             autoFocusForm: WriteDefinitionFormType.word,
           ),

@@ -7,7 +7,7 @@ part of 'definition_for_write_notifier.dart';
 // **************************************************************************
 
 String _$definitionForWriteNotifierHash() =>
-    r'ab285e7ec27712673dde511ce502a3efadf4115b';
+    r'40f6b48142ee5eb7847ca99bccbc7597b78dfc46';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,34 +40,26 @@ abstract class _$DefinitionForWriteNotifier
 }
 
 /// 更新時などTextField等に初期表示したい値がある場合、
-/// [definitionForWrite]として渡すこと
-///
-/// ない場合はnullを渡すこと
+/// [definitionForWrite] として渡す。
 ///
 /// Copied from [DefinitionForWriteNotifier].
 @ProviderFor(DefinitionForWriteNotifier)
 const definitionForWriteNotifierProvider = DefinitionForWriteNotifierFamily();
 
 /// 更新時などTextField等に初期表示したい値がある場合、
-/// [definitionForWrite]として渡すこと
-///
-/// ない場合はnullを渡すこと
+/// [definitionForWrite] として渡す。
 ///
 /// Copied from [DefinitionForWriteNotifier].
 class DefinitionForWriteNotifierFamily
     extends Family<AsyncValue<DefinitionForWrite>> {
   /// 更新時などTextField等に初期表示したい値がある場合、
-  /// [definitionForWrite]として渡すこと
-  ///
-  /// ない場合はnullを渡すこと
+  /// [definitionForWrite] として渡す。
   ///
   /// Copied from [DefinitionForWriteNotifier].
   const DefinitionForWriteNotifierFamily();
 
   /// 更新時などTextField等に初期表示したい値がある場合、
-  /// [definitionForWrite]として渡すこと
-  ///
-  /// ない場合はnullを渡すこと
+  /// [definitionForWrite] として渡す。
   ///
   /// Copied from [DefinitionForWriteNotifier].
   DefinitionForWriteNotifierProvider call(
@@ -103,18 +95,14 @@ class DefinitionForWriteNotifierFamily
 }
 
 /// 更新時などTextField等に初期表示したい値がある場合、
-/// [definitionForWrite]として渡すこと
-///
-/// ない場合はnullを渡すこと
+/// [definitionForWrite] として渡す。
 ///
 /// Copied from [DefinitionForWriteNotifier].
 class DefinitionForWriteNotifierProvider
     extends AutoDisposeAsyncNotifierProviderImpl<DefinitionForWriteNotifier,
         DefinitionForWrite> {
   /// 更新時などTextField等に初期表示したい値がある場合、
-  /// [definitionForWrite]として渡すこと
-  ///
-  /// ない場合はnullを渡すこと
+  /// [definitionForWrite] として渡す。
   ///
   /// Copied from [DefinitionForWriteNotifier].
   DefinitionForWriteNotifierProvider(

@@ -7,12 +7,19 @@ class ConfirmDialog extends StatelessWidget {
   const ConfirmDialog({
     super.key,
     required this.confirmMessage,
-    required this.onConfirm,
+    required this.onAccept,
     required this.confirmButtonText,
   });
 
+  /// 本文として表示するメッセージ。
   final String confirmMessage;
-  final VoidCallback onConfirm;
+
+  /// [confirmMessage] をタップした際の処理。
+  ///
+  /// ここで指定した処理の前に、`context.popRoute()` が実行される。
+  final VoidCallback onAccept;
+
+  /// 了承する旨のボタンのテキスト。
   final String confirmButtonText;
 
   @override
@@ -21,9 +28,7 @@ class ConfirmDialog extends StatelessWidget {
       content: Text(confirmMessage, textAlign: TextAlign.center),
       actions: [
         InkWell(
-          onTap: () {
-            context.popRoute();
-          },
+          onTap: context.popRoute,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
@@ -35,7 +40,7 @@ class ConfirmDialog extends StatelessWidget {
         InkWell(
           onTap: () async {
             await context.popRoute();
-            onConfirm();
+            onAccept();
           },
           child: Padding(
             padding: const EdgeInsets.all(16),

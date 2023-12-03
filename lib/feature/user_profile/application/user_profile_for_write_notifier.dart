@@ -1,12 +1,9 @@
 import 'dart:io';
 
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/common_provider/is_loading_overlay_state.dart';
-import '../../../core/common_provider/toast_controller.dart';
-import '../../../core/router/app_router.dart';
-import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
 import '../domain/user_profile.dart';
 import '../repository/image_repository.dart';
@@ -16,7 +13,7 @@ import 'user_profile_state.dart';
 
 part 'user_profile_for_write_notifier.g.dart';
 
-/// UserProfileの更新に関する処理を行う
+/// [UserProfile] の更新に関する処理を行う。
 @riverpod
 class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
   @override
@@ -28,109 +25,88 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
     return _initialState = initialUserProfile;
   }
 
-  /// 初期時の[UserProfile].
-  /// 現在の状態と比較するために使用する
+  /// 初期時の [UserProfile]。
+  ///
+  /// 現在の状態と比較するために使用する。
   late final UserProfile _initialState;
 
-  void changeName(String name) {
-    state = AsyncData(state.value!.copyWith(name: name));
-  }
+  void updateNameState(String name) =>
+      state = AsyncData(state.value!.copyWith(name: name));
 
-  void changeBio(String bio) {
-    state = AsyncData(state.value!.copyWith(bio: bio));
-  }
+  void updateBioState(String bio) =>
+      state = AsyncData(state.value!.copyWith(bio: bio));
 
-  void _changeProfileImageUrl(String profileImageUrl) {
-    state = AsyncData(state.value!.copyWith(profileImageUrl: profileImageUrl));
-  }
+  void _updateProfileImageUrlState(String profileImageUrl) => state =
+      AsyncData(state.value!.copyWith(profileImageUrl: profileImageUrl));
 
-  Future<void> pickAndCropImage(ImageSource imageSource) async {
-    final isLoadingOverlayNotifier =
-        ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
-    final imageRepository = ref.read(imageRepositoryProvider);
-
-    // 画像を選択
-    try {
-      final pickedFile = await imageRepository.pickImage(imageSource);
-      if (pickedFile == null) {
-        isLoadingOverlayNotifier.finishLoading();
-        return;
-      }
-
-      // 画像を切り抜き
-      final croppedFile = await imageRepository.cropImage(pickedFile.path);
-      if (croppedFile == null) {
-        isLoadingOverlayNotifier.finishLoading();
-        return;
-      }
+  void updateCroppedFileState(CroppedFile? croppedFile) =>
       state = AsyncData(state.value!.copyWith(croppedFile: croppedFile));
-    } on Exception catch (e, stackTrace) {
-      logger.e('画像選択もしくは切り抜き時にエラーが発生 error: $e, stackTrace: $stackTrace');
 
-      ref
-          .read(toastControllerProvider.notifier)
-          .showToast('エラーが発生しました。もう一度お試しください');
-      isLoadingOverlayNotifier.finishLoading();
+  bool canEdit() => state.value!.isValidAllFields() && isStateChanged();
+
+  /// 初期値と比較して、変更があるかどうか。
+  bool isStateChanged() => state.value != _initialState;
+
+  /// 画像を選択し、切り抜き、state を更新する。
+  ///
+  /// 画像の選択、もしくは、切り抜きがキャンセルされた場合は、
+  /// state を更新せずにキャンセルした時点で処理を終える。
+  Future<void> pickAndCropImage(ImageSource imageSource) async {
+    final pickedFile = await _pickImage(imageSource);
+
+    // 画像が選択されなかった場合は処理を終える。
+    if (pickedFile == null) {
       return;
     }
 
-    isLoadingOverlayNotifier.finishLoading();
+    final croppedFile = await _cropImage(pickedFile.path);
+
+    // 切り抜かれなかった場合は処理を終える。
+    if (croppedFile == null) {
+      return;
+    }
+    updateCroppedFileState(croppedFile);
   }
 
-  void resetCroppedFile() {
-    state = AsyncData(state.value!.copyWith(croppedFile: null));
-  }
+  /// 画像を選択する。
+  ///
+  /// 途中でキャンセルするなど、画像を選択しなかった場合はnullを返す。
+  Future<XFile?> _pickImage(ImageSource imageSource) async =>
+      ref.read(imageRepositoryProvider).pickImage(imageSource);
+
+  /// 画像を切り抜く。
+  ///
+  /// 途中でキャンセルするなど、画像を切り抜かなかった場合はnullを返す。
+  Future<CroppedFile?> _cropImage(String path) async =>
+      ref.read(imageRepositoryProvider).cropImage(path);
 
   Future<void> edit() async {
-    final isLoadingOverlayNotifier =
-        ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
-    final toastNotifier = ref.read(toastControllerProvider.notifier);
+    // 必要があれば画像をアップロードする。
+    await _maybeUploadImage();
 
-    try {
-      // 新たに画像が選択されているかどうか
-      if (state.value!.croppedFile != null) {
-        // 画像をアップロードし、stateを更新
-        final profileImageUrl = await _uploadImage();
-        _changeProfileImageUrl(profileImageUrl);
-      }
+    // プロフィールを更新する。
+    await ref
+        .read(userProfileRepositoryProvider)
+        .updateUserProfile(state.value!);
 
-      // プロフィールを更新
-      await ref.read(userProfileRepositoryProvider).updateUserProfile(
-            state.value!,
-          );
-
-      // プロフィールを更新
-    } on Exception catch (e, stackTrace) {
-      logger.e('プロフィール編集時にエラーが発生 error: $e, stackTrace: $stackTrace');
-      toastNotifier.showToast(
-        '保存できませんでした。もう一度お試しください。',
-        causeError: true,
-      );
-      isLoadingOverlayNotifier.finishLoading();
-      return;
-    }
-
-    // UIを更新するためにinvalidateする
     final userId = ref.read(userIdProvider)!;
     ref.invalidate(userProfileProvider(userId));
-
-    isLoadingOverlayNotifier.finishLoading();
-    await ref.read(appRouterProvider).pop();
-    toastNotifier.showToast('保存しました！');
   }
 
-  /// 画像をアップロードし、ダウンロードURLを返す
+  /// 必要があれば画像をアップロードし、 state を更新する。
+  Future<void> _maybeUploadImage() async {
+    // 新たに画像が選択されているかどうか。
+    if (state.value!.croppedFile != null) {
+      // 画像をアップロードし、stateを更新する。
+      final profileImageUrl = await _uploadImage();
+      _updateProfileImageUrlState(profileImageUrl);
+    }
+  }
+
+  /// 画像をアップロードし、ダウンロードURLを返す。
   Future<String> _uploadImage() async {
     final userId = ref.read(userIdProvider)!;
     final file = File(state.value!.croppedFile!.path);
     return ref.read(storageRepositoryProvider).uploadFile(userId, file);
-  }
-
-  bool canEdit() {
-    return state.value!.isValidAllFields() && isChanged();
-  }
-
-  bool isChanged() {
-    return state.value != _initialState;
   }
 }

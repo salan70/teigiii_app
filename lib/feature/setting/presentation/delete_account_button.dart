@@ -6,9 +6,10 @@ import '../../../core/common_provider/dialog_controller.dart';
 import '../../../core/common_widget/button/filled_button.dart';
 import '../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../../core/router/app_router.dart';
+import '../../../util/mixin/presentation_mixin.dart';
 import '../../auth/application/auth_service.dart';
 
-class DeleteAccountButton extends ConsumerWidget {
+class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
   const DeleteAccountButton({
     super.key,
   });
@@ -16,7 +17,7 @@ class DeleteAccountButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Future<void> showCompleteDeleteAccountDialog() async {
-      ref.read(dialogControllerProvider.notifier).show(
+      ref.read(dialogControllerProvider).show(
             WillPopScope(
               onWillPop: () async => false,
               child: AlertDialog(
@@ -36,12 +37,8 @@ class DeleteAccountButton extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     PrimaryFilledButton(
-                      onPressed: () async {
-                        await context.navigateTo(const BaseRoute());
-                        await ref
-                            .read(authServiceProvider.notifier)
-                            .onAppLaunch();
-                      },
+                      onPressed: () async =>
+                          context.navigateTo(const BaseRoute()),
                       text: '新規作成',
                     ),
                   ],
@@ -53,12 +50,17 @@ class DeleteAccountButton extends ConsumerWidget {
     }
 
     Future<void> showFinalConfirmDialog() async {
-      ref.read(dialogControllerProvider.notifier).show(
+      ref.read(dialogControllerProvider).show(
             ConfirmDialog(
               confirmMessage: '最終確認です。\n本当にアカウントを削除しても\nよろしいですか？',
-              onConfirm: () async {
-                await ref.read(authServiceProvider.notifier).deleteUser();
-                await showCompleteDeleteAccountDialog();
+              onAccept: () async {
+                await executeWithOverlayLoading(
+                  ref,
+                  action: () async {
+                    await ref.read(authServiceProvider).deleteUser();
+                    await showCompleteDeleteAccountDialog();
+                  },
+                );
               },
               confirmButtonText: '削除する',
             ),
@@ -66,10 +68,10 @@ class DeleteAccountButton extends ConsumerWidget {
     }
 
     Future<void> showInitialConfirmDialog() async {
-      ref.read(dialogControllerProvider.notifier).show(
+      ref.read(dialogControllerProvider).show(
             ConfirmDialog(
               confirmMessage: '全ての投稿が削除されます。\n本当にアカウントを削除しても\nよろしいですか？',
-              onConfirm: showFinalConfirmDialog,
+              onAccept: showFinalConfirmDialog,
               confirmButtonText: '削除する',
             ),
           );

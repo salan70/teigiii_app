@@ -3,26 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
-import 'package:teigi_app/feature/definition/application/definition_service.dart';
-import 'package:teigi_app/feature/definition/repository/like_definition_repository.dart';
+import 'package:teigi_app/feature/definition_like/application/like_definition_service.dart';
+import 'package:teigi_app/feature/definition_like/repository/like_definition_repository.dart';
 
 import '../../../mock/mock_data.dart';
 import 'definition_service_test.mocks.dart';
 
 @GenerateNiceMocks([
   MockSpec<LikeDefinitionRepository>(),
-  MockSpec<Listener<AsyncValue<void>>>(),
 ])
-
-// ignore: one_member_abstracts, unreachable_from_main
-abstract class Listener<T> {
-// ignore: unreachable_from_main
-  void call(T? previous, T next);
-}
-
 void main() {
   final mockLikeDefinitionRepository = MockLikeDefinitionRepository();
-  final listener = MockListener();
 
   late ProviderContainer container;
 
@@ -39,26 +30,12 @@ void main() {
 
   tearDown(() {
     reset(mockLikeDefinitionRepository);
-    reset(listener);
   });
-
-  /// definitionServiceProviderをlistenし、DefinitionServiceを返す
-  DefinitionService init() {
-    container.listen(
-      definitionServiceProvider,
-      listener,
-      fireImmediately: true,
-    );
-
-    return container.read(
-      definitionServiceProvider.notifier,
-    );
-  }
 
   group('tapLike()', () {
     test('いいね登録: stateと、想定通りにrepositoryの関数が呼ばれることを検証', () async {
       // * Arrange
-      final definitionService = init();
+      final definitionService = container.read(likeDefinitionServiceProvider);
       // いいね登録のため、isLikedByUserがfalseのDefinitionを用意
       final definition = mockDefinition.copyWith(isLikedByUser: false);
 
@@ -66,15 +43,6 @@ void main() {
       await definitionService.tapLike(definition);
 
       // * Assert
-      // stateの検証
-      verifyInOrder([
-        // build()時
-        listener.call(null, const AsyncData(null)),
-        // tapLike()時もstateは変わらない
-      ]);
-      // 他にlistenerが発火されないことを検証
-      verifyNoMoreInteractions(listener);
-
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
         mockLikeDefinitionRepository.likeDefinition(definition.id, any),
@@ -86,7 +54,7 @@ void main() {
 
     test('いいね解除: stateと、想定通りにrepositoryの関数が呼ばれることを検証', () async {
       // * Arrange
-      final definitionService = init();
+      final definitionService = container.read(likeDefinitionServiceProvider);
       // いいね解除のため、isLikedByUserがtrueのDefinitionを用意
       final definition = mockDefinition.copyWith(isLikedByUser: true);
 
@@ -94,15 +62,6 @@ void main() {
       await definitionService.tapLike(definition);
 
       // * Assert
-      // stateの検証
-      verifyInOrder([
-        // build()時
-        listener.call(null, const AsyncData(null)),
-        // tapLike()後もstateは変わらない
-      ]);
-      // 他にlistenerが発火されないことを検証
-      verifyNoMoreInteractions(listener);
-
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
         mockLikeDefinitionRepository.unlikeDefinition(definition.id, any),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../router/app_router.dart';
@@ -6,9 +7,13 @@ import '../router/app_router.dart';
 part 'dialog_controller.g.dart';
 
 @riverpod
-class DialogController extends _$DialogController {
-  @override
-  void build() {}
+DialogController dialogController(DialogControllerRef ref) =>
+    DialogController(ref);
+
+class DialogController {
+  DialogController(this.ref);
+
+  final Ref ref;
 
   void show(Widget dialog, {bool barrierDismissible = false}) {
     showDialog<void>(

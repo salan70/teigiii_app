@@ -1,21 +1,20 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/common_provider/flavor_state.dart';
-import '../../../core/common_provider/is_loading_overlay_state.dart';
-import '../../../core/common_provider/toast_controller.dart';
 import '../../../util/logger.dart';
 import '../../definition/repository/fetch_definition_repository.dart';
-import '../../definition/repository/like_definition_repository.dart';
 import '../../definition/repository/write_definition_repository.dart';
+import '../../definition_like/repository/like_definition_repository.dart';
 import '../../user_config/application/user_config_state.dart';
 import '../../user_config/repository/device_info_repository.dart';
 import '../../user_config/repository/user_config_repository.dart';
-import '../../user_profile/application/user_id_list_state.dart';
+import '../../user_follow/repository/user_follow_repository.dart';
+import '../../user_list/application/user_id_list_state_notifier.dart';
+import '../../user_list/util/user_list_type.dart';
 import '../../user_profile/domain/user_profile.dart';
 import '../../user_profile/repository/storage_repository.dart';
-import '../../user_profile/repository/user_follow_repository.dart';
 import '../../user_profile/repository/user_profile_repository.dart';
-import '../../user_profile/util/user_list_type.dart';
 import '../repository/auth_repository.dart';
 import '../repository/register_user_repository.dart';
 import '../util/constant.dart';
@@ -24,79 +23,82 @@ import 'auth_state.dart';
 part 'auth_service.g.dart';
 
 @riverpod
-class AuthService extends _$AuthService {
-  @override
-  FutureOr<void> build() async {}
+AuthService authService(AuthServiceRef ref) => AuthService(ref);
 
-  /// アプリ起動時に行うAuth関連の処理
+class AuthService {
+  AuthService(this.ref);
+
+  final Ref ref;
+
+  /// 匿名ログインし、ユーザー情報を登録する。
   ///
-  /// 初回ログイン時にエラーが発生した場合、[state]が[AsyncValue.error]になる
-  /// この場合、以降のアプリ上での操作の大半ができなくなることを考慮して、エラーハンドリングを行うこと
-  ///
-  /// 2回目以降のログイン時にエラーが発生した場合は、[state]が[AsyncValue.error]にならない
-  Future<void> onAppLaunch() async {
-    state = const AsyncValue.loading();
+  /// アプリ起動時に、ログインしていない場合に呼ばれることを想定している。
+  Future<void> signIn() async {
+    // 匿名ユーザーとして登録する。
+    await ref.read(authRepositoryProvider).signInAnonymously();
 
-    if (ref.read(isSignedInProvider)) {
-      // * ログインしている場合
-      logger.i('ログイン済みです。');
-
-      // _updateUserConfig()時のエラーは直接ユーザーに影響が想定のため、
-      // AsyncValue.guard()で囲わず、エラーをログ出力するだけとしている
-      try {
-        await _updateUserConfig();
-      } on Exception catch (e, s) {
-        logger.e('UserConfigの更新に失敗しました。 error:$e, stackTrace:$s');
-      }
-      state = const AsyncValue.data(null);
-      return;
-    }
-
-    // * ログインしていない場合
-    logger.i('ログインしていないため、匿名ログインします');
     try {
-      await ref.read(authRepositoryProvider).signInAnonymously();
-
-      // ユーザー情報を登録
+      // ユーザー情報を登録する。
       await _initUser();
     } on Exception catch (e, s) {
-      logger.e('匿名ログイン時にエラーが発生しました。 error:$e, stackTrace:$s');
-      ref
-          .read(toastControllerProvider.notifier)
-          .showToast('エラーが発生しました。再度お試しください。');
+      logger.e('匿名ログイン時にエラーが発生したため、アカウントを削除します。'
+          ' error:$e, stackTrace:$s');
 
-      // 匿名ログインは成功しているが、
-      // ユーザー情報登録時にエラーが発生した場合、アカウントを削除する
-      if (ref.read(authRepositoryProvider).currentUser != null) {
-        await ref.read(authRepositoryProvider).deleteUser();
-      }
-      state = AsyncValue.error(e, s);
-      return;
+      // ユーザー情報登録時にエラーが発生した場合、
+      // 最初からやり直すためにアカウントを削除する。
+      await ref.read(authRepositoryProvider).deleteUser();
+      rethrow;
     }
-    state = const AsyncValue.data(null);
+  }
+
+  /// 初回登録時に必要なユーザー情報を登録する。
+  Future<void> _initUser() async {
+    final userId = ref.read(userIdProvider)!;
+    logger.i('[$userId]として新規ログインしました。ユーザー情報を登録します。');
+
+    final imageUrl = ref.read(flavorProvider).generateRandomIconImageUrl();
+    final userProfile = UserProfile.defaultValue(userId, imageUrl);
+
+    final osVersion =
+        await ref.read(deviceInfoRepositoryProvider).fetchOsVersion() ??
+            unexpectedOsText;
+    final appVersion = await ref.read(appVersionProvider.future);
+
+    await ref
+        .read(registerUserRepositoryProvider)
+        .initUser(userId, userProfile, osVersion, appVersion);
+    logger.i('ユーザー情報の登録が完了しました。');
+  }
+
+  /// ユーザーの設定に関する情報を更新する。
+  Future<void> updateUserConfig() async {
+    final osVersion =
+        await ref.read(deviceInfoRepositoryProvider).fetchOsVersion() ??
+            unexpectedOsText;
+    final appVersion = await ref.read(appVersionProvider.future);
+
+    final userId = ref.read(userIdProvider)!;
+    // ログインしている場合、最初に userId を取得するのはこの関数内を想定しているため
+    // ここで userId を出力しておく。
+    logger.i('[$userId]としてログイン中です。ユーザー情報を更新します。');
+
+    await ref.read(registerUserRepositoryProvider).updateVersionInfo(
+          userId,
+          osVersion,
+          appVersion,
+        );
   }
 
   Future<void> deleteUser() async {
-    ref.read(isLoadingOverlayNotifierProvider.notifier).startLoading();
-
-    try {
-      await _deleteUserRelatedData();
-      await ref.read(authRepositoryProvider).deleteUser();
-      logger.i('ユーザー削除が完了しました。');
-    } on Exception catch (e, s) {
-      logger.e('ユーザー削除時にエラーが発生しました。 error:$e, stackTrace:$s');
-      ref
-          .read(toastControllerProvider.notifier)
-          .showToast('エラーが発生しました。再度お試しください。');
-      rethrow;
-    } finally {
-      ref.read(isLoadingOverlayNotifierProvider.notifier).finishLoading();
-    }
+    await _deleteUserRelatedData();
+    await ref.read(authRepositoryProvider).deleteUser();
   }
 
-  /// ユーザーに関連するデータを削除する
+  /// ユーザーに関連するデータを削除する。
   Future<void> _deleteUserRelatedData() async {
     final currentUserId = ref.read(userIdProvider)!;
+
+    // TODO(me): バッチ実行したい。
 
     // * definition
     await deleteAllDefinition();
@@ -104,7 +106,7 @@ class AuthService extends _$AuthService {
     // * like
     await unlikeAllLikedDefinition();
 
-    // * follow関連
+    // * follow 関連
     await unfollowAllFollowing(currentUserId);
     await unfollowByAllFollower(currentUserId);
     await ref
@@ -123,7 +125,7 @@ class AuthService extends _$AuthService {
         .deleteUserConfig(currentUserId);
   }
 
-  /// ユーザーが投稿したDefinitionと紐づくLikeを全て削除する
+  /// ユーザーが投稿した Definition と紐づくLikeを全て削除する。
   Future<void> deleteAllDefinition() async {
     final currentUserId = ref.read(userIdProvider)!;
 
@@ -132,19 +134,19 @@ class AuthService extends _$AuthService {
         .fetchAllPostedDefinitionDocList(currentUserId);
 
     for (final definitionDoc in allPostedDefinitionDocList) {
-      // Definitionを削除
+      // Definition を削除する。
       await ref
           .read(writeDefinitionRepositoryProvider)
           .deleteDefinition(definitionDoc.id, definitionDoc.wordId);
 
-      // 紐づくLikeを削除
+      // 紐づく Like を削除する。
       await ref
           .read(likeDefinitionRepositoryProvider)
           .deleteLikeByDefinitionId(definitionDoc.id);
     }
   }
 
-  /// ユーザーがいいねした全てのDefinitionのいいねを解除する
+  /// ユーザーがいいねした全ての Definition のいいねを解除する。
   Future<void> unlikeAllLikedDefinition() async {
     final currentUserId = ref.read(userIdProvider)!;
 
@@ -159,7 +161,7 @@ class AuthService extends _$AuthService {
     }
   }
 
-  /// 全てのフォロワーが、currentUser をフォロー解除する
+  /// 全てのフォロワーが、currentUser をフォロー解除する。
   Future<void> unfollowByAllFollower(String currentUserId) async {
     final followerIdList = await ref.read(
       userIdListStateNotifierProvider(
@@ -176,7 +178,7 @@ class AuthService extends _$AuthService {
     }
   }
 
-  /// currentUser が全てのフォロー中のユーザーをフォロー解除する
+  /// currentUser が全てのフォロー中のユーザーをフォロー解除する。
   Future<void> unfollowAllFollowing(String currentUserId) async {
     final followingIdList = await ref.read(
       userIdListStateNotifierProvider(
@@ -190,45 +192,5 @@ class AuthService extends _$AuthService {
           .read(userFollowRepositoryProvider)
           .unfollow(currentUserId, followingId);
     }
-  }
-
-  /// 初回登録時に必要なユーザー情報を登録する
-  Future<void> _initUser() async {
-    final userId = ref.read(userIdProvider)!;
-    // 新規ログイン後に最初にuserIdを取得するのはこの関数内を想定しているため
-    // ここでuserIdを出力しておく
-    logger.i('[$userId]として新規ログインしました。ユーザー情報を登録します。');
-
-    final imageUrl = ref.read(flavorProvider).generateRandomIconImageUrl();
-    final userProfile = UserProfile.defaultValue(userId, imageUrl);
-
-    final osVersion =
-        await ref.read(deviceInfoRepositoryProvider).fetchOsVersion() ??
-            unexpectedOsText;
-    final appVersion = await ref.read(appVersionProvider.future);
-
-    await ref
-        .read(registerUserRepositoryProvider)
-        .initUser(userId, userProfile, osVersion, appVersion);
-    logger.i('ユーザー情報の登録が完了しました。');
-  }
-
-  /// ユーザーの設定に関する情報を更新する
-  Future<void> _updateUserConfig() async {
-    final osVersion =
-        await ref.read(deviceInfoRepositoryProvider).fetchOsVersion() ??
-            unexpectedOsText;
-    final appVersion = await ref.read(appVersionProvider.future);
-
-    final userId = ref.read(userIdProvider)!;
-    // ログインしている場合、最初にuserIdを取得するのはこの関数内を想定しているため
-    // ここでuserIdを出力しておく
-    logger.i('[$userId]としてログイン中です。ユーザー情報を更新します。');
-
-    await ref.read(registerUserRepositoryProvider).updateVersionInfo(
-          userId,
-          osVersion,
-          appVersion,
-        );
   }
 }

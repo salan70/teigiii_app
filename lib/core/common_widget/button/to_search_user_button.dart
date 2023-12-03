@@ -14,7 +14,7 @@ class ToSearchUserButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(CupertinoIcons.person_add),
       onPressed: () {
-        context.pushRoute(const SearchUserRoute());
+        context.pushRoute(const UserSearchRoute());
       },
     );
   }

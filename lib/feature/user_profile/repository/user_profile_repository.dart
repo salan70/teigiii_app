@@ -33,24 +33,6 @@ class UserProfileRepository {
     return UserProfileDocument.fromFirestore(snapshot);
   }
 
-  /// publicIdからユーザープロフィールを取得する
-  ///
-  /// 該当するユーザープロフィールが存在しない場合はnullを返す
-  Future<UserProfileDocument?> searchUserProfileByPublicId(
-    String publicId,
-  ) async {
-    final querySnapshot = await _userProfilesCollectionRef
-        .where(UserProfilesCollection.publicId, isEqualTo: publicId)
-        .limit(1)
-        .get();
-
-    if (querySnapshot.docs.isEmpty) {
-      return null;
-    }
-
-    return UserProfileDocument.fromFirestore(querySnapshot.docs.first);
-  }
-
   Future<void> updateUserProfile(
     UserProfile userProfileForWrite,
   ) async {

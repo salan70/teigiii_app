@@ -1,26 +1,19 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/common_provider/is_loading_overlay_state.dart';
-import '../../../core/common_provider/toast_controller.dart';
-import '../../../core/router/app_router.dart';
-import '../../../util/logger.dart';
 import '../../auth/application/auth_state.dart';
-import '../../word/application/word_list_state_by_initial.dart';
-import '../../word/application/word_list_state_by_search_word.dart';
+import '../../definition_list/appication/definition_id_list_state.dart';
 import '../../word/application/word_state.dart';
 import '../../word/repository/word_repository.dart';
+import '../../word_list/application/word_list_state_by_initial.dart';
+import '../../word_list/application/word_list_state_by_search_word.dart';
 import '../domain/definition_for_write.dart';
 import '../repository/write_definition_repository.dart';
-import '../util/after_post_navigation_type.dart';
-import 'definition_id_list_state.dart';
 import 'definition_state.dart';
 
 part 'definition_for_write_notifier.g.dart';
 
 /// 更新時などTextField等に初期表示したい値がある場合、
-/// [definitionForWrite]として渡すこと
-///
-/// ない場合はnullを渡すこと
+/// [definitionForWrite] として渡す。
 @riverpod
 class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
   @override
@@ -37,8 +30,8 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     return _initialState;
   }
 
-  /// 初期状態として渡された[DefinitionForWrite].
-  /// 現在の状態と比較するために使用する
+  /// 初期状態として渡された [DefinitionForWrite].
+  /// 現在の状態と比較するために使用する。
   late final DefinitionForWrite _initialState;
 
   void changeWord(String word) {
@@ -57,25 +50,9 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     state = AsyncData(state.value!.copyWith(definition: definition));
   }
 
-  /// 定義を投稿し、投稿した定義のIdを返す
-  ///
-  /// 投稿が失敗したらnullを返す
-  Future<void> post(AfterPostNavigationType afterPostNavigation) async {
-    final isLoadingOverlayNotifier =
-        ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
-
-    late String definitionId;
-    try {
-      definitionId = await _executeCreate();
-    } on Exception catch (e, stackTrace) {
-      logger.e('定義投稿時にエラーが発生 error: $e, stackTrace: $stackTrace');
-      ref.read(toastControllerProvider.notifier).showToast(
-            '投稿できませんでした。もう一度お試しください。',
-            causeError: true,
-          );
-      isLoadingOverlayNotifier.finishLoading();
-      return;
-    }
+  /// 投稿し、投稿した定義のIdを返す。
+  Future<String> post() async {
+    final definitionId = await _executeCreate();
 
     ref
       ..invalidate(definitionIdListStateNotifierProvider)
@@ -83,31 +60,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
       ..invalidate(wordListStateBySearchWordNotifierProvider)
       ..invalidate(wordProvider);
 
-    isLoadingOverlayNotifier.finishLoading();
-    ref.read(toastControllerProvider.notifier).showToast('投稿しました！');
-
-    // 画面遷移
-    await _navigateAfterPost(afterPostNavigation, definitionId);
-  }
-
-  Future<void> _navigateAfterPost(
-    AfterPostNavigationType afterPostNavigation,
-    String definitionId,
-  ) async {
-    switch (afterPostNavigation) {
-      case AfterPostNavigationType.pop:
-        await ref.read(appRouterProvider).pop();
-        return;
-
-      case AfterPostNavigationType.toDetail:
-        await ref.read(appRouterProvider).pop();
-        await ref.read(appRouterProvider).push(
-              DefinitionDetailRoute(
-                definitionId: definitionId,
-              ),
-            );
-        return;
-    }
+    return definitionId;
   }
 
   Future<String> _executeCreate() async {
@@ -119,7 +72,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
               definitionForWrite.trimmedWordReading,
             );
 
-    // Wordドキュメントを新たに作成する必要があるかを判定
+    // Word ドキュメントを新たに作成する必要があるかを判定する。
     if (existingCurrentWordId == null) {
       // * 必要ある場合
       return ref
@@ -137,21 +90,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
   }
 
   Future<void> edit() async {
-    final isLoadingOverlayNotifier =
-        ref.read(isLoadingOverlayNotifierProvider.notifier)..startLoading();
-    final toastNotifier = ref.read(toastControllerProvider.notifier);
-
-    try {
-      await _executeUpdate();
-    } on Exception catch (e, stackTrace) {
-      logger.e('定義編集時にエラーが発生 error: $e, stackTrace: $stackTrace');
-      toastNotifier.showToast(
-        '保存できませんでした。もう一度お試しください。',
-        causeError: true,
-      );
-      isLoadingOverlayNotifier.finishLoading();
-      return;
-    }
+    await _executeUpdate();
 
     ref
       ..invalidate(definitionProvider(state.value!.id!))
@@ -159,16 +98,12 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
       ..invalidate(wordListStateByInitialNotifierProvider)
       ..invalidate(wordListStateBySearchWordNotifierProvider)
       ..invalidate(wordProvider);
-
-    isLoadingOverlayNotifier.finishLoading();
-    await ref.read(appRouterProvider).pop();
-    toastNotifier.showToast('保存しました！');
   }
 
   Future<void> _executeUpdate() async {
     final definitionForWrite = state.value!;
 
-    // 編集前のwordId
+    // 編集前の wordId。
     final previousWordId = await ref
         .read(wordRepositoryProvider)
         .findWordId(_initialState.word, _initialState.wordReading);
@@ -176,7 +111,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
       throw Exception('編集前のwordIdがnullです');
     }
 
-    // 編集後のwordId。 [initialWordId] と同じ可能性あり
+    // 編集後のwordId。 initialWordId と同じ可能性あり
     final existingNewWordId = await ref.read(wordRepositoryProvider).findWordId(
           definitionForWrite.trimmedWord,
           definitionForWrite.trimmedWordReading,
