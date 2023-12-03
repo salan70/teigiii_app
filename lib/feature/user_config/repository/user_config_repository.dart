@@ -26,7 +26,7 @@ class UserConfigRepository {
     return UserConfigDocument.fromFirestore(snapshot);
   }
 
-  /// [mutedUserId]をmutedUserIdListに追加する
+  /// [mutedUserId] を mutedUserIdList に追加する。
   Future<void> appendMutedUserIdList(
     String userId,
     String mutedUserId,
@@ -38,7 +38,7 @@ class UserConfigRepository {
     });
   }
 
-  /// [mutedUserId]をmutedUserIdListから削除する
+  /// [mutedUserId] を mutedUserIdList から削除する。
   Future<void> removeMutedUserIdList(
     String userId,
     String mutedUserId,
