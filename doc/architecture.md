@@ -2,46 +2,53 @@
 
 ## 概要
 
-- 「presentation」「application」「domain」「repository」の4層に分割
-- featureファースト
-- lib配下にcommon_widget, util, feature
-- 以下を必要に応じて各feature配下に作成
+- featureファーストを採用する
+- 「presentation」「application」「domain」「repository」の4層に分割する
+- lib配下にcore, feature, utilディレクトリを格納する
+- feature配下には、必要に応じて以下を関心事に格納する
   - presentation
   - application
   - domain
   - repository
   - util
+- pageを表すWidgetは、core/pageに格納する（featureのpresentationではない）
+  - pageは複数の関心事を扱うことが多々あることや、pageを表すファイルの格納場所を近づけたいため、このような運用とする
 
 参考  
 [Flutter App Architecture with Riverpod: An Introduction](https://codewithandrea.com/articles/flutter-app-architecture-riverpod-introduction/)  
 [Flutter Project Structure: Feature-first or Layer-first?](https://codewithandrea.com/articles/flutter-project-structure/)
 
-
 ## 詳細
 
 ### core
 
-- 複数のfeatureで使うような汎用的なwidgetを格納する（common_widget）
-- 複数のfeatureで使うような汎用的なproviderを格納する（common_provider）
-- routerを格納する
+- pageを表すWidgetを格納する（page/）
+- 複数のfeatureで使うような汎用的なwidgetを格納する（common_widget/）
+- 複数のfeatureで使うような汎用的なproviderを格納する（common_provider/）
+- routerを格納する（router/）
 
 ### util
 
 - アプリ全体で使用する汎用的なコードを格納する
-  - constやextensionなど
+  - constやextension, mixinなど
 - coreとの境界は曖昧
-  - common_widget, common_provider, router 以外はutilとしている
+  - page, common_widget, common_provider, router 以外はutilとしている
 
 ### feature/presentation
 
+- Flutterパッケージに依存する
 - UIに関するファイルを格納する
+- ローディングやトースト表示、画面遷移も行う
+  - コードが煩雑になるようなら、Controllerの作成を検討する
 
 ### feature/application
 
+- Flutterパッケージに依存しない
 - 状態（state）を保持するクラスを格納する
   - Riverpodで状態を管理する
 - serviceクラスを格納する
   - presentationとrepositoryの橋渡しや、ビジネスロジックの実装を担う
+  - ローディング表示やトースト表示はpresentationで行う
 - ~~原則UnitTest書く~~
 - 作成が容易そう、もしくは重要度の高い関数について、UnitTestを書く
   - 理想は原則UnitTestを書くことだが、ユーザーが増えるまではこの方針で進める
@@ -162,7 +169,6 @@ repository --> firebase
 #### クラス名
 
 - Service系: 〇〇Service
-  - ControllerやUseCaseなど、他に適切が表現がありそう
 - 関数ベースのProvider: 〇〇
   - クラスではないが、便宜上ここに記載
 
