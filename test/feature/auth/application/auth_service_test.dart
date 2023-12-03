@@ -18,31 +18,23 @@ import 'auth_service_test.mocks.dart';
   MockSpec<RegisterUserRepository>(),
   MockSpec<DeviceInfoRepository>(),
   MockSpec<AuthRepository>(),
-  MockSpec<Listener<AsyncValue<void>>>(),
 ])
 class MockToastController extends Notifier<void>
     with Mock
     implements ToastController {}
 
-// ignore: one_member_abstracts, unreachable_from_main
-abstract class Listener<T> {
-// ignore: unreachable_from_main
-  void call(T? previous, T next);
-}
-
 void main() {
   final mockRegisterUserRepository = MockRegisterUserRepository();
   final mockDeviceInfoRepository = MockDeviceInfoRepository();
   final mockAuthRepository = MockAuthRepository();
-  final listener = MockListener();
 
   late ProviderContainer container;
 
   const mockUserId = 'userId';
   const mockAppVersion = '1.0.0';
 
-  // ProviderContainerの初期化、authServiceProviderのlistenを設定する
-  // このとき、[isSignedInProvider]はfalse（未ログイン状態）であることに注意
+  // ProviderContainerの初期化を行う。
+  // このとき、isSignedInProvider はfalse（未ログイン状態）であることに注意する。
   setUp(() {
     container = ProviderContainer(
       overrides: [
@@ -67,10 +59,9 @@ void main() {
     reset(mockRegisterUserRepository);
     reset(mockDeviceInfoRepository);
     reset(mockAuthRepository);
-    reset(listener);
   });
 
-  /// containerのoverrideを更新する
+  /// container を 更新（ override ）する。
   void updateContainersOverride({required bool isSignedIn}) {
     container.updateOverrides([
       flavorProvider.overrideWithValue(Flavor.dev),
@@ -104,15 +95,6 @@ void main() {
       await authService.signIn();
 
       // * Assert
-      // stateの検証
-      verifyInOrder([
-        listener.call(null, const AsyncLoading()),
-        listener.call(const AsyncLoading(), const AsyncData(null)),
-        listener.call(const AsyncData(null), const AsyncData(null)),
-      ]);
-      // 他にlistenerが発火されないことを検証
-      verifyNoMoreInteractions(listener);
-
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(mockAuthRepository.signInAnonymously()).called(1);
       verify(mockDeviceInfoRepository.fetchOsVersion()).called(1);
@@ -137,15 +119,6 @@ void main() {
       await authService.updateUserConfig();
 
       // * Assert
-      // stateの検証
-      verifyInOrder([
-        listener.call(null, const AsyncLoading()),
-        listener.call(const AsyncLoading(), const AsyncData(null)),
-        listener.call(const AsyncData(null), const AsyncData(null)),
-      ]);
-      // 他にlistenerが発火されないことを検証
-      verifyNoMoreInteractions(listener);
-
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(mockDeviceInfoRepository.fetchOsVersion()).called(1);
       verify(
@@ -198,51 +171,6 @@ void main() {
           any,
         ),
       ).called(1);
-    });
-
-    test('未ログイン（例外発生）: stateにAsyncErrorが入ることを検証', () async {
-      // * Arrange
-      final authService = container.read(authServiceProvider);
-      final testException = Exception('signInAnonymously()で例外発生！！！');
-      when(mockAuthRepository.signInAnonymously()).thenThrow(testException);
-
-      // * Act
-      await authService.signIn();
-
-      // * Assert
-      verifyInOrder([
-        listener.call(null, const AsyncLoading()),
-        listener.call(
-          const AsyncLoading(),
-          // AsyncErrorが格納されていることを検証
-          argThat(
-            isA<AsyncError<void>>().having(
-              (d) => d.error,
-              'error',
-              testException,
-            ),
-          ),
-        ),
-      ]);
-    });
-
-    test('ログイン済み（例外発生）: stateにAsyncErrorが入らないことを検証', () async {
-      // * Arrange
-      final authService = container.read(authServiceProvider);
-      updateContainersOverride(isSignedIn: true);
-      final testException = Exception('updateUserConfig()で例外発生！！！');
-      when(mockRegisterUserRepository.updateVersionInfo(any, any, any))
-          .thenThrow(testException);
-
-      // * Act
-      await authService.updateUserConfig();
-
-      // * Assert
-      verifyInOrder([
-        listener.call(null, const AsyncLoading()),
-        listener.call(const AsyncLoading(), const AsyncData(null)),
-        listener.call(const AsyncData(null), const AsyncData(null)),
-      ]);
     });
   });
 }

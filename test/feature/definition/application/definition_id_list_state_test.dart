@@ -140,7 +140,7 @@ void main() {
         // データがstateに格納されたことを検証
         listener.call(
           const AsyncLoading<DefinitionIdListState>(),
-          // fetchHomeRecommendDefinitionIdListの戻り値がそのまま格納されていることを検証
+          // fetchHomeRecommendDefinitionIdList の戻り値がそのまま格納されていることを検証
           AsyncValue.data(expected),
         ),
       ]);
@@ -166,7 +166,7 @@ void main() {
       final mockDefinitionIdList = [mockDefinitionDoc.id];
       when(
         mockDefinitionIdListRepository
-            .fetchForHomeRecommend(
+            .fetchForHomeFollowing(
           any,
           any,
           any,
@@ -208,7 +208,7 @@ void main() {
         // データがstateに格納されたことを検証
         listener.call(
           const AsyncLoading<DefinitionIdListState>(),
-          // fetchHomeRecommendDefinitionIdListの戻り値がそのまま格納されていることを検証
+          // fetchHomeRecommendDefinitionIdList の戻り値がそのまま格納されていることを検証
           AsyncValue.data(expected),
         ),
       ]);
