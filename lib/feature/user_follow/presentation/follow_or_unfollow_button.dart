@@ -53,7 +53,6 @@ class _FollowButton extends ConsumerWidget with PresentationMixin {
           ref,
           action: () async =>
               ref.read(userFollowServiceProvider).follow(targetUserId),
-          showErrorToast: true,
           errorToastMessage: 'フォローが失敗しました。もう一度お試しください。',
         );
       },
@@ -77,7 +76,6 @@ class _UnfollowButton extends ConsumerWidget with PresentationMixin {
           ref,
           action: () async =>
               ref.read(userFollowServiceProvider).unfollow(targetUserId),
-          showErrorToast: true,
           errorToastMessage: 'フォロー解除が失敗しました。もう一度お試しください。',
         );
       },

@@ -82,7 +82,6 @@ class SelfDefinitionActionIconButton extends ConsumerWidget
                           }
                           await context.popRoute();
                         },
-                        showErrorToast: true,
                         successToastMessage: '削除しました。',
                       );
                     },
@@ -247,7 +246,6 @@ class _ChangePostTypeConfirmDialog extends ConsumerWidget
                     .updatePostType(definition);
                 await ref.read(appRouterProvider).pop();
               },
-              showErrorToast: true,
               successToastMessage: afterUpdatePostType.completeChangeMessage,
             );
           },

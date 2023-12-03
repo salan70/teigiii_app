@@ -71,7 +71,6 @@ class LikeWidget extends ConsumerWidget with PresentationMixin {
                         .tapLike(definition);
                     isActionCompleted = true;
                   },
-                  showErrorToast: true,
                 );
 
             if (isActionCompleted) {

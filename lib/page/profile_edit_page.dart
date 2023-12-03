@@ -73,7 +73,6 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
                               await ref.read(appRouterProvider).pop();
                             },
                             successToastMessage: '保存しました！',
-                            showErrorToast: true,
                             errorToastMessage: '保存できませんでした。もう一度お試しください。',
                           );
                         }

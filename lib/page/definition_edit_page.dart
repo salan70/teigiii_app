@@ -47,7 +47,6 @@ class DefinitionEditPage extends ConsumerWidget with PresentationMixin {
                           await notifier.edit();
                           await ref.read(appRouterProvider).pop();
                         },
-                        showErrorToast: true,
                         errorToastMessage: '保存できませんでした。もう一度お試しください。',
                         successToastMessage: '保存しました！',
                       );
@@ -65,7 +64,6 @@ class DefinitionEditPage extends ConsumerWidget with PresentationMixin {
                             action: () async {
                               definitionId = await notifier.post();
                             },
-                            showErrorToast: true,
                             errorToastMessage: '投稿できませんでした。もう一度お試しください。',
                             successToastMessage: '投稿しました！',
                           );
