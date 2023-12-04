@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../../core/common_provider/dialog_controller.dart';
@@ -141,7 +142,7 @@ class _CannotEditAlertDialog extends StatelessWidget {
             '編集は投稿してから1時間以内にしかできません。',
             overflow: TextOverflow.clip,
           ),
-          SizedBox(height: 8),
+          Gap(8),
           Text(
             '代わりに、この投稿の内容をもとに新規投稿を作成しませんか？',
             overflow: TextOverflow.clip,

@@ -3,12 +3,13 @@ import 'dart:math';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
-import '../../../core/common_widget/button/post_definition_fab.dart';
-import '../../../core/common_widget/simple_widget_for_empty.dart';
+import '../../../core/common_widget/simple_empty_widget.dart';
 import '../../../util/constant/initial_main_group.dart';
 import '../../../util/extension/scroll_controller_extension.dart';
 import '../../auth/application/auth_state.dart';
+import '../../definition/presentation/post_definition_fab.dart';
 import '../../user_profile/presentation/dictionary_author_widget.dart';
 import '../util/definition_feed_type.dart';
 import 'definition_list.dart';
@@ -74,16 +75,16 @@ class IndividualDictionaryDefinitionListPage extends ConsumerWidget {
           },
           body: Column(
             children: [
-              const SizedBox(height: 16),
+              const Gap(16),
               DictionaryAuthorWidget(targetUserId: targetUserId),
-              const SizedBox(height: 16),
+              const Gap(16),
               Expanded(
                 child: DefinitionList(
                   definitionFeedType: DefinitionFeedType.individualIndex,
                   targetUserId: targetUserId,
                   initialSubGroup: initialSubGroup,
                   shimmerTileNumber: 1,
-                  emptyWidget: SimpleWidgetForEmpty(
+                  emptyWidget: SimpleEmptyWidget(
                     message: generateEmptyMessage(initialSubGroup.label),
                   ),
                 ),

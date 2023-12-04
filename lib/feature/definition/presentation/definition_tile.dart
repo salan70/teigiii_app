@@ -2,14 +2,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../core/common_widget/adaptive_overflow_text.dart';
-import '../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../../../util/logger.dart';
 import '../../definition_like/presentation/like_widget.dart';
+import '../../user_profile/presentation/avatar_network_image_widget.dart';
 import '../application/definition_state.dart';
 import 'definition_tile_shimmer.dart';
 
@@ -51,7 +52,7 @@ class DefinitionTile extends ConsumerWidget {
                         imageUrl: definition.authorImageUrl,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const Gap(8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +68,7 @@ class DefinitionTile extends ConsumerWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              const SizedBox(width: 4),
+                              const Gap(4),
                               definition.isPublic
                                   ? const SizedBox.shrink()
                                   : Row(
@@ -79,7 +80,7 @@ class DefinitionTile extends ConsumerWidget {
                                               .colorScheme
                                               .onSurfaceVariant,
                                         ),
-                                        const SizedBox(width: 4),
+                                        const Gap(4),
                                       ],
                                     ),
                               Text(
@@ -92,12 +93,12 @@ class DefinitionTile extends ConsumerWidget {
                             overflow: TextOverflow.clip,
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
-                          const SizedBox(height: 8),
+                          const Gap(8),
                           AdaptiveOverflowText(
                             text: definition.definition,
                             maxLines: 5,
                           ),
-                          const SizedBox(height: 8),
+                          const Gap(8),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: LikeWidget(definition: definition),
@@ -118,9 +119,9 @@ class DefinitionTile extends ConsumerWidget {
         if (asyncDefinition.isRefreshing) {
           return const Column(
             children: [
-              SizedBox(height: 16),
+              Gap(16),
               CupertinoActivityIndicator(),
-              SizedBox(height: 24),
+              Gap(24),
               Divider(),
             ],
           );
@@ -131,11 +132,11 @@ class DefinitionTile extends ConsumerWidget {
         );
         return Column(
           children: [
-            const SizedBox(height: 16),
+            const Gap(16),
             SimpleErrorAndRetryWidget(
               onRetry: () => ref.invalidate(definitionProvider(definitionId)),
             ),
-            const SizedBox(height: 16),
+            const Gap(16),
             const Divider(),
           ],
         );

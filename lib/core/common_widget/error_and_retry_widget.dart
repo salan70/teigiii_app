@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../feature/auth/application/auth_state.dart';
 import '../../feature/user_profile/application/user_profile_state.dart';
@@ -28,12 +29,12 @@ class ErrorAndRetryWidget extends ConsumerWidget {
           color: Theme.of(context).colorScheme.error,
           size: 24,
         ),
-        const SizedBox(height: 8),
+        const Gap(8),
         Text(
           'エラーが発生しました。',
           style: Theme.of(context).textTheme.titleLarge,
         ),
-        const SizedBox(height: 8),
+        const Gap(8),
         Text(
           '再読み込みをお試しください。',
           style: Theme.of(context).textTheme.bodyMedium,
@@ -42,12 +43,12 @@ class ErrorAndRetryWidget extends ConsumerWidget {
           '繰り返し発生する場合は、運営へお問い合わせください。',
           style: Theme.of(context).textTheme.bodyMedium,
         ),
-        const SizedBox(height: 24),
+        const Gap(24),
         PrimaryFilledButton(onPressed: onRetry, text: '再読み込み'),
         showInquireButton
             ? Column(
                 children: [
-                  const SizedBox(height: 24),
+                  const Gap(24),
                   TertiaryOutlinedButton(
                     onPressed: () {
                       final currentUserId = ref.read(userIdProvider);
@@ -96,7 +97,7 @@ class SimpleErrorAndRetryWidget extends StatelessWidget {
                 color: Theme.of(context).colorScheme.error,
                 size: 24,
               ),
-              const SizedBox(width: 8),
+              const Gap(8),
               Text(
                 'エラー',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -105,7 +106,7 @@ class SimpleErrorAndRetryWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const Gap(8),
           Text(
             'タップで再読み込み',
             style: Theme.of(context).textTheme.titleMedium,

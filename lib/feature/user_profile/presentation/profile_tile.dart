@@ -2,14 +2,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../core/common_widget/adaptive_overflow_text.dart';
-import '../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/exception/database_exception.dart';
 import '../../../../util/logger.dart';
 import '../application/user_profile_state.dart';
+import 'avatar_network_image_widget.dart';
 import 'profile_tile_shimmer.dart';
 
 class ProfileTile extends ConsumerWidget {
@@ -57,7 +58,7 @@ class ProfileTile extends ConsumerWidget {
                     AvatarNetworkImageWidget(
                       imageUrl: targetUserProfile.profileImageUrl,
                     ),
-                    const SizedBox(width: 8),
+                    const Gap(8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,16 +75,16 @@ class ProfileTile extends ConsumerWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              const SizedBox(width: 4),
+                              const Gap(4),
                               button,
                             ],
                           ),
-                          const SizedBox(height: 8),
+                          const Gap(8),
                           AdaptiveOverflowText(
                             text: targetUserProfile.bio,
                             maxLines: 5,
                           ),
-                          const SizedBox(height: 8),
+                          const Gap(8),
                         ],
                       ),
                     ),
@@ -103,20 +104,20 @@ class ProfileTile extends ConsumerWidget {
             children: [
               Row(
                 children: [
-                  const SizedBox(width: 20),
+                  const Gap(20),
                   Icon(
                     CupertinoIcons.exclamationmark_circle_fill,
                     color: Theme.of(context).colorScheme.error,
                     size: 40,
                   ),
-                  const SizedBox(width: 16),
+                  const Gap(16),
                   const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 16),
+                        Gap(16),
                         Text('存在しないユーザーです。\n削除された可能性があります。'),
-                        SizedBox(height: 16),
+                        Gap(16),
                       ],
                     ),
                   ),
@@ -131,9 +132,9 @@ class ProfileTile extends ConsumerWidget {
         if (asyncTargetUserProfile.isRefreshing) {
           return const Column(
             children: [
-              SizedBox(height: 16),
+              Gap(16),
               CupertinoActivityIndicator(),
-              SizedBox(height: 24),
+              Gap(24),
               Divider(),
             ],
           );
@@ -144,11 +145,11 @@ class ProfileTile extends ConsumerWidget {
         );
         return Column(
           children: [
-            const SizedBox(height: 16),
+            const Gap(16),
             SimpleErrorAndRetryWidget(
               onRetry: () => ref.invalidate(userProfileProvider(targetUserId)),
             ),
-            const SizedBox(height: 16),
+            const Gap(16),
             const Divider(),
           ],
         );

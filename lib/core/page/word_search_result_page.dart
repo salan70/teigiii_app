@@ -3,16 +3,17 @@ import 'dart:math';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
+import '../../feature/definition/presentation/post_definition_fab.dart';
 import '../../feature/word/domain/word.dart';
 import '../../feature/word/presentation/word_tile.dart';
 import '../../feature/word/presentation/word_tile_shimmer.dart';
 import '../../feature/word_list/application/word_list_state_by_search_word.dart';
 import '../../feature/word_list/presentation/search_word_text_field.dart';
 import '../../util/extension/scroll_controller_extension.dart';
-import '../common_widget/button/post_definition_fab.dart';
 import '../common_widget/infinity_scroll_widget.dart';
-import '../common_widget/simple_widget_for_empty.dart';
+import '../common_widget/simple_empty_widget.dart';
 
 @RoutePage()
 class WordSearchResultPage extends ConsumerWidget {
@@ -61,12 +62,12 @@ class WordSearchResultPage extends ConsumerWidget {
           },
           body: Column(
             children: [
-              const SizedBox(height: 24),
+              const Gap(24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 36),
                 child: SearchWordTextField(defaultText: searchWord),
               ),
-              const SizedBox(height: 32),
+              const Gap(32),
               Expanded(
                 child: InfinityScrollWidget(
                   listStateNotifierProvider: wordListProvider,
@@ -75,7 +76,7 @@ class WordSearchResultPage extends ConsumerWidget {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   shimmerTile: const WordTileShimmer(),
                   shimmerTileNumber: 2,
-                  emptyWidget: SimpleWidgetForEmpty(
+                  emptyWidget: SimpleEmptyWidget(
                     message: generateEmptyMessage(searchWord),
                   ),
                 ),

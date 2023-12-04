@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../../core/common_provider/launch_url.dart';
 import '../../../core/common_widget/button/filled_button.dart';
@@ -33,21 +34,21 @@ class OverlayInMaintenanceDialog extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const SizedBox(height: 8),
+                  const Gap(8),
                   Text(
                     '🤖現在メンテナンス中です🤖'
                     '\n終了予定は${appMaintenance.scheduledEndTime}です。',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  const SizedBox(height: 16),
+                  const Gap(16),
                   Text(
                     'ご不便をおかけし申し訳ございません🙇‍♂\n'
                     '詳しい情報は下記からご確認いただけます。',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  const SizedBox(height: 16),
+                  const Gap(16),
                   PrimaryFilledButton(
                     onPressed: () {
                       ref.read(launchURLProvider(latestInformationPageUrl));

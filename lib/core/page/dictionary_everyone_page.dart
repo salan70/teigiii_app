@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../feature/word/presentation/initial_main_group_list.dart';
 import '../../feature/word/util/dictionary_page_type.dart';
@@ -31,7 +32,7 @@ class DictionaryEveryonePage extends StatelessWidget {
           ),
           child: ListView(
             children: const [
-              SizedBox(height: 24),
+              Gap(24),
               SizedBox(
                 height: 80,
                 child: Padding(

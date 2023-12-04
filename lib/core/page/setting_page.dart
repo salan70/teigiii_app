@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../core/common_provider/in_app_review_provider.dart';
 import '../../../../core/common_provider/launch_url.dart';
@@ -45,13 +46,13 @@ class SettingPage extends ConsumerWidget {
         ),
         child: ListView(
           children: [
-            const SizedBox(height: 24),
+            const Gap(24),
             // 一般
             Text(
               '一般',
               style: Theme.of(context).textTheme.titleSmall,
             ),
-            const SizedBox(height: 8),
+            const Gap(8),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.speaker_slash),
               label: 'ミュートの管理',
@@ -59,20 +60,20 @@ class SettingPage extends ConsumerWidget {
                 context.navigateTo(const UserListMutedRoute());
               },
             ),
-            const SizedBox(height: 32),
+            const Gap(32),
 
             // サポート
             Text(
               'サポート',
               style: Theme.of(context).textTheme.titleSmall,
             ),
-            const SizedBox(height: 8),
+            const Gap(8),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.question_square),
               label: '使い方',
               onTap: () => ref.read(launchURLProvider(howToPageUrl)),
             ),
-            const SizedBox(height: 24),
+            const Gap(24),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.mail),
               label: 'お問い合わせ',
@@ -85,7 +86,7 @@ class SettingPage extends ConsumerWidget {
                 ref.read(launchURLProvider(url));
               },
             ),
-            const SizedBox(height: 24),
+            const Gap(24),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.star),
               label: 'レビューで応援する',
@@ -93,26 +94,26 @@ class SettingPage extends ConsumerWidget {
                   .read(inAppReviewProvider)
                   .openStoreListing(appStoreId: appleId),
             ),
-            const SizedBox(height: 32),
+            const Gap(32),
 
             // アプリについて
             Text(
               'アプリについて',
               style: Theme.of(context).textTheme.titleSmall,
             ),
-            const SizedBox(height: 8),
+            const Gap(8),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.doc_text),
               label: '利用規約',
               onTap: () => ref.read(launchURLProvider(termPageUrl)),
             ),
-            const SizedBox(height: 24),
+            const Gap(24),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.exclamationmark_shield),
               label: 'プライバシーポリシー',
               onTap: () => ref.read(launchURLProvider(privacyPolicyPageUrl)),
             ),
-            const SizedBox(height: 24),
+            const Gap(24),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.tag),
               label: 'ライセンス',
@@ -120,11 +121,11 @@ class SettingPage extends ConsumerWidget {
                 await context.navigateTo(const MyLicenseRoute());
               },
             ),
-            const SizedBox(height: 24),
+            const Gap(24),
             Row(
               children: [
                 const Icon(CupertinoIcons.info),
-                const SizedBox(width: 8),
+                const Gap(8),
                 Expanded(
                   child: Text(
                     'バージョン',
@@ -154,15 +155,15 @@ class SettingPage extends ConsumerWidget {
                     },
                   ),
                 ),
-                const SizedBox(width: 4),
+                const Gap(4),
               ],
             ),
-            const SizedBox(height: 72),
+            const Gap(72),
             const Align(
               alignment: Alignment.topCenter,
               child: DeleteAccountButton(),
             ),
-            const SizedBox(height: 40),
+            const Gap(40),
           ],
         ),
       ),
@@ -190,7 +191,7 @@ class SettingTileButton extends StatelessWidget {
       child: Row(
         children: [
           trailingIcon,
-          const SizedBox(width: 8),
+          const Gap(8),
           Expanded(
             child: Text(
               label,

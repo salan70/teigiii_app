@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../../core/common_widget/cupertino_refresh_indicator.dart';
 import '../../../core/common_widget/error_and_retry_widget.dart';
@@ -105,10 +106,10 @@ class InfinityScrollWidget extends ConsumerWidget {
                 ? const Column(
                     children: [
                       CupertinoActivityIndicator(),
-                      SizedBox(height: 40),
+                      Gap(40),
                     ],
                   )
-                : const SizedBox(),
+                : const SizedBox.shrink(),
             emptyWidget: emptyWidget,
             showBannerAd: showBannerAd,
           ),
@@ -283,7 +284,7 @@ class _BottomWidgetWhenError extends StatelessWidget {
                           CupertinoIcons.exclamationmark_circle_fill,
                           color: Theme.of(context).colorScheme.error,
                         ),
-                  const SizedBox(height: 4),
+                  const Gap(4),
                   asyncListState.isRefreshing
                       ? Text(
                           '読み込み中...',
@@ -299,12 +300,12 @@ class _BottomWidgetWhenError extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
-                  const SizedBox(height: 40),
+                  const Gap(40),
                 ],
               ),
             ),
           )
-        : const SizedBox();
+        : const SizedBox.shrink();
   }
 }
 

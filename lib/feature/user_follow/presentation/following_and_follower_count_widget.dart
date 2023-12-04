@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../core/common_widget/shimmer_widget.dart';
 import '../../../../core/router/app_router.dart';
@@ -42,12 +43,12 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
                         .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(width: 4),
+                  const Gap(4),
                   const Text('フォロー中'),
                 ],
               ),
             ),
-            const SizedBox(width: 16),
+            const Gap(16),
             InkWell(
               onTap: () async {
                 await context.pushRoute(
@@ -66,7 +67,7 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
                         .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(width: 4),
+                  const Gap(4),
                   const Text('フォロワー'),
                 ],
               ),
@@ -78,11 +79,11 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ShimmerWidget.rectangular(width: 16, height: 24),
-          SizedBox(height: 8),
+          Gap(8),
           ShimmerWidget.rectangular(width: 48, height: 16),
-          SizedBox(width: 16),
+          Gap(16),
           ShimmerWidget.rectangular(width: 16, height: 24),
-          SizedBox(height: 8),
+          Gap(8),
           ShimmerWidget.rectangular(width: 48, height: 16),
         ],
       ),

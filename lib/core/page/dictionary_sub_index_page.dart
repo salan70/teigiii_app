@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../feature/user_profile/presentation/dictionary_author_widget.dart';
 import '../../feature/word/presentation/index_tile.dart';
@@ -38,7 +39,7 @@ class DictionarySubIndexPage extends ConsumerWidget {
           dictionaryPageType == DictionaryPageType.individual
               ? Column(
                   children: [
-                    const SizedBox(height: 16),
+                    const Gap(16),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 16),
                       child:
@@ -47,7 +48,7 @@ class DictionarySubIndexPage extends ConsumerWidget {
                   ],
                 )
               : const SizedBox.shrink(),
-          const SizedBox(height: 8),
+          const Gap(8),
           Padding(
             padding: const EdgeInsets.only(
               left: 16,

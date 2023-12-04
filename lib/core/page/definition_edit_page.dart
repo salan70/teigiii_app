@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../feature/definition/application/definition_for_write_notifier.dart';
 import '../../feature/definition/domain/definition.dart';
@@ -140,7 +141,7 @@ class _AlertCannotEditDialog extends ConsumerWidget {
             '投稿から1時間が経過したため保存できませんでした。',
             overflow: TextOverflow.clip,
           ),
-          SizedBox(height: 8),
+          Gap(8),
           Text(
             '代わりに、入力した内容で新規投稿しませんか？',
             overflow: TextOverflow.clip,

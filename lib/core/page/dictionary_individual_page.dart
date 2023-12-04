@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../feature/user_profile/application/user_profile_state.dart';
 import '../../feature/user_profile/presentation/dictionary_author_widget.dart';
@@ -44,7 +45,7 @@ class DictionaryIndividualPage extends ConsumerWidget {
                 height: 80,
                 child: DictionaryAuthorWidget(targetUserId: targetUserId),
               ),
-              const SizedBox(height: 24),
+              const Gap(24),
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: InitialMainGroupList(

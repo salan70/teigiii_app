@@ -2,7 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
+import '../../feature/definition/presentation/post_definition_fab.dart';
 import '../../feature/definition_list/presentation/definition_list.dart';
 import '../../feature/definition_list/util/definition_feed_type.dart';
 import '../../feature/word/application/word_state.dart';
@@ -10,7 +12,6 @@ import '../../feature/word/presentation/word_page_shimmer.dart';
 import '../../feature/word/presentation/word_widget.dart';
 import '../../util/extension/scroll_controller_extension.dart';
 import '../../util/logger.dart';
-import '../common_widget/button/post_definition_fab.dart';
 import '../common_widget/error_and_retry_widget.dart';
 import '../common_widget/stickey_tab_bar_deligate.dart';
 
@@ -46,7 +47,7 @@ class WordTopPage extends ConsumerWidget {
                       color: Theme.of(context).colorScheme.error,
                       size: 24,
                     ),
-                    const SizedBox(height: 16),
+                    const Gap(16),
                     Align(
                       alignment: Alignment.topCenter,
                       child: Text(
@@ -54,7 +55,7 @@ class WordTopPage extends ConsumerWidget {
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const Gap(8),
                     const Text('投稿が0件になり、語句が削除された可能性があります。'),
                   ],
                 ),

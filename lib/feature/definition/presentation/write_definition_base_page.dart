@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../core/common_provider/dialog_controller.dart';
 import '../../../../core/common_widget/dialog/confirm_dialog.dart';
@@ -62,7 +63,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
         ),
         actions: [
           Center(child: appBarActionWidget),
-          const SizedBox(width: 24),
+          const Gap(24),
         ],
       ),
       body: GestureDetector(
@@ -72,7 +73,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
             padding: const EdgeInsets.all(24),
             child: ListView(
               children: [
-                const SizedBox(height: 8),
+                const Gap(8),
                 TextFormField(
                   initialValue: definitionForWrite.word,
                   autofocus: autoFocusForm == WriteDefinitionFormType.word,
@@ -104,7 +105,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                     border: InputBorder.none,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const Gap(16),
                 TextFormField(
                   initialValue: definitionForWrite.definition,
                   autofocus:
@@ -119,7 +120,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                     border: InputBorder.none,
                   ),
                 ),
-                const SizedBox(height: 300),
+                const Gap(300),
               ],
             ),
           ),

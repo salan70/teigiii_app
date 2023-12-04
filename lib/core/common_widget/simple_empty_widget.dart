@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
-/// emptyステートとして使用する [message] を表示させるだけのシンプルなWidget
-class SimpleWidgetForEmpty extends StatelessWidget {
-  const SimpleWidgetForEmpty({
+/// emptyステートとして使用する [message] を表示させるだけのシンプルな Widget.
+class SimpleEmptyWidget extends StatelessWidget {
+  const SimpleEmptyWidget({
     super.key,
     required this.message,
   });
@@ -13,7 +14,7 @@ class SimpleWidgetForEmpty extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 40),
+        const Gap(40),
         Center(
           child: Text(
             message,

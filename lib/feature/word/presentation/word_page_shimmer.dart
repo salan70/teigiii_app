@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../../core/common_widget/shimmer_widget.dart';
 import '../../definition/presentation/definition_tile_shimmer.dart';
@@ -15,13 +16,13 @@ class WordPageShimmer extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 24),
+              const Gap(24),
               const ShimmerWidget.rectangular(width: 160, height: 24),
-              const SizedBox(height: 8),
+              const Gap(8),
               const ShimmerWidget.rectangular(width: 120, height: 16),
-              const SizedBox(height: 26),
+              const Gap(26),
               const ShimmerWidget.rectangular(width: 32, height: 16),
-              const SizedBox(height: 16),
+              const Gap(16),
               Center(
                 child: ShimmerWidget.circular(
                   width: 232,
@@ -31,7 +32,7 @@ class WordPageShimmer extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+              const Gap(32),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -42,7 +43,7 @@ class WordPageShimmer extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const Gap(16),
         const DefinitionTileShimmer(),
       ],
     );
