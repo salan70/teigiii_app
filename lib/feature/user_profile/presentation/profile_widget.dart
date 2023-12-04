@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../../core/common_widget/button/outlined_button.dart';
@@ -31,7 +32,7 @@ class ProfileWidget extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 24),
+              const Gap(24),
               Row(
                 children: [
                   AvatarNetworkImageWidget(
@@ -51,7 +52,7 @@ class ProfileWidget extends ConsumerWidget {
                         ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const Gap(16),
               Text(
                 targetUserProfile.name,
                 style: Theme.of(context).textTheme.titleLarge,
@@ -62,14 +63,14 @@ class ProfileWidget extends ConsumerWidget {
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
               ),
-              const SizedBox(height: 8),
+              const Gap(8),
               Text(
                 targetUserProfile.bio,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(height: 16),
+              const Gap(16),
               FollowingAndFollowerCountWidget(targetUserId: targetUserId),
-              const SizedBox(height: 16),
+              const Gap(16),
               InkWell(
                 onTap: () async {
                   await context.pushRoute(
@@ -85,7 +86,7 @@ class ProfileWidget extends ConsumerWidget {
                       '辞書を見る',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    const SizedBox(width: 4),
+                    const Gap(4),
                     Icon(
                       CupertinoIcons.chevron_forward,
                       size: 16,
@@ -94,7 +95,7 @@ class ProfileWidget extends ConsumerWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
+              const Gap(8),
             ],
           ),
         );

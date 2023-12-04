@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gap/gap.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../util/constant/color_scheme.dart';
@@ -42,7 +43,7 @@ class ToastController extends _$ToastController {
                       CupertinoIcons.exclamationmark_circle_fill,
                       color: lightColorScheme.error,
                     ),
-                    const SizedBox(width: 8),
+                    const Gap(8),
                   ],
                 )
               : const SizedBox.shrink(),

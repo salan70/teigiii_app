@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../../core/common_provider/launch_url.dart';
 import '../../../core/common_widget/button/filled_button.dart';
@@ -32,13 +33,13 @@ class OverlayForceUpdateDialog extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const SizedBox(height: 8),
+                  const Gap(8),
                   Text(
                     '新たなバージョンが配信されています。\nアップデートをお願いします',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  const SizedBox(height: 16),
+                  const Gap(16),
                   PrimaryFilledButton(
                     onPressed: () {
                       // platform に応じたURLを開く。

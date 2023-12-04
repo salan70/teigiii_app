@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../feature/introduction/presentation/confirm_agreement_dialog.dart';
 import '../../util/constant/url.dart';
@@ -32,18 +33,18 @@ class IntroductionPage extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const Gap(24),
               Text(
                 'ようこそ！',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(height: 24),
+              const Gap(24),
               Text(
                 '思うがままに\n言葉を定義しちゃってください😆',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              const SizedBox(height: 24),
+              const Gap(24),
               PrimaryFilledButton(
                 onPressed: () {
                   ref.read(dialogControllerProvider).show(
@@ -52,7 +53,7 @@ class IntroductionPage extends ConsumerWidget {
                 },
                 text: 'はじめる',
               ),
-              const SizedBox(height: 16),
+              const Gap(16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

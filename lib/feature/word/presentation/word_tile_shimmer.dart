@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../../core/common_widget/shimmer_widget.dart';
 
@@ -20,7 +21,7 @@ class WordTileShimmer extends StatelessWidget {
               ShimmerWidget.rectangular(width: 64, height: 24),
             ],
           ),
-          SizedBox(height: 8),
+          Gap(8),
           ShimmerWidget.rectangular(width: 120, height: 20),
           Divider(),
         ],

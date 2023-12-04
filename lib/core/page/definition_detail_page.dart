@@ -3,6 +3,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../feature/auth/application/auth_state.dart';
 import '../../feature/definition/application/definition_state.dart';
@@ -77,7 +78,7 @@ class DefinitionDetailPage extends ConsumerWidget {
                                           .colorScheme
                                           .onSurfaceVariant,
                                     ),
-                                    const SizedBox(width: 2),
+                                    const Gap(2),
                                     Text(
                                       'この投稿はあなただけに見えています',
                                       style: Theme.of(context)
@@ -92,7 +93,7 @@ class DefinitionDetailPage extends ConsumerWidget {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 16),
+                                const Gap(16),
                               ],
                             ),
                           ),
@@ -108,7 +109,7 @@ class DefinitionDetailPage extends ConsumerWidget {
                           AvatarNetworkImageWidget(
                             imageUrl: definition.authorImageUrl,
                           ),
-                          const SizedBox(width: 16),
+                          const Gap(16),
                           Expanded(
                             child: Text(
                               definition.authorName,
@@ -129,8 +130,7 @@ class DefinitionDetailPage extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    const SizedBox(height: 8),
+                    const Gap(16),
                     InkWell(
                       onTap: () async {
                         await context.pushRoute(
@@ -161,12 +161,12 @@ class DefinitionDetailPage extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const Gap(16),
                     Text(
                       definition.definition,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    const SizedBox(height: 16),
+                    const Gap(16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -271,19 +271,19 @@ class _DefinitionDetailPageShimmer extends StatelessWidget {
           Row(
             children: [
               ShimmerWidget.circular(width: 48, height: 48),
-              SizedBox(width: 16),
+              Gap(16),
               ShimmerWidget.rectangular(height: 16, width: 120),
             ],
           ),
-          SizedBox(height: 16),
+          Gap(16),
           ShimmerWidget.rectangular(height: 32, width: 300),
-          SizedBox(height: 16),
+          Gap(16),
           ShimmerWidget.rectangular(height: 120),
-          SizedBox(height: 16),
+          Gap(16),
           ShimmerWidget.rectangular(height: 16, width: 120),
-          SizedBox(height: 4),
+          Gap(4),
           ShimmerWidget.rectangular(height: 16, width: 120),
-          SizedBox(height: 8),
+          Gap(8),
           ShimmerWidget.rectangular(height: 20, width: 48),
         ],
       ),

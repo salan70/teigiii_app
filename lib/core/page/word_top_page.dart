@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../feature/definition_list/presentation/definition_list.dart';
 import '../../feature/definition_list/util/definition_feed_type.dart';
@@ -46,7 +47,7 @@ class WordTopPage extends ConsumerWidget {
                       color: Theme.of(context).colorScheme.error,
                       size: 24,
                     ),
-                    const SizedBox(height: 16),
+                    const Gap(16),
                     Align(
                       alignment: Alignment.topCenter,
                       child: Text(
@@ -54,7 +55,7 @@ class WordTopPage extends ConsumerWidget {
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const Gap(8),
                     const Text('投稿が0件になり、語句が削除された可能性があります。'),
                   ],
                 ),

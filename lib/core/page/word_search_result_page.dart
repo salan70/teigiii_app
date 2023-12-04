@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../feature/word/domain/word.dart';
 import '../../feature/word/presentation/word_tile.dart';
@@ -61,12 +62,12 @@ class WordSearchResultPage extends ConsumerWidget {
           },
           body: Column(
             children: [
-              const SizedBox(height: 24),
+              const Gap(24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 36),
                 child: SearchWordTextField(defaultText: searchWord),
               ),
-              const SizedBox(height: 32),
+              const Gap(32),
               Expanded(
                 child: InfinityScrollWidget(
                   listStateNotifierProvider: wordListProvider,

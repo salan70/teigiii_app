@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../feature/user_profile/application/user_profile_for_write_notifier.dart';
 import '../../feature/user_profile/presentation/changeable_profile_image.dart';
@@ -90,7 +91,7 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
                   ),
                 ),
               ),
-              const SizedBox(width: 24),
+              const Gap(24),
             ],
           ),
           body: GestureDetector(
@@ -99,12 +100,12 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ListView(
                 children: [
-                  const SizedBox(height: 24),
+                  const Gap(24),
                   ChangeableProfileImage(
                     userProfileForWrite: userProfileForWrite,
                     globalKey: globalKey,
                   ),
-                  const SizedBox(height: 16),
+                  const Gap(16),
                   TextFormField(
                     initialValue: userProfileForWrite.name,
                     maxLength: userProfileForWrite.maxNameLength,
@@ -118,7 +119,7 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
                       border: InputBorder.none,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const Gap(8),
                   TextFormField(
                     initialValue: userProfileForWrite.bio,
                     maxLength: userProfileForWrite.maxBioLength,

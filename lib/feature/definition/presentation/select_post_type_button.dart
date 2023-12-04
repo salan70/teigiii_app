@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../application/definition_for_write_notifier.dart';
@@ -72,12 +73,12 @@ class SelectPostTypeButton extends ConsumerWidget {
               color: Theme.of(context).colorScheme.onSurface,
               size: postType.largeIconSize,
             ),
-            const SizedBox(width: 8),
+            const Gap(8),
             Text(
               postType.labelForWrite,
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            const SizedBox(width: 8),
+            const Gap(8),
             Icon(
               CupertinoIcons.arrowtriangle_down_fill,
               color: Theme.of(context).colorScheme.onSurface,

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../core/router/app_router.dart';
 import '../domain/word.dart';
@@ -56,7 +57,7 @@ class WordTile extends StatelessWidget {
                                 Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
-                    const SizedBox(width: 4),
+                    const Gap(4),
                     Icon(
                       CupertinoIcons.chevron_forward,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,

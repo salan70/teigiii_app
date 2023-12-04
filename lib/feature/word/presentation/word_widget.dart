@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../../core/common_widget/button/filled_button.dart';
 import '../../../../../core/router/app_router.dart';
@@ -21,7 +22,7 @@ class WordWidget extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 24),
+          const Gap(24),
           Text(
             word.word,
             style: Theme.of(context).textTheme.titleLarge,
@@ -33,14 +34,14 @@ class WordWidget extends ConsumerWidget {
                   fontWeight: FontWeight.bold,
                 ),
           ),
-          const SizedBox(height: 24),
+          const Gap(24),
           Text(
             '${word.postedDefinitionCount}投稿',
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
           ),
-          const SizedBox(height: 8),
+          const Gap(8),
           Center(
             child: PrimaryFilledButton(
               onPressed: () {
@@ -57,7 +58,7 @@ class WordWidget extends ConsumerWidget {
               text: 'この語句の定義を投稿する',
             ),
           ),
-          const SizedBox(height: 8),
+          const Gap(8),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../core/common_widget/shimmer_widget.dart';
 
@@ -15,7 +16,7 @@ class ProfileTileShimmer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const ShimmerWidget.circular(width: 48, height: 48),
-              const SizedBox(width: 8),
+              const Gap(8),
               Expanded(
                 child: Column(
                   children: [
@@ -35,16 +36,16 @@ class ProfileTileShimmer extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
+                    const Gap(8),
                     const ShimmerWidget.rectangular(height: 16),
-                    const SizedBox(height: 8),
+                    const Gap(8),
                     const ShimmerWidget.rectangular(height: 16),
-                    const SizedBox(height: 8),
+                    const Gap(8),
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: ShimmerWidget.rectangular(width: 240, height: 16),
                     ),
-                    const SizedBox(height: 24),
+                    const Gap(24),
                   ],
                 ),
               ),
