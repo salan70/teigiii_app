@@ -5,12 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../core/common_widget/adaptive_overflow_text.dart';
-import '../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/exception/database_exception.dart';
 import '../../../../util/logger.dart';
 import '../application/user_profile_state.dart';
+import 'avatar_network_image_widget.dart';
 import 'profile_tile_shimmer.dart';
 
 class ProfileTile extends ConsumerWidget {

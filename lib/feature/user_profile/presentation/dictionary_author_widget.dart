@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/common_widget/avatar_network_image_widget.dart';
 import '../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/logger.dart';
 import '../application/user_profile_state.dart';
+import 'avatar_network_image_widget.dart';
 
 class DictionaryAuthorWidget extends ConsumerWidget {
   const DictionaryAuthorWidget({

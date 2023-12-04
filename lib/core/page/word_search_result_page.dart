@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
+import '../../feature/definition/presentation/post_definition_fab.dart';
 import '../../feature/word/domain/word.dart';
 import '../../feature/word/presentation/word_tile.dart';
 import '../../feature/word/presentation/word_tile_shimmer.dart';
 import '../../feature/word_list/application/word_list_state_by_search_word.dart';
 import '../../feature/word_list/presentation/search_word_text_field.dart';
 import '../../util/extension/scroll_controller_extension.dart';
-import '../common_widget/button/post_definition_fab.dart';
 import '../common_widget/infinity_scroll_widget.dart';
 import '../common_widget/simple_widget_for_empty.dart';
 

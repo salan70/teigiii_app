@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/button/other_user_action_icon_button.dart';
 import '../../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../../core/common_widget/simple_widget_for_empty.dart';
 import '../../../../util/logger.dart';
 import '../../feature/user_config/application/user_config_state.dart';
+import '../../feature/user_config/presentation/other_user_action_icon_button.dart';
 import '../../feature/user_profile/presentation/profile_tile.dart';
 
 @RoutePage()

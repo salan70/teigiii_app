@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import 'shimmer_widget.dart';
+import '../../../core/common_widget/shimmer_widget.dart';
 
 class AvatarNetworkImageWidget extends StatelessWidget {
   const AvatarNetworkImageWidget({

@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-import '../../../feature/auth/application/auth_state.dart';
-import '../../../feature/user_config/application/user_config_service.dart';
-import '../../../feature/user_config/application/user_config_state.dart';
-import '../../../feature/user_profile/application/user_profile_state.dart';
-import '../../../feature/user_profile/domain/user_profile.dart';
+import '../../../core/common_provider/launch_url.dart';
 import '../../../util/constant/url.dart';
 import '../../../util/mixin/presentation_mixin.dart';
-import '../../common_provider/launch_url.dart';
+import '../../auth/application/auth_state.dart';
+import '../../user_profile/application/user_profile_state.dart';
+import '../../user_profile/domain/user_profile.dart';
+import '../application/user_config_service.dart';
+import '../application/user_config_state.dart';
 
 class OtherUserActionIconButton extends ConsumerWidget with PresentationMixin {
   OtherUserActionIconButton({

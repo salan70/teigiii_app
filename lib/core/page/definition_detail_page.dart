@@ -7,14 +7,14 @@ import 'package:gap/gap.dart';
 
 import '../../feature/auth/application/auth_state.dart';
 import '../../feature/definition/application/definition_state.dart';
+import '../../feature/definition/presentation/post_definition_fab.dart';
 import '../../feature/definition/presentation/self_definition_action_icon_button.dart';
 import '../../feature/definition_like/presentation/like_widget.dart';
+import '../../feature/user_config/presentation/other_user_action_icon_button.dart';
 import '../../feature/user_follow/presentation/follow_or_unfollow_button.dart';
+import '../../feature/user_profile/presentation/avatar_network_image_widget.dart';
 import '../../util/extension/date_time_extension.dart';
 import '../../util/logger.dart';
-import '../common_widget/avatar_network_image_widget.dart';
-import '../common_widget/button/other_user_action_icon_button.dart';
-import '../common_widget/button/post_definition_fab.dart';
 import '../common_widget/error_and_retry_widget.dart';
 import '../common_widget/shimmer_widget.dart';
 import '../router/app_router.dart';
