@@ -12,7 +12,7 @@ import '../../feature/word_list/application/word_list_state_by_initial.dart';
 import '../../util/constant/initial_main_group.dart';
 import '../../util/extension/scroll_controller_extension.dart';
 import '../common_widget/infinity_scroll_widget.dart';
-import '../common_widget/simple_widget_for_empty.dart';
+import '../common_widget/simple_empty_widget.dart';
 
 @RoutePage()
 class WordListPage extends ConsumerWidget {
@@ -74,7 +74,7 @@ class WordListPage extends ConsumerWidget {
             contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             shimmerTile: const WordTileShimmer(),
             shimmerTileNumber: 10,
-            emptyWidget: SimpleWidgetForEmpty(
+            emptyWidget: SimpleEmptyWidget(
               message: generateEmptyMessage(selectedInitialSubGroup.label),
             ),
             showBannerAd: true,

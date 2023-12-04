@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../../../core/common_widget/simple_widget_for_empty.dart';
+import '../../../core/common_widget/simple_empty_widget.dart';
 import '../../../util/constant/initial_main_group.dart';
 import '../../../util/extension/scroll_controller_extension.dart';
 import '../../auth/application/auth_state.dart';
@@ -84,7 +84,7 @@ class IndividualDictionaryDefinitionListPage extends ConsumerWidget {
                   targetUserId: targetUserId,
                   initialSubGroup: initialSubGroup,
                   shimmerTileNumber: 1,
-                  emptyWidget: SimpleWidgetForEmpty(
+                  emptyWidget: SimpleEmptyWidget(
                     message: generateEmptyMessage(initialSubGroup.label),
                   ),
                 ),

@@ -8,7 +8,7 @@ import '../../feature/definition_list/util/definition_feed_type.dart';
 import '../../util/extension/scroll_controller_extension.dart';
 import '../common_provider/key_provider.dart';
 import '../common_widget/button/to_setting_button.dart';
-import '../common_widget/simple_widget_for_empty.dart';
+import '../common_widget/simple_empty_widget.dart';
 import '../common_widget/stickey_tab_bar_deligate.dart';
 
 @RoutePage()
@@ -63,13 +63,13 @@ class HomePage extends ConsumerWidget {
               children: <Widget>[
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.homeRecommend,
-                  emptyWidget: SimpleWidgetForEmpty(
+                  emptyWidget: SimpleEmptyWidget(
                     message: 'おすすめの投稿がありません...',
                   ),
                 ),
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.homeFollowing,
-                  emptyWidget: SimpleWidgetForEmpty(
+                  emptyWidget: SimpleEmptyWidget(
                     message: 'フォローしたユーザーの投稿が表示されます🏄‍♂',
                   ),
                 ),
