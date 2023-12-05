@@ -135,10 +135,10 @@ class MyApp extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Center(
-                    child: ErrorAndRetryWidget(
+                    child: ErrorAndRetryWidget.canInquire(
                       onRetry: () =>
                           ref.invalidate(isRequiredAppUpdateProvider),
-                      showInquireButton: true,
+                      inBaseRoute: false,
                     ),
                   ),
                 ],

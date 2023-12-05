@@ -170,7 +170,7 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Center(
-              child: ErrorAndRetryWidget(
+              child: ErrorAndRetryWidget.cannotInquire(
                 onRetry: () =>
                     ref.invalidate(userProfileForWriteNotifierProvider),
               ),

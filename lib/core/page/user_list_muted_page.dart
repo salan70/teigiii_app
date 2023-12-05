@@ -64,7 +64,7 @@ class UserListMutedPage extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Align(
               alignment: Alignment.topCenter,
-              child: ErrorAndRetryWidget(
+              child: ErrorAndRetryWidget.cannotInquire(
                 onRetry: () => ref.invalidate(mutedUserIdListProvider),
               ),
             ),

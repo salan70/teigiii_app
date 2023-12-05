@@ -6,9 +6,10 @@ import 'package:gap/gap.dart';
 import '../../feature/introduction/presentation/confirm_agreement_dialog.dart';
 import '../../util/constant/url.dart';
 import '../common_provider/dialog_controller.dart';
-import '../common_provider/launch_url.dart';
+import '../common_provider/launch_url_controller.dart';
 import '../common_widget/button/filled_button.dart';
 
+// todo: WelcomePage にリネームする。
 @RoutePage()
 class IntroductionPage extends ConsumerWidget {
   const IntroductionPage({super.key});
@@ -58,7 +59,9 @@ class IntroductionPage extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
-                    onTap: () => ref.read(launchURLProvider(termPageUrl)),
+                    onTap: () => ref
+                        .read(launchUrlControllerProvider)
+                        .launchURL(termPageUrl, inBaseRoute: false),
                     child: Text(
                       '利用規約',
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
@@ -71,8 +74,9 @@ class IntroductionPage extends ConsumerWidget {
                   ),
                   const Text(' と '),
                   InkWell(
-                    onTap: () =>
-                        ref.read(launchURLProvider(privacyPolicyPageUrl)),
+                    onTap: () => ref
+                        .read(launchUrlControllerProvider)
+                        .launchURL(privacyPolicyPageUrl, inBaseRoute: false),
                     child: Text(
                       'プライバシーポリシー',
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(

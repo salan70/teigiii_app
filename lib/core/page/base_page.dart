@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../feature/auth/application/auth_state.dart';
 import '../../util/extension/scroll_controller_extension.dart';
 import '../common_provider/key_provider.dart';
-import '../common_provider/toast_controller.dart';
 import '../router/app_router.dart';
 
 // 参考
@@ -17,25 +16,11 @@ class BaseRouterPage extends AutoRouter {
 }
 
 @RoutePage()
-class BasePage extends ConsumerStatefulWidget {
+class BasePage extends ConsumerWidget {
   const BasePage({super.key});
 
   @override
-  ConsumerState<BasePage> createState() => _BasePageState();
-}
-
-class _BasePageState extends ConsumerState<BasePage> {
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ref.read(toastControllerProvider.notifier).initFToast(context);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final currentUserId = ref.watch(userIdProvider);
     return currentUserId == null
         ? const Scaffold(

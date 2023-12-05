@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../core/common_provider/in_app_review_provider.dart';
-import '../../../../core/common_provider/launch_url.dart';
 import '../../../../core/common_widget/shimmer_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/constant/url.dart';
@@ -13,6 +12,7 @@ import '../../feature/auth/application/auth_state.dart';
 import '../../feature/setting/presentation/delete_account_button.dart';
 import '../../feature/user_config/application/user_config_state.dart';
 import '../../feature/user_profile/application/user_profile_state.dart';
+import '../common_provider/launch_url_controller.dart';
 
 @RoutePage()
 class SettingRouterPage extends AutoRouter {
@@ -71,7 +71,8 @@ class SettingPage extends ConsumerWidget {
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.question_square),
               label: '使い方',
-              onTap: () => ref.read(launchURLProvider(howToPageUrl)),
+              onTap: () =>
+                  ref.read(launchUrlControllerProvider).launchURL(howToPageUrl, inBaseRoute: false),
             ),
             const Gap(24),
             SettingTileButton(
@@ -83,7 +84,7 @@ class SettingPage extends ConsumerWidget {
                     ref.read(userProfileProvider(currentUserId)).value;
                 final url = inquireFormUrl(currentUserProfile?.publicId ?? '');
 
-                ref.read(launchURLProvider(url));
+                ref.read(launchUrlControllerProvider).launchURL(url, inBaseRoute: false);
               },
             ),
             const Gap(24),
@@ -105,13 +106,16 @@ class SettingPage extends ConsumerWidget {
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.doc_text),
               label: '利用規約',
-              onTap: () => ref.read(launchURLProvider(termPageUrl)),
+              onTap: () =>
+                  ref.read(launchUrlControllerProvider).launchURL(termPageUrl, inBaseRoute: false),
             ),
             const Gap(24),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.exclamationmark_shield),
               label: 'プライバシーポリシー',
-              onTap: () => ref.read(launchURLProvider(privacyPolicyPageUrl)),
+              onTap: () => ref
+                  .read(launchUrlControllerProvider)
+                  .launchURL(privacyPolicyPageUrl, inBaseRoute: false),
             ),
             const Gap(24),
             SettingTileButton(

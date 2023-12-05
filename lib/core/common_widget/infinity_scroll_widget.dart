@@ -8,7 +8,8 @@ import '../../../core/common_widget/error_and_retry_widget.dart';
 import '../../../util/interface/list_state.dart';
 import '../../../util/logger.dart';
 import '../../feature/admob/presentation/banner_ad_widget.dart';
-import '../common_provider/toast_controller.dart';
+import '../common_provider/key_provider.dart';
+import '../common_provider/snack_bar_controller.dart';
 
 class InfinityScrollWidget extends ConsumerWidget {
   InfinityScrollWidget({
@@ -76,9 +77,11 @@ class InfinityScrollWidget extends ConsumerWidget {
         error: (e, s) {
           // ログ表示する。
           logger.e('error: $e, stackTrace: $s');
-          ref
-              .read(toastControllerProvider.notifier)
-              .showToast('読み込めませんでした。もう一度お試しください。', causeError: true);
+
+          ref.read(snackBarControllerProvider).showErrorSnackBar(
+                '読み込めませんでした。もう一度お試しください。',
+                ScaffoldMessengerType.baseRoute,
+              );
         },
         loading: () {},
       );
@@ -143,7 +146,7 @@ class InfinityScrollWidget extends ConsumerWidget {
         return Padding(
           padding: const EdgeInsets.only(top: 32),
           child: Center(
-            child: ErrorAndRetryWidget(
+            child: ErrorAndRetryWidget.cannotInquire(
               onRetry: () => ref.invalidate(listStateNotifierProvider),
             ),
           ),

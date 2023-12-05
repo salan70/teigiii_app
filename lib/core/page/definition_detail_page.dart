@@ -243,7 +243,7 @@ class DefinitionDetailPage extends ConsumerWidget {
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Center(
-              child: ErrorAndRetryWidget(
+              child: ErrorAndRetryWidget.cannotInquire(
                 onRetry: () => ref.invalidate(definitionProvider(definitionId)),
               ),
             ),

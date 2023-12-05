@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
-import '../../../core/common_provider/toast_controller.dart';
+import '../../../core/common_provider/key_provider.dart';
+import '../../../core/common_provider/snack_bar_controller.dart';
 import '../../../core/router/app_router.dart';
 import '../../user_profile/domain/user_profile.dart';
 
@@ -111,9 +112,10 @@ class _SearchUserTextFieldState extends ConsumerState<SearchUserTextField> {
           autofocus: widget.autoFocus,
           onSubmitted: (value) {
             if (value.length != UserProfile.publicIdLength) {
-              ref
-                  .read(toastControllerProvider.notifier)
-                  .showToast('9文字入力してください');
+              ref.read(snackBarControllerProvider).showErrorSnackBar(
+                    '9文字入力してください',
+                    ScaffoldMessengerType.baseRoute,
+                  );
               return;
             }
             controller.text = widget.defaultText ?? '';

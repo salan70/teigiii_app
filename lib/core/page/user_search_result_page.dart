@@ -62,7 +62,7 @@ class UserSearchResultPage extends ConsumerWidget {
             error: (error, stackTrace) {
               logger.e('[$searchWord]を検索時にエラーが発生しました。'
                   'error: $error, stackTrace: $stackTrace');
-              return ErrorAndRetryWidget(
+              return ErrorAndRetryWidget.cannotInquire(
                 onRetry: () =>
                     ref.invalidate(userIdSearchByPublicIdProvider(searchWord)),
               );
