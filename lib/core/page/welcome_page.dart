@@ -9,10 +9,9 @@ import '../common_provider/dialog_controller.dart';
 import '../common_provider/launch_url_controller.dart';
 import '../common_widget/button/filled_button.dart';
 
-// todo: WelcomePage にリネームする。
 @RoutePage()
-class IntroductionPage extends ConsumerWidget {
-  const IntroductionPage({super.key});
+class WelcomePage extends ConsumerWidget {
+  const WelcomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

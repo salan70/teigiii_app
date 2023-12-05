@@ -18,7 +18,6 @@ import '../page/dictionary_everyone_page.dart';
 import '../page/dictionary_individual_page.dart';
 import '../page/dictionary_sub_index_page.dart';
 import '../page/home_page.dart';
-import '../page/introduction_page.dart';
 import '../page/license_page.dart';
 import '../page/profile_edit_page.dart';
 import '../page/profile_top_page.dart';
@@ -29,6 +28,7 @@ import '../page/user_list_liked_page.dart';
 import '../page/user_list_muted_page.dart';
 import '../page/user_search_page.dart';
 import '../page/user_search_result_page.dart';
+import '../page/welcome_page.dart';
 import '../page/word_list_page.dart';
 import '../page/word_search_result_page.dart';
 import '../page/word_top_page.dart';
@@ -90,13 +90,16 @@ class AppRouter extends _$AppRouter {
   @override
   List<AdaptiveRoute> get routes => [
         AdaptiveRoute(
-          path: '/introduction',
-          page: IntroductionRoute.page,
+          path: '/welcome',
+          page: WelcomeRoute.page,
         ),
         AdaptiveRoute(
           path: '/',
           page: BaseRoute.page,
-          guards: [ref.read(firstLaunchGuardProvider), ref.read(authGuardProvider)],
+          guards: [
+            ref.read(firstLaunchGuardProvider),
+            ref.read(authGuardProvider),
+          ],
           children: [
             AdaptiveRoute(
               path: 'home',
