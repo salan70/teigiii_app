@@ -36,7 +36,10 @@ class UserListMutedPage extends ConsumerWidget {
                 final mutedUserId = mutedUserIdList[index];
                 return ProfileTile(
                   targetUserId: mutedUserId,
-                  button: OtherUserActionIconButton(ownerId: mutedUserId),
+                  button: OtherUserActionIconButton(
+                    ownerId: mutedUserId,
+                    inBaseRoute: false,
+                  ),
                   transitionToProfilePage: false,
                 );
               },
@@ -61,7 +64,7 @@ class UserListMutedPage extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Align(
               alignment: Alignment.topCenter,
-              child: ErrorAndRetryWidget(
+              child: ErrorAndRetryWidget.cannotInquire(
                 onRetry: () => ref.invalidate(mutedUserIdListProvider),
               ),
             ),

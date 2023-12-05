@@ -19,12 +19,12 @@ class SignInFailurePage extends ConsumerWidget with PresentationMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
-              child: ErrorAndRetryWidget(
+              child: ErrorAndRetryWidget.canInquire(
                 // BaseRoute に遷移する際に AuthGuard でログインの処理を行うため、
                 // ここでは BaseRoute に遷移するだけにしている。
                 // 問題ありそうだったら、ここでログイン処理を行うようにする。
                 onRetry: () async => context.pushRoute(const BaseRoute()),
-                showInquireButton: true,
+                inBaseRoute: false,
               ),
             ),
           ],

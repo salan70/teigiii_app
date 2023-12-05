@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:teigi_app/core/common_provider/toast_controller.dart';
 import 'package:teigi_app/feature/user_list/application/user_id_list_state_notifier.dart';
 import 'package:teigi_app/feature/user_list/domain/user_id_list_state.dart';
 import 'package:teigi_app/feature/user_list/repository/fetch_user_list_repository.dart';
@@ -15,9 +14,6 @@ import 'user_id_list_state_test.mocks.dart';
   MockSpec<FetchUserListRepository>(),
   MockSpec<Listener<AsyncValue<UserIdListState>>>(),
 ])
-class MockToastController extends Notifier<void>
-    with Mock
-    implements ToastController {}
 
 // ignore: one_member_abstracts, unreachable_from_main
 abstract class Listener<T> {
@@ -38,9 +34,6 @@ void main() {
       overrides: [
         fetchUserListRepositoryProvider
             .overrideWithValue(mockFetchUserListRepository),
-        toastControllerProvider.overrideWith(
-          MockToastController.new,
-        ),
       ],
     );
     addTearDown(container.dispose);

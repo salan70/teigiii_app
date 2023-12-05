@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-import '../../../core/common_provider/launch_url.dart';
+import '../../../core/common_provider/launch_url_controller.dart';
 import '../../../util/constant/url.dart';
 import '../../../util/mixin/presentation_mixin.dart';
 import '../../auth/application/auth_state.dart';
@@ -16,9 +16,12 @@ class OtherUserActionIconButton extends ConsumerWidget with PresentationMixin {
   OtherUserActionIconButton({
     super.key,
     required this.ownerId,
+    this.inBaseRoute = true,
   });
 
   final String ownerId;
+  final bool inBaseRoute;
+
   final globalKey = GlobalKey();
 
   @override
@@ -40,6 +43,8 @@ class OtherUserActionIconButton extends ConsumerWidget with PresentationMixin {
                       .read(userConfigServiceProvider)
                       .unmuteUser(ownerProfile.id),
                   successToastMessage: 'ミュート解除しました。',
+                  inBaseRouteBeforeAction: inBaseRoute,
+                  inBaseRouteAfterAction: inBaseRoute,
                 );
               },
               title: 'このユーザーのミュートを解除',
@@ -54,6 +59,8 @@ class OtherUserActionIconButton extends ConsumerWidget with PresentationMixin {
                       .read(userConfigServiceProvider)
                       .muteUser(ownerProfile.id),
                   successToastMessage: 'ミュートしました。',
+                  inBaseRouteBeforeAction: inBaseRoute,
+                  inBaseRouteAfterAction: inBaseRoute,
                 );
               },
               title: 'このユーザーをミュート',
@@ -72,7 +79,10 @@ class OtherUserActionIconButton extends ConsumerWidget with PresentationMixin {
               currentUserPublicId: currentUserProfile.publicId,
               targetUserPublicId: ownerProfile.publicId,
             );
-            ref.read(launchURLProvider(url));
+            await ref.read(launchUrlControllerProvider).launchURL(
+                  url,
+                  inBaseRoute: inBaseRoute,
+                );
           },
           title: 'このユーザーを報告',
           icon: CupertinoIcons.flag,

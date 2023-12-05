@@ -156,7 +156,7 @@ class WordTopPage extends ConsumerWidget {
                 child: asyncWord.isRefreshing
                     ? // エラー発生後の再読み込み中の場合
                     const CupertinoActivityIndicator()
-                    : ErrorAndRetryWidget(
+                    : ErrorAndRetryWidget.cannotInquire(
                         onRetry: () => ref.invalidate(wordProvider(wordId)),
                       ),
               ),

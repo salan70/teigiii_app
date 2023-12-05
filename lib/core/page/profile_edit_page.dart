@@ -75,6 +75,7 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
                             },
                             successToastMessage: '保存しました！',
                             errorToastMessage: '保存できませんでした。もう一度お試しください。',
+                            inBaseRouteBeforeAction: false,
                           );
                         }
                       : null,
@@ -169,7 +170,7 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Center(
-              child: ErrorAndRetryWidget(
+              child: ErrorAndRetryWidget.cannotInquire(
                 onRetry: () =>
                     ref.invalidate(userProfileForWriteNotifierProvider),
               ),

@@ -6,19 +6,33 @@ import 'package:gap/gap.dart';
 import '../../feature/auth/application/auth_state.dart';
 import '../../feature/user_profile/application/user_profile_state.dart';
 import '../../util/constant/url.dart';
-import '../common_provider/launch_url.dart';
+import '../common_provider/launch_url_controller.dart';
 import 'button/filled_button.dart';
 import 'button/outlined_button.dart';
 
 class ErrorAndRetryWidget extends ConsumerWidget {
-  const ErrorAndRetryWidget({
+  /// お問い合わせボタンを表示しない [ErrorAndRetryWidget].
+  const ErrorAndRetryWidget.cannotInquire({
     super.key,
     required this.onRetry,
-    this.showInquireButton = false,
-  });
+  })  : showInquireButton = false,
+        inBaseRoute = null;
 
+  /// お問い合わせボタンを表示する [ErrorAndRetryWidget].
+  const ErrorAndRetryWidget.canInquire({
+    super.key,
+    required this.onRetry,
+    required this.inBaseRoute,
+  }) : showInquireButton = true;
+
+  /// リトライ時の処理。
   final VoidCallback onRetry;
+
+  /// お問い合わせボタンを表示するかどうか。
   final bool showInquireButton;
+
+  /// 表示する Page が BaseRoute 内かどうか。（ BottomNavBar を表示するかどうか。）
+  final bool? inBaseRoute;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -62,7 +76,11 @@ class ErrorAndRetryWidget extends ConsumerWidget {
                       }
                       final url = inquireFormUrl(publicId ?? '');
 
-                      ref.read(launchURLProvider(url));
+                      // `showInquireButton` が true の場合、
+                      // `inBaseRoute` は必ず null ではない。
+                      ref
+                          .read(launchUrlControllerProvider)
+                          .launchURL(url, inBaseRoute: inBaseRoute!);
                     },
                     text: '運営へお問い合わせ',
                   ),
@@ -74,7 +92,7 @@ class ErrorAndRetryWidget extends ConsumerWidget {
   }
 }
 
-/// [ErrorAndRetryWidget]の簡易版
+/// [ErrorAndRetryWidget] の簡易版。
 class SimpleErrorAndRetryWidget extends StatelessWidget {
   const SimpleErrorAndRetryWidget({
     super.key,

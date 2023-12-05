@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../../../core/common_provider/launch_url.dart';
+import '../../../core/common_provider/launch_url_controller.dart';
 import '../../../core/common_widget/button/filled_button.dart';
 import '../../../util/constant/url.dart';
 import '../domain/app_maintenance.dart';
@@ -50,9 +50,11 @@ class OverlayInMaintenanceDialog extends ConsumerWidget {
                   ),
                   const Gap(16),
                   PrimaryFilledButton(
-                    onPressed: () {
-                      ref.read(launchURLProvider(latestInformationPageUrl));
-                    },
+                    onPressed: () =>
+                        ref.read(launchUrlControllerProvider).launchURL(
+                              latestInformationPageUrl,
+                              inBaseRoute: false,
+                            ),
                     text: '最新情報を確認する',
                   ),
                 ],

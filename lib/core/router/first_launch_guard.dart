@@ -26,7 +26,7 @@ class FirstLaunchGuard extends AutoRouteGuard {
 
     if (isFirstLaunch) {
       logger.d('初回起動しました。');
-      await router.replace(const IntroductionRoute());
+      await router.replace(const WelcomeRoute());
       return;
     }
     resolver.next();

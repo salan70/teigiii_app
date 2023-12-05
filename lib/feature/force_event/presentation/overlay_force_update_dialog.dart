@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../../../core/common_provider/launch_url.dart';
+import '../../../core/common_provider/launch_url_controller.dart';
 import '../../../core/common_widget/button/filled_button.dart';
 import '../../../util/constant/url.dart';
 import '../../../util/extension/target_platform_extension.dart';
@@ -44,9 +44,12 @@ class OverlayForceUpdateDialog extends ConsumerWidget {
                     onPressed: () {
                       // platform に応じたURLを開く。
                       defaultTargetPlatform.when(
-                        onIOS: () => ref.read(launchURLProvider(appStoreUrl)),
-                        onAndroid: () =>
-                            ref.read(launchURLProvider(googlePlayStoreUrl)),
+                        onIOS: () => ref
+                            .read(launchUrlControllerProvider)
+                            .launchURL(appStoreUrl, inBaseRoute: false),
+                        onAndroid: () => ref
+                            .read(launchUrlControllerProvider)
+                            .launchURL(googlePlayStoreUrl, inBaseRoute: false),
                       );
                     },
                     text: 'アップデートする',

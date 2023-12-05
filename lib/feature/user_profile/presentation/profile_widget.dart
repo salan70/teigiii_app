@@ -116,7 +116,7 @@ class ProfileWidget extends ConsumerWidget {
             'error: $error, stackTrace: $stackTrace');
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 24),
-          child: ErrorAndRetryWidget(
+          child: ErrorAndRetryWidget.cannotInquire(
             onRetry: () => ref.invalidate(userProfileProvider(targetUserId)),
           ),
         );

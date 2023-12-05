@@ -15,6 +15,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'core/common_provider/flavor_state.dart';
 import 'core/common_provider/is_loading_overlay_state.dart';
+import 'core/common_provider/key_provider.dart';
 import 'core/common_widget/dialog/loading_dialog.dart';
 import 'core/common_widget/error_and_retry_widget.dart';
 import 'core/router/app_router.dart';
@@ -122,7 +123,7 @@ class MyApp extends ConsumerWidget {
         return asyncIsRequiredUpdate.when(
           loading: () => const Scaffold(body: OverlayLoadingWidget()),
           error: (e, s) {
-            // エラーが発生後、再読み込み時にtrueになる
+            // エラーが発生後、再読み込み時にtrueになる。
             if (asyncIsRequiredUpdate.isLoading) {
               return const Scaffold(body: OverlayLoadingWidget());
             }
@@ -134,10 +135,10 @@ class MyApp extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Center(
-                    child: ErrorAndRetryWidget(
+                    child: ErrorAndRetryWidget.canInquire(
                       onRetry: () =>
                           ref.invalidate(isRequiredAppUpdateProvider),
-                      showInquireButton: true,
+                      inBaseRoute: false,
                     ),
                   ),
                 ],
@@ -158,7 +159,14 @@ class MyApp extends ConsumerWidget {
             // * アップデートが不要な場合
             return Stack(
               children: [
-                child!,
+                ScaffoldMessenger(
+                  key: ref.watch(
+                    scaffoldMessengerKeyProvider(
+                      ScaffoldMessengerType.topRoute,
+                    ),
+                  ),
+                  child: child!,
+                ),
                 if (ref.watch(isLoadingOverlayNotifierProvider))
                   const OverlayLoadingWidget(),
               ],

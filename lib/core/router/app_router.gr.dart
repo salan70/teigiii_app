@@ -124,12 +124,6 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    IntroductionRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const IntroductionPage(),
-      );
-    },
     MyLicenseRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -213,6 +207,12 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           searchWord: args.searchWord,
         ),
+      );
+    },
+    WelcomeRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const WelcomePage(),
       );
     },
     WordListRoute.name: (routeData) {
@@ -608,20 +608,6 @@ class IndividualDictionaryDefinitionListRouteArgs {
 }
 
 /// generated route for
-/// [IntroductionPage]
-class IntroductionRoute extends PageRouteInfo<void> {
-  const IntroductionRoute({List<PageRouteInfo>? children})
-      : super(
-          IntroductionRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'IntroductionRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
 /// [MyLicensePage]
 class MyLicenseRoute extends PageRouteInfo<void> {
   const MyLicenseRoute({List<PageRouteInfo>? children})
@@ -890,6 +876,20 @@ class UserSearchResultRouteArgs {
   String toString() {
     return 'UserSearchResultRouteArgs{key: $key, searchWord: $searchWord}';
   }
+}
+
+/// generated route for
+/// [WelcomePage]
+class WelcomeRoute extends PageRouteInfo<void> {
+  const WelcomeRoute({List<PageRouteInfo>? children})
+      : super(
+          WelcomeRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'WelcomeRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

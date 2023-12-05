@@ -61,6 +61,8 @@ class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
                     await ref.read(authServiceProvider).deleteUser();
                     await showCompleteDeleteAccountDialog();
                   },
+                  inBaseRouteBeforeAction: false,
+                  inBaseRouteAfterAction: false,
                 );
               },
               confirmButtonText: '削除する',

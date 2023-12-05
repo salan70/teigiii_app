@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'toast_controller.dart';
+part of 'launch_url_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$toastControllerHash() => r'bae2ed9aba1a3ecf0592a06c40112adaffc30424';
+String _$launchUrlControllerHash() =>
+    r'a4c019f50dbbb6c23c58a186621b4c081365044a';
 
-/// See also [ToastController].
-@ProviderFor(ToastController)
-final toastControllerProvider =
-    NotifierProvider<ToastController, void>.internal(
-  ToastController.new,
-  name: r'toastControllerProvider',
+/// See also [launchUrlController].
+@ProviderFor(launchUrlController)
+final launchUrlControllerProvider =
+    AutoDisposeProvider<LaunchUrlController>.internal(
+  launchUrlController,
+  name: r'launchUrlControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$toastControllerHash,
+      : _$launchUrlControllerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ToastController = Notifier<void>;
+typedef LaunchUrlControllerRef = AutoDisposeProviderRef<LaunchUrlController>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
