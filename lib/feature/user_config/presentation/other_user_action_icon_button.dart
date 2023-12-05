@@ -16,9 +16,12 @@ class OtherUserActionIconButton extends ConsumerWidget with PresentationMixin {
   OtherUserActionIconButton({
     super.key,
     required this.ownerId,
+    this.inBaseRoute = true,
   });
 
   final String ownerId;
+  final bool inBaseRoute;
+
   final globalKey = GlobalKey();
 
   @override
@@ -40,6 +43,8 @@ class OtherUserActionIconButton extends ConsumerWidget with PresentationMixin {
                       .read(userConfigServiceProvider)
                       .unmuteUser(ownerProfile.id),
                   successToastMessage: 'ミュート解除しました。',
+                  inBaseRouteBeforeAction: inBaseRoute,
+                  inBaseRouteAfterAction: inBaseRoute,
                 );
               },
               title: 'このユーザーのミュートを解除',
@@ -54,6 +59,8 @@ class OtherUserActionIconButton extends ConsumerWidget with PresentationMixin {
                       .read(userConfigServiceProvider)
                       .muteUser(ownerProfile.id),
                   successToastMessage: 'ミュートしました。',
+                  inBaseRouteBeforeAction: inBaseRoute,
+                  inBaseRouteAfterAction: inBaseRoute,
                 );
               },
               title: 'このユーザーをミュート',

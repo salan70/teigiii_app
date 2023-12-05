@@ -6,6 +6,7 @@ import 'toast_controller.dart';
 
 part 'launch_url.g.dart';
 
+// TODO(me): Controller として作成する。
 // [launchUrl] との重複を避けるために、[launchURL] と命名
 @riverpod
 Future<void> launchURL(LaunchURLRef ref, String url) async {

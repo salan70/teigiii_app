@@ -75,6 +75,7 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
                             },
                             successToastMessage: '保存しました！',
                             errorToastMessage: '保存できませんでした。もう一度お試しください。',
+                            inBaseRouteBeforeAction: false,
                           );
                         }
                       : null,

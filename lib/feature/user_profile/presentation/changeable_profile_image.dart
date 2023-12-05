@@ -44,6 +44,7 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
                   ref,
                   action: () async =>
                       notifier.pickAndCropImage(ImageSource.camera),
+                  inBaseRouteBeforeAction: false,
                 );
               },
               title: '写真を撮る',
@@ -55,6 +56,7 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
                   ref,
                   action: () async =>
                       notifier.pickAndCropImage(ImageSource.gallery),
+                  inBaseRouteBeforeAction: false,
                 );
               },
               title: 'アルバムから選択',

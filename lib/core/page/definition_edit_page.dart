@@ -50,6 +50,7 @@ class DefinitionEditPage extends ConsumerWidget with PresentationMixin {
                         },
                         errorToastMessage: '保存できませんでした。もう一度お試しください。',
                         successToastMessage: '保存しました！',
+                        inBaseRouteBeforeAction: false,
                       );
 
                       return;
@@ -67,6 +68,7 @@ class DefinitionEditPage extends ConsumerWidget with PresentationMixin {
                             },
                             errorToastMessage: '投稿できませんでした。もう一度お試しください。',
                             successToastMessage: '投稿しました！',
+                            inBaseRouteBeforeAction: false,
                           );
 
                           // 新規投稿した定義の詳細画面に遷移する。

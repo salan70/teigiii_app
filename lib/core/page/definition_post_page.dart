@@ -65,6 +65,7 @@ class DefinitionPostPage extends ConsumerWidget with PresentationMixin {
                       },
                       errorToastMessage: '投稿できませんでした。もう一度お試しください。',
                       successToastMessage: '投稿しました！',
+                      inBaseRouteBeforeAction: false,
                     );
 
                     if (!isActionCompleted) {
