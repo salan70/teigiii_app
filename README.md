@@ -6,6 +6,38 @@
 
 TODO: DL用のリンク貼る
 
+# ドキュメント
+
+| ドキュメント | 説明 |
+|------------|------|
+| [CLAUDE.md](./CLAUDE.md) | AIエージェント向けガイドライン |
+| [CONTRIBUTING.md](./CONTRIBUTING.md) | コントリビューションガイド |
+| [アーキテクチャ](./doc/architecture.md) | アーキテクチャ詳細 |
+| [コーディング規約](./doc/coding_guidelines.md) | コーディングスタイル・規約 |
+| [開発環境セットアップ](./doc/development_setup.md) | 開発環境の構築手順 |
+| [トラブルシューティング](./doc/troubleshooting.md) | よくある問題と解決方法 |
+
+# クイックスタート
+
+```bash
+# 1. FVM をインストール（未インストールの場合）
+dart pub global activate fvm
+
+# 2. Flutter SDK をセットアップ
+fvm install
+
+# 3. 依存関係をインストール
+make setup
+
+# 4. コード生成
+make generate
+
+# 5. アプリを起動（開発環境）
+fvm flutter run --dart-define-from-file=dart_defines/dev.json
+```
+
+詳細は [開発環境セットアップガイド](./doc/development_setup.md) を参照してください。
+
 # アプリ起動（run）
 
 開発環境
