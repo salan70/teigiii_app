@@ -1,0 +1,54 @@
+name: バグ報告
+description: バグの報告
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 概要
+      description: バグの概要を記述してください。
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: 再現手順
+      description: バグを再現する手順を記述してください。
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: 期待する動作
+      description: 本来どのように動作すべきかを記述してください。
+    validations:
+      required: true
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: 実際の動作
+      description: 実際にどのように動作したかを記述してください。
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 環境
+      description: 環境情報を記述してください。
+      placeholder: |
+        - OS: [例: iOS 17.0, Android 14]
+        - Flutter バージョン: [例: 3.x.x]
+        - デバイス: [例: iPhone 15, Pixel 8]
+    validations:
+      required: false
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: スクリーンショット
+      description: 該当する場合はスクリーンショットを貼り付けてください。
+    validations:
+      required: false
