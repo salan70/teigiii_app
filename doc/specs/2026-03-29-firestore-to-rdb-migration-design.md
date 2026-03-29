@@ -52,7 +52,7 @@ Firestore をコアデータのデータソースとして使用しているが�
 
 ## 3. 全体アーキテクチャ
 
-```
+```text
 ┌─────────────┐     ┌──────────────────────┐     ┌─────────────────┐
 │  Flutter App │────>│  Cloudflare Workers   │────>│  Neon PostgreSQL │
 │             │<────│  (TypeScript / Hono)  │<────│  (Singapore)     │
@@ -83,7 +83,7 @@ UserProfiles / UserConfigs は当初 Firebase 残留を想定したが、レビ�
 
 ### 認証フロー
 
-```
+```text
 1. Flutter App → Firebase Auth でログイン → ID Token (JWT) 取得
 2. リクエスト: Authorization: Bearer <firebase_id_token>
 3. Workers auth middleware:
@@ -97,13 +97,14 @@ Firebase 公開鍵は Workers KV にキャッシュ（TTL: 1 時間）。キャ�
 
 ### ユーザー削除方針
 
-ユーザーアカウント削除時は以下の順序で処理:
+`definitions.author_id` は `ON DELETE RESTRICT` であり、定義が存在する限り `users` の物理削除はブロックされる。soft delete (`deleted_at` の設定) は FK 参照を解除しないため、ユーザーも**物理削除せず soft delete に統一**する。
 
-1. `definitions` を soft delete (`deleted_at` を設定)
-2. `likes`, `user_follows`, `user_mutes` は `ON DELETE CASCADE` で自動削除
-3. `users` レコードを削除
+- `users` テーブルに `deleted_at TIMESTAMPTZ DEFAULT NULL` を追加
+- ユーザーアカウント削除時: `users.deleted_at` を設定（物理削除しない）
+- 削除済みユーザーの定義は「退会済みユーザー」として表示
+- `likes`, `user_follows`, `user_mutes` は物理削除（`ON DELETE CASCADE` は users 物理削除時のセーフティネットとして残すが、通常フローでは API 層で明示的に削除）
 
-これにより、FK 制約違反を回避しつつデータの整合性を維持する。
+**注意:** soft delete した定義に紐づく likes は DB 上に残る（un-delete 対応のため）。フィード等のクエリでは `definitions.deleted_at IS NULL` で常にフィルタすること。
 
 ## 4. データベーススキーマ
 
@@ -138,6 +139,7 @@ CREATE TABLE users (
   profile_image_url TEXT NOT NULL DEFAULT '',
   os_version TEXT NOT NULL DEFAULT '',
   app_version TEXT NOT NULL DEFAULT '',
+  deleted_at TIMESTAMPTZ DEFAULT NULL,   -- soft delete
   firestore_id TEXT UNIQUE,             -- 移行用（完了後に DROP）
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
@@ -298,7 +300,7 @@ CREATE INDEX idx_user_follows_following
 
 ### エンドポイント
 
-```
+```text
 # Words
 GET    /api/words                       -- 語句一覧（ページネーション、グループ別）
 GET    /api/words/search?q=...          -- 語句検索（LIKE 部分一致）
@@ -369,22 +371,22 @@ SELECT d.*, w.word, w.reading, u.name AS author_name, u.profile_image_url
 **定義作成（Word 自動作成含む）:**
 
 ```sql
-BEGIN;
-  -- CTE で Word を upsert し、既存/新規どちらでも id を取得
-  WITH new_word AS (
-    INSERT INTO words (word, reading, initial_sub_group_label)
-      VALUES ($1, $2, $3)
-      ON CONFLICT (word, reading) DO NOTHING
-      RETURNING id
-  )
+-- CTE で Word を upsert し、取得した id で定義を 1 ステートメントで作成
+WITH new_word AS (
+  INSERT INTO words (word, reading, initial_sub_group_label)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (word, reading) DO NOTHING
+    RETURNING id
+),
+picked_word AS (
   SELECT id FROM new_word
   UNION ALL
   SELECT id FROM words WHERE word = $1 AND reading = $2
-  LIMIT 1;
-  -- 取得した word_id で定義を作成
-  INSERT INTO definitions (word_id, author_id, definition, is_public)
-    VALUES ($word_id, $author_id, $text, $is_public);
-COMMIT;
+  LIMIT 1
+)
+INSERT INTO definitions (word_id, author_id, definition, is_public)
+SELECT id, $4, $5, $6
+FROM picked_word;
 ```
 
 ### ページネーション
@@ -479,7 +481,7 @@ Phase 1 の LIKE 検索は 50,000 行 x 500 文字で ~100-200ms（シーケン�
 | UserProfiles | PostgreSQL に移行 | JOIN で定義と一括取得。Firestore 往復を排除 |
 | AppConfig | Firebase に残留 | コールドスタート不要で即座に取得 |
 | follower/following 命名 | 標準規約に修正 | 移行を機に混乱を解消 |
-| soft delete | definitions のみ | ユーザーの取り消し操作対応 |
+| soft delete | definitions + users | 定義の取り消し対応 + ユーザー退会後も定義を「退会済みユーザー」として表示 |
 | WordDefinitionRelations | 廃止 | FK で代替。結合テーブル不要 |
 | Word 削除 | `ON DELETE RESTRICT` + API 層で制御 | 定義 soft delete 後、定義数 0 の Word を定期的またはイベント駆動で削除 |
 | Neon 接続方式 | `@neondatabase/serverless` (WebSocket) | Workers は TCP 非対応。Neon 組込みコネクションプーラー使用 |
