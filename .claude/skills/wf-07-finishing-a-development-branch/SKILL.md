@@ -43,7 +43,7 @@ npm test / cargo test / pytest / go test ./...
 
 ```bash
 # 一般的なベースブランチを試す
-git merge-base HEAD main 2>/dev/null || git merge-base HEAD master 2>/dev/null
+git merge-base HEAD develop 2>/dev/null || git merge-base HEAD main 2>/dev/null || git merge-base HEAD master 2>/dev/null
 ```
 
 または確認: 「このブランチは main から分岐しました — 合っていますか？」

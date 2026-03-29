@@ -58,7 +58,7 @@ HEAD_SHA=$(git rev-parse HEAD)
 
 [superpowers:code-reviewer サブエージェントを起動]
   WHAT_WAS_IMPLEMENTED: 会話インデックスの検証・修復関数
-  PLAN_OR_REQUIREMENTS: docs/superpowers/plans/deployment-plan.md のタスク 2
+  PLAN_OR_REQUIREMENTS: doc/plans/deployment-plan.md のタスク 2
   BASE_SHA: a7981ec
   HEAD_SHA: 3df7661
   DESCRIPTION: verifyIndex() と repairIndex() を4種類の問題タイプ付きで追加

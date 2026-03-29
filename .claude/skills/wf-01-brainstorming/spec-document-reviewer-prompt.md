@@ -4,7 +4,7 @@ spec-document-reviewer サブエージェントをディスパッチする際に
 
 **目的:** 仕様が完全で、一貫性があり、実装計画の作成に十分な状態か検証する。
 
-**ディスパッチタイミング:** 仕様ドキュメントが docs/superpowers/specs/ に書き込まれた後
+**ディスパッチタイミング:** 仕様ドキュメントが doc/specs/ に書き込まれた後
 
 ```
 Task tool (general-purpose):

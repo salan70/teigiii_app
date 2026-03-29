@@ -15,7 +15,7 @@ description: 仕様や要件がある複数ステップのタスクに対して�
 
 **コンテキスト:** wf-01-brainstorming スキルが作成した専用の worktree で実行してください。
 
-**計画の保存先:** `docs/plans/YYYY-MM-DD-<feature-name>.md`
+**計画の保存先:** `doc/plans/YYYY-MM-DD-<feature-name>.md`
 - （ユーザーが計画の保存場所を指定している場合はそちらを優先）
 
 ## スコープの確認
@@ -128,7 +128,7 @@ git commit -m "feat: add specific feature"
 
 計画を保存した後、実行方法を提示:
 
-**「計画が完成し `docs/plans/<filename>.md` に保存しました。2 つの実行方法があります:**
+**「計画が完成し `doc/plans/<filename>.md` に保存しました。2 つの実行方法があります:**
 
 **1. サブエージェント駆動（推奨）** - タスクごとに新しいサブエージェントをディスパッチ、タスク間にレビュー、高速な反復
 

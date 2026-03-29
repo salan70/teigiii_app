@@ -28,7 +28,7 @@ description: "すべてのタスクの開始時に使用する計画スキル。
 3. **確認質問** — 一度にひとつずつ、目的・制約・成功基準を理解する
 4. **2〜3 のアプローチを提案** — トレードオフと推奨を示す
 5. **設計を提示** — 複雑さに応じたセクション構成で、各セクション後にユーザーの承認を得る
-6. **設計ドキュメントを作成** — `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` に保存してコミット
+6. **設計ドキュメントを作成** — `doc/specs/YYYY-MM-DD-<topic>-design.md` に保存してコミット
 7. **仕様レビューループ** — spec-document-reviewer サブエージェントを的確なレビュー文脈でディスパッチ（セッション履歴は渡さない）。問題があれば修正して再ディスパッチ、承認されるまで繰り返す（最大 3 回、超過したらユーザーに報告）
 8. **ユーザーが仕様を確認** — 続行前にユーザーに仕様ファイルのレビューを依頼
 9. **実装への移行** — wf-03-writing-plans スキルを呼び出して実装計画を作成
@@ -113,7 +113,7 @@ digraph wf-01-brainstorming {
 
 **ドキュメント化:**
 
-- 検証済みの設計（仕様）を `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` に書き出す
+- 検証済みの設計（仕様）を `doc/specs/YYYY-MM-DD-<topic>-design.md` に書き出す
   - （仕様の保存場所についてユーザーの指定がある場合はそちらを優先）
 - elements-of-style:writing-clearly-and-concisely スキルがあれば使用
 - 設計ドキュメントを Git にコミット

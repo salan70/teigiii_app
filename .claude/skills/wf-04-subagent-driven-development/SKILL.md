@@ -128,7 +128,7 @@ digraph process {
 ```
 あなた: サブエージェント駆動開発でこの計画を実行します。
 
-[計画ファイルを一度読む: docs/superpowers/plans/feature-plan.md]
+[計画ファイルを一度読む: doc/plans/feature-plan.md]
 [5つのタスクすべてを全文とコンテキスト付きで抽出]
 [全タスクで TodoWrite を作成]
 

@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 # Read wf-01-brainstorming skill from local path
-brainstorming_content=$(cat "${REPO_ROOT}/.claude/skills/wf-01-brainstorming/SKILL.md" 2>&1 || echo "Error reading brainstorming skill")
+brainstorming_content=$(cat "${REPO_ROOT}/.claude/skills/wf-01-brainstorming/SKILL.md" 2>/dev/null || echo "Error reading brainstorming skill")
 
 # Escape string for JSON embedding using bash parameter substitution.
 escape_for_json() {
