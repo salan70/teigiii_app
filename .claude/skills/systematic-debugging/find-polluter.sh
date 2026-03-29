@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Bisection script to find which test creates unwanted files/state
-# Usage: ./find-polluter.sh <file_or_dir_to_check> <test_pattern>
-# Example: ./find-polluter.sh '.git' 'src/**/*.test.ts'
+# Usage: ./find-polluter.sh <file_or_dir_to_check> <test_pattern> [test_command]
+# Example: ./find-polluter.sh '.git' 'src/**/*.test.ts' 'make test'
 
 set -e
 
-if [ $# -ne 2 ]; then
-  echo "Usage: $0 <file_to_check> <test_pattern>"
-  echo "Example: $0 '.git' 'src/**/*.test.ts'"
+if [ $# -lt 2 ] || [ $# -gt 3 ]; then
+  echo "Usage: $0 <file_to_check> <test_pattern> [test_command]"
+  echo "Example: $0 '.git' 'src/**/*.test.ts' 'make test'"
   exit 1
 fi
 
