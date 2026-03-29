@@ -287,7 +287,7 @@ CREATE INDEX idx_user_follows_following
 | プレフィックス検索のみ | `.startAt().endAt()` | LIKE 部分一致（将来 Meilisearch） |
 | WordDefinitionRelations 手動管理 | 結合テーブル + 複数クエリ | `definitions.word_id` FK + JOIN |
 | `whereIn` 10 件制限 | チャンク分割 + メモリソート | `WHERE ... IN (...)` 制限なし |
-| ミュートのメモリ内フィルタ | fetch 後にアプリで除外 | `NOT IN (SELECT ... FROM user_mutes)` |
+| ミュートのメモリ内フィルタ | fetch 後にアプリで除外 | `NOT EXISTS` サブクエリ（NULL 安全・高パフォーマンス） |
 | likes_count 不整合 | バッチ部分失敗リスク | トリガーで原子的に更新 |
 | フォロー数不整合 | 非正規化テーブル | `COUNT()` で毎回計算 |
 | Likes 削除漏れ | TODO コメント未実装 | `ON DELETE CASCADE` で自動 |
@@ -483,6 +483,6 @@ Phase 1 の LIKE 検索は 50,000 行 x 500 文字で ~100-200ms（シーケン�
 | follower/following 命名 | 標準規約に修正 | 移行を機に混乱を解消 |
 | soft delete | definitions + users | 定義の取り消し対応 + ユーザー退会後も定義を「退会済みユーザー」として表示 |
 | WordDefinitionRelations | 廃止 | FK で代替。結合テーブル不要 |
-| Word 削除 | `ON DELETE RESTRICT` + API 層で制御 | 定義 soft delete 後、定義数 0 の Word を定期的またはイベント駆動で削除 |
+| Word 削除 | `ON DELETE RESTRICT` + API 層で制御 | soft delete された定義は FK 参照が残るため、Word 削除は「active な定義が 0 件かつ soft delete 済み定義を物理削除した後」にのみ実行。定期バッチで処理 |
 | Neon 接続方式 | `@neondatabase/serverless` (WebSocket) | Workers は TCP 非対応。Neon 組込みコネクションプーラー使用 |
 | ミュートフィルタ | `NOT EXISTS` サブクエリ | `NOT IN` より NULL 安全でパフォーマンスが良い |
