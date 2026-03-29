@@ -6,7 +6,7 @@ spec-document-reviewer サブエージェントをディスパッチする際に
 
 **ディスパッチタイミング:** 仕様ドキュメントが doc/specs/ に書き込まれた後
 
-```
+```yaml
 Task tool (general-purpose):
   description: "仕様ドキュメントをレビュー"
   prompt: |

@@ -13,10 +13,19 @@ fi
 
 POLLUTION_CHECK="$1"
 TEST_PATTERN="$2"
+TEST_CMD="${3:-make test}"
 
 echo "🔍 Searching for test that creates: $POLLUTION_CHECK"
 echo "Test pattern: $TEST_PATTERN"
+echo "Test command: $TEST_CMD"
 echo ""
+
+# Abort if pollution already exists before any test runs
+if [ -e "$POLLUTION_CHECK" ]; then
+  echo "❌ Pollution '$POLLUTION_CHECK' already exists before testing."
+  echo "   Remove it first, then re-run this script."
+  exit 1
+fi
 
 # Get list of test files
 TEST_FILES=$(find . -path "$TEST_PATTERN" | sort)
@@ -29,17 +38,17 @@ COUNT=0
 for TEST_FILE in $TEST_FILES; do
   COUNT=$((COUNT + 1))
 
-  # Skip if pollution already exists
+  # Check if pollution appeared from a previous test
   if [ -e "$POLLUTION_CHECK" ]; then
-    echo "⚠️  Pollution already exists before test $COUNT/$TOTAL"
-    echo "   Skipping: $TEST_FILE"
-    continue
+    echo "⚠️  Pollution appeared after previous test"
+    echo "   Skipping remaining: $TEST_FILE"
+    break
   fi
 
   echo "[$COUNT/$TOTAL] Testing: $TEST_FILE"
 
   # Run the test
-  npm test "$TEST_FILE" > /dev/null 2>&1 || true
+  $TEST_CMD "$TEST_FILE" > /dev/null 2>&1 || true
 
   # Check if pollution appeared
   if [ -e "$POLLUTION_CHECK" ]; then
@@ -52,7 +61,7 @@ for TEST_FILE in $TEST_FILES; do
     ls -la "$POLLUTION_CHECK"
     echo ""
     echo "To investigate:"
-    echo "  npm test $TEST_FILE    # Run just this test"
+    echo "  $TEST_CMD $TEST_FILE    # Run just this test"
     echo "  cat $TEST_FILE         # Review test code"
     exit 1
   fi

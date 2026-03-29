@@ -3,10 +3,10 @@
 # Stop hook: 作業完了報告の直後に session-reflect の実行をリマインドする。
 #
 # 判定ロジック:
-# 1. stop_hook_active == true → exit 0（ループ防止）
-# 2. last_assistant_message に「セッション振り返り提案」を含む → exit 0（実行済み）
-# 3. last_assistant_message に「作業完了報告」を含む → block + リマインド
-# 4. それ以外 → exit 0（通常の応答では発火しない）
+# 1. last_assistant_message に「セッション振り返り提案」を含む → exit 0（実行済み）
+# 2. last_assistant_message に「作業完了報告」を含む → block + リマインド
+# 3. それ以外 → exit 0（通常の応答では発火しない）
+# ループ防止: block 後に振り返りが実行されると、次の stop で判定 1 に該当して通過する
 
 set -uo pipefail
 

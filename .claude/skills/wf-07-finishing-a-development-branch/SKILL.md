@@ -27,7 +27,7 @@ npm test / cargo test / pytest / go test ./...
 ```
 
 **テストが失敗した場合:**
-```
+```text
 テスト失敗 (<N> 件の失敗)。完了前に修正が必要です:
 
 [失敗内容を表示]
@@ -42,17 +42,22 @@ npm test / cargo test / pytest / go test ./...
 ### Step 2: ベースブランチの特定
 
 ```bash
-# 一般的なベースブランチを試す
-git merge-base HEAD develop 2>/dev/null || git merge-base HEAD main 2>/dev/null || git merge-base HEAD master 2>/dev/null
+# ベースブランチ候補を検出（存在するブランチのうち最も近い分岐点を持つものを選択）
+for branch in develop main master; do
+  if git rev-parse --verify "$branch" >/dev/null 2>&1; then
+    echo "$branch"
+    break
+  fi
+done
 ```
 
-または確認: 「このブランチは main から分岐しました — 合っていますか？」
+検出されたブランチを確認: 「このブランチは `<detected-branch>` から分岐しました — 合っていますか？」
 
 ### Step 3: オプションの提示
 
 以下の 4 つのオプションを正確に提示:
 
-```
+```text
 実装が完了しました。どうしますか？
 
 1. <base-branch> にローカルでマージ
@@ -86,7 +91,7 @@ git merge <feature-branch>
 git branch -d <feature-branch>
 ```
 
-その後: Worktree のクリーンアップ (Step 5)
+その後: Worktree のクリーンアップ (Step 5) → セッションの振り返り (Step 6)
 
 #### オプション 2: プッシュして PR 作成
 
@@ -105,7 +110,7 @@ EOF
 )"
 ```
 
-その後: Worktree のクリーンアップ (Step 5)
+その後: セッションの振り返り (Step 6)。**Worktree は維持** — PR レビュー対応のため。
 
 #### オプション 3: そのまま残す
 
@@ -116,7 +121,7 @@ EOF
 #### オプション 4: 破棄
 
 **まず確認:**
-```
+```text
 以下が完全に削除されます:
 - ブランチ <name>
 - すべてのコミット: <commit-list>
@@ -133,11 +138,11 @@ git checkout <base-branch>
 git branch -D <feature-branch>
 ```
 
-その後: Worktree のクリーンアップ (Step 5)
+その後: Worktree のクリーンアップ (Step 5) → セッションの振り返り (Step 6)
 
 ### Step 5: Worktree のクリーンアップ
 
-**オプション 1、2、4 の場合:**
+**オプション 1、4 の場合のみ:**
 
 worktree 内にいるか確認:
 ```bash
