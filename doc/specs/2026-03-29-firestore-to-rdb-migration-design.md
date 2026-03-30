@@ -101,7 +101,7 @@ Firebase 公開鍵は Workers KV にキャッシュ（TTL: 1 時間）。キャ�
 
 - `users` テーブルに `deleted_at TIMESTAMPTZ DEFAULT NULL` を追加
 - ユーザーアカウント削除時: `users.deleted_at` を設定（物理削除しない）
-- 削除済みユーザーの定義は「退会済みユーザー」として表示
+- 削除済みユーザーの定義は「退会済みユーザー」として表示（表示名の差し替えは API レイヤーで処理。SQL クエリは `u.name` をそのまま返し、`u.deleted_at IS NOT NULL` の場合に API 層でプレースホルダーに置換する）
 - `likes`, `user_follows`, `user_mutes` は物理削除（`ON DELETE CASCADE` は users 物理削除時のセーフティネットとして残すが、通常フローでは API 層で明示的に削除）
 
 **注意:** soft delete した定義に紐づく likes は DB 上に残る（un-delete 対応のため）。フィード等のクエリでは `definitions.deleted_at IS NULL` で常にフィルタすること。
