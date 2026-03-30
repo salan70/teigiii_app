@@ -349,7 +349,7 @@ SELECT d.*, w.word, w.reading, u.name AS author_name, u.profile_image_url
    AND NOT EXISTS (SELECT 1 FROM user_mutes um WHERE um.user_id = $1 AND um.muted_user_id = d.author_id)
  ORDER BY d.created_at DESC
  LIMIT 20;
--- ※ カーソルページネーション時は WHERE に d.created_at < $cursor を追加
+-- ※ カーソルページネーション時は WHERE に (d.created_at, d.id) < ($cursor_ts, $cursor_id) を追加
 ```
 
 **フォロー中フィード:**
@@ -365,28 +365,23 @@ SELECT d.*, w.word, w.reading, u.name AS author_name, u.profile_image_url
    AND NOT EXISTS (SELECT 1 FROM user_mutes um WHERE um.user_id = $1 AND um.muted_user_id = d.author_id)
  ORDER BY d.created_at DESC
  LIMIT 20;
--- ※ カーソルページネーション時は WHERE に d.created_at < $cursor を追加
+-- ※ カーソルページネーション時は WHERE に (d.created_at, d.id) < ($cursor_ts, $cursor_id) を追加
 ```
 
 **定義作成（Word 自動作成含む）:**
 
 ```sql
 -- CTE で Word を upsert し、取得した id で定義を 1 ステートメントで作成
-WITH new_word AS (
+-- DO UPDATE (no-op) により、競合時も RETURNING が必ず行を返す
+WITH upserted_word AS (
   INSERT INTO words (word, reading, initial_sub_group_label)
     VALUES ($1, $2, $3)
-    ON CONFLICT (word, reading) DO NOTHING
+    ON CONFLICT (word, reading) DO UPDATE SET word = EXCLUDED.word
     RETURNING id
-),
-picked_word AS (
-  SELECT id FROM new_word
-  UNION ALL
-  SELECT id FROM words WHERE word = $1 AND reading = $2
-  LIMIT 1
 )
 INSERT INTO definitions (word_id, author_id, definition, is_public)
 SELECT id, $4, $5, $6
-FROM picked_word;
+FROM upserted_word;
 ```
 
 ### ページネーション
