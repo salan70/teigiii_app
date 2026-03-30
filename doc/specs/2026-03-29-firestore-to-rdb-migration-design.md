@@ -391,11 +391,11 @@ FROM picked_word;
 
 ### ページネーション
 
-カーソルベース（現行 Firestore と同方式）:
+複合カーソルベース（`created_at` + `id`）。同一タイムスタンプの行スキップを防止:
 
 ```sql
-WHERE d.created_at < $cursor
-ORDER BY d.created_at DESC
+WHERE (d.created_at, d.id) < ($cursor_ts, $cursor_id)
+ORDER BY d.created_at DESC, d.id DESC
 LIMIT 20;
 ```
 
