@@ -1,5 +1,5 @@
 ---
-name: wf-common-git-operations
+name: git-operations
 autoInvoke: when committing changes, creating branches, or checking for sensitive file leaks
 description: ローカル Git 操作 — ブランチ作成、ステージング、コミット、セキュリティチェック、コミットメッセージ規約
 ---
@@ -10,7 +10,7 @@ description: ローカル Git 操作 — ブランチ作成、ステージング
 
 **基本原則:** プロジェクトルールが最優先。コミット前に検証。シークレットを絶対に漏らさない。
 
-**開始時に宣言:** 「wf-common-git-operations スキルを使用して Git 操作を行います。」
+**開始時に宣言:** 「git-operations スキルを使用して Git 操作を行います。」
 
 ## ルールの優先順位
 
@@ -21,6 +21,17 @@ description: ローカル Git 操作 — ブランチ作成、ステージング
 迷った場合は、対象プロジェクトの Git 関連ルールを確認してから進める。
 
 <!-- BRANCH_STRATEGY_SECTION -->
+
+<!-- ISSUE_BASED_START -->
+## ブランチ戦略
+
+本プロジェクトは **Issue ベース**で開発を進めます。
+
+- **1 Issue = 1 ブランチ = 1 PR** の原則を守る
+- すべての作業は Issue を起点として開始する
+- Issue なしでの直接コミットは原則禁止
+- PR 本文に `closes #<issue-number>` を含めて Issue を自動クローズ
+<!-- ISSUE_BASED_END -->
 
 ## ブランチ
 
@@ -35,9 +46,6 @@ description: ローカル Git 操作 — ブランチ作成、ステージング
 ```
 <type>/<yyyymmdd>-<short-kebab-summary>
 ```
-
-ブランチの完了とマージオプションについては `wf-07-finishing-a-development-branch` に引き継ぐ。
-独立したワークスペースが必要な場合は `wf-02-using-git-worktrees` を使用する。
 
 ## ステージング
 
@@ -88,6 +96,4 @@ description: ローカル Git 操作 — ブランチ作成、ステージング
 
 ## 関連スキル
 
-- `wf-07-finishing-a-development-branch` — ブランチの完了、マージ、クリーンアップ
-- `wf-02-using-git-worktrees` — 並行作業のための独立ワークスペース
-- `wf-common-collaborating-on-github` — GitHub 側の操作（Issue、PR）
+- `collaborating-on-github` — GitHub 側の操作（Issue、PR）

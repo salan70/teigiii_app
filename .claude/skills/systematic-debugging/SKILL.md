@@ -176,7 +176,7 @@ description: バグ、テスト失敗、エラー、例外、クラッシュ、�
    - 可能なら自動テスト
    - フレームワークがなければ使い捨てテストスクリプト
    - 修正前に必ず作成
-   - 適切な失敗テストの書き方は `superpowers:wf-common-test-driven-development` スキルを使用
+   - 適切な失敗テストの書き方は `superpowers:test-driven-development` スキルを使用
 
 2. **単一の修正を実装する**
    - 特定した根本原因に対処する
@@ -284,8 +284,7 @@ description: バグ、テスト失敗、エラー、例外、クラッシュ、�
 - **`condition-based-waiting.md`** — 任意のタイムアウトを条件ポーリングに置き換える
 
 **関連スキル:**
-- **superpowers:wf-common-test-driven-development** — 失敗するテストケースの作成（フェーズ 4、ステップ 1）
-- **superpowers:wf-06-verification-before-completion** — 修正が成功したことを主張する前に検証
+- **superpowers:test-driven-development** — 失敗するテストケースの作成（フェーズ 4、ステップ 1）
 
 ## 実績
 

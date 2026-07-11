@@ -6,9 +6,9 @@ description: 正本ソースから AI スキル・フック・設定をプロジ
 
 # AI アセットの同期
 
-正本ソースからスキル・フック・設定をプロジェクトの `.claude/` にコピーし、ハードコードされた値を対象プロジェクトに合わせて適応させる。
+Claude 用の正本ソースからスキル・フック・設定をプロジェクトの `.claude/` にコピーし、ハードコードされた値を対象プロジェクトに合わせて適応させる。
 
-**基本原則:** 正本ソースが唯一の真実。同期は冪等。値を適応させるが、ロジックは変えない。
+**基本原則:** Claude 用 `.claude/` assets の正本ソースが、このスキルで同期する範囲の真実。同期は冪等。値を適応させるが、ロジックは変えない。
 
 **開始時に宣言:** 「syncing-ai-assets スキルを使用してアセットをこのプロジェクトに同期します。」
 
@@ -21,6 +21,7 @@ description: 正本ソースから AI スキル・フック・設定をプロジ
   - `skills/` — ワークフロー・ドメインスキル
   - `hooks/` — セッションフック
   - `settings.json` — 権限・フック設定（マージ方式：正本のキーで上書き、プロジェクト固有キーは保持）
+- **対象外:** `.agents/`、`AGENTS.md`、`.codex/` は通常実行では作成・上書きしない。
 - **冪等性:** 毎回正本ソースから上書きし、同一の結果を生成する。
 
 ## 適応ルール
@@ -34,10 +35,11 @@ description: 正本ソースから AI スキル・フック・設定をプロジ
 プロジェクトルートを調査して以下を特定する:
 
 1. **ディレクトリ構成** — 既存のドキュメント、タスク管理、設定ディレクトリ
-2. **技術スタック** — `package.json`、`devbox.json`、`Makefile`、`justfile`、`pubspec.yaml`、`Cargo.toml` など
+2. **技術スタック** — `package.json`、`flake.nix`、`Makefile`、`justfile`、`pubspec.yaml`、`Cargo.toml` など
 3. **ツールチェーン** — lint / format / test の実行方法
 4. **タスク管理** — `TODO.md`、`TASKS.md`、GitHub Issues、カスタムタスクファイル
 5. **既存の `.claude/` 構成** — 既存の CLAUDE.md やスキル
+6. **ブランチ戦略** — ユーザーにヒアリングして決定（[references/adaptation-rules.md](references/adaptation-rules.md) ルール 7 を参照）
 
 ### 適応マッピングの構築
 
@@ -48,7 +50,7 @@ description: 正本ソースから AI スキル・フック・設定をプロジ
 | 正本の値 | プロジェクトの値 | 理由 |
 |---|---|---|
 | `docs/tasks/ai-logs/YYYY-MM-DD_{slug}.md` | `ai-logs/YYYY-MM-DD_{slug}.md` | `ai-logs/` ディレクトリが存在 |
-| `devbox run lint` | `npm run lint` | `package.json` に `lint` スクリプトあり |
+| `nix run .#lint` | `npm run lint` | `package.json` に `lint` スクリプトあり |
 | `docs/guides/general/shell-policy.md` | （参照を削除） | プロジェクトに同等のファイルなし |
 
 ### スキルの選定
@@ -57,10 +59,10 @@ description: 正本ソースから AI スキル・フック・設定をプロジ
 
 **選定基準:**
 
-- **コアスキル**（例: `wf-00-using-workflows`、`wf-03-writing-plans`、`wf-04-executing-plans`、`wf-06-verification-before-completion`）: 基盤スキルとしてデフォルトで含める
-- **開発ワークフロースキル**（例: `wf-07-finishing-a-development-branch`、`wf-common-git-operations`、`wf-common-collaborating-on-github`）: Git ベースの開発を行うプロジェクトに含める
-- **ドメイン固有スキル**（例: `ddd-modeling`、`hig-design`）: 技術スタックやドメインが一致する場合に含める
-- **レビュースキル**（`wf-05-requesting-code-review`、`receiving-code-review`）: 協業プロジェクトに含める
+- **汎用開発スキル**（例: `git-operations`、`collaborating-on-github`、`test-driven-development`）: Git ベースの開発や TDD を行うプロジェクトに含める
+- **運用・保守スキル**（例: `systematic-debugging`、`maintaining-ai-docs`、`syncing-ai-assets`）: プロジェクトの運用形態に合う場合に含める
+- **ドメイン固有スキル**（例: `ddd-modeling`、`designing-with-hig`）: 技術スタックやドメインが一致する場合に含める
+- **レビュースキル**（例: `receiving-code-review`）: 協業プロジェクトに含める
 - **無関係なスキル:** 理由を記載して除外
 
 各スキルに**選定理由**または**除外理由**を付記する。
@@ -126,9 +128,19 @@ description: 正本ソースから AI スキル・フック・設定をプロジ
 
 **承認:** CLAUDE.md の変更差分もスキル同期の承認提示に含める。
 
+### Codex assets の扱い
+
+`syncing-ai-assets` は Claude 用 assets の同期スキルである。通常実行では対象プロジェクトの `.agents/`、`AGENTS.md`、`.codex/` を作成・上書きしない。
+
+Claude 用 skill を同期した結果、Codex 版も必要になった場合は、同期完了後に `porting-ai-assets-to-codex` を使って Codex 側の作成・更新要否を判断する。
+
+Codex assets を同期対象に含める場合は、別タスクとして `syncing-ai-assets` の多ターゲット化を設計する。今回の移行では暗黙同期しない。
+
 ### プロジェクトレジストリの更新
 
 検証と報告の前に、dotfiles リポジトリのプロジェクトレジストリを更新する。
+
+**レジストリの対象:** このスキルが更新する `skills` ステータスは Claude 用 `.claude/skills` の配備状況を表す。Codex 用 `.agents/skills` の配備状況は、このスキルでは更新しない。
 
 **レジストリファイル:** 正本ソースの親ディレクトリから導出 — `~/Projects/tool/dotfiles/templates/ai-driven-development/data/project-registry.yaml`
 
@@ -148,15 +160,31 @@ description: 正本ソースから AI スキル・フック・設定をプロジ
 
 **注意:** レジストリファイルの書き込みのみ行い、コミットはしない — ユーザーが dotfiles リポジトリ側で確認・コミットする。対象プロジェクトのファイルは一切変更しない。
 
+### ユーザーレベルスキルとの重複チェック
+
+`~/.claude/skills/` にプロジェクトレベルと同名のスキルが存在すると、`<available-skills>` リストに同じスキル名が二重に列挙され、コンテキストを浪費する。
+
+**手順:**
+
+1. プロジェクトに同期したスキル名のリストを保持
+2. 各スキル名について `~/.claude/skills/<skill-name>/SKILL.md` の存在を確認
+3. 重複しているスキル名を**警告として報告**し、ユーザーに以下のいずれかを提案する:
+   - プロジェクトに同期したものを使い、ユーザーレベルから退避（`~/.claude/skills/<skill>` → `~/.claude/skills.archive/<skill>` など）
+   - ユーザーレベルを正本としたい場合は、プロジェクト側の同期から外す（除外リストへ追加）
+
+**ルール:** ユーザーレベルスキルを `syncing-ai-assets` 側から勝手に削除・移動しない。あくまで重複を可視化し、選択はユーザーに委ねる。
+
 ### 検証と報告
 
-1. **相対パスチェック** — スキル間参照（例: `../wf-03-writing-plans/references/`）が正しく解決されることを確認
+1. **相対パスチェック** — スキル間参照（例: `../git-operations/references/`）が正しく解決されることを確認
 2. **CLAUDE.md 整合性チェック** — CLAUDE.md で参照しているスキル名が `.claude/skills/` に存在することを確認
 3. **適応差分** — スキルファイルと CLAUDE.md の変更内容をサマリーで報告
+4. **ユーザーレベル重複** — 上記重複チェックの結果を含める
 
 ## 補足事項
 
 - `syncing-ai-assets` スキル自体もコピー対象に含まれる（クラウド環境での再同期に必要）。
 - `.gitignore` が `.claude/skills/` のコミットを許可していることを確認する（Claude Code on the Web などのクラウド環境で必要）。
 - 正本ソースの更新後: 正本ソースのリポジトリを pull し、その後対象プロジェクトで同期を再実行する。
+- Codex 用 assets は `syncing-ai-assets` では暗黙同期しない。必要な場合は `porting-ai-assets-to-codex` を使う。
 - 同期完了時に dotfiles リポジトリの `data/project-registry.yaml` を更新する。初回実行時は dotfiles リポジトリ（`~/Projects/tool/dotfiles/`）への書き込み許可ダイアログが表示される。

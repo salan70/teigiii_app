@@ -1,7 +1,7 @@
 ---
-name: wf-common-collaborating-on-github
+name: collaborating-on-github
 autoInvoke: when working with GitHub Issues, PRs, or comments via gh CLI
-description: GitHub CLI を使った Issue、PR、進捗共有の操作 — コードレビューは除外（wf-05-requesting-code-review と receiving-code-review を参照）
+description: GitHub CLI を使った Issue、PR、進捗共有の操作 — コードレビュー対応は receiving-code-review を参照
 ---
 
 # GitHub での協業
@@ -10,7 +10,7 @@ description: GitHub CLI を使った Issue、PR、進捗共有の操作 — コ�
 
 **基本原則:** GitHub 操作はすべて `gh` で行う。関係者への情報共有を怠らない。まず Draft、検証後に Ready。
 
-**開始時に宣言:** 「wf-common-collaborating-on-github スキルを使用して GitHub 操作を行います。」
+**開始時に宣言:** 「collaborating-on-github スキルを使用して GitHub 操作を行います。」
 
 ## ルールの優先順位
 
@@ -23,7 +23,7 @@ description: GitHub CLI を使った Issue、PR、進捗共有の操作 — コ�
 - GitHub 操作はすべて `gh` CLI を使用し、ローカル Git 操作には `git` を使用する。
 - コメントの言語はデフォルトで日本語。プロジェクトの慣例がある場合はそちらに従う。
 - PR はデフォルトで **Draft** として作成し、セルフレビューと検証の後に `gh pr ready <number>` で Ready にする。
-- コードレビューのワークフローについては、`wf-05-requesting-code-review`（送信側）または `receiving-code-review`（受信側）に引き継ぐ。
+- レビューフィードバックへの対応は `receiving-code-review` に引き継ぐ。
 
 ## Pull Request ワークフロー
 
@@ -85,7 +85,5 @@ API 呼び出しが失敗した場合（権限、ネットワーク、予期し�
 
 ## 関連スキル
 
-- `wf-05-requesting-code-review` — レビューリクエストの送信
 - `receiving-code-review` — レビューフィードバックへの対応
-- `wf-common-git-operations` — ローカル Git 操作（ブランチ、コミット、安全確認）
-- `wf-07-finishing-a-development-branch` — ブランチの完了とマージオプション
+- `git-operations` — ローカル Git 操作（ブランチ、コミット、安全確認）
