@@ -23,8 +23,17 @@ fi
 # 拡張子に応じてフォーマッタを選択
 ext="${file_path##*.}"
 case "$ext" in
+  ts|js|tsx|jsx)
+    nix run .#format-ts -- "$file_path" 2>&1 || true
+    ;;
   dart)
-    fvm dart format "$file_path" 2>&1 || true
+    nix run .#format-dart -- "$file_path" 2>&1 || true
+    ;;
+  swift)
+    swift-format format -i "$file_path" 2>&1 || true
+    ;;
+  md)
+    nix run .#format-md -- "$file_path" 2>&1 || true
     ;;
   *)
     # 対象外拡張子 → スキップ

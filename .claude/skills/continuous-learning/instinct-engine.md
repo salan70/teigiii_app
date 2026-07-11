@@ -78,7 +78,7 @@ confidence < 0.5 の instinct は表示しないが、`/instincts --all` で全�
 
 ## 他スキルからの参照
 
-wf-01（brainstorming）や wf-03（writing-plans）の開始時:
+計画や設計の開始時:
 
 1. instincts.json を読み込む
 2. 現在の作業に関連する context タグの instinct を抽出

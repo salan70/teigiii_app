@@ -21,7 +21,7 @@ fi
 # コマンドに git push が含まれるかチェック
 command=$(echo "$input" | jq -r '.tool_input.command // empty' 2>/dev/null)
 if echo "$command" | grep -q "git push"; then
-  echo "[push リマインダー] wf-06 検証は済んでいますか？ コードレビューは完了していますか？"
+  echo "[push リマインダー] 検証コマンドの実行とコードレビューは完了していますか？"
 fi
 
 exit 0

@@ -1,4 +1,9 @@
 {
+  "permissions": {
+    "allow": [
+      "mcp__pencil"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {
@@ -54,5 +59,6 @@
         ]
       }
     ]
-  }
+  },
+  "theme": "dark-ansi"
 }

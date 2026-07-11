@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-このファイルは Claude Code / Codex がこのリポジトリで作業する際のガイダンスを提供します。
+このファイルは Codex がこのリポジトリで作業する際のガイダンスを提供します。
 
 ## プロジェクト概要
 
@@ -35,15 +35,22 @@ fvm dart format .
 make test
 ```
 
+## AI asset 運用
+
+- Claude 用 assets: `.claude/` と `CLAUDE.md`
+- Codex 用 assets: `.agents/` と `AGENTS.md`
+- `.agents` は `.claude` への symlink ではなく、独立した実体として管理する
+- Claude 側に skill を追加・更新した場合は `porting-ai-assets-to-codex` を使って Codex 側への移植要否を判断する
+
 ## 指示の優先順位
 
 1. **ユーザーの指示**（最優先） — 会話内での直接的な指示
-2. **Skills** — Skill ツール経由で呼び出された場合
-3. **CLAUDE.md のデフォルト**（最低） — このファイルに記載されたルール
+2. **Skills** — `.agents/skills/` のスキルを適用する場合
+3. **AGENTS.md のデフォルト**（最低） — このファイルに記載されたルール
 
 ## ワークフロー
 
-すべての依頼に対し、該当する skill があれば使用する。
+すべての依頼に対し、`.agents/skills/` に該当する skill があれば使用する。
 例外はユーザーが明示的にスキル不要と指示した場合のみ。
 
 ## plan ワークフロー
@@ -61,9 +68,10 @@ make test
 
 ## 禁止事項
 
-- プロジェクトの CLAUDE.md や Skills で定義済みの手順をここに複製することを禁止する。スキルの内容を CLAUDE.md に転記せず、スキル名で参照すること。
+- プロジェクトの AGENTS.md や Skills で定義済みの手順をここに複製することを禁止する。スキルの内容を AGENTS.md に転記せず、スキル名で参照すること。
 - 依頼スコープ外の「ついでに改善」を禁止する。
 - 将来の仮想要件に備えたコードを禁止する。
+- Claude 専用の手順を Codex 用 asset にそのまま転記することを禁止する。
 
 ## 完了報告フォーマット（必須）
 
@@ -86,4 +94,4 @@ make test
 - {コミット要否、確認依頼など}
 ```
 
-**MCP サーバー例**: github, mobile-mcp, pencil
+**MCP サーバー例**: github, mobile-mcp
