@@ -12,7 +12,7 @@ part of 'app_maintenance.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AppMaintenance {
@@ -63,22 +63,22 @@ class _$AppMaintenanceCopyWithImpl<$Res, $Val extends AppMaintenance>
 }
 
 /// @nodoc
-abstract class _$$_AppMaintenanceCopyWith<$Res>
+abstract class _$$AppMaintenanceImplCopyWith<$Res>
     implements $AppMaintenanceCopyWith<$Res> {
-  factory _$$_AppMaintenanceCopyWith(
-          _$_AppMaintenance value, $Res Function(_$_AppMaintenance) then) =
-      __$$_AppMaintenanceCopyWithImpl<$Res>;
+  factory _$$AppMaintenanceImplCopyWith(_$AppMaintenanceImpl value,
+          $Res Function(_$AppMaintenanceImpl) then) =
+      __$$AppMaintenanceImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool inMaintenance, String scheduledEndTime});
 }
 
 /// @nodoc
-class __$$_AppMaintenanceCopyWithImpl<$Res>
-    extends _$AppMaintenanceCopyWithImpl<$Res, _$_AppMaintenance>
-    implements _$$_AppMaintenanceCopyWith<$Res> {
-  __$$_AppMaintenanceCopyWithImpl(
-      _$_AppMaintenance _value, $Res Function(_$_AppMaintenance) _then)
+class __$$AppMaintenanceImplCopyWithImpl<$Res>
+    extends _$AppMaintenanceCopyWithImpl<$Res, _$AppMaintenanceImpl>
+    implements _$$AppMaintenanceImplCopyWith<$Res> {
+  __$$AppMaintenanceImplCopyWithImpl(
+      _$AppMaintenanceImpl _value, $Res Function(_$AppMaintenanceImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -87,7 +87,7 @@ class __$$_AppMaintenanceCopyWithImpl<$Res>
     Object? inMaintenance = null,
     Object? scheduledEndTime = null,
   }) {
-    return _then(_$_AppMaintenance(
+    return _then(_$AppMaintenanceImpl(
       inMaintenance: null == inMaintenance
           ? _value.inMaintenance
           : inMaintenance // ignore: cast_nullable_to_non_nullable
@@ -102,8 +102,8 @@ class __$$_AppMaintenanceCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_AppMaintenance implements _AppMaintenance {
-  const _$_AppMaintenance(
+class _$AppMaintenanceImpl implements _AppMaintenance {
+  const _$AppMaintenanceImpl(
       {required this.inMaintenance, required this.scheduledEndTime});
 
   @override
@@ -117,10 +117,10 @@ class _$_AppMaintenance implements _AppMaintenance {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AppMaintenance &&
+            other is _$AppMaintenanceImpl &&
             (identical(other.inMaintenance, inMaintenance) ||
                 other.inMaintenance == inMaintenance) &&
             (identical(other.scheduledEndTime, scheduledEndTime) ||
@@ -133,14 +133,15 @@ class _$_AppMaintenance implements _AppMaintenance {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AppMaintenanceCopyWith<_$_AppMaintenance> get copyWith =>
-      __$$_AppMaintenanceCopyWithImpl<_$_AppMaintenance>(this, _$identity);
+  _$$AppMaintenanceImplCopyWith<_$AppMaintenanceImpl> get copyWith =>
+      __$$AppMaintenanceImplCopyWithImpl<_$AppMaintenanceImpl>(
+          this, _$identity);
 }
 
 abstract class _AppMaintenance implements AppMaintenance {
   const factory _AppMaintenance(
       {required final bool inMaintenance,
-      required final String scheduledEndTime}) = _$_AppMaintenance;
+      required final String scheduledEndTime}) = _$AppMaintenanceImpl;
 
   @override
   bool get inMaintenance;
@@ -148,6 +149,6 @@ abstract class _AppMaintenance implements AppMaintenance {
   String get scheduledEndTime;
   @override
   @JsonKey(ignore: true)
-  _$$_AppMaintenanceCopyWith<_$_AppMaintenance> get copyWith =>
+  _$$AppMaintenanceImplCopyWith<_$AppMaintenanceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

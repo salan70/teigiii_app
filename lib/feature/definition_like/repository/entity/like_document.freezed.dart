@@ -12,7 +12,7 @@ part of 'like_document.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$LikeDocument {
@@ -86,11 +86,11 @@ class _$LikeDocumentCopyWithImpl<$Res, $Val extends LikeDocument>
 }
 
 /// @nodoc
-abstract class _$$_LikeDocumentCopyWith<$Res>
+abstract class _$$LikeDocumentImplCopyWith<$Res>
     implements $LikeDocumentCopyWith<$Res> {
-  factory _$$_LikeDocumentCopyWith(
-          _$_LikeDocument value, $Res Function(_$_LikeDocument) then) =
-      __$$_LikeDocumentCopyWithImpl<$Res>;
+  factory _$$LikeDocumentImplCopyWith(
+          _$LikeDocumentImpl value, $Res Function(_$LikeDocumentImpl) then) =
+      __$$LikeDocumentImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -102,11 +102,11 @@ abstract class _$$_LikeDocumentCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_LikeDocumentCopyWithImpl<$Res>
-    extends _$LikeDocumentCopyWithImpl<$Res, _$_LikeDocument>
-    implements _$$_LikeDocumentCopyWith<$Res> {
-  __$$_LikeDocumentCopyWithImpl(
-      _$_LikeDocument _value, $Res Function(_$_LikeDocument) _then)
+class __$$LikeDocumentImplCopyWithImpl<$Res>
+    extends _$LikeDocumentCopyWithImpl<$Res, _$LikeDocumentImpl>
+    implements _$$LikeDocumentImplCopyWith<$Res> {
+  __$$LikeDocumentImplCopyWithImpl(
+      _$LikeDocumentImpl _value, $Res Function(_$LikeDocumentImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -118,7 +118,7 @@ class __$$_LikeDocumentCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$_LikeDocument(
+    return _then(_$LikeDocumentImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -145,8 +145,8 @@ class __$$_LikeDocumentCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_LikeDocument implements _LikeDocument {
-  const _$_LikeDocument(
+class _$LikeDocumentImpl implements _LikeDocument {
+  const _$LikeDocumentImpl(
       {required this.id,
       required this.definitionId,
       required this.userId,
@@ -170,10 +170,10 @@ class _$_LikeDocument implements _LikeDocument {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_LikeDocument &&
+            other is _$LikeDocumentImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.definitionId, definitionId) ||
                 other.definitionId == definitionId) &&
@@ -191,8 +191,8 @@ class _$_LikeDocument implements _LikeDocument {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_LikeDocumentCopyWith<_$_LikeDocument> get copyWith =>
-      __$$_LikeDocumentCopyWithImpl<_$_LikeDocument>(this, _$identity);
+  _$$LikeDocumentImplCopyWith<_$LikeDocumentImpl> get copyWith =>
+      __$$LikeDocumentImplCopyWithImpl<_$LikeDocumentImpl>(this, _$identity);
 }
 
 abstract class _LikeDocument implements LikeDocument {
@@ -201,7 +201,7 @@ abstract class _LikeDocument implements LikeDocument {
       required final String definitionId,
       required final String userId,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_LikeDocument;
+      required final DateTime updatedAt}) = _$LikeDocumentImpl;
 
   @override
   String get id;
@@ -215,6 +215,6 @@ abstract class _LikeDocument implements LikeDocument {
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
-  _$$_LikeDocumentCopyWith<_$_LikeDocument> get copyWith =>
+  _$$LikeDocumentImplCopyWith<_$LikeDocumentImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

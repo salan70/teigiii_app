@@ -6,16 +6,27 @@
 
 TODO: DL用のリンク貼る
 
+# 開発環境セットアップ
+
+[Nix](https://nixos.org/download/) と direnv をインストール後、リポジトリで以下を実行します。
+
+```sh
+direnv allow
+just setup
+```
+
+direnv を使わない場合は、先に `nix develop` で開発シェルへ入ってください。
+
 # アプリ起動（run）
 
 開発環境
 ```sh
-fvm flutter run --dart-define-from-file=dart_defines/dev.json
+just run-dev
 ```
 
 本番環境
 ```sh
-fvm flutter run --dart-define-from-file=dart_defines/prod.json
+just run-prod
 ```
 
 # 使用技術
@@ -23,12 +34,8 @@ fvm flutter run --dart-define-from-file=dart_defines/prod.json
 
 以下環境を使用しています。
 
-```sh
-Flutter 3.13.6 • channel stable • https://github.com/flutter/flutter.git
-Framework • revision ead455963c (4 days ago) • 2023-09-26 18:28:17 -0700
-Engine • revision a794cf2681
-Tools • Dart 3.1.3 • DevTools 2.25.0
-```
+Flutter 3.41.8 を `flake.nix` で固定しています。
+
 また、状態管理はRiverpodを使用しています。
 
 ## Firebase
@@ -76,5 +83,3 @@ CIは、Pull Request作成時とPush時に、静的解析とテストの実行�
 ## その他
 
 - 使用するIDEはVS Codeを前提とする
-- Flutterのバージョン管理に[fvm](https://fvm.app/)を使う
-  - 初回リリースまでFlutterバージョンは「3.13.6」を使用する

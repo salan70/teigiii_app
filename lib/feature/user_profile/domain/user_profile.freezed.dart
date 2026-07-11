@@ -12,7 +12,7 @@ part of 'user_profile.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$UserProfile {
@@ -95,11 +95,11 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
 }
 
 /// @nodoc
-abstract class _$$_UserProfileCopyWith<$Res>
+abstract class _$$UserProfileImplCopyWith<$Res>
     implements $UserProfileCopyWith<$Res> {
-  factory _$$_UserProfileCopyWith(
-          _$_UserProfile value, $Res Function(_$_UserProfile) then) =
-      __$$_UserProfileCopyWithImpl<$Res>;
+  factory _$$UserProfileImplCopyWith(
+          _$UserProfileImpl value, $Res Function(_$UserProfileImpl) then) =
+      __$$UserProfileImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -112,11 +112,11 @@ abstract class _$$_UserProfileCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_UserProfileCopyWithImpl<$Res>
-    extends _$UserProfileCopyWithImpl<$Res, _$_UserProfile>
-    implements _$$_UserProfileCopyWith<$Res> {
-  __$$_UserProfileCopyWithImpl(
-      _$_UserProfile _value, $Res Function(_$_UserProfile) _then)
+class __$$UserProfileImplCopyWithImpl<$Res>
+    extends _$UserProfileCopyWithImpl<$Res, _$UserProfileImpl>
+    implements _$$UserProfileImplCopyWith<$Res> {
+  __$$UserProfileImplCopyWithImpl(
+      _$UserProfileImpl _value, $Res Function(_$UserProfileImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -129,7 +129,7 @@ class __$$_UserProfileCopyWithImpl<$Res>
     Object? profileImageUrl = null,
     Object? croppedFile = freezed,
   }) {
-    return _then(_$_UserProfile(
+    return _then(_$UserProfileImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -160,8 +160,8 @@ class __$$_UserProfileCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserProfile extends _UserProfile {
-  const _$_UserProfile(
+class _$UserProfileImpl extends _UserProfile {
+  const _$UserProfileImpl(
       {required this.id,
       required this.publicId,
       required this.name,
@@ -191,10 +191,10 @@ class _$_UserProfile extends _UserProfile {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserProfile &&
+            other is _$UserProfileImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.publicId, publicId) ||
                 other.publicId == publicId) &&
@@ -213,8 +213,8 @@ class _$_UserProfile extends _UserProfile {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserProfileCopyWith<_$_UserProfile> get copyWith =>
-      __$$_UserProfileCopyWithImpl<_$_UserProfile>(this, _$identity);
+  _$$UserProfileImplCopyWith<_$UserProfileImpl> get copyWith =>
+      __$$UserProfileImplCopyWithImpl<_$UserProfileImpl>(this, _$identity);
 }
 
 abstract class _UserProfile extends UserProfile {
@@ -224,7 +224,7 @@ abstract class _UserProfile extends UserProfile {
       required final String name,
       required final String bio,
       required final String profileImageUrl,
-      required final CroppedFile? croppedFile}) = _$_UserProfile;
+      required final CroppedFile? croppedFile}) = _$UserProfileImpl;
   const _UserProfile._() : super._();
 
   @override
@@ -243,6 +243,6 @@ abstract class _UserProfile extends UserProfile {
   CroppedFile? get croppedFile;
   @override
   @JsonKey(ignore: true)
-  _$$_UserProfileCopyWith<_$_UserProfile> get copyWith =>
+  _$$UserProfileImplCopyWith<_$UserProfileImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

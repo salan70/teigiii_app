@@ -12,7 +12,7 @@ part of 'app_config_document.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AppConfigDocument {
@@ -73,11 +73,11 @@ class _$AppConfigDocumentCopyWithImpl<$Res, $Val extends AppConfigDocument>
 }
 
 /// @nodoc
-abstract class _$$_AppConfigDocumentCopyWith<$Res>
+abstract class _$$AppConfigDocumentImplCopyWith<$Res>
     implements $AppConfigDocumentCopyWith<$Res> {
-  factory _$$_AppConfigDocumentCopyWith(_$_AppConfigDocument value,
-          $Res Function(_$_AppConfigDocument) then) =
-      __$$_AppConfigDocumentCopyWithImpl<$Res>;
+  factory _$$AppConfigDocumentImplCopyWith(_$AppConfigDocumentImpl value,
+          $Res Function(_$AppConfigDocumentImpl) then) =
+      __$$AppConfigDocumentImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -87,11 +87,11 @@ abstract class _$$_AppConfigDocumentCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_AppConfigDocumentCopyWithImpl<$Res>
-    extends _$AppConfigDocumentCopyWithImpl<$Res, _$_AppConfigDocument>
-    implements _$$_AppConfigDocumentCopyWith<$Res> {
-  __$$_AppConfigDocumentCopyWithImpl(
-      _$_AppConfigDocument _value, $Res Function(_$_AppConfigDocument) _then)
+class __$$AppConfigDocumentImplCopyWithImpl<$Res>
+    extends _$AppConfigDocumentCopyWithImpl<$Res, _$AppConfigDocumentImpl>
+    implements _$$AppConfigDocumentImplCopyWith<$Res> {
+  __$$AppConfigDocumentImplCopyWithImpl(_$AppConfigDocumentImpl _value,
+      $Res Function(_$AppConfigDocumentImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -101,7 +101,7 @@ class __$$_AppConfigDocumentCopyWithImpl<$Res>
     Object? minAppVersionForAndroid = null,
     Object? maintenanceMap = null,
   }) {
-    return _then(_$_AppConfigDocument(
+    return _then(_$AppConfigDocumentImpl(
       minAppVersionForIos: null == minAppVersionForIos
           ? _value.minAppVersionForIos
           : minAppVersionForIos // ignore: cast_nullable_to_non_nullable
@@ -120,8 +120,8 @@ class __$$_AppConfigDocumentCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_AppConfigDocument extends _AppConfigDocument {
-  const _$_AppConfigDocument(
+class _$AppConfigDocumentImpl extends _AppConfigDocument {
+  const _$AppConfigDocumentImpl(
       {required this.minAppVersionForIos,
       required this.minAppVersionForAndroid,
       required final Map<String, Map<String, Object>> maintenanceMap})
@@ -146,10 +146,10 @@ class _$_AppConfigDocument extends _AppConfigDocument {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AppConfigDocument &&
+            other is _$AppConfigDocumentImpl &&
             (identical(other.minAppVersionForIos, minAppVersionForIos) ||
                 other.minAppVersionForIos == minAppVersionForIos) &&
             (identical(
@@ -169,8 +169,8 @@ class _$_AppConfigDocument extends _AppConfigDocument {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AppConfigDocumentCopyWith<_$_AppConfigDocument> get copyWith =>
-      __$$_AppConfigDocumentCopyWithImpl<_$_AppConfigDocument>(
+  _$$AppConfigDocumentImplCopyWith<_$AppConfigDocumentImpl> get copyWith =>
+      __$$AppConfigDocumentImplCopyWithImpl<_$AppConfigDocumentImpl>(
           this, _$identity);
 }
 
@@ -179,7 +179,7 @@ abstract class _AppConfigDocument extends AppConfigDocument {
           {required final String minAppVersionForIos,
           required final String minAppVersionForAndroid,
           required final Map<String, Map<String, Object>> maintenanceMap}) =
-      _$_AppConfigDocument;
+      _$AppConfigDocumentImpl;
   const _AppConfigDocument._() : super._();
 
   @override
@@ -190,6 +190,6 @@ abstract class _AppConfigDocument extends AppConfigDocument {
   Map<String, Map<String, Object>> get maintenanceMap;
   @override
   @JsonKey(ignore: true)
-  _$$_AppConfigDocumentCopyWith<_$_AppConfigDocument> get copyWith =>
+  _$$AppConfigDocumentImplCopyWith<_$AppConfigDocumentImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

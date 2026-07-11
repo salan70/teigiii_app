@@ -12,7 +12,7 @@ part of 'word.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Word {
@@ -84,9 +84,10 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
 }
 
 /// @nodoc
-abstract class _$$_WordCopyWith<$Res> implements $WordCopyWith<$Res> {
-  factory _$$_WordCopyWith(_$_Word value, $Res Function(_$_Word) then) =
-      __$$_WordCopyWithImpl<$Res>;
+abstract class _$$WordImplCopyWith<$Res> implements $WordCopyWith<$Res> {
+  factory _$$WordImplCopyWith(
+          _$WordImpl value, $Res Function(_$WordImpl) then) =
+      __$$WordImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -98,9 +99,10 @@ abstract class _$$_WordCopyWith<$Res> implements $WordCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res, _$_Word>
-    implements _$$_WordCopyWith<$Res> {
-  __$$_WordCopyWithImpl(_$_Word _value, $Res Function(_$_Word) _then)
+class __$$WordImplCopyWithImpl<$Res>
+    extends _$WordCopyWithImpl<$Res, _$WordImpl>
+    implements _$$WordImplCopyWith<$Res> {
+  __$$WordImplCopyWithImpl(_$WordImpl _value, $Res Function(_$WordImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -112,7 +114,7 @@ class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res, _$_Word>
     Object? initialSubGroupLabel = null,
     Object? postedDefinitionCount = null,
   }) {
-    return _then(_$_Word(
+    return _then(_$WordImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -139,8 +141,8 @@ class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res, _$_Word>
 
 /// @nodoc
 
-class _$_Word implements _Word {
-  const _$_Word(
+class _$WordImpl implements _Word {
+  const _$WordImpl(
       {required this.id,
       required this.word,
       required this.reading,
@@ -164,10 +166,10 @@ class _$_Word implements _Word {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Word &&
+            other is _$WordImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.word, word) || other.word == word) &&
             (identical(other.reading, reading) || other.reading == reading) &&
@@ -184,8 +186,8 @@ class _$_Word implements _Word {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_WordCopyWith<_$_Word> get copyWith =>
-      __$$_WordCopyWithImpl<_$_Word>(this, _$identity);
+  _$$WordImplCopyWith<_$WordImpl> get copyWith =>
+      __$$WordImplCopyWithImpl<_$WordImpl>(this, _$identity);
 }
 
 abstract class _Word implements Word {
@@ -194,7 +196,7 @@ abstract class _Word implements Word {
       required final String word,
       required final String reading,
       required final String initialSubGroupLabel,
-      required final int postedDefinitionCount}) = _$_Word;
+      required final int postedDefinitionCount}) = _$WordImpl;
 
   @override
   String get id;
@@ -208,5 +210,6 @@ abstract class _Word implements Word {
   int get postedDefinitionCount;
   @override
   @JsonKey(ignore: true)
-  _$$_WordCopyWith<_$_Word> get copyWith => throw _privateConstructorUsedError;
+  _$$WordImplCopyWith<_$WordImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

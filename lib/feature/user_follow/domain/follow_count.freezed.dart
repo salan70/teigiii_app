@@ -12,7 +12,7 @@ part of 'follow_count.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$FollowCount {
@@ -69,22 +69,22 @@ class _$FollowCountCopyWithImpl<$Res, $Val extends FollowCount>
 }
 
 /// @nodoc
-abstract class _$$_FollowCountCopyWith<$Res>
+abstract class _$$FollowCountImplCopyWith<$Res>
     implements $FollowCountCopyWith<$Res> {
-  factory _$$_FollowCountCopyWith(
-          _$_FollowCount value, $Res Function(_$_FollowCount) then) =
-      __$$_FollowCountCopyWithImpl<$Res>;
+  factory _$$FollowCountImplCopyWith(
+          _$FollowCountImpl value, $Res Function(_$FollowCountImpl) then) =
+      __$$FollowCountImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String userId, int followerCount, int followingCount});
 }
 
 /// @nodoc
-class __$$_FollowCountCopyWithImpl<$Res>
-    extends _$FollowCountCopyWithImpl<$Res, _$_FollowCount>
-    implements _$$_FollowCountCopyWith<$Res> {
-  __$$_FollowCountCopyWithImpl(
-      _$_FollowCount _value, $Res Function(_$_FollowCount) _then)
+class __$$FollowCountImplCopyWithImpl<$Res>
+    extends _$FollowCountCopyWithImpl<$Res, _$FollowCountImpl>
+    implements _$$FollowCountImplCopyWith<$Res> {
+  __$$FollowCountImplCopyWithImpl(
+      _$FollowCountImpl _value, $Res Function(_$FollowCountImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -94,7 +94,7 @@ class __$$_FollowCountCopyWithImpl<$Res>
     Object? followerCount = null,
     Object? followingCount = null,
   }) {
-    return _then(_$_FollowCount(
+    return _then(_$FollowCountImpl(
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -113,8 +113,8 @@ class __$$_FollowCountCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_FollowCount implements _FollowCount {
-  const _$_FollowCount(
+class _$FollowCountImpl implements _FollowCount {
+  const _$FollowCountImpl(
       {required this.userId,
       required this.followerCount,
       required this.followingCount});
@@ -132,10 +132,10 @@ class _$_FollowCount implements _FollowCount {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_FollowCount &&
+            other is _$FollowCountImpl &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.followerCount, followerCount) ||
                 other.followerCount == followerCount) &&
@@ -150,15 +150,15 @@ class _$_FollowCount implements _FollowCount {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_FollowCountCopyWith<_$_FollowCount> get copyWith =>
-      __$$_FollowCountCopyWithImpl<_$_FollowCount>(this, _$identity);
+  _$$FollowCountImplCopyWith<_$FollowCountImpl> get copyWith =>
+      __$$FollowCountImplCopyWithImpl<_$FollowCountImpl>(this, _$identity);
 }
 
 abstract class _FollowCount implements FollowCount {
   const factory _FollowCount(
       {required final String userId,
       required final int followerCount,
-      required final int followingCount}) = _$_FollowCount;
+      required final int followingCount}) = _$FollowCountImpl;
 
   @override
   String get userId;
@@ -168,6 +168,6 @@ abstract class _FollowCount implements FollowCount {
   int get followingCount;
   @override
   @JsonKey(ignore: true)
-  _$$_FollowCountCopyWith<_$_FollowCount> get copyWith =>
+  _$$FollowCountImplCopyWith<_$FollowCountImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

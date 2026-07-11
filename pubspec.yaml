@@ -4,7 +4,7 @@ description: A new Flutter project.
 version: 1.0.0+7
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: '>=3.11.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -27,11 +27,11 @@ dependencies:
   fluttertoast: ^8.2.3
   freezed_annotation: ^2.4.1
   gap: ^3.0.1
-  google_mobile_ads: ^3.1.0
+  google_mobile_ads: ^9.0.0
   image_cropper: ^5.0.0
   image_picker: ^1.0.4
   in_app_review: ^2.0.8
-  intl: ^0.18.1
+  intl: ^0.20.2
   keyboard_actions: ^4.2.0
   like_button: ^2.0.5
   mockito: ^5.4.2
@@ -45,13 +45,13 @@ dependencies:
   version: ^3.0.2
 
   # Firebase関連
-  cloud_firestore: ^4.9.2
-  firebase_analytics: ^10.5.1
-  firebase_app_check: ^0.1.5
-  firebase_auth: 4.10.0
-  firebase_core: ^2.16.0
-  firebase_crashlytics: ^3.3.6
-  firebase_storage: ^11.2.8
+  cloud_firestore: ^6.6.0
+  firebase_analytics: ^12.4.3
+  firebase_app_check: ^0.4.5
+  firebase_auth: ^6.5.4
+  firebase_core: ^4.11.0
+  firebase_crashlytics: ^5.2.4
+  firebase_storage: ^13.4.3
 
 dev_dependencies:
   flutter_test:

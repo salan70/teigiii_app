@@ -12,7 +12,7 @@ part of 'user_id_list_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$UserIdListState {
@@ -76,11 +76,11 @@ class _$UserIdListStateCopyWithImpl<$Res, $Val extends UserIdListState>
 }
 
 /// @nodoc
-abstract class _$$_UserIdListStateCopyWith<$Res>
+abstract class _$$UserIdListStateImplCopyWith<$Res>
     implements $UserIdListStateCopyWith<$Res> {
-  factory _$$_UserIdListStateCopyWith(
-          _$_UserIdListState value, $Res Function(_$_UserIdListState) then) =
-      __$$_UserIdListStateCopyWithImpl<$Res>;
+  factory _$$UserIdListStateImplCopyWith(_$UserIdListStateImpl value,
+          $Res Function(_$UserIdListStateImpl) then) =
+      __$$UserIdListStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -90,11 +90,11 @@ abstract class _$$_UserIdListStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_UserIdListStateCopyWithImpl<$Res>
-    extends _$UserIdListStateCopyWithImpl<$Res, _$_UserIdListState>
-    implements _$$_UserIdListStateCopyWith<$Res> {
-  __$$_UserIdListStateCopyWithImpl(
-      _$_UserIdListState _value, $Res Function(_$_UserIdListState) _then)
+class __$$UserIdListStateImplCopyWithImpl<$Res>
+    extends _$UserIdListStateCopyWithImpl<$Res, _$UserIdListStateImpl>
+    implements _$$UserIdListStateImplCopyWith<$Res> {
+  __$$UserIdListStateImplCopyWithImpl(
+      _$UserIdListStateImpl _value, $Res Function(_$UserIdListStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -104,7 +104,7 @@ class __$$_UserIdListStateCopyWithImpl<$Res>
     Object? lastReadQueryDocumentSnapshot = freezed,
     Object? hasMore = null,
   }) {
-    return _then(_$_UserIdListState(
+    return _then(_$UserIdListStateImpl(
       list: null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -123,8 +123,8 @@ class __$$_UserIdListStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserIdListState implements _UserIdListState {
-  const _$_UserIdListState(
+class _$UserIdListStateImpl implements _UserIdListState {
+  const _$UserIdListStateImpl(
       {required final List<String> list,
       required this.lastReadQueryDocumentSnapshot,
       required this.hasMore})
@@ -151,10 +151,10 @@ class _$_UserIdListState implements _UserIdListState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserIdListState &&
+            other is _$UserIdListStateImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.lastReadQueryDocumentSnapshot,
                     lastReadQueryDocumentSnapshot) ||
@@ -173,8 +173,9 @@ class _$_UserIdListState implements _UserIdListState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserIdListStateCopyWith<_$_UserIdListState> get copyWith =>
-      __$$_UserIdListStateCopyWithImpl<_$_UserIdListState>(this, _$identity);
+  _$$UserIdListStateImplCopyWith<_$UserIdListStateImpl> get copyWith =>
+      __$$UserIdListStateImplCopyWithImpl<_$UserIdListStateImpl>(
+          this, _$identity);
 }
 
 abstract class _UserIdListState implements UserIdListState {
@@ -182,7 +183,7 @@ abstract class _UserIdListState implements UserIdListState {
       {required final List<String> list,
       required final QueryDocumentSnapshot<Object?>?
           lastReadQueryDocumentSnapshot,
-      required final bool hasMore}) = _$_UserIdListState;
+      required final bool hasMore}) = _$UserIdListStateImpl;
 
   @override
   List<String> get list;
@@ -195,6 +196,6 @@ abstract class _UserIdListState implements UserIdListState {
   bool get hasMore;
   @override
   @JsonKey(ignore: true)
-  _$$_UserIdListStateCopyWith<_$_UserIdListState> get copyWith =>
+  _$$UserIdListStateImplCopyWith<_$UserIdListStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

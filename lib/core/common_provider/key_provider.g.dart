@@ -10,8 +10,7 @@ String _$globalKeyHash() => r'c9b683949cb6cc7d2b9ae4df52a749fb1646b81e';
 
 /// See also [globalKey].
 @ProviderFor(globalKey)
-final globalKeyProvider =
-    AutoDisposeProvider<GlobalKey<State<StatefulWidget>>>.internal(
+final globalKeyProvider = AutoDisposeProvider<GlobalKey>.internal(
   globalKey,
   name: r'globalKeyProvider',
   debugGetCreateSourceHash:
@@ -20,7 +19,7 @@ final globalKeyProvider =
   allTransitiveDependencies: null,
 );
 
-typedef GlobalKeyRef = AutoDisposeProviderRef<GlobalKey<State<StatefulWidget>>>;
+typedef GlobalKeyRef = AutoDisposeProviderRef<GlobalKey>;
 String _$scaffoldMessengerKeyHash() =>
     r'70d707a46145cc33fd390fc8b81001defdec29ed';
 

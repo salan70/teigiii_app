@@ -1,2 +1,5 @@
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+flavor=prod
+appName=Teigiii
+appIdSuffix=
 #include "Generated.xcconfig"

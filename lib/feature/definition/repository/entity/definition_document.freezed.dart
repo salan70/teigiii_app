@@ -12,7 +12,7 @@ part of 'definition_document.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$DefinitionDocument {
@@ -136,11 +136,11 @@ class _$DefinitionDocumentCopyWithImpl<$Res, $Val extends DefinitionDocument>
 }
 
 /// @nodoc
-abstract class _$$_DefinitionDocumentCopyWith<$Res>
+abstract class _$$DefinitionDocumentImplCopyWith<$Res>
     implements $DefinitionDocumentCopyWith<$Res> {
-  factory _$$_DefinitionDocumentCopyWith(_$_DefinitionDocument value,
-          $Res Function(_$_DefinitionDocument) then) =
-      __$$_DefinitionDocumentCopyWithImpl<$Res>;
+  factory _$$DefinitionDocumentImplCopyWith(_$DefinitionDocumentImpl value,
+          $Res Function(_$DefinitionDocumentImpl) then) =
+      __$$DefinitionDocumentImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -159,11 +159,11 @@ abstract class _$$_DefinitionDocumentCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_DefinitionDocumentCopyWithImpl<$Res>
-    extends _$DefinitionDocumentCopyWithImpl<$Res, _$_DefinitionDocument>
-    implements _$$_DefinitionDocumentCopyWith<$Res> {
-  __$$_DefinitionDocumentCopyWithImpl(
-      _$_DefinitionDocument _value, $Res Function(_$_DefinitionDocument) _then)
+class __$$DefinitionDocumentImplCopyWithImpl<$Res>
+    extends _$DefinitionDocumentCopyWithImpl<$Res, _$DefinitionDocumentImpl>
+    implements _$$DefinitionDocumentImplCopyWith<$Res> {
+  __$$DefinitionDocumentImplCopyWithImpl(_$DefinitionDocumentImpl _value,
+      $Res Function(_$DefinitionDocumentImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -182,7 +182,7 @@ class __$$_DefinitionDocumentCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$_DefinitionDocument(
+    return _then(_$DefinitionDocumentImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -237,8 +237,8 @@ class __$$_DefinitionDocumentCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_DefinitionDocument implements _DefinitionDocument {
-  const _$_DefinitionDocument(
+class _$DefinitionDocumentImpl implements _DefinitionDocument {
+  const _$DefinitionDocumentImpl(
       {required this.id,
       required this.wordId,
       required this.word,
@@ -283,10 +283,10 @@ class _$_DefinitionDocument implements _DefinitionDocument {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_DefinitionDocument &&
+            other is _$DefinitionDocumentImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.wordId, wordId) || other.wordId == wordId) &&
             (identical(other.word, word) || other.word == word) &&
@@ -331,8 +331,8 @@ class _$_DefinitionDocument implements _DefinitionDocument {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_DefinitionDocumentCopyWith<_$_DefinitionDocument> get copyWith =>
-      __$$_DefinitionDocumentCopyWithImpl<_$_DefinitionDocument>(
+  _$$DefinitionDocumentImplCopyWith<_$DefinitionDocumentImpl> get copyWith =>
+      __$$DefinitionDocumentImplCopyWithImpl<_$DefinitionDocumentImpl>(
           this, _$identity);
 }
 
@@ -349,7 +349,7 @@ abstract class _DefinitionDocument implements DefinitionDocument {
       required final bool isPublic,
       required final bool isEdited,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_DefinitionDocument;
+      required final DateTime updatedAt}) = _$DefinitionDocumentImpl;
 
   @override
   String get id;
@@ -377,6 +377,6 @@ abstract class _DefinitionDocument implements DefinitionDocument {
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
-  _$$_DefinitionDocumentCopyWith<_$_DefinitionDocument> get copyWith =>
+  _$$DefinitionDocumentImplCopyWith<_$DefinitionDocumentImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

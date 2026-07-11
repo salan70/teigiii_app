@@ -12,7 +12,7 @@ part of 'user_profile_document.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$UserProfileDocument {
@@ -100,11 +100,11 @@ class _$UserProfileDocumentCopyWithImpl<$Res, $Val extends UserProfileDocument>
 }
 
 /// @nodoc
-abstract class _$$_UserProfileDocumentCopyWith<$Res>
+abstract class _$$UserProfileDocumentImplCopyWith<$Res>
     implements $UserProfileDocumentCopyWith<$Res> {
-  factory _$$_UserProfileDocumentCopyWith(_$_UserProfileDocument value,
-          $Res Function(_$_UserProfileDocument) then) =
-      __$$_UserProfileDocumentCopyWithImpl<$Res>;
+  factory _$$UserProfileDocumentImplCopyWith(_$UserProfileDocumentImpl value,
+          $Res Function(_$UserProfileDocumentImpl) then) =
+      __$$UserProfileDocumentImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -118,11 +118,11 @@ abstract class _$$_UserProfileDocumentCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_UserProfileDocumentCopyWithImpl<$Res>
-    extends _$UserProfileDocumentCopyWithImpl<$Res, _$_UserProfileDocument>
-    implements _$$_UserProfileDocumentCopyWith<$Res> {
-  __$$_UserProfileDocumentCopyWithImpl(_$_UserProfileDocument _value,
-      $Res Function(_$_UserProfileDocument) _then)
+class __$$UserProfileDocumentImplCopyWithImpl<$Res>
+    extends _$UserProfileDocumentCopyWithImpl<$Res, _$UserProfileDocumentImpl>
+    implements _$$UserProfileDocumentImplCopyWith<$Res> {
+  __$$UserProfileDocumentImplCopyWithImpl(_$UserProfileDocumentImpl _value,
+      $Res Function(_$UserProfileDocumentImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -136,7 +136,7 @@ class __$$_UserProfileDocumentCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$_UserProfileDocument(
+    return _then(_$UserProfileDocumentImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -171,8 +171,8 @@ class __$$_UserProfileDocumentCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserProfileDocument extends _UserProfileDocument {
-  const _$_UserProfileDocument(
+class _$UserProfileDocumentImpl extends _UserProfileDocument {
+  const _$UserProfileDocumentImpl(
       {required this.id,
       required this.publicId,
       required this.name,
@@ -203,10 +203,10 @@ class _$_UserProfileDocument extends _UserProfileDocument {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserProfileDocument &&
+            other is _$UserProfileDocumentImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.publicId, publicId) ||
                 other.publicId == publicId) &&
@@ -227,8 +227,8 @@ class _$_UserProfileDocument extends _UserProfileDocument {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserProfileDocumentCopyWith<_$_UserProfileDocument> get copyWith =>
-      __$$_UserProfileDocumentCopyWithImpl<_$_UserProfileDocument>(
+  _$$UserProfileDocumentImplCopyWith<_$UserProfileDocumentImpl> get copyWith =>
+      __$$UserProfileDocumentImplCopyWithImpl<_$UserProfileDocumentImpl>(
           this, _$identity);
 }
 
@@ -240,7 +240,7 @@ abstract class _UserProfileDocument extends UserProfileDocument {
       required final String bio,
       required final String profileImageUrl,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_UserProfileDocument;
+      required final DateTime updatedAt}) = _$UserProfileDocumentImpl;
   const _UserProfileDocument._() : super._();
 
   @override
@@ -259,6 +259,6 @@ abstract class _UserProfileDocument extends UserProfileDocument {
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
-  _$$_UserProfileDocumentCopyWith<_$_UserProfileDocument> get copyWith =>
+  _$$UserProfileDocumentImplCopyWith<_$UserProfileDocumentImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
