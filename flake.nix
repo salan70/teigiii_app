@@ -11,7 +11,6 @@
       lib = nixpkgs.lib;
       systems = [
         "aarch64-darwin"
-        "x86_64-darwin"
         "x86_64-linux"
       ];
       forAllSystems = lib.genAttrs systems;
@@ -20,10 +19,6 @@
         aarch64-darwin = {
           url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_arm64_${flutterVersion}-stable.zip";
           sha256 = "1ypha2f1xcv5hhbf8zmnazbaazmf8gcn0w07k6wp7wcnb8dcc7x9";
-        };
-        x86_64-darwin = {
-          url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_${flutterVersion}-stable.zip";
-          sha256 = "1djyf716ykzrabymg70pi08rm7vfcim04j8rkfmlkdw5x805hakr";
         };
         x86_64-linux = {
           url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${flutterVersion}-stable.tar.xz";
@@ -76,10 +71,9 @@
             flutterTool
             dartTool
             pkgs.just
-            pkgs.cocoapods
             pkgs.lcov
             pkgs.git
-          ];
+          ] ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.cocoapods ];
         in
         {
           inherit flutterTool dartTool toolPackages;
@@ -119,7 +113,7 @@
                   export CXX="$(xcrun --find clang++)"
                 fi
               ''}
-              echo "[nix] teigi_app dev shell ready (Flutter ${flutterVersion}, just, CocoaPods, lcov)"
+              echo "[nix] teigi_app dev shell ready (Flutter ${flutterVersion}, just, lcov${lib.optionalString pkgs.stdenv.isDarwin ", CocoaPods"})"
               echo "[nix] Run tasks with: just <task>"
             '';
           };
