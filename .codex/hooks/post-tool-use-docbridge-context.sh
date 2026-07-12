@@ -20,7 +20,7 @@ cd "$repo_root"
 # How to invoke DocBridge. Override with e.g.
 #   DOCBRIDGE_CMD="bun run /path/to/docbridge/src/cli/index.ts"
 # Intentionally unquoted below so a multi-word command splits into words.
-docbridge_cmd=(${DOCBRIDGE_CMD:-bunx docbridge@0.5.0})
+docbridge_cmd=(${DOCBRIDGE_CMD:-bunx docbridge@0.5.2})
 
 file_path="$(
   PAYLOAD="$payload" bun -e '

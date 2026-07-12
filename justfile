@@ -20,7 +20,7 @@ test:
     flutter test
 
 docbridge-check:
-    bunx docbridge@0.5.0 check
+    bunx docbridge@0.5.2 check
 
 coverage:
     flutter test --coverage

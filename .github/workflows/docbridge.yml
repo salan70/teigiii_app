@@ -51,7 +51,7 @@ jobs:
           gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files" --paginate \
             -q '.[].filename' > changed-files.txt
           gate_status=0
-          nix develop --command bunx docbridge@0.5.0 related --stdin --gate \
+          nix develop --command bunx docbridge@0.5.2 related --stdin --gate \
             < changed-files.txt > gate-output.txt 2>&1 || gate_status=$?
           echo "GATE_STATUS=${gate_status}" >> "$GITHUB_ENV"
           cat gate-output.txt
