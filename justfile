@@ -19,6 +19,9 @@ format:
 test:
     flutter test
 
+docbridge-check:
+    bunx docbridge@0.5.2 check
+
 coverage:
     flutter test --coverage
     lcov --remove coverage/lcov.info '*.freezed.dart' '*.g.dart' '*/repository*' -o coverage/lcov.info

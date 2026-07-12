@@ -73,6 +73,7 @@
             pkgs.just
             pkgs.lcov
             pkgs.git
+            pkgs.bun
           ] ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.cocoapods ];
         in
         {

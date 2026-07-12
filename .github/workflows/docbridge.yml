@@ -1,0 +1,86 @@
+name: docbridge
+
+# check.yml は paths-ignore で md 変更をスキップするため、
+# 仕様書とコードのリンク検証は本ワークフローで全 PR に対して行う。
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@v3
+
+      - name: DocBridge check
+        run: nix develop --command just docbridge-check
+
+  # informational: 違反があってもワークフローは fail させず、
+  # sticky コメントで報告してマージ判断はレビュアーに委ねる。
+  related-gate-report:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@v3
+
+      - name: Run related-gate over the PR change set
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files" --paginate \
+            -q '.[].filename' > changed-files.txt
+          gate_status=0
+          nix develop --command bunx docbridge@0.5.2 related --stdin --gate \
+            < changed-files.txt > gate-output.txt 2>&1 || gate_status=$?
+          echo "GATE_STATUS=${gate_status}" >> "$GITHUB_ENV"
+          cat gate-output.txt
+
+      - name: Create or update the sticky PR comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          marker='<!-- docbridge-related-gate -->'
+          {
+            echo "$marker"
+            echo "## DocBridge related-gate"
+            echo
+            if [ "$GATE_STATUS" = "0" ]; then
+              echo "変更ファイルにリンクされたカウンターパートは、すべてこの PR の変更セットに含まれています。"
+            else
+              echo "変更ファイルに、この PR で更新されていないリンク先カウンターパートがあります。"
+              echo "各項目について、カウンターパートを更新するか、更新不要な理由を PR に記載してください。"
+              echo
+              echo '```'
+              cat gate-output.txt
+              echo '```'
+            fi
+          } > comment.md
+          comment_id="$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" --paginate \
+            -q ".[] | select(.body | startswith(\"${marker}\")) | .id" | head -n 1)"
+          if [ -n "$comment_id" ]; then
+            gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${comment_id}" -F body=@comment.md
+          else
+            gh api -X POST "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" -F body=@comment.md
+          fi
