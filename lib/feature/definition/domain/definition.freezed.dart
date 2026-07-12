@@ -12,7 +12,7 @@ part of 'definition.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Definition {
@@ -135,11 +135,11 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
 }
 
 /// @nodoc
-abstract class _$$_DefinitionCopyWith<$Res>
+abstract class _$$DefinitionImplCopyWith<$Res>
     implements $DefinitionCopyWith<$Res> {
-  factory _$$_DefinitionCopyWith(
-          _$_Definition value, $Res Function(_$_Definition) then) =
-      __$$_DefinitionCopyWithImpl<$Res>;
+  factory _$$DefinitionImplCopyWith(
+          _$DefinitionImpl value, $Res Function(_$DefinitionImpl) then) =
+      __$$DefinitionImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -158,11 +158,11 @@ abstract class _$$_DefinitionCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_DefinitionCopyWithImpl<$Res>
-    extends _$DefinitionCopyWithImpl<$Res, _$_Definition>
-    implements _$$_DefinitionCopyWith<$Res> {
-  __$$_DefinitionCopyWithImpl(
-      _$_Definition _value, $Res Function(_$_Definition) _then)
+class __$$DefinitionImplCopyWithImpl<$Res>
+    extends _$DefinitionCopyWithImpl<$Res, _$DefinitionImpl>
+    implements _$$DefinitionImplCopyWith<$Res> {
+  __$$DefinitionImplCopyWithImpl(
+      _$DefinitionImpl _value, $Res Function(_$DefinitionImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -181,7 +181,7 @@ class __$$_DefinitionCopyWithImpl<$Res>
     Object? isLikedByUser = null,
     Object? createdAt = null,
   }) {
-    return _then(_$_Definition(
+    return _then(_$DefinitionImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -236,8 +236,8 @@ class __$$_DefinitionCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Definition extends _Definition {
-  const _$_Definition(
+class _$DefinitionImpl extends _Definition {
+  const _$DefinitionImpl(
       {required this.id,
       required this.wordId,
       required this.word,
@@ -283,10 +283,10 @@ class _$_Definition extends _Definition {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Definition &&
+            other is _$DefinitionImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.wordId, wordId) || other.wordId == wordId) &&
             (identical(other.word, word) || other.word == word) &&
@@ -329,8 +329,8 @@ class _$_Definition extends _Definition {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_DefinitionCopyWith<_$_Definition> get copyWith =>
-      __$$_DefinitionCopyWithImpl<_$_Definition>(this, _$identity);
+  _$$DefinitionImplCopyWith<_$DefinitionImpl> get copyWith =>
+      __$$DefinitionImplCopyWithImpl<_$DefinitionImpl>(this, _$identity);
 }
 
 abstract class _Definition extends Definition {
@@ -346,7 +346,7 @@ abstract class _Definition extends Definition {
       required final bool isPublic,
       required final int likesCount,
       required final bool isLikedByUser,
-      required final DateTime createdAt}) = _$_Definition;
+      required final DateTime createdAt}) = _$DefinitionImpl;
   const _Definition._() : super._();
 
   @override
@@ -375,6 +375,6 @@ abstract class _Definition extends Definition {
   DateTime get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$$_DefinitionCopyWith<_$_Definition> get copyWith =>
+  _$$DefinitionImplCopyWith<_$DefinitionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

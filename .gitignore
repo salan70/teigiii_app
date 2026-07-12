@@ -5,9 +5,11 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.swiftpm/
 migrate_working_dir/
 
 # IntelliJ related
@@ -43,7 +45,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-.fvm/flutter_sdk
+.nix/
 
 **/android/app/src/main/res/mipmap*/
 **/android/app/src/main/res/values/colors.xml

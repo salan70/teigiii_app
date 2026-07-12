@@ -12,7 +12,7 @@ part of 'definition_id_list_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$DefinitionIdListState {
@@ -77,11 +77,12 @@ class _$DefinitionIdListStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_DefinitionIdListStateCopyWith<$Res>
+abstract class _$$DefinitionIdListStateImplCopyWith<$Res>
     implements $DefinitionIdListStateCopyWith<$Res> {
-  factory _$$_DefinitionIdListStateCopyWith(_$_DefinitionIdListState value,
-          $Res Function(_$_DefinitionIdListState) then) =
-      __$$_DefinitionIdListStateCopyWithImpl<$Res>;
+  factory _$$DefinitionIdListStateImplCopyWith(
+          _$DefinitionIdListStateImpl value,
+          $Res Function(_$DefinitionIdListStateImpl) then) =
+      __$$DefinitionIdListStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -91,11 +92,12 @@ abstract class _$$_DefinitionIdListStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_DefinitionIdListStateCopyWithImpl<$Res>
-    extends _$DefinitionIdListStateCopyWithImpl<$Res, _$_DefinitionIdListState>
-    implements _$$_DefinitionIdListStateCopyWith<$Res> {
-  __$$_DefinitionIdListStateCopyWithImpl(_$_DefinitionIdListState _value,
-      $Res Function(_$_DefinitionIdListState) _then)
+class __$$DefinitionIdListStateImplCopyWithImpl<$Res>
+    extends _$DefinitionIdListStateCopyWithImpl<$Res,
+        _$DefinitionIdListStateImpl>
+    implements _$$DefinitionIdListStateImplCopyWith<$Res> {
+  __$$DefinitionIdListStateImplCopyWithImpl(_$DefinitionIdListStateImpl _value,
+      $Res Function(_$DefinitionIdListStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -105,7 +107,7 @@ class __$$_DefinitionIdListStateCopyWithImpl<$Res>
     Object? lastReadQueryDocumentSnapshot = freezed,
     Object? hasMore = null,
   }) {
-    return _then(_$_DefinitionIdListState(
+    return _then(_$DefinitionIdListStateImpl(
       list: null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -124,8 +126,8 @@ class __$$_DefinitionIdListStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_DefinitionIdListState implements _DefinitionIdListState {
-  const _$_DefinitionIdListState(
+class _$DefinitionIdListStateImpl implements _DefinitionIdListState {
+  const _$DefinitionIdListStateImpl(
       {required final List<String> list,
       required this.lastReadQueryDocumentSnapshot,
       required this.hasMore})
@@ -152,10 +154,10 @@ class _$_DefinitionIdListState implements _DefinitionIdListState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_DefinitionIdListState &&
+            other is _$DefinitionIdListStateImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.lastReadQueryDocumentSnapshot,
                     lastReadQueryDocumentSnapshot) ||
@@ -174,9 +176,9 @@ class _$_DefinitionIdListState implements _DefinitionIdListState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_DefinitionIdListStateCopyWith<_$_DefinitionIdListState> get copyWith =>
-      __$$_DefinitionIdListStateCopyWithImpl<_$_DefinitionIdListState>(
-          this, _$identity);
+  _$$DefinitionIdListStateImplCopyWith<_$DefinitionIdListStateImpl>
+      get copyWith => __$$DefinitionIdListStateImplCopyWithImpl<
+          _$DefinitionIdListStateImpl>(this, _$identity);
 }
 
 abstract class _DefinitionIdListState implements DefinitionIdListState {
@@ -184,7 +186,7 @@ abstract class _DefinitionIdListState implements DefinitionIdListState {
       {required final List<String> list,
       required final QueryDocumentSnapshot<Object?>?
           lastReadQueryDocumentSnapshot,
-      required final bool hasMore}) = _$_DefinitionIdListState;
+      required final bool hasMore}) = _$DefinitionIdListStateImpl;
 
   @override
   List<String> get list;
@@ -197,6 +199,6 @@ abstract class _DefinitionIdListState implements DefinitionIdListState {
   bool get hasMore;
   @override
   @JsonKey(ignore: true)
-  _$$_DefinitionIdListStateCopyWith<_$_DefinitionIdListState> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$DefinitionIdListStateImplCopyWith<_$DefinitionIdListStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

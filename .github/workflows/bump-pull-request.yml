@@ -13,7 +13,6 @@ on:
           - major
 
 env:
-    # 「 github-actions[bot] 」 というユーザーが commit するよう設定。
   GIT_USER_EMAIL: '41898282+github-actions[bot]@users.noreply.github.com'
   GIT_USER_NAME: 'github-actions[bot]'
 
@@ -26,51 +25,40 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: checkout
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: install flutter
-        uses: subosito/flutter-action@v2
-        with:
-          # TODO:  ハードコーディング避けたい。
-          flutter-version: '3.13.6'
-          channel: 'stable'
-          cache: true
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@v3
 
-      - name: run flutter version
-        run: flutter --version
+      - name: Install dependencies
+        run: nix develop --command just setup
 
-      - name: run flutter pub get
-        run: flutter pub get
-
-      - name: init git config
+      - name: Init git config
         run: |
-          git config --local user.name $GIT_USER_NAME
-          git config --local user.email $GIT_USER_EMAIL
+          git config --local user.name "$GIT_USER_NAME"
+          git config --local user.email "$GIT_USER_EMAIL"
 
-      - name: bump up version
+      - name: Bump version
         run: |
-          echo choice: ${{ github.event.inputs.bump }}
-          flutter pub run cider bump ${{ github.event.inputs.bump }} --bump-build
-          echo "BUMP_VERSION=$(flutter pub run cider version)" >> $GITHUB_ENV
+          nix develop --command dart run cider bump "${{ github.event.inputs.bump }}" --bump-build
+          echo "BUMP_VERSION=$(nix develop --command dart run cider version)" >> "$GITHUB_ENV"
 
-      - name: commit pubspec.yaml
+      - name: Commit pubspec.yaml
         run: |
           git checkout develop
           git add -u pubspec.yaml
           echo "Bumped version number to $BUMP_VERSION" | git commit --file=-
 
-      - name: create release branch
+      - name: Create release branch
         run: |
-          git checkout -b releases/$BUMP_VERSION
-          echo "RELEASE_BRANCH=releases/$BUMP_VERSION" >> $GITHUB_ENV
+          git checkout -b "releases/$BUMP_VERSION"
+          echo "RELEASE_BRANCH=releases/$BUMP_VERSION" >> "$GITHUB_ENV"
 
-      - name: push branch
-        run: |
-          git push -u origin $RELEASE_BRANCH
+      - name: Push branch
+        run: git push -u origin "$RELEASE_BRANCH"
 
-      - name: create pull request
+      - name: Create pull request
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh pr create -B develop -t "Release $BUMP_VERSION" -b "Release $BUMP_VERSION" --head $RELEASE_BRANCH
+        run: gh pr create -B develop -t "Release $BUMP_VERSION" -b "Release $BUMP_VERSION" --head "$RELEASE_BRANCH"

@@ -7,7 +7,7 @@
 Flutter/Dart アプリケーション（teigi_app）。
 
 **技術スタック**:
-- Flutter（FVM でバージョン管理）
+- Flutter（Nix flake でバージョン管理）
 - Riverpod（状態管理）
 - Freezed（コード生成）
 - auto_route（ルーティング）
@@ -20,19 +20,19 @@ Flutter/Dart アプリケーション（teigi_app）。
 
 ```bash
 # 開発環境セットアップ
-make setup
+just setup
 
 # コード生成（Freezed等）
-make generate
+just generate
 
 # Lint
-fvm flutter analyze
+just analyze
 
 # Format
-fvm dart format .
+just format
 
 # テスト
-make test
+just test
 ```
 
 ## AI asset 運用

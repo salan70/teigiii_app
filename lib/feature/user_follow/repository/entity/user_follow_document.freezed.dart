@@ -12,7 +12,7 @@ part of 'user_follow_document.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$UserFollowDocument {
@@ -86,11 +86,11 @@ class _$UserFollowDocumentCopyWithImpl<$Res, $Val extends UserFollowDocument>
 }
 
 /// @nodoc
-abstract class _$$_UserFollowDocumentCopyWith<$Res>
+abstract class _$$UserFollowDocumentImplCopyWith<$Res>
     implements $UserFollowDocumentCopyWith<$Res> {
-  factory _$$_UserFollowDocumentCopyWith(_$_UserFollowDocument value,
-          $Res Function(_$_UserFollowDocument) then) =
-      __$$_UserFollowDocumentCopyWithImpl<$Res>;
+  factory _$$UserFollowDocumentImplCopyWith(_$UserFollowDocumentImpl value,
+          $Res Function(_$UserFollowDocumentImpl) then) =
+      __$$UserFollowDocumentImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -102,11 +102,11 @@ abstract class _$$_UserFollowDocumentCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_UserFollowDocumentCopyWithImpl<$Res>
-    extends _$UserFollowDocumentCopyWithImpl<$Res, _$_UserFollowDocument>
-    implements _$$_UserFollowDocumentCopyWith<$Res> {
-  __$$_UserFollowDocumentCopyWithImpl(
-      _$_UserFollowDocument _value, $Res Function(_$_UserFollowDocument) _then)
+class __$$UserFollowDocumentImplCopyWithImpl<$Res>
+    extends _$UserFollowDocumentCopyWithImpl<$Res, _$UserFollowDocumentImpl>
+    implements _$$UserFollowDocumentImplCopyWith<$Res> {
+  __$$UserFollowDocumentImplCopyWithImpl(_$UserFollowDocumentImpl _value,
+      $Res Function(_$UserFollowDocumentImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -118,7 +118,7 @@ class __$$_UserFollowDocumentCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$_UserFollowDocument(
+    return _then(_$UserFollowDocumentImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -145,8 +145,8 @@ class __$$_UserFollowDocumentCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserFollowDocument implements _UserFollowDocument {
-  const _$_UserFollowDocument(
+class _$UserFollowDocumentImpl implements _UserFollowDocument {
+  const _$UserFollowDocumentImpl(
       {required this.id,
       required this.followerId,
       required this.followingId,
@@ -170,10 +170,10 @@ class _$_UserFollowDocument implements _UserFollowDocument {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserFollowDocument &&
+            other is _$UserFollowDocumentImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.followerId, followerId) ||
                 other.followerId == followerId) &&
@@ -192,8 +192,8 @@ class _$_UserFollowDocument implements _UserFollowDocument {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserFollowDocumentCopyWith<_$_UserFollowDocument> get copyWith =>
-      __$$_UserFollowDocumentCopyWithImpl<_$_UserFollowDocument>(
+  _$$UserFollowDocumentImplCopyWith<_$UserFollowDocumentImpl> get copyWith =>
+      __$$UserFollowDocumentImplCopyWithImpl<_$UserFollowDocumentImpl>(
           this, _$identity);
 }
 
@@ -203,7 +203,7 @@ abstract class _UserFollowDocument implements UserFollowDocument {
       required final String followerId,
       required final String followingId,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_UserFollowDocument;
+      required final DateTime updatedAt}) = _$UserFollowDocumentImpl;
 
   @override
   String get id;
@@ -217,6 +217,6 @@ abstract class _UserFollowDocument implements UserFollowDocument {
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
-  _$$_UserFollowDocumentCopyWith<_$_UserFollowDocument> get copyWith =>
+  _$$UserFollowDocumentImplCopyWith<_$UserFollowDocumentImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

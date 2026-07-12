@@ -10,6 +10,8 @@ import '../domain/word_list_state.dart';
 
 part 'fetch_word_list_repository.g.dart';
 
+int aggregateCountOrZero(int? count) => count ?? 0;
+
 @riverpod
 FetchWordListRepository fetchWordListRepository(FetchWordListRepositoryRef ref) =>
     FetchWordListRepository(ref.watch(firestoreProvider));
@@ -190,7 +192,7 @@ class FetchWordListRepository {
         )
         .count()
         .get();
-    final allDefinitionCount = allDefinitionSnapshot.count;
+    final allDefinitionCount = aggregateCountOrZero(allDefinitionSnapshot.count);
 
     if (mutedUserIdList.isEmpty) {
       return allDefinitionCount;
@@ -225,7 +227,7 @@ class FetchWordListRepository {
           .count()
           .get();
 
-      mutedDefinitionCount += mutedSnapshot.count;
+      mutedDefinitionCount += aggregateCountOrZero(mutedSnapshot.count);
 
       // maxCount に達することは、
       // これ以上 snapshot を取得する意味がないことを意味する。

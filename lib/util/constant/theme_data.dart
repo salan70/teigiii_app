@@ -49,7 +49,7 @@ ThemeData getThemeData(ThemeMode themeMode, BuildContext context) {
       ),
       elevation: 0.1,
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       labelColor: colorScheme.primary,
       unselectedLabelColor: colorScheme.onSurface,
       indicatorSize: TabBarIndicatorSize.label,

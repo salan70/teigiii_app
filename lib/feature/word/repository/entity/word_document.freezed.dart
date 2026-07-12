@@ -12,7 +12,7 @@ part of 'word_document.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$WordDocument {
@@ -93,11 +93,11 @@ class _$WordDocumentCopyWithImpl<$Res, $Val extends WordDocument>
 }
 
 /// @nodoc
-abstract class _$$_WordDocumentCopyWith<$Res>
+abstract class _$$WordDocumentImplCopyWith<$Res>
     implements $WordDocumentCopyWith<$Res> {
-  factory _$$_WordDocumentCopyWith(
-          _$_WordDocument value, $Res Function(_$_WordDocument) then) =
-      __$$_WordDocumentCopyWithImpl<$Res>;
+  factory _$$WordDocumentImplCopyWith(
+          _$WordDocumentImpl value, $Res Function(_$WordDocumentImpl) then) =
+      __$$WordDocumentImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -110,11 +110,11 @@ abstract class _$$_WordDocumentCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_WordDocumentCopyWithImpl<$Res>
-    extends _$WordDocumentCopyWithImpl<$Res, _$_WordDocument>
-    implements _$$_WordDocumentCopyWith<$Res> {
-  __$$_WordDocumentCopyWithImpl(
-      _$_WordDocument _value, $Res Function(_$_WordDocument) _then)
+class __$$WordDocumentImplCopyWithImpl<$Res>
+    extends _$WordDocumentCopyWithImpl<$Res, _$WordDocumentImpl>
+    implements _$$WordDocumentImplCopyWith<$Res> {
+  __$$WordDocumentImplCopyWithImpl(
+      _$WordDocumentImpl _value, $Res Function(_$WordDocumentImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -127,7 +127,7 @@ class __$$_WordDocumentCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$_WordDocument(
+    return _then(_$WordDocumentImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -158,8 +158,8 @@ class __$$_WordDocumentCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_WordDocument implements _WordDocument {
-  const _$_WordDocument(
+class _$WordDocumentImpl implements _WordDocument {
+  const _$WordDocumentImpl(
       {required this.id,
       required this.word,
       required this.reading,
@@ -186,10 +186,10 @@ class _$_WordDocument implements _WordDocument {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_WordDocument &&
+            other is _$WordDocumentImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.word, word) || other.word == word) &&
             (identical(other.reading, reading) || other.reading == reading) &&
@@ -208,8 +208,8 @@ class _$_WordDocument implements _WordDocument {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_WordDocumentCopyWith<_$_WordDocument> get copyWith =>
-      __$$_WordDocumentCopyWithImpl<_$_WordDocument>(this, _$identity);
+  _$$WordDocumentImplCopyWith<_$WordDocumentImpl> get copyWith =>
+      __$$WordDocumentImplCopyWithImpl<_$WordDocumentImpl>(this, _$identity);
 }
 
 abstract class _WordDocument implements WordDocument {
@@ -219,7 +219,7 @@ abstract class _WordDocument implements WordDocument {
       required final String reading,
       required final String initialSubGroupLabel,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_WordDocument;
+      required final DateTime updatedAt}) = _$WordDocumentImpl;
 
   @override
   String get id;
@@ -235,6 +235,6 @@ abstract class _WordDocument implements WordDocument {
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
-  _$$_WordDocumentCopyWith<_$_WordDocument> get copyWith =>
+  _$$WordDocumentImplCopyWith<_$WordDocumentImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

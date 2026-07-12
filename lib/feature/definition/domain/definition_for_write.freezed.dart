@@ -12,7 +12,7 @@ part of 'definition_for_write.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$DefinitionForWrite {
@@ -94,11 +94,11 @@ class _$DefinitionForWriteCopyWithImpl<$Res, $Val extends DefinitionForWrite>
 }
 
 /// @nodoc
-abstract class _$$_DefinitionForWriteCopyWith<$Res>
+abstract class _$$DefinitionForWriteImplCopyWith<$Res>
     implements $DefinitionForWriteCopyWith<$Res> {
-  factory _$$_DefinitionForWriteCopyWith(_$_DefinitionForWrite value,
-          $Res Function(_$_DefinitionForWrite) then) =
-      __$$_DefinitionForWriteCopyWithImpl<$Res>;
+  factory _$$DefinitionForWriteImplCopyWith(_$DefinitionForWriteImpl value,
+          $Res Function(_$DefinitionForWriteImpl) then) =
+      __$$DefinitionForWriteImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -111,11 +111,11 @@ abstract class _$$_DefinitionForWriteCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_DefinitionForWriteCopyWithImpl<$Res>
-    extends _$DefinitionForWriteCopyWithImpl<$Res, _$_DefinitionForWrite>
-    implements _$$_DefinitionForWriteCopyWith<$Res> {
-  __$$_DefinitionForWriteCopyWithImpl(
-      _$_DefinitionForWrite _value, $Res Function(_$_DefinitionForWrite) _then)
+class __$$DefinitionForWriteImplCopyWithImpl<$Res>
+    extends _$DefinitionForWriteCopyWithImpl<$Res, _$DefinitionForWriteImpl>
+    implements _$$DefinitionForWriteImplCopyWith<$Res> {
+  __$$DefinitionForWriteImplCopyWithImpl(_$DefinitionForWriteImpl _value,
+      $Res Function(_$DefinitionForWriteImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -128,7 +128,7 @@ class __$$_DefinitionForWriteCopyWithImpl<$Res>
     Object? isPublic = null,
     Object? definition = null,
   }) {
-    return _then(_$_DefinitionForWrite(
+    return _then(_$DefinitionForWriteImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -159,8 +159,8 @@ class __$$_DefinitionForWriteCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_DefinitionForWrite extends _DefinitionForWrite {
-  const _$_DefinitionForWrite(
+class _$DefinitionForWriteImpl extends _DefinitionForWrite {
+  const _$DefinitionForWriteImpl(
       {required this.id,
       required this.authorId,
       required this.word,
@@ -189,10 +189,10 @@ class _$_DefinitionForWrite extends _DefinitionForWrite {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_DefinitionForWrite &&
+            other is _$DefinitionForWriteImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.authorId, authorId) ||
                 other.authorId == authorId) &&
@@ -212,8 +212,8 @@ class _$_DefinitionForWrite extends _DefinitionForWrite {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_DefinitionForWriteCopyWith<_$_DefinitionForWrite> get copyWith =>
-      __$$_DefinitionForWriteCopyWithImpl<_$_DefinitionForWrite>(
+  _$$DefinitionForWriteImplCopyWith<_$DefinitionForWriteImpl> get copyWith =>
+      __$$DefinitionForWriteImplCopyWithImpl<_$DefinitionForWriteImpl>(
           this, _$identity);
 }
 
@@ -224,7 +224,7 @@ abstract class _DefinitionForWrite extends DefinitionForWrite {
       required final String word,
       required final String wordReading,
       required final bool isPublic,
-      required final String definition}) = _$_DefinitionForWrite;
+      required final String definition}) = _$DefinitionForWriteImpl;
   const _DefinitionForWrite._() : super._();
 
   @override
@@ -243,6 +243,6 @@ abstract class _DefinitionForWrite extends DefinitionForWrite {
   String get definition;
   @override
   @JsonKey(ignore: true)
-  _$$_DefinitionForWriteCopyWith<_$_DefinitionForWrite> get copyWith =>
+  _$$DefinitionForWriteImplCopyWith<_$DefinitionForWriteImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

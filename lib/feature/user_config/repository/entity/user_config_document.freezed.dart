@@ -12,7 +12,7 @@ part of 'user_config_document.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$UserConfigDocument {
@@ -93,11 +93,11 @@ class _$UserConfigDocumentCopyWithImpl<$Res, $Val extends UserConfigDocument>
 }
 
 /// @nodoc
-abstract class _$$_UserConfigDocumentCopyWith<$Res>
+abstract class _$$UserConfigDocumentImplCopyWith<$Res>
     implements $UserConfigDocumentCopyWith<$Res> {
-  factory _$$_UserConfigDocumentCopyWith(_$_UserConfigDocument value,
-          $Res Function(_$_UserConfigDocument) then) =
-      __$$_UserConfigDocumentCopyWithImpl<$Res>;
+  factory _$$UserConfigDocumentImplCopyWith(_$UserConfigDocumentImpl value,
+          $Res Function(_$UserConfigDocumentImpl) then) =
+      __$$UserConfigDocumentImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -110,11 +110,11 @@ abstract class _$$_UserConfigDocumentCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_UserConfigDocumentCopyWithImpl<$Res>
-    extends _$UserConfigDocumentCopyWithImpl<$Res, _$_UserConfigDocument>
-    implements _$$_UserConfigDocumentCopyWith<$Res> {
-  __$$_UserConfigDocumentCopyWithImpl(
-      _$_UserConfigDocument _value, $Res Function(_$_UserConfigDocument) _then)
+class __$$UserConfigDocumentImplCopyWithImpl<$Res>
+    extends _$UserConfigDocumentCopyWithImpl<$Res, _$UserConfigDocumentImpl>
+    implements _$$UserConfigDocumentImplCopyWith<$Res> {
+  __$$UserConfigDocumentImplCopyWithImpl(_$UserConfigDocumentImpl _value,
+      $Res Function(_$UserConfigDocumentImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -127,7 +127,7 @@ class __$$_UserConfigDocumentCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$_UserConfigDocument(
+    return _then(_$UserConfigDocumentImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -158,8 +158,8 @@ class __$$_UserConfigDocumentCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserConfigDocument implements _UserConfigDocument {
-  const _$_UserConfigDocument(
+class _$UserConfigDocumentImpl implements _UserConfigDocument {
+  const _$UserConfigDocumentImpl(
       {required this.id,
       required this.appVersion,
       required this.osVersion,
@@ -193,10 +193,10 @@ class _$_UserConfigDocument implements _UserConfigDocument {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserConfigDocument &&
+            other is _$UserConfigDocumentImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.appVersion, appVersion) ||
                 other.appVersion == appVersion) &&
@@ -223,8 +223,8 @@ class _$_UserConfigDocument implements _UserConfigDocument {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserConfigDocumentCopyWith<_$_UserConfigDocument> get copyWith =>
-      __$$_UserConfigDocumentCopyWithImpl<_$_UserConfigDocument>(
+  _$$UserConfigDocumentImplCopyWith<_$UserConfigDocumentImpl> get copyWith =>
+      __$$UserConfigDocumentImplCopyWithImpl<_$UserConfigDocumentImpl>(
           this, _$identity);
 }
 
@@ -235,7 +235,7 @@ abstract class _UserConfigDocument implements UserConfigDocument {
       required final String osVersion,
       required final List<String> mutedUserIdList,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_UserConfigDocument;
+      required final DateTime updatedAt}) = _$UserConfigDocumentImpl;
 
   @override
   String get id;
@@ -251,6 +251,6 @@ abstract class _UserConfigDocument implements UserConfigDocument {
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
-  _$$_UserConfigDocumentCopyWith<_$_UserConfigDocument> get copyWith =>
+  _$$UserConfigDocumentImplCopyWith<_$UserConfigDocumentImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

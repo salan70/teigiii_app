@@ -12,7 +12,7 @@ part of 'user_follow_count_document.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$UserFollowCountDocument {
@@ -87,11 +87,12 @@ class _$UserFollowCountDocumentCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_UserFollowCountDocumentCopyWith<$Res>
+abstract class _$$UserFollowCountDocumentImplCopyWith<$Res>
     implements $UserFollowCountDocumentCopyWith<$Res> {
-  factory _$$_UserFollowCountDocumentCopyWith(_$_UserFollowCountDocument value,
-          $Res Function(_$_UserFollowCountDocument) then) =
-      __$$_UserFollowCountDocumentCopyWithImpl<$Res>;
+  factory _$$UserFollowCountDocumentImplCopyWith(
+          _$UserFollowCountDocumentImpl value,
+          $Res Function(_$UserFollowCountDocumentImpl) then) =
+      __$$UserFollowCountDocumentImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -103,12 +104,13 @@ abstract class _$$_UserFollowCountDocumentCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_UserFollowCountDocumentCopyWithImpl<$Res>
+class __$$UserFollowCountDocumentImplCopyWithImpl<$Res>
     extends _$UserFollowCountDocumentCopyWithImpl<$Res,
-        _$_UserFollowCountDocument>
-    implements _$$_UserFollowCountDocumentCopyWith<$Res> {
-  __$$_UserFollowCountDocumentCopyWithImpl(_$_UserFollowCountDocument _value,
-      $Res Function(_$_UserFollowCountDocument) _then)
+        _$UserFollowCountDocumentImpl>
+    implements _$$UserFollowCountDocumentImplCopyWith<$Res> {
+  __$$UserFollowCountDocumentImplCopyWithImpl(
+      _$UserFollowCountDocumentImpl _value,
+      $Res Function(_$UserFollowCountDocumentImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -120,7 +122,7 @@ class __$$_UserFollowCountDocumentCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$_UserFollowCountDocument(
+    return _then(_$UserFollowCountDocumentImpl(
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -147,8 +149,8 @@ class __$$_UserFollowCountDocumentCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserFollowCountDocument implements _UserFollowCountDocument {
-  const _$_UserFollowCountDocument(
+class _$UserFollowCountDocumentImpl implements _UserFollowCountDocument {
+  const _$UserFollowCountDocumentImpl(
       {required this.userId,
       required this.followerCount,
       required this.followingCount,
@@ -172,10 +174,10 @@ class _$_UserFollowCountDocument implements _UserFollowCountDocument {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserFollowCountDocument &&
+            other is _$UserFollowCountDocumentImpl &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.followerCount, followerCount) ||
                 other.followerCount == followerCount) &&
@@ -194,10 +196,9 @@ class _$_UserFollowCountDocument implements _UserFollowCountDocument {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserFollowCountDocumentCopyWith<_$_UserFollowCountDocument>
-      get copyWith =>
-          __$$_UserFollowCountDocumentCopyWithImpl<_$_UserFollowCountDocument>(
-              this, _$identity);
+  _$$UserFollowCountDocumentImplCopyWith<_$UserFollowCountDocumentImpl>
+      get copyWith => __$$UserFollowCountDocumentImplCopyWithImpl<
+          _$UserFollowCountDocumentImpl>(this, _$identity);
 }
 
 abstract class _UserFollowCountDocument implements UserFollowCountDocument {
@@ -206,7 +207,7 @@ abstract class _UserFollowCountDocument implements UserFollowCountDocument {
       required final int followerCount,
       required final int followingCount,
       required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_UserFollowCountDocument;
+      required final DateTime updatedAt}) = _$UserFollowCountDocumentImpl;
 
   @override
   String get userId;
@@ -220,6 +221,6 @@ abstract class _UserFollowCountDocument implements UserFollowCountDocument {
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
-  _$$_UserFollowCountDocumentCopyWith<_$_UserFollowCountDocument>
+  _$$UserFollowCountDocumentImplCopyWith<_$UserFollowCountDocumentImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
