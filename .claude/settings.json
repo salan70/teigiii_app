@@ -25,6 +25,16 @@
             "timeout": 15
           }
         ]
+      },
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/post-tool-use-docbridge-context.sh",
+            "timeout": 30
+          }
+        ]
       }
     ],
     "PreToolUse": [
@@ -55,6 +65,11 @@
             "type": "command",
             "command": "bash .claude/hooks/session-reflect-reminder.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/stop-docbridge-related-gate.sh",
+            "timeout": 60
           }
         ]
       }
