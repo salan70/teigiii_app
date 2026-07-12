@@ -11,4 +11,4 @@
 
 注意: Freezed は元クラスの doc コメントを生成ファイルへ複製することがあるため、
 最初のアノテーション追加時に重複リンクの挙動を検証すること
-（詳細: `doc/plans/2026-07-12-docbridge-adoption.md` の将来課題）。
+（詳細: `doc/plans/done/2026-07-12-docbridge-adoption.md` の将来課題）。
