@@ -119,6 +119,8 @@ export const likes = sqliteTable(
     primaryKey({ columns: [table.userId, table.definitionId] }),
     // いいね集計・いいねユーザー一覧
     index("likes_definition_idx").on(table.definitionId, table.createdAt),
+    // いいねした定義一覧（いいね日時の降順の keyset ページング）
+    index("likes_user_idx").on(table.userId, sql`${table.createdAt} desc`, table.definitionId),
   ],
 );
 

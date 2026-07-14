@@ -48,6 +48,7 @@ CREATE TABLE `likes` (
 );
 --> statement-breakpoint
 CREATE INDEX `likes_definition_idx` ON `likes` (`definition_id`,`created_at`);--> statement-breakpoint
+CREATE INDEX `likes_user_idx` ON `likes` (`user_id`,"created_at" desc,`definition_id`);--> statement-breakpoint
 CREATE TABLE `saved_words` (
 	`user_id` text NOT NULL,
 	`word_id` text NOT NULL,

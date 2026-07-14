@@ -119,6 +119,7 @@ saved_words  (user_id, word_id, created_at)         PK(user_id, word_id)
 | 読み順一覧・行絞り込み | `words(reading_sub_group, reading, id)` |
 | 言葉登録の新着（見つけるフィード） | `words(created_at DESC, id)` |
 | いいね集計・いいねユーザー一覧 | `likes(definition_id, created_at)`（PK と別途） |
+| いいねした定義一覧 | `likes(user_id, created_at DESC, definition_id)` |
 | フォロワー逆引き | `follows(following_id, created_at)`（PK と別途） |
 | 保存した言葉 | PK(user_id, word_id) + `created_at` 降順は少件数のため追加不要 |
 
@@ -182,8 +183,8 @@ saved_words  (user_id, word_id, created_at)         PK(user_id, word_id)
   DELETE /v1/users/me                  アカウント削除（論理。R2 上の画像の物理削除は 30 日後バッチのスコープ）
   GET    /v1/users/{id}                公開プロフィール（合成 DTO）
   GET    /v1/users/{id}/dictionary     公開辞書（言葉単位グルーピング）
-  GET    /v1/users/{id}/definitions    ユーザーの定義一覧（新着順。本人は非公開含む。?wordId= / ?subGroup= で絞り込み。旧 UI のプロフィール定義一覧・頭文字別辞書のパリティ）
-  GET    /v1/users/{id}/liked-definitions  いいねした公開定義一覧（旧 UI のプロフィール「いいね」タブのパリティ）
+  GET    /v1/users/{id}/definitions    ユーザーの定義一覧（本人は非公開含む。?wordId= / ?subGroup= で絞り込み、?sort=newest|reading。旧 UI のプロフィール定義一覧・頭文字別辞書のパリティ）
+  GET    /v1/users/{id}/liked-definitions  いいねした定義一覧（他者の公開定義 + 閲覧者自身の定義は非公開でも含む。旧 UI のプロフィール「いいね」タブのパリティ）
   GET    /v1/users/{id}/followers      フォロワー一覧
   GET    /v1/users/{id}/following      フォロー中一覧
   PUT/DELETE /v1/users/{id}/follow     フォロー / 解除

@@ -54,8 +54,8 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 | `definition_id_list_repository.fetchForHomeFollowing` | `GET /v1/timeline/following` |
 | `definition_id_list_repository.fetchForWordTop`（createdAt / likesCount 順） | `GET /v1/words/{id}/definitions?scope=all&sort=newest\|reactions` |
 | `definition_id_list_repository.fetchForProfileCreatedAt` | `GET /v1/users/{id}/definitions` |
-| `definition_id_list_repository.fetchForLikedByUser` | `GET /v1/users/{id}/liked-definitions` |
-| `definition_id_list_repository.fetchForIndividualDictionary` | `GET /v1/users/{id}/definitions?subGroup=` |
+| `definition_id_list_repository.fetchForLikedByUser` | `GET /v1/users/{id}/liked-definitions`（他者の公開定義 + 閲覧者自身の定義は非公開でも含む。旧実装と同じ可視性） |
+| `definition_id_list_repository.fetchForIndividualDictionary` | `GET /v1/users/{id}/definitions?subGroup=&sort=reading`（旧実装と同じ、よみ昇順） |
 | 各メソッドの `mutedUserIdList` 引数によるクライアント側フィルタ | **集約**: ミュート除外はサーバー側クエリで実施 |
 
 ## 言葉

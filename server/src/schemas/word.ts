@@ -1,9 +1,13 @@
 import { z } from "@hono/zod-openapi";
 import { errorResponseSchema } from "./common";
 
-// 現行実装（definition_for_write.dart）に準拠
+// 現行実装（definition_for_write.dart / string_regex.dart）に準拠
 export const maxWordLength = 30;
 export const maxReadingLength = 50;
+
+/** よみに使える文字種（かな・英数字・基本的な記号のみ。漢字不可）。現行の combinedRegex と同一 */
+export const readingPattern =
+  /^[ ぁ-んゔァ-ンヴヷヸヹヺa-zA-Z0-9!#$%&()*+,\-./:;<=>?@[\\\]^_`{|}~（）「」『』ー]+$/;
 
 export const wordSummarySchema = z
   .object({
@@ -36,14 +40,14 @@ export const wordResponseSchema = wordSummarySchema
 export const createWordRequestSchema = z
   .object({
     word: z.string().min(1).max(maxWordLength),
-    reading: z.string().min(1).max(maxReadingLength),
+    reading: z.string().min(1).max(maxReadingLength).regex(readingPattern),
   })
   .openapi("CreateWordRequest");
 
 export const updateWordRequestSchema = z
   .object({
     word: z.string().min(1).max(maxWordLength).optional(),
-    reading: z.string().min(1).max(maxReadingLength).optional(),
+    reading: z.string().min(1).max(maxReadingLength).regex(readingPattern).optional(),
   })
   .openapi("UpdateWordRequest");
 

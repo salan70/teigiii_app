@@ -144,15 +144,16 @@ const getUserDefinitionsRoute = createRoute({
   method: "get",
   path: "/users/{id}/definitions",
   tags: ["users"],
-  summary: "ユーザーの定義一覧（新着順）",
+  summary: "ユーザーの定義一覧",
   description:
-    "対象が本人の場合は非公開定義を含む（下書きは /me/definitions）。他者の場合は公開定義のみ。wordId・subGroup で絞り込み可能。",
+    "対象が本人の場合は非公開定義を含む（下書きは /me/definitions）。他者の場合は公開定義のみ。wordId・subGroup で絞り込み可能。sort=reading は言葉のよみ昇順（旧 UI の頭文字別辞書のパリティ）。",
   security: authenticatedSecurity,
   request: {
     params: userIdParams,
     query: paginationQuerySchema.extend({
       wordId: z.string().optional(),
       subGroup: z.string().optional(),
+      sort: z.enum(["newest", "reading"]).default("newest"),
     }),
   },
   responses: {
@@ -166,8 +167,9 @@ const getUserLikedDefinitionsRoute = createRoute({
   method: "get",
   path: "/users/{id}/liked-definitions",
   tags: ["users"],
-  summary: "ユーザーがいいねした公開定義の一覧（いいね日時の降順）",
-  description: "旧 UI のプロフィール「いいね」タブのパリティ用。",
+  summary: "ユーザーがいいねした定義の一覧（いいね日時の降順）",
+  description:
+    "旧 UI のプロフィール「いいね」タブのパリティ用。他者の公開定義に加え、閲覧者自身の定義は非公開でも含める（旧実装と同じ可視性）。",
   security: authenticatedSecurity,
   request: { params: userIdParams, query: paginationQuerySchema },
   responses: {

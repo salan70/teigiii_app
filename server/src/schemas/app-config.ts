@@ -7,5 +7,6 @@ export const appConfigResponseSchema = z
     minAppVersionAndroid: z.string().openapi({ example: "2.0.0" }),
     inMaintenance: z.boolean(),
     maintenanceScheduledEndTime: isoDateTime.nullable(),
+    updatedAt: isoDateTime,
   })
   .openapi("AppConfigResponse");

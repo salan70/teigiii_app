@@ -2,6 +2,7 @@
  * OpenAPI ドキュメントが生成でき、plan のエンドポイント一覧と一致することを検証する。
  */
 import { describe, expect, test } from "bun:test";
+import { Validator } from "@seriousme/openapi-schema-validator";
 import { buildOpenApiDocument } from "../src/app";
 
 /** plan（doc/plans/2026-07-15-rdb-schema-api-design.md）のエンドポイント一覧 */
@@ -67,13 +68,22 @@ describe("OpenAPI document", () => {
     expect(Object.keys(schemes).toSorted()).toEqual(["appCheck", "firebaseIdToken"]);
   });
 
-  test("全オペレーションに security が設定され、app-config 以外は firebaseIdToken を要求する", () => {
+  test("OpenAPI 3.0 スキーマとして妥当（validate が通る）", async () => {
+    const validator = new Validator();
+    const result = await validator.validate(JSON.parse(JSON.stringify(document)));
+    expect(result.errors).toBeUndefined();
+    expect(result.valid).toBe(true);
+  });
+
+  test("全オペレーションで appCheck 必須、app-config 以外は firebaseIdToken も必須", () => {
     for (const [path, item] of Object.entries(document.paths ?? {})) {
       for (const [method, operation] of Object.entries(item ?? {})) {
         if (!["get", "post", "put", "patch", "delete"].includes(method)) continue;
         const op = operation as { security?: Record<string, unknown>[] };
         expect(op.security).toBeDefined();
+        const requiresAppCheck = (op.security ?? []).some((entry) => "appCheck" in entry);
         const requiresIdToken = (op.security ?? []).some((entry) => "firebaseIdToken" in entry);
+        expect(requiresAppCheck).toBe(true);
         if (path === "/v1/app-config") {
           expect(requiresIdToken).toBe(false);
         } else {

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "60e0ba47-c766-4418-b47f-f10c3e2f66ab",
+  "id": "b105a6da-248a-43a7-a73d-e457cc499e52",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "app_config": {
@@ -317,6 +317,15 @@
           "columns": [
             "definition_id",
             "created_at"
+          ],
+          "isUnique": false
+        },
+        "likes_user_idx": {
+          "name": "likes_user_idx",
+          "columns": [
+            "user_id",
+            "\"created_at\" desc",
+            "definition_id"
           ],
           "isUnique": false
         }
@@ -711,6 +720,13 @@
       "definitions_author_idx": {
         "columns": {
           "\"updated_at\" desc": {
+            "isExpression": true
+          }
+        }
+      },
+      "likes_user_idx": {
+        "columns": {
+          "\"created_at\" desc": {
             "isExpression": true
           }
         }
