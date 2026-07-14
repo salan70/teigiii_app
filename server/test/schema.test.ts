@@ -46,12 +46,16 @@ function insertWord(db: Database, id: string, word: string): void {
 function insertDefinition(
   db: Database,
   id: string,
-  opts: { wordId: string; authorId: string; status?: string },
+  opts: { wordId: string; authorId: string; status?: string; finalizedAt?: number | null },
 ): void {
+  const status = opts.status ?? "public";
+  // 不変条件: draft は finalized_at NULL、public/private は NOT NULL
+  const finalizedAt =
+    opts.finalizedAt !== undefined ? opts.finalizedAt : status === "draft" ? null : now;
   db.run(
-    `insert into definitions (id, word_id, author_id, body, status, created_at, updated_at)
-     values (?, ?, ?, '本文', ?, ?, ?)`,
-    [id, opts.wordId, opts.authorId, opts.status ?? "public", now, now],
+    `insert into definitions (id, word_id, author_id, body, status, finalized_at, created_at, updated_at)
+     values (?, ?, ?, '本文', ?, ?, ?, ?)`,
+    [id, opts.wordId, opts.authorId, status, finalizedAt, now, now],
   );
 }
 
@@ -92,6 +96,28 @@ describe("migration SQL", () => {
     expect(() =>
       insertDefinition(db, "d1", { wordId: "w1", authorId: "u1", status: "archived" }),
     ).toThrow();
+  });
+
+  test("finalized_at の不変条件が CHECK で強制される", () => {
+    insertUser(db, "u1");
+    insertWord(db, "w1", "自由");
+    // public なのに finalized_at が NULL → 拒否
+    expect(() =>
+      insertDefinition(db, "d1", { wordId: "w1", authorId: "u1", finalizedAt: null }),
+    ).toThrow();
+    // draft なのに finalized_at がある → 拒否
+    expect(() =>
+      insertDefinition(db, "d2", {
+        wordId: "w1",
+        authorId: "u1",
+        status: "draft",
+        finalizedAt: now,
+      }),
+    ).toThrow();
+    // 正しい組み合わせは通る
+    insertDefinition(db, "d3", { wordId: "w1", authorId: "u1" });
+    insertDefinition(db, "d4", { wordId: "w1", authorId: "u1", status: "draft" });
+    expect(db.query("select count(*) as c from definitions").get()).toEqual({ c: 2 });
   });
 
   test("自分自身へのフォローが CHECK で拒否される", () => {

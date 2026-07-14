@@ -21,7 +21,8 @@ CREATE TABLE `definitions` (
 	`updated_at` integer NOT NULL,
 	FOREIGN KEY (`word_id`) REFERENCES `words`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
-	CONSTRAINT "definitions_status_check" CHECK("definitions"."status" in ('draft', 'public', 'private'))
+	CONSTRAINT "definitions_status_check" CHECK("definitions"."status" in ('draft', 'public', 'private')),
+	CONSTRAINT "definitions_finalized_at_check" CHECK(("definitions"."status" = 'draft') = ("definitions"."finalized_at" is null))
 );
 --> statement-breakpoint
 CREATE INDEX `definitions_timeline_idx` ON `definitions` (`status`,"finalized_at" desc,`id`) WHERE "definitions"."deleted_at" is null;--> statement-breakpoint

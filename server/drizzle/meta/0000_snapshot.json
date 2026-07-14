@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "b105a6da-248a-43a7-a73d-e457cc499e52",
+  "id": "75b5395f-b9d6-48ea-a022-f71eee279e7a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "app_config": {
@@ -203,6 +203,10 @@
         "definitions_status_check": {
           "name": "definitions_status_check",
           "value": "\"definitions\".\"status\" in ('draft', 'public', 'private')"
+        },
+        "definitions_finalized_at_check": {
+          "name": "definitions_finalized_at_check",
+          "value": "(\"definitions\".\"status\" = 'draft') = (\"definitions\".\"finalized_at\" is null)"
         }
       }
     },

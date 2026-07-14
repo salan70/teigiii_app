@@ -71,7 +71,7 @@ issue #183（Cloudflare 移行 2/6）の実行計画。grilling による設計�
 | author_id | TEXT NOT NULL FK→users.id | |
 | body | TEXT NOT NULL | 500 文字。完全に空の下書きは作成しない |
 | status | TEXT NOT NULL CHECK IN ('draft','public','private') | |
-| finalized_at | INTEGER NULL | 初めて public/private で確定した時刻。編集期限 = finalized_at + 1h は**サーバー側で毎回計算し列に持たない** |
+| finalized_at | INTEGER NULL | 初めて public/private で確定した時刻。編集期限 = finalized_at + 1h は**サーバー側で毎回計算し列に持たない**。CHECK で不変条件を強制: `(status = 'draft') = (finalized_at IS NULL)`。移行時の帰結: 既存の public/private 定義には finalized_at のバックフィルが必須（現行に確定時刻がないため createdAt を充てる） |
 | is_edited | INTEGER NOT NULL DEFAULT 0 | **「確定後に本文を編集した」場合のみ true**。下書き中の編集・公開/非公開切り替えでは立てない（現行の一律 isEdited より意味を限定） |
 | deleted_at | INTEGER NULL | 論理削除（30 日保持） |
 | created_at / updated_at | INTEGER NOT NULL | |
@@ -88,7 +88,7 @@ issue #183（Cloudflare 移行 2/6）の実行計画。grilling による設計�
 
 ### 関係テーブル
 
-```
+```text
 likes        (user_id, definition_id, created_at)   PK(user_id, definition_id)
 follows      (follower_id, following_id, created_at) PK(follower_id, following_id)
 user_mutes   (muter_id, muted_user_id, created_at)  PK(muter_id, muted_user_id)
@@ -170,7 +170,7 @@ saved_words  (user_id, word_id, created_at)         PK(user_id, word_id)
 
 ### エンドポイント一覧
 
-```
+```text
 認証不要:
   GET    /v1/app-config
 

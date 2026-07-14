@@ -3,7 +3,7 @@
 issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え）の台帳として、旧 UI の全 repository 操作に新 API の対応先（または例外方針）を記録する。
 
 - API 定義の正本: `server/openapi.json`（`server/src/routes/` から生成）
-- 設計判断: `doc/plans/2026-07-15-rdb-schema-api-design.md`
+- 設計判断: `doc/plans/done/2026-07-15-rdb-schema-api-design.md`
 
 ## 凡例
 

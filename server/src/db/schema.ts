@@ -85,6 +85,11 @@ export const definitions = sqliteTable(
   },
   (table) => [
     check("definitions_status_check", sql`${table.status} in ('draft', 'public', 'private')`),
+    // 確定状態と finalized_at の不変条件: draft は NULL、public/private は NOT NULL
+    check(
+      "definitions_finalized_at_check",
+      sql`(${table.status} = 'draft') = (${table.finalizedAt} is null)`,
+    ),
     // タイムライン（見つける / フォロー中）
     index("definitions_timeline_idx")
       .on(table.status, sql`${table.finalizedAt} desc`, table.id)
