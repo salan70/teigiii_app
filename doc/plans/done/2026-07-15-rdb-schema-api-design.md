@@ -182,6 +182,8 @@ saved_words  (user_id, word_id, created_at)         PK(user_id, word_id)
   DELETE /v1/users/me                  アカウント削除（論理。R2 上の画像の物理削除は 30 日後バッチのスコープ）
   GET    /v1/users/{id}                公開プロフィール（合成 DTO）
   GET    /v1/users/{id}/dictionary     公開辞書（言葉単位グルーピング）
+  GET    /v1/users/{id}/definitions    ユーザーの定義一覧（新着順。本人は非公開含む。?wordId= / ?subGroup= で絞り込み。旧 UI のプロフィール定義一覧・頭文字別辞書のパリティ）
+  GET    /v1/users/{id}/liked-definitions  いいねした公開定義一覧（旧 UI のプロフィール「いいね」タブのパリティ）
   GET    /v1/users/{id}/followers      フォロワー一覧
   GET    /v1/users/{id}/following      フォロー中一覧
   PUT/DELETE /v1/users/{id}/follow     フォロー / 解除
@@ -200,7 +202,8 @@ saved_words  (user_id, word_id, created_at)         PK(user_id, word_id)
   GET    /v1/words                     読み順一覧（?subGroup= / ?filter=all|defined|undefined / ?q=）
   GET    /v1/words/{id}                言葉ページヘッダ（定義数・保存済みか等）
   PATCH  /v1/words/{id}                作成者修正（1h 以内 + 他ユーザー操作なし、をサーバーで検証）
-  GET    /v1/words/{id}/definitions?scope=mine|others&sort=newest|reactions
+  GET    /v1/words/{id}/definitions?scope=mine|others|all&sort=newest|reactions
+                                       scope=all は自分 + 他者の公開定義の混在（旧 UI の言葉トップのパリティ）
 
 定義:
   POST   /v1/definitions               作成（draft / public / private いずれでも）

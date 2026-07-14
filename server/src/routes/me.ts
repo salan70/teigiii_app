@@ -1,0 +1,85 @@
+import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
+import { paginatedSchema, paginationQuerySchema } from "../schemas/common";
+import { definitionResponseSchema } from "../schemas/definition";
+import {
+  definedWordItemSchema,
+  myDictionaryOverviewSchema,
+  savedWordItemSchema,
+} from "../schemas/dictionary";
+import { userListItemSchema } from "../schemas/user";
+import { authErrorResponses, authenticatedSecurity, jsonContent, notImplemented } from "./helpers";
+
+const getOverviewRoute = createRoute({
+  method: "get",
+  path: "/me/dictionary/overview",
+  tags: ["me"],
+  summary: "あなたの辞書の概要（各件数 + 最近の定義）",
+  security: authenticatedSecurity,
+  responses: {
+    200: jsonContent(myDictionaryOverviewSchema, "概要"),
+    ...authErrorResponses,
+  },
+});
+
+const getDefinedWordsRoute = createRoute({
+  method: "get",
+  path: "/me/defined-words",
+  tags: ["me"],
+  summary: "定義済みの言葉一覧（言葉単位 + 状態別件数）",
+  security: authenticatedSecurity,
+  request: { query: paginationQuerySchema },
+  responses: {
+    200: jsonContent(paginatedSchema(definedWordItemSchema), "定義済み一覧"),
+    ...authErrorResponses,
+  },
+});
+
+const getMyDefinitionsRoute = createRoute({
+  method: "get",
+  path: "/me/definitions",
+  tags: ["me"],
+  summary: "自分の定義一覧（状態で絞り込み。下書き一覧は status=draft）",
+  security: authenticatedSecurity,
+  request: {
+    query: paginationQuerySchema.extend({
+      status: z.enum(["draft", "public", "private"]).optional(),
+    }),
+  },
+  responses: {
+    200: jsonContent(paginatedSchema(definitionResponseSchema), "定義一覧"),
+    ...authErrorResponses,
+  },
+});
+
+const getSavedWordsRoute = createRoute({
+  method: "get",
+  path: "/me/saved-words",
+  tags: ["me"],
+  summary: "保存した言葉の一覧",
+  security: authenticatedSecurity,
+  request: { query: paginationQuerySchema },
+  responses: {
+    200: jsonContent(paginatedSchema(savedWordItemSchema), "保存した言葉"),
+    ...authErrorResponses,
+  },
+});
+
+const getMutesRoute = createRoute({
+  method: "get",
+  path: "/me/mutes",
+  tags: ["me"],
+  summary: "ミュート中のユーザー一覧",
+  security: authenticatedSecurity,
+  request: { query: paginationQuerySchema },
+  responses: {
+    200: jsonContent(paginatedSchema(userListItemSchema), "ミュート中一覧"),
+    ...authErrorResponses,
+  },
+});
+
+export const meRoutes = new OpenAPIHono()
+  .openapi(getOverviewRoute, notImplemented)
+  .openapi(getDefinedWordsRoute, notImplemented)
+  .openapi(getMyDefinitionsRoute, notImplemented)
+  .openapi(getSavedWordsRoute, notImplemented)
+  .openapi(getMutesRoute, notImplemented);
