@@ -241,7 +241,8 @@ const unfollowRoute = createRoute({
   request: { params: userIdParams },
   responses: {
     204: { description: "解除完了（冪等）" },
-    404: errorContent("操作ユーザーが存在しない（user_not_found）"),
+    400: errorContent("自分自身への指定（cannot_follow_self）"),
+    404: errorContent("ユーザーが存在しない（user_not_found）"),
     ...authErrorResponses,
   },
 });
@@ -270,7 +271,8 @@ const unmuteRoute = createRoute({
   request: { params: userIdParams },
   responses: {
     204: { description: "解除完了（冪等）" },
-    404: errorContent("操作ユーザーが存在しない（user_not_found）"),
+    400: errorContent("自分自身への指定（cannot_mute_self）"),
+    404: errorContent("ユーザーが存在しない（user_not_found）"),
     ...authErrorResponses,
   },
 });
@@ -371,5 +373,3 @@ export function createUserRoutes(options: UserServiceOptions = {}) {
       return context.body(null, 204);
     });
 }
-
-export const userRoutes = createUserRoutes();

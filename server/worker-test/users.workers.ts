@@ -2,6 +2,7 @@ import { applyD1Migrations, env } from "cloudflare:test";
 import { beforeEach, describe, expect, test } from "vitest";
 
 import { createApp } from "../src/app";
+import { AvatarService } from "../src/users/user-service";
 
 const authHeaders = {
   Authorization: "Bearer valid-id-token",
@@ -33,6 +34,21 @@ async function createUser(uid: string, name = uid) {
     headers: { "Content-Type": "application/json" },
     method: "POST",
   });
+}
+
+function databaseFailingAvatarKeyUpdate(match: string): D1Database {
+  return {
+    prepare(query: string) {
+      if (!query.includes(match)) return env.DB.prepare(query);
+      return {
+        bind: () => ({
+          run: async () => {
+            throw new Error("simulated D1 update failure");
+          },
+        }),
+      } as unknown as D1PreparedStatement;
+    },
+  } as unknown as D1Database;
 }
 
 beforeEach(async () => {
@@ -230,6 +246,17 @@ describe("follow and mute routes", () => {
       404,
     );
     expect((await request("alice", "/v1/users/missing/mute", { method: "PUT" })).status).toBe(404);
+
+    expect((await request("alice", "/v1/users/alice/follow", { method: "DELETE" })).status).toBe(
+      400,
+    );
+    expect((await request("alice", "/v1/users/alice/mute", { method: "DELETE" })).status).toBe(400);
+    expect((await request("alice", "/v1/users/missing/follow", { method: "DELETE" })).status).toBe(
+      404,
+    );
+    expect((await request("alice", "/v1/users/missing/mute", { method: "DELETE" })).status).toBe(
+      404,
+    );
   });
 
   test("フォロワー・フォロー中一覧を安定した cursor でページングする", async () => {
@@ -351,6 +378,136 @@ describe("avatar routes", () => {
       method: "PUT",
     });
     expect(oversized.status).toBe(413);
+  });
+
+  test("Content-Length がなくても上限超過時点で body stream を中断する", async () => {
+    let pullCount = 0;
+    let cancelled = false;
+    const body = new ReadableStream<Uint8Array>(
+      {
+        cancel: () => {
+          cancelled = true;
+        },
+        pull(controller) {
+          pullCount += 1;
+          if (pullCount === 1) {
+            const first = new Uint8Array(6 * 1024 * 1024);
+            first.set([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+            controller.enqueue(first);
+            return;
+          }
+          if (pullCount === 2) {
+            controller.enqueue(new Uint8Array(5 * 1024 * 1024));
+            return;
+          }
+          throw new Error("stream was read after exceeding the limit");
+        },
+      },
+      { highWaterMark: 0 },
+    );
+    const service = new AvatarService(env);
+
+    await expect(
+      service.upload(
+        "alice",
+        new Request("https://example.com/v1/users/me/avatar", {
+          body,
+          headers: { "Content-Type": "image/png" },
+          method: "PUT",
+        }),
+      ),
+    ).rejects.toMatchObject({ code: "image_too_large", status: 413 });
+    expect(pullCount).toBe(2);
+    expect(cancelled).toBe(true);
+  });
+
+  test("D1 更新失敗時も既存アバターと avatar_key の整合性を維持する", async () => {
+    const oldPng = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x01]);
+    const newPng = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x02]);
+    await request("alice", "/v1/users/me/avatar", {
+      body: oldPng,
+      headers: { "Content-Type": "image/png" },
+      method: "PUT",
+    });
+
+    const uploadService = new AvatarService({
+      ...env,
+      DB: databaseFailingAvatarKeyUpdate("set avatar_key = ?"),
+    });
+    await expect(
+      uploadService.upload(
+        "alice",
+        new Request("https://example.com/v1/users/me/avatar", {
+          body: newPng,
+          headers: { "Content-Type": "image/png" },
+          method: "PUT",
+        }),
+      ),
+    ).rejects.toThrow("simulated D1 update failure");
+    const restored = await env.AVATARS.get("avatars/alice");
+    expect(Array.from(new Uint8Array(await restored!.arrayBuffer()))).toEqual(Array.from(oldPng));
+
+    const deleteService = new AvatarService({
+      ...env,
+      DB: databaseFailingAvatarKeyUpdate("set avatar_key = null"),
+    });
+    await expect(deleteService.delete("alice")).rejects.toThrow("simulated D1 update failure");
+    expect(await env.AVATARS.get("avatars/alice")).not.toBeNull();
+    const user = await env.DB.prepare("select avatar_key from users where id = ?")
+      .bind("alice")
+      .first<{ avatar_key: string | null }>();
+    expect(user?.avatar_key).toBe("avatars/alice");
+  });
+
+  test("R2 削除失敗時は avatar_key を復元する", async () => {
+    const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+    await request("alice", "/v1/users/me/avatar", {
+      body: png,
+      headers: { "Content-Type": "image/png" },
+      method: "PUT",
+    });
+    const service = new AvatarService({
+      ...env,
+      AVATARS: {
+        delete: async () => {
+          throw new Error("simulated R2 delete failure");
+        },
+        head: (key: string) => env.AVATARS.head(key),
+      } as unknown as R2Bucket,
+    });
+
+    await expect(service.delete("alice")).rejects.toThrow("simulated R2 delete failure");
+    const user = await env.DB.prepare("select avatar_key from users where id = ?")
+      .bind("alice")
+      .first<{ avatar_key: string | null }>();
+    expect(user?.avatar_key).toBe("avatars/alice");
+    expect(await env.AVATARS.get("avatars/alice")).not.toBeNull();
+  });
+
+  test("R2 削除が反映済みならエラー応答でも avatar_key を復元しない", async () => {
+    const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+    await request("alice", "/v1/users/me/avatar", {
+      body: png,
+      headers: { "Content-Type": "image/png" },
+      method: "PUT",
+    });
+    const service = new AvatarService({
+      ...env,
+      AVATARS: {
+        delete: async (key: string) => {
+          await env.AVATARS.delete(key);
+          throw new Error("simulated ambiguous R2 delete failure");
+        },
+        head: (key: string) => env.AVATARS.head(key),
+      } as unknown as R2Bucket,
+    });
+
+    await expect(service.delete("alice")).rejects.toThrow("simulated ambiguous R2 delete failure");
+    const user = await env.DB.prepare("select avatar_key from users where id = ?")
+      .bind("alice")
+      .first<{ avatar_key: string | null }>();
+    expect(user?.avatar_key).toBeNull();
+    expect(await env.AVATARS.get("avatars/alice")).toBeNull();
   });
 
   test("アバター削除は R2 object がなくても成功する", async () => {

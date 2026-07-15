@@ -1596,6 +1596,16 @@
           "204": {
             "description": "解除完了（冪等）"
           },
+          "400": {
+            "description": "自分自身への指定（cannot_follow_self）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "401": {
             "description": "App Check または Firebase ID トークンが欠落・無効",
             "content": {
@@ -1607,7 +1617,7 @@
             }
           },
           "404": {
-            "description": "操作ユーザーが存在しない（user_not_found）",
+            "description": "ユーザーが存在しない（user_not_found）",
             "content": {
               "application/json": {
                 "schema": {
@@ -1702,6 +1712,16 @@
           "204": {
             "description": "解除完了（冪等）"
           },
+          "400": {
+            "description": "自分自身への指定（cannot_mute_self）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "401": {
             "description": "App Check または Firebase ID トークンが欠落・無効",
             "content": {
@@ -1713,7 +1733,7 @@
             }
           },
           "404": {
-            "description": "操作ユーザーが存在しない（user_not_found）",
+            "description": "ユーザーが存在しない（user_not_found）",
             "content": {
               "application/json": {
                 "schema": {

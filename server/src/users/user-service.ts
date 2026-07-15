@@ -316,7 +316,11 @@ export class UserService {
   }
 
   async unfollow(uid: string, targetId: string): Promise<void> {
-    await requireActiveUser(this.env.DB, uid);
+    if (uid === targetId) throw new ApiError(400, "cannot_follow_self", "Cannot follow self");
+    await Promise.all([
+      requireActiveUser(this.env.DB, uid),
+      requireActiveUser(this.env.DB, targetId),
+    ]);
     await this.env.DB.prepare("delete from follows where follower_id = ? and following_id = ?")
       .bind(uid, targetId)
       .run();
@@ -336,7 +340,11 @@ export class UserService {
   }
 
   async unmute(uid: string, targetId: string): Promise<void> {
-    await requireActiveUser(this.env.DB, uid);
+    if (uid === targetId) throw new ApiError(400, "cannot_mute_self", "Cannot mute self");
+    await Promise.all([
+      requireActiveUser(this.env.DB, uid),
+      requireActiveUser(this.env.DB, targetId),
+    ]);
     await this.env.DB.prepare("delete from user_mutes where muter_id = ? and muted_user_id = ?")
       .bind(uid, targetId)
       .run();
@@ -416,6 +424,35 @@ function hasPngSignature(bytes: Uint8Array): boolean {
   return signature.every((value, index) => bytes[index] === value);
 }
 
+async function readBodyWithLimit(
+  body: ReadableStream<Uint8Array> | null,
+  maximumBytes: number,
+): Promise<Uint8Array> {
+  if (body === null) return new Uint8Array();
+
+  const reader = body.getReader();
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+  while (true) {
+    const result = await reader.read();
+    if (result.done) break;
+    totalBytes += result.value.byteLength;
+    if (totalBytes > maximumBytes) {
+      await reader.cancel("image_too_large");
+      throw new ApiError(413, "image_too_large", "Image too large");
+    }
+    chunks.push(result.value);
+  }
+
+  const combined = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    combined.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return combined;
+}
+
 /**
  * R2 アバターの形式・容量検証、固定キー保存、削除、公開 URL 解決を扱う。
  *
@@ -434,11 +471,7 @@ export class AvatarService {
     if (Number.isFinite(contentLength) && contentLength > maxAvatarBytes) {
       throw new ApiError(413, "image_too_large", "Image too large");
     }
-    const body = await request.arrayBuffer();
-    if (body.byteLength > maxAvatarBytes) {
-      throw new ApiError(413, "image_too_large", "Image too large");
-    }
-    const bytes = new Uint8Array(body);
+    const bytes = await readBodyWithLimit(request.body, maxAvatarBytes);
     const signatureMatches =
       contentType === "image/jpeg" ? hasJpegSignature(bytes) : hasPngSignature(bytes);
     if (!signatureMatches) {
@@ -446,15 +479,41 @@ export class AvatarService {
     }
 
     const key = `avatars/${encodeURIComponent(uid)}`;
-    await this.env.AVATARS.put(key, body, { httpMetadata: { contentType } });
+    const previousObject = await this.env.AVATARS.get(key);
+    const previousBody = previousObject === null ? null : await previousObject.arrayBuffer();
+    await this.env.AVATARS.put(key, bytes, { httpMetadata: { contentType } });
     try {
-      await this.env.DB.prepare(
+      const result = await this.env.DB.prepare(
         "update users set avatar_key = ?, updated_at = ? where id = ? and deleted_at is null",
       )
         .bind(key, Date.now(), uid)
         .run();
+      if (result.meta.changes === 0) {
+        throw new ApiError(404, "user_not_found", "User not found");
+      }
     } catch (error) {
-      await this.env.AVATARS.delete(key);
+      try {
+        if (previousObject === null || previousBody === null) {
+          await this.env.AVATARS.delete(key);
+        } else {
+          await this.env.AVATARS.put(key, previousBody, {
+            ...(previousObject.customMetadata
+              ? { customMetadata: previousObject.customMetadata }
+              : {}),
+            ...(previousObject.httpMetadata ? { httpMetadata: previousObject.httpMetadata } : {}),
+          });
+        }
+      } catch (compensationError) {
+        console.error(
+          JSON.stringify({
+            compensationErrorName:
+              compensationError instanceof Error ? compensationError.name : "UnknownError",
+            errorName: error instanceof Error ? error.name : "UnknownError",
+            event: "avatar_upload_compensation_failed",
+          }),
+        );
+        throw error;
+      }
       throw error;
     }
     return avatarUrl(this.env.AVATAR_BASE_URL, key)!;
@@ -463,11 +522,55 @@ export class AvatarService {
   async delete(uid: string): Promise<void> {
     const user = await requireActiveUser(this.env.DB, uid);
     const key = user.avatar_key ?? `avatars/${encodeURIComponent(uid)}`;
-    await this.env.AVATARS.delete(key);
-    await this.env.DB.prepare(
+    const result = await this.env.DB.prepare(
       "update users set avatar_key = null, updated_at = ? where id = ? and deleted_at is null",
     )
       .bind(Date.now(), uid)
       .run();
+    if (result.meta.changes === 0) {
+      throw new ApiError(404, "user_not_found", "User not found");
+    }
+
+    try {
+      await this.env.AVATARS.delete(key);
+    } catch (error) {
+      let objectStillExists = false;
+      try {
+        objectStillExists = (await this.env.AVATARS.head(key)) !== null;
+      } catch (stateCheckError) {
+        console.error(
+          JSON.stringify({
+            errorName: error instanceof Error ? error.name : "UnknownError",
+            event: "avatar_deletion_state_check_failed",
+            stateCheckErrorName:
+              stateCheckError instanceof Error ? stateCheckError.name : "UnknownError",
+          }),
+        );
+      }
+
+      if (objectStillExists && user.avatar_key !== null) {
+        try {
+          const compensation = await this.env.DB.prepare(
+            "update users set avatar_key = ?, updated_at = ? where id = ? and deleted_at is null",
+          )
+            .bind(user.avatar_key, Date.now(), uid)
+            .run();
+          if (compensation.meta.changes === 0) {
+            throw new ApiError(404, "user_not_found", "User not found");
+          }
+        } catch (compensationError) {
+          console.error(
+            JSON.stringify({
+              compensationErrorName:
+                compensationError instanceof Error ? compensationError.name : "UnknownError",
+              errorName: error instanceof Error ? error.name : "UnknownError",
+              event: "avatar_deletion_compensation_failed",
+            }),
+          );
+          throw error;
+        }
+      }
+      throw error;
+    }
   }
 }
