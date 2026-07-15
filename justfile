@@ -35,3 +35,24 @@ run-dev:
 
 run-prod:
     flutter run --dart-define-from-file=dart_defines/prod.json
+
+# --- server（Cloudflare Workers API）---
+
+server-setup:
+    cd server && bun install
+
+server-lint:
+    cd server && bun run lint && bun run typecheck
+
+server-format:
+    cd server && bun run format
+
+server-test:
+    cd server && bun test
+
+# openapi.json と Drizzle マイグレーション SQL を生成する
+server-generate:
+    cd server && bun run generate:openapi && bun run generate:migrations
+
+server-dev:
+    cd server && bun run dev

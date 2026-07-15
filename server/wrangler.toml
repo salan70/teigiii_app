@@ -1,0 +1,10 @@
+# ローカル開発用の最小構成。dev/prod 環境分離・デプロイ設定はフェーズ 3（#184）で行う。
+name = "teigiii-api"
+main = "src/index.ts"
+compatibility_date = "2026-07-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "teigiii-local"
+database_id = "local"
+migrations_dir = "drizzle"

@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1784069976936,
+      "tag": "0000_absurd_power_pack",
+      "breakpoints": true
+    }
+  ]
+}
