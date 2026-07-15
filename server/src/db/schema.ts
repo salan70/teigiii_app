@@ -37,6 +37,8 @@ export const users = sqliteTable(
 /**
  * 言葉はユーザー削除不可のグローバル資産のため deleted_at を持たない。
  * word の一意性は完全一致（前後トリム + NFC 正規化をサーバーで適用してから保存）。
+ *
+ * @doc doc/specs/new-ui-information-architecture.md#16-言葉の管理
  */
 export const words = sqliteTable(
   "words",
@@ -61,6 +63,11 @@ export const words = sqliteTable(
   ],
 );
 
+/**
+ * 定義は独立した投稿（同一ユーザー・同一言葉に複数可）。下書きも状態の 1 つとして持つ。
+ *
+ * @doc doc/specs/new-ui-information-architecture.md#8-定義
+ */
 export const definitions = sqliteTable(
   "definitions",
   {
@@ -108,6 +115,8 @@ export const definitions = sqliteTable(
 /**
  * リアクションは Tier 1 の「いいね」1 種のみ。
  * Tier 2 の 3 種化は reaction_type 列追加 + PK 張り直しのマイグレーションで対応する。
+ *
+ * @doc doc/specs/new-ui-information-architecture.md#10-リアクション
  */
 export const likes = sqliteTable(
   "likes",

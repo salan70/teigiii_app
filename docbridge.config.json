@@ -3,6 +3,9 @@
     "code": {
       "dart": {
         "patterns": ["lib/**/*.dart"]
+      },
+      "typescript": {
+        "patterns": ["server/src/**/*.ts"]
       }
     },
     "docs": ["doc/specs/**/*.md"]
