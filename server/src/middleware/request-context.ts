@@ -36,14 +36,18 @@ export function createRequestContextMiddleware({
     context.set("requestId", requestId);
     context.header("X-Request-ID", requestId);
 
-    await next();
-
-    log({
-      durationMs: Math.max(0, now() - startedAt),
-      method: context.req.method,
-      path: context.req.path,
-      requestId,
-      status: context.res.status,
-    });
+    let status = 500;
+    try {
+      await next();
+      status = context.res.status;
+    } finally {
+      log({
+        durationMs: Math.max(0, now() - startedAt),
+        method: context.req.method,
+        path: context.req.path,
+        requestId,
+        status,
+      });
+    }
   };
 }

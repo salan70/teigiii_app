@@ -15,7 +15,7 @@ import {
   type RequestContextVariables,
   type RequestLogEntry,
 } from "./middleware/request-context";
-import { handleApiError, handleNotFound } from "./errors";
+import { createApiErrorHandler, handleNotFound } from "./errors";
 import { appConfigRoutes } from "./routes/app-config";
 import { definitionRoutes } from "./routes/definitions";
 import { meRoutes } from "./routes/me";
@@ -52,7 +52,7 @@ export function createApp({
   verifyFirebaseIdToken = (token, env) =>
     verifyFirebaseIdTokenWithGoogleKeys(token, env.FIREBASE_PROJECT_ID),
 }: CreateAppOptions = {}) {
-  const v1 = new OpenAPIHono<{ Bindings: Env }>()
+  const v1 = new OpenAPIHono<ServerEnvironment>()
     .route("/", appConfigRoutes)
     .route("/", userRoutes)
     .route("/", meRoutes)
@@ -82,7 +82,7 @@ export function createApp({
     }),
   );
   honoApp.route("/v1", v1);
-  honoApp.onError(handleApiError);
+  honoApp.onError(createApiErrorHandler<ServerEnvironment>());
   honoApp.notFound(handleNotFound);
 
   honoApp.openAPIRegistry.registerComponent("securitySchemes", "firebaseIdToken", {

@@ -2,11 +2,20 @@ import { describe, expect, test } from "bun:test";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 
-import { ApiError, handleApiError, handleNotFound } from "../src/errors";
+import {
+  ApiError,
+  createApiErrorHandler,
+  handleNotFound,
+  type UnexpectedErrorLogEntry,
+} from "../src/errors";
 
-function appWithErrors() {
-  const app = new Hono();
-  app.onError(handleApiError);
+function appWithErrors(logUnexpectedError: (entry: UnexpectedErrorLogEntry) => void = () => {}) {
+  const app = new Hono<{ Variables: { requestId: string } }>();
+  app.use("*", async (context, next) => {
+    context.set("requestId", "request-id-1");
+    await next();
+  });
+  app.onError(createApiErrorHandler({ log: logUnexpectedError }));
   app.notFound(handleNotFound);
   app.get("/known", () => {
     throw new ApiError(403, "edit_window_expired", "編集期限を過ぎています");
@@ -39,7 +48,8 @@ describe("API error handler", () => {
   });
 
   test("予期しない例外の詳細をレスポンスへ含めない", async () => {
-    const response = await appWithErrors().request("/unknown");
+    const entries: UnexpectedErrorLogEntry[] = [];
+    const response = await appWithErrors((entry) => entries.push(entry)).request("/unknown");
 
     expect(response.status).toBe(500);
     const body = await response.json<unknown>();
@@ -47,6 +57,14 @@ describe("API error handler", () => {
       error: { code: "internal_error", message: "Internal Server Error" },
     });
     expect(JSON.stringify(body)).not.toContain("database password");
+    expect(entries).toEqual([
+      {
+        errorName: "Error",
+        event: "unhandled_api_error",
+        requestId: "request-id-1",
+      },
+    ]);
+    expect(JSON.stringify(entries)).not.toContain("database password");
   });
 
   test("HTTPException の status を維持して統一形式にする", async () => {

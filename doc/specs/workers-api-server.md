@@ -96,7 +96,7 @@ Hono app は request context、App Check、Firebase Auth の順に middleware �
 <!-- @code server/src/middleware/request-context.ts#createRequestContextMiddleware -->
 ### リクエスト ID とログ
 
-各リクエストに UUID の request ID を発行し、`X-Request-ID` レスポンスヘッダーへ設定する。構造化ログには request ID、method、path、status、処理時間だけを記録する。
+各リクエストに UUID の request ID を発行し、`X-Request-ID` レスポンスヘッダーへ設定する。リクエストの構造化ログには request ID、method、path、status、処理時間だけを記録する。予期しない例外は相関用の request ID と例外型を別の構造化ログへ記録するが、例外メッセージと stack trace は記録しない。
 
 JWT、Authorization、App Check token、プロフィール内容などの個人情報はログへ出さない。認証失敗は `app_check_invalid` または `firebase_id_token_invalid` としてレスポンスで分類する。
 
@@ -130,7 +130,7 @@ JWT、Authorization、App Check token、プロフィール内容などの個人�
 
 `PUT /v1/users/me/avatar` は JPEG / PNG を受け付け、Content-Type とファイルシグネチャの両方を検証する。10 MiB を安全上限とし、Workers では画像変換しない。
 
-#185 の Flutter クライアントは HEIC を含む元画像を切り抜き、512 x 512 JPEG quality 85 に変換して送る。R2 key はユーザー単位で固定し、再アップロードは上書きする。削除は R2 object がなくても成功する。
+Issue `#185` の Flutter クライアントは HEIC を含む元画像を切り抜き、512 x 512 JPEG quality 85 に変換して送る。R2 key はユーザー単位で固定し、再アップロードは上書きする。削除は R2 object がなくても成功する。
 
 ### 言葉
 

@@ -80,4 +80,35 @@ describe("request context middleware", () => {
     ]);
     expect(JSON.stringify(entries)).not.toContain("sensitive-error-detail");
   });
+
+  test("error handler 自体が例外を投げても500の構造化ログを記録する", async () => {
+    const entries: RequestLogEntry[] = [];
+    const times = [100, 125];
+    const app = new Hono<{ Variables: { requestId: string } }>();
+    app.use(
+      "*",
+      createRequestContextMiddleware({
+        generateRequestId: () => "request-id-3",
+        log: (entry) => entries.push(entry),
+        now: () => times.shift()!,
+      }),
+    );
+    app.get("/error", () => {
+      throw new Error("route-error");
+    });
+    app.onError(() => {
+      throw new Error("error-handler-error");
+    });
+
+    await expect(app.request("/error")).rejects.toThrow("error-handler-error");
+    expect(entries).toEqual([
+      {
+        durationMs: 25,
+        method: "GET",
+        path: "/error",
+        requestId: "request-id-3",
+        status: 500,
+      },
+    ]);
+  });
 });
