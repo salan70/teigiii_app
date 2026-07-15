@@ -1,5 +1,10 @@
-import type { Env } from "../src/app";
+import type { D1Migration } from "@cloudflare/vitest-pool-workers";
+import type { Env as AppEnv } from "../src/app";
 
-declare module "cloudflare:test" {
-  interface ProvidedEnv extends Env {}
+declare global {
+  namespace Cloudflare {
+    interface Env extends AppEnv {
+      TEST_MIGRATIONS: D1Migration[];
+    }
+  }
 }

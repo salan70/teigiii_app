@@ -1,4 +1,5 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
+import type { AuthenticationVariables } from "../auth/middleware";
 import { paginatedSchema, paginationQuerySchema } from "../schemas/common";
 import { definitionResponseSchema } from "../schemas/definition";
 import { userDictionaryItemSchema } from "../schemas/dictionary";
@@ -9,6 +10,7 @@ import {
   userListItemSchema,
   userResponseSchema,
 } from "../schemas/user";
+import { AvatarService, UserService, type UserServiceOptions } from "../users/user-service";
 import {
   authErrorResponses,
   authenticatedSecurity,
@@ -60,6 +62,7 @@ const updateMeRoute = createRoute({
   },
   responses: {
     200: jsonContent(meResponseSchema, "更新後の自分の情報"),
+    404: errorContent("未登録（user_not_found）"),
     ...authErrorResponses,
   },
 });
@@ -74,7 +77,10 @@ const uploadAvatarRoute = createRoute({
   request: {
     body: {
       content: {
-        "application/octet-stream": {
+        "image/jpeg": {
+          schema: z.string().openapi({ format: "binary" }),
+        },
+        "image/png": {
           schema: z.string().openapi({ format: "binary" }),
         },
       },
@@ -83,7 +89,9 @@ const uploadAvatarRoute = createRoute({
   },
   responses: {
     200: jsonContent(z.object({ avatarUrl: z.string() }), "保存後の配信 URL"),
+    404: errorContent("未登録（user_not_found）"),
     413: errorContent("画像サイズ超過（image_too_large）"),
+    415: errorContent("画像形式不正（unsupported_image_type）"),
     ...authErrorResponses,
   },
 });
@@ -96,6 +104,7 @@ const deleteAvatarRoute = createRoute({
   security: authenticatedSecurity,
   responses: {
     204: { description: "削除完了" },
+    404: errorContent("未登録（user_not_found）"),
     ...authErrorResponses,
   },
 });
@@ -108,6 +117,7 @@ const deleteMeRoute = createRoute({
   security: authenticatedSecurity,
   responses: {
     204: { description: "削除受付完了" },
+    404: errorContent("未登録（user_not_found）"),
     ...authErrorResponses,
   },
 });
@@ -231,6 +241,7 @@ const unfollowRoute = createRoute({
   request: { params: userIdParams },
   responses: {
     204: { description: "解除完了（冪等）" },
+    404: errorContent("操作ユーザーが存在しない（user_not_found）"),
     ...authErrorResponses,
   },
 });
@@ -259,24 +270,106 @@ const unmuteRoute = createRoute({
   request: { params: userIdParams },
   responses: {
     204: { description: "解除完了（冪等）" },
+    404: errorContent("操作ユーザーが存在しない（user_not_found）"),
     ...authErrorResponses,
   },
 });
 
-export const userRoutes = new OpenAPIHono()
-  .openapi(createUserRoute, notImplemented)
-  .openapi(getMeRoute, notImplemented)
-  .openapi(updateMeRoute, notImplemented)
-  .openapi(uploadAvatarRoute, notImplemented)
-  .openapi(deleteAvatarRoute, notImplemented)
-  .openapi(deleteMeRoute, notImplemented)
-  .openapi(getUserRoute, notImplemented)
-  .openapi(getUserDictionaryRoute, notImplemented)
-  .openapi(getUserDefinitionsRoute, notImplemented)
-  .openapi(getUserLikedDefinitionsRoute, notImplemented)
-  .openapi(getFollowersRoute, notImplemented)
-  .openapi(getFollowingRoute, notImplemented)
-  .openapi(followRoute, notImplemented)
-  .openapi(unfollowRoute, notImplemented)
-  .openapi(muteRoute, notImplemented)
-  .openapi(unmuteRoute, notImplemented);
+type UserRouteEnvironment = {
+  Bindings: {
+    AVATARS: R2Bucket;
+    AVATAR_BASE_URL: string;
+    DB: D1Database;
+  };
+  Variables: AuthenticationVariables;
+};
+
+export function createUserRoutes(options: UserServiceOptions = {}) {
+  const routes = new OpenAPIHono<UserRouteEnvironment>();
+  const users = (env: UserRouteEnvironment["Bindings"]) => new UserService(env, options);
+
+  return routes
+    .openapi(createUserRoute, async (context) => {
+      const user = await users(context.env).create(
+        context.get("firebaseUid"),
+        context.req.valid("json"),
+      );
+      return context.json(user, 201);
+    })
+    .openapi(getMeRoute, async (context) => {
+      const user = await users(context.env).getMe(context.get("firebaseUid"));
+      return context.json(user, 200);
+    })
+    .openapi(updateMeRoute, async (context) => {
+      const user = await users(context.env).update(
+        context.get("firebaseUid"),
+        context.req.valid("json"),
+      );
+      return context.json(user, 200);
+    })
+    .openapi(uploadAvatarRoute, async (context) => {
+      const resolvedAvatarUrl = await new AvatarService(context.env).upload(
+        context.get("firebaseUid"),
+        context.req.raw,
+      );
+      return context.json({ avatarUrl: resolvedAvatarUrl }, 200);
+    })
+    .openapi(deleteAvatarRoute, async (context) => {
+      await new AvatarService(context.env).delete(context.get("firebaseUid"));
+      return context.body(null, 204);
+    })
+    .openapi(deleteMeRoute, async (context) => {
+      await users(context.env).delete(context.get("firebaseUid"));
+      return context.body(null, 204);
+    })
+    .openapi(getUserRoute, async (context) => {
+      const user = await users(context.env).getPublic(
+        context.get("firebaseUid"),
+        context.req.valid("param").id,
+      );
+      return context.json(user, 200);
+    })
+    .openapi(getUserDictionaryRoute, notImplemented)
+    .openapi(getUserDefinitionsRoute, notImplemented)
+    .openapi(getUserLikedDefinitionsRoute, notImplemented)
+    .openapi(getFollowersRoute, async (context) => {
+      const query = context.req.valid("query");
+      const result = await users(context.env).listRelatedUsers(
+        context.get("firebaseUid"),
+        context.req.valid("param").id,
+        "followers",
+        query.limit,
+        query.cursor,
+      );
+      return context.json(result, 200);
+    })
+    .openapi(getFollowingRoute, async (context) => {
+      const query = context.req.valid("query");
+      const result = await users(context.env).listRelatedUsers(
+        context.get("firebaseUid"),
+        context.req.valid("param").id,
+        "following",
+        query.limit,
+        query.cursor,
+      );
+      return context.json(result, 200);
+    })
+    .openapi(followRoute, async (context) => {
+      await users(context.env).follow(context.get("firebaseUid"), context.req.valid("param").id);
+      return context.body(null, 204);
+    })
+    .openapi(unfollowRoute, async (context) => {
+      await users(context.env).unfollow(context.get("firebaseUid"), context.req.valid("param").id);
+      return context.body(null, 204);
+    })
+    .openapi(muteRoute, async (context) => {
+      await users(context.env).mute(context.get("firebaseUid"), context.req.valid("param").id);
+      return context.body(null, 204);
+    })
+    .openapi(unmuteRoute, async (context) => {
+      await users(context.env).unmute(context.get("firebaseUid"), context.req.valid("param").id);
+      return context.body(null, 204);
+    });
+}
+
+export const userRoutes = createUserRoutes();

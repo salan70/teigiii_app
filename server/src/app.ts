@@ -21,10 +21,12 @@ import { definitionRoutes } from "./routes/definitions";
 import { meRoutes } from "./routes/me";
 import { searchRoutes } from "./routes/search";
 import { timelineRoutes } from "./routes/timeline";
-import { userRoutes } from "./routes/users";
+import { createUserRoutes } from "./routes/users";
 import { wordRoutes } from "./routes/words";
 
 export type Env = {
+  AVATARS: R2Bucket;
+  AVATAR_BASE_URL: string;
   DB: D1Database;
   FIREBASE_PROJECT_ID: string;
   FIREBASE_PROJECT_NUMBER: string;
@@ -36,6 +38,7 @@ type ServerEnvironment = {
 };
 
 type CreateAppOptions = {
+  generatePublicId?: () => string;
   generateRequestId?: () => string;
   logRequest?: (entry: RequestLogEntry) => void;
   verifyAppCheck?: (token: string, env: Env) => Promise<AppCheckIdentity>;
@@ -46,6 +49,7 @@ type CreateAppOptions = {
  * @doc doc/specs/workers-api-server.md#リクエスト処理順序
  */
 export function createApp({
+  generatePublicId,
   generateRequestId,
   logRequest,
   verifyAppCheck = (token, env) => verifyAppCheckToken(token, env.FIREBASE_PROJECT_NUMBER),
@@ -54,7 +58,7 @@ export function createApp({
 }: CreateAppOptions = {}) {
   const v1 = new OpenAPIHono<ServerEnvironment>()
     .route("/", appConfigRoutes)
-    .route("/", userRoutes)
+    .route("/", createUserRoutes(generatePublicId ? { generatePublicId } : {}))
     .route("/", meRoutes)
     .route("/", wordRoutes)
     .route("/", definitionRoutes)
