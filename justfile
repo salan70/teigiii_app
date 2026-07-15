@@ -48,7 +48,7 @@ server-format:
     cd server && bun run format
 
 server-test:
-    cd server && bun test
+    cd server && bun run test
 
 # openapi.json と Drizzle マイグレーション SQL を生成する
 server-generate:

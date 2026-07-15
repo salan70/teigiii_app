@@ -6,9 +6,16 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
-    "types": ["@cloudflare/workers-types", "bun"],
+    "types": ["@cloudflare/workers-types", "@cloudflare/vitest-pool-workers/types", "bun"],
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "scripts/**/*.ts", "test/**/*.ts", "drizzle.config.ts"]
+  "include": [
+    "src/**/*.ts",
+    "scripts/**/*.ts",
+    "test/**/*.ts",
+    "worker-test/**/*.ts",
+    "drizzle.config.ts",
+    "vitest.config.ts"
+  ]
 }

@@ -3,6 +3,10 @@ name = "teigiii-api"
 main = "src/index.ts"
 compatibility_date = "2026-07-01"
 
+[vars]
+FIREBASE_PROJECT_ID = "everyone-teigi-dev"
+FIREBASE_PROJECT_NUMBER = "225028441501"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "teigiii-local"
