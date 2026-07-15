@@ -1,8 +1,10 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
+import type { AuthenticationVariables } from "../auth/middleware";
+import { BrowseService } from "../browse/browse-service";
 import { paginatedSchema, paginationQuerySchema } from "../schemas/common";
 import { userListItemSchema } from "../schemas/user";
 import { wordListItemSchema } from "../schemas/word";
-import { authErrorResponses, authenticatedSecurity, jsonContent, notImplemented } from "./helpers";
+import { authErrorResponses, authenticatedSecurity, jsonContent } from "./helpers";
 
 const searchQuerySchema = paginationQuerySchema.extend({
   q: z.string().min(1),
@@ -34,6 +36,29 @@ const searchUsersRoute = createRoute({
   },
 });
 
-export const searchRoutes = new OpenAPIHono()
-  .openapi(searchWordsRoute, notImplemented)
-  .openapi(searchUsersRoute, notImplemented);
+type SearchRouteEnvironment = {
+  Bindings: { AVATAR_BASE_URL: string; DB: D1Database };
+  Variables: AuthenticationVariables;
+};
+
+export const searchRoutes = new OpenAPIHono<SearchRouteEnvironment>()
+  .openapi(searchWordsRoute, async (context) => {
+    const query = context.req.valid("query");
+    const result = await new BrowseService(context.env).searchWords(
+      context.get("firebaseUid"),
+      query.q,
+      query.limit,
+      query.cursor,
+    );
+    return context.json(result, 200);
+  })
+  .openapi(searchUsersRoute, async (context) => {
+    const query = context.req.valid("query");
+    const result = await new BrowseService(context.env).searchUsers(
+      context.get("firebaseUid"),
+      query.q,
+      query.limit,
+      query.cursor,
+    );
+    return context.json(result, 200);
+  });

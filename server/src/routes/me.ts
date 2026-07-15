@@ -1,4 +1,6 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
+import type { AuthenticationVariables } from "../auth/middleware";
+import { BrowseService } from "../browse/browse-service";
 import { paginatedSchema, paginationQuerySchema } from "../schemas/common";
 import { definitionResponseSchema } from "../schemas/definition";
 import {
@@ -7,7 +9,7 @@ import {
   savedWordItemSchema,
 } from "../schemas/dictionary";
 import { userListItemSchema } from "../schemas/user";
-import { authErrorResponses, authenticatedSecurity, jsonContent, notImplemented } from "./helpers";
+import { authErrorResponses, authenticatedSecurity, jsonContent } from "./helpers";
 
 const getOverviewRoute = createRoute({
   method: "get",
@@ -77,9 +79,50 @@ const getMutesRoute = createRoute({
   },
 });
 
-export const meRoutes = new OpenAPIHono()
-  .openapi(getOverviewRoute, notImplemented)
-  .openapi(getDefinedWordsRoute, notImplemented)
-  .openapi(getMyDefinitionsRoute, notImplemented)
-  .openapi(getSavedWordsRoute, notImplemented)
-  .openapi(getMutesRoute, notImplemented);
+type MeRouteEnvironment = {
+  Bindings: { AVATAR_BASE_URL: string; DB: D1Database };
+  Variables: AuthenticationVariables;
+};
+
+export const meRoutes = new OpenAPIHono<MeRouteEnvironment>()
+  .openapi(getOverviewRoute, async (context) => {
+    const result = await new BrowseService(context.env).getMyOverview(context.get("firebaseUid"));
+    return context.json(result, 200);
+  })
+  .openapi(getDefinedWordsRoute, async (context) => {
+    const query = context.req.valid("query");
+    const result = await new BrowseService(context.env).listDefinedWords(
+      context.get("firebaseUid"),
+      query.limit,
+      query.cursor,
+    );
+    return context.json(result, 200);
+  })
+  .openapi(getMyDefinitionsRoute, async (context) => {
+    const query = context.req.valid("query");
+    const result = await new BrowseService(context.env).listMyDefinitions(
+      context.get("firebaseUid"),
+      query.limit,
+      query.status,
+      query.cursor,
+    );
+    return context.json(result, 200);
+  })
+  .openapi(getSavedWordsRoute, async (context) => {
+    const query = context.req.valid("query");
+    const result = await new BrowseService(context.env).listSavedWords(
+      context.get("firebaseUid"),
+      query.limit,
+      query.cursor,
+    );
+    return context.json(result, 200);
+  })
+  .openapi(getMutesRoute, async (context) => {
+    const query = context.req.valid("query");
+    const result = await new BrowseService(context.env).listMutes(
+      context.get("firebaseUid"),
+      query.limit,
+      query.cursor,
+    );
+    return context.json(result, 200);
+  });

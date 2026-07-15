@@ -1,8 +1,10 @@
 import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
+import type { AuthenticationVariables } from "../auth/middleware";
+import { BrowseService } from "../browse/browse-service";
 import { paginatedSchema, paginationQuerySchema } from "../schemas/common";
 import { definitionResponseSchema } from "../schemas/definition";
 import { discoverFeedItemSchema } from "../schemas/timeline";
-import { authErrorResponses, authenticatedSecurity, jsonContent, notImplemented } from "./helpers";
+import { authErrorResponses, authenticatedSecurity, jsonContent } from "./helpers";
 
 const discoverRoute = createRoute({
   method: "get",
@@ -32,6 +34,27 @@ const followingRoute = createRoute({
   },
 });
 
-export const timelineRoutes = new OpenAPIHono()
-  .openapi(discoverRoute, notImplemented)
-  .openapi(followingRoute, notImplemented);
+type TimelineRouteEnvironment = {
+  Bindings: { AVATAR_BASE_URL: string; DB: D1Database };
+  Variables: AuthenticationVariables;
+};
+
+export const timelineRoutes = new OpenAPIHono<TimelineRouteEnvironment>()
+  .openapi(discoverRoute, async (context) => {
+    const query = context.req.valid("query");
+    const result = await new BrowseService(context.env).listDiscover(
+      context.get("firebaseUid"),
+      query.limit,
+      query.cursor,
+    );
+    return context.json(result, 200);
+  })
+  .openapi(followingRoute, async (context) => {
+    const query = context.req.valid("query");
+    const result = await new BrowseService(context.env).listFollowing(
+      context.get("firebaseUid"),
+      query.limit,
+      query.cursor,
+    );
+    return context.json(result, 200);
+  });

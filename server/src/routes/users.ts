@@ -1,5 +1,6 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
 import type { AuthenticationVariables } from "../auth/middleware";
+import { BrowseService } from "../browse/browse-service";
 import { paginatedSchema, paginationQuerySchema } from "../schemas/common";
 import { definitionResponseSchema } from "../schemas/definition";
 import { userDictionaryItemSchema } from "../schemas/dictionary";
@@ -11,13 +12,7 @@ import {
   userResponseSchema,
 } from "../schemas/user";
 import { AvatarService, UserService, type UserServiceOptions } from "../users/user-service";
-import {
-  authErrorResponses,
-  authenticatedSecurity,
-  errorContent,
-  jsonContent,
-  notImplemented,
-} from "./helpers";
+import { authErrorResponses, authenticatedSecurity, errorContent, jsonContent } from "./helpers";
 
 const userIdParams = z.object({ id: z.string() });
 
@@ -331,9 +326,33 @@ export function createUserRoutes(options: UserServiceOptions = {}) {
       );
       return context.json(user, 200);
     })
-    .openapi(getUserDictionaryRoute, notImplemented)
-    .openapi(getUserDefinitionsRoute, notImplemented)
-    .openapi(getUserLikedDefinitionsRoute, notImplemented)
+    .openapi(getUserDictionaryRoute, async (context) => {
+      const query = context.req.valid("query");
+      const result = await new BrowseService(context.env).listUserDictionary(
+        context.req.valid("param").id,
+        query.limit,
+        query.cursor,
+      );
+      return context.json(result, 200);
+    })
+    .openapi(getUserDefinitionsRoute, async (context) => {
+      const result = await new BrowseService(context.env).listUserDefinitions(
+        context.get("firebaseUid"),
+        context.req.valid("param").id,
+        context.req.valid("query"),
+      );
+      return context.json(result, 200);
+    })
+    .openapi(getUserLikedDefinitionsRoute, async (context) => {
+      const query = context.req.valid("query");
+      const result = await new BrowseService(context.env).listLikedDefinitions(
+        context.get("firebaseUid"),
+        context.req.valid("param").id,
+        query.limit,
+        query.cursor,
+      );
+      return context.json(result, 200);
+    })
     .openapi(getFollowersRoute, async (context) => {
       const query = context.req.valid("query");
       const result = await users(context.env).listRelatedUsers(
