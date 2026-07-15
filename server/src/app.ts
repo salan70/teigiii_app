@@ -1,4 +1,21 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
+import type { AppCheckIdentity } from "./auth/app-check";
+import type { FirebaseIdentity } from "./auth/firebase-id-token";
+import {
+  type AuthenticationVariables,
+  createAppCheckMiddleware,
+  createFirebaseAuthMiddleware,
+} from "./auth/middleware";
+import {
+  verifyAppCheckToken,
+  verifyFirebaseIdToken as verifyFirebaseIdTokenWithGoogleKeys,
+} from "./auth/production-verifiers";
+import {
+  createRequestContextMiddleware,
+  type RequestContextVariables,
+  type RequestLogEntry,
+} from "./middleware/request-context";
+import { createApiErrorHandler, handleNotFound } from "./errors";
 import { appConfigRoutes } from "./routes/app-config";
 import { definitionRoutes } from "./routes/definitions";
 import { meRoutes } from "./routes/me";
@@ -9,32 +26,83 @@ import { wordRoutes } from "./routes/words";
 
 export type Env = {
   DB: D1Database;
+  FIREBASE_PROJECT_ID: string;
+  FIREBASE_PROJECT_NUMBER: string;
 };
 
-const v1 = new OpenAPIHono<{ Bindings: Env }>()
-  .route("/", appConfigRoutes)
-  .route("/", userRoutes)
-  .route("/", meRoutes)
-  .route("/", wordRoutes)
-  .route("/", definitionRoutes)
-  .route("/", timelineRoutes)
-  .route("/", searchRoutes);
+type ServerEnvironment = {
+  Bindings: Env;
+  Variables: AuthenticationVariables & RequestContextVariables;
+};
 
-export const app = new OpenAPIHono<{ Bindings: Env }>().route("/v1", v1);
+type CreateAppOptions = {
+  generateRequestId?: () => string;
+  logRequest?: (entry: RequestLogEntry) => void;
+  verifyAppCheck?: (token: string, env: Env) => Promise<AppCheckIdentity>;
+  verifyFirebaseIdToken?: (token: string, env: Env) => Promise<FirebaseIdentity>;
+};
 
-app.openAPIRegistry.registerComponent("securitySchemes", "firebaseIdToken", {
-  type: "http",
-  scheme: "bearer",
-  bearerFormat: "JWT",
-  description: "Firebase Auth の ID トークン。GET /v1/app-config 以外の全エンドポイントで必須。",
-});
+/**
+ * @doc doc/specs/workers-api-server.md#リクエスト処理順序
+ */
+export function createApp({
+  generateRequestId,
+  logRequest,
+  verifyAppCheck = (token, env) => verifyAppCheckToken(token, env.FIREBASE_PROJECT_NUMBER),
+  verifyFirebaseIdToken = (token, env) =>
+    verifyFirebaseIdTokenWithGoogleKeys(token, env.FIREBASE_PROJECT_ID),
+}: CreateAppOptions = {}) {
+  const v1 = new OpenAPIHono<ServerEnvironment>()
+    .route("/", appConfigRoutes)
+    .route("/", userRoutes)
+    .route("/", meRoutes)
+    .route("/", wordRoutes)
+    .route("/", definitionRoutes)
+    .route("/", timelineRoutes)
+    .route("/", searchRoutes);
 
-app.openAPIRegistry.registerComponent("securitySchemes", "appCheck", {
-  type: "apiKey",
-  in: "header",
-  name: "X-Firebase-AppCheck",
-  description: "Firebase App Check トークン。全エンドポイントで必須。",
-});
+  const honoApp = new OpenAPIHono<ServerEnvironment>();
+  honoApp.use(
+    "*",
+    createRequestContextMiddleware({
+      ...(generateRequestId ? { generateRequestId } : {}),
+      ...(logRequest ? { log: logRequest } : {}),
+    }),
+  );
+  honoApp.use(
+    "*",
+    createAppCheckMiddleware({
+      verify: (token, context) => verifyAppCheck(token, context.env as Env),
+    }),
+  );
+  honoApp.use(
+    "*",
+    createFirebaseAuthMiddleware({
+      verify: (token, context) => verifyFirebaseIdToken(token, context.env as Env),
+    }),
+  );
+  honoApp.route("/v1", v1);
+  honoApp.onError(createApiErrorHandler<ServerEnvironment>());
+  honoApp.notFound(handleNotFound);
+
+  honoApp.openAPIRegistry.registerComponent("securitySchemes", "firebaseIdToken", {
+    type: "http",
+    scheme: "bearer",
+    bearerFormat: "JWT",
+    description: "Firebase Auth の ID トークン。GET /v1/app-config 以外の全エンドポイントで必須。",
+  });
+
+  honoApp.openAPIRegistry.registerComponent("securitySchemes", "appCheck", {
+    type: "apiKey",
+    in: "header",
+    name: "X-Firebase-AppCheck",
+    description: "Firebase App Check トークン。全エンドポイントで必須。",
+  });
+
+  return honoApp;
+}
+
+export const app = createApp();
 
 export function buildOpenApiDocument() {
   return app.getOpenAPIDocument({
