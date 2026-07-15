@@ -137,6 +137,7 @@ Issue `#185` の Flutter クライアントは HEIC を含む元画像を切り�
 
 R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object の HTTP metadata に検証済み Content-Type を保存する。レスポンスの `avatarUrl` は環境変数 `AVATAR_BASE_URL` と key を結合して解決する。dev は対象 bucket の r2.dev URL、prod は R2 custom domain を `AVATAR_BASE_URL` に設定し、Worker を介さず直接配信する。
 
+<!-- @code server/src/words/word-service.ts#WordService -->
 ### 言葉
 
 - 登録前に前後空白を除去し NFC 正規化する。同一表記は409で既存言葉を返す
@@ -144,6 +145,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 - 言葉の修正は登録後1時間以内かつ、登録者本人で、他ユーザーの定義または保存がない場合だけ許可する
 - 一覧は reading、id の安定順とし、指定された行、定義有無、検索語を適用する
 
+<!-- @code server/src/definitions/definition-service.ts#DefinitionService -->
 ### 定義
 
 - draft は `finalized_at=null`、public / private は初回確定時の `finalized_at` を持つ

@@ -1,4 +1,6 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
+import type { AuthenticationVariables } from "../auth/middleware";
+import { DefinitionService } from "../definitions/definition-service";
 import { paginatedSchema, paginationQuerySchema } from "../schemas/common";
 import {
   createDefinitionRequestSchema,
@@ -6,13 +8,7 @@ import {
   updateDefinitionRequestSchema,
 } from "../schemas/definition";
 import { userListItemSchema } from "../schemas/user";
-import {
-  authErrorResponses,
-  authenticatedSecurity,
-  errorContent,
-  jsonContent,
-  notImplemented,
-} from "./helpers";
+import { authErrorResponses, authenticatedSecurity, errorContent, jsonContent } from "./helpers";
 
 const definitionIdParams = z.object({ id: z.string() });
 
@@ -27,7 +23,9 @@ const createDefinitionRoute = createRoute({
   },
   responses: {
     201: jsonContent(definitionResponseSchema, "作成された定義"),
-    404: errorContent("言葉が存在しない（word_not_found）"),
+    404: errorContent(
+      "言葉が存在しない（word_not_found）・未登録・削除済みユーザー（user_not_found）",
+    ),
     ...authErrorResponses,
   },
 });
@@ -91,7 +89,9 @@ const likeRoute = createRoute({
   request: { params: definitionIdParams },
   responses: {
     204: { description: "いいね完了（冪等）" },
-    404: errorContent("定義が存在しない（definition_not_found）"),
+    404: errorContent(
+      "定義が存在しない（definition_not_found）・未登録・削除済みユーザー（user_not_found）",
+    ),
     ...authErrorResponses,
   },
 });
@@ -123,11 +123,62 @@ const listLikedUsersRoute = createRoute({
   },
 });
 
-export const definitionRoutes = new OpenAPIHono()
-  .openapi(createDefinitionRoute, notImplemented)
-  .openapi(getDefinitionRoute, notImplemented)
-  .openapi(updateDefinitionRoute, notImplemented)
-  .openapi(deleteDefinitionRoute, notImplemented)
-  .openapi(likeRoute, notImplemented)
-  .openapi(unlikeRoute, notImplemented)
-  .openapi(listLikedUsersRoute, notImplemented);
+type DefinitionRouteEnvironment = {
+  Bindings: { AVATAR_BASE_URL: string; DB: D1Database };
+  Variables: AuthenticationVariables;
+};
+
+export const definitionRoutes = new OpenAPIHono<DefinitionRouteEnvironment>()
+  .openapi(createDefinitionRoute, async (context) => {
+    const definition = await new DefinitionService(context.env).create(
+      context.get("firebaseUid"),
+      context.req.valid("json"),
+    );
+    return context.json(definition, 201);
+  })
+  .openapi(getDefinitionRoute, async (context) => {
+    const definition = await new DefinitionService(context.env).get(
+      context.get("firebaseUid"),
+      context.req.valid("param").id,
+    );
+    return context.json(definition, 200);
+  })
+  .openapi(updateDefinitionRoute, async (context) => {
+    const definition = await new DefinitionService(context.env).update(
+      context.get("firebaseUid"),
+      context.req.valid("param").id,
+      context.req.valid("json"),
+    );
+    return context.json(definition, 200);
+  })
+  .openapi(deleteDefinitionRoute, async (context) => {
+    await new DefinitionService(context.env).delete(
+      context.get("firebaseUid"),
+      context.req.valid("param").id,
+    );
+    return context.body(null, 204);
+  })
+  .openapi(likeRoute, async (context) => {
+    await new DefinitionService(context.env).like(
+      context.get("firebaseUid"),
+      context.req.valid("param").id,
+    );
+    return context.body(null, 204);
+  })
+  .openapi(unlikeRoute, async (context) => {
+    await new DefinitionService(context.env).unlike(
+      context.get("firebaseUid"),
+      context.req.valid("param").id,
+    );
+    return context.body(null, 204);
+  })
+  .openapi(listLikedUsersRoute, async (context) => {
+    const query = context.req.valid("query");
+    const result = await new DefinitionService(context.env).listLikedUsers(
+      context.get("firebaseUid"),
+      context.req.valid("param").id,
+      query.limit,
+      query.cursor,
+    );
+    return context.json(result, 200);
+  });

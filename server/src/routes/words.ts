@@ -1,4 +1,5 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
+import type { AuthenticationVariables } from "../auth/middleware";
 import { paginatedSchema, paginationQuerySchema } from "../schemas/common";
 import { definitionResponseSchema } from "../schemas/definition";
 import {
@@ -8,6 +9,7 @@ import {
   wordListItemSchema,
   wordResponseSchema,
 } from "../schemas/word";
+import { WordConflictError, WordService } from "../words/word-service";
 import {
   authErrorResponses,
   authenticatedSecurity,
@@ -30,6 +32,7 @@ const createWordRoute = createRoute({
   },
   responses: {
     201: jsonContent(wordResponseSchema, "登録された言葉"),
+    404: errorContent("未登録・削除済みユーザー（user_not_found）"),
     409: {
       content: { "application/json": { schema: wordConflictResponseSchema } },
       description: "同一表記が登録済み（word_already_exists）。既存の言葉を返す",
@@ -90,7 +93,9 @@ const updateWordRoute = createRoute({
     403: errorContent(
       "修正条件を満たさない（word_not_editable: 期限超過・他ユーザー操作あり・登録者以外）",
     ),
-    404: errorContent("言葉が存在しない（word_not_found）"),
+    404: errorContent(
+      "言葉が存在しない（word_not_found）・未登録・削除済みユーザー（user_not_found）",
+    ),
     409: {
       content: { "application/json": { schema: wordConflictResponseSchema } },
       description: "修正後の表記が登録済み（word_already_exists）",
@@ -130,7 +135,9 @@ const saveWordRoute = createRoute({
   request: { params: wordIdParams },
   responses: {
     204: { description: "保存完了（冪等）" },
-    404: errorContent("言葉が存在しない（word_not_found）"),
+    404: errorContent(
+      "言葉が存在しない（word_not_found）・未登録・削除済みユーザー（user_not_found）",
+    ),
     ...authErrorResponses,
   },
 });
@@ -148,11 +155,74 @@ const unsaveWordRoute = createRoute({
   },
 });
 
-export const wordRoutes = new OpenAPIHono()
-  .openapi(createWordRoute, notImplemented)
-  .openapi(listWordsRoute, notImplemented)
-  .openapi(getWordRoute, notImplemented)
-  .openapi(updateWordRoute, notImplemented)
+type WordRouteEnvironment = {
+  Bindings: { DB: D1Database };
+  Variables: AuthenticationVariables;
+};
+
+/** 登録・修正時の表記重複は 409 と既存の言葉で返す（レスポンス形状が通常のエラーと異なる）。 */
+function wordConflictResponse(error: WordConflictError) {
+  return {
+    error: { code: error.code, message: error.message },
+    existingWord: error.existingWord,
+  };
+}
+
+export const wordRoutes = new OpenAPIHono<WordRouteEnvironment>()
+  .openapi(createWordRoute, async (context) => {
+    const service = new WordService(context.env);
+    try {
+      const word = await service.create(context.get("firebaseUid"), context.req.valid("json"));
+      return context.json(word, 201);
+    } catch (error) {
+      if (error instanceof WordConflictError) {
+        return context.json(wordConflictResponse(error), 409);
+      }
+      throw error;
+    }
+  })
+  .openapi(listWordsRoute, async (context) => {
+    const result = await new WordService(context.env).list(
+      context.get("firebaseUid"),
+      context.req.valid("query"),
+    );
+    return context.json(result, 200);
+  })
+  .openapi(getWordRoute, async (context) => {
+    const word = await new WordService(context.env).get(
+      context.get("firebaseUid"),
+      context.req.valid("param").id,
+    );
+    return context.json(word, 200);
+  })
+  .openapi(updateWordRoute, async (context) => {
+    const service = new WordService(context.env);
+    try {
+      const word = await service.update(
+        context.get("firebaseUid"),
+        context.req.valid("param").id,
+        context.req.valid("json"),
+      );
+      return context.json(word, 200);
+    } catch (error) {
+      if (error instanceof WordConflictError) {
+        return context.json(wordConflictResponse(error), 409);
+      }
+      throw error;
+    }
+  })
   .openapi(listWordDefinitionsRoute, notImplemented)
-  .openapi(saveWordRoute, notImplemented)
-  .openapi(unsaveWordRoute, notImplemented);
+  .openapi(saveWordRoute, async (context) => {
+    await new WordService(context.env).save(
+      context.get("firebaseUid"),
+      context.req.valid("param").id,
+    );
+    return context.body(null, 204);
+  })
+  .openapi(unsaveWordRoute, async (context) => {
+    await new WordService(context.env).unsave(
+      context.get("firebaseUid"),
+      context.req.valid("param").id,
+    );
+    return context.body(null, 204);
+  });
