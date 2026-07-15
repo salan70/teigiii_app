@@ -274,10 +274,16 @@ export class DefinitionService {
   async like(uid: string, id: string): Promise<void> {
     await this.#requireActiveUser(uid);
     await this.#requireVisibleRow(uid, id);
+    // 可視性チェックと INSERT の間に削除・非公開化が入る TOCTOU を防ぐため、
+    // 可視条件を述語に含めた単一文で挿入する
     await this.env.DB.prepare(
-      "insert or ignore into likes (user_id, definition_id, created_at) values (?, ?, ?)",
+      `insert or ignore into likes (user_id, definition_id, created_at)
+       select ?, d.id, ?
+       from definitions d
+       join users u on u.id = d.author_id and u.deleted_at is null
+       where d.id = ? and d.deleted_at is null and (d.author_id = ? or d.status = 'public')`,
     )
-      .bind(uid, id, Date.now())
+      .bind(uid, Date.now(), id, uid)
       .run();
   }
 

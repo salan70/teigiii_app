@@ -460,6 +460,51 @@ describe("PUT / DELETE /v1/definitions/{id}/like", () => {
     await expect(unliked.json()).resolves.toMatchObject({ isLikedByMe: false, likesCount: 0 });
   });
 
+  test("可視性チェック後に削除された定義にはいいね行を残さない", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    const word = await createWord("alice", "ことば", "ことば");
+    const definition = await createDefinition("alice", word.id, "public");
+    // 可視性チェックと INSERT の間に定義の論理削除を割り込ませ、TOCTOU を再現する
+    let intercepted = false;
+    const racingDatabase = {
+      prepare(query: string) {
+        const statement = env.DB.prepare(query);
+        if (!query.trimStart().startsWith("insert or ignore into likes") || intercepted) {
+          return statement;
+        }
+        intercepted = true;
+        return {
+          bind: (...values: unknown[]) => {
+            const bound = statement.bind(...values);
+            return {
+              run: async () => {
+                const now = Date.now();
+                await env.DB.prepare(
+                  "update definitions set deleted_at = ?, updated_at = ? where id = ?",
+                )
+                  .bind(now, now, definition.id)
+                  .run();
+                return bound.run();
+              },
+            };
+          },
+        } as unknown as D1PreparedStatement;
+      },
+    } as unknown as D1Database;
+
+    await testApp("bob").request(
+      `/v1/definitions/${definition.id}/like`,
+      { headers: authHeaders, method: "PUT" },
+      { ...env, DB: racingDatabase },
+    );
+
+    const row = await env.DB.prepare("select count(*) as count from likes where definition_id = ?")
+      .bind(definition.id)
+      .first<{ count: number }>();
+    expect(row!.count).toBe(0);
+  });
+
   test("自分の draft にもいいねできる", async () => {
     await createUser("alice");
     const word = await createWord("alice", "ことば", "ことば");

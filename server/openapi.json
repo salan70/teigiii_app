@@ -2373,7 +2373,7 @@
             }
           },
           "404": {
-            "description": "言葉が存在しない（word_not_found）",
+            "description": "言葉が存在しない（word_not_found）・未登録・削除済みユーザー（user_not_found）",
             "content": {
               "application/json": {
                 "schema": {
@@ -2551,7 +2551,7 @@
             }
           },
           "404": {
-            "description": "言葉が存在しない（word_not_found）",
+            "description": "言葉が存在しない（word_not_found）・未登録・削除済みユーザー（user_not_found）",
             "content": {
               "application/json": {
                 "schema": {
@@ -2644,7 +2644,7 @@
             }
           },
           "404": {
-            "description": "言葉が存在しない（word_not_found）",
+            "description": "言葉が存在しない（word_not_found）・未登録・削除済みユーザー（user_not_found）",
             "content": {
               "application/json": {
                 "schema": {
@@ -2891,7 +2891,7 @@
             }
           },
           "404": {
-            "description": "定義が存在しない（definition_not_found）",
+            "description": "定義が存在しない（definition_not_found）・未登録・削除済みユーザー（user_not_found）",
             "content": {
               "application/json": {
                 "schema": {

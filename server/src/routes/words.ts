@@ -93,7 +93,9 @@ const updateWordRoute = createRoute({
     403: errorContent(
       "修正条件を満たさない（word_not_editable: 期限超過・他ユーザー操作あり・登録者以外）",
     ),
-    404: errorContent("言葉が存在しない（word_not_found）"),
+    404: errorContent(
+      "言葉が存在しない（word_not_found）・未登録・削除済みユーザー（user_not_found）",
+    ),
     409: {
       content: { "application/json": { schema: wordConflictResponseSchema } },
       description: "修正後の表記が登録済み（word_already_exists）",
@@ -133,7 +135,9 @@ const saveWordRoute = createRoute({
   request: { params: wordIdParams },
   responses: {
     204: { description: "保存完了（冪等）" },
-    404: errorContent("言葉が存在しない（word_not_found）"),
+    404: errorContent(
+      "言葉が存在しない（word_not_found）・未登録・削除済みユーザー（user_not_found）",
+    ),
     ...authErrorResponses,
   },
 });

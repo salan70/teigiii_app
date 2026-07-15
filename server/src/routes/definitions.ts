@@ -23,7 +23,9 @@ const createDefinitionRoute = createRoute({
   },
   responses: {
     201: jsonContent(definitionResponseSchema, "作成された定義"),
-    404: errorContent("言葉が存在しない（word_not_found）"),
+    404: errorContent(
+      "言葉が存在しない（word_not_found）・未登録・削除済みユーザー（user_not_found）",
+    ),
     ...authErrorResponses,
   },
 });
@@ -87,7 +89,9 @@ const likeRoute = createRoute({
   request: { params: definitionIdParams },
   responses: {
     204: { description: "いいね完了（冪等）" },
-    404: errorContent("定義が存在しない（definition_not_found）"),
+    404: errorContent(
+      "定義が存在しない（definition_not_found）・未登録・削除済みユーザー（user_not_found）",
+    ),
     ...authErrorResponses,
   },
 });
