@@ -51,8 +51,14 @@ jobs:
           gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files" --paginate \
             -q '.[].filename' > changed-files.txt
           gate_status=0
-          nix develop --command bunx docbridge@0.5.2 related --stdin --gate \
-            < changed-files.txt > gate-output.txt 2>&1 || gate_status=$?
+          nix develop --command sh -c \
+            "bunx docbridge@0.5.2 related --stdin --gate < \"\$1\" > \"\$2\" 2> \"\$3\"" \
+            sh changed-files.txt gate-output.txt gate-error.txt || gate_status=$?
+          cat gate-error.txt >&2
+          if [ "$gate_status" != "0" ] && [ ! -s gate-output.txt ]; then
+            echo "DocBridge related-gate がレポートを生成できませんでした。詳細は CI ログを確認してください。" \
+              > gate-output.txt
+          fi
           echo "GATE_STATUS=${gate_status}" >> "$GITHUB_ENV"
           cat gate-output.txt
 
