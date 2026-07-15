@@ -1,5 +1,6 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
 import type { AuthenticationVariables } from "../auth/middleware";
+import { BrowseService } from "../browse/browse-service";
 import { paginatedSchema, paginationQuerySchema } from "../schemas/common";
 import { definitionResponseSchema } from "../schemas/definition";
 import {
@@ -10,13 +11,7 @@ import {
   wordResponseSchema,
 } from "../schemas/word";
 import { WordConflictError, WordService } from "../words/word-service";
-import {
-  authErrorResponses,
-  authenticatedSecurity,
-  errorContent,
-  jsonContent,
-  notImplemented,
-} from "./helpers";
+import { authErrorResponses, authenticatedSecurity, errorContent, jsonContent } from "./helpers";
 
 const wordIdParams = z.object({ id: z.string() });
 
@@ -156,7 +151,7 @@ const unsaveWordRoute = createRoute({
 });
 
 type WordRouteEnvironment = {
-  Bindings: { DB: D1Database };
+  Bindings: { AVATAR_BASE_URL: string; DB: D1Database };
   Variables: AuthenticationVariables;
 };
 
@@ -211,7 +206,14 @@ export const wordRoutes = new OpenAPIHono<WordRouteEnvironment>()
       throw error;
     }
   })
-  .openapi(listWordDefinitionsRoute, notImplemented)
+  .openapi(listWordDefinitionsRoute, async (context) => {
+    const result = await new BrowseService(context.env).listWordDefinitions(
+      context.get("firebaseUid"),
+      context.req.valid("param").id,
+      context.req.valid("query"),
+    );
+    return context.json(result, 200);
+  })
   .openapi(saveWordRoute, async (context) => {
     await new WordService(context.env).save(
       context.get("firebaseUid"),

@@ -155,6 +155,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 - 削除は所有者だけが実行でき、`deleted_at` を設定する
 - いいね対象は他者が閲覧可能な public 定義と、自分が閲覧可能な自分の定義に限定する
 
+<!-- @code server/src/browse/browse-service.ts#BrowseService -->
 ### 辞書と一覧
 
 - 公開辞書は対象ユーザーの public 定義だけを言葉単位にまとめる
@@ -162,6 +163,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 - 合成 DTO の likesCount、followingCount、followerCount は有効な行だけを集計する
 - `isLikedByMe`、`isFollowedByMe`、`isMutedByMe` は認証 UID を基準に算出する
 
+<!-- @code server/src/browse/browse-service.ts#BrowseService -->
 ### タイムラインと検索
 
 - 見つけるは public 定義を `finalized_at DESC`、言葉登録を `created_at DESC` として混在させる

@@ -47,18 +47,15 @@ describe("createApp", () => {
   });
 
   test("両トークンの検証後に認証必須ルートへ到達する", async () => {
-    // #193 実装までは未実装（501）の /v1/me/mutes で到達確認する
-    const response = await testApp().request("/v1/me/mutes", {
+    // limit=0 のバリデーションエラーで、認証を通過して実ルートへ到達したことを確認する
+    const response = await testApp().request("/v1/me/mutes?limit=0", {
       headers: {
         Authorization: "Bearer valid-id-token",
         "X-Firebase-AppCheck": "valid-app-check",
       },
     });
 
-    expect(response.status).toBe(501);
-    expect(await response.json<unknown>()).toEqual({
-      error: { code: "not_implemented", message: "not implemented" },
-    });
+    expect(response.status).toBe(400);
   });
 
   test("認証で拒否したリクエストにも request ID と構造化ログを付ける", async () => {
