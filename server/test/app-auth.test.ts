@@ -47,7 +47,7 @@ describe("createApp", () => {
   });
 
   test("両トークンの検証後に認証必須ルートへ到達する", async () => {
-    const response = await testApp().request("/v1/users/me", {
+    const response = await testApp().request("/v1/words", {
       headers: {
         Authorization: "Bearer valid-id-token",
         "X-Firebase-AppCheck": "valid-app-check",

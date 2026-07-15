@@ -791,6 +791,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "未登録（user_not_found）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       },
@@ -818,6 +828,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "未登録（user_not_found）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -838,7 +858,13 @@
         "requestBody": {
           "description": "画像バイナリ",
           "content": {
-            "application/octet-stream": {
+            "image/jpeg": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "image/png": {
               "schema": {
                 "type": "string",
                 "format": "binary"
@@ -875,8 +901,28 @@
               }
             }
           },
+          "404": {
+            "description": "未登録（user_not_found）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "413": {
             "description": "画像サイズ超過（image_too_large）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "画像形式不正（unsupported_image_type）",
             "content": {
               "application/json": {
                 "schema": {
@@ -904,6 +950,16 @@
           },
           "401": {
             "description": "App Check または Firebase ID トークンが欠落・無効",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "未登録（user_not_found）",
             "content": {
               "application/json": {
                 "schema": {
@@ -1540,8 +1596,28 @@
           "204": {
             "description": "解除完了（冪等）"
           },
+          "400": {
+            "description": "自分自身への指定（cannot_follow_self）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "401": {
             "description": "App Check または Firebase ID トークンが欠落・無効",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ユーザーが存在しない（user_not_found）",
             "content": {
               "application/json": {
                 "schema": {
@@ -1636,8 +1712,28 @@
           "204": {
             "description": "解除完了（冪等）"
           },
+          "400": {
+            "description": "自分自身への指定（cannot_mute_self）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "401": {
             "description": "App Check または Firebase ID トークンが欠落・無効",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ユーザーが存在しない（user_not_found）",
             "content": {
               "application/json": {
                 "schema": {

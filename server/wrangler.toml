@@ -6,9 +6,14 @@ compatibility_date = "2026-07-01"
 [vars]
 FIREBASE_PROJECT_ID = "everyone-teigi-dev"
 FIREBASE_PROJECT_NUMBER = "225028441501"
+AVATAR_BASE_URL = "https://avatars.local.invalid"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "teigiii-local"
 database_id = "local"
 migrations_dir = "drizzle"
+
+[[r2_buckets]]
+binding = "AVATARS"
+bucket_name = "teigiii-local-avatars"

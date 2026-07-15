@@ -118,19 +118,24 @@ JWT、Authorization、App Check token、プロフィール内容などの個人�
 
 運用時の変更は `wrangler d1 execute` で行い、管理 API は追加しない。
 
+<!-- @code server/src/users/user-service.ts#UserService -->
 ### ユーザー
 
 - `POST /v1/users` は認証 UID を主キーに初回登録し、9桁数字の publicId を暗号学的乱数で生成する。UNIQUE 競合時は再試行し、同じ UID が登録済みなら409 `user_already_exists` を返す
 - 自分の取得・更新は認証 UID だけを対象とし、他者の private 情報を返さない
 - 他者プロフィールと一覧は論理削除済みユーザーを除外する
 - フォローとミュートは自己指定を400で拒否し、対象が不可視なら404とする
+- フォローとミュートの追加・解除は冪等とする。フォロワー・フォロー中一覧は関係作成日時、ユーザー ID の降順で keyset pagination する
 - アカウント削除はユーザーと所有する定義へ `deleted_at` を設定し、通常 API から即時に不可視とする
 
+<!-- @code server/src/users/user-service.ts#AvatarService -->
 ### アバター
 
 `PUT /v1/users/me/avatar` は JPEG / PNG を受け付け、Content-Type とファイルシグネチャの両方を検証する。10 MiB を安全上限とし、Workers では画像変換しない。
 
 Issue `#185` の Flutter クライアントは HEIC を含む元画像を切り抜き、512 x 512 JPEG quality 85 に変換して送る。R2 key はユーザー単位で固定し、再アップロードは上書きする。削除は R2 object がなくても成功する。
+
+R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object の HTTP metadata に検証済み Content-Type を保存する。レスポンスの `avatarUrl` は環境変数 `AVATAR_BASE_URL` と key を結合して解決する。dev は対象 bucket の r2.dev URL、prod は R2 custom domain を `AVATAR_BASE_URL` に設定し、Worker を介さず直接配信する。
 
 ### 言葉
 
