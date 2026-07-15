@@ -80,6 +80,14 @@ function decodeWordListCursor(value: string): WordListCursor {
   return parsed as unknown as WordListCursor;
 }
 
+/** zod は空白のみの入力を通すため、正規化後の空文字はここで拒否する。 */
+function requireNonEmpty(value: string, field: string): string {
+  if (value === "") {
+    throw new ApiError(400, "invalid_request", `${field} must not be empty`);
+  }
+  return value;
+}
+
 function escapeLikePattern(value: string): string {
   return value.replaceAll("\\", "\\\\").replaceAll("%", "\\%").replaceAll("_", "\\_");
 }
@@ -166,8 +174,8 @@ export class WordService {
 
   async create(uid: string, input: CreateWordInput) {
     await this.#requireActiveUser(uid);
-    const word = normalizeText(input.word);
-    const reading = normalizeText(input.reading);
+    const word = requireNonEmpty(normalizeText(input.word), "word");
+    const reading = requireNonEmpty(normalizeText(input.reading), "reading");
     await this.#throwIfWordTaken(word);
 
     const id = uuidv7();
@@ -198,19 +206,49 @@ export class WordService {
       throw new ApiError(403, "word_not_editable", "Word not editable");
     }
 
-    const word = input.word === undefined ? detail.word : normalizeText(input.word);
-    const reading = input.reading === undefined ? detail.reading : normalizeText(input.reading);
+    const word =
+      input.word === undefined ? detail.word : requireNonEmpty(normalizeText(input.word), "word");
+    const reading =
+      input.reading === undefined
+        ? detail.reading
+        : requireNonEmpty(normalizeText(input.reading), "reading");
     if (word !== detail.word) await this.#throwIfWordTaken(word);
 
+    const now = Date.now();
+    let result: D1Response;
     try {
-      await this.env.DB.prepare(
-        "update words set word = ?, reading = ?, reading_sub_group = ?, updated_at = ? where id = ?",
+      // 編集可否チェックと更新の間に他ユーザーの操作が入る TOCTOU を防ぐため、
+      // 可否条件を WHERE に埋め込んだ単一文で原子的に更新する
+      result = await this.env.DB.prepare(
+        `update words
+         set word = ?, reading = ?, reading_sub_group = ?, updated_at = ?
+         where id = ?
+           and created_by = ?
+           and created_at > ?
+           and not exists(select 1 from definitions d
+            where d.word_id = words.id and d.author_id <> ? and d.deleted_at is null)
+           and not exists(select 1 from saved_words s
+            where s.word_id = words.id and s.user_id <> ?)`,
       )
-        .bind(word, reading, readingSubGroup(reading), Date.now(), id)
+        .bind(
+          word,
+          reading,
+          readingSubGroup(reading),
+          now,
+          id,
+          uid,
+          now - editWindowMilliseconds,
+          uid,
+          uid,
+        )
         .run();
     } catch (error) {
+      // UNIQUE 競合（同時登録）だけを 409 に変換し、それ以外は再送出する
       if (word !== detail.word) await this.#throwIfWordTaken(word);
       throw error;
+    }
+    if (result.meta.changes === 0) {
+      throw new ApiError(403, "word_not_editable", "Word not editable");
     }
     return this.get(uid, id);
   }

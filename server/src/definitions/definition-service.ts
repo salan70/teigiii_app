@@ -3,6 +3,8 @@ import { decodeOpaqueCursor, encodeOpaqueCursor } from "../lib/cursor";
 import { uuidv7 } from "../lib/uuidv7";
 
 const editWindowMilliseconds = 60 * 60 * 1000;
+// 楽観ロックの再試行上限。自分の定義への並行更新だけが対象のため衝突は稀
+const maxUpdateAttempts = 3;
 
 type DefinitionBindings = {
   AVATAR_BASE_URL: string;
@@ -205,50 +207,57 @@ export class DefinitionService {
   }
 
   async update(uid: string, id: string, input: UpdateDefinitionInput) {
-    const row = await this.#findRow(id);
-    if (row === null || (row.author_id !== uid && row.status !== "public")) definitionNotFound();
-    if (row.author_id !== uid) throw new ApiError(403, "forbidden", "Forbidden");
+    // 読み取りと更新の間に並行リクエストが割り込むと確定済み定義が draft へ巻き戻り得るため、
+    // 観測した status / updated_at を条件にした楽観ロックで更新し、外れたら再評価する
+    for (let attempt = 0; attempt < maxUpdateAttempts; attempt += 1) {
+      const row = await this.#findRow(id);
+      if (row === null || (row.author_id !== uid && row.status !== "public")) definitionNotFound();
+      if (row.author_id !== uid) throw new ApiError(403, "forbidden", "Forbidden");
 
-    const now = Date.now();
-    const wasFinalized = row.finalized_at !== null;
-    const nextStatus = input.status ?? row.status;
+      const now = Date.now();
+      const wasFinalized = row.finalized_at !== null;
+      const nextStatus = input.status ?? row.status;
 
-    if (wasFinalized && nextStatus === "draft") {
-      throw new ApiError(400, "invalid_transition", "Cannot revert to draft");
-    }
-
-    const wordChanged = input.wordId !== undefined && input.wordId !== row.word_id;
-    if (wordChanged) {
-      if (wasFinalized) {
-        throw new ApiError(400, "invalid_transition", "Cannot change word after finalization");
+      if (wasFinalized && nextStatus === "draft") {
+        throw new ApiError(400, "invalid_transition", "Cannot revert to draft");
       }
-      await this.#requireWordExists(input.wordId!);
-    }
 
-    const bodyChanged = input.body !== undefined && input.body !== row.body;
-    if (bodyChanged && wasFinalized && now - row.finalized_at! >= editWindowMilliseconds) {
-      throw new ApiError(403, "edit_window_expired", "Edit window expired");
-    }
+      const wordChanged = input.wordId !== undefined && input.wordId !== row.word_id;
+      if (wordChanged) {
+        if (wasFinalized) {
+          throw new ApiError(400, "invalid_transition", "Cannot change word after finalization");
+        }
+        await this.#requireWordExists(input.wordId!);
+      }
 
-    const finalizedAt = !wasFinalized && nextStatus !== "draft" ? now : row.finalized_at;
-    const isEdited = row.is_edited !== 0 || (bodyChanged && wasFinalized);
+      const bodyChanged = input.body !== undefined && input.body !== row.body;
+      if (bodyChanged && wasFinalized && now - row.finalized_at! >= editWindowMilliseconds) {
+        throw new ApiError(403, "edit_window_expired", "Edit window expired");
+      }
 
-    await this.env.DB.prepare(
-      `update definitions
-       set word_id = ?, body = ?, status = ?, finalized_at = ?, is_edited = ?, updated_at = ?
-       where id = ?`,
-    )
-      .bind(
-        wordChanged ? input.wordId! : row.word_id,
-        input.body ?? row.body,
-        nextStatus,
-        finalizedAt,
-        isEdited ? 1 : 0,
-        now,
-        id,
+      const finalizedAt = !wasFinalized && nextStatus !== "draft" ? now : row.finalized_at;
+      const isEdited = row.is_edited !== 0 || (bodyChanged && wasFinalized);
+
+      const result = await this.env.DB.prepare(
+        `update definitions
+         set word_id = ?, body = ?, status = ?, finalized_at = ?, is_edited = ?, updated_at = ?
+         where id = ? and status = ? and updated_at = ?`,
       )
-      .run();
-    return this.#getDetail(uid, id);
+        .bind(
+          wordChanged ? input.wordId! : row.word_id,
+          input.body ?? row.body,
+          nextStatus,
+          finalizedAt,
+          isEdited ? 1 : 0,
+          now,
+          id,
+          row.status,
+          row.updated_at,
+        )
+        .run();
+      if (result.meta.changes > 0) return this.#getDetail(uid, id);
+    }
+    throw new ApiError(500, "definition_update_conflict", "Internal Server Error");
   }
 
   async delete(uid: string, id: string): Promise<void> {

@@ -311,6 +311,57 @@ describe("PATCH /v1/definitions/{id}", () => {
     expect(response.status).toBe(200);
   });
 
+  test("並行する確定処理と競合しても draft へ巻き戻らない", async () => {
+    await createUser("alice");
+    const word = await createWord("alice", "ことば", "ことば");
+    const draft = await createDefinition("alice", word.id, "draft");
+    // 本文編集 PATCH の読み取りと UPDATE の間に、別リクエストによる確定（draft→public）を割り込ませる
+    let intercepted = false;
+    const racingDatabase = {
+      prepare(query: string) {
+        const statement = env.DB.prepare(query);
+        if (!query.trimStart().startsWith("update definitions") || intercepted) return statement;
+        intercepted = true;
+        return {
+          bind: (...values: unknown[]) => {
+            const bound = statement.bind(...values);
+            return {
+              run: async () => {
+                const now = Date.now();
+                await env.DB.prepare(
+                  "update definitions set status = 'public', finalized_at = ?, updated_at = ? where id = ?",
+                )
+                  .bind(now, now + 1, draft.id)
+                  .run();
+                return bound.run();
+              },
+            };
+          },
+        } as unknown as D1PreparedStatement;
+      },
+    } as unknown as D1Database;
+
+    const response = await testApp("alice").request(
+      `/v1/definitions/${draft.id}`,
+      {
+        body: JSON.stringify({ body: "競合する本文編集" }),
+        headers: { ...authHeaders, "Content-Type": "application/json" },
+        method: "PATCH",
+      },
+      { ...env, DB: racingDatabase },
+    );
+
+    expect(response.status).toBe(200);
+    const body = await response.json<DefinitionResponse>();
+    expect(body.status).toBe("public");
+    expect(body.finalizedAt).not.toBeNull();
+    const row = await env.DB.prepare("select status, finalized_at from definitions where id = ?")
+      .bind(draft.id)
+      .first<{ status: string; finalized_at: number | null }>();
+    expect(row!.status).toBe("public");
+    expect(row!.finalized_at).not.toBeNull();
+  });
+
   test("他者の public 定義の編集は 403 forbidden", async () => {
     await createUser("alice");
     await createUser("bob");

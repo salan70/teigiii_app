@@ -123,6 +123,20 @@ describe("POST /v1/words", () => {
     expect(body.id).toMatch(uuidPattern);
   });
 
+  test("正規化後に空になる表記・よみは 400 invalid_request", async () => {
+    await createUser("alice");
+
+    const response = await requestJson("alice", "/v1/words", "POST", {
+      reading: " ",
+      word: " ",
+    });
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toMatchObject({
+      error: { code: "invalid_request" },
+    });
+  });
+
   test("未登録ユーザーの言葉登録は 404 user_not_found", async () => {
     const response = await requestJson("unregistered", "/v1/words", "POST", {
       reading: "ことば",
@@ -293,6 +307,62 @@ describe("PATCH /v1/words/{id}", () => {
       error: { code: "word_already_exists" },
       existingWord: { id: existing.id },
     });
+  });
+
+  test("正規化後に空になる修正は 400 invalid_request", async () => {
+    await createUser("alice");
+    const word = await createWord("alice", "ことば", "ことば");
+
+    const response = await requestJson("alice", `/v1/words/${word.id}`, "PATCH", { word: "  " });
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toMatchObject({
+      error: { code: "invalid_request" },
+    });
+  });
+
+  test("編集可否チェック後に他ユーザーの保存が入った場合も 403 word_not_editable", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    const word = await createWord("alice", "ことば", "ことば");
+    // 編集可否チェックと UPDATE の間に bob の保存を割り込ませ、TOCTOU を再現する
+    let intercepted = false;
+    const racingDatabase = {
+      prepare(query: string) {
+        const statement = env.DB.prepare(query);
+        if (!query.trimStart().startsWith("update words") || intercepted) return statement;
+        intercepted = true;
+        return {
+          bind: (...values: unknown[]) => {
+            const bound = statement.bind(...values);
+            return {
+              run: async () => {
+                await env.DB.prepare(
+                  "insert into saved_words (user_id, word_id, created_at) values (?, ?, ?)",
+                )
+                  .bind("bob", word.id, Date.now())
+                  .run();
+                return bound.run();
+              },
+            };
+          },
+        } as unknown as D1PreparedStatement;
+      },
+    } as unknown as D1Database;
+
+    const response = await testApp("alice").request(
+      `/v1/words/${word.id}`,
+      {
+        body: JSON.stringify({ word: "改変" }),
+        headers: { ...authHeaders, "Content-Type": "application/json" },
+        method: "PATCH",
+      },
+      { ...env, DB: racingDatabase },
+    );
+
+    expect(response.status).toBe(403);
+    const row = await env.DB.prepare("select word from words where id = ?").bind(word.id).first();
+    expect(row).toMatchObject({ word: "ことば" });
   });
 
   test("論理削除済みユーザーは自分が登録した言葉も修正できない", async () => {
