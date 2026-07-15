@@ -690,7 +690,7 @@ export class BrowseService {
       if (
         typeof parsed["sortAt"] !== "number" ||
         !Number.isSafeInteger(parsed["sortAt"]) ||
-        typeof parsed["type"] !== "string" ||
+        (parsed["type"] !== "definition" && parsed["type"] !== "wordRegistered") ||
         typeof parsed["id"] !== "string" ||
         parsed["id"].length === 0
       ) {
@@ -828,6 +828,7 @@ export class BrowseService {
       await this.env.DB.prepare(
         `select w.id, w.word, w.reading, w.reading_sub_group,
            (select count(*) from definitions d
+            join users author on author.id = d.author_id and author.deleted_at is null
             where d.word_id = w.id and d.status = 'public' and d.deleted_at is null)
              as public_definition_count
          from words w

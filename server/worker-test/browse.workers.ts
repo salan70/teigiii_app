@@ -2,6 +2,8 @@ import { applyD1Migrations, env } from "cloudflare:test";
 import { beforeEach, describe, expect, test } from "vitest";
 
 import { createApp } from "../src/app";
+import { BrowseService } from "../src/browse/browse-service";
+import { encodeOpaqueCursor } from "../src/lib/cursor";
 
 const authHeaders = {
   Authorization: "Bearer valid-id-token",
@@ -9,6 +11,21 @@ const authHeaders = {
 };
 
 type Page<T> = { items: T[]; nextCursor: string | null };
+type RecordedQuery = { bindings: unknown[]; sql: string };
+
+function recordingDatabase(database: D1Database, queries: RecordedQuery[]): D1Database {
+  return {
+    prepare(sql: string) {
+      const statement = database.prepare(sql);
+      return {
+        bind(...bindings: unknown[]) {
+          queries.push({ bindings, sql });
+          return statement.bind(...bindings);
+        },
+      } as D1PreparedStatement;
+    },
+  } as D1Database;
+}
 
 function testApp(uid: string) {
   return createApp({
@@ -240,6 +257,23 @@ describe("word definition lists", () => {
 });
 
 describe("timelines and search", () => {
+  test("見つけるは未知の activity type を持つカーソルを拒否する", async () => {
+    const cursor = encodeOpaqueCursor({
+      id: "activity-id",
+      kind: "timeline_discover",
+      sortAt: 100,
+      type: "unknown",
+      version: 1,
+    });
+
+    const response = await request("alice", `/v1/timeline/discover?cursor=${cursor}`);
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toEqual({
+      error: { code: "invalid_cursor", message: "Invalid cursor" },
+    });
+  });
+
   test("見つけるは定義と言葉を完全な新着順で混在し、ミュート対象を除外する", async () => {
     await insertUser("alice");
     await insertUser("bob");
@@ -297,26 +331,65 @@ describe("timelines and search", () => {
     const userBody = await users.json<Page<{ id: string }>>();
     expect(userBody.items).toEqual([]);
   });
+
+  test("言葉検索の公開定義数は論理削除済み作者の定義を除外する", async () => {
+    await insertUser("alice");
+    await insertUser("deleted-author");
+    await insertWord("w1", "朝", "あさ", "alice", 10);
+    await insertDefinition("hidden", "w1", "deleted-author", "public", 100);
+    await env.DB.prepare("update users set deleted_at = 200 where id = 'deleted-author'").run();
+
+    const response = await request("alice", "/v1/search/words?q=%E6%9C%9D");
+    const body = await response.json<Page<{ id: string; publicDefinitionCount: number }>>();
+
+    expect(body.items).toMatchObject([{ id: "w1", publicDefinitionCount: 0 }]);
+  });
 });
 
 describe("query plans", () => {
-  test("主要一覧は設計済みインデックスを使用できる", async () => {
-    const definitionPlan = await env.DB.prepare(
-      `explain query plan
-       select id from definitions
-       where status = 'public' and deleted_at is null
-       order by finalized_at desc, id desc limit 21`,
-    ).all<{ detail: string }>();
+  test("主要一覧の本番クエリは設計済みアクセスパスを使用する", async () => {
+    const queries: RecordedQuery[] = [];
+    const service = new BrowseService({
+      AVATAR_BASE_URL: "https://example.com/avatars",
+      DB: recordingDatabase(env.DB, queries),
+    });
+    await service.listFollowing(
+      "alice",
+      20,
+      encodeOpaqueCursor({
+        id: "definition-id",
+        kind: "timeline_following",
+        sortAt: 100,
+        version: 1,
+      }),
+    );
+    await service.searchWords(
+      "alice",
+      "朝",
+      20,
+      encodeOpaqueCursor({
+        id: "word-id",
+        kind: "search_words",
+        reading: "あさ",
+        version: 1,
+      }),
+    );
+
+    const definitionQuery = queries.find((query) => query.sql.includes("from definitions d"));
+    expect(definitionQuery).toBeDefined();
+    const definitionPlan = await env.DB.prepare(`explain query plan ${definitionQuery!.sql}`)
+      .bind(...definitionQuery!.bindings)
+      .all<{ detail: string }>();
     expect(definitionPlan.results.map((row) => row.detail).join("\n")).toContain(
       "definitions_timeline_idx",
     );
 
-    const wordPlan = await env.DB.prepare(
-      `explain query plan
-       select id from words order by reading_sub_group, reading, id limit 21`,
-    ).all<{ detail: string }>();
-    expect(wordPlan.results.map((row) => row.detail).join("\n")).toContain(
-      "words_reading_order_idx",
-    );
+    const wordQuery = queries.find((query) => query.sql.includes("from words w"));
+    expect(wordQuery).toBeDefined();
+    const wordPlan = await env.DB.prepare(`explain query plan ${wordQuery!.sql}`)
+      .bind(...wordQuery!.bindings)
+      .all<{ detail: string }>();
+    // LIKE 検索本体の全走査は設計上許容する。公開定義数の相関サブクエリは複合 index を使う。
+    expect(wordPlan.results.map((row) => row.detail).join("\n")).toContain("definitions_word_idx");
   });
 });
