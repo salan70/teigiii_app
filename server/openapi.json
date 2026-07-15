@@ -2130,6 +2130,16 @@
               }
             }
           },
+          "404": {
+            "description": "未登録・削除済みユーザー（user_not_found）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "409": {
             "description": "同一表記が登録済み（word_already_exists）。既存の言葉を返す",
             "content": {

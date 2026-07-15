@@ -123,6 +123,30 @@ describe("POST /v1/words", () => {
     expect(body.id).toMatch(uuidPattern);
   });
 
+  test("未登録ユーザーの言葉登録は 404 user_not_found", async () => {
+    const response = await requestJson("unregistered", "/v1/words", "POST", {
+      reading: "ことば",
+      word: "ことば",
+    });
+
+    expect(response.status).toBe(404);
+    await expect(response.json()).resolves.toMatchObject({
+      error: { code: "user_not_found" },
+    });
+  });
+
+  test("論理削除済みユーザーは言葉を登録できない", async () => {
+    await createUser("alice");
+    await request("alice", "/v1/users/me", { method: "DELETE" });
+
+    const response = await requestJson("alice", "/v1/words", "POST", {
+      reading: "ことば",
+      word: "ことば",
+    });
+
+    expect(response.status).toBe(404);
+  });
+
   test("正規化後に同一表記が存在する場合は 409 で既存の言葉を返す", async () => {
     await createUser("alice");
     const first = await createWord("alice", "りんご", "りんご");
@@ -269,6 +293,16 @@ describe("PATCH /v1/words/{id}", () => {
       error: { code: "word_already_exists" },
       existingWord: { id: existing.id },
     });
+  });
+
+  test("論理削除済みユーザーは自分が登録した言葉も修正できない", async () => {
+    await createUser("alice");
+    const word = await createWord("alice", "ことば", "ことば");
+    await request("alice", "/v1/users/me", { method: "DELETE" });
+
+    const response = await requestJson("alice", `/v1/words/${word.id}`, "PATCH", { word: "改" });
+
+    expect(response.status).toBe(404);
   });
 
   test("存在しない言葉の修正は 404 word_not_found", async () => {

@@ -32,6 +32,7 @@ const createWordRoute = createRoute({
   },
   responses: {
     201: jsonContent(wordResponseSchema, "登録された言葉"),
+    404: errorContent("未登録・削除済みユーザー（user_not_found）"),
     409: {
       content: { "application/json": { schema: wordConflictResponseSchema } },
       description: "同一表記が登録済み（word_already_exists）。既存の言葉を返す",

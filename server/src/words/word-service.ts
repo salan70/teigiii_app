@@ -165,6 +165,7 @@ export class WordService {
   }
 
   async create(uid: string, input: CreateWordInput) {
+    await this.#requireActiveUser(uid);
     const word = normalizeText(input.word);
     const reading = normalizeText(input.reading);
     await this.#throwIfWordTaken(word);
@@ -191,6 +192,7 @@ export class WordService {
   }
 
   async update(uid: string, id: string, input: UpdateWordInput) {
+    await this.#requireActiveUser(uid);
     const detail = await this.#requireDetail(uid, id);
     if (!toWordResponse(detail, uid, Date.now()).isEditableByMe) {
       throw new ApiError(403, "word_not_editable", "Word not editable");
