@@ -56,3 +56,28 @@ server-generate:
 
 server-dev:
     cd server && bun run dev
+
+# dev D1 に未適用の migration を反映する
+server-migrate-dev:
+    cd server && bunx wrangler d1 migrations apply DB --env dev --remote
+
+# app-config の初期行だけを冪等に作成する
+server-seed-dev:
+    cd server && bunx wrangler d1 execute DB --env dev --remote --command "insert into app_config (id, min_app_version_ios, min_app_version_android, in_maintenance, maintenance_scheduled_end_time, updated_at) values (1, '0.0.0', '0.0.0', 0, null, unixepoch('now') * 1000) on conflict(id) do nothing"
+
+# migration と app-config 初期化を完了してから dev Worker を手動 deploy する
+server-deploy-dev: server-migrate-dev server-seed-dev
+    if rg -q 'AVATAR_BASE_URL = "https://api.dev.invalid/v1"' server/wrangler.toml; then echo 'Replace AVATAR_BASE_URL with the deployed dev Worker URL before deploy.' >&2; exit 1; fi
+    cd server && bunx wrangler deploy --env dev
+
+# 正規の Firebase ID token / App Check token を使って dev Worker を smoke test する
+server-smoke-dev:
+    server/scripts/smoke-dev.sh
+
+# remote dev bindings に対して Scheduled Handler を手動起動できる状態にする
+server-dev-remote-scheduled:
+    cd server && bunx wrangler dev --env dev --remote --test-scheduled
+
+# prod は #186 まで deploy せず、bundle と bindings の解決だけを検証する
+server-validate-prod:
+    cd server && bunx wrangler deploy --env prod --dry-run --outdir /tmp/teigiii-api-prod-dry-run

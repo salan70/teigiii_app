@@ -74,6 +74,9 @@
             pkgs.lcov
             pkgs.git
             pkgs.bun
+            pkgs.curl
+            pkgs.jq
+            pkgs.ripgrep
           ] ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.cocoapods ];
         in
         {

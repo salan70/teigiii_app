@@ -454,12 +454,25 @@ async function readBodyWithLimit(
 }
 
 /**
- * R2 アバターの形式・容量検証、固定キー保存、削除、公開 URL 解決を扱う。
+ * R2 アバターの形式・容量検証、固定キー保存、削除、認証付き Worker URL 解決を扱う。
  *
  * @doc doc/specs/workers-api-server.md#アバター
  */
 export class AvatarService {
   constructor(private readonly env: UserBindings) {}
+
+  async get(viewerUid: string, targetUid: string): Promise<R2ObjectBody> {
+    await requireActiveUser(this.env.DB, viewerUid);
+    const target = await findActiveUser(this.env.DB, targetUid);
+    if (target?.avatar_key == null) {
+      throw new ApiError(404, "avatar_not_found", "Avatar not found");
+    }
+    const object = await this.env.AVATARS.get(target.avatar_key);
+    if (object === null) {
+      throw new ApiError(404, "avatar_not_found", "Avatar not found");
+    }
+    return object;
+  }
 
   async upload(uid: string, request: Request): Promise<string> {
     await requireActiveUser(this.env.DB, uid);

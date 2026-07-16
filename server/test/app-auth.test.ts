@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { createApp } from "../src/app";
+import { createApp, type Env } from "../src/app";
 import type { RequestLogEntry } from "../src/middleware/request-context";
 
 function testApp() {
@@ -31,11 +31,20 @@ describe("createApp", () => {
   });
 
   test("app-config は App Check 検証後にルートへ到達する", async () => {
-    const response = await testApp().request("/v1/app-config", {
-      headers: { "X-Firebase-AppCheck": "valid-app-check" },
-    });
+    const response = await testApp().request(
+      "/v1/app-config",
+      { headers: { "X-Firebase-AppCheck": "valid-app-check" } },
+      {
+        DB: {
+          prepare: () => ({ first: async () => null }) as unknown as D1PreparedStatement,
+        } as unknown as D1Database,
+      } as Env,
+    );
 
-    expect(response.status).toBe(501);
+    expect(response.status).toBe(500);
+    expect(await response.json<unknown>()).toEqual({
+      error: { code: "app_config_unavailable", message: "App config unavailable" },
+    });
   });
 
   test("認証必須ルートは Firebase ID トークンも要求する", async () => {

@@ -11,7 +11,7 @@ Issue #184 のフェーズ 3 として、フェーズ 2 で定義済みの OpenA
 - `server/openapi.json` に定義済みの全エンドポイントの実ハンドラ
 - Firebase ID トークンと App Check トークンの検証
 - D1 を使うクエリ、状態遷移、認可、keyset pagination
-- R2 を使うアバターの保存・削除・公開 URL 解決
+- R2 を使うアバターの保存・削除・認証付き Worker URL 解決
 - 30 日経過した論理削除データの Scheduled Handler による物理削除
 - dev / prod の Wrangler 設定と Cloudflare リソース
 - 構造化ログ、テスト、仕様書、DocBridge リンク
@@ -33,7 +33,7 @@ Issue #184 のフェーズ 3 として、フェーズ 2 で定義済みの OpenA
 - Wrangler のローカル既定環境に加え、dev / prod を別 Worker・別 D1・別 R2 として構成する
 - dev / prod のリソースは作成する。#184 では dev のみ手動デプロイし、prod は設定検証までとする
 - `just server-deploy-dev` を手動デプロイの正規コマンドとし、自動デプロイは導入しない
-- アバターは dev では r2.dev、prod では R2 カスタムドメインから直接配信する
+- R2 bucket は非公開とし、アバターは App Check と Firebase ID token が必須の Workers API から配信する
 
 ### 認証と保護
 
@@ -60,6 +60,7 @@ Issue #184 のフェーズ 3 として、フェーズ 2 で定義済みの OpenA
 - サーバー上限は通常到達しない安全弁として 10 MiB とする
 - #185 で HEIC を含む選択元画像を 512 x 512 JPEG quality 85 に正規化してから送信する
 - R2 オブジェクトキーはユーザー単位で固定し、再アップロードは上書き、削除は冪等とする
+- `avatarUrl` は認証付き `GET /v1/avatars/{id}` を指し、Flutter 側も画像取得時に両認証ヘッダーを付ける
 
 ### 物理削除
 
