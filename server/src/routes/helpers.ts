@@ -1,6 +1,4 @@
 import type { z } from "@hono/zod-openapi";
-import type { Context } from "hono";
-import { HTTPException } from "hono/http-exception";
 import { errorResponseSchema } from "../schemas/common";
 
 /**
@@ -20,11 +18,3 @@ export const errorContent = (description: string) => jsonContent(errorResponseSc
 export const authErrorResponses = {
   401: errorContent("App Check または Firebase ID トークンが欠落・無効"),
 };
-
-/**
- * フェーズ 2 のスタブハンドラ。実装はフェーズ 3（#184）。
- * OpenAPI 定義を汚さないよう、レスポンススキーマには含めず実行時に 501 を投げる。
- */
-export function notImplemented(_c: Context): never {
-  throw new HTTPException(501, { message: "not implemented" });
-}

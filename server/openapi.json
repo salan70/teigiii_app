@@ -644,6 +644,16 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "アプリ設定が未初期化",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -960,6 +970,70 @@
           },
           "404": {
             "description": "未登録（user_not_found）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/avatars/{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "認証付きアバター画像を取得",
+        "description": "非公開 R2 bucket の画像を認証済み利用者へ配信する。",
+        "security": [
+          {
+            "appCheck": [],
+            "firebaseIdToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "アバター画像",
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "App Check または Firebase ID トークンが欠落・無効",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ユーザーまたはアバターが存在しない（avatar_not_found）",
             "content": {
               "application/json": {
                 "schema": {

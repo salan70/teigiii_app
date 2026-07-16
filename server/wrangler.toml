@@ -1,4 +1,3 @@
-# ローカル開発用の最小構成。dev/prod 環境分離・デプロイ設定はフェーズ 3（#184）で行う。
 name = "teigiii-api"
 main = "src/index.ts"
 compatibility_date = "2026-07-01"
@@ -6,7 +5,7 @@ compatibility_date = "2026-07-01"
 [vars]
 FIREBASE_PROJECT_ID = "everyone-teigi-dev"
 FIREBASE_PROJECT_NUMBER = "225028441501"
-AVATAR_BASE_URL = "https://avatars.local.invalid"
+AVATAR_BASE_URL = "http://localhost:8787/v1"
 
 [[d1_databases]]
 binding = "DB"
@@ -17,3 +16,40 @@ migrations_dir = "drizzle"
 [[r2_buckets]]
 binding = "AVATARS"
 bucket_name = "teigiii-local-avatars"
+
+[env.dev]
+name = "teigiii-api-dev"
+
+[env.dev.vars]
+FIREBASE_PROJECT_ID = "everyone-teigi-dev"
+FIREBASE_PROJECT_NUMBER = "225028441501"
+AVATAR_BASE_URL = "https://teigiii-api-dev.tetsuo21ad.workers.dev/v1"
+
+[[env.dev.d1_databases]]
+binding = "DB"
+database_name = "teigiii-dev"
+database_id = "3a8c086b-4704-4277-9c89-14e45fc00e92"
+migrations_dir = "drizzle"
+
+[[env.dev.r2_buckets]]
+binding = "AVATARS"
+bucket_name = "teigiii-dev-avatars"
+
+[env.prod]
+name = "teigiii-api-prod"
+
+[env.prod.vars]
+FIREBASE_PROJECT_ID = "everyone-teigi-prod"
+FIREBASE_PROJECT_NUMBER = "713374936833"
+# #186 で prod Worker の実 URL へ置換してから deploy する。
+AVATAR_BASE_URL = "https://api.prod.invalid/v1"
+
+[[env.prod.d1_databases]]
+binding = "DB"
+database_name = "teigiii-prod"
+database_id = "cf269ff5-12bd-49d6-96f4-b3bbf37371aa"
+migrations_dir = "drizzle"
+
+[[env.prod.r2_buckets]]
+binding = "AVATARS"
+bucket_name = "teigiii-prod-avatars"

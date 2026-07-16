@@ -11,7 +11,7 @@ export const userSummarySchema = z
     id: z.string(),
     publicId: z.string(),
     name: z.string(),
-    // avatar_key を R2 の配信 URL に解決した値。未設定は null。
+    // avatar_key を認証必須の Workers API URL に解決した値。未設定は null。
     avatarUrl: z.string().nullable(),
   })
   .openapi("UserSummary");

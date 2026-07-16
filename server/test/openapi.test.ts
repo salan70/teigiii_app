@@ -14,6 +14,7 @@ const expectedOperations = [
   "DELETE /v1/users/me",
   "PUT /v1/users/me/avatar",
   "DELETE /v1/users/me/avatar",
+  "GET /v1/avatars/{id}",
   "GET /v1/users/{id}",
   "GET /v1/users/{id}/dictionary",
   "GET /v1/users/{id}/definitions",

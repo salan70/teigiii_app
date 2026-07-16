@@ -12,9 +12,9 @@ Flutter repository の接続、Firestore / Firebase Storage の既存データ�
 
 | 環境 | Worker | Firebase | D1 | R2 | 配信 |
 |---|---|---|---|---|---|
-| local | `wrangler dev` | dev project | local D1 | local R2 | ローカル |
-| dev | `teigiii-api-dev` | dev project | dev 専用 | dev 専用 | r2.dev |
-| prod | `teigiii-api-prod` | prod project | prod 専用 | prod 専用 | R2 custom domain |
+| local | `teigiii-api` | `everyone-teigi-dev` | `teigiii-local` | `teigiii-local-avatars` | 認証付き Worker API |
+| dev | `teigiii-api-dev` | `everyone-teigi-dev` | `teigiii-dev` | `teigiii-dev-avatars` | 認証付き Worker API |
+| prod | `teigiii-api-prod` | `everyone-teigi-prod` | `teigiii-prod` | `teigiii-prod-avatars` | 認証付き Worker API |
 
 Firebase project ID と project number は公開識別子として Wrangler vars に置く。トークン、秘密鍵、Cloudflare API token はコード、設定ファイル、ログへ保存しない。
 
@@ -112,6 +112,7 @@ JWT、Authorization、App Check token、プロフィール内容などの個人�
 
 ## API 振る舞い
 
+<!-- @code server/src/config/app-config-service.ts#AppConfigService -->
 ### App config
 
 `GET /v1/app-config` は D1 の `app_config` 単一行を返す。Firebase ID トークンは不要だが App Check は必須とする。単一行がなければ500とし、暗黙の既定値では起動を続けない。
@@ -135,7 +136,11 @@ JWT、Authorization、App Check token、プロフィール内容などの個人�
 
 Issue `#185` の Flutter クライアントは HEIC を含む元画像を切り抜き、512 x 512 JPEG quality 85 に変換して送る。R2 key はユーザー単位で固定し、再アップロードは上書きする。削除は R2 object がなくても成功する。
 
-R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object の HTTP metadata に検証済み Content-Type を保存する。レスポンスの `avatarUrl` は環境変数 `AVATAR_BASE_URL` と key を結合して解決する。dev は対象 bucket の r2.dev URL、prod は R2 custom domain を `AVATAR_BASE_URL` に設定し、Worker を介さず直接配信する。
+R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object の HTTP metadata に検証済み Content-Type を保存する。bucket に r2.dev URL または R2 custom domain を設定せず、object は公開しない。
+
+レスポンスの `avatarUrl` は `<AVATAR_BASE_URL>/avatars/<URL エンコード済み Firebase UID>` とする。`AVATAR_BASE_URL` は各環境の Worker API `/v1` URLを指す。`GET /v1/avatars/{id}` は App Check と Firebase ID token に加え、閲覧者と対象ユーザーが論理削除されていないことを検証してから R2 object を返す。応答は保存済み Content-Type、`ETag`、`Cache-Control: private, max-age=300`、`X-Content-Type-Options: nosniff` を設定する。URLだけを知る未認証者には画像を返さない。
+
+#185 の Flutter クライアントは通常 API と同様に画像取得へ `X-Firebase-AppCheck` と `Authorization` ヘッダーを付ける。
 
 <!-- @code server/src/words/word-service.ts#WordService -->
 ### 言葉
@@ -172,11 +177,14 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 - 言葉検索は表記・よみの部分一致、ユーザー検索は表示名・publicId の部分一致を適用する
 - リアクション数順はページ移動中の件数変動による重複・欠落を許容する
 
+<!-- @code server/src/maintenance/physical-deletion.ts#runPhysicalDeletion -->
 ## 物理削除
 
 Scheduled Handler は30日以前に論理削除された定義とユーザーを物理削除する。ユーザー削除では R2 アバターを削除してから D1 ユーザーを削除し、FK CASCADE で関連行と定義を削除する。`words.created_by` は SET NULL とし、言葉自体は残す。
 
-処理は再実行可能とし、対象件数、成功件数、失敗件数を構造化ログへ記録する。dev ではローカル scheduled endpoint から手動検証し、prod Cron は #186 で有効化する。
+期限は Scheduled Event の `scheduledTime - 30日` とし、`deleted_at` が期限と同値の行も対象に含める。定義は一括削除し、ユーザーは R2 削除後に1件ずつ D1 から削除する。R2 またはユーザー D1 削除に失敗した場合は当該ユーザーを D1 に保持して他のユーザーを継続する。定義の一括削除に失敗した場合もユーザー削除は継続する。残った対象は次回実行で再試行するため、処理は冪等である。
+
+完了ログは定義とユーザーごとに `target`、`success`、`failure` を記録する。失敗ログは対象種別、`avatar_delete` / `database_delete` の段階、例外型だけを記録し、UID、R2 key、例外メッセージ、stack trace は含めない。dev では remote bindings を使う scheduled endpoint から手動検証し、prod Cron は #186 で有効化する。
 
 ## テストと検証
 
@@ -190,6 +198,44 @@ Scheduled Handler は30日以前に論理削除された定義とユーザーを
 
 ## 運用
 
-dev デプロイ後は認証付き smoke test で app-config、D1 読み書き、R2 アバター、Scheduled Handler を確認する。Cloudflare Dashboard では Workers request、D1 rows read / written、R2 storage / operation の利用量を確認する。
+### dev デプロイと smoke test
 
-prod の使用量通知設定とデプロイは #186 の切替チェックリストに含める。Firebase / Cloudflare の秘密情報は Wrangler secrets または GitHub secrets にのみ保存する。
+1. 初回 deploy で確定した `teigiii-api-dev` の workers.dev URL に `/v1` を付け、`server/wrangler.toml` の dev `AVATAR_BASE_URL` を置き換える。R2 public access は有効化しない。
+2. `just server-deploy-dev` を実行する。このコマンドは D1 migration、`app_config` 初期行の冪等な作成、`teigiii-api-dev` の deploy を順に行う。
+3. dev Firebase の正規トークンを shell 環境だけに設定し、次を実行する。トークンをファイル、shell history、ログへ保存しない。
+
+```bash
+TEIGIII_API_BASE_URL=https://teigiii-api-dev.tetsuo21ad.workers.dev \
+FIREBASE_ID_TOKEN='<dev Firebase ID token>' \
+FIREBASE_APP_CHECK_TOKEN='<dev App Check token>' \
+just server-smoke-dev
+```
+
+smoke test は app-config、認証、D1 のユーザー作成・更新、非公開 R2 アバターの upload・URL 単独アクセスの401・認証付き取得・delete を確認する。ユーザーが既存なら作成の409を許容し、更新で D1 write を検証する。
+
+Scheduled Handler は次のように remote dev D1 / R2 に対して手動検証する。
+
+```bash
+# terminal A
+just server-dev-remote-scheduled
+
+# terminal B
+curl 'http://localhost:8787/__scheduled?cron=0+3+*+*+*'
+```
+
+30日以前へ backdate した dev 専用 fixture を事前に用意し、HTTP 200、構造化ログの件数、D1 行と R2 object の削除を確認する。本番データを fixture に使わない。Wrangler 4.110 の `--remote --test-scheduled` は互換 endpoint `/__scheduled` を使う。
+
+### prod 切替前検証
+
+`just server-validate-prod` で `teigiii-api-prod`、`teigiii-prod`、`teigiii-prod-avatars`、prod Firebase vars の bundle / bindings 解決を dry-run する。#186 では prod `AVATAR_BASE_URL` の `.invalid` 値を実 Worker API `/v1` URLへ置き換え、R2 public access が無効であることを確認する。同コマンドを再実行してから prod deploy と Cron Trigger 有効化を行う。Cron は Wrangler 設定を正本とし、UTC の実行時刻を切替チェックリストで確定する。
+
+### 使用量監視と通知
+
+- Workers request / CPU、D1 rows read / written と storage、R2 storage / Class A / Class B operations を各 product の Analytics で確認する。
+- Pay-as-you-go account では Cloudflare Dashboard の `Manage Account > Billing > Billable Usage > Create budget alert` から account 全体の USD 閾値と通知先を設定する。
+- Professional 以上かつ Pay-as-you-go で product 別通知が利用できる場合は `Notifications > Add > Billable Usage` から Workers / R2 等の閾値を設定する。
+- budget alert と usage notification は停止・上限制御ではない。通知後は Billable Usage と product Analytics を確認し、想定外の呼び出し元、Cron 頻度、D1 query、R2 operation を切り分ける。
+
+参考: [Cloudflare Budget alerts](https://developers.cloudflare.com/billing/manage/budget-alerts/)、[Usage-based billing](https://developers.cloudflare.com/billing/understand/usage-based-billing/)、[Cron Triggers](https://developers.cloudflare.com/workers/configuration/cron-triggers/)
+
+Firebase / Cloudflare の秘密情報は Wrangler secrets、GitHub secrets、または実行中の shell 環境だけに置き、リポジトリやログへ保存しない。

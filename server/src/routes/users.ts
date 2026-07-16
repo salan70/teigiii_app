@@ -104,6 +104,27 @@ const deleteAvatarRoute = createRoute({
   },
 });
 
+const getAvatarRoute = createRoute({
+  method: "get",
+  path: "/avatars/{id}",
+  tags: ["users"],
+  summary: "認証付きアバター画像を取得",
+  description: "非公開 R2 bucket の画像を認証済み利用者へ配信する。",
+  security: authenticatedSecurity,
+  request: { params: userIdParams },
+  responses: {
+    200: {
+      content: {
+        "image/jpeg": { schema: z.string().openapi({ format: "binary" }) },
+        "image/png": { schema: z.string().openapi({ format: "binary" }) },
+      },
+      description: "アバター画像",
+    },
+    404: errorContent("ユーザーまたはアバターが存在しない（avatar_not_found）"),
+    ...authErrorResponses,
+  },
+});
+
 const deleteMeRoute = createRoute({
   method: "delete",
   path: "/users/me",
@@ -314,6 +335,18 @@ export function createUserRoutes(options: UserServiceOptions = {}) {
     .openapi(deleteAvatarRoute, async (context) => {
       await new AvatarService(context.env).delete(context.get("firebaseUid"));
       return context.body(null, 204);
+    })
+    .openapi(getAvatarRoute, async (context) => {
+      const object = await new AvatarService(context.env).get(
+        context.get("firebaseUid"),
+        context.req.valid("param").id,
+      );
+      const headers = new Headers();
+      object.writeHttpMetadata(headers);
+      headers.set("Cache-Control", "private, max-age=300");
+      headers.set("ETag", object.httpEtag);
+      headers.set("X-Content-Type-Options", "nosniff");
+      return new Response(object.body, { headers });
     })
     .openapi(deleteMeRoute, async (context) => {
       await users(context.env).delete(context.get("firebaseUid"));

@@ -330,7 +330,7 @@ describe("avatar routes", () => {
     await createUser("alice", "Alice");
   });
 
-  test("JPEG を検証して固定キーへ保存し、公開 URL を返す", async () => {
+  test("JPEG を検証して固定キーへ保存し、認証付き Worker URL を返す", async () => {
     const jpeg = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10]);
 
     const response = await request("alice", "/v1/users/me/avatar", {
@@ -341,7 +341,7 @@ describe("avatar routes", () => {
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual({
-      avatarUrl: "https://avatars.local.invalid/avatars/alice",
+      avatarUrl: "http://localhost:8787/v1/avatars/alice",
     });
     const object = await env.AVATARS.get("avatars/alice");
     expect(object).not.toBeNull();
@@ -350,7 +350,40 @@ describe("avatar routes", () => {
 
     const me = await request("alice", "/v1/users/me");
     await expect(me.json()).resolves.toMatchObject({
-      avatarUrl: "https://avatars.local.invalid/avatars/alice",
+      avatarUrl: "http://localhost:8787/v1/avatars/alice",
+    });
+  });
+
+  test("認証済みユーザーへ非公開 R2 のアバターを配信する", async () => {
+    const jpeg = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10]);
+    await request("alice", "/v1/users/me/avatar", {
+      body: jpeg,
+      headers: { "Content-Type": "image/jpeg" },
+      method: "PUT",
+    });
+
+    const response = await request("alice", "/v1/avatars/alice");
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Content-Type")).toBe("image/jpeg");
+    expect(response.headers.get("Cache-Control")).toBe("private, max-age=300");
+    expect(Array.from(new Uint8Array(await response.arrayBuffer()))).toEqual(Array.from(jpeg));
+
+    const urlOnlyResponse = await testApp("alice").request("/v1/avatars/alice", {}, env);
+    expect(urlOnlyResponse.status).toBe(401);
+  });
+
+  test("対象ユーザーまたはアバターがなければ一律 avatar_not_found を返す", async () => {
+    const missingUser = await request("alice", "/v1/avatars/missing");
+    expect(missingUser.status).toBe(404);
+    await expect(missingUser.json()).resolves.toEqual({
+      error: { code: "avatar_not_found", message: "Avatar not found" },
+    });
+
+    const missingAvatar = await request("alice", "/v1/avatars/alice");
+    expect(missingAvatar.status).toBe(404);
+    await expect(missingAvatar.json()).resolves.toEqual({
+      error: { code: "avatar_not_found", message: "Avatar not found" },
     });
   });
 
