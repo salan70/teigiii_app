@@ -1,5 +1,6 @@
 {
     "flavor": "prod",
     "appName": "Teigiii",
-    "appIdSuffix": ""
+    "appIdSuffix": "",
+    "apiBaseUrl": "https://api.prod.invalid"
 }

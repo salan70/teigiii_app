@@ -1,5 +1,6 @@
 {
     "flavor": "dev",
     "appName": "Teigiii dev",
-    "appIdSuffix": ".dev"
+    "appIdSuffix": ".dev",
+    "apiBaseUrl": "https://teigiii-api-dev.tetsuo21ad.workers.dev"
 }

@@ -2,6 +2,7 @@ name: teigi_app
 description: A new Flutter project.
 
 version: 1.0.0+7
+publish_to: none
 
 environment:
   sdk: '>=3.11.0 <4.0.0'
@@ -21,6 +22,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   device_preview: ^1.1.0
   device_info_plus: ^9.1.0
+  dio: ^5.7.0
   easy_refresh: ^3.3.2+1
   flutter_dotenv: ^5.1.0
   flutter_riverpod: ^2.4.3
@@ -43,6 +45,10 @@ dependencies:
   shimmer: ^3.0.0
   url_launcher: ^6.2.1
   version: ^3.0.2
+
+  # Workers API クライアント（server/openapi.json から生成）
+  teigiii_api:
+    path: packages/teigiii_api
 
   # Firebase関連
   cloud_firestore: ^6.6.0
