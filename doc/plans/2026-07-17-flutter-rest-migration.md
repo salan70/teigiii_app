@@ -53,6 +53,20 @@ Issue #185 のフェーズ 4 として、Flutter アプリの repository 層を 
 - アバター画像の表示（`GET /v1/avatars/{id}`）も認証ヘッダーが必要なため、認証付き画像取得の仕組みを基盤に含める
 - 401 / 404 / 409 など API エラーの共通ハンドリングを定め、既存 UI のエラー表示挙動を維持する
 
+### Slice 2 の設計（grilling で確定）
+
+- **認証付きアバター表示**: flutter_cache_manager の `FileService` を dio + 既存 auth インターセプタで実装し、`CachedNetworkImage` の `cacheManager` に渡す。`AvatarNetworkImageWidget` の interface は維持する
+- **キャッシュ無効化**: `PUT` / `DELETE /v1/users/me/avatar` 成功後に自分の avatarUrl のキャッシュを明示削除する。他ユーザーは `Cache-Control: private, max-age=300` による最大 5 分の陳腐化を許容する
+- **画像正規化**: 既存 `cropImage` に `maxWidth: 512, maxHeight: 512, compressFormat: jpg, compressQuality: 85` を追加して完結させる（新規依存なし。512px 未満の元画像は拡大しない。サーバーは寸法検証をしないため動作上問題なし）
+- **デフォルトアイコン**: 挙動変更 5（台帳参照）。`avatarUrl: null` のとき同梱 asset 3 種から `hash(userId)` で決定的に選択。既存ユーザーの見た目維持は #186 の移行（R2 コピー）で担保する
+- **戻り値型**: repository は生成 DTO → domain 変換を内部に閉じ、domain 型を直接返す。Firestore 用 Document entity は削除する
+- **domain UserProfile 拡張**: `profileImageUrl: String` → `avatarUrl: String?` に変更し、`followingCount` / `followerCount` / `isFollowedByMe` を追加（`isMutedByMe` はミュート判定を `mutedUserIdListProvider` に維持するため追加しない）。`followCountProvider` / `isFollowingProvider` は `userProfileProvider` からの導出に変える（`GET /v1/users/{id}` 1 リクエストに集約）
+- **ミュートリスト**: `GET /v1/me/mutes` の cursor を最後まで走査して全 ID を収集し、`mutedUserIdListProvider` の `List<String>` interface を維持する（Slice 4 除去予定の暫定フィルタとミュート一覧・メニュー判定が無変更で動く）。フォロー中 ID リストも同様に `GET /v1/users/{id}/following` の全ページ走査で暫定維持する
+- **アカウント削除（例外 4）の前倒し**: 旧 fan-out は「他ユーザーとしての unfollow」等 REST では実現不可能な操作を含み、Slice 3 対象の定義系 repository にも依存するため、Slice 5 から Slice 2 へ前倒しして `DELETE /v1/users/me` + Firebase Auth `deleteUser` に集約した
+- **avatar PUT のみ dio 直接実装**: 生成クライアントの `v1UsersMeAvatarPut` はバイナリボディを JSON エンコードするため使用不可（Slice 1 で想定したフォールバック判断に該当）。この 1 エンドポイントのみ dio で直接送信する
+- **ユーザー検索**: `GET /v1/search/users` は部分一致のため、repository 側で publicId 完全一致のみを有効として現行挙動を維持する
+- **PR 粒度**: 1 issue = 1 PR（`feature/203-user-follow-mute-avatar`）
+
 ### 置き換え方式
 
 - repository の公開インターフェース（メソッドシグネチャと戻り値の domain 型）を可能な限り維持し、内部実装のみ REST 化する。呼び出し側の変更は「埋め込み」「集約」で呼び出し自体が消えるものと例外 4 件に限定する
@@ -90,7 +104,7 @@ Issue #185 のフェーズ 4 として、Flutter アプリの repository 層を 
 ### Slice 5: AppConfig・アカウント削除・総仕上げ
 
 1. 例外 3: `app_config_repository` を起動時ポーリングに置換する
-2. 例外 4: アカウント削除フローを `DELETE /v1/users/me` + Auth `deleteUser` に集約し、fan-out 処理を削除する
+2. ~~例外 4: アカウント削除フローを `DELETE /v1/users/me` + Auth `deleteUser` に集約し、fan-out 処理を削除する~~（Slice 2 で前倒し済み。理由は「Slice 2 の設計」参照）
 3. `cloud_firestore` / `firebase_storage` を pubspec から除去し、残存参照がないことを確認する
 4. dev Workers に対する実機での主要フロー総合確認（登録 → 投稿 → いいね → フォロー → 検索 → 削除）
 5. 全検証後に本 plan を `doc/plans/done/` へ移動する
