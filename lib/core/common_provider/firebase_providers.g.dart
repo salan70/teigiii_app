@@ -36,21 +36,6 @@ final firebaseAuthProvider = Provider<FirebaseAuth>.internal(
 );
 
 typedef FirebaseAuthRef = ProviderRef<FirebaseAuth>;
-String _$firebaseStorageHash() => r'ee51676c16a06f67a861c29f61a5fd9cbaab8f82';
-
-/// See also [firebaseStorage].
-@ProviderFor(firebaseStorage)
-final firebaseStorageProvider = AutoDisposeProvider<FirebaseStorage>.internal(
-  firebaseStorage,
-  name: r'firebaseStorageProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$firebaseStorageHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef FirebaseStorageRef = AutoDisposeProviderRef<FirebaseStorage>;
 String _$firebaseAppCheckHash() => r'f4ea1226ba4b32b49c1446e5dbf87de9cebdbdfd';
 
 /// See also [firebaseAppCheck].

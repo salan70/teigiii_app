@@ -6,8 +6,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../auth/application/auth_state.dart';
 import '../domain/user_profile.dart';
+import '../repository/avatar_repository.dart';
 import '../repository/image_repository.dart';
-import '../repository/storage_repository.dart';
 import '../repository/user_profile_repository.dart';
 import 'user_profile_state.dart';
 
@@ -19,8 +19,9 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
   @override
   FutureOr<UserProfile> build() async {
     final userId = ref.read(userIdProvider)!;
-    final initialUserProfile =
-        await ref.read(userProfileProvider(userId).future);
+    final initialUserProfile = await ref.read(
+      userProfileProvider(userId).future,
+    );
 
     return _initialState = initialUserProfile;
   }
@@ -36,8 +37,8 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
   void updateBioState(String bio) =>
       state = AsyncData(state.value!.copyWith(bio: bio));
 
-  void _updateProfileImageUrlState(String profileImageUrl) => state =
-      AsyncData(state.value!.copyWith(profileImageUrl: profileImageUrl));
+  void _updateAvatarUrlState(String avatarUrl) =>
+      state = AsyncData(state.value!.copyWith(avatarUrl: avatarUrl));
 
   void updateCroppedFileState(CroppedFile? croppedFile) =>
       state = AsyncData(state.value!.copyWith(croppedFile: croppedFile));
@@ -98,15 +99,14 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
     // 新たに画像が選択されているかどうか。
     if (state.value!.croppedFile != null) {
       // 画像をアップロードし、stateを更新する。
-      final profileImageUrl = await _uploadImage();
-      _updateProfileImageUrlState(profileImageUrl);
+      final avatarUrl = await _uploadImage();
+      _updateAvatarUrlState(avatarUrl);
     }
   }
 
-  /// 画像をアップロードし、ダウンロードURLを返す。
+  /// 画像をアップロードし、アバター画像の URL を返す。
   Future<String> _uploadImage() async {
-    final userId = ref.read(userIdProvider)!;
     final file = File(state.value!.croppedFile!.path);
-    return ref.read(storageRepositoryProvider).uploadFile(userId, file);
+    return ref.read(avatarRepositoryProvider).uploadAvatar(file);
   }
 }

@@ -21,10 +21,7 @@ import '../router/app_router.dart';
 
 @RoutePage()
 class DefinitionDetailPage extends ConsumerWidget {
-  const DefinitionDetailPage({
-    super.key,
-    required this.definitionId,
-  });
+  const DefinitionDetailPage({super.key, required this.definitionId});
 
   final String definitionId;
 
@@ -74,9 +71,9 @@ class DefinitionDetailPage extends ConsumerWidget {
                                     Icon(
                                       CupertinoIcons.lock_fill,
                                       size: 16,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
                                     ),
                                     const Gap(2),
                                     Text(
@@ -85,9 +82,9 @@ class DefinitionDetailPage extends ConsumerWidget {
                                           .textTheme
                                           .bodyMedium!
                                           .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurfaceVariant,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onSurfaceVariant,
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -108,18 +105,15 @@ class DefinitionDetailPage extends ConsumerWidget {
                         children: [
                           AvatarNetworkImageWidget(
                             imageUrl: definition.authorImageUrl,
+                            userId: definition.authorId,
                           ),
                           const Gap(16),
                           Expanded(
                             child: Text(
                               definition.authorName,
                               overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
-                                    fontWeight: FontWeight.normal,
-                                  ),
+                              style: Theme.of(context).textTheme.titleMedium!
+                                  .copyWith(fontWeight: FontWeight.normal),
                             ),
                           ),
                           definition.authorId == currentUserId
@@ -148,13 +142,11 @@ class DefinitionDetailPage extends ConsumerWidget {
                           Text(
                             definition.wordReading,
                             overflow: TextOverflow.clip,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
+                            style: Theme.of(context).textTheme.titleSmall!
                                 .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                   fontWeight: FontWeight.bold,
                                 ),
                           ),
@@ -172,12 +164,12 @@ class DefinitionDetailPage extends ConsumerWidget {
                       children: [
                         Text(
                           '${definition.createdAt.toDisplayFormat()} 投稿',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
+                          style: Theme.of(context).textTheme.bodyMedium!
+                              .copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
                         ),
                       ],
                     ),
@@ -211,9 +203,7 @@ class DefinitionDetailPage extends ConsumerWidget {
       },
       loading: () {
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('詳細'),
-          ),
+          appBar: AppBar(title: const Text('詳細')),
           body: const _DefinitionDetailPageShimmer(),
         );
       },
@@ -221,9 +211,7 @@ class DefinitionDetailPage extends ConsumerWidget {
         // エラー発生後の再読み込み中の場合、trueになる
         if (asyncDefinition.isRefreshing) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('詳細'),
-            ),
+            appBar: AppBar(title: const Text('詳細')),
             body: const Padding(
               padding: EdgeInsets.symmetric(vertical: 24),
               child: Align(
@@ -234,12 +222,12 @@ class DefinitionDetailPage extends ConsumerWidget {
           );
         }
 
-        logger.e('定義[$definitionId]の取得に失敗しました。'
-            'error: $error, stackTrace: $stackTrace');
+        logger.e(
+          '定義[$definitionId]の取得に失敗しました。'
+          'error: $error, stackTrace: $stackTrace',
+        );
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('詳細'),
-          ),
+          appBar: AppBar(title: const Text('詳細')),
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Center(
@@ -260,11 +248,7 @@ class _DefinitionDetailPageShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.only(
-        top: 24,
-        left: 24,
-        right: 24,
-      ),
+      padding: EdgeInsets.only(top: 24, left: 24, right: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

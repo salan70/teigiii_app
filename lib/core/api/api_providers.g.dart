@@ -36,5 +36,23 @@ final teigiiiApiProvider = Provider<TeigiiiApi>.internal(
 );
 
 typedef TeigiiiApiRef = ProviderRef<TeigiiiApi>;
+String _$avatarCacheManagerHash() =>
+    r'f7585b17106c81c6f90b61b29790ebf935336dbf';
+
+/// アバター画像（`GET /v1/avatars/{id}`）用の認証付きキャッシュ。
+///
+/// Copied from [avatarCacheManager].
+@ProviderFor(avatarCacheManager)
+final avatarCacheManagerProvider = Provider<CacheManager>.internal(
+  avatarCacheManager,
+  name: r'avatarCacheManagerProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$avatarCacheManagerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AvatarCacheManagerRef = ProviderRef<CacheManager>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

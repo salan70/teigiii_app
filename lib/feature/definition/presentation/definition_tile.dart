@@ -15,10 +15,7 @@ import '../application/definition_state.dart';
 import 'definition_tile_shimmer.dart';
 
 class DefinitionTile extends ConsumerWidget {
-  const DefinitionTile({
-    super.key,
-    required this.definitionId,
-  });
+  const DefinitionTile({super.key, required this.definitionId});
 
   final String definitionId;
 
@@ -30,9 +27,7 @@ class DefinitionTile extends ConsumerWidget {
         return InkWell(
           onTap: () async {
             await context.pushRoute(
-              DefinitionDetailRoute(
-                definitionId: definition.id,
-              ),
+              DefinitionDetailRoute(definitionId: definition.id),
             );
           },
           child: Column(
@@ -50,6 +45,7 @@ class DefinitionTile extends ConsumerWidget {
                       },
                       child: AvatarNetworkImageWidget(
                         imageUrl: definition.authorImageUrl,
+                        userId: definition.authorId,
                       ),
                     ),
                     const Gap(8),
@@ -76,9 +72,9 @@ class DefinitionTile extends ConsumerWidget {
                                         Icon(
                                           CupertinoIcons.lock_fill,
                                           size: 16,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurfaceVariant,
                                         ),
                                         const Gap(4),
                                       ],

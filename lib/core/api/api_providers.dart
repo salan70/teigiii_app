@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:teigiii_api/teigiii_api.dart';
 
 import '../common_provider/firebase_providers.dart';
 import 'auth_interceptor.dart';
+import 'dio_file_service.dart';
 
 part 'api_providers.g.dart';
 
@@ -35,3 +37,9 @@ Dio apiDio(ApiDioRef ref) {
 @Riverpod(keepAlive: true)
 TeigiiiApi teigiiiApi(TeigiiiApiRef ref) =>
     TeigiiiApi(dio: ref.watch(apiDioProvider), interceptors: const []);
+
+/// アバター画像（`GET /v1/avatars/{id}`）用の認証付きキャッシュ。
+@Riverpod(keepAlive: true)
+CacheManager avatarCacheManager(AvatarCacheManagerRef ref) => CacheManager(
+  Config('avatarCache', fileService: DioFileService(ref.watch(apiDioProvider))),
+);

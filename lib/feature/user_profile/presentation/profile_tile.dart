@@ -42,9 +42,7 @@ class ProfileTile extends ConsumerWidget {
           onTap: transitionToProfilePage
               ? () async {
                   await context.pushRoute(
-                    ProfileTopRoute(
-                      targetUserId: targetUserId,
-                    ),
+                    ProfileTopRoute(targetUserId: targetUserId),
                   );
                 }
               : null,
@@ -56,7 +54,8 @@ class ProfileTile extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AvatarNetworkImageWidget(
-                      imageUrl: targetUserProfile.profileImageUrl,
+                      imageUrl: targetUserProfile.avatarUrl,
+                      userId: targetUserProfile.id,
                     ),
                     const Gap(8),
                     Expanded(
@@ -69,8 +68,9 @@ class ProfileTile extends ConsumerWidget {
                               Expanded(
                                 child: Text(
                                   targetUserProfile.name,
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleMedium,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
