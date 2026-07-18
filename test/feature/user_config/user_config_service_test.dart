@@ -11,10 +11,9 @@ import 'user_config_service_test.mocks.dart';
   MockSpec<UserConfigRepository>(),
   MockSpec<Listener<AsyncValue<void>>>(),
 ])
-
 // ignore: one_member_abstracts, unreachable_from_main
 abstract class Listener<T> {
-// ignore: unreachable_from_main
+  // ignore: unreachable_from_main
   void call(T? previous, T next);
 }
 
@@ -28,8 +27,9 @@ void main() {
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => 'userId'),
-        userConfigRepositoryProvider
-            .overrideWithValue(mockUserConfigRepository),
+        userConfigRepositoryProvider.overrideWithValue(
+          mockUserConfigRepository,
+        ),
       ],
     );
     addTearDown(container.dispose);

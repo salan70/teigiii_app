@@ -10,6 +10,7 @@ import 'package:teigi_app/feature/auth/repository/register_user_repository.dart'
 import 'package:teigi_app/feature/auth/util/constant.dart';
 import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart';
+import 'package:teigi_app/feature/user_profile/domain/user_profile.dart';
 
 import 'auth_service_test.mocks.dart';
 
@@ -37,10 +38,12 @@ void main() {
         isSignedInProvider.overrideWithValue(false),
         userIdProvider.overrideWithValue(mockUserId),
         appVersionProvider.overrideWith((ref) => Future.value(mockAppVersion)),
-        registerUserRepositoryProvider
-            .overrideWithValue(mockRegisterUserRepository),
-        deviceInfoRepositoryProvider
-            .overrideWithValue(mockDeviceInfoRepository),
+        registerUserRepositoryProvider.overrideWithValue(
+          mockRegisterUserRepository,
+        ),
+        deviceInfoRepositoryProvider.overrideWithValue(
+          mockDeviceInfoRepository,
+        ),
         authRepositoryProvider.overrideWithValue(mockAuthRepository),
       ],
     );
@@ -60,16 +63,18 @@ void main() {
       isSignedInProvider.overrideWithValue(isSignedIn),
       userIdProvider.overrideWithValue(mockUserId),
       appVersionProvider.overrideWith((ref) => Future.value(mockAppVersion)),
-      registerUserRepositoryProvider
-          .overrideWithValue(mockRegisterUserRepository),
+      registerUserRepositoryProvider.overrideWithValue(
+        mockRegisterUserRepository,
+      ),
       deviceInfoRepositoryProvider.overrideWithValue(mockDeviceInfoRepository),
       authRepositoryProvider.overrideWithValue(mockAuthRepository),
     ]);
   }
 
   void setupMock(String? osVersion) {
-    when(mockDeviceInfoRepository.fetchOsVersion())
-        .thenAnswer((_) async => osVersion);
+    when(
+      mockDeviceInfoRepository.fetchOsVersion(),
+    ).thenAnswer((_) async => osVersion);
   }
 
   group('onAppLaunch()', () {
@@ -89,10 +94,9 @@ void main() {
       verify(mockDeviceInfoRepository.fetchOsVersion()).called(1);
       verify(
         mockRegisterUserRepository.initUser(
-          mockUserId,
-          any,
-          mockOsVersion,
-          mockAppVersion,
+          name: UserProfile.defaultName,
+          osVersion: mockOsVersion,
+          appVersion: mockAppVersion,
         ),
       ).called(1);
     });
@@ -112,9 +116,8 @@ void main() {
       verify(mockDeviceInfoRepository.fetchOsVersion()).called(1);
       verify(
         mockRegisterUserRepository.updateVersionInfo(
-          mockUserId,
-          mockOsVersion,
-          mockAppVersion,
+          osVersion: mockOsVersion,
+          appVersion: mockAppVersion,
         ),
       ).called(1);
 
@@ -134,10 +137,9 @@ void main() {
       // * Assert
       verify(
         mockRegisterUserRepository.initUser(
-          any,
-          any,
-          unexpectedOsText, // 検証対象
-          any,
+          name: anyNamed('name'),
+          osVersion: unexpectedOsText, // 検証対象
+          appVersion: anyNamed('appVersion'),
         ),
       ).called(1);
     });
@@ -155,11 +157,30 @@ void main() {
       // * Assert
       verify(
         mockRegisterUserRepository.updateVersionInfo(
-          any,
-          unexpectedOsText, // 検証対象
-          any,
+          osVersion: unexpectedOsText, // 検証対象
+          appVersion: anyNamed('appVersion'),
         ),
       ).called(1);
     });
+  });
+
+  group('deleteUser()', () {
+    test(
+      'DELETE /v1/users/me → Firebase Auth deleteUser の順で呼ばれることを検証',
+      () async {
+        // * Arrange
+        final authService = container.read(authServiceProvider);
+        updateContainersOverride(isSignedIn: true);
+
+        // * Act
+        await authService.deleteUser();
+
+        // * Assert
+        verifyInOrder([
+          mockRegisterUserRepository.deleteUser(),
+          mockAuthRepository.deleteUser(),
+        ]);
+      },
+    );
   });
 }

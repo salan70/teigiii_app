@@ -13,7 +13,7 @@ class Definition with _$Definition {
     required String wordReading,
     required String authorId,
     required String authorName,
-    required String authorImageUrl,
+    required String? authorImageUrl,
     required String definition,
     required bool isPublic,
     required int likesCount,

@@ -3,17 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i4;
 
-import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
-import 'package:firebase_auth/firebase_auth.dart' as _i3;
+import 'package:firebase_auth/firebase_auth.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i8;
+import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i6;
 import 'package:teigi_app/feature/auth/repository/register_user_repository.dart'
-    as _i4;
+    as _i3;
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart'
-    as _i7;
-import 'package:teigi_app/feature/user_profile/domain/user_profile.dart' as _i6;
+    as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -28,153 +26,125 @@ import 'package:teigi_app/feature/user_profile/domain/user_profile.dart' as _i6;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeFirebaseFirestore_0 extends _i1.SmartFake
-    implements _i2.FirebaseFirestore {
-  _FakeFirebaseFirestore_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeFirebaseAuth_1 extends _i1.SmartFake implements _i3.FirebaseAuth {
-  _FakeFirebaseAuth_1(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+class _FakeFirebaseAuth_0 extends _i1.SmartFake implements _i2.FirebaseAuth {
+  _FakeFirebaseAuth_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [RegisterUserRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockRegisterUserRepository extends _i1.Mock
-    implements _i4.RegisterUserRepository {
+    implements _i3.RegisterUserRepository {
   @override
-  _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
-        Invocation.getter(#firestore),
-        returnValue: _FakeFirebaseFirestore_0(
-          this,
-          Invocation.getter(#firestore),
-        ),
-        returnValueForMissingStub: _FakeFirebaseFirestore_0(
-          this,
-          Invocation.getter(#firestore),
-        ),
-      ) as _i2.FirebaseFirestore);
+  _i4.Future<void> initUser({
+    required String? name,
+    required String? osVersion,
+    required String? appVersion,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#initUser, [], {
+              #name: name,
+              #osVersion: osVersion,
+              #appVersion: appVersion,
+            }),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
 
   @override
-  _i5.Future<void> initUser(
-    String? userId,
-    _i6.UserProfile? userProfile,
-    String? osVersion,
-    String? appVersion,
-  ) =>
+  _i4.Future<void> updateVersionInfo({
+    required String? osVersion,
+    required String? appVersion,
+  }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #initUser,
-          [
-            userId,
-            userProfile,
-            osVersion,
-            appVersion,
-          ],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+            Invocation.method(#updateVersionInfo, [], {
+              #osVersion: osVersion,
+              #appVersion: appVersion,
+            }),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
 
   @override
-  _i5.Future<void> updateVersionInfo(
-    String? userId,
-    String? osVersion,
-    String? appVersion,
-  ) =>
+  _i4.Future<void> deleteUser() =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateVersionInfo,
-          [
-            userId,
-            osVersion,
-            appVersion,
-          ],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+            Invocation.method(#deleteUser, []),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
 }
 
 /// A class which mocks [DeviceInfoRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDeviceInfoRepository extends _i1.Mock
-    implements _i7.DeviceInfoRepository {
+    implements _i5.DeviceInfoRepository {
   @override
-  _i5.Future<String?> fetchOsVersion() => (super.noSuchMethod(
-        Invocation.method(
-          #fetchOsVersion,
-          [],
-        ),
-        returnValue: _i5.Future<String?>.value(),
-        returnValueForMissingStub: _i5.Future<String?>.value(),
-      ) as _i5.Future<String?>);
+  _i4.Future<String?> fetchOsVersion() =>
+      (super.noSuchMethod(
+            Invocation.method(#fetchOsVersion, []),
+            returnValue: _i4.Future<String?>.value(),
+            returnValueForMissingStub: _i4.Future<String?>.value(),
+          )
+          as _i4.Future<String?>);
 }
 
 /// A class which mocks [AuthRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthRepository extends _i1.Mock implements _i8.AuthRepository {
+class MockAuthRepository extends _i1.Mock implements _i6.AuthRepository {
   @override
-  _i3.FirebaseAuth get firebaseAuth => (super.noSuchMethod(
-        Invocation.getter(#firebaseAuth),
-        returnValue: _FakeFirebaseAuth_1(
-          this,
-          Invocation.getter(#firebaseAuth),
-        ),
-        returnValueForMissingStub: _FakeFirebaseAuth_1(
-          this,
-          Invocation.getter(#firebaseAuth),
-        ),
-      ) as _i3.FirebaseAuth);
+  _i2.FirebaseAuth get firebaseAuth =>
+      (super.noSuchMethod(
+            Invocation.getter(#firebaseAuth),
+            returnValue: _FakeFirebaseAuth_0(
+              this,
+              Invocation.getter(#firebaseAuth),
+            ),
+            returnValueForMissingStub: _FakeFirebaseAuth_0(
+              this,
+              Invocation.getter(#firebaseAuth),
+            ),
+          )
+          as _i2.FirebaseAuth);
 
   @override
-  _i5.Stream<_i3.User?> get userChanges => (super.noSuchMethod(
-        Invocation.getter(#userChanges),
-        returnValue: _i5.Stream<_i3.User?>.empty(),
-        returnValueForMissingStub: _i5.Stream<_i3.User?>.empty(),
-      ) as _i5.Stream<_i3.User?>);
+  _i4.Stream<_i2.User?> get userChanges =>
+      (super.noSuchMethod(
+            Invocation.getter(#userChanges),
+            returnValue: _i4.Stream<_i2.User?>.empty(),
+            returnValueForMissingStub: _i4.Stream<_i2.User?>.empty(),
+          )
+          as _i4.Stream<_i2.User?>);
 
   @override
-  _i5.Future<void> signInAnonymously() => (super.noSuchMethod(
-        Invocation.method(
-          #signInAnonymously,
-          [],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+  _i4.Future<void> signInAnonymously() =>
+      (super.noSuchMethod(
+            Invocation.method(#signInAnonymously, []),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
 
   @override
-  _i5.Future<void> signOut() => (super.noSuchMethod(
-        Invocation.method(
-          #signOut,
-          [],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+  _i4.Future<void> signOut() =>
+      (super.noSuchMethod(
+            Invocation.method(#signOut, []),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
 
   @override
-  _i5.Future<void> deleteUser() => (super.noSuchMethod(
-        Invocation.method(
-          #deleteUser,
-          [],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+  _i4.Future<void> deleteUser() =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteUser, []),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
 }

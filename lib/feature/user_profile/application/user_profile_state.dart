@@ -7,8 +7,5 @@ part 'user_profile_state.g.dart';
 
 @riverpod
 Future<UserProfile> userProfile(UserProfileRef ref, String userId) async {
-  final userProfileDoc =
-      await ref.read(userProfileRepositoryProvider).fetchUserProfile(userId);
-
-  return userProfileDoc.toUserProfile();
+  return ref.read(userProfileRepositoryProvider).fetchUserProfile(userId);
 }

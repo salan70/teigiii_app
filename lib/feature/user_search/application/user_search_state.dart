@@ -9,8 +9,5 @@ Future<String?> userIdSearchByPublicId(
   UserIdSearchByPublicIdRef ref,
   String publicId,
 ) async {
-  final userProfileDoc =
-      await ref.read(userSearchRepositoryProvider).searchByPublicId(publicId);
-
-  return userProfileDoc?.id;
+  return ref.read(userSearchRepositoryProvider).searchByPublicId(publicId);
 }

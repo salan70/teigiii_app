@@ -8,7 +8,10 @@ void main() {
       publicId: '123456789',
       name: 'ヒトカゲ',
       bio: '早くリザードになりたい',
-      profileImageUrl: 'https://example.com/profile.jpg',
+      avatarUrl: 'https://example.com/profile.jpg',
+      followingCount: 0,
+      followerCount: 0,
+      isFollowedByMe: false,
       croppedFile: null,
     );
 
@@ -37,7 +40,8 @@ void main() {
 
       test('最大文字数を超えている', () {
         // * Arrange
-        final longName = 'a' *
+        final longName =
+            'a' *
             (defaultUserProfileForWrite.maxNameLength +
                 1); // maxNameLengthより1文字多い
         final userProfile = defaultUserProfileForWrite.copyWith(name: longName);
@@ -64,7 +68,8 @@ void main() {
 
       test('最大文字数を超えている', () {
         // * Arrange
-        final longBio = 'a' *
+        final longBio =
+            'a' *
             (defaultUserProfileForWrite.maxBioLength +
                 1); // maxBioLengthより1文字多い
         final userProfile = defaultUserProfileForWrite.copyWith(bio: longBio);
@@ -91,8 +96,9 @@ void main() {
       test('nameが無効', () {
         // * Arrange
         const invalidName = ''; // 無効な名前
-        final userProfile =
-            defaultUserProfileForWrite.copyWith(name: invalidName);
+        final userProfile = defaultUserProfileForWrite.copyWith(
+          name: invalidName,
+        );
 
         // * Act
         final result = userProfile.isValidAllFields();
@@ -103,11 +109,13 @@ void main() {
 
       test('bioが無効', () {
         // * Arrange
-        final invalidBio = 'a' *
+        final invalidBio =
+            'a' *
             (defaultUserProfileForWrite.maxBioLength +
                 1); // maxBioLengthより1文字多い
-        final userProfile =
-            defaultUserProfileForWrite.copyWith(bio: invalidBio);
+        final userProfile = defaultUserProfileForWrite.copyWith(
+          bio: invalidBio,
+        );
 
         // * Act
         final result = userProfile.isValidAllFields();
@@ -119,7 +127,8 @@ void main() {
       test('nameとbioが無効', () {
         // * Arrange
         const invalidName = ''; // 無効な名前
-        final invalidBio = 'a' *
+        final invalidBio =
+            'a' *
             (defaultUserProfileForWrite.maxBioLength +
                 1); // maxBioLengthより1文字多い
         final userProfile = defaultUserProfileForWrite.copyWith(

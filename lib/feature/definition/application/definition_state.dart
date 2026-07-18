@@ -15,8 +15,9 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
       .fetchDefinition(definitionId);
 
   /// プロフィール更新に合わせて更新されるよう監視
-  final userProfile =
-      await ref.watch(userProfileProvider(definitionDoc.authorId).future);
+  final userProfile = await ref.watch(
+    userProfileProvider(definitionDoc.authorId).future,
+  );
 
   final userId = ref.read(userIdProvider)!;
   final isLikedByUser = await ref
@@ -30,7 +31,7 @@ Future<Definition> definition(DefinitionRef ref, String definitionId) async {
     wordReading: definitionDoc.wordReading,
     authorId: userProfile.id,
     authorName: userProfile.name,
-    authorImageUrl: userProfile.profileImageUrl,
+    authorImageUrl: userProfile.avatarUrl,
     definition: definitionDoc.definition,
     likesCount: definitionDoc.likesCount,
     isPublic: definitionDoc.isPublic,

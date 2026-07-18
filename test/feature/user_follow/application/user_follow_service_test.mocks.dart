@@ -3,14 +3,11 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i3;
 
-import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:teigi_app/feature/user_follow/repository/entity/user_follow_count_document.dart'
-    as _i3;
 import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart'
-    as _i4;
+    as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -25,142 +22,37 @@ import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeFirebaseFirestore_0 extends _i1.SmartFake
-    implements _i2.FirebaseFirestore {
-  _FakeFirebaseFirestore_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeUserFollowCountDocument_1 extends _i1.SmartFake
-    implements _i3.UserFollowCountDocument {
-  _FakeUserFollowCountDocument_1(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
 /// A class which mocks [UserFollowRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserFollowRepository extends _i1.Mock
-    implements _i4.UserFollowRepository {
+    implements _i2.UserFollowRepository {
   @override
-  _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
-        Invocation.getter(#firestore),
-        returnValue: _FakeFirebaseFirestore_0(
-          this,
-          Invocation.getter(#firestore),
-        ),
-        returnValueForMissingStub: _FakeFirebaseFirestore_0(
-          this,
-          Invocation.getter(#firestore),
-        ),
-      ) as _i2.FirebaseFirestore);
-
-  @override
-  _i5.Future<_i3.UserFollowCountDocument> fetchUserFollowCount(
-          String? userId) =>
+  _i3.Future<void> follow(String? targetUserId) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchUserFollowCount,
-          [userId],
-        ),
-        returnValue: _i5.Future<_i3.UserFollowCountDocument>.value(
-            _FakeUserFollowCountDocument_1(
-          this,
-          Invocation.method(
-            #fetchUserFollowCount,
-            [userId],
-          ),
-        )),
-        returnValueForMissingStub:
-            _i5.Future<_i3.UserFollowCountDocument>.value(
-                _FakeUserFollowCountDocument_1(
-          this,
-          Invocation.method(
-            #fetchUserFollowCount,
-            [userId],
-          ),
-        )),
-      ) as _i5.Future<_i3.UserFollowCountDocument>);
+            Invocation.method(#follow, [targetUserId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  _i5.Future<void> follow(
-    String? currentUserId,
-    String? targetUserId,
-  ) =>
+  _i3.Future<void> unfollow(String? targetUserId) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #follow,
-          [
-            currentUserId,
-            targetUserId,
-          ],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+            Invocation.method(#unfollow, [targetUserId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  _i5.Future<void> unfollow(
-    String? currentUserId,
-    String? targetUserId,
-  ) =>
+  _i3.Future<List<String>> fetchAllFollowingIdList(String? userId) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #unfollow,
-          [
-            currentUserId,
-            targetUserId,
-          ],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
-
-  @override
-  _i5.Future<bool> isFollowing(
-    String? currentUserId,
-    String? targetUserId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #isFollowing,
-          [
-            currentUserId,
-            targetUserId,
-          ],
-        ),
-        returnValue: _i5.Future<bool>.value(false),
-        returnValueForMissingStub: _i5.Future<bool>.value(false),
-      ) as _i5.Future<bool>);
-
-  @override
-  _i5.Future<List<String>> fetchAllFollowingIdList(String? userId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchAllFollowingIdList,
-          [userId],
-        ),
-        returnValue: _i5.Future<List<String>>.value(<String>[]),
-        returnValueForMissingStub: _i5.Future<List<String>>.value(<String>[]),
-      ) as _i5.Future<List<String>>);
-
-  @override
-  _i5.Future<void> deleteUserFollowCount(String? userId) => (super.noSuchMethod(
-        Invocation.method(
-          #deleteUserFollowCount,
-          [userId],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+            Invocation.method(#fetchAllFollowingIdList, [userId]),
+            returnValue: _i3.Future<List<String>>.value(<String>[]),
+            returnValueForMissingStub: _i3.Future<List<String>>.value(
+              <String>[],
+            ),
+          )
+          as _i3.Future<List<String>>);
 }

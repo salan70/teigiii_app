@@ -21,10 +21,9 @@ import 'definition_state_test.mocks.dart';
   MockSpec<WordRepository>(),
   MockSpec<Listener<AsyncValue<Definition>>>(),
 ])
-
 // ignore: one_member_abstracts, unreachable_from_main
 abstract class Listener<T> {
-// ignore: unreachable_from_main
+  // ignore: unreachable_from_main
   void call(T? previous, T next);
 }
 
@@ -41,15 +40,18 @@ void main() {
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => 'userId'),
-        userProfileProvider(mockUserProfileDoc.id).overrideWith(
-          (ref) => mockUserProfile,
+        userProfileProvider(
+          mockUserProfile.id,
+        ).overrideWith((ref) => mockUserProfile),
+        likeDefinitionRepositoryProvider.overrideWithValue(
+          mockLikeDefinitionRepository,
         ),
-        likeDefinitionRepositoryProvider
-            .overrideWithValue(mockLikeDefinitionRepository),
-        fetchDefinitionRepositoryProvider
-            .overrideWithValue(mockFetchDefinitionRepository),
-        userProfileRepositoryProvider
-            .overrideWithValue(mockUserProfileRepository),
+        fetchDefinitionRepositoryProvider.overrideWithValue(
+          mockFetchDefinitionRepository,
+        ),
+        userProfileRepositoryProvider.overrideWithValue(
+          mockUserProfileRepository,
+        ),
         wordRepositoryProvider.overrideWithValue(mockWordRepository),
       ],
     );
@@ -85,9 +87,7 @@ void main() {
       addTearDown(() => reset(listener));
 
       // * Act
-      await container.read(
-        definitionProvider(mockDefinitionDoc.id).future,
-      );
+      await container.read(definitionProvider(mockDefinitionDoc.id).future);
 
       // * Assert
       final expected = Definition(
@@ -97,7 +97,7 @@ void main() {
         wordReading: mockWordDoc.reading,
         authorId: mockDefinitionDoc.authorId,
         authorName: mockUserProfile.name,
-        authorImageUrl: mockUserProfile.profileImageUrl,
+        authorImageUrl: mockUserProfile.avatarUrl,
         definition: mockDefinitionDoc.definition,
         isPublic: mockDefinitionDoc.isPublic,
         likesCount: mockDefinitionDoc.likesCount,
@@ -107,10 +107,7 @@ void main() {
       // stateの検証
       verifyInOrder([
         // ローディング状態であることを検証
-        listener.call(
-          null,
-          const AsyncLoading<Definition>(),
-        ),
+        listener.call(null, const AsyncLoading<Definition>()),
         // データがstateに格納されたこと、格納された値が想定通りであることを検証
         listener.call(
           const AsyncLoading<Definition>(),
@@ -125,10 +122,7 @@ void main() {
         mockFetchDefinitionRepository.fetchDefinition(mockDefinitionDoc.id),
       ).called(1);
       verify(
-        mockLikeDefinitionRepository.isLikedByUser(
-          any,
-          mockDefinitionDoc.id,
-        ),
+        mockLikeDefinitionRepository.isLikedByUser(any, mockDefinitionDoc.id),
       ).called(1);
     });
   });

@@ -7,22 +7,22 @@ part of 'user_profile_repository.dart';
 // **************************************************************************
 
 String _$userProfileRepositoryHash() =>
-    r'9ca8e161aec9d53aaca32b405cca417fbccb8dd8';
+    r'276ab4f606ee1dde38294f957c2b01c9d27ed486';
 
 /// See also [userProfileRepository].
 @ProviderFor(userProfileRepository)
 final userProfileRepositoryProvider =
     AutoDisposeProvider<UserProfileRepository>.internal(
-  userProfileRepository,
-  name: r'userProfileRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$userProfileRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      userProfileRepository,
+      name: r'userProfileRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$userProfileRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
-typedef UserProfileRepositoryRef
-    = AutoDisposeProviderRef<UserProfileRepository>;
+typedef UserProfileRepositoryRef =
+    AutoDisposeProviderRef<UserProfileRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

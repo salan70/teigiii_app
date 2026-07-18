@@ -6,7 +6,7 @@ part of 'definition_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$definitionHash() => r'e41863cc2be938130dddc85541e2e63d25033961';
+String _$definitionHash() => r'adc9079f3442addadf6211bec7294062372e50c8';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -39,21 +39,15 @@ class DefinitionFamily extends Family<AsyncValue<Definition>> {
   const DefinitionFamily();
 
   /// See also [definition].
-  DefinitionProvider call(
-    String definitionId,
-  ) {
-    return DefinitionProvider(
-      definitionId,
-    );
+  DefinitionProvider call(String definitionId) {
+    return DefinitionProvider(definitionId);
   }
 
   @override
   DefinitionProvider getProviderOverride(
     covariant DefinitionProvider provider,
   ) {
-    return call(
-      provider.definitionId,
-    );
+    return call(provider.definitionId);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -74,24 +68,18 @@ class DefinitionFamily extends Family<AsyncValue<Definition>> {
 /// See also [definition].
 class DefinitionProvider extends AutoDisposeFutureProvider<Definition> {
   /// See also [definition].
-  DefinitionProvider(
-    String definitionId,
-  ) : this._internal(
-          (ref) => definition(
-            ref as DefinitionRef,
-            definitionId,
-          ),
-          from: definitionProvider,
-          name: r'definitionProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$definitionHash,
-          dependencies: DefinitionFamily._dependencies,
-          allTransitiveDependencies:
-              DefinitionFamily._allTransitiveDependencies,
-          definitionId: definitionId,
-        );
+  DefinitionProvider(String definitionId)
+    : this._internal(
+        (ref) => definition(ref as DefinitionRef, definitionId),
+        from: definitionProvider,
+        name: r'definitionProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$definitionHash,
+        dependencies: DefinitionFamily._dependencies,
+        allTransitiveDependencies: DefinitionFamily._allTransitiveDependencies,
+        definitionId: definitionId,
+      );
 
   DefinitionProvider._internal(
     super._createNotifier, {
@@ -148,11 +136,13 @@ mixin DefinitionRef on AutoDisposeFutureProviderRef<Definition> {
 }
 
 class _DefinitionProviderElement
-    extends AutoDisposeFutureProviderElement<Definition> with DefinitionRef {
+    extends AutoDisposeFutureProviderElement<Definition>
+    with DefinitionRef {
   _DefinitionProviderElement(super.provider);
 
   @override
   String get definitionId => (origin as DefinitionProvider).definitionId;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -4,6 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/user_follow/application/user_follow_state.dart';
+import 'package:teigi_app/feature/user_follow/domain/follow_count.dart';
 import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart';
 import 'package:teigi_app/feature/user_profile/application/user_profile_state.dart';
 import 'package:teigi_app/feature/user_profile/domain/user_profile.dart';
@@ -19,15 +20,12 @@ import 'user_profile_state_test.mocks.dart';
 class MockUserProfileProviderListener extends Mock
     implements Listener<AsyncValue<UserProfile>> {}
 
-class MockIsFollowingProviderListener extends Mock
-    implements Listener<AsyncValue<bool>> {}
-
 class MockFollowingIdListListener extends Mock
     implements Listener<AsyncValue<List<String>>> {}
 
 // ignore: one_member_abstracts, unreachable_from_main
 abstract class Listener<T> {
-// ignore: unreachable_from_main
+  // ignore: unreachable_from_main
   void call(T? previous, T next);
 }
 
@@ -43,10 +41,12 @@ void main() {
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => currentUserId),
-        userProfileRepositoryProvider
-            .overrideWithValue(mockUserProfileRepository),
-        userFollowRepositoryProvider
-            .overrideWithValue(mockUserFollowRepository),
+        userProfileRepositoryProvider.overrideWithValue(
+          mockUserProfileRepository,
+        ),
+        userFollowRepositoryProvider.overrideWithValue(
+          mockUserFollowRepository,
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -63,44 +63,28 @@ void main() {
       // Mockの設定
       when(
         mockUserProfileRepository.fetchUserProfile(any),
-      ).thenAnswer((_) async => mockUserProfileDoc);
-      when(
-        mockUserFollowRepository.fetchUserFollowCount(any),
-      ).thenAnswer((_) async => mockUserFollowCountDoc);
+      ).thenAnswer((_) async => mockUserProfile);
 
       final listener = MockUserProfileProviderListener();
       container.listen(
-        userProfileProvider(mockUserProfileDoc.id),
+        userProfileProvider(mockUserProfile.id),
         listener,
         fireImmediately: true,
       );
       addTearDown(() => reset(listener));
 
       // * Act
-      await container.read(
-        userProfileProvider(mockUserProfileDoc.id).future,
-      );
+      await container.read(userProfileProvider(mockUserProfile.id).future);
 
       // * Assert
-      final expected = UserProfile(
-        id: mockUserProfileDoc.id,
-        publicId: mockUserProfileDoc.publicId,
-        name: mockUserProfileDoc.name,
-        bio: mockUserProfileDoc.bio,
-        profileImageUrl: mockUserProfileDoc.profileImageUrl,
-        croppedFile: null,
-      );
       // stateの検証
       verifyInOrder([
         // ローディング状態であることを検証
-        listener.call(
-          null,
-          const AsyncLoading<UserProfile>(),
-        ),
+        listener.call(null, const AsyncLoading<UserProfile>()),
         // データがstateに格納されたこと、格納された値が想定通りであることを検証
         listener.call(
           const AsyncLoading<UserProfile>(),
-          AsyncValue.data(expected),
+          const AsyncValue.data(mockUserProfile),
         ),
       ]);
       // 他にlistenerが発火されないことを検証
@@ -108,7 +92,7 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockUserProfileRepository.fetchUserProfile(mockUserProfileDoc.id),
+        mockUserProfileRepository.fetchUserProfile(mockUserProfile.id),
       ).called(1);
     });
   });
@@ -131,19 +115,14 @@ void main() {
       addTearDown(() => reset(listener));
 
       // * Act
-      await container.read(
-        followingIdListProvider(targetUserId).future,
-      );
+      await container.read(followingIdListProvider(targetUserId).future);
 
       // * Assert
       const expected = mockFollowingIdList;
       // stateの検証
       verifyInOrder([
         // ローディング状態であることを検証
-        listener.call(
-          null,
-          const AsyncLoading<List<String>>(),
-        ),
+        listener.call(null, const AsyncLoading<List<String>>()),
         // データがstateに格納されたこと、格納された値が想定通りであることを検証
         listener.call(
           const AsyncLoading<List<String>>(),
@@ -155,60 +134,57 @@ void main() {
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockUserFollowRepository.fetchAllFollowingIdList(
-          targetUserId,
-        ),
+        mockUserFollowRepository.fetchAllFollowingIdList(targetUserId),
       ).called(1);
     });
   });
 
   group('isFollowing', () {
-    test('stateの更新、repositoryで定義している関数の呼び出しを検証', () async {
+    test('userProfileProvider の isFollowedByMe から導出されることを検証', () async {
       // * Arrange
-      const mockIsFollowing = true;
       when(
-        mockUserFollowRepository.isFollowing(any, any),
-      ).thenAnswer((_) async => mockIsFollowing);
+        mockUserProfileRepository.fetchUserProfile(any),
+      ).thenAnswer((_) async => mockUserProfile.copyWith(isFollowedByMe: true));
 
       const targetUserId = 'targetUserId';
-      final listener = MockIsFollowingProviderListener();
-      container.listen(
-        isFollowingProvider(targetUserId),
-        listener,
-        fireImmediately: true,
-      );
-      addTearDown(() => reset(listener));
 
       // * Act
-      await container.read(
+      final isFollowing = await container.read(
         isFollowingProvider(targetUserId).future,
       );
 
       // * Assert
-      const expected = mockIsFollowing;
-      // stateの検証
-      verifyInOrder([
-        // ローディング状態であることを検証
-        listener.call(
-          null,
-          const AsyncLoading<bool>(),
-        ),
-        // データがstateに格納されたこと、格納された値が想定通りであることを検証
-        listener.call(
-          const AsyncLoading<bool>(),
-          const AsyncValue.data(expected),
-        ),
-      ]);
-      // 他にlistenerが発火されないことを検証
-      verifyNoMoreInteractions(listener);
-
-      // 想定通りにrepositoryの関数が呼ばれているか検証
+      expect(isFollowing, true);
       verify(
-        mockUserFollowRepository.isFollowing(
-          currentUserId,
-          targetUserId,
-        ),
+        mockUserProfileRepository.fetchUserProfile(targetUserId),
       ).called(1);
+    });
+  });
+
+  group('followCount', () {
+    test('userProfileProvider のフォロー数から導出されることを検証', () async {
+      // * Arrange
+      when(mockUserProfileRepository.fetchUserProfile(any)).thenAnswer(
+        (_) async =>
+            mockUserProfile.copyWith(followingCount: 5, followerCount: 7),
+      );
+
+      const targetUserId = 'targetUserId';
+
+      // * Act
+      final followCount = await container.read(
+        followCountProvider(targetUserId).future,
+      );
+
+      // * Assert
+      expect(
+        followCount,
+        const FollowCount(
+          userId: targetUserId,
+          followingCount: 5,
+          followerCount: 7,
+        ),
+      );
     });
   });
 }
