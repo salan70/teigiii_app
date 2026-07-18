@@ -23,3 +23,4 @@
 #!docs/README.md
 pubspec.yaml
 analysis_options.yaml
+lib/src/model/discover_feed_item.dart

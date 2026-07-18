@@ -1,82 +1,64 @@
 //
-// AUTO-GENERATED FILE, DO NOT MODIFY!
+// HAND-MAINTAINED FILE (excluded via .openapi-generator-ignore)
 //
+// openapi-generator の dart-dio + json_serializable は oneOf を単一クラスに
+// 潰してしまい、discriminator (`type`) による分岐を生成できないため、
+// この union だけ手書きで維持する。スキーマ変更時は openapi.json の
+// DiscoverFeedItem に追従して手動更新すること。
 
-// ignore_for_file: unused_element
 import 'package:teigiii_api/src/model/definition_activity.dart';
 import 'package:teigiii_api/src/model/word_registered_activity.dart';
-import 'package:teigiii_api/src/model/definition_response.dart';
-import 'package:teigiii_api/src/model/word_summary.dart';
-import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'discover_feed_item.g.dart';
+sealed class DiscoverFeedItem {
+  const DiscoverFeedItem();
 
-@CopyWith()
-@JsonSerializable(
-  checked: true,
-  createToJson: true,
-  disallowUnrecognizedKeys: false,
-  explicitToJson: true,
-)
-class DiscoverFeedItem {
-  /// Returns a new [DiscoverFeedItem] instance.
-  DiscoverFeedItem({
-    required this.type,
+  factory DiscoverFeedItem.fromJson(Map<String, dynamic> json) {
+    final type = json['type'];
+    switch (type) {
+      case 'definition':
+        return DiscoverFeedDefinitionItem(DefinitionActivity.fromJson(json));
+      case 'wordRegistered':
+        return DiscoverFeedWordRegisteredItem(
+          WordRegisteredActivity.fromJson(json),
+        );
+      default:
+        throw FormatException('Unknown DiscoverFeedItem type: $type', json);
+    }
+  }
 
-    required this.occurredAt,
+  Map<String, dynamic> toJson();
+}
 
-    required this.definition,
+class DiscoverFeedDefinitionItem extends DiscoverFeedItem {
+  const DiscoverFeedDefinitionItem(this.activity);
 
-    required this.word,
-  });
+  final DefinitionActivity activity;
 
-  @JsonKey(name: r'type', required: true, includeIfNull: false)
-  final DiscoverFeedItemTypeEnum type;
-
-  @JsonKey(name: r'occurredAt', required: true, includeIfNull: false)
-  final DateTime occurredAt;
-
-  @JsonKey(name: r'definition', required: true, includeIfNull: false)
-  final DefinitionResponse definition;
-
-  @JsonKey(name: r'word', required: true, includeIfNull: false)
-  final WordSummary word;
+  @override
+  Map<String, dynamic> toJson() => activity.toJson();
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is DiscoverFeedItem &&
-          other.type == type &&
-          other.occurredAt == occurredAt &&
-          other.definition == definition &&
-          other.word == word;
+      other is DiscoverFeedDefinitionItem && other.activity == activity;
 
   @override
-  int get hashCode =>
-      type.hashCode + occurredAt.hashCode + definition.hashCode + word.hashCode;
-
-  factory DiscoverFeedItem.fromJson(Map<String, dynamic> json) =>
-      _$DiscoverFeedItemFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DiscoverFeedItemToJson(this);
-
-  @override
-  String toString() {
-    return toJson().toString();
-  }
+  int get hashCode => activity.hashCode;
 }
 
-enum DiscoverFeedItemTypeEnum {
-  @JsonValue(r'definition')
-  definition(r'definition'),
-  @JsonValue(r'wordRegistered')
-  wordRegistered(r'wordRegistered');
+class DiscoverFeedWordRegisteredItem extends DiscoverFeedItem {
+  const DiscoverFeedWordRegisteredItem(this.activity);
 
-  const DiscoverFeedItemTypeEnum(this.value);
-
-  final String value;
+  final WordRegisteredActivity activity;
 
   @override
-  String toString() => value;
+  Map<String, dynamic> toJson() => activity.toJson();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DiscoverFeedWordRegisteredItem && other.activity == activity;
+
+  @override
+  int get hashCode => activity.hashCode;
 }
