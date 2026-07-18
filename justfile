@@ -10,6 +10,12 @@ setup:
 generate:
     dart run build_runner build --delete-conflicting-outputs
 
+# server/openapi.json から Dart API クライアントを packages/teigiii_api に生成する
+generate-api:
+    openapi-generator-cli generate -i server/openapi.json -g dart-dio -o packages/teigiii_api \
+      --additional-properties=pubName=teigiii_api,serializationLibrary=json_serializable
+    cd packages/teigiii_api && dart pub get && dart run build_runner build --delete-conflicting-outputs && dart format .
+
 analyze:
     flutter analyze --no-fatal-infos
 

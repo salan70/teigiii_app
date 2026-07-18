@@ -13,8 +13,9 @@ String _$firestoreHash() => r'4963ca786eb54685cef6453544040c7567e77c0f';
 final firestoreProvider = Provider<FirebaseFirestore>.internal(
   firestore,
   name: r'firestoreProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$firestoreHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$firestoreHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -27,8 +28,9 @@ String _$firebaseAuthHash() => r'c8e57c3e164ad1c2cad48c4508e47f6097e350a7';
 final firebaseAuthProvider = Provider<FirebaseAuth>.internal(
   firebaseAuth,
   name: r'firebaseAuthProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$firebaseAuthHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$firebaseAuthHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -49,5 +51,20 @@ final firebaseStorageProvider = AutoDisposeProvider<FirebaseStorage>.internal(
 );
 
 typedef FirebaseStorageRef = AutoDisposeProviderRef<FirebaseStorage>;
+String _$firebaseAppCheckHash() => r'f4ea1226ba4b32b49c1446e5dbf87de9cebdbdfd';
+
+/// See also [firebaseAppCheck].
+@ProviderFor(firebaseAppCheck)
+final firebaseAppCheckProvider = Provider<FirebaseAppCheck>.internal(
+  firebaseAppCheck,
+  name: r'firebaseAppCheckProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$firebaseAppCheckHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef FirebaseAppCheckRef = ProviderRef<FirebaseAppCheck>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

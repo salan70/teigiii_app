@@ -77,6 +77,7 @@
             pkgs.curl
             pkgs.jq
             pkgs.ripgrep
+            pkgs.openapi-generator-cli
           ] ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.cocoapods ];
         in
         {
