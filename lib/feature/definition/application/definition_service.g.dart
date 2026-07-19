@@ -12,14 +12,14 @@ String _$definitionServiceHash() => r'ff6f7c3f812dca75bd2fd4e82d177c2f78465bb5';
 @ProviderFor(definitionService)
 final definitionServiceProvider =
     AutoDisposeProvider<DefinitionService>.internal(
-  definitionService,
-  name: r'definitionServiceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$definitionServiceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      definitionService,
+      name: r'definitionServiceProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$definitionServiceHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef DefinitionServiceRef = AutoDisposeProviderRef<DefinitionService>;
 // ignore_for_file: type=lint

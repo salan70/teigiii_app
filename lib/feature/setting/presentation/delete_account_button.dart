@@ -11,14 +11,14 @@ import '../../../util/mixin/presentation_mixin.dart';
 import '../../auth/application/auth_service.dart';
 
 class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
-  const DeleteAccountButton({
-    super.key,
-  });
+  const DeleteAccountButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Future<void> showCompleteDeleteAccountDialog() async {
-      ref.read(dialogControllerProvider).show(
+      ref
+          .read(dialogControllerProvider)
+          .show(
             WillPopScope(
               onWillPop: () async => false,
               child: AlertDialog(
@@ -26,10 +26,7 @@ class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      'ご利用ありがとうございました。',
-                      textAlign: TextAlign.center,
-                    ),
+                    const Text('ご利用ありがとうございました。', textAlign: TextAlign.center),
                     const Gap(16),
                     Text(
                       '新たにアカウントを作成する場合は、\n「新規作成」ボタンをタップしてください',
@@ -51,7 +48,9 @@ class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
     }
 
     Future<void> showFinalConfirmDialog() async {
-      ref.read(dialogControllerProvider).show(
+      ref
+          .read(dialogControllerProvider)
+          .show(
             ConfirmDialog(
               confirmMessage: '最終確認です。\n本当にアカウントを削除しても\nよろしいですか？',
               onAccept: () async {
@@ -71,7 +70,9 @@ class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
     }
 
     Future<void> showInitialConfirmDialog() async {
-      ref.read(dialogControllerProvider).show(
+      ref
+          .read(dialogControllerProvider)
+          .show(
             ConfirmDialog(
               confirmMessage: '全ての投稿が削除されます。\n本当にアカウントを削除しても\nよろしいですか？',
               onAccept: showFinalConfirmDialog,
@@ -85,8 +86,8 @@ class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
       child: Text(
         'アカウント削除',
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Theme.of(context).colorScheme.error,
-            ),
+          color: Theme.of(context).colorScheme.error,
+        ),
       ),
     );
   }

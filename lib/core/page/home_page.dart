@@ -63,9 +63,7 @@ class HomePage extends ConsumerWidget {
               children: <Widget>[
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.homeRecommend,
-                  emptyWidget: SimpleEmptyWidget(
-                    message: 'おすすめの投稿がありません...',
-                  ),
+                  emptyWidget: SimpleEmptyWidget(message: 'おすすめの投稿がありません...'),
                 ),
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.homeFollowing,

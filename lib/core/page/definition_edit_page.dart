@@ -13,10 +13,7 @@ import '../router/app_router.dart';
 
 @RoutePage()
 class DefinitionEditPage extends ConsumerWidget with PresentationMixin {
-  const DefinitionEditPage({
-    super.key,
-    required this.initialDefinition,
-  });
+  const DefinitionEditPage({super.key, required this.initialDefinition});
 
   final Definition initialDefinition;
 
@@ -24,8 +21,9 @@ class DefinitionEditPage extends ConsumerWidget with PresentationMixin {
   Widget build(BuildContext context, WidgetRef ref) {
     final initialDefinitionForWrite = initialDefinition.toDefinitionForWrite();
 
-    final definitionForWriteProvider =
-        definitionForWriteNotifierProvider(initialDefinitionForWrite);
+    final definitionForWriteProvider = definitionForWriteNotifierProvider(
+      initialDefinitionForWrite,
+    );
 
     final asyncDefinitionForWrite = ref.watch(definitionForWriteProvider);
     final notifier = ref.watch(definitionForWriteProvider.notifier);
@@ -57,29 +55,33 @@ class DefinitionEditPage extends ConsumerWidget with PresentationMixin {
                     }
 
                     // 投稿から1時間以上経過している場合、新規投稿するかどうかを確認する。
-                    ref.read(dialogControllerProvider).show(
-                      _AlertCannotEditDialog(
-                        onPost: () async {
-                          late final String definitionId;
-                          await executeWithOverlayLoading(
-                            ref,
-                            action: () async {
-                              definitionId = await notifier.post();
-                            },
-                            errorToastMessage: '投稿できませんでした。もう一度お試しください。',
-                            successToastMessage: '投稿しました！',
-                            inBaseRouteBeforeAction: false,
-                          );
-
-                          // 新規投稿した定義の詳細画面に遷移する。
-                          await ref.read(appRouterProvider).popAndPush(
-                                DefinitionDetailRoute(
-                                  definitionId: definitionId,
-                                ),
+                    ref
+                        .read(dialogControllerProvider)
+                        .show(
+                          _AlertCannotEditDialog(
+                            onPost: () async {
+                              late final String definitionId;
+                              await executeWithOverlayLoading(
+                                ref,
+                                action: () async {
+                                  definitionId = await notifier.post();
+                                },
+                                errorToastMessage: '投稿できませんでした。もう一度お試しください。',
+                                successToastMessage: '投稿しました！',
+                                inBaseRouteBeforeAction: false,
                               );
-                        },
-                      ),
-                    );
+
+                              // 新規投稿した定義の詳細画面に遷移する。
+                              await ref
+                                  .read(appRouterProvider)
+                                  .popAndPush(
+                                    DefinitionDetailRoute(
+                                      definitionId: definitionId,
+                                    ),
+                                  );
+                            },
+                          ),
+                        );
                   }
                 : null,
             child: Text(
@@ -87,30 +89,21 @@ class DefinitionEditPage extends ConsumerWidget with PresentationMixin {
               style: notifier.canEdit()
                   ? Theme.of(context).textTheme.titleLarge
                   : Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.3),
-                      ),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.3),
+                    ),
             ),
           ),
         );
       },
       loading: () => Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-        ),
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
+        appBar: AppBar(elevation: 0),
+        body: const Center(child: CircularProgressIndicator()),
       ),
       error: (error, stackTrace) => Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-        ),
-        body: Center(
-          child: Text(error.toString()),
-        ),
+        appBar: AppBar(elevation: 0),
+        body: Center(child: Text(error.toString())),
       ),
     );
   }
@@ -126,9 +119,7 @@ class _AlertCannotEditDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return AlertDialog(
       elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       contentPadding: const EdgeInsets.only(
         top: 32,
         right: 24,
@@ -139,15 +130,9 @@ class _AlertCannotEditDialog extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '投稿から1時間が経過したため保存できませんでした。',
-            overflow: TextOverflow.clip,
-          ),
+          Text('投稿から1時間が経過したため保存できませんでした。', overflow: TextOverflow.clip),
           Gap(8),
-          Text(
-            '代わりに、入力した内容で新規投稿しませんか？',
-            overflow: TextOverflow.clip,
-          ),
+          Text('代わりに、入力した内容で新規投稿しませんか？', overflow: TextOverflow.clip),
         ],
       ),
       actionsAlignment: MainAxisAlignment.spaceEvenly,
@@ -173,8 +158,8 @@ class _AlertCannotEditDialog extends ConsumerWidget {
             child: Text(
               '新規投稿する',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ),
         ),

@@ -1,10 +1,7 @@
 import 'exception_code.dart';
 
 class BaseException implements Exception {
-  const BaseException(
-    this.exceptionCode, {
-    this.info,
-  });
+  const BaseException(this.exceptionCode, {this.info});
 
   final ExceptionCode exceptionCode;
   final dynamic info;

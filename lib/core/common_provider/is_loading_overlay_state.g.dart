@@ -15,14 +15,14 @@ String _$isLoadingOverlayNotifierHash() =>
 @ProviderFor(IsLoadingOverlayNotifier)
 final isLoadingOverlayNotifierProvider =
     NotifierProvider<IsLoadingOverlayNotifier, bool>.internal(
-  IsLoadingOverlayNotifier.new,
-  name: r'isLoadingOverlayNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$isLoadingOverlayNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      IsLoadingOverlayNotifier.new,
+      name: r'isLoadingOverlayNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$isLoadingOverlayNotifierHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$IsLoadingOverlayNotifier = Notifier<bool>;
 // ignore_for_file: type=lint

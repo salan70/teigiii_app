@@ -13,8 +13,9 @@ String _$globalKeyHash() => r'c9b683949cb6cc7d2b9ae4df52a749fb1646b81e';
 final globalKeyProvider = AutoDisposeProvider<GlobalKey>.internal(
   globalKey,
   name: r'globalKeyProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$globalKeyHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$globalKeyHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -55,21 +56,15 @@ class ScaffoldMessengerKeyFamily
   const ScaffoldMessengerKeyFamily();
 
   /// See also [scaffoldMessengerKey].
-  ScaffoldMessengerKeyProvider call(
-    ScaffoldMessengerType type,
-  ) {
-    return ScaffoldMessengerKeyProvider(
-      type,
-    );
+  ScaffoldMessengerKeyProvider call(ScaffoldMessengerType type) {
+    return ScaffoldMessengerKeyProvider(type);
   }
 
   @override
   ScaffoldMessengerKeyProvider getProviderOverride(
     covariant ScaffoldMessengerKeyProvider provider,
   ) {
-    return call(
-      provider.type,
-    );
+    return call(provider.type);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -91,24 +86,19 @@ class ScaffoldMessengerKeyFamily
 class ScaffoldMessengerKeyProvider
     extends AutoDisposeProvider<GlobalKey<ScaffoldMessengerState>> {
   /// See also [scaffoldMessengerKey].
-  ScaffoldMessengerKeyProvider(
-    ScaffoldMessengerType type,
-  ) : this._internal(
-          (ref) => scaffoldMessengerKey(
-            ref as ScaffoldMessengerKeyRef,
-            type,
-          ),
-          from: scaffoldMessengerKeyProvider,
-          name: r'scaffoldMessengerKeyProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$scaffoldMessengerKeyHash,
-          dependencies: ScaffoldMessengerKeyFamily._dependencies,
-          allTransitiveDependencies:
-              ScaffoldMessengerKeyFamily._allTransitiveDependencies,
-          type: type,
-        );
+  ScaffoldMessengerKeyProvider(ScaffoldMessengerType type)
+    : this._internal(
+        (ref) => scaffoldMessengerKey(ref as ScaffoldMessengerKeyRef, type),
+        from: scaffoldMessengerKeyProvider,
+        name: r'scaffoldMessengerKeyProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$scaffoldMessengerKeyHash,
+        dependencies: ScaffoldMessengerKeyFamily._dependencies,
+        allTransitiveDependencies:
+            ScaffoldMessengerKeyFamily._allTransitiveDependencies,
+        type: type,
+      );
 
   ScaffoldMessengerKeyProvider._internal(
     super._createNotifier, {
@@ -125,7 +115,7 @@ class ScaffoldMessengerKeyProvider
   @override
   Override overrideWith(
     GlobalKey<ScaffoldMessengerState> Function(ScaffoldMessengerKeyRef provider)
-        create,
+    create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -143,7 +133,7 @@ class ScaffoldMessengerKeyProvider
 
   @override
   AutoDisposeProviderElement<GlobalKey<ScaffoldMessengerState>>
-      createElement() {
+  createElement() {
     return _ScaffoldMessengerKeyProviderElement(this);
   }
 
@@ -176,5 +166,6 @@ class _ScaffoldMessengerKeyProviderElement
   ScaffoldMessengerType get type =>
       (origin as ScaffoldMessengerKeyProvider).type;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

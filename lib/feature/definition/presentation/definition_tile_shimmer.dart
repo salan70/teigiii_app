@@ -24,21 +24,12 @@ class DefinitionTileShimmer extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ShimmerWidget.rectangular(
-                          height: 16,
-                          width: 160,
-                        ),
-                        ShimmerWidget.rectangular(
-                          height: 16,
-                          width: 40,
-                        ),
+                        ShimmerWidget.rectangular(height: 16, width: 160),
+                        ShimmerWidget.rectangular(height: 16, width: 40),
                       ],
                     ),
                     Gap(8),
-                    ShimmerWidget.rectangular(
-                      height: 24,
-                      width: 200,
-                    ),
+                    ShimmerWidget.rectangular(height: 24, width: 200),
                     Gap(8),
                     ShimmerWidget.rectangular(height: 72),
                     Gap(8),

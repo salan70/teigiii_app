@@ -62,7 +62,9 @@ class SelfDefinitionActionIconButton extends ConsumerWidget
           title: 'この定義を削除',
           icon: CupertinoIcons.trash,
           onTap: () {
-            ref.read(dialogControllerProvider).show(
+            ref
+                .read(dialogControllerProvider)
+                .show(
                   ConfirmDialog(
                     confirmMessage: '本当に削除してもよろしいですか？',
                     onAccept: () async {
@@ -125,9 +127,7 @@ class _CannotEditAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       contentPadding: const EdgeInsets.only(
         top: 32,
         right: 24,
@@ -138,15 +138,9 @@ class _CannotEditAlertDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '編集は投稿してから1時間以内にしかできません。',
-            overflow: TextOverflow.clip,
-          ),
+          Text('編集は投稿してから1時間以内にしかできません。', overflow: TextOverflow.clip),
           Gap(8),
-          Text(
-            '代わりに、この投稿の内容をもとに新規投稿を作成しませんか？',
-            overflow: TextOverflow.clip,
-          ),
+          Text('代わりに、この投稿の内容をもとに新規投稿を作成しませんか？', overflow: TextOverflow.clip),
         ],
       ),
       actionsAlignment: MainAxisAlignment.spaceEvenly,
@@ -179,8 +173,8 @@ class _CannotEditAlertDialog extends StatelessWidget {
             child: Text(
               '作成する',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ),
         ),
@@ -203,13 +197,8 @@ class _ChangePostTypeConfirmDialog extends ConsumerWidget
 
     return AlertDialog(
       elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      contentPadding: const EdgeInsets.only(
-        top: 16,
-        bottom: 8,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      contentPadding: const EdgeInsets.only(top: 16, bottom: 8),
       title: const Center(child: Text('確認')),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -227,10 +216,7 @@ class _ChangePostTypeConfirmDialog extends ConsumerWidget
           onTap: context.popRoute,
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Text(
-              'しない',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            child: Text('しない', style: Theme.of(context).textTheme.titleMedium),
           ),
         ),
         InkWell(
@@ -255,8 +241,8 @@ class _ChangePostTypeConfirmDialog extends ConsumerWidget
             child: Text(
               'する',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.error,
-                  ),
+                color: Theme.of(context).colorScheme.error,
+              ),
             ),
           ),
         ),

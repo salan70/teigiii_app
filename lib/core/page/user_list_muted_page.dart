@@ -19,9 +19,7 @@ class UserListMutedPage extends ConsumerWidget {
     final asyncMutedUserIdList = ref.watch(mutedUserIdListProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ミュート中のユーザー'),
-      ),
+      appBar: AppBar(title: const Text('ミュート中のユーザー')),
       body: asyncMutedUserIdList.when(
         data: (mutedUserIdList) {
           if (mutedUserIdList.isEmpty) {
@@ -58,8 +56,10 @@ class UserListMutedPage extends ConsumerWidget {
             );
           }
 
-          logger.e('ミュートユーザーの取得に失敗しました。'
-              'error: $error, stackTrace: $stackTrace');
+          logger.e(
+            'ミュートユーザーの取得に失敗しました。'
+            'error: $error, stackTrace: $stackTrace',
+          );
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Align(

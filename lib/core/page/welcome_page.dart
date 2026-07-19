@@ -34,10 +34,7 @@ class WelcomePage extends ConsumerWidget {
                 ),
               ),
               const Gap(24),
-              Text(
-                'ようこそ！',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              Text('ようこそ！', style: Theme.of(context).textTheme.titleLarge),
               const Gap(24),
               Text(
                 '思うがままに\n言葉を定義しちゃってください😆',
@@ -47,9 +44,9 @@ class WelcomePage extends ConsumerWidget {
               const Gap(24),
               PrimaryFilledButton(
                 onPressed: () {
-                  ref.read(dialogControllerProvider).show(
-                        const ConfirmAgreementDialog(),
-                      );
+                  ref
+                      .read(dialogControllerProvider)
+                      .show(const ConfirmAgreementDialog());
                 },
                 text: 'はじめる',
               ),
@@ -64,11 +61,10 @@ class WelcomePage extends ConsumerWidget {
                     child: Text(
                       '利用規約',
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                            decoration: TextDecoration.underline,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
                   const Text(' と '),
@@ -79,11 +75,10 @@ class WelcomePage extends ConsumerWidget {
                     child: Text(
                       'プライバシーポリシー',
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                            decoration: TextDecoration.underline,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
                 ],

@@ -154,8 +154,9 @@ void main() {
 
     test('59分経過している（59分前の時刻が実行）', () {
       // * Arrange
-      final thirtyMinutesAgo =
-          DateTime.now().subtract(const Duration(minutes: 59));
+      final thirtyMinutesAgo = DateTime.now().subtract(
+        const Duration(minutes: 59),
+      );
 
       // * Act
       final actual = thirtyMinutesAgo.hasOneHourPassed();

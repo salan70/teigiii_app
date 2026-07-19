@@ -17,10 +17,7 @@ import '../common_widget/stickey_tab_bar_deligate.dart';
 
 @RoutePage()
 class ProfileTopPage extends ConsumerWidget {
-  const ProfileTopPage({
-    super.key,
-    required this.targetUserId,
-  });
+  const ProfileTopPage({super.key, required this.targetUserId});
 
   final String targetUserId;
 
@@ -61,9 +58,9 @@ class ProfileTopPage extends ConsumerWidget {
                   ],
                 ),
                 SliverList(
-                  delegate: SliverChildListDelegate(
-                    [ProfileWidget(targetUserId: targetUserId)],
-                  ),
+                  delegate: SliverChildListDelegate([
+                    ProfileWidget(targetUserId: targetUserId),
+                  ]),
                 ),
                 SliverPersistentHeader(
                   pinned: true,

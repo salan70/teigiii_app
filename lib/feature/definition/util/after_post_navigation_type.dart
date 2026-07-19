@@ -1,4 +1,1 @@
-enum AfterPostNavigationType {
-  pop,
-  toDetail;
-}
+enum AfterPostNavigationType { pop, toDetail }

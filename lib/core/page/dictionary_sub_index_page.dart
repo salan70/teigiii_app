@@ -42,18 +42,16 @@ class DictionarySubIndexPage extends ConsumerWidget {
                     const Gap(16),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 16),
-                      child:
-                          DictionaryAuthorWidget(targetUserId: targetUserId!),
+                      child: DictionaryAuthorWidget(
+                        targetUserId: targetUserId!,
+                      ),
                     ),
                   ],
                 )
               : const SizedBox.shrink(),
           const Gap(8),
           Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-            ),
+            padding: const EdgeInsets.only(left: 16, right: 16),
             child: ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),

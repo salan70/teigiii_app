@@ -12,7 +12,8 @@ part of 'app_maintenance.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$AppMaintenance {
@@ -27,8 +28,9 @@ mixin _$AppMaintenance {
 /// @nodoc
 abstract class $AppMaintenanceCopyWith<$Res> {
   factory $AppMaintenanceCopyWith(
-          AppMaintenance value, $Res Function(AppMaintenance) then) =
-      _$AppMaintenanceCopyWithImpl<$Res, AppMaintenance>;
+    AppMaintenance value,
+    $Res Function(AppMaintenance) then,
+  ) = _$AppMaintenanceCopyWithImpl<$Res, AppMaintenance>;
   @useResult
   $Res call({bool inMaintenance, String scheduledEndTime});
 }
@@ -45,29 +47,30 @@ class _$AppMaintenanceCopyWithImpl<$Res, $Val extends AppMaintenance>
 
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? inMaintenance = null,
-    Object? scheduledEndTime = null,
-  }) {
-    return _then(_value.copyWith(
-      inMaintenance: null == inMaintenance
-          ? _value.inMaintenance
-          : inMaintenance // ignore: cast_nullable_to_non_nullable
-              as bool,
-      scheduledEndTime: null == scheduledEndTime
-          ? _value.scheduledEndTime
-          : scheduledEndTime // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  $Res call({Object? inMaintenance = null, Object? scheduledEndTime = null}) {
+    return _then(
+      _value.copyWith(
+            inMaintenance: null == inMaintenance
+                ? _value.inMaintenance
+                : inMaintenance // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            scheduledEndTime: null == scheduledEndTime
+                ? _value.scheduledEndTime
+                : scheduledEndTime // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$AppMaintenanceImplCopyWith<$Res>
     implements $AppMaintenanceCopyWith<$Res> {
-  factory _$$AppMaintenanceImplCopyWith(_$AppMaintenanceImpl value,
-          $Res Function(_$AppMaintenanceImpl) then) =
-      __$$AppMaintenanceImplCopyWithImpl<$Res>;
+  factory _$$AppMaintenanceImplCopyWith(
+    _$AppMaintenanceImpl value,
+    $Res Function(_$AppMaintenanceImpl) then,
+  ) = __$$AppMaintenanceImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool inMaintenance, String scheduledEndTime});
@@ -78,33 +81,35 @@ class __$$AppMaintenanceImplCopyWithImpl<$Res>
     extends _$AppMaintenanceCopyWithImpl<$Res, _$AppMaintenanceImpl>
     implements _$$AppMaintenanceImplCopyWith<$Res> {
   __$$AppMaintenanceImplCopyWithImpl(
-      _$AppMaintenanceImpl _value, $Res Function(_$AppMaintenanceImpl) _then)
-      : super(_value, _then);
+    _$AppMaintenanceImpl _value,
+    $Res Function(_$AppMaintenanceImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? inMaintenance = null,
-    Object? scheduledEndTime = null,
-  }) {
-    return _then(_$AppMaintenanceImpl(
-      inMaintenance: null == inMaintenance
-          ? _value.inMaintenance
-          : inMaintenance // ignore: cast_nullable_to_non_nullable
-              as bool,
-      scheduledEndTime: null == scheduledEndTime
-          ? _value.scheduledEndTime
-          : scheduledEndTime // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? inMaintenance = null, Object? scheduledEndTime = null}) {
+    return _then(
+      _$AppMaintenanceImpl(
+        inMaintenance: null == inMaintenance
+            ? _value.inMaintenance
+            : inMaintenance // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        scheduledEndTime: null == scheduledEndTime
+            ? _value.scheduledEndTime
+            : scheduledEndTime // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$AppMaintenanceImpl implements _AppMaintenance {
-  const _$AppMaintenanceImpl(
-      {required this.inMaintenance, required this.scheduledEndTime});
+  const _$AppMaintenanceImpl({
+    required this.inMaintenance,
+    required this.scheduledEndTime,
+  });
 
   @override
   final bool inMaintenance;
@@ -135,13 +140,16 @@ class _$AppMaintenanceImpl implements _AppMaintenance {
   @pragma('vm:prefer-inline')
   _$$AppMaintenanceImplCopyWith<_$AppMaintenanceImpl> get copyWith =>
       __$$AppMaintenanceImplCopyWithImpl<_$AppMaintenanceImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _AppMaintenance implements AppMaintenance {
-  const factory _AppMaintenance(
-      {required final bool inMaintenance,
-      required final String scheduledEndTime}) = _$AppMaintenanceImpl;
+  const factory _AppMaintenance({
+    required final bool inMaintenance,
+    required final String scheduledEndTime,
+  }) = _$AppMaintenanceImpl;
 
   @override
   bool get inMaintenance;

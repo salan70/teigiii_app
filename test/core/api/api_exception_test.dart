@@ -57,11 +57,7 @@ void main() {
           statusCode: 409,
           data: {
             'error': {'code': 'conflict', 'message': '登録済みの言葉です'},
-            'existingWord': {
-              'id': 'word-1',
-              'word': '定義',
-              'reading': 'ていぎ',
-            },
+            'existingWord': {'id': 'word-1', 'word': '定義', 'reading': 'ていぎ'},
           },
         ),
       ),

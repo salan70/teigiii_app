@@ -16,17 +16,16 @@ import '../router/app_router.dart';
 
 @RoutePage()
 class ProfileEditPage extends ConsumerWidget with PresentationMixin {
-  ProfileEditPage({
-    super.key,
-  });
+  ProfileEditPage({super.key});
 
   final globalKey = GlobalKey();
   final avatarSize = AvatarSize.large;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncUserProfileForWrite =
-        ref.watch(userProfileForWriteNotifierProvider);
+    final asyncUserProfileForWrite = ref.watch(
+      userProfileForWriteNotifierProvider,
+    );
     final notifier = ref.watch(userProfileForWriteNotifierProvider.notifier);
 
     return asyncUserProfileForWrite.when(
@@ -48,11 +47,14 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
                 }
 
                 // 確認ダイアログを表示する。
-                ref.read(dialogControllerProvider).show(
+                ref
+                    .read(dialogControllerProvider)
+                    .show(
                       ConfirmDialog(
                         confirmMessage: '入力した内容は保存されません。\nよろしいですか？',
-                        onAccept: () async => Navigator.of(context)
-                            .popUntil((route) => route.isFirst),
+                        onAccept: () async => Navigator.of(
+                          context,
+                        ).popUntil((route) => route.isFirst),
                         confirmButtonText: 'OK',
                       ),
                     );
@@ -84,11 +86,10 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
                     style: canEdit
                         ? Theme.of(context).textTheme.titleLarge
                         : Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withOpacity(0.3),
-                            ),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withOpacity(0.3),
+                          ),
                   ),
                 ),
               ),
@@ -139,18 +140,13 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
           ),
         );
       },
-      loading: () => const Scaffold(
-        body: Center(
-          child: CupertinoActivityIndicator(),
-        ),
-      ),
+      loading: () =>
+          const Scaffold(body: Center(child: CupertinoActivityIndicator())),
       error: (error, stackTrace) {
         // エラー発生後の再読み込み中の場合、trueになる
         if (asyncUserProfileForWrite.isRefreshing) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('プロフィール編集'),
-            ),
+            appBar: AppBar(title: const Text('プロフィール編集')),
             body: const Padding(
               padding: EdgeInsets.symmetric(vertical: 24),
               child: Align(
@@ -161,12 +157,12 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
           );
         }
 
-        logger.e('プロフィール編集画面でエラーが発生しました。'
-            'error: $error, stackTrace: $stackTrace');
+        logger.e(
+          'プロフィール編集画面でエラーが発生しました。'
+          'error: $error, stackTrace: $stackTrace',
+        );
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('プロフィール編集'),
-          ),
+          appBar: AppBar(title: const Text('プロフィール編集')),
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Center(

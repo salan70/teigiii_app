@@ -13,8 +13,9 @@ String _$flavorHash() => r'25ba4a0d5bc764f5d1eefe0d64f557e200ff4c3a';
 final flavorProvider = AutoDisposeProvider<Flavor>.internal(
   flavor,
   name: r'flavorProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$flavorHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$flavorHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

@@ -35,15 +35,15 @@ Future<void> main() async {
   await Firebase.initializeApp(options: firebaseOptionsWithFlavor(flavor));
 
   await FirebaseAppCheck.instance.activate(
-    androidProvider:
-        kReleaseMode ? AndroidProvider.playIntegrity : AndroidProvider.debug,
-    appleProvider:
-        kReleaseMode ? AppleProvider.deviceCheck : AppleProvider.debug,
+    androidProvider: kReleaseMode
+        ? AndroidProvider.playIntegrity
+        : AndroidProvider.debug,
+    appleProvider: kReleaseMode
+        ? AppleProvider.deviceCheck
+        : AppleProvider.debug,
   );
 
-  await FirebaseAnalytics.instance.logEvent(
-    name: 'launch App',
-  );
+  await FirebaseAnalytics.instance.logEvent(name: 'launch App');
 
   // Flutterフレームワークがキャッチしたエラーを記録する
   FlutterError.onError = (errorDetails) {
@@ -71,9 +71,7 @@ Future<void> main() async {
   ]).then((_) {
     runApp(
       ProviderScope(
-        overrides: [
-          flavorProvider.overrideWithValue(flavor),
-        ],
+        overrides: [flavorProvider.overrideWithValue(flavor)],
         child: DevicePreview(
           enabled: false,
           builder: (context) {
@@ -128,8 +126,10 @@ class MyApp extends ConsumerWidget {
               return const Scaffold(body: OverlayLoadingWidget());
             }
 
-            logger.e('[asyncIsRequiredUpdate]の取得時にエラーが発生しました。'
-                ' error: $e, stackTrace: $s');
+            logger.e(
+              '[asyncIsRequiredUpdate]の取得時にエラーが発生しました。'
+              ' error: $e, stackTrace: $s',
+            );
             return Scaffold(
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -149,10 +149,7 @@ class MyApp extends ConsumerWidget {
             if (isRequiredUpdate) {
               // * アップデートが必要な場合
               return Stack(
-                children: [
-                  child!,
-                  const OverlayForceUpdateDialog(),
-                ],
+                children: [child!, const OverlayForceUpdateDialog()],
               );
             }
 

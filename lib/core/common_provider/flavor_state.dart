@@ -31,20 +31,20 @@ enum Flavor {
       case 'dev':
         return Flavor.dev;
       default:
-        throw UnsupportedError(
-          'this flavor is not expected',
-        );
+        throw UnsupportedError('this flavor is not expected');
     }
   }
 
   String generateRandomIconImageUrl() {
     switch (this) {
       case Flavor.prod:
-        return defaultIconImageUrlListForProd[
-            Random().nextInt(defaultIconImageUrlListForProd.length)];
+        return defaultIconImageUrlListForProd[Random().nextInt(
+          defaultIconImageUrlListForProd.length,
+        )];
       case Flavor.dev:
-        return defaultIconImageUrlListForDev[
-            Random().nextInt(defaultIconImageUrlListForDev.length)];
+        return defaultIconImageUrlListForDev[Random().nextInt(
+          defaultIconImageUrlListForDev.length,
+        )];
     }
   }
 }

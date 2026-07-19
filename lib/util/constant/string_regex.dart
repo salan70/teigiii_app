@@ -4,8 +4,9 @@ final alphabetRegex = RegExp(r'^[a-zA-Z]+$');
 final numberRegex = RegExp(r'^[0-9]+$');
 
 /// アプリ内において、「基本的な記号」と定義する記号にマッチする正規表現
-final basicSymbolRegex =
-    RegExp(r'^[!#$%&()*+,\-./:;<=>?@\[\]^_`{|}~（）「」『』ー]+$');
+final basicSymbolRegex = RegExp(
+  r'^[!#$%&()*+,\-./:;<=>?@\[\]^_`{|}~（）「」『』ー]+$',
+);
 
 // TODO(me): ベタ書きではなく、既存の定数を使用して定義したい
 

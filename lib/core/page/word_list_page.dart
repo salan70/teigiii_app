@@ -16,17 +16,15 @@ import '../common_widget/simple_empty_widget.dart';
 
 @RoutePage()
 class WordListPage extends ConsumerWidget {
-  const WordListPage({
-    super.key,
-    required this.selectedInitialSubGroup,
-  });
+  const WordListPage({super.key, required this.selectedInitialSubGroup});
 
   final InitialSubGroup selectedInitialSubGroup;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final wordListProvider =
-        wordListStateByInitialNotifierProvider(selectedInitialSubGroup.label);
+    final wordListProvider = wordListStateByInitialNotifierProvider(
+      selectedInitialSubGroup.label,
+    );
 
     String generateEmptyMessage(String initialLabel) {
       final messageList = [

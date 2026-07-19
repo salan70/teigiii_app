@@ -78,7 +78,9 @@ class InfinityScrollWidget extends ConsumerWidget {
           // ログ表示する。
           logger.e('error: $e, stackTrace: $s');
 
-          ref.read(snackBarControllerProvider).showErrorSnackBar(
+          ref
+              .read(snackBarControllerProvider)
+              .showErrorSnackBar(
                 '読み込めませんでした。もう一度お試しください。',
                 ScaffoldMessengerType.baseRoute,
               );
@@ -107,10 +109,7 @@ class InfinityScrollWidget extends ConsumerWidget {
             contentPadding: contentPadding,
             bottomWidget: listState.hasMore
                 ? const Column(
-                    children: [
-                      CupertinoActivityIndicator(),
-                      Gap(40),
-                    ],
+                    children: [CupertinoActivityIndicator(), Gap(40)],
                   )
                 : const SizedBox.shrink(),
             emptyWidget: emptyWidget,
@@ -249,9 +248,7 @@ class _StateScrollBar extends StatelessWidget {
           ),
           SliverPadding(
             padding: const EdgeInsets.only(top: 8, bottom: 40),
-            sliver: SliverToBoxAdapter(
-              child: bottomWidget,
-            ),
+            sliver: SliverToBoxAdapter(child: bottomWidget),
           ),
         ],
       ),
@@ -291,17 +288,13 @@ class _BottomWidgetWhenError extends StatelessWidget {
                   asyncListState.isRefreshing
                       ? Text(
                           '読み込み中...',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          style: Theme.of(context).textTheme.bodyMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
                         )
                       : Text(
                           'タップで再読み込み',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          style: Theme.of(context).textTheme.bodyMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
                         ),
                   const Gap(40),
                 ],

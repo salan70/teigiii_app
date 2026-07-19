@@ -13,8 +13,9 @@ String _$appRouterHash() => r'feb7a4e507f23e7f2b0c6b4ac54db31d22d36356';
 final appRouterProvider = AutoDisposeProvider<Raw<AppRouter>>.internal(
   appRouter,
   name: r'appRouterProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$appRouterHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$appRouterHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

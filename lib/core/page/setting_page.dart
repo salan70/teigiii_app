@@ -40,18 +40,12 @@ class SettingPage extends ConsumerWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.only(
-          left: 24,
-          right: 20,
-        ),
+        padding: const EdgeInsets.only(left: 24, right: 20),
         child: ListView(
           children: [
             const Gap(24),
             // 一般
-            Text(
-              '一般',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
+            Text('一般', style: Theme.of(context).textTheme.titleSmall),
             const Gap(8),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.speaker_slash),
@@ -63,16 +57,14 @@ class SettingPage extends ConsumerWidget {
             const Gap(32),
 
             // サポート
-            Text(
-              'サポート',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
+            Text('サポート', style: Theme.of(context).textTheme.titleSmall),
             const Gap(8),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.question_square),
               label: '使い方',
-              onTap: () =>
-                  ref.read(launchUrlControllerProvider).launchURL(howToPageUrl, inBaseRoute: false),
+              onTap: () => ref
+                  .read(launchUrlControllerProvider)
+                  .launchURL(howToPageUrl, inBaseRoute: false),
             ),
             const Gap(24),
             SettingTileButton(
@@ -80,11 +72,14 @@ class SettingPage extends ConsumerWidget {
               label: 'お問い合わせ',
               onTap: () {
                 final currentUserId = ref.read(userIdProvider)!;
-                final currentUserProfile =
-                    ref.read(userProfileProvider(currentUserId)).value;
+                final currentUserProfile = ref
+                    .read(userProfileProvider(currentUserId))
+                    .value;
                 final url = inquireFormUrl(currentUserProfile?.publicId ?? '');
 
-                ref.read(launchUrlControllerProvider).launchURL(url, inBaseRoute: false);
+                ref
+                    .read(launchUrlControllerProvider)
+                    .launchURL(url, inBaseRoute: false);
               },
             ),
             const Gap(24),
@@ -98,16 +93,14 @@ class SettingPage extends ConsumerWidget {
             const Gap(32),
 
             // アプリについて
-            Text(
-              'アプリについて',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
+            Text('アプリについて', style: Theme.of(context).textTheme.titleSmall),
             const Gap(8),
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.doc_text),
               label: '利用規約',
-              onTap: () =>
-                  ref.read(launchUrlControllerProvider).launchURL(termPageUrl, inBaseRoute: false),
+              onTap: () => ref
+                  .read(launchUrlControllerProvider)
+                  .launchURL(termPageUrl, inBaseRoute: false),
             ),
             const Gap(24),
             SettingTileButton(
@@ -197,10 +190,7 @@ class SettingTileButton extends StatelessWidget {
           trailingIcon,
           const Gap(8),
           Expanded(
-            child: Text(
-              label,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            child: Text(label, style: Theme.of(context).textTheme.titleLarge),
           ),
           Align(
             alignment: Alignment.centerRight,

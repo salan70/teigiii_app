@@ -56,14 +56,13 @@ void main() {
       // アップロード後に（ディスク側の）古いキャッシュが破棄されること
       verify(mockCacheManager.removeFile(avatarUrl)).called(1);
       // 送信されたバイト列・Content-Type・Content-Length を検証する
-      final captured =
-          verify(
-            mockDio.put<Map<String, dynamic>>(
-              '/v1/users/me/avatar',
-              data: captureAnyNamed('data'),
-              options: captureAnyNamed('options'),
-            ),
-          ).captured;
+      final captured = verify(
+        mockDio.put<Map<String, dynamic>>(
+          '/v1/users/me/avatar',
+          data: captureAnyNamed('data'),
+          options: captureAnyNamed('options'),
+        ),
+      ).captured;
       final data = captured[0] as Stream<List<int>>;
       final options = captured[1] as Options;
 

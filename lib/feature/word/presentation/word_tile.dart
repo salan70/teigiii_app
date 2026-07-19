@@ -7,10 +7,7 @@ import '../../../../core/router/app_router.dart';
 import '../domain/word.dart';
 
 class WordTile extends StatelessWidget {
-  const WordTile({
-    super.key,
-    required this.word,
-  });
+  const WordTile({super.key, required this.word});
 
   final Word word;
 
@@ -39,10 +36,8 @@ class WordTile extends StatelessWidget {
                       Text(
                         word.reading,
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                            ),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -53,9 +48,8 @@ class WordTile extends StatelessWidget {
                     Text(
                       '${word.postedDefinitionCount}投稿',
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                     const Gap(4),
                     Icon(

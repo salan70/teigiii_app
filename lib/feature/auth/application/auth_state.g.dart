@@ -15,8 +15,9 @@ String _$userChangesHash() => r'4d38930d75575de157a299ad9b32c030d7490685';
 final userChangesProvider = StreamProvider<User?>.internal(
   userChanges,
   name: r'userChangesProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$userChangesHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$userChangesHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -35,8 +36,9 @@ String _$userIdHash() => r'ddb1ce88c396dbc1fc35794967e712feaf9aadac';
 final userIdProvider = Provider<String?>.internal(
   userId,
   name: r'userIdProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$userIdHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$userIdHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -53,8 +55,9 @@ String _$isSignedInHash() => r'7be28bf7800a870161b37258d04586b45882c83a';
 final isSignedInProvider = Provider<bool>.internal(
   isSignedIn,
   name: r'isSignedInProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$isSignedInHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$isSignedInHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

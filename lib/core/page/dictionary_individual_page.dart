@@ -57,18 +57,13 @@ class DictionaryIndividualPage extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Scaffold(
-        body: Center(
-          child: CupertinoActivityIndicator(),
-        ),
-      ),
+      loading: () =>
+          const Scaffold(body: Center(child: CupertinoActivityIndicator())),
       error: (error, stackTrace) {
         // エラー発生後の再読み込み中の場合、trueになる
         if (asyncTargetUserProfile.isRefreshing) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('辞書'),
-            ),
+            appBar: AppBar(title: const Text('辞書')),
             body: const Padding(
               padding: EdgeInsets.symmetric(vertical: 24),
               child: Align(
@@ -79,12 +74,12 @@ class DictionaryIndividualPage extends ConsumerWidget {
           );
         }
 
-        logger.e('ユーザー[$targetUserId]のプロフィールの取得に失敗しました。'
-            'error: $error, stackTrace: $stackTrace');
+        logger.e(
+          'ユーザー[$targetUserId]のプロフィールの取得に失敗しました。'
+          'error: $error, stackTrace: $stackTrace',
+        );
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('辞書'),
-          ),
+          appBar: AppBar(title: const Text('辞書')),
           body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Center(

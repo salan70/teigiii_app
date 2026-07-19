@@ -7,10 +7,9 @@ import 'package:teigi_app/core/common_provider/is_loading_overlay_state.dart';
 import 'common_provider_test.mocks.dart';
 
 @GenerateNiceMocks([MockSpec<Listener<bool>>()])
-
 // ignore: one_member_abstracts, unreachable_from_main
 abstract class Listener<T> {
-// ignore: unreachable_from_main
+  // ignore: unreachable_from_main
   void call(T? previous, T next);
 }
 
@@ -18,17 +17,15 @@ void main() {
   final listener = MockListener();
   late ProviderContainer container;
 
-  setUp(
-    () {
-      container = ProviderContainer()
-        ..listen(
-          isLoadingOverlayNotifierProvider,
-          listener,
-          fireImmediately: true,
-        );
-      addTearDown(container.dispose);
-    },
-  );
+  setUp(() {
+    container = ProviderContainer()
+      ..listen(
+        isLoadingOverlayNotifierProvider,
+        listener,
+        fireImmediately: true,
+      );
+    addTearDown(container.dispose);
+  });
 
   tearDown(() {
     reset(listener);
@@ -88,7 +85,6 @@ void main() {
       // * Arrange
       container.read(isLoadingOverlayNotifierProvider.notifier)
         ..startLoading()
-
         // * Act
         ..finishLoading();
 

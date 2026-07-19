@@ -17,17 +17,15 @@ import '../common_widget/simple_empty_widget.dart';
 
 @RoutePage()
 class WordSearchResultPage extends ConsumerWidget {
-  const WordSearchResultPage({
-    super.key,
-    required this.searchWord,
-  });
+  const WordSearchResultPage({super.key, required this.searchWord});
 
   final String searchWord;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final wordListProvider =
-        wordListStateBySearchWordNotifierProvider(searchWord);
+    final wordListProvider = wordListStateBySearchWordNotifierProvider(
+      searchWord,
+    );
 
     String generateEmptyMessage(String label) {
       final messageList = [

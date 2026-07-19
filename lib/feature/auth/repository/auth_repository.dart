@@ -6,9 +6,8 @@ import '../../../core/common_provider/firebase_providers.dart';
 part 'auth_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-AuthRepository authRepository(AuthRepositoryRef ref) => AuthRepository(
-      ref.watch(firebaseAuthProvider),
-    );
+AuthRepository authRepository(AuthRepositoryRef ref) =>
+    AuthRepository(ref.watch(firebaseAuthProvider));
 
 class AuthRepository {
   AuthRepository(this.firebaseAuth);

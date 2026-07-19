@@ -13,16 +13,16 @@ String _$packageInfoRepositoryHash() =>
 @ProviderFor(packageInfoRepository)
 final packageInfoRepositoryProvider =
     AutoDisposeProvider<PackageInfoRepository>.internal(
-  packageInfoRepository,
-  name: r'packageInfoRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$packageInfoRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      packageInfoRepository,
+      name: r'packageInfoRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$packageInfoRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
-typedef PackageInfoRepositoryRef
-    = AutoDisposeProviderRef<PackageInfoRepository>;
+typedef PackageInfoRepositoryRef =
+    AutoDisposeProviderRef<PackageInfoRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

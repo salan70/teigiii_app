@@ -3,10 +3,7 @@ import 'package:gap/gap.dart';
 
 /// emptyステートとして使用する [message] を表示させるだけのシンプルな Widget.
 class SimpleEmptyWidget extends StatelessWidget {
-  const SimpleEmptyWidget({
-    super.key,
-    required this.message,
-  });
+  const SimpleEmptyWidget({super.key, required this.message});
 
   final String message;
 

@@ -50,11 +50,12 @@ class OverlayInMaintenanceDialog extends ConsumerWidget {
                   ),
                   const Gap(16),
                   PrimaryFilledButton(
-                    onPressed: () =>
-                        ref.read(launchUrlControllerProvider).launchURL(
-                              latestInformationPageUrl,
-                              inBaseRoute: false,
-                            ),
+                    onPressed: () => ref
+                        .read(launchUrlControllerProvider)
+                        .launchURL(
+                          latestInformationPageUrl,
+                          inBaseRoute: false,
+                        ),
                     text: '最新情報を確認する',
                   ),
                 ],

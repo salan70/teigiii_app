@@ -4,10 +4,7 @@ extension TargetPlatformExtension on TargetPlatform {
   /// [TargetPlatform]に対して、 iOS と Android の場合で処理を分ける。
   ///
   /// iOS でも Android でもない場合は、[UnsupportedError] を投げる。
-  T when<T>({
-    required T Function() onIOS,
-    required T Function() onAndroid,
-  }) {
+  T when<T>({required T Function() onIOS, required T Function() onAndroid}) {
     switch (this) {
       case TargetPlatform.iOS:
         return onIOS();

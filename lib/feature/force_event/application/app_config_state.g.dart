@@ -15,8 +15,9 @@ String _$appConfigHash() => r'28e72d143d5d1f2be2ef58a5851f391bb7066eba';
 final appConfigProvider = StreamProvider<AppConfigDocument>.internal(
   appConfig,
   name: r'appConfigProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$appConfigHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$appConfigHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

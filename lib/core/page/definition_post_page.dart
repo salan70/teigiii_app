@@ -34,8 +34,9 @@ class DefinitionPostPage extends ConsumerWidget with PresentationMixin {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncDefinitionForWrite = ref
-        .watch(definitionForWriteNotifierProvider(initialDefinitionForWrite));
+    final asyncDefinitionForWrite = ref.watch(
+      definitionForWriteNotifierProvider(initialDefinitionForWrite),
+    );
     final notifier = ref.watch(
       definitionForWriteNotifierProvider(initialDefinitionForWrite).notifier,
     );
@@ -82,10 +83,10 @@ class DefinitionPostPage extends ConsumerWidget with PresentationMixin {
                       case AfterPostNavigationType.pop:
                         break;
                       case AfterPostNavigationType.toDetail:
-                        await ref.read(appRouterProvider).push(
-                              DefinitionDetailRoute(
-                                definitionId: definitionId,
-                              ),
+                        await ref
+                            .read(appRouterProvider)
+                            .push(
+                              DefinitionDetailRoute(definitionId: definitionId),
                             );
                         break;
                     }
@@ -96,30 +97,21 @@ class DefinitionPostPage extends ConsumerWidget with PresentationMixin {
               style: canPost
                   ? Theme.of(context).textTheme.titleLarge
                   : Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.3),
-                      ),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.3),
+                    ),
             ),
           ),
         );
       },
       loading: () => Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-        ),
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
+        appBar: AppBar(elevation: 0),
+        body: const Center(child: CircularProgressIndicator()),
       ),
       error: (error, stackTrace) => Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-        ),
-        body: Center(
-          child: Text(error.toString()),
-        ),
+        appBar: AppBar(elevation: 0),
+        body: Center(child: Text(error.toString())),
       ),
     );
   }

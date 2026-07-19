@@ -9,10 +9,7 @@ import '../../feature/user_list/util/user_list_type.dart';
 
 @RoutePage()
 class UserListLikedPage extends ConsumerWidget {
-  const UserListLikedPage({
-    super.key,
-    required this.definitionId,
-  });
+  const UserListLikedPage({super.key, required this.definitionId});
   final String definitionId;
 
   @override
@@ -42,9 +39,7 @@ class UserListLikedPage extends ConsumerWidget {
             targetUserId: null,
             targetDefinitionId: definitionId,
             // いいねが0件の場合、[LikeUserPage] には遷移しない想定だが念のため設定しておく
-            emptyWidget: const SimpleEmptyWidget(
-              message: 'まだいいね！されていません',
-            ),
+            emptyWidget: const SimpleEmptyWidget(message: 'まだいいね！されていません'),
           ),
         ),
       ),
