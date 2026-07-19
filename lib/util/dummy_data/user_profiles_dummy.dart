@@ -13,7 +13,10 @@ Future<void> addUserProfilesToFirestore(String flavorName) async {
 
   // 上で定義したusersマップを用いてデータをFirestoreに追加
   for (final userId in userProfiles.keys) {
-    await firestore.collection('UserProfiles').doc(userId).set(userProfiles[userId]!);
+    await firestore
+        .collection('UserProfiles')
+        .doc(userId)
+        .set(userProfiles[userId]!);
     await Future<void>.delayed(const Duration(milliseconds: 1000));
   }
 }

@@ -13,14 +13,14 @@ String _$launchUrlControllerHash() =>
 @ProviderFor(launchUrlController)
 final launchUrlControllerProvider =
     AutoDisposeProvider<LaunchUrlController>.internal(
-  launchUrlController,
-  name: r'launchUrlControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$launchUrlControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      launchUrlController,
+      name: r'launchUrlControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$launchUrlControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef LaunchUrlControllerRef = AutoDisposeProviderRef<LaunchUrlController>;
 // ignore_for_file: type=lint

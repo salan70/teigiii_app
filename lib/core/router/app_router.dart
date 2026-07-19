@@ -49,22 +49,10 @@ class AppRouter extends _$AppRouter {
   final Ref ref;
 
   final List<AdaptiveRoute> commonRouteList = [
-    AdaptiveRoute(
-      path: 'definition_detail',
-      page: DefinitionDetailRoute.page,
-    ),
-    AdaptiveRoute(
-      path: 'user_list_liked',
-      page: UserListLikedRoute.page,
-    ),
-    AdaptiveRoute(
-      path: 'word_top',
-      page: WordTopRoute.page,
-    ),
-    AdaptiveRoute(
-      path: 'profile_top',
-      page: ProfileTopRoute.page,
-    ),
+    AdaptiveRoute(path: 'definition_detail', page: DefinitionDetailRoute.page),
+    AdaptiveRoute(path: 'user_list_liked', page: UserListLikedRoute.page),
+    AdaptiveRoute(path: 'word_top', page: WordTopRoute.page),
+    AdaptiveRoute(path: 'profile_top', page: ProfileTopRoute.page),
     AdaptiveRoute(
       path: 'user_list_following_or_follower',
       page: UserListFollowingOrFollowerRoute.page,
@@ -77,119 +65,86 @@ class AppRouter extends _$AppRouter {
       path: 'individual_dictionary_definition_list',
       page: IndividualDictionaryDefinitionListRoute.page,
     ),
-    AdaptiveRoute(
-      path: 'user_search',
-      page: UserSearchRoute.page,
-    ),
-    AdaptiveRoute(
-      path: 'user_search_result',
-      page: UserSearchResultRoute.page,
-    ),
+    AdaptiveRoute(path: 'user_search', page: UserSearchRoute.page),
+    AdaptiveRoute(path: 'user_search_result', page: UserSearchResultRoute.page),
   ];
 
   @override
   List<AdaptiveRoute> get routes => [
+    AdaptiveRoute(path: '/welcome', page: WelcomeRoute.page),
+    AdaptiveRoute(
+      path: '/',
+      page: BaseRoute.page,
+      guards: [ref.read(firstLaunchGuardProvider), ref.read(authGuardProvider)],
+      children: [
         AdaptiveRoute(
-          path: '/welcome',
-          page: WelcomeRoute.page,
+          path: 'home',
+          page: HomeRouterRoute.page,
+          children: [
+            AdaptiveRoute(initial: true, page: HomeRoute.page),
+            AdaptiveRoute(
+              path: 'dictionary_individual',
+              page: DictionaryIndividualRoute.page,
+            ),
+            ...commonRouteList,
+          ],
         ),
         AdaptiveRoute(
-          path: '/',
-          page: BaseRoute.page,
-          guards: [
-            ref.read(firstLaunchGuardProvider),
-            ref.read(authGuardProvider),
-          ],
+          path: 'dictionary_individual',
+          page: DictionaryIndividualRouterRoute.page,
           children: [
+            AdaptiveRoute(initial: true, page: DictionaryIndividualRoute.page),
+            ...commonRouteList,
+          ],
+        ),
+        AdaptiveRoute(
+          path: 'dictionary_everyone',
+          page: DictionaryEveryoneRouterRoute.page,
+          children: [
+            AdaptiveRoute(initial: true, page: DictionaryEveryoneRoute.page),
+            AdaptiveRoute(path: 'word_list', page: WordListRoute.page),
             AdaptiveRoute(
-              path: 'home',
-              page: HomeRouterRoute.page,
-              children: [
-                AdaptiveRoute(
-                  initial: true,
-                  page: HomeRoute.page,
-                ),
-                AdaptiveRoute(
-                  path: 'dictionary_individual',
-                  page: DictionaryIndividualRoute.page,
-                ),
-                ...commonRouteList,
-              ],
+              path: 'word_search_result',
+              page: WordSearchResultRoute.page,
             ),
             AdaptiveRoute(
               path: 'dictionary_individual',
-              page: DictionaryIndividualRouterRoute.page,
-              children: [
-                AdaptiveRoute(
-                  initial: true,
-                  page: DictionaryIndividualRoute.page,
-                ),
-                ...commonRouteList,
-              ],
+              page: DictionaryIndividualRoute.page,
             ),
-            AdaptiveRoute(
-              path: 'dictionary_everyone',
-              page: DictionaryEveryoneRouterRoute.page,
-              children: [
-                AdaptiveRoute(
-                  initial: true,
-                  page: DictionaryEveryoneRoute.page,
-                ),
-                AdaptiveRoute(
-                  path: 'word_list',
-                  page: WordListRoute.page,
-                ),
-                AdaptiveRoute(
-                  path: 'word_search_result',
-                  page: WordSearchResultRoute.page,
-                ),
-                AdaptiveRoute(
-                  path: 'dictionary_individual',
-                  page: DictionaryIndividualRoute.page,
-                ),
-                ...commonRouteList,
-              ],
-            ),
+            ...commonRouteList,
           ],
         ),
-        AdaptiveRoute(
-          path: '/setting',
-          page: SettingRouterRoute.page,
-          fullscreenDialog: true,
-          children: [
-            AdaptiveRoute(
-              initial: true,
-              page: SettingRoute.page,
-            ),
-            AdaptiveRoute(
-              path: 'license',
-              page: MyLicenseRoute.page,
-            ),
-            AdaptiveRoute(
-              path: 'user_list_muted',
-              page: UserListMutedRoute.page,
-            ),
-          ],
-        ),
-        AdaptiveRoute(
-          path: '/definition_post',
-          page: DefinitionPostRoute.page,
-          fullscreenDialog: true,
-        ),
-        AdaptiveRoute(
-          path: '/definition_edit',
-          page: DefinitionEditRoute.page,
-          fullscreenDialog: true,
-        ),
-        AdaptiveRoute(
-          path: '/profile_edit',
-          page: ProfileEditRoute.page,
-          fullscreenDialog: true,
-        ),
-        AdaptiveRoute(
-          path: '/sign_in_failure',
-          page: SignInFailureRoute.page,
-          fullscreenDialog: true,
-        ),
-      ];
+      ],
+    ),
+    AdaptiveRoute(
+      path: '/setting',
+      page: SettingRouterRoute.page,
+      fullscreenDialog: true,
+      children: [
+        AdaptiveRoute(initial: true, page: SettingRoute.page),
+        AdaptiveRoute(path: 'license', page: MyLicenseRoute.page),
+        AdaptiveRoute(path: 'user_list_muted', page: UserListMutedRoute.page),
+      ],
+    ),
+    AdaptiveRoute(
+      path: '/definition_post',
+      page: DefinitionPostRoute.page,
+      fullscreenDialog: true,
+    ),
+    AdaptiveRoute(
+      path: '/definition_edit',
+      page: DefinitionEditRoute.page,
+      fullscreenDialog: true,
+    ),
+    AdaptiveRoute(
+      path: '/profile_edit',
+      page: ProfileEditRoute.page,
+      fullscreenDialog: true,
+    ),
+    AdaptiveRoute(
+      path: '/sign_in_failure',
+      page: SignInFailureRoute.page,
+      fullscreenDialog: true,
+    ),
+  ];
 }

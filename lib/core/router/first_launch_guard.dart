@@ -9,7 +9,8 @@ import 'app_router.dart';
 part 'first_launch_guard.g.dart';
 
 @riverpod
-FirstLaunchGuard firstLaunchGuard(FirstLaunchGuardRef ref) => FirstLaunchGuard(ref);
+FirstLaunchGuard firstLaunchGuard(FirstLaunchGuardRef ref) =>
+    FirstLaunchGuard(ref);
 
 class FirstLaunchGuard extends AutoRouteGuard {
   FirstLaunchGuard(this.ref);
@@ -21,8 +22,9 @@ class FirstLaunchGuard extends AutoRouteGuard {
     NavigationResolver resolver,
     StackRouter router,
   ) async {
-    final isFirstLaunch =
-        await ref.read(isFirstLaunchRepositoryProvider).isFirstLaunch();
+    final isFirstLaunch = await ref
+        .read(isFirstLaunchRepositoryProvider)
+        .isFirstLaunch();
 
     if (isFirstLaunch) {
       logger.d('初回起動しました。');

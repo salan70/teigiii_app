@@ -27,19 +27,13 @@ class AdaptiveOverflowText extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          text,
-          maxLines: maxLines,
-          overflow: TextOverflow.ellipsis,
-        ),
+        Text(text, maxLines: maxLines, overflow: TextOverflow.ellipsis),
         if (isTextOverflown())
           Align(
             alignment: Alignment.topRight,
             child: Text(
               '続き →',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.tertiary,
-              ),
+              style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
             ),
           ),
       ],

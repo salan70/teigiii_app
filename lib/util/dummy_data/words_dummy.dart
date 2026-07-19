@@ -71,13 +71,7 @@ Future<void> addWordsDummy0to29(String flavorName) async {
     'みらいえいごう',
   ];
 
-  await _addWordsDummyToFirestore(
-    flavorName,
-    words,
-    readings,
-    0,
-    29,
-  );
+  await _addWordsDummyToFirestore(flavorName, words, readings, 0, 29);
 }
 
 Future<void> addWordsDummy30to59(String flavorName) async {
@@ -149,13 +143,7 @@ Future<void> addWordsDummy30to59(String flavorName) async {
     'ざつおん',
   ];
 
-  await _addWordsDummyToFirestore(
-    flavorName,
-    words,
-    readings,
-    30,
-    59,
-  );
+  await _addWordsDummyToFirestore(flavorName, words, readings, 30, 59);
 }
 
 Future<void> _addWordsDummyToFirestore(

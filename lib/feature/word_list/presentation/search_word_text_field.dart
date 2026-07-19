@@ -6,10 +6,7 @@ import '../../../../core/router/app_router.dart';
 
 /// 語句を検索する用の [TextField]。
 class SearchWordTextField extends StatefulWidget {
-  const SearchWordTextField({
-    super.key,
-    this.defaultText,
-  });
+  const SearchWordTextField({super.key, this.defaultText});
 
   /// 初期値として表示するテキスト。
   final String? defaultText;
@@ -52,24 +49,16 @@ class _SearchWordTextFieldState extends State<SearchWordTextField> {
           return;
         }
         controller.text = widget.defaultText ?? '';
-        context.pushRoute(
-          WordSearchResultRoute(searchWord: value),
-        );
+        context.pushRoute(WordSearchResultRoute(searchWord: value));
       },
       decoration: InputDecoration(
-        prefixIcon: const Icon(
-          CupertinoIcons.search,
-          size: 20,
-        ),
+        prefixIcon: const Icon(CupertinoIcons.search, size: 20),
         prefixIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
         suffixIcon: isEmpty
             ? const SizedBox.shrink()
             : GestureDetector(
                 onTap: controller.clear,
-                child: const Icon(
-                  CupertinoIcons.clear_thick_circled,
-                  size: 20,
-                ),
+                child: const Icon(CupertinoIcons.clear_thick_circled, size: 20),
               ),
         suffixIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
         hintText: '語句を検索',

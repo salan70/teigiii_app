@@ -12,14 +12,9 @@ class UserSearchPage extends StatelessWidget {
     return GestureDetector(
       onTap: () => primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('ユーザーを探す'),
-        ),
+        appBar: AppBar(title: const Text('ユーザーを探す')),
         body: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 24,
-            horizontal: 40,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 40),
           child: SearchUserTextField(autoFocus: true),
         ),
       ),

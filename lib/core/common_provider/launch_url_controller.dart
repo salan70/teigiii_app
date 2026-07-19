@@ -31,7 +31,9 @@ class LaunchUrlController {
           ? ScaffoldMessengerType.baseRoute
           : ScaffoldMessengerType.topRoute;
 
-      ref.read(snackBarControllerProvider).showErrorSnackBar(
+      ref
+          .read(snackBarControllerProvider)
+          .showErrorSnackBar(
             'ページを開けませんでした。もう一度お試しください。',
             scaffoldMessengerType,
           );

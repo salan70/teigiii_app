@@ -15,11 +15,7 @@ class ProfileWidgetShimmer extends StatelessWidget {
         children: [
           const Gap(24),
           const Row(
-            children: [
-              ShimmerWidget.circular(width: 72, height: 72),
-              Spacer(),
-              
-            ],
+            children: [ShimmerWidget.circular(width: 72, height: 72), Spacer()],
           ),
           const Gap(16),
           const ShimmerWidget.rectangular(width: 240, height: 24),

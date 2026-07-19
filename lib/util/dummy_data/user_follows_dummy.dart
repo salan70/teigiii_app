@@ -27,14 +27,12 @@ Future<void> addUserFollowsToFirestore2(String flavorName) async {
 
   for (var i = 2; i <= 20; i++) {
     final userId = 'user$i';
-    await FirebaseFirestore.instance.collection('UserFollows').add(
-      {
-        'followingId': 'user1',
-        'followerId': userId,
-        'createdAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      },
-    );
+    await FirebaseFirestore.instance.collection('UserFollows').add({
+      'followingId': 'user1',
+      'followerId': userId,
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
   }
 }
 
@@ -46,14 +44,12 @@ Future<void> addUserFollowsToFirestore3(String flavorName) async {
 
   for (var i = 2; i <= 20; i++) {
     final userId = 'user$i';
-    await FirebaseFirestore.instance.collection('UserFollows').add(
-      {
-        'followingId': userId,
-        'followerId': 'user1',
-        'createdAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      },
-    );
+    await FirebaseFirestore.instance.collection('UserFollows').add({
+      'followingId': userId,
+      'followerId': 'user1',
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
   }
 }
 

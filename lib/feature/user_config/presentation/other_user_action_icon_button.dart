@@ -72,17 +72,17 @@ class OtherUserActionIconButton extends ConsumerWidget with PresentationMixin {
         PullDownMenuItem(
           onTap: () async {
             final currentUserId = ref.read(userIdProvider)!;
-            final currentUserProfile =
-                await ref.read(userProfileProvider(currentUserId).future);
+            final currentUserProfile = await ref.read(
+              userProfileProvider(currentUserId).future,
+            );
 
             final url = userReportFormUrl(
               currentUserPublicId: currentUserProfile.publicId,
               targetUserPublicId: ownerProfile.publicId,
             );
-            await ref.read(launchUrlControllerProvider).launchURL(
-                  url,
-                  inBaseRoute: inBaseRoute,
-                );
+            await ref
+                .read(launchUrlControllerProvider)
+                .launchURL(url, inBaseRoute: inBaseRoute);
           },
           title: 'このユーザーを報告',
           icon: CupertinoIcons.flag,
@@ -103,8 +103,9 @@ class OtherUserActionIconButton extends ConsumerWidget with PresentationMixin {
             final position =
                 box!.localToGlobal(Offset.zero) & const Size(40, 48);
 
-            final ownerProfile =
-                await ref.read(userProfileProvider(ownerId).future);
+            final ownerProfile = await ref.read(
+              userProfileProvider(ownerId).future,
+            );
 
             if (!context.mounted) {
               return;

@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import '../../router/app_router.dart';
 
 class ToSearchUserButton extends StatelessWidget {
-  const ToSearchUserButton({
-    super.key,
-  });
+  const ToSearchUserButton({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -12,8 +12,11 @@ Widget buildCustomRefreshIndicator(
   double refreshTriggerPullDistance,
   double refreshIndicatorExtent,
 ) {
-  final percentageComplete =
-      clampDouble(pulledExtent / refreshTriggerPullDistance, 0, 1);
+  final percentageComplete = clampDouble(
+    pulledExtent / refreshTriggerPullDistance,
+    0,
+    1,
+  );
   const margin = 16.0;
   const radius = 10.0;
 

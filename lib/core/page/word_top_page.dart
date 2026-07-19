@@ -17,10 +17,7 @@ import '../common_widget/stickey_tab_bar_deligate.dart';
 
 @RoutePage()
 class WordTopPage extends ConsumerWidget {
-  const WordTopPage({
-    super.key,
-    required this.wordId,
-  });
+  const WordTopPage({super.key, required this.wordId});
 
   final String wordId;
 
@@ -72,14 +69,12 @@ class WordTopPage extends ConsumerWidget {
                     SliverAppBar(
                       forceElevated: true,
                       floating: true,
-                      title: Text(
-                        word.word,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      title: Text(word.word, overflow: TextOverflow.ellipsis),
                     ),
                     SliverList(
-                      delegate:
-                          SliverChildListDelegate([WordWidget(word: word)]),
+                      delegate: SliverChildListDelegate([
+                        WordWidget(word: word),
+                      ]),
                     ),
                     SliverPersistentHeader(
                       pinned: true,
@@ -92,8 +87,9 @@ class WordTopPage extends ConsumerWidget {
                             Tab(text: 'いいね数順'),
                           ],
                           onTap: (_) {
-                            if (DefaultTabController.of(context)
-                                .indexIsChanging) {
+                            if (DefaultTabController.of(
+                              context,
+                            ).indexIsChanging) {
                               // * タブを切り替えた場合
                               return;
                             }
@@ -137,15 +133,13 @@ class WordTopPage extends ConsumerWidget {
         },
         loading: () => Scaffold(
           appBar: AppBar(),
-          body: const Column(
-            children: [
-              WordPageShimmer(),
-            ],
-          ),
+          body: const Column(children: [WordPageShimmer()]),
         ),
         error: (error, stackTrace) {
-          logger.e('語句[$wordId]の取得に失敗しました。'
-              'error: $error, stackTrace: $stackTrace');
+          logger.e(
+            '語句[$wordId]の取得に失敗しました。'
+            'error: $error, stackTrace: $stackTrace',
+          );
 
           return Scaffold(
             appBar: AppBar(),
@@ -155,7 +149,7 @@ class WordTopPage extends ConsumerWidget {
                 alignment: Alignment.topCenter,
                 child: asyncWord.isRefreshing
                     ? // エラー発生後の再読み込み中の場合
-                    const CupertinoActivityIndicator()
+                      const CupertinoActivityIndicator()
                     : ErrorAndRetryWidget.cannotInquire(
                         onRetry: () => ref.invalidate(wordProvider(wordId)),
                       ),

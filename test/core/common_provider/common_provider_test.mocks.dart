@@ -23,18 +23,8 @@ import 'is_loading_overlay_state_test.dart' as _i2;
 /// See the documentation for Mockito's code generation for more information.
 class MockListener extends _i1.Mock implements _i2.Listener<bool> {
   @override
-  void call(
-    bool? previous,
-    bool? next,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #call,
-          [
-            previous,
-            next,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
+  void call(bool? previous, bool? next) => super.noSuchMethod(
+    Invocation.method(#call, [previous, next]),
+    returnValueForMissingStub: null,
+  );
 }

@@ -13,8 +13,9 @@ String _$inAppReviewHash() => r'e4a81de941378fc21b9690e55d12aad3923b492c';
 final inAppReviewProvider = AutoDisposeProvider<InAppReview>.internal(
   inAppReview,
   name: r'inAppReviewProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$inAppReviewHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$inAppReviewHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

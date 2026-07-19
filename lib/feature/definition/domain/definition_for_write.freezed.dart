@@ -12,7 +12,8 @@ part of 'definition_for_write.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$DefinitionForWrite {
@@ -32,16 +33,18 @@ mixin _$DefinitionForWrite {
 /// @nodoc
 abstract class $DefinitionForWriteCopyWith<$Res> {
   factory $DefinitionForWriteCopyWith(
-          DefinitionForWrite value, $Res Function(DefinitionForWrite) then) =
-      _$DefinitionForWriteCopyWithImpl<$Res, DefinitionForWrite>;
+    DefinitionForWrite value,
+    $Res Function(DefinitionForWrite) then,
+  ) = _$DefinitionForWriteCopyWithImpl<$Res, DefinitionForWrite>;
   @useResult
-  $Res call(
-      {String? id,
-      String authorId,
-      String word,
-      String wordReading,
-      bool isPublic,
-      String definition});
+  $Res call({
+    String? id,
+    String authorId,
+    String word,
+    String wordReading,
+    bool isPublic,
+    String definition,
+  });
 }
 
 /// @nodoc
@@ -64,59 +67,65 @@ class _$DefinitionForWriteCopyWithImpl<$Res, $Val extends DefinitionForWrite>
     Object? isPublic = null,
     Object? definition = null,
   }) {
-    return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      authorId: null == authorId
-          ? _value.authorId
-          : authorId // ignore: cast_nullable_to_non_nullable
-              as String,
-      word: null == word
-          ? _value.word
-          : word // ignore: cast_nullable_to_non_nullable
-              as String,
-      wordReading: null == wordReading
-          ? _value.wordReading
-          : wordReading // ignore: cast_nullable_to_non_nullable
-              as String,
-      isPublic: null == isPublic
-          ? _value.isPublic
-          : isPublic // ignore: cast_nullable_to_non_nullable
-              as bool,
-      definition: null == definition
-          ? _value.definition
-          : definition // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: freezed == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            authorId: null == authorId
+                ? _value.authorId
+                : authorId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            word: null == word
+                ? _value.word
+                : word // ignore: cast_nullable_to_non_nullable
+                      as String,
+            wordReading: null == wordReading
+                ? _value.wordReading
+                : wordReading // ignore: cast_nullable_to_non_nullable
+                      as String,
+            isPublic: null == isPublic
+                ? _value.isPublic
+                : isPublic // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            definition: null == definition
+                ? _value.definition
+                : definition // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$DefinitionForWriteImplCopyWith<$Res>
     implements $DefinitionForWriteCopyWith<$Res> {
-  factory _$$DefinitionForWriteImplCopyWith(_$DefinitionForWriteImpl value,
-          $Res Function(_$DefinitionForWriteImpl) then) =
-      __$$DefinitionForWriteImplCopyWithImpl<$Res>;
+  factory _$$DefinitionForWriteImplCopyWith(
+    _$DefinitionForWriteImpl value,
+    $Res Function(_$DefinitionForWriteImpl) then,
+  ) = __$$DefinitionForWriteImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? id,
-      String authorId,
-      String word,
-      String wordReading,
-      bool isPublic,
-      String definition});
+  $Res call({
+    String? id,
+    String authorId,
+    String word,
+    String wordReading,
+    bool isPublic,
+    String definition,
+  });
 }
 
 /// @nodoc
 class __$$DefinitionForWriteImplCopyWithImpl<$Res>
     extends _$DefinitionForWriteCopyWithImpl<$Res, _$DefinitionForWriteImpl>
     implements _$$DefinitionForWriteImplCopyWith<$Res> {
-  __$$DefinitionForWriteImplCopyWithImpl(_$DefinitionForWriteImpl _value,
-      $Res Function(_$DefinitionForWriteImpl) _then)
-      : super(_value, _then);
+  __$$DefinitionForWriteImplCopyWithImpl(
+    _$DefinitionForWriteImpl _value,
+    $Res Function(_$DefinitionForWriteImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -128,46 +137,48 @@ class __$$DefinitionForWriteImplCopyWithImpl<$Res>
     Object? isPublic = null,
     Object? definition = null,
   }) {
-    return _then(_$DefinitionForWriteImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      authorId: null == authorId
-          ? _value.authorId
-          : authorId // ignore: cast_nullable_to_non_nullable
-              as String,
-      word: null == word
-          ? _value.word
-          : word // ignore: cast_nullable_to_non_nullable
-              as String,
-      wordReading: null == wordReading
-          ? _value.wordReading
-          : wordReading // ignore: cast_nullable_to_non_nullable
-              as String,
-      isPublic: null == isPublic
-          ? _value.isPublic
-          : isPublic // ignore: cast_nullable_to_non_nullable
-              as bool,
-      definition: null == definition
-          ? _value.definition
-          : definition // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$DefinitionForWriteImpl(
+        id: freezed == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        authorId: null == authorId
+            ? _value.authorId
+            : authorId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        word: null == word
+            ? _value.word
+            : word // ignore: cast_nullable_to_non_nullable
+                  as String,
+        wordReading: null == wordReading
+            ? _value.wordReading
+            : wordReading // ignore: cast_nullable_to_non_nullable
+                  as String,
+        isPublic: null == isPublic
+            ? _value.isPublic
+            : isPublic // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        definition: null == definition
+            ? _value.definition
+            : definition // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$DefinitionForWriteImpl extends _DefinitionForWrite {
-  const _$DefinitionForWriteImpl(
-      {required this.id,
-      required this.authorId,
-      required this.word,
-      required this.wordReading,
-      required this.isPublic,
-      required this.definition})
-      : super._();
+  const _$DefinitionForWriteImpl({
+    required this.id,
+    required this.authorId,
+    required this.word,
+    required this.wordReading,
+    required this.isPublic,
+    required this.definition,
+  }) : super._();
 
   /// 更新時のみ使用する。新規投稿時はnull
   @override
@@ -207,28 +218,37 @@ class _$DefinitionForWriteImpl extends _DefinitionForWrite {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, authorId, word, wordReading, isPublic, definition);
+    runtimeType,
+    id,
+    authorId,
+    word,
+    wordReading,
+    isPublic,
+    definition,
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$DefinitionForWriteImplCopyWith<_$DefinitionForWriteImpl> get copyWith =>
       __$$DefinitionForWriteImplCopyWithImpl<_$DefinitionForWriteImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _DefinitionForWrite extends DefinitionForWrite {
-  const factory _DefinitionForWrite(
-      {required final String? id,
-      required final String authorId,
-      required final String word,
-      required final String wordReading,
-      required final bool isPublic,
-      required final String definition}) = _$DefinitionForWriteImpl;
+  const factory _DefinitionForWrite({
+    required final String? id,
+    required final String authorId,
+    required final String word,
+    required final String wordReading,
+    required final bool isPublic,
+    required final String definition,
+  }) = _$DefinitionForWriteImpl;
   const _DefinitionForWrite._() : super._();
 
   @override
-
   /// 更新時のみ使用する。新規投稿時はnull
   String? get id;
   @override

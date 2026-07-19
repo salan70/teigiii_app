@@ -23,23 +23,20 @@ class WordWidget extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Gap(24),
-          Text(
-            word.word,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          Text(word.word, style: Theme.of(context).textTheme.titleLarge),
           Text(
             word.reading,
             style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.bold,
-                ),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const Gap(24),
           Text(
             '${word.postedDefinitionCount}投稿',
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
           const Gap(8),
           Center(

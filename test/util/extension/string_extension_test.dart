@@ -36,10 +36,7 @@ void main() {
       const hiragana = 'サケ';
 
       // * Act & Assert
-      expect(
-        () => hiragana.katakanaToHiragana(),
-        throwsFormatException,
-      );
+      expect(() => hiragana.katakanaToHiragana(), throwsFormatException);
     });
 
     test('空文字', () {
@@ -47,10 +44,7 @@ void main() {
       const hiragana = '';
 
       // * Act & Assert
-      expect(
-        () => hiragana.katakanaToHiragana(),
-        throwsFormatException,
-      );
+      expect(() => hiragana.katakanaToHiragana(), throwsFormatException);
     });
 
     test('スペース', () {
@@ -58,10 +52,7 @@ void main() {
       const hiragana = ' ';
 
       // * Act & Assert
-      expect(
-        () => hiragana.katakanaToHiragana(),
-        throwsArgumentError,
-      );
+      expect(() => hiragana.katakanaToHiragana(), throwsArgumentError);
     });
 
     test('ひらがな', () {
@@ -69,10 +60,7 @@ void main() {
       const hiragana = 'あ';
 
       // * Act & Assert
-      expect(
-        () => hiragana.katakanaToHiragana(),
-        throwsArgumentError,
-      );
+      expect(() => hiragana.katakanaToHiragana(), throwsArgumentError);
     });
 
     test('数字', () {
@@ -80,10 +68,7 @@ void main() {
       const hiragana = '1';
 
       // * Act & Assert
-      expect(
-        () => hiragana.katakanaToHiragana(),
-        throwsArgumentError,
-      );
+      expect(() => hiragana.katakanaToHiragana(), throwsArgumentError);
     });
 
     test('半角カタカナ', () {
@@ -91,10 +76,7 @@ void main() {
       const hiragana = 'ｱ';
 
       // * Act & Assert
-      expect(
-        () => hiragana.katakanaToHiragana(),
-        throwsArgumentError,
-      );
+      expect(() => hiragana.katakanaToHiragana(), throwsArgumentError);
     });
   });
 

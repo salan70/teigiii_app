@@ -26,10 +26,7 @@ class DictionaryEveryonePage extends StatelessWidget {
           leading: const ToSettingButton(),
         ),
         body: Padding(
-          padding: const EdgeInsets.only(
-            left: 16,
-            right: 16,
-          ),
+          padding: const EdgeInsets.only(left: 16, right: 16),
           child: ListView(
             children: const [
               Gap(24),

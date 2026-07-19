@@ -23,11 +23,7 @@ class BasePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUserId = ref.watch(userIdProvider);
     return currentUserId == null
-        ? const Scaffold(
-            body: Center(
-              child: CupertinoActivityIndicator(),
-            ),
-          )
+        ? const Scaffold(body: Center(child: CupertinoActivityIndicator()))
         : AutoTabsRouter(
             routes: [
               const HomeRouterRoute(),
@@ -78,9 +74,7 @@ class BasePage extends ConsumerWidget {
                       if (tabsRouter.activeIndex == index) {
                         // ネストされたルーターのスタック情報を破棄
                         tabsRouter
-                            .innerRouterOf<StackRouter>(
-                              tabsRouter.current.name,
-                            )
+                            .innerRouterOf<StackRouter>(tabsRouter.current.name)
                             ?.popUntilRoot();
 
                         PrimaryScrollController.of(

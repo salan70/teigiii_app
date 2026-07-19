@@ -13,14 +13,14 @@ String _$snackBarControllerHash() =>
 @ProviderFor(snackBarController)
 final snackBarControllerProvider =
     AutoDisposeProvider<SnackBarController>.internal(
-  snackBarController,
-  name: r'snackBarControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$snackBarControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      snackBarController,
+      name: r'snackBarControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$snackBarControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef SnackBarControllerRef = AutoDisposeProviderRef<SnackBarController>;
 // ignore_for_file: type=lint

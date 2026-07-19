@@ -25,23 +25,17 @@ class _BaseOutlinedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(48),
-        ),
-        side: BorderSide(
-          color: borderColor,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(48)),
+        side: BorderSide(color: borderColor),
       ),
       onPressed: onPressed,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Text(
           text,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: textColor,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(color: textColor),
         ),
       ),
     );

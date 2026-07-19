@@ -6,8 +6,9 @@ import 'text_theme.dart';
 // [BuildContext]を引数で渡すしたくないが、
 // [AppBarTheme]の[titleTextStyle]を設定するためにやむを得ず渡している
 ThemeData getThemeData(ThemeMode themeMode, BuildContext context) {
-  final colorScheme =
-      themeMode == ThemeMode.light ? lightColorScheme : darkColorScheme;
+  final colorScheme = themeMode == ThemeMode.light
+      ? lightColorScheme
+      : darkColorScheme;
 
   return ThemeData(
     fontFamily: lineFontFamily,
@@ -18,22 +19,16 @@ ThemeData getThemeData(ThemeMode themeMode, BuildContext context) {
       backgroundColor: colorScheme.surface,
       elevation: 0.1,
       titleTextStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
-            fontFamily: lineFontFamily,
-            color: colorScheme.onSurface,
-            fontWeight: FontWeight.bold,
-          ),
-      iconTheme: IconThemeData(
+        fontFamily: lineFontFamily,
         color: colorScheme.onSurface,
+        fontWeight: FontWeight.bold,
       ),
+      iconTheme: IconThemeData(color: colorScheme.onSurface),
     ),
     iconButtonTheme: IconButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          colorScheme.surface,
-        ),
-        iconColor: MaterialStateProperty.all<Color>(
-          colorScheme.primary,
-        ),
+        backgroundColor: MaterialStateProperty.all<Color>(colorScheme.surface),
+        iconColor: MaterialStateProperty.all<Color>(colorScheme.primary),
       ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -44,9 +39,7 @@ ThemeData getThemeData(ThemeMode themeMode, BuildContext context) {
         fontWeight: FontWeight.bold,
         fontSize: 12,
       ),
-      unselectedLabelStyle: const TextStyle(
-        fontFamily: lineFontFamily,
-      ),
+      unselectedLabelStyle: const TextStyle(fontFamily: lineFontFamily),
       elevation: 0.1,
     ),
     tabBarTheme: TabBarThemeData(

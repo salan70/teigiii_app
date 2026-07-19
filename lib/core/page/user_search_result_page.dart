@@ -19,15 +19,14 @@ class UserSearchResultPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncUserProfileByPublicId =
-        ref.watch(userIdSearchByPublicIdProvider(searchWord));
+    final asyncUserProfileByPublicId = ref.watch(
+      userIdSearchByPublicIdProvider(searchWord),
+    );
 
     return GestureDetector(
       onTap: () => primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('ユーザーを探す'),
-        ),
+        appBar: AppBar(title: const Text('ユーザーを探す')),
         body: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: asyncUserProfileByPublicId.when(
@@ -60,8 +59,10 @@ class UserSearchResultPage extends ConsumerWidget {
             },
             loading: ProfileTileShimmer.new,
             error: (error, stackTrace) {
-              logger.e('[$searchWord]を検索時にエラーが発生しました。'
-                  'error: $error, stackTrace: $stackTrace');
+              logger.e(
+                '[$searchWord]を検索時にエラーが発生しました。'
+                'error: $error, stackTrace: $stackTrace',
+              );
               return ErrorAndRetryWidget.cannotInquire(
                 onRetry: () =>
                     ref.invalidate(userIdSearchByPublicIdProvider(searchWord)),

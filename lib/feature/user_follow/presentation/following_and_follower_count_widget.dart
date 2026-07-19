@@ -38,10 +38,9 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
                 children: [
                   Text(
                     followCount.followingCount.toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const Gap(4),
                   const Text('フォロー中'),
@@ -62,10 +61,9 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
                 children: [
                   Text(
                     followCount.followerCount.toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const Gap(4),
                   const Text('フォロワー'),

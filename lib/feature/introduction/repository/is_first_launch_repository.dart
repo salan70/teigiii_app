@@ -6,8 +6,7 @@ part 'is_first_launch_repository.g.dart';
 @riverpod
 IsFirstLaunchRepository isFirstLaunchRepository(
   IsFirstLaunchRepositoryRef ref,
-) =>
-    IsFirstLaunchRepository();
+) => IsFirstLaunchRepository();
 
 class IsFirstLaunchRepository {
   IsFirstLaunchRepository();

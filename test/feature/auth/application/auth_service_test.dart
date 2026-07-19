@@ -166,27 +166,30 @@ void main() {
   });
 
   group('signIn() 失敗時のクリーンアップ', () {
-    test('initUser 失敗時: サーバーユーザー削除 → Firebase Auth 削除の順で呼ばれ rethrow する', () async {
-      // * Arrange
-      final authService = container.read(authServiceProvider);
-      setupMock('iOS 14.4');
-      when(
-        mockRegisterUserRepository.initUser(
-          name: anyNamed('name'),
-          osVersion: anyNamed('osVersion'),
-          appVersion: anyNamed('appVersion'),
-        ),
-      ).thenThrow(ApiException(statusCode: 500));
+    test(
+      'initUser 失敗時: サーバーユーザー削除 → Firebase Auth 削除の順で呼ばれ rethrow する',
+      () async {
+        // * Arrange
+        final authService = container.read(authServiceProvider);
+        setupMock('iOS 14.4');
+        when(
+          mockRegisterUserRepository.initUser(
+            name: anyNamed('name'),
+            osVersion: anyNamed('osVersion'),
+            appVersion: anyNamed('appVersion'),
+          ),
+        ).thenThrow(ApiException(statusCode: 500));
 
-      // * Act & Assert
-      await expectLater(authService.signIn(), throwsA(isA<ApiException>()));
+        // * Act & Assert
+        await expectLater(authService.signIn(), throwsA(isA<ApiException>()));
 
-      // Firebase Auth だけでなくサーバーユーザーもベストエフォート削除される
-      verifyInOrder([
-        mockRegisterUserRepository.deleteUser(),
-        mockAuthRepository.deleteUser(),
-      ]);
-    });
+        // Firebase Auth だけでなくサーバーユーザーもベストエフォート削除される
+        verifyInOrder([
+          mockRegisterUserRepository.deleteUser(),
+          mockAuthRepository.deleteUser(),
+        ]);
+      },
+    );
 
     test('サーバーユーザー削除も失敗した場合でも Firebase Auth 削除まで到達し rethrow する', () async {
       // * Arrange
@@ -254,10 +257,7 @@ void main() {
       ).thenThrow(ApiException(statusCode: 500));
 
       // * Act & Assert
-      await expectLater(
-        authService.deleteUser(),
-        throwsA(isA<ApiException>()),
-      );
+      await expectLater(authService.deleteUser(), throwsA(isA<ApiException>()));
       verifyNever(mockAuthRepository.deleteUser());
     });
   });

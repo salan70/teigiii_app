@@ -23,10 +23,7 @@ class ProfileTileShimmer extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const ShimmerWidget.rectangular(
-                          width: 120,
-                          height: 24,
-                        ),
+                        const ShimmerWidget.rectangular(width: 120, height: 24),
                         ShimmerWidget.circular(
                           width: 144,
                           height: 40,

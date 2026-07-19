@@ -22,7 +22,10 @@ class SnackBarController {
         .read(scaffoldMessengerKeyProvider(type))
         .currentState
         ?.hideCurrentSnackBar();
-    ref.read(scaffoldMessengerKeyProvider(type)).currentState?.showSnackBar(
+    ref
+        .read(scaffoldMessengerKeyProvider(type))
+        .currentState
+        ?.showSnackBar(
           _BaseSnackBar(
             text: text,
             duration: const Duration(milliseconds: 2000),
@@ -37,7 +40,10 @@ class SnackBarController {
         .read(scaffoldMessengerKeyProvider(type))
         .currentState
         ?.hideCurrentSnackBar();
-    ref.read(scaffoldMessengerKeyProvider(type)).currentState?.showSnackBar(
+    ref
+        .read(scaffoldMessengerKeyProvider(type))
+        .currentState
+        ?.showSnackBar(
           _BaseSnackBar(
             text: text,
             duration: const Duration(milliseconds: 4000),
@@ -47,16 +53,14 @@ class SnackBarController {
 }
 
 class _BaseSnackBar extends SnackBar {
-  _BaseSnackBar({
-    required String text,
-    required super.duration,
-  }) : super(
-          content: Text(text),
-          margin: const EdgeInsets.all(16),
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(4)),
-          ),
-        );
+  _BaseSnackBar({required String text, required super.duration})
+    : super(
+        content: Text(text),
+        margin: const EdgeInsets.all(16),
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+        ),
+      );
 }

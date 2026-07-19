@@ -47,8 +47,8 @@ class ConfirmDialog extends StatelessWidget {
             child: Text(
               confirmButtonText,
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.error,
-                  ),
+                color: Theme.of(context).colorScheme.error,
+              ),
             ),
           ),
         ),

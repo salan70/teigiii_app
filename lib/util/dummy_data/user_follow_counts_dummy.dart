@@ -9,13 +9,11 @@ Future<void> addUserFollowCountsToFirestore(String flavorName) async {
 
   for (var i = 1; i <= 20; i++) {
     final userId = 'user$i';
-    await firestore.collection('UserFollowCounts').doc(userId).set(
-      {
-        'followerCount': 0,
-        'followingCount': 0,
-        'createdAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      },
-    );
+    await firestore.collection('UserFollowCounts').doc(userId).set({
+      'followerCount': 0,
+      'followingCount': 0,
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
   }
 }

@@ -13,8 +13,7 @@ GlobalKey globalKey(GlobalKeyRef ref) => GlobalKey();
 GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey(
   ScaffoldMessengerKeyRef ref,
   ScaffoldMessengerType type,
-) =>
-    GlobalKey<ScaffoldMessengerState>();
+) => GlobalKey<ScaffoldMessengerState>();
 
 enum ScaffoldMessengerType {
   /// MyApp の builder メソッド内の ScaffoldMessenger に設定する Key.
@@ -27,5 +26,5 @@ enum ScaffoldMessengerType {
   ///
   /// BottomNavigationBar を表示している Page 上で
   /// Snackbar を表示する場合に使用する。
-  baseRoute;
+  baseRoute,
 }

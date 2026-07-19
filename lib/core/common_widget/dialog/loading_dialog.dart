@@ -28,8 +28,9 @@ class OverlayLoadingWidget extends StatelessWidget {
                 children: [
                   CupertinoActivityIndicator(
                     radius: 16,
-                    color:
-                        Theme.of(context).colorScheme.surface.withOpacity(0.3),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.surface.withOpacity(0.3),
                   ),
                 ],
               ),

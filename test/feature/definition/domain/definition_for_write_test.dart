@@ -56,10 +56,7 @@ void main() {
       final actual = definition.outputWordError();
 
       // * Assert
-      expect(
-        actual,
-        '${baseDefinitionForWrite.maxWordLength}文字以内で入力してください',
-      );
+      expect(actual, '${baseDefinitionForWrite.maxWordLength}文字以内で入力してください');
     });
 
     test('スペースのみ（先頭がスペース）', () {
@@ -99,8 +96,9 @@ void main() {
 
     test('ひらがな + カタカナ + アラビア数字 + 大文字アルファベット + 小文字アルファベット + ?', () {
       // * Arrange
-      final definition =
-          baseDefinitionForWrite.copyWith(wordReading: 'ひらがなカタカナ0Aa?');
+      final definition = baseDefinitionForWrite.copyWith(
+        wordReading: 'ひらがなカタカナ0Aa?',
+      );
 
       // * Act
       final actual = definition.outputWordReadingError();
@@ -111,8 +109,9 @@ void main() {
 
     test('途中にスペース', () {
       // * Arrange
-      final definition =
-          baseDefinitionForWrite.copyWith(wordReading: 'ふつかめの かれー');
+      final definition = baseDefinitionForWrite.copyWith(
+        wordReading: 'ふつかめの かれー',
+      );
 
       // * Act
       final actual = definition.outputWordReadingError();
@@ -123,8 +122,9 @@ void main() {
 
     test('漢字が含まれている', () {
       // * Arrange
-      final definition =
-          baseDefinitionForWrite.copyWith(wordReading: '二日目の かれー');
+      final definition = baseDefinitionForWrite.copyWith(
+        wordReading: '二日目の かれー',
+      );
 
       // * Act
       final actual = definition.outputWordReadingError();
@@ -137,8 +137,9 @@ void main() {
       // * Arrange
       final wordReading =
           'あ' * (baseDefinitionForWrite.maxWordReadingLength + 1);
-      final definition =
-          baseDefinitionForWrite.copyWith(wordReading: wordReading);
+      final definition = baseDefinitionForWrite.copyWith(
+        wordReading: wordReading,
+      );
 
       // * Act
       final actual = definition.outputWordReadingError();
@@ -152,8 +153,9 @@ void main() {
 
     test('無効な記号が含まれている', () {
       // * Arrange
-      final definition =
-          baseDefinitionForWrite.copyWith(wordReading: 'ふつかめの かれー💓');
+      final definition = baseDefinitionForWrite.copyWith(
+        wordReading: 'ふつかめの かれー💓',
+      );
 
       // * Act
       final actual = definition.outputWordReadingError();

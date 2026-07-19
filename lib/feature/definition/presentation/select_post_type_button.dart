@@ -45,18 +45,14 @@ class SelectPostTypeButton extends ConsumerWidget {
             items: [
               PullDownMenuItem(
                 onTap: () {
-                  notifier.changePublicState(
-                    isPublic: true,
-                  );
+                  notifier.changePublicState(isPublic: true);
                 },
                 title: DefinitionPostType.public.labelForWrite,
                 icon: DefinitionPostType.public.icon,
               ),
               PullDownMenuItem(
                 onTap: () {
-                  notifier.changePublicState(
-                    isPublic: false,
-                  );
+                  notifier.changePublicState(isPublic: false);
                 },
                 title: DefinitionPostType.private.labelForWrite,
                 icon: DefinitionPostType.private.icon,

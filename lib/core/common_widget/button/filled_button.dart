@@ -25,21 +25,17 @@ class _BaseFilledButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(48),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(48)),
         backgroundColor: backgroundColor,
       ),
       onPressed: onPressed,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Text(
           text,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: textColor,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(color: textColor),
         ),
       ),
     );

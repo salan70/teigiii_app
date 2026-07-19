@@ -9,10 +9,7 @@ import '../application/user_follow_service.dart';
 import '../application/user_follow_state.dart';
 
 class FollowOrUnfollowButton extends ConsumerWidget {
-  const FollowOrUnfollowButton({
-    super.key,
-    required this.targetUserId,
-  });
+  const FollowOrUnfollowButton({super.key, required this.targetUserId});
 
   final String targetUserId;
 
@@ -38,9 +35,7 @@ class FollowOrUnfollowButton extends ConsumerWidget {
 }
 
 class _FollowButton extends ConsumerWidget with PresentationMixin {
-  const _FollowButton({
-    required this.targetUserId,
-  });
+  const _FollowButton({required this.targetUserId});
 
   final String targetUserId;
 
@@ -61,9 +56,7 @@ class _FollowButton extends ConsumerWidget with PresentationMixin {
 }
 
 class _UnfollowButton extends ConsumerWidget with PresentationMixin {
-  const _UnfollowButton({
-    required this.targetUserId,
-  });
+  const _UnfollowButton({required this.targetUserId});
 
   final String targetUserId;
 

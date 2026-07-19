@@ -31,19 +31,16 @@ class LikeWidget extends ConsumerWidget with PresentationMixin {
             top: 2,
             right: showCount ? 24 : 0,
           ),
-          padding: const EdgeInsets.only(
-            top: 4,
-            right: 4,
-            bottom: 4,
-          ),
+          padding: const EdgeInsets.only(top: 4, right: 4, bottom: 4),
           size: 20,
           likeBuilder: (bool isLiked) {
             return Align(
               alignment: Alignment.centerLeft,
               child: Icon(
                 isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
-                color:
-                    isLiked ? likeColor : Theme.of(context).colorScheme.outline,
+                color: isLiked
+                    ? likeColor
+                    : Theme.of(context).colorScheme.outline,
                 size: 20,
               ),
             );
@@ -65,13 +62,13 @@ class LikeWidget extends ConsumerWidget with PresentationMixin {
             var isActionCompleted = false;
             await executeWithOverlayLoading(
               ref,
-                  action: () async {
-                    await ref
-                        .read(likeDefinitionServiceProvider)
-                        .tapLike(definition);
-                    isActionCompleted = true;
-                  },
-                );
+              action: () async {
+                await ref
+                    .read(likeDefinitionServiceProvider)
+                    .tapLike(definition);
+                isActionCompleted = true;
+              },
+            );
 
             if (isActionCompleted) {
               return !definition.isLikedByUser;

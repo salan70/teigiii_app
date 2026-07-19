@@ -11,11 +11,7 @@ import '../../../core/router/app_router.dart';
 import '../../user_profile/domain/user_profile.dart';
 
 class SearchUserTextField extends ConsumerStatefulWidget {
-  SearchUserTextField({
-    super.key,
-    this.autoFocus = false,
-    this.defaultText,
-  });
+  SearchUserTextField({super.key, this.autoFocus = false, this.defaultText});
 
   final bool autoFocus;
   final String? defaultText;
@@ -83,20 +79,21 @@ class _SearchUserTextFieldState extends ConsumerState<SearchUserTextField> {
                       },
                       child: Text(
                         '検索',
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: controller.text.length ==
-                                          UserProfile.publicIdLength
-                                      ? Theme.of(context).colorScheme.onSurface
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant
-                                          .withOpacity(0.4),
-                                ),
+                        style: Theme.of(context).textTheme.titleMedium!
+                            .copyWith(
+                              color:
+                                  controller.text.length ==
+                                      UserProfile.publicIdLength
+                                  ? Theme.of(context).colorScheme.onSurface
+                                  : Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant
+                                        .withOpacity(0.4),
+                            ),
                       ),
                     ),
                   );
-                }
+                },
               ],
             ),
           ],
@@ -112,7 +109,9 @@ class _SearchUserTextFieldState extends ConsumerState<SearchUserTextField> {
           autofocus: widget.autoFocus,
           onSubmitted: (value) {
             if (value.length != UserProfile.publicIdLength) {
-              ref.read(snackBarControllerProvider).showErrorSnackBar(
+              ref
+                  .read(snackBarControllerProvider)
+                  .showErrorSnackBar(
                     '9文字入力してください',
                     ScaffoldMessengerType.baseRoute,
                   );
@@ -122,10 +121,7 @@ class _SearchUserTextFieldState extends ConsumerState<SearchUserTextField> {
             context.pushRoute(UserSearchResultRoute(searchWord: value));
           },
           decoration: InputDecoration(
-            prefixIcon: const Icon(
-              CupertinoIcons.search,
-              size: 20,
-            ),
+            prefixIcon: const Icon(CupertinoIcons.search, size: 20),
             prefixIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
             suffixIcon: Consumer(
               builder: (context, ref, child) {

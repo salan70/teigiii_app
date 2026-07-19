@@ -7,19 +7,14 @@ import '../../../core/router/app_router.dart';
 import '../application/introduction_service.dart';
 
 class ConfirmAgreementDialog extends ConsumerWidget {
-  const ConfirmAgreementDialog({
-    super.key,
-  });
+  const ConfirmAgreementDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BaseDialog(
       content: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
-        child: Text(
-          '利用規約とプライバシーポリシーに\n同意しますか？',
-          textAlign: TextAlign.center,
-        ),
+        child: Text('利用規約とプライバシーポリシーに\n同意しますか？', textAlign: TextAlign.center),
       ),
       actions: [
         InkWell(
@@ -46,8 +41,8 @@ class ConfirmAgreementDialog extends ConsumerWidget {
             child: Text(
               '同意する',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ),
         ),

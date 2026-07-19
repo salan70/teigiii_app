@@ -3,7 +3,8 @@ import 'package:teigi_app/util/extension/string_list_extension.dart';
 
 void main() {
   group('orSingleEmptyStringList', () {
-    test('Listが空の場合、空のString（' '）が入ったListを返すことを検証', () {
+    test('Listが空の場合、空のString（'
+        '）が入ったListを返すことを検証', () {
       // * Arrange
       final emptyList = <String>[];
 

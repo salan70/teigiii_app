@@ -23,20 +23,11 @@ class DatabaseException extends BaseException {
 /// データベース関連のエラーコード
 enum DatabaseExceptionCode implements ExceptionCode {
   // データが見つからない
-  notFound(
-    'not found',
-    'エラーが発生しました。もう一度お試しください。',
-  ),
+  notFound('not found', 'エラーが発生しました。もう一度お試しください。'),
   // 不明
-  unknown(
-    'unknown',
-    'エラーが発生しました。もう一度お試しください。',
-  );
+  unknown('unknown', 'エラーが発生しました。もう一度お試しください。');
 
-  const DatabaseExceptionCode(
-    this._code,
-    this._message,
-  );
+  const DatabaseExceptionCode(this._code, this._message);
 
   final String _code;
   final String? _message;

@@ -13,14 +13,14 @@ String _$deviceInfoRepositoryHash() =>
 @ProviderFor(deviceInfoRepository)
 final deviceInfoRepositoryProvider =
     AutoDisposeProvider<DeviceInfoRepository>.internal(
-  deviceInfoRepository,
-  name: r'deviceInfoRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$deviceInfoRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      deviceInfoRepository,
+      name: r'deviceInfoRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$deviceInfoRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef DeviceInfoRepositoryRef = AutoDisposeProviderRef<DeviceInfoRepository>;
 // ignore_for_file: type=lint

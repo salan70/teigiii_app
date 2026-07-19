@@ -75,10 +75,9 @@ void main() {
       when(
         mockSearchApi.v1SearchUsersGet(q: '123456789', limit: 50),
       ).thenAnswer(
-        (_) async => buildResponse(
-          [buildItem('userB', '1234567890')],
-          nextCursor: 'cursor1',
-        ),
+        (_) async => buildResponse([
+          buildItem('userB', '1234567890'),
+        ], nextCursor: 'cursor1'),
       );
       // 2 ページ目に完全一致が含まれる
       when(

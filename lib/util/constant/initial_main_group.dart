@@ -311,11 +311,9 @@ enum InitialSubGroup {
 
     // アルファベット
     if (alphabetRegex.hasMatch(initial)) {
-      return InitialSubGroup.values
-          .firstWhere(
-            (element) => element.label == initial.toUpperCase(),
-          )
-          ;
+      return InitialSubGroup.values.firstWhere(
+        (element) => element.label == initial.toUpperCase(),
+      );
     }
 
     // 数字

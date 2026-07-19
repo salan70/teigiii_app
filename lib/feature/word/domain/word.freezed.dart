@@ -12,7 +12,8 @@ part of 'word.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$Word {
@@ -31,12 +32,13 @@ abstract class $WordCopyWith<$Res> {
   factory $WordCopyWith(Word value, $Res Function(Word) then) =
       _$WordCopyWithImpl<$Res, Word>;
   @useResult
-  $Res call(
-      {String id,
-      String word,
-      String reading,
-      String initialSubGroupLabel,
-      int postedDefinitionCount});
+  $Res call({
+    String id,
+    String word,
+    String reading,
+    String initialSubGroupLabel,
+    int postedDefinitionCount,
+  });
 }
 
 /// @nodoc
@@ -58,44 +60,49 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
     Object? initialSubGroupLabel = null,
     Object? postedDefinitionCount = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      word: null == word
-          ? _value.word
-          : word // ignore: cast_nullable_to_non_nullable
-              as String,
-      reading: null == reading
-          ? _value.reading
-          : reading // ignore: cast_nullable_to_non_nullable
-              as String,
-      initialSubGroupLabel: null == initialSubGroupLabel
-          ? _value.initialSubGroupLabel
-          : initialSubGroupLabel // ignore: cast_nullable_to_non_nullable
-              as String,
-      postedDefinitionCount: null == postedDefinitionCount
-          ? _value.postedDefinitionCount
-          : postedDefinitionCount // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            word: null == word
+                ? _value.word
+                : word // ignore: cast_nullable_to_non_nullable
+                      as String,
+            reading: null == reading
+                ? _value.reading
+                : reading // ignore: cast_nullable_to_non_nullable
+                      as String,
+            initialSubGroupLabel: null == initialSubGroupLabel
+                ? _value.initialSubGroupLabel
+                : initialSubGroupLabel // ignore: cast_nullable_to_non_nullable
+                      as String,
+            postedDefinitionCount: null == postedDefinitionCount
+                ? _value.postedDefinitionCount
+                : postedDefinitionCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$WordImplCopyWith<$Res> implements $WordCopyWith<$Res> {
   factory _$$WordImplCopyWith(
-          _$WordImpl value, $Res Function(_$WordImpl) then) =
-      __$$WordImplCopyWithImpl<$Res>;
+    _$WordImpl value,
+    $Res Function(_$WordImpl) then,
+  ) = __$$WordImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      String word,
-      String reading,
-      String initialSubGroupLabel,
-      int postedDefinitionCount});
+  $Res call({
+    String id,
+    String word,
+    String reading,
+    String initialSubGroupLabel,
+    int postedDefinitionCount,
+  });
 }
 
 /// @nodoc
@@ -103,7 +110,7 @@ class __$$WordImplCopyWithImpl<$Res>
     extends _$WordCopyWithImpl<$Res, _$WordImpl>
     implements _$$WordImplCopyWith<$Res> {
   __$$WordImplCopyWithImpl(_$WordImpl _value, $Res Function(_$WordImpl) _then)
-      : super(_value, _then);
+    : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -114,40 +121,43 @@ class __$$WordImplCopyWithImpl<$Res>
     Object? initialSubGroupLabel = null,
     Object? postedDefinitionCount = null,
   }) {
-    return _then(_$WordImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      word: null == word
-          ? _value.word
-          : word // ignore: cast_nullable_to_non_nullable
-              as String,
-      reading: null == reading
-          ? _value.reading
-          : reading // ignore: cast_nullable_to_non_nullable
-              as String,
-      initialSubGroupLabel: null == initialSubGroupLabel
-          ? _value.initialSubGroupLabel
-          : initialSubGroupLabel // ignore: cast_nullable_to_non_nullable
-              as String,
-      postedDefinitionCount: null == postedDefinitionCount
-          ? _value.postedDefinitionCount
-          : postedDefinitionCount // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+    return _then(
+      _$WordImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        word: null == word
+            ? _value.word
+            : word // ignore: cast_nullable_to_non_nullable
+                  as String,
+        reading: null == reading
+            ? _value.reading
+            : reading // ignore: cast_nullable_to_non_nullable
+                  as String,
+        initialSubGroupLabel: null == initialSubGroupLabel
+            ? _value.initialSubGroupLabel
+            : initialSubGroupLabel // ignore: cast_nullable_to_non_nullable
+                  as String,
+        postedDefinitionCount: null == postedDefinitionCount
+            ? _value.postedDefinitionCount
+            : postedDefinitionCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$WordImpl implements _Word {
-  const _$WordImpl(
-      {required this.id,
-      required this.word,
-      required this.reading,
-      required this.initialSubGroupLabel,
-      required this.postedDefinitionCount});
+  const _$WordImpl({
+    required this.id,
+    required this.word,
+    required this.reading,
+    required this.initialSubGroupLabel,
+    required this.postedDefinitionCount,
+  });
 
   @override
   final String id;
@@ -180,8 +190,14 @@ class _$WordImpl implements _Word {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, word, reading,
-      initialSubGroupLabel, postedDefinitionCount);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    word,
+    reading,
+    initialSubGroupLabel,
+    postedDefinitionCount,
+  );
 
   @JsonKey(ignore: true)
   @override
@@ -191,12 +207,13 @@ class _$WordImpl implements _Word {
 }
 
 abstract class _Word implements Word {
-  const factory _Word(
-      {required final String id,
-      required final String word,
-      required final String reading,
-      required final String initialSubGroupLabel,
-      required final int postedDefinitionCount}) = _$WordImpl;
+  const factory _Word({
+    required final String id,
+    required final String word,
+    required final String reading,
+    required final String initialSubGroupLabel,
+    required final int postedDefinitionCount,
+  }) = _$WordImpl;
 
   @override
   String get id;
