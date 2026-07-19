@@ -164,12 +164,13 @@ void main() {
   group('followCount', () {
     test('userProfileProvider のフォロー数から導出されることを検証', () async {
       // * Arrange
-      when(mockUserProfileRepository.fetchUserProfile(any)).thenAnswer(
+      const targetUserId = 'targetUserId';
+      when(
+        mockUserProfileRepository.fetchUserProfile(targetUserId),
+      ).thenAnswer(
         (_) async =>
             mockUserProfile.copyWith(followingCount: 5, followerCount: 7),
       );
-
-      const targetUserId = 'targetUserId';
 
       // * Act
       final followCount = await container.read(
@@ -185,6 +186,9 @@ void main() {
           followerCount: 7,
         ),
       );
+      verify(
+        mockUserProfileRepository.fetchUserProfile(targetUserId),
+      ).called(1);
     });
   });
 }

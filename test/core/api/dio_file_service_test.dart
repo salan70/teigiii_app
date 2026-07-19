@@ -71,6 +71,49 @@ void main() {
       );
     });
 
+    test('max-age=0 は即時失効として validTill に反映する', () async {
+      // * Arrange
+      setupMock(
+        buildResponse(
+          headers: {
+            'cache-control': ['max-age=0'],
+          },
+        ),
+      );
+
+      // * Act
+      final response = await fileService.get(url);
+      final after = DateTime.now();
+
+      // * Assert
+      // max-age=0 は 7 日デフォルトにフォールバックせず、受信時刻付近で失効する
+      expect(
+        response.validTill.isBefore(after.add(const Duration(seconds: 1))),
+        isTrue,
+      );
+    });
+
+    test('認証ヘッダーと stream responseType を Dio に渡す', () async {
+      // * Arrange
+      setupMock(buildResponse());
+      const headers = {'Authorization': 'Bearer token'};
+
+      // * Act
+      await fileService.get(url, headers: headers);
+
+      // * Assert
+      final options =
+          verify(
+                mockDio.get<ResponseBody>(
+                  url,
+                  options: captureAnyNamed('options'),
+                ),
+              ).captured.single
+              as Options;
+      expect(options.headers, headers);
+      expect(options.responseType, ResponseType.stream);
+    });
+
     test('content-type から拡張子を導出する', () async {
       // * Arrange
       setupMock(

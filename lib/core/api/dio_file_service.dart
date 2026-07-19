@@ -19,7 +19,14 @@ class DioFileService extends FileService {
   }) async {
     final response = await _dio.get<ResponseBody>(
       url,
-      options: Options(responseType: ResponseType.stream, headers: headers),
+      options: Options(
+        responseType: ResponseType.stream,
+        headers: headers,
+        // flutter_cache_manager は 304（条件付きリクエストの再検証）や
+        // 4xx/5xx を FileServiceResponse として受け取り statusCode で判断する。
+        // Dio 既定の 2xx 以外で throw する挙動を無効化する。
+        validateStatus: (_) => true,
+      ),
     );
     return DioGetResponse(response);
   }
@@ -57,7 +64,8 @@ class DioGetResponse implements FileServiceResponse {
         }
         if (sanitizedSetting.startsWith('max-age=')) {
           final validSeconds = int.tryParse(sanitizedSetting.split('=')[1]);
-          if (validSeconds != null && validSeconds > 0) {
+          // max-age=0 は即時失効（Duration.zero）として扱う。
+          if (validSeconds != null && validSeconds >= 0) {
             ageDuration = Duration(seconds: validSeconds);
           }
         }

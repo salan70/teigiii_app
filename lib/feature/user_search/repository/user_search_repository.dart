@@ -21,15 +21,25 @@ class UserSearchRepository {
   /// 該当するユーザーが存在しない場合はnullを返す。
   Future<String?> searchByPublicId(String publicId) async {
     try {
-      final response = await _searchApi.v1SearchUsersGet(q: publicId);
-      final items = response.data!.items;
+      // サーバーは部分一致検索のため、完全一致は最初のページ以外にも
+      // 現れうる。cursor が尽きるまで全ページを走査して完全一致のみを探す。
+      String? cursor;
+      do {
+        final response = await _searchApi.v1SearchUsersGet(
+          q: publicId,
+          cursor: cursor,
+          limit: 50,
+        );
+        final page = response.data!;
 
-      // サーバーは部分一致検索のため、完全一致のみを有効とする。
-      for (final item in items) {
-        if (item.publicId == publicId) {
-          return item.id;
+        for (final item in page.items) {
+          if (item.publicId == publicId) {
+            return item.id;
+          }
         }
-      }
+        cursor = page.nextCursor;
+      } while (cursor != null);
+
       return null;
     } on DioException catch (exception) {
       throw ApiException.fromDioException(exception);

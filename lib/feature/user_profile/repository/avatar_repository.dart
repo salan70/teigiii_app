@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -24,8 +25,10 @@ class AvatarRepository {
   /// 512 x 512 JPEG に正規化済みのアバター画像をアップロードし、
   /// アバター画像の URL を返す。
   ///
-  /// アバターの URL はユーザーごとに固定のため、アップロード成功後に
-  /// 古い画像のキャッシュを破棄する。
+  /// アバターの URL はユーザーごとに固定で、差し替えても
+  /// `CachedNetworkImageProvider` のキーは変わらない。ディスクキャッシュだけ
+  /// 消しても `ImageCache` に残ったデコード済み画像が返り続けるため、
+  /// アップロード成功後にディスク・メモリ両方のキャッシュを破棄する。
   ///
   /// 生成クライアントの `v1UsersMeAvatarPut` はバイナリボディを
   /// JSON エンコードしてしまうため、このエンドポイントのみ dio で直接送信する。
@@ -42,7 +45,11 @@ class AvatarRepository {
       );
 
       final avatarUrl = response.data!['avatarUrl'] as String;
-      await _cacheManager.removeFile(avatarUrl);
+      // ディスク（CacheManager）とメモリ（ImageCache）の両方を破棄する。
+      await CachedNetworkImage.evictFromCache(
+        avatarUrl,
+        cacheManager: _cacheManager,
+      );
       return avatarUrl;
     } on DioException catch (exception) {
       throw ApiException.fromDioException(exception);

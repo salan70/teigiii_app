@@ -11,6 +11,9 @@ import 'avatar_repository_test.mocks.dart';
 
 @GenerateNiceMocks([MockSpec<Dio>(), MockSpec<CacheManager>()])
 void main() {
+  // evictFromCache が ImageCache（PaintingBinding）へアクセスするため初期化する。
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   final mockDio = MockDio();
   final mockCacheManager = MockCacheManager();
   final repository = AvatarRepository(mockDio, mockCacheManager);
@@ -26,7 +29,8 @@ void main() {
       final file = File(
         '${Directory.systemTemp.path}/avatar_repository_test.jpg',
       );
-      await file.writeAsBytes([0xFF, 0xD8, 0xFF, 0xE0]);
+      const jpegBytes = [0xFF, 0xD8, 0xFF, 0xE0];
+      await file.writeAsBytes(jpegBytes);
       addTearDown(file.deleteSync);
 
       const avatarUrl = 'https://api.example.com/v1/avatars/user1';
@@ -49,19 +53,23 @@ void main() {
 
       // * Assert
       expect(result, avatarUrl);
-      // アップロード後に古いキャッシュが破棄されること
+      // アップロード後に（ディスク側の）古いキャッシュが破棄されること
       verify(mockCacheManager.removeFile(avatarUrl)).called(1);
-      // JPEG として送信されること
-      final options =
+      // 送信されたバイト列・Content-Type・Content-Length を検証する
+      final captured =
           verify(
-                mockDio.put<Map<String, dynamic>>(
-                  '/v1/users/me/avatar',
-                  data: anyNamed('data'),
-                  options: captureAnyNamed('options'),
-                ),
-              ).captured.single
-              as Options;
+            mockDio.put<Map<String, dynamic>>(
+              '/v1/users/me/avatar',
+              data: captureAnyNamed('data'),
+              options: captureAnyNamed('options'),
+            ),
+          ).captured;
+      final data = captured[0] as Stream<List<int>>;
+      final options = captured[1] as Options;
+
+      expect(await data.expand((chunk) => chunk).toList(), jpegBytes);
       expect(options.contentType, 'image/jpeg');
+      expect(options.headers?[Headers.contentLengthHeader], jpegBytes.length);
     });
   });
 }
