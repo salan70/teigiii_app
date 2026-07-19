@@ -59,10 +59,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDQJqCl67hpyhCVD8wz82IQbw5l8nLv8xs',
-    appId: '1:225028441501:ios:4fbcc87bb7ca1b22b5db74',
+    appId: '1:225028441501:ios:370c06ac8f1486b7b5db74',
     messagingSenderId: '225028441501',
     projectId: 'everyone-teigi-dev',
     storageBucket: 'everyone-teigi-dev.appspot.com',
-    iosBundleId: 'com.toda.teigiApp.dev',
+    iosBundleId: 'com.toda.teigiii.dev',
   );
 }
