@@ -12,7 +12,7 @@ Firestore → D1、Firebase Storage → R2 の移行スクリプトを作成し�
 
 旧アプリ（Firestore 版バイナリ）のメンテナンスモードは `main.dart` の `builder` で UI に overlay を被せるだけで、`AuthGuard` の匿名サインアップ（Firebase Auth 登録 + Firestore プロフィール作成）はメンテ中でも実行される。さらに切替後も、ストア更新前の旧バイナリの初回起動で D1 に存在しない Auth ユーザーが恒久的に発生し得る。
 
-- **採用**: メンテフリーズ（切替手順の前提）+ クライアント自己修復（新アプリで起動時 `GET /v1/users/me` が 404 `user_not_found` の場合、`POST /v1/users` で再登録する）
+- **採用**: メンテフリーズ（切替手順の前提）+ クライアント自己修復（新アプリで既存の起動時バージョン情報更新（`PATCH /v1/users/me`）が 404 `user_not_found` の場合、`POST /v1/users` で再登録する。検知用の `GET` は追加しない）
 - **不採用**: 差分移行。メンテ開始後に発生する新規ユーザーはデフォルト名の空プロフィールのみ（UI 遮断により投稿等は不可能）で、自己修復による再生成で実害がない。一方、差分移行は一回きりの対処であり孤児 Auth ユーザーの恒久的な発生を構造的に塞げず、増分抽出の実装コストに価値が見合わない
 - issue #186 コメントの「1（差分移行）を軸に」は本決定で上書きする
 
@@ -79,7 +79,7 @@ Firestore → D1、Firebase Storage → R2 の移行スクリプトを作成し�
 
 ### PR 1: クライアント自己修復（Flutter）
 
-起動時 `GET /v1/users/me` が 404 `user_not_found` の場合、`POST /v1/users` で再登録する（既存の初回登録フローを再利用。Firebase Auth ユーザーは存在するためサーバー登録のみ）。
+既存の起動時バージョン情報更新（`PATCH /v1/users/me`）が 404 `user_not_found` の場合、`POST /v1/users` で再登録する（既存の初回登録フローを再利用。Firebase Auth ユーザーは存在するためサーバー登録のみ。検知用の `GET` は追加しない）。
 
 ### PR 2: 移行スクリプト一式（`server/scripts/migration/`）
 

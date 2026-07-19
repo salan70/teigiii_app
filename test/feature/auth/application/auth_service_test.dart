@@ -165,6 +165,114 @@ void main() {
     });
   });
 
+  group('updateUserConfig() の自己修復', () {
+    test(
+      '404 user_not_found: initUser による再登録が呼ばれることを検証',
+      () async {
+        // * Arrange
+        final authService = container.read(authServiceProvider);
+        setupMock('iOS 14.4');
+        updateContainersOverride(isSignedIn: true);
+        when(
+          mockRegisterUserRepository.updateVersionInfo(
+            osVersion: anyNamed('osVersion'),
+            appVersion: anyNamed('appVersion'),
+          ),
+        ).thenThrow(ApiException(statusCode: 404, code: 'user_not_found'));
+
+        // * Act
+        await authService.updateUserConfig();
+
+        // * Assert
+        verify(
+          mockRegisterUserRepository.initUser(
+            name: UserProfile.defaultName,
+            osVersion: 'iOS 14.4',
+            appVersion: mockAppVersion,
+          ),
+        ).called(1);
+      },
+    );
+
+    test('404 だが code が user_not_found でない場合は再登録せず rethrow する', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      setupMock('iOS 14.4');
+      updateContainersOverride(isSignedIn: true);
+      when(
+        mockRegisterUserRepository.updateVersionInfo(
+          osVersion: anyNamed('osVersion'),
+          appVersion: anyNamed('appVersion'),
+        ),
+      ).thenThrow(ApiException(statusCode: 404, code: 'other_not_found'));
+
+      // * Act & Assert
+      await expectLater(
+        authService.updateUserConfig(),
+        throwsA(isA<ApiException>()),
+      );
+      verifyNever(
+        mockRegisterUserRepository.initUser(
+          name: anyNamed('name'),
+          osVersion: anyNamed('osVersion'),
+          appVersion: anyNamed('appVersion'),
+        ),
+      );
+    });
+
+    test('500 の場合は再登録せず rethrow する', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      setupMock('iOS 14.4');
+      updateContainersOverride(isSignedIn: true);
+      when(
+        mockRegisterUserRepository.updateVersionInfo(
+          osVersion: anyNamed('osVersion'),
+          appVersion: anyNamed('appVersion'),
+        ),
+      ).thenThrow(ApiException(statusCode: 500));
+
+      // * Act & Assert
+      await expectLater(
+        authService.updateUserConfig(),
+        throwsA(isA<ApiException>()),
+      );
+      verifyNever(
+        mockRegisterUserRepository.initUser(
+          name: anyNamed('name'),
+          osVersion: anyNamed('osVersion'),
+          appVersion: anyNamed('appVersion'),
+        ),
+      );
+    });
+
+    test('再登録（自己修復）自体が失敗した場合はそのエラーを rethrow する', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      setupMock('iOS 14.4');
+      updateContainersOverride(isSignedIn: true);
+      when(
+        mockRegisterUserRepository.updateVersionInfo(
+          osVersion: anyNamed('osVersion'),
+          appVersion: anyNamed('appVersion'),
+        ),
+      ).thenThrow(ApiException(statusCode: 404, code: 'user_not_found'));
+      when(
+        mockRegisterUserRepository.initUser(
+          name: anyNamed('name'),
+          osVersion: anyNamed('osVersion'),
+          appVersion: anyNamed('appVersion'),
+        ),
+      ).thenThrow(ApiException(statusCode: 409, code: 'user_already_exists'));
+
+      // * Act & Assert
+      await expectLater(
+        authService.updateUserConfig(),
+        throwsA(isA<ApiException>()),
+      );
+    });
+  });
+
   group('signIn() 失敗時のクリーンアップ', () {
     test(
       'initUser 失敗時: サーバーユーザー削除 → Firebase Auth 削除の順で呼ばれ rethrow する',

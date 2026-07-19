@@ -78,6 +78,11 @@ class AuthService {
   }
 
   /// ユーザーの設定に関する情報を更新する。
+  ///
+  /// 404 `user_not_found`（Firebase Auth にはユーザーが存在するがサーバー側に
+  /// 存在しない状態）の場合、自己修復として `_initUser()` による再登録を行う。
+  /// 移行スナップショット取得後に旧アプリで新規登録したユーザー等で発生しうる。
+  /// 再登録自体が失敗した場合はそのまま rethrow し、握りつぶさない。
   Future<void> updateUserConfig() async {
     final osVersion =
         await ref.read(deviceInfoRepositoryProvider).fetchOsVersion() ??
@@ -89,9 +94,17 @@ class AuthService {
     // ここで userId を出力しておく。
     logger.i('[$userId]としてログイン中です。ユーザー情報を更新します。');
 
-    await ref
-        .read(registerUserRepositoryProvider)
-        .updateVersionInfo(osVersion: osVersion, appVersion: appVersion);
+    try {
+      await ref
+          .read(registerUserRepositoryProvider)
+          .updateVersionInfo(osVersion: osVersion, appVersion: appVersion);
+    } on ApiException catch (e) {
+      if (e.statusCode != 404 || e.code != 'user_not_found') {
+        rethrow;
+      }
+      logger.w('[$userId]はサーバー未登録のため、自己修復として再登録します。');
+      await _initUser();
+    }
   }
 
   /// アカウントを削除する。
