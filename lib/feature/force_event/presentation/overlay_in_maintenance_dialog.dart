@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import '../../../core/common_provider/launch_url_controller.dart';
 import '../../../core/common_widget/button/filled_button.dart';
 import '../../../util/constant/url.dart';
+import '../../../util/extension/date_time_extension.dart';
 import '../domain/app_maintenance.dart';
 
 /// 端末のバックキーや画面操作を受け付けないWidget
@@ -17,6 +18,9 @@ class OverlayInMaintenanceDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final scheduledEndTime =
+        appMaintenance.scheduledEndTime?.toLocal().toDisplayFormat() ?? '未定';
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Container(
@@ -37,7 +41,7 @@ class OverlayInMaintenanceDialog extends ConsumerWidget {
                   const Gap(8),
                   Text(
                     '🤖現在メンテナンス中です🤖'
-                    '\n終了予定は${appMaintenance.scheduledEndTime}です。',
+                    '\n終了予定は$scheduledEndTimeです。',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),

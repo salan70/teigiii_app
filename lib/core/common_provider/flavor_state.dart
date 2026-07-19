@@ -1,8 +1,4 @@
-import 'dart:math';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../util/constant/url.dart';
 
 part 'flavor_state.g.dart';
 
@@ -32,19 +28,6 @@ enum Flavor {
         return Flavor.dev;
       default:
         throw UnsupportedError('this flavor is not expected');
-    }
-  }
-
-  String generateRandomIconImageUrl() {
-    switch (this) {
-      case Flavor.prod:
-        return defaultIconImageUrlListForProd[Random().nextInt(
-          defaultIconImageUrlListForProd.length,
-        )];
-      case Flavor.dev:
-        return defaultIconImageUrlListForDev[Random().nextInt(
-          defaultIconImageUrlListForDev.length,
-        )];
     }
   }
 }

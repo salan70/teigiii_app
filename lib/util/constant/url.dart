@@ -27,15 +27,3 @@ String userReportFormUrl({
 String inquireFormUrl(String currentUserPublicId) {
   return 'https://docs.google.com/forms/d/e/1FAIpQLScVQ21a8-CtMRwD7Syy3AZfK07SpZQQCjYSuqNNvoA4g7rSsw/viewform?usp=pp_url&entry.2104212620=${Uri.encodeComponent(currentUserPublicId)}';
 }
-
-const defaultIconImageUrlListForProd = <String>[
-  'https://firebasestorage.googleapis.com/v0/b/everyone-teigi-prod.appspot.com/o/common%2Fdefault_icon_image%2Fghost_writer.png?alt=media&token=37ed60f0-9f7a-4307-981b-437cde7a5e6f',
-  'https://firebasestorage.googleapis.com/v0/b/everyone-teigi-prod.appspot.com/o/common%2Fdefault_icon_image%2Fanimal_chara_radio_penguin.png?alt=media&token=9fe745eb-51a3-4194-b4ab-c96823e486f4',
-  'https://firebasestorage.googleapis.com/v0/b/everyone-teigi-prod.appspot.com/o/common%2Fdefault_icon_image%2Fanimal_chara_mogura_hakase.png?alt=media&token=3606cf7f-a8ee-4ba3-8aee-42ab4ddde5bd',
-];
-
-const defaultIconImageUrlListForDev = [
-  'https://firebasestorage.googleapis.com/v0/b/everyone-teigi-dev.appspot.com/o/common%2Fdefault_icon_image%2Fanimal_chara_mogura_hakase.png?alt=media&token=fe96fdd8-f17a-45ec-9c47-3921b60b2580',
-  'https://firebasestorage.googleapis.com/v0/b/everyone-teigi-dev.appspot.com/o/common%2Fdefault_icon_image%2Fanimal_chara_radio_penguin.png?alt=media&token=bc0088e1-9474-4b0c-9778-3c34e8381a2c',
-  'https://firebasestorage.googleapis.com/v0/b/everyone-teigi-dev.appspot.com/o/common%2Fdefault_icon_image%2Fghost_writer.png?alt=media&token=0e2a4605-8b0f-4a36-96cd-cf7e36302243',
-];

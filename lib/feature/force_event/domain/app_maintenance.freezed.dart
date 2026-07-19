@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AppMaintenance {
   bool get inMaintenance => throw _privateConstructorUsedError;
-  String get scheduledEndTime => throw _privateConstructorUsedError;
+  DateTime? get scheduledEndTime => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AppMaintenanceCopyWith<AppMaintenance> get copyWith =>
@@ -32,7 +32,7 @@ abstract class $AppMaintenanceCopyWith<$Res> {
     $Res Function(AppMaintenance) then,
   ) = _$AppMaintenanceCopyWithImpl<$Res, AppMaintenance>;
   @useResult
-  $Res call({bool inMaintenance, String scheduledEndTime});
+  $Res call({bool inMaintenance, DateTime? scheduledEndTime});
 }
 
 /// @nodoc
@@ -47,17 +47,20 @@ class _$AppMaintenanceCopyWithImpl<$Res, $Val extends AppMaintenance>
 
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? inMaintenance = null, Object? scheduledEndTime = null}) {
+  $Res call({
+    Object? inMaintenance = null,
+    Object? scheduledEndTime = freezed,
+  }) {
     return _then(
       _value.copyWith(
             inMaintenance: null == inMaintenance
                 ? _value.inMaintenance
                 : inMaintenance // ignore: cast_nullable_to_non_nullable
                       as bool,
-            scheduledEndTime: null == scheduledEndTime
+            scheduledEndTime: freezed == scheduledEndTime
                 ? _value.scheduledEndTime
                 : scheduledEndTime // ignore: cast_nullable_to_non_nullable
-                      as String,
+                      as DateTime?,
           )
           as $Val,
     );
@@ -73,7 +76,7 @@ abstract class _$$AppMaintenanceImplCopyWith<$Res>
   ) = __$$AppMaintenanceImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool inMaintenance, String scheduledEndTime});
+  $Res call({bool inMaintenance, DateTime? scheduledEndTime});
 }
 
 /// @nodoc
@@ -87,17 +90,20 @@ class __$$AppMaintenanceImplCopyWithImpl<$Res>
 
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? inMaintenance = null, Object? scheduledEndTime = null}) {
+  $Res call({
+    Object? inMaintenance = null,
+    Object? scheduledEndTime = freezed,
+  }) {
     return _then(
       _$AppMaintenanceImpl(
         inMaintenance: null == inMaintenance
             ? _value.inMaintenance
             : inMaintenance // ignore: cast_nullable_to_non_nullable
                   as bool,
-        scheduledEndTime: null == scheduledEndTime
+        scheduledEndTime: freezed == scheduledEndTime
             ? _value.scheduledEndTime
             : scheduledEndTime // ignore: cast_nullable_to_non_nullable
-                  as String,
+                  as DateTime?,
       ),
     );
   }
@@ -114,7 +120,7 @@ class _$AppMaintenanceImpl implements _AppMaintenance {
   @override
   final bool inMaintenance;
   @override
-  final String scheduledEndTime;
+  final DateTime? scheduledEndTime;
 
   @override
   String toString() {
@@ -148,13 +154,13 @@ class _$AppMaintenanceImpl implements _AppMaintenance {
 abstract class _AppMaintenance implements AppMaintenance {
   const factory _AppMaintenance({
     required final bool inMaintenance,
-    required final String scheduledEndTime,
+    required final DateTime? scheduledEndTime,
   }) = _$AppMaintenanceImpl;
 
   @override
   bool get inMaintenance;
   @override
-  String get scheduledEndTime;
+  DateTime? get scheduledEndTime;
   @override
   @JsonKey(ignore: true)
   _$$AppMaintenanceImplCopyWith<_$AppMaintenanceImpl> get copyWith =>

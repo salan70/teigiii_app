@@ -6,6 +6,6 @@ part 'app_maintenance.freezed.dart';
 class AppMaintenance with _$AppMaintenance {
   const factory AppMaintenance({
     required bool inMaintenance,
-    required String scheduledEndTime,
+    required DateTime? scheduledEndTime,
   }) = _AppMaintenance;
 }
