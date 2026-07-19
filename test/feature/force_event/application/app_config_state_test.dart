@@ -29,12 +29,11 @@ void main() {
 
   test('起動中は AppConfig を一度だけ取得して保持する', () async {
     // * Arrange
-    final expected = AppConfig(
+    const expected = AppConfig(
       minAppVersionIos: '2.0.0',
       minAppVersionAndroid: '2.1.0',
       inMaintenance: false,
       maintenanceScheduledEndTime: null,
-      updatedAt: DateTime.utc(2026, 7, 19),
     );
     when(
       mockAppConfigRepository.fetchAppConfig(),

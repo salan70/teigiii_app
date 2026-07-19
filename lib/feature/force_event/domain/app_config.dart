@@ -11,7 +11,6 @@ class AppConfig with _$AppConfig {
     required String minAppVersionAndroid,
     required bool inMaintenance,
     required DateTime? maintenanceScheduledEndTime,
-    required DateTime updatedAt,
   }) = _AppConfig;
   const AppConfig._();
 

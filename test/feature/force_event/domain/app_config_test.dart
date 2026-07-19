@@ -5,12 +5,11 @@ void main() {
   group('toAppMaintenance', () {
     test('メンテナンス状態と nullable な終了予定日時を変換する', () {
       // * Arrange
-      final appConfig = AppConfig(
+      const appConfig = AppConfig(
         minAppVersionIos: '2.0.0',
         minAppVersionAndroid: '2.1.0',
         inMaintenance: false,
         maintenanceScheduledEndTime: null,
-        updatedAt: DateTime.utc(2026, 7, 19),
       );
 
       // * Act

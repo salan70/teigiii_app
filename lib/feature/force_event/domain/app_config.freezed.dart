@@ -22,7 +22,6 @@ mixin _$AppConfig {
   bool get inMaintenance => throw _privateConstructorUsedError;
   DateTime? get maintenanceScheduledEndTime =>
       throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AppConfigCopyWith<AppConfig> get copyWith =>
@@ -39,7 +38,6 @@ abstract class $AppConfigCopyWith<$Res> {
     String minAppVersionAndroid,
     bool inMaintenance,
     DateTime? maintenanceScheduledEndTime,
-    DateTime updatedAt,
   });
 }
 
@@ -60,7 +58,6 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
     Object? minAppVersionAndroid = null,
     Object? inMaintenance = null,
     Object? maintenanceScheduledEndTime = freezed,
-    Object? updatedAt = null,
   }) {
     return _then(
       _value.copyWith(
@@ -80,10 +77,6 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
                 ? _value.maintenanceScheduledEndTime
                 : maintenanceScheduledEndTime // ignore: cast_nullable_to_non_nullable
                       as DateTime?,
-            updatedAt: null == updatedAt
-                ? _value.updatedAt
-                : updatedAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
           )
           as $Val,
     );
@@ -104,7 +97,6 @@ abstract class _$$AppConfigImplCopyWith<$Res>
     String minAppVersionAndroid,
     bool inMaintenance,
     DateTime? maintenanceScheduledEndTime,
-    DateTime updatedAt,
   });
 }
 
@@ -124,7 +116,6 @@ class __$$AppConfigImplCopyWithImpl<$Res>
     Object? minAppVersionAndroid = null,
     Object? inMaintenance = null,
     Object? maintenanceScheduledEndTime = freezed,
-    Object? updatedAt = null,
   }) {
     return _then(
       _$AppConfigImpl(
@@ -144,10 +135,6 @@ class __$$AppConfigImplCopyWithImpl<$Res>
             ? _value.maintenanceScheduledEndTime
             : maintenanceScheduledEndTime // ignore: cast_nullable_to_non_nullable
                   as DateTime?,
-        updatedAt: null == updatedAt
-            ? _value.updatedAt
-            : updatedAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
       ),
     );
   }
@@ -161,7 +148,6 @@ class _$AppConfigImpl extends _AppConfig {
     required this.minAppVersionAndroid,
     required this.inMaintenance,
     required this.maintenanceScheduledEndTime,
-    required this.updatedAt,
   }) : super._();
 
   @override
@@ -172,12 +158,10 @@ class _$AppConfigImpl extends _AppConfig {
   final bool inMaintenance;
   @override
   final DateTime? maintenanceScheduledEndTime;
-  @override
-  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'AppConfig(minAppVersionIos: $minAppVersionIos, minAppVersionAndroid: $minAppVersionAndroid, inMaintenance: $inMaintenance, maintenanceScheduledEndTime: $maintenanceScheduledEndTime, updatedAt: $updatedAt)';
+    return 'AppConfig(minAppVersionIos: $minAppVersionIos, minAppVersionAndroid: $minAppVersionAndroid, inMaintenance: $inMaintenance, maintenanceScheduledEndTime: $maintenanceScheduledEndTime)';
   }
 
   @override
@@ -196,9 +180,7 @@ class _$AppConfigImpl extends _AppConfig {
                   maintenanceScheduledEndTime,
                 ) ||
                 other.maintenanceScheduledEndTime ==
-                    maintenanceScheduledEndTime) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                    maintenanceScheduledEndTime));
   }
 
   @override
@@ -208,7 +190,6 @@ class _$AppConfigImpl extends _AppConfig {
     minAppVersionAndroid,
     inMaintenance,
     maintenanceScheduledEndTime,
-    updatedAt,
   );
 
   @JsonKey(ignore: true)
@@ -224,7 +205,6 @@ abstract class _AppConfig extends AppConfig {
     required final String minAppVersionAndroid,
     required final bool inMaintenance,
     required final DateTime? maintenanceScheduledEndTime,
-    required final DateTime updatedAt,
   }) = _$AppConfigImpl;
   const _AppConfig._() : super._();
 
@@ -236,8 +216,6 @@ abstract class _AppConfig extends AppConfig {
   bool get inMaintenance;
   @override
   DateTime? get maintenanceScheduledEndTime;
-  @override
-  DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$AppConfigImplCopyWith<_$AppConfigImpl> get copyWith =>

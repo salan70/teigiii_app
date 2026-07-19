@@ -41,7 +41,6 @@ void main() {
       expect(appConfig.minAppVersionAndroid, '2.1.0');
       expect(appConfig.inMaintenance, isTrue);
       expect(appConfig.maintenanceScheduledEndTime, scheduledEndTime);
-      expect(appConfig.updatedAt, updatedAt);
       verify(mockAppConfigApi.v1AppConfigGet()).called(1);
     });
 
