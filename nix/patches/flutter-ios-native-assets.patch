@@ -1,0 +1,111 @@
+diff --git a/packages/flutter_tools/bin/xcode_backend.dart b/packages/flutter_tools/bin/xcode_backend.dart
+index e82c487fe4..6659a0d223 100644
+--- a/packages/flutter_tools/bin/xcode_backend.dart
++++ b/packages/flutter_tools/bin/xcode_backend.dart
+@@ -343,7 +343,13 @@ class Context {
+       projectPath = environment['FLUTTER_APPLICATION_PATH']!;
+     }
+     final String flutterBuildDir = environment['FLUTTER_BUILD_DIR']!;
+-    final nativeAssetsPath = '$projectPath/$flutterBuildDir/native_assets/${platform.name}/';
++    final String platformName = environment['PLATFORM_NAME'] ?? '';
++    final String nativeAssetsPlatformDirectory =
++        platform == TargetPlatform.ios && platformName.isNotEmpty
++        ? '${platform.name}/$platformName'
++        : platform.name;
++    final nativeAssetsPath =
++        '$projectPath/$flutterBuildDir/native_assets/$nativeAssetsPlatformDirectory/';
+     final bool verbose = (environment['VERBOSE_SCRIPT_LOGGING'] ?? '').isNotEmpty;
+
+     final Set<String> referencedFrameworks = {};
+diff --git a/packages/flutter_tools/lib/src/isolated/native_assets/native_assets.dart b/packages/flutter_tools/lib/src/isolated/native_assets/native_assets.dart
+index 51e9df760e..13352e5856 100644
+--- a/packages/flutter_tools/lib/src/isolated/native_assets/native_assets.dart
++++ b/packages/flutter_tools/lib/src/isolated/native_assets/native_assets.dart
+@@ -18,6 +18,7 @@ import '../../cache.dart';
+ import '../../convert.dart';
+ import '../../features.dart';
+ import '../../globals.dart' as globals;
++import '../../macos/xcode.dart' as xcode;
+ import 'android/native_assets.dart';
+ import 'dart_hook_result.dart';
+ import 'ios/native_assets.dart';
+@@ -53,7 +54,15 @@ Future<DartHooksResult> runFlutterSpecificHooks({
+   required Uri projectUri,
+   required FileSystem fileSystem,
+ }) async {
+-  final Uri buildUri = nativeAssetsBuildUri(projectUri, targetPlatform.osName);
++  final Uri buildUri = nativeAssetsBuildUri(
++    projectUri,
++    targetPlatform.osName,
++    subdirectory: _nativeAssetsBuildSubdirectory(
++      targetPlatform,
++      environmentDefines,
++      fileSystem,
++    ),
++  );
+   final Directory buildDir = fileSystem.directory(buildUri);
+   if (!await buildDir.exists()) {
+     // Ensure the folder exists so the native build system can copy it even
+@@ -105,7 +114,15 @@ Future<void> installCodeAssets({
+   required Uri nativeAssetsFileUri,
+ }) async {
+   final OS targetOS = getNativeOSFromTargetPlatform(targetPlatform);
+-  final Uri buildUri = nativeAssetsBuildUri(projectUri, targetOS.name);
++  final Uri buildUri = nativeAssetsBuildUri(
++    projectUri,
++    targetOS.name,
++    subdirectory: _nativeAssetsBuildSubdirectory(
++      targetPlatform,
++      environmentDefines,
++      fileSystem,
++    ),
++  );
+   final flutterTester = targetPlatform == TargetPlatform.tester;
+   final BuildMode buildMode = _getBuildMode(environmentDefines, flutterTester);
+
+@@ -363,11 +380,43 @@ void ensureNoNativeAssetsOrOsIsSupported({
+   );
+ }
+
++String? _nativeAssetsBuildSubdirectory(
++  TargetPlatform targetPlatform,
++  Map<String, String> environmentDefines,
++  FileSystem fileSystem,
++) {
++  if (targetPlatform != TargetPlatform.ios) {
++    return null;
++  }
++
++  final String? sdkRoot = environmentDefines[kSdkRoot];
++  if (sdkRoot == null) {
++    throw MissingDefineException(kSdkRoot, 'native_assets');
++  }
++  final EnvironmentType? environmentType = xcode.environmentTypeFromSdkroot(
++    sdkRoot,
++    fileSystem,
++  );
++  if (environmentType == null) {
++    throwToolExit(
++      'Unable to determine the iOS native assets SDK from $sdkRoot.',
++    );
++  }
++  return environmentType == EnvironmentType.simulator
++      ? 'iphonesimulator'
++      : 'iphoneos';
++}
++
+ /// This should be the same for different archs, debug/release, etc.
+ /// It should work for all macOS.
+-Uri nativeAssetsBuildUri(Uri projectUri, String osName) {
++Uri nativeAssetsBuildUri(
++  Uri projectUri,
++  String osName, {
++  String? subdirectory,
++}) {
+   final String buildDir = getBuildDirectory();
+-  return projectUri.resolve('$buildDir/native_assets/$osName/');
++  final String suffix = subdirectory == null ? '' : '$subdirectory/';
++  return projectUri.resolve('$buildDir/native_assets/$osName/$suffix');
+ }
+
+ Map<FlutterCodeAsset, KernelAsset> _assetTargetLocationsWindowsLinux(

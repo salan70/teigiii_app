@@ -37,10 +37,20 @@ coverage-open: coverage
     open coverage/html/index.html
 
 run-dev:
-    flutter run --dart-define-from-file=dart_defines/dev.json
+    flutter run --flavor dev --dart-define-from-file=dart_defines/dev.json
+
+# 指定した端末で dev flavor を起動する（`flutter devices` で端末 ID を確認）
+run-dev-on device:
+    flutter run -d "{{device}}" --flavor dev --dart-define-from-file=dart_defines/dev.json
 
 run-prod:
-    flutter run --dart-define-from-file=dart_defines/prod.json
+    flutter run --flavor prod --dart-define-from-file=dart_defines/prod.json
+
+check-ios-flavors:
+    bash ios/scripts/check_flavor_configuration.sh
+
+check-ios-native-asset binary sdk:
+    bash ios/scripts/check_native_asset_platform.sh "{{binary}}" "{{sdk}}"
 
 # --- server（Cloudflare Workers API）---
 

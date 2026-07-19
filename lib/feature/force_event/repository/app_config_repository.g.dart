@@ -7,7 +7,7 @@ part of 'app_config_repository.dart';
 // **************************************************************************
 
 String _$appConfigRepositoryHash() =>
-    r'e00c73b9dd3b7b3660455581ce47a640aa76df2b';
+    r'6ba81bef34c57ef8f4db882553e9a11768f7a6e0';
 
 /// See also [appConfigRepository].
 @ProviderFor(appConfigRepository)

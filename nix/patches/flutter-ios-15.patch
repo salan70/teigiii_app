@@ -1,0 +1,20 @@
+diff --git a/packages/flutter_tools/lib/src/macos/swift_package_manager.dart b/packages/flutter_tools/lib/src/macos/swift_package_manager.dart
+index 0cc89db82f..172d1d4be5 100644
+--- a/packages/flutter_tools/lib/src/macos/swift_package_manager.dart
++++ b/packages/flutter_tools/lib/src/macos/swift_package_manager.dart
+@@ -85,7 +85,14 @@ class SwiftPackageManager {
+     final pluginsPackage = SwiftPackage(
+       manifest: project.flutterPluginSwiftPackageManifest,
+       name: kFlutterGeneratedPluginSwiftPackageName,
+-      platforms: <SwiftPackageSupportedPlatform>[platform.supportedPackagePlatform],
++      platforms: <SwiftPackageSupportedPlatform>[
++        platform == FlutterDarwinPlatform.ios
++            ? SwiftPackageSupportedPlatform(
++                platform: SwiftPackagePlatform.ios,
++                version: Version(15, 0, null),
++              )
++            : platform.supportedPackagePlatform,
++      ],
+       products: <SwiftPackageProduct>[generatedProduct],
+       dependencies: packageDependencies,
+       targets: <SwiftPackageTarget>[generatedTarget],

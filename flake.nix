@@ -25,6 +25,11 @@
           sha256 = "1izic61kldcw8drg526dia3m0fsbib5qibixdkih9x3q8vxi2nz5";
         };
       };
+      # Flutter 3.41.8 regenerates the aggregate iOS plugin package with an
+      # iOS 13 minimum even when the Runner target and Firebase require iOS 15.
+      # Rebuild the Flutter tool snapshot with repository-owned patches, including
+      # SDK-specific iOS native asset output directories.
+      flutterToolchainRevision = "${flutterVersion}-teigiii-ios15-native-assets-v6";
       mkTools =
         pkgs:
         let
@@ -37,6 +42,7 @@
             runtimeInputs = [
               pkgs.coreutils
               pkgs.git
+              pkgs.patch
               pkgs.rsync
             ];
             text = ''
@@ -48,13 +54,16 @@
 
               flutter_root="''${FLUTTER_ROOT:-$repo_root/.nix/flutter/${flutterVersion}}"
               stamp="$flutter_root/.nix-flutter-version"
-              if [ ! -x "$flutter_root/bin/${executable}" ] || [ ! -f "$stamp" ] || [ "$(cat "$stamp")" != "${flutterVersion}" ]; then
+              if [ ! -x "$flutter_root/bin/${executable}" ] || [ ! -f "$stamp" ] || [ "$(cat "$stamp")" != "${flutterToolchainRevision}" ]; then
                 tmp="$flutter_root.tmp"
                 rm -rf "$tmp"
                 mkdir -p "$(dirname "$tmp")"
                 rsync -a --delete "${flutterSrc}/" "$tmp/"
                 chmod -R u+w "$tmp"
-                printf '%s\n' "${flutterVersion}" > "$tmp/.nix-flutter-version"
+                patch -d "$tmp" -p1 < ${./nix/patches/flutter-ios-15.patch}
+                patch -d "$tmp" -p1 < ${./nix/patches/flutter-ios-native-assets.patch}
+                rm -f "$tmp/bin/cache/flutter_tools.snapshot" "$tmp/bin/cache/flutter_tools.stamp"
+                printf '%s\n' "${flutterToolchainRevision}" > "$tmp/.nix-flutter-version"
                 rm -rf "$flutter_root"
                 mv "$tmp" "$flutter_root"
               fi

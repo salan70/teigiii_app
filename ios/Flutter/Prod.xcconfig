@@ -1,0 +1,13 @@
+// Production flavor settings shared by Debug/Profile/Release configurations.
+flavor=prod
+appName=Teigiii
+appIdSuffix=
+apiBaseUrl=https:/$()/api.prod.invalid
+
+CODE_SIGN_IDENTITY=Apple Development
+CODE_SIGN_IDENTITY[sdk=iphoneos*]=iPhone Distribution
+CODE_SIGN_STYLE=Manual
+DEVELOPMENT_TEAM=
+DEVELOPMENT_TEAM[sdk=iphoneos*]=S5LH7R5263
+PROVISIONING_PROFILE_SPECIFIER=
+PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]=Teigiii prod

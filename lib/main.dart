@@ -20,8 +20,8 @@ import 'core/common_widget/dialog/loading_dialog.dart';
 import 'core/common_widget/error_and_retry_widget.dart';
 import 'core/router/app_router.dart';
 import 'feature/force_event/application/app_config_state.dart';
+import 'feature/force_event/presentation/app_config_gate.dart';
 import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
-import 'feature/force_event/presentation/overlay_in_maintenance_dialog.dart';
 import 'util/constant/theme_data.dart';
 import 'util/firebase_options/firebase_options.dart';
 import 'util/logger.dart';
@@ -100,25 +100,9 @@ class MyApp extends ConsumerWidget {
       theme: getThemeData(ThemeMode.light, context),
       darkTheme: getThemeData(ThemeMode.dark, context),
       builder: (context, child) {
-        // メンテナンス関連の処理
-        final appMaintenance = ref.watch(appMaintenanceProvider);
-        if (appMaintenance == null) {
-          // * ロード中の場合
-          return const Scaffold(body: OverlayLoadingWidget());
-        }
-        if (appMaintenance.inMaintenance) {
-          // * メンテナンス中の場合
-          return Stack(
-            children: [
-              child!,
-              OverlayInMaintenanceDialog(appMaintenance: appMaintenance),
-            ],
-          );
-        }
-
         // 強制アップデート関連の処理
         final asyncIsRequiredUpdate = ref.watch(isRequiredAppUpdateProvider);
-        return asyncIsRequiredUpdate.when(
+        final app = asyncIsRequiredUpdate.when(
           loading: () => const Scaffold(body: OverlayLoadingWidget()),
           error: (e, s) {
             // エラーが発生後、再読み込み時にtrueになる。
@@ -169,6 +153,12 @@ class MyApp extends ConsumerWidget {
               ],
             );
           },
+        );
+
+        return AppConfigGate(
+          asyncAppConfig: ref.watch(appConfigProvider),
+          onRetry: () => ref.invalidate(appConfigProvider),
+          child: app,
         );
       },
     );
