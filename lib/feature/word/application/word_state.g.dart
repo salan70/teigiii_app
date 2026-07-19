@@ -6,7 +6,7 @@ part of 'word_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$wordHash() => r'f49fb13fae49f1abda9610bdfb49bd782734f0c6';
+String _$wordHash() => r'6775adbb0d1e8bf29be3eed1348760f8581782d2';
 
 /// Copied from Dart SDK
 class _SystemHash {

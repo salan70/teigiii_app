@@ -1,52 +1,42 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:teigiii_api/teigiii_api.dart';
 
-import '../../../core/common_provider/firebase_providers.dart';
-import '../../../util/constant/firestore_collections.dart';
-import 'entity/word_document.dart';
+import '../../../core/api/api_exception.dart';
+import '../../../core/api/api_providers.dart';
+import '../domain/word.dart';
 
 part 'word_repository.g.dart';
 
 @riverpod
 WordRepository wordRepository(WordRepositoryRef ref) =>
-    WordRepository(ref.watch(firestoreProvider));
+    WordRepository(ref.watch(teigiiiApiProvider).getWordsApi());
 
+/// @doc doc/specs/legacy-repository-api-mapping.md#言葉
 class WordRepository {
-  WordRepository(this.firestore);
+  WordRepository(this._wordsApi);
 
-  final FirebaseFirestore firestore;
+  final WordsApi _wordsApi;
 
-  CollectionReference get _wordsCollectionRef =>
-      firestore.collection(WordsCollection.collectionName);
-
-  /// [wordId] に一致する [WordDocument] を返す。
+  /// [wordId] に一致する [Word] を返す。
   ///
-  /// 該当するドキュメントが見つからない場合、nullを返す。
-  Future<WordDocument?> fetchWordById(String wordId) async {
-    final snapshot = await _wordsCollectionRef.doc(wordId).get();
-
-    if (snapshot.exists) {
-      return WordDocument.fromFirestore(snapshot);
+  /// 該当する言葉が見つからない場合、null を返す。
+  Future<Word?> fetchWordById(String wordId) async {
+    try {
+      final response = await _wordsApi.v1WordsIdGet(id: wordId);
+      final word = response.data!;
+      return Word(
+        id: word.id,
+        word: word.word,
+        reading: word.reading,
+        initialSubGroupLabel: word.readingSubGroup,
+        postedDefinitionCount: word.publicDefinitionCount,
+      );
+    } on DioException catch (exception) {
+      if (exception.response?.statusCode == 404) {
+        return null;
+      }
+      throw ApiException.fromDioException(exception);
     }
-
-    return null;
-  }
-
-  /// [word], [wordReading] 両方が一致する [WordDocument] のidを返す。
-  ///
-  /// 見つからない場合はnullを返す。
-  Future<String?> findWordId(String word, String wordReading) async {
-    final snapshot = await _wordsCollectionRef
-        .where(WordsCollection.word, isEqualTo: word)
-        .where(WordsCollection.reading, isEqualTo: wordReading)
-        .limit(1)
-        .get();
-
-    if (snapshot.docs.isEmpty) {
-      // 該当する Word ドキュメントが見つからない場合、nullを返す。
-      return null;
-    }
-
-    return snapshot.docs.first.id;
   }
 }

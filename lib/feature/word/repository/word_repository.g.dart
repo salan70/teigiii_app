@@ -6,7 +6,7 @@ part of 'word_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$wordRepositoryHash() => r'c529f882184f1e988ad4c4049ab433058177767e';
+String _$wordRepositoryHash() => r'4cedafe94015e3808cadcd9cbb1e0104b1136567';
 
 /// See also [wordRepository].
 @ProviderFor(wordRepository)

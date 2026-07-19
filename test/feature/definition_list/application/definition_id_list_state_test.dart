@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
-import 'package:teigi_app/feature/definition/repository/write_definition_repository.dart';
 import 'package:teigi_app/feature/definition_list/appication/definition_id_list_state.dart';
 import 'package:teigi_app/feature/definition_list/domain/definition_id_list_state.dart';
 import 'package:teigi_app/feature/definition_list/repository/definition_id_list_repository.dart';
@@ -13,18 +12,15 @@ import 'package:teigi_app/feature/user_config/repository/user_config_repository.
 import 'package:teigi_app/feature/user_follow/application/user_follow_state.dart';
 import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
-import 'package:teigi_app/feature/word/repository/word_repository.dart';
 
 import '../../../mock/mock_data.dart';
 import 'definition_id_list_state_test.mocks.dart';
 
 @GenerateNiceMocks([
-  MockSpec<WriteDefinitionRepository>(),
   MockSpec<DefinitionIdListRepository>(),
   MockSpec<UserProfileRepository>(),
   MockSpec<UserConfigRepository>(),
   MockSpec<UserFollowRepository>(),
-  MockSpec<WordRepository>(),
   MockSpec<Listener<AsyncValue<DefinitionIdListState>>>(),
 ])
 // ignore: one_member_abstracts, unreachable_from_main
@@ -36,7 +32,6 @@ abstract class Listener<T> {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final mockWriteDefinitionRepository = MockWriteDefinitionRepository();
   final mockDefinitionIdListRepository = MockDefinitionIdListRepository();
   final mockUserProfileRepository = MockUserProfileRepository();
   final mockUserFollowRepository = MockUserFollowRepository();
@@ -59,9 +54,6 @@ void main() {
         followingIdListProvider(
           userId,
         ).overrideWith((ref) => mockFollowingUserIdList),
-        writeDefinitionRepositoryProvider.overrideWithValue(
-          mockWriteDefinitionRepository,
-        ),
         definitionIdListRepositoryProvider.overrideWithValue(
           mockDefinitionIdListRepository,
         ),
@@ -81,7 +73,6 @@ void main() {
   });
 
   tearDown(() {
-    reset(mockWriteDefinitionRepository);
     reset(mockDefinitionIdListRepository);
     reset(mockUserProfileRepository);
     reset(mockUserFollowRepository);

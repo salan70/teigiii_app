@@ -355,36 +355,4 @@ void main() {
       expect(actual, isFalse);
     });
   });
-
-  group('toFirestore()', () {
-    test('想定通りにMap型が返されることを検証', () {
-      // * Arrange
-      const word = '冒険';
-      const userId = 'userId';
-      const wordReading = 'ぼうけん';
-      const definition = 'かかんに挑むこと';
-      const isPublic = true;
-
-      const definitionForWrite = DefinitionForWrite(
-        id: null,
-        authorId: userId,
-        word: word,
-        wordReading: wordReading,
-        isPublic: isPublic,
-        definition: definition,
-      );
-
-      // * Act
-      final actual = definitionForWrite.toFirestoreForCreate();
-
-      // * Assert
-      expect(actual, isA<Map<String, dynamic>>());
-      expect(actual['authorId'], userId);
-      expect(actual['word'], word);
-      expect(actual['wordReadingInitialSubGroupLabel'], 'ほ');
-      expect(actual['definition'], definition);
-      expect(actual['likesCount'], 0);
-      expect(actual['isPublic'], isPublic);
-    });
-  });
 }

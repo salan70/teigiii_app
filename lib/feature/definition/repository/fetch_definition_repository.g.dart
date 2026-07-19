@@ -7,7 +7,7 @@ part of 'fetch_definition_repository.dart';
 // **************************************************************************
 
 String _$fetchDefinitionRepositoryHash() =>
-    r'368fb73d8aa8a7163143382b9520e6148f49aa00';
+    r'7ae9aaf2ec165ec9ba7275869f6b83ae9102634b';
 
 /// See also [fetchDefinitionRepository].
 @ProviderFor(fetchDefinitionRepository)

@@ -1,48 +1,50 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:teigiii_api/teigiii_api.dart';
 
-import '../../../core/common_provider/firebase_providers.dart';
-import '../../../util/constant/firestore_collections.dart';
-import 'entity/definition_document.dart';
+import '../../../core/api/api_exception.dart';
+import '../../../core/api/api_providers.dart';
+import '../domain/definition.dart';
 
 part 'fetch_definition_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 FetchDefinitionRepository fetchDefinitionRepository(
   FetchDefinitionRepositoryRef ref,
-) =>
-    FetchDefinitionRepository(
-      ref.watch(firestoreProvider),
-    );
+) => FetchDefinitionRepository(
+  ref.watch(teigiiiApiProvider).getDefinitionsApi(),
+);
 
 /// 定義の取得に関する処理を記述するRepository
+///
+/// @doc doc/specs/legacy-repository-api-mapping.md#定義の読み書き
 class FetchDefinitionRepository {
-  FetchDefinitionRepository(this.firestore);
+  FetchDefinitionRepository(this._definitionsApi);
 
-  final FirebaseFirestore firestore;
+  final DefinitionsApi _definitionsApi;
 
-  CollectionReference get _definitionsCollectionRef =>
-      firestore.collection(DefinitionsCollection.collectionName);
-
-  Future<DefinitionDocument> fetchDefinition(String definitionId) async {
-    final snapshot = await _definitionsCollectionRef
-        .doc(definitionId)
-        .get()
-        .then((snapshot) => snapshot);
-
-    return DefinitionDocument.fromFirestore(snapshot);
-  }
-
-  /// [userId] が投稿した全てのDefinitionDocリストを取得する
-  ///
-  /// 取得数にlimitを設定していないため、大量のデータを取得する可能性があることに注意。
-  Future<List<DefinitionDocument>> fetchAllPostedDefinitionDocList(
-    String userId,
-  ) async {
-    final snapshot = await _definitionsCollectionRef
-        .where(DefinitionsCollection.authorId, isEqualTo: userId)
-        .get();
-
-    return snapshot.docs.map(DefinitionDocument.fromFirestore).toList();
+  Future<Definition> fetchDefinition(String definitionId) async {
+    try {
+      final response = await _definitionsApi.v1DefinitionsIdGet(
+        id: definitionId,
+      );
+      final definition = response.data!;
+      return Definition(
+        id: definition.id,
+        wordId: definition.word.id,
+        word: definition.word.word,
+        wordReading: definition.word.reading,
+        authorId: definition.author.id,
+        authorName: definition.author.name,
+        authorImageUrl: definition.author.avatarUrl,
+        definition: definition.body,
+        isPublic: definition.status == DefinitionStatus.public,
+        likesCount: definition.likesCount,
+        isLikedByUser: definition.isLikedByMe,
+        createdAt: definition.createdAt,
+      );
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
   }
 }

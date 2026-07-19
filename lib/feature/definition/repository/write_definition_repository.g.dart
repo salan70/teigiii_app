@@ -7,7 +7,7 @@ part of 'write_definition_repository.dart';
 // **************************************************************************
 
 String _$writeDefinitionRepositoryHash() =>
-    r'fcc95fe38b2e864efa218c3031412592078de07e';
+    r'c1694b686146642653cc050d80c854f57d087fed';
 
 /// See also [writeDefinitionRepository].
 @ProviderFor(writeDefinitionRepository)
