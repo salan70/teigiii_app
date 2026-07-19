@@ -39,6 +39,10 @@ coverage-open: coverage
 run-dev:
     flutter run --flavor dev --dart-define-from-file=dart_defines/dev.json
 
+# 指定した端末で dev flavor を起動する（`flutter devices` で端末 ID を確認）
+run-dev-on device:
+    flutter run -d "{{device}}" --flavor dev --dart-define-from-file=dart_defines/dev.json
+
 run-prod:
     flutter run --flavor prod --dart-define-from-file=dart_defines/prod.json
 
