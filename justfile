@@ -49,6 +49,9 @@ run-prod:
 check-ios-flavors:
     bash ios/scripts/check_flavor_configuration.sh
 
+check-ios-native-asset binary sdk:
+    bash ios/scripts/check_native_asset_platform.sh "{{binary}}" "{{sdk}}"
+
 # --- server（Cloudflare Workers API）---
 
 server-setup:
