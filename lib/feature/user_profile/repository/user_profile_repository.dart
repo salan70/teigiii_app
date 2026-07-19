@@ -1,51 +1,58 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:teigiii_api/teigiii_api.dart';
 
-import '../../../core/common_provider/firebase_providers.dart';
-import '../../../util/constant/firestore_collections.dart';
+import '../../../core/api/api_exception.dart';
+import '../../../core/api/api_providers.dart';
 import '../../../util/exception/database_exception.dart';
 import '../domain/user_profile.dart';
-import 'entity/user_profile_document.dart';
 
 part 'user_profile_repository.g.dart';
 
 @riverpod
 UserProfileRepository userProfileRepository(UserProfileRepositoryRef ref) =>
-    UserProfileRepository(
-      ref.watch(firestoreProvider),
-    );
+    UserProfileRepository(ref.watch(teigiiiApiProvider).getUsersApi());
 
 class UserProfileRepository {
-  UserProfileRepository(this.firestore);
+  UserProfileRepository(this._usersApi);
 
-  CollectionReference get _userProfilesCollectionRef =>
-      firestore.collection(UserProfilesCollection.collectionName);
+  final UsersApi _usersApi;
 
-  final FirebaseFirestore firestore;
-
-  Future<UserProfileDocument> fetchUserProfile(String userId) async {
-    final snapshot = await _userProfilesCollectionRef.doc(userId).get();
-
-    if (!snapshot.exists) {
-      throw const DatabaseException(DatabaseExceptionCode.notFound);
+  Future<UserProfile> fetchUserProfile(String userId) async {
+    try {
+      final response = await _usersApi.v1UsersIdGet(id: userId);
+      final user = response.data!;
+      return UserProfile(
+        id: user.id,
+        publicId: user.publicId,
+        name: user.name,
+        bio: user.bio,
+        avatarUrl: user.avatarUrl,
+        followingCount: user.followingCount,
+        followerCount: user.followerCount,
+        isFollowedByMe: user.isFollowedByMe,
+        croppedFile: null,
+      );
+    } on DioException catch (exception) {
+      // 削除済みユーザーの表示は 404 由来の notFound 判定に依存しているため、
+      // ここで DatabaseException へ変換して既存 UI の挙動を維持する。
+      if (exception.response?.statusCode == 404) {
+        throw const DatabaseException(DatabaseExceptionCode.notFound);
+      }
+      throw ApiException.fromDioException(exception);
     }
-
-    return UserProfileDocument.fromFirestore(snapshot);
   }
 
-  Future<void> updateUserProfile(
-    UserProfile userProfileForWrite,
-  ) async {
-    await _userProfilesCollectionRef.doc(userProfileForWrite.id).update({
-      UserProfilesCollection.name: userProfileForWrite.name,
-      UserProfilesCollection.bio: userProfileForWrite.bio,
-      UserProfilesCollection.profileImageUrl:
-          userProfileForWrite.profileImageUrl,
-      updatedAtFieldName: FieldValue.serverTimestamp(),
-    });
-  }
-
-  Future<void> deleteUserProfile(String userId) async {
-    await _userProfilesCollectionRef.doc(userId).delete();
+  Future<void> updateUserProfile(UserProfile userProfileForWrite) async {
+    try {
+      await _usersApi.v1UsersMePatch(
+        updateMeRequest: UpdateMeRequest(
+          name: userProfileForWrite.name,
+          bio: userProfileForWrite.bio,
+        ),
+      );
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
   }
 }

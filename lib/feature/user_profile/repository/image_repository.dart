@@ -17,10 +17,20 @@ class ImageRepository {
     return ImagePicker().pickImage(source: imageSource);
   }
 
-  /// 画像を切り抜く
+  /// 画像を切り抜き、512 x 512 JPEG quality 85 へ正規化する
+  ///
+  /// 512px 未満の元画像は拡大せず、そのままのサイズで返す
+  /// （サーバーは寸法検証を行わない）
   Future<CroppedFile?> cropImage(String imagePath) async {
     final croppedFile = await ImageCropper().cropImage(
       sourcePath: imagePath,
+      maxWidth: 512,
+      maxHeight: 512,
+      // 既定値と一致するが、512 x 512 JPEG quality 85 という仕様の
+      // 明示のため指定する。
+      // ignore: avoid_redundant_argument_values
+      compressFormat: ImageCompressFormat.jpg,
+      compressQuality: 85,
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: '',

@@ -8,10 +8,7 @@ import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.
 
 import 'user_follow_service_test.mocks.dart';
 
-@GenerateNiceMocks([
-  MockSpec<UserFollowRepository>(),
-])
-
+@GenerateNiceMocks([MockSpec<UserFollowRepository>()])
 void main() {
   final mockUserFollowRepository = MockUserFollowRepository();
   const currentUserId = 'userId';
@@ -22,8 +19,9 @@ void main() {
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => currentUserId),
-        userFollowRepositoryProvider
-            .overrideWithValue(mockUserFollowRepository),
+        userFollowRepositoryProvider.overrideWithValue(
+          mockUserFollowRepository,
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -44,14 +42,10 @@ void main() {
 
       // * Assert
       // 想定通りにrepositoryの関数が呼ばれているか検証
-      verify(
-        mockUserFollowRepository.follow(currentUserId, targetUserId),
-      ).called(1);
+      verify(mockUserFollowRepository.follow(targetUserId)).called(1);
 
       // 想定外のrepositoryの関数が呼ばれていないか検証
-      verifyNever(
-        mockUserFollowRepository.unfollow(any, any),
-      );
+      verifyNever(mockUserFollowRepository.unfollow(any));
     });
   });
 
@@ -66,14 +60,10 @@ void main() {
 
       // * Assert
       // 想定通りにrepositoryの関数が呼ばれているか検証
-      verify(
-        mockUserFollowRepository.unfollow(currentUserId, targetUserId),
-      ).called(1);
+      verify(mockUserFollowRepository.unfollow(targetUserId)).called(1);
 
       // 想定外のrepositoryの関数が呼ばれていないか検証
-      verifyNever(
-        mockUserFollowRepository.follow(any, any),
-      );
+      verifyNever(mockUserFollowRepository.follow(any));
     });
   });
 }

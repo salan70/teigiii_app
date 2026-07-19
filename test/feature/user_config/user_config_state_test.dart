@@ -7,7 +7,6 @@ import 'package:teigi_app/feature/user_config/application/user_config_state.dart
 import 'package:teigi_app/feature/user_config/repository/package_info_repository.dart';
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
 
-import '../../mock/mock_data.dart';
 import 'user_config_state_test.mocks.dart';
 
 @GenerateNiceMocks([
@@ -22,7 +21,7 @@ class MockAppVersionListener extends Mock
 
 // ignore: one_member_abstracts, unreachable_from_main
 abstract class Listener<T> {
-// ignore: unreachable_from_main
+  // ignore: unreachable_from_main
   void call(T? previous, T next);
 }
 
@@ -38,10 +37,12 @@ void main() {
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => 'userId'),
-        userConfigRepositoryProvider
-            .overrideWithValue(mockUserConfigRepository),
-        packageInfoRepositoryProvider
-            .overrideWithValue(mockPackageInfoRepository),
+        userConfigRepositoryProvider.overrideWithValue(
+          mockUserConfigRepository,
+        ),
+        packageInfoRepositoryProvider.overrideWithValue(
+          mockPackageInfoRepository,
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -55,9 +56,10 @@ void main() {
     test('stateの更新、repositoryで定義している関数の呼び出しを検証', () async {
       // * Arrange
       // Mockの設定
+      const expected = ['user1'];
       when(
-        mockUserConfigRepository.fetchUserConfig(any),
-      ).thenAnswer((_) async => mockUserConfigDoc);
+        mockUserConfigRepository.fetchMutedUserIdList(),
+      ).thenAnswer((_) async => expected);
 
       container.listen(
         mutedUserIdListProvider,
@@ -67,32 +69,24 @@ void main() {
       addTearDown(() => reset(mutedUserIdListListener));
 
       // * Act
-      await container.read(
-        mutedUserIdListProvider.future,
-      );
+      await container.read(mutedUserIdListProvider.future);
 
       // * Assert
-      final expected = mockUserConfigDoc.mutedUserIdList;
       // stateの検証
       verifyInOrder([
         // ローディング状態であることを検証
-        mutedUserIdListListener.call(
-          null,
-          const AsyncLoading<List<String>>(),
-        ),
+        mutedUserIdListListener.call(null, const AsyncLoading<List<String>>()),
         // データがstateに格納されたこと、格納された値が想定通りであることを検証
         mutedUserIdListListener.call(
           const AsyncLoading<List<String>>(),
-          AsyncValue.data(expected),
+          const AsyncValue.data(expected),
         ),
       ]);
       // 他にlistenerが発火されないことを検証
       verifyNoMoreInteractions(mutedUserIdListListener);
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
-      verify(
-        mockUserConfigRepository.fetchUserConfig(mockDefinitionDoc.authorId),
-      ).called(1);
+      verify(mockUserConfigRepository.fetchMutedUserIdList()).called(1);
     });
   });
 
@@ -113,19 +107,14 @@ void main() {
       addTearDown(() => reset(appVersionListener));
 
       // * Act
-      await container.read(
-        appVersionProvider.future,
-      );
+      await container.read(appVersionProvider.future);
 
       // * Assert
       const expected = mockAppVersion;
       // stateの検証
       verifyInOrder([
         // ローディング状態であることを検証
-        appVersionListener.call(
-          null,
-          const AsyncLoading<String>(),
-        ),
+        appVersionListener.call(null, const AsyncLoading<String>()),
         // データがstateに格納されたこと、格納された値が想定通りであることを検証
         appVersionListener.call(
           const AsyncLoading<String>(),
@@ -136,9 +125,7 @@ void main() {
       verifyNoMoreInteractions(appVersionListener);
 
       // 想定通りにrepositoryの関数が呼ばれているか検証
-      verify(
-        mockPackageInfoRepository.fetchAppVersion(),
-      ).called(1);
+      verify(mockPackageInfoRepository.fetchAppVersion()).called(1);
     });
   });
 }

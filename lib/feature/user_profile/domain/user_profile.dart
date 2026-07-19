@@ -1,9 +1,5 @@
-import 'dart:math';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_cropper/image_cropper.dart';
-
-import '../../../util/constant/firestore_collections.dart';
 
 part 'user_profile.freezed.dart';
 
@@ -14,24 +10,17 @@ class UserProfile with _$UserProfile {
     required String publicId,
     required String name,
     required String bio,
-    required String profileImageUrl,
+
+    /// アバター画像の URL。未設定の場合は null
+    required String? avatarUrl,
+    required int followingCount,
+    required int followerCount,
+    required bool isFollowedByMe,
 
     /// アップロード用にユーザーが指定したファイル（画像）を保持する
     required CroppedFile? croppedFile,
   }) = _UserProfile;
   const UserProfile._();
-
-  /// [UserProfile] の初期値（初回登録時に保存する値）
-  factory UserProfile.defaultValue(String userId, String imageUrl) {
-    return UserProfile(
-      id: userId,
-      publicId: '',
-      name: defaultName,
-      bio: defaultBio,
-      profileImageUrl: imageUrl,
-      croppedFile: null,
-    );
-  }
 
   /// [name]の初期値
   static String get defaultName => '新人さん';
@@ -78,23 +67,5 @@ class UserProfile with _$UserProfile {
       RegExp(r'(.{3})(?!$)'),
       (match) => '${match.group(0)}-',
     );
-  }
-
-  /// [publicId]を生成する
-  static String generatePublicId() {
-    // 9桁のランダムな数字を生成し、文字列に変換したものを返す
-    return List.generate(publicIdLength, (_) => Random.secure().nextInt(10))
-        .join();
-  }
-
-  /// Firestore に保存する用の Map を返す
-  /// 
-  /// [publicId] は生成後に存在するか確認する必要があるため、未指定
-  Map<String, dynamic> toFirestoreForCreate() {
-    return {
-      UserProfilesCollection.name: name,
-      UserProfilesCollection.bio: bio,
-      UserProfilesCollection.profileImageUrl: profileImageUrl,
-    };
   }
 }

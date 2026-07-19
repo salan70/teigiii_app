@@ -2,11 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/definition/domain/definition.dart';
 import 'package:teigi_app/feature/definition/repository/entity/definition_document.dart';
-import 'package:teigi_app/feature/user_config/repository/entity/user_config_document.dart';
-import 'package:teigi_app/feature/user_follow/repository/entity/user_follow_count_document.dart';
 import 'package:teigi_app/feature/user_list/domain/user_id_list_state.dart';
 import 'package:teigi_app/feature/user_profile/domain/user_profile.dart';
-import 'package:teigi_app/feature/user_profile/repository/entity/user_profile_document.dart';
 import 'package:teigi_app/feature/word/repository/entity/word_document.dart';
 
 final nowDateTime = DateTime.now();
@@ -35,7 +32,7 @@ final mockDefinitionDoc = DefinitionDocument(
   word: mockWordDoc.word,
   wordReading: mockWordDoc.reading,
   wordReadingInitialSubGroupLabel: mockWordDoc.initialSubGroupLabel,
-  authorId: mockUserProfileDoc.id,
+  authorId: mockUserProfile.id,
   definition: 'content',
   likesCount: 0,
   isPublic: true,
@@ -44,41 +41,19 @@ final mockDefinitionDoc = DefinitionDocument(
   updatedAt: nowDateTime,
 );
 
-final mockUserProfile = UserProfile(
-  id: mockUserProfileDoc.id,
+const mockUserProfile = UserProfile(
+  id: 'userId',
   publicId: '123456789',
-  name: mockUserProfileDoc.name,
-  bio: mockUserProfileDoc.bio,
-  profileImageUrl: mockUserProfileDoc.profileImageUrl,
+  name: 'name',
+  bio: 'I am a perfect human',
+  avatarUrl: 'https://api.example.com/v1/avatars/userId',
+  followingCount: 2,
+  followerCount: 1,
+  isFollowedByMe: false,
   croppedFile: null,
 );
 
-final mockUserProfileDoc = UserProfileDocument(
-  id: 'userId',
-  name: 'name',
-  publicId: '123456789',
-  bio: 'I am a perfect human',
-  profileImageUrl: 'profileImageUrl',
-  createdAt: nowDateTime,
-  updatedAt: nowDateTime,
-);
-
-final mockUserFollowCountDoc = UserFollowCountDocument(
-  userId: mockUserProfileDoc.id,
-  followerCount: 1,
-  followingCount: 2,
-  createdAt: nowDateTime,
-  updatedAt: nowDateTime,
-);
-
-final mockUserConfigDoc = UserConfigDocument(
-  id: 'userId',
-  appVersion: '1.0.0',
-  osVersion: 'iOS 14.0.0',
-  mutedUserIdList: ['mutedUserId'],
-  createdAt: nowDateTime,
-  updatedAt: nowDateTime,
-);
+const mockMutedUserIdList = ['mutedUserId'];
 
 final mockWordDoc = WordDocument(
   id: 'wordId',

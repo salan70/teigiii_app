@@ -1,135 +1,60 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:teigiii_api/teigiii_api.dart';
 
-import '../../../core/common_provider/firebase_providers.dart';
-import '../../../util/constant/firestore_collections.dart';
-import 'entity/user_follow_count_document.dart';
+import '../../../core/api/api_exception.dart';
+import '../../../core/api/api_providers.dart';
 
 part 'user_follow_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 UserFollowRepository userFollowRepository(UserFollowRepositoryRef ref) =>
-    UserFollowRepository(
-      ref.watch(firestoreProvider),
-    );
+    UserFollowRepository(ref.watch(teigiiiApiProvider).getUsersApi());
 
 class UserFollowRepository {
-  UserFollowRepository(this.firestore);
+  UserFollowRepository(this._usersApi);
 
-  final FirebaseFirestore firestore;
+  final UsersApi _usersApi;
 
-  CollectionReference get _userFollowsCollectionRef =>
-      firestore.collection(UserFollowsCollection.collectionName);
-
-  CollectionReference get _userFollowCountsCollectionRef =>
-      firestore.collection(UserFollowCountsCollection.collectionName);
-
-  Future<UserFollowCountDocument> fetchUserFollowCount(String userId) async {
-    final snapshot = await _userFollowCountsCollectionRef.doc(userId).get();
-
-    return UserFollowCountDocument.fromFirestore(snapshot);
+  /// ログイン中のユーザーが [targetUserId] をフォローする。
+  Future<void> follow(String targetUserId) async {
+    try {
+      await _usersApi.v1UsersIdFollowPut(id: targetUserId);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
   }
 
-  /// [currentUserId] が [targetUserId] をフォローする。
-  Future<void> follow(String currentUserId, String targetUserId) async {
-    final batch = firestore.batch()
-
-      // UserFollows ドキュメントを追加する。
-      ..set(
-        _userFollowsCollectionRef.doc(),
-        {
-          UserFollowsCollection.followerId: targetUserId,
-          UserFollowsCollection.followingId: currentUserId,
-          createdAtFieldName: FieldValue.serverTimestamp(),
-          updatedAtFieldName: FieldValue.serverTimestamp(),
-        },
-      )
-
-      // フォローしたユーザーの UserFollowCounts ドキュメントを更新する。
-      ..update(
-        _userFollowCountsCollectionRef.doc(currentUserId),
-        {
-          UserFollowCountsCollection.followingCount: FieldValue.increment(1),
-          updatedAtFieldName: FieldValue.serverTimestamp(),
-        },
-      )
-
-      // フォローされたユーザーの UserFollowCounts ドキュメントを更新する。
-      ..update(
-        _userFollowCountsCollectionRef.doc(targetUserId),
-        {
-          UserFollowCountsCollection.followerCount: FieldValue.increment(1),
-          updatedAtFieldName: FieldValue.serverTimestamp(),
-        },
-      );
-
-    await batch.commit();
-  }
-
-  /// [currentUserId] が [targetUserId] のフォローを解除する。
-  Future<void> unfollow(String currentUserId, String targetUserId) async {
-    final batch = firestore.batch()
-
-      // UserFollowsドキュメントを探して削除する。
-      ..delete(
-        await _userFollowsCollectionRef
-            .where(
-              UserFollowsCollection.followingId,
-              isEqualTo: currentUserId,
-            )
-            .where(
-              UserFollowsCollection.followerId,
-              isEqualTo: targetUserId,
-            )
-            .limit(1)
-            .get()
-            .then((snapshot) => snapshot.docs.first.reference),
-      )
-
-      // フォロー解除したユーザーのUserFollowCountsドキュメントを更新する。
-      ..update(
-        _userFollowCountsCollectionRef.doc(currentUserId),
-        {
-          UserFollowCountsCollection.followingCount: FieldValue.increment(-1),
-          updatedAtFieldName: FieldValue.serverTimestamp(),
-        },
-      )
-
-      // フォロー解除されたユーザーのUserFollowCountsドキュメントを更新する。
-      ..update(
-        _userFollowCountsCollectionRef.doc(targetUserId),
-        {
-          UserFollowCountsCollection.followerCount: FieldValue.increment(-1),
-          updatedAtFieldName: FieldValue.serverTimestamp(),
-        },
-      );
-
-    await batch.commit();
-  }
-
-  /// [currentUserId] が [targetUserId] をフォローしているかどうかを返す。
-  Future<bool> isFollowing(String currentUserId, String targetUserId) async {
-    final snapshot = await _userFollowsCollectionRef
-        .where(UserFollowsCollection.followingId, isEqualTo: currentUserId)
-        .where(UserFollowsCollection.followerId, isEqualTo: targetUserId)
-        .limit(1)
-        .get();
-
-    return snapshot.docs.isNotEmpty;
+  /// ログイン中のユーザーが [targetUserId] のフォローを解除する。
+  Future<void> unfollow(String targetUserId) async {
+    try {
+      await _usersApi.v1UsersIdFollowDelete(id: targetUserId);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
   }
 
   /// [userId] がフォローしているユーザーのIDリストを全て取得する。
+  ///
+  /// フォロー中フィードのクライアント側 JOIN が残っている間の暫定実装。
+  /// サーバー側 JOIN（`GET /v1/timeline/following`）への切替で不要になる。
   Future<List<String>> fetchAllFollowingIdList(String userId) async {
-    final snapshot = await _userFollowsCollectionRef
-        .where(UserFollowsCollection.followingId, isEqualTo: userId)
-        .get();
-
-    return snapshot.docs
-        .map((doc) => doc[UserFollowsCollection.followerId] as String)
-        .toList();
-  }
-
-  Future<void> deleteUserFollowCount(String userId) async {
-    await _userFollowCountsCollectionRef.doc(userId).delete();
+    try {
+      final idList = <String>[];
+      String? cursor;
+      do {
+        final response = await _usersApi.v1UsersIdFollowingGet(
+          id: userId,
+          cursor: cursor,
+          limit: 50,
+        );
+        final page = response.data!;
+        idList.addAll(page.items.map((item) => item.id));
+        cursor = page.nextCursor;
+      } while (cursor != null);
+      return idList;
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
   }
 }

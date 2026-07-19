@@ -3,17 +3,14 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i3;
 
-import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i7;
-import 'package:teigi_app/feature/user_config/repository/entity/user_config_document.dart'
-    as _i3;
+import 'package:riverpod_annotation/riverpod_annotation.dart' as _i5;
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart'
-    as _i4;
+    as _i2;
 
-import 'user_config_service_test.dart' as _i6;
+import 'user_config_service_test.dart' as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -28,134 +25,50 @@ import 'user_config_service_test.dart' as _i6;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeFirebaseFirestore_0 extends _i1.SmartFake
-    implements _i2.FirebaseFirestore {
-  _FakeFirebaseFirestore_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeUserConfigDocument_1 extends _i1.SmartFake
-    implements _i3.UserConfigDocument {
-  _FakeUserConfigDocument_1(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
 /// A class which mocks [UserConfigRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserConfigRepository extends _i1.Mock
-    implements _i4.UserConfigRepository {
+    implements _i2.UserConfigRepository {
   @override
-  _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
-        Invocation.getter(#firestore),
-        returnValue: _FakeFirebaseFirestore_0(
-          this,
-          Invocation.getter(#firestore),
-        ),
-        returnValueForMissingStub: _FakeFirebaseFirestore_0(
-          this,
-          Invocation.getter(#firestore),
-        ),
-      ) as _i2.FirebaseFirestore);
-
-  @override
-  _i5.Future<_i3.UserConfigDocument> fetchUserConfig(String? userId) =>
+  _i3.Future<List<String>> fetchMutedUserIdList() =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchUserConfig,
-          [userId],
-        ),
-        returnValue:
-            _i5.Future<_i3.UserConfigDocument>.value(_FakeUserConfigDocument_1(
-          this,
-          Invocation.method(
-            #fetchUserConfig,
-            [userId],
-          ),
-        )),
-        returnValueForMissingStub:
-            _i5.Future<_i3.UserConfigDocument>.value(_FakeUserConfigDocument_1(
-          this,
-          Invocation.method(
-            #fetchUserConfig,
-            [userId],
-          ),
-        )),
-      ) as _i5.Future<_i3.UserConfigDocument>);
+            Invocation.method(#fetchMutedUserIdList, []),
+            returnValue: _i3.Future<List<String>>.value(<String>[]),
+            returnValueForMissingStub: _i3.Future<List<String>>.value(
+              <String>[],
+            ),
+          )
+          as _i3.Future<List<String>>);
 
   @override
-  _i5.Future<void> appendMutedUserIdList(
-    String? userId,
-    String? mutedUserId,
-  ) =>
+  _i3.Future<void> appendMutedUserIdList(String? mutedUserId) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #appendMutedUserIdList,
-          [
-            userId,
-            mutedUserId,
-          ],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+            Invocation.method(#appendMutedUserIdList, [mutedUserId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  _i5.Future<void> removeMutedUserIdList(
-    String? userId,
-    String? mutedUserId,
-  ) =>
+  _i3.Future<void> removeMutedUserIdList(String? mutedUserId) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #removeMutedUserIdList,
-          [
-            userId,
-            mutedUserId,
-          ],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
-
-  @override
-  _i5.Future<void> deleteUserConfig(String? userId) => (super.noSuchMethod(
-        Invocation.method(
-          #deleteUserConfig,
-          [userId],
-        ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+            Invocation.method(#removeMutedUserIdList, [mutedUserId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 }
 
 /// A class which mocks [Listener].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockListener extends _i1.Mock
-    implements _i6.Listener<_i7.AsyncValue<void>> {
+    implements _i4.Listener<_i5.AsyncValue<void>> {
   @override
-  void call(
-    _i7.AsyncValue<void>? previous,
-    _i7.AsyncValue<void>? next,
-  ) =>
+  void call(_i5.AsyncValue<void>? previous, _i5.AsyncValue<void>? next) =>
       super.noSuchMethod(
-        Invocation.method(
-          #call,
-          [
-            previous,
-            next,
-          ],
-        ),
+        Invocation.method(#call, [previous, next]),
         returnValueForMissingStub: null,
       );
 }

@@ -1,58 +1,59 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:teigiii_api/teigiii_api.dart';
 
-import '../../../core/common_provider/firebase_providers.dart';
-import '../../../util/constant/firestore_collections.dart';
+import '../../../core/api/api_exception.dart';
+import '../../../core/api/api_providers.dart';
 import '../../../util/logger.dart';
-import 'entity/user_config_document.dart';
 
 part 'user_config_repository.g.dart';
 
 @riverpod
 UserConfigRepository userConfigRepository(UserConfigRepositoryRef ref) =>
     UserConfigRepository(
-      ref.watch(firestoreProvider),
+      ref.watch(teigiiiApiProvider).getMeApi(),
+      ref.watch(teigiiiApiProvider).getUsersApi(),
     );
 
 class UserConfigRepository {
-  UserConfigRepository(this.firestore);
+  UserConfigRepository(this._meApi, this._usersApi);
 
-  final FirebaseFirestore firestore;
+  final MeApi _meApi;
+  final UsersApi _usersApi;
 
-  CollectionReference get _userConfigsCollectionRef =>
-      firestore.collection(UserConfigsCollection.collectionName);
-
-  Future<UserConfigDocument> fetchUserConfig(String userId) async {
-    logger.i('ユーザー設定情報を取得します。userId: $userId');
-    final snapshot = await _userConfigsCollectionRef.doc(userId).get();
-    return UserConfigDocument.fromFirestore(snapshot);
+  /// ログイン中のユーザーがミュートしているユーザーのIDリストを全て取得する。
+  Future<List<String>> fetchMutedUserIdList() async {
+    logger.i('ミュート中のユーザーIDリストを取得します。');
+    try {
+      final idList = <String>[];
+      String? cursor;
+      do {
+        final response = await _meApi.v1MeMutesGet(cursor: cursor, limit: 50);
+        final page = response.data!;
+        idList.addAll(page.items.map((item) => item.id));
+        cursor = page.nextCursor;
+      } while (cursor != null);
+      return idList;
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
   }
 
-  /// [mutedUserId] を mutedUserIdList に追加する。
-  Future<void> appendMutedUserIdList(
-    String userId,
-    String mutedUserId,
-  ) async {
-    await _userConfigsCollectionRef.doc(userId).update({
-      UserConfigsCollection.mutedUserIdList:
-          FieldValue.arrayUnion(<dynamic>[mutedUserId]),
-      updatedAtFieldName: FieldValue.serverTimestamp(),
-    });
+  /// [mutedUserId] をミュートする。
+  Future<void> appendMutedUserIdList(String mutedUserId) async {
+    try {
+      await _usersApi.v1UsersIdMutePut(id: mutedUserId);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
   }
 
-  /// [mutedUserId] を mutedUserIdList から削除する。
-  Future<void> removeMutedUserIdList(
-    String userId,
-    String mutedUserId,
-  ) async {
-    await _userConfigsCollectionRef.doc(userId).update({
-      UserConfigsCollection.mutedUserIdList:
-          FieldValue.arrayRemove(<dynamic>[mutedUserId]),
-      updatedAtFieldName: FieldValue.serverTimestamp(),
-    });
-  }
-
-  Future<void> deleteUserConfig(String userId) async {
-    await _userConfigsCollectionRef.doc(userId).delete();
+  /// [mutedUserId] のミュートを解除する。
+  Future<void> removeMutedUserIdList(String mutedUserId) async {
+    try {
+      await _usersApi.v1UsersIdMuteDelete(id: mutedUserId);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
   }
 }

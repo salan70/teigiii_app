@@ -36,7 +36,8 @@ class ProfileWidget extends ConsumerWidget {
               Row(
                 children: [
                   AvatarNetworkImageWidget(
-                    imageUrl: targetUserProfile.profileImageUrl,
+                    imageUrl: targetUserProfile.avatarUrl,
+                    userId: targetUserProfile.id,
                     avatarSize: AvatarSize.large,
                   ),
                   const Spacer(),
@@ -60,8 +61,8 @@ class ProfileWidget extends ConsumerWidget {
               Text(
                 'ID ${targetUserProfile.publicIdForUi}',
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
               const Gap(8),
               Text(
@@ -112,8 +113,10 @@ class ProfileWidget extends ConsumerWidget {
           );
         }
 
-        logger.e('ユーザー[$targetUserId]のプロフィールの取得に失敗しました。'
-            'error: $error, stackTrace: $stackTrace');
+        logger.e(
+          'ユーザー[$targetUserId]のプロフィールの取得に失敗しました。'
+          'error: $error, stackTrace: $stackTrace',
+        );
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 24),
           child: ErrorAndRetryWidget.cannotInquire(

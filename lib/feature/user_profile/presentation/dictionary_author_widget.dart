@@ -11,10 +11,7 @@ import '../application/user_profile_state.dart';
 import 'avatar_network_image_widget.dart';
 
 class DictionaryAuthorWidget extends ConsumerWidget {
-  const DictionaryAuthorWidget({
-    super.key,
-    required this.targetUserId,
-  });
+  const DictionaryAuthorWidget({super.key, required this.targetUserId});
 
   final String targetUserId;
 
@@ -27,23 +24,19 @@ class DictionaryAuthorWidget extends ConsumerWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Written by',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text('Written by', style: Theme.of(context).textTheme.titleMedium),
             const Gap(16),
             InkWell(
               onTap: () {
                 context.pushRoute(
-                  ProfileTopRoute(
-                    targetUserId: targetUserProfile.id,
-                  ),
+                  ProfileTopRoute(targetUserId: targetUserProfile.id),
                 );
               },
               child: Row(
                 children: [
                   AvatarNetworkImageWidget(
-                    imageUrl: targetUserProfile.profileImageUrl,
+                    imageUrl: targetUserProfile.avatarUrl,
+                    userId: targetUserProfile.id,
                   ),
                   const Gap(16),
                   Text(
@@ -63,8 +56,10 @@ class DictionaryAuthorWidget extends ConsumerWidget {
           return const Center(child: CupertinoActivityIndicator());
         }
 
-        logger.e('ユーザー[$targetUserId]の取得に失敗しました。'
-            'error: $error, stackTrace: $stackTrace');
+        logger.e(
+          'ユーザー[$targetUserId]の取得に失敗しました。'
+          'error: $error, stackTrace: $stackTrace',
+        );
         return Center(
           child: SimpleErrorAndRetryWidget(
             onRetry: () => ref.invalidate(userProfileProvider(targetUserId)),

@@ -24,6 +24,7 @@ dependencies:
   device_info_plus: ^9.1.0
   dio: ^5.7.0
   easy_refresh: ^3.3.2+1
+  flutter_cache_manager: ^3.4.1
   flutter_dotenv: ^5.1.0
   flutter_riverpod: ^2.4.3
   fluttertoast: ^8.2.3
@@ -57,7 +58,6 @@ dependencies:
   firebase_auth: ^6.5.4
   firebase_core: ^4.11.0
   firebase_crashlytics: ^5.2.4
-  firebase_storage: ^13.4.3
 
 dev_dependencies:
   flutter_test:
@@ -92,6 +92,7 @@ flutter:
         weight: 800
 
   assets:
+    - assets/images/default_icon/
     - assets/images/introduction_icon/
     - .env
 

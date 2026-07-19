@@ -12,7 +12,8 @@ part of 'follow_count.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$FollowCount {
@@ -28,8 +29,9 @@ mixin _$FollowCount {
 /// @nodoc
 abstract class $FollowCountCopyWith<$Res> {
   factory $FollowCountCopyWith(
-          FollowCount value, $Res Function(FollowCount) then) =
-      _$FollowCountCopyWithImpl<$Res, FollowCount>;
+    FollowCount value,
+    $Res Function(FollowCount) then,
+  ) = _$FollowCountCopyWithImpl<$Res, FollowCount>;
   @useResult
   $Res call({String userId, int followerCount, int followingCount});
 }
@@ -51,20 +53,23 @@ class _$FollowCountCopyWithImpl<$Res, $Val extends FollowCount>
     Object? followerCount = null,
     Object? followingCount = null,
   }) {
-    return _then(_value.copyWith(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      followerCount: null == followerCount
-          ? _value.followerCount
-          : followerCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      followingCount: null == followingCount
-          ? _value.followingCount
-          : followingCount // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            userId: null == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            followerCount: null == followerCount
+                ? _value.followerCount
+                : followerCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            followingCount: null == followingCount
+                ? _value.followingCount
+                : followingCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -72,8 +77,9 @@ class _$FollowCountCopyWithImpl<$Res, $Val extends FollowCount>
 abstract class _$$FollowCountImplCopyWith<$Res>
     implements $FollowCountCopyWith<$Res> {
   factory _$$FollowCountImplCopyWith(
-          _$FollowCountImpl value, $Res Function(_$FollowCountImpl) then) =
-      __$$FollowCountImplCopyWithImpl<$Res>;
+    _$FollowCountImpl value,
+    $Res Function(_$FollowCountImpl) then,
+  ) = __$$FollowCountImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String userId, int followerCount, int followingCount});
@@ -84,8 +90,9 @@ class __$$FollowCountImplCopyWithImpl<$Res>
     extends _$FollowCountCopyWithImpl<$Res, _$FollowCountImpl>
     implements _$$FollowCountImplCopyWith<$Res> {
   __$$FollowCountImplCopyWithImpl(
-      _$FollowCountImpl _value, $Res Function(_$FollowCountImpl) _then)
-      : super(_value, _then);
+    _$FollowCountImpl _value,
+    $Res Function(_$FollowCountImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -94,30 +101,33 @@ class __$$FollowCountImplCopyWithImpl<$Res>
     Object? followerCount = null,
     Object? followingCount = null,
   }) {
-    return _then(_$FollowCountImpl(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      followerCount: null == followerCount
-          ? _value.followerCount
-          : followerCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      followingCount: null == followingCount
-          ? _value.followingCount
-          : followingCount // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+    return _then(
+      _$FollowCountImpl(
+        userId: null == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        followerCount: null == followerCount
+            ? _value.followerCount
+            : followerCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        followingCount: null == followingCount
+            ? _value.followingCount
+            : followingCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$FollowCountImpl implements _FollowCount {
-  const _$FollowCountImpl(
-      {required this.userId,
-      required this.followerCount,
-      required this.followingCount});
+  const _$FollowCountImpl({
+    required this.userId,
+    required this.followerCount,
+    required this.followingCount,
+  });
 
   @override
   final String userId;
@@ -155,10 +165,11 @@ class _$FollowCountImpl implements _FollowCount {
 }
 
 abstract class _FollowCount implements FollowCount {
-  const factory _FollowCount(
-      {required final String userId,
-      required final int followerCount,
-      required final int followingCount}) = _$FollowCountImpl;
+  const factory _FollowCount({
+    required final String userId,
+    required final int followerCount,
+    required final int followingCount,
+  }) = _$FollowCountImpl;
 
   @override
   String get userId;

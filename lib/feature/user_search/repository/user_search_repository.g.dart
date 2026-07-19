@@ -7,20 +7,20 @@ part of 'user_search_repository.dart';
 // **************************************************************************
 
 String _$userSearchRepositoryHash() =>
-    r'f84e0855dea0c46a2d6803eff470c6ecc8c30cfa';
+    r'f47528f4be7164dc7ac9be878ede2465cee29aeb';
 
 /// See also [userSearchRepository].
 @ProviderFor(userSearchRepository)
 final userSearchRepositoryProvider =
     AutoDisposeProvider<UserSearchRepository>.internal(
-  userSearchRepository,
-  name: r'userSearchRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$userSearchRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      userSearchRepository,
+      name: r'userSearchRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$userSearchRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef UserSearchRepositoryRef = AutoDisposeProviderRef<UserSearchRepository>;
 // ignore_for_file: type=lint

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/core/api/api_exception.dart';
 import 'package:teigi_app/core/common_provider/flavor_state.dart';
 import 'package:teigi_app/feature/auth/application/auth_service.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
@@ -10,6 +11,7 @@ import 'package:teigi_app/feature/auth/repository/register_user_repository.dart'
 import 'package:teigi_app/feature/auth/util/constant.dart';
 import 'package:teigi_app/feature/user_config/application/user_config_state.dart';
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart';
+import 'package:teigi_app/feature/user_profile/domain/user_profile.dart';
 
 import 'auth_service_test.mocks.dart';
 
@@ -37,10 +39,12 @@ void main() {
         isSignedInProvider.overrideWithValue(false),
         userIdProvider.overrideWithValue(mockUserId),
         appVersionProvider.overrideWith((ref) => Future.value(mockAppVersion)),
-        registerUserRepositoryProvider
-            .overrideWithValue(mockRegisterUserRepository),
-        deviceInfoRepositoryProvider
-            .overrideWithValue(mockDeviceInfoRepository),
+        registerUserRepositoryProvider.overrideWithValue(
+          mockRegisterUserRepository,
+        ),
+        deviceInfoRepositoryProvider.overrideWithValue(
+          mockDeviceInfoRepository,
+        ),
         authRepositoryProvider.overrideWithValue(mockAuthRepository),
       ],
     );
@@ -60,16 +64,18 @@ void main() {
       isSignedInProvider.overrideWithValue(isSignedIn),
       userIdProvider.overrideWithValue(mockUserId),
       appVersionProvider.overrideWith((ref) => Future.value(mockAppVersion)),
-      registerUserRepositoryProvider
-          .overrideWithValue(mockRegisterUserRepository),
+      registerUserRepositoryProvider.overrideWithValue(
+        mockRegisterUserRepository,
+      ),
       deviceInfoRepositoryProvider.overrideWithValue(mockDeviceInfoRepository),
       authRepositoryProvider.overrideWithValue(mockAuthRepository),
     ]);
   }
 
   void setupMock(String? osVersion) {
-    when(mockDeviceInfoRepository.fetchOsVersion())
-        .thenAnswer((_) async => osVersion);
+    when(
+      mockDeviceInfoRepository.fetchOsVersion(),
+    ).thenAnswer((_) async => osVersion);
   }
 
   group('onAppLaunch()', () {
@@ -89,10 +95,9 @@ void main() {
       verify(mockDeviceInfoRepository.fetchOsVersion()).called(1);
       verify(
         mockRegisterUserRepository.initUser(
-          mockUserId,
-          any,
-          mockOsVersion,
-          mockAppVersion,
+          name: UserProfile.defaultName,
+          osVersion: mockOsVersion,
+          appVersion: mockAppVersion,
         ),
       ).called(1);
     });
@@ -112,9 +117,8 @@ void main() {
       verify(mockDeviceInfoRepository.fetchOsVersion()).called(1);
       verify(
         mockRegisterUserRepository.updateVersionInfo(
-          mockUserId,
-          mockOsVersion,
-          mockAppVersion,
+          osVersion: mockOsVersion,
+          appVersion: mockAppVersion,
         ),
       ).called(1);
 
@@ -134,10 +138,9 @@ void main() {
       // * Assert
       verify(
         mockRegisterUserRepository.initUser(
-          any,
-          any,
-          unexpectedOsText, // 検証対象
-          any,
+          name: anyNamed('name'),
+          osVersion: unexpectedOsText, // 検証対象
+          appVersion: anyNamed('appVersion'),
         ),
       ).called(1);
     });
@@ -155,11 +158,107 @@ void main() {
       // * Assert
       verify(
         mockRegisterUserRepository.updateVersionInfo(
-          any,
-          unexpectedOsText, // 検証対象
-          any,
+          osVersion: unexpectedOsText, // 検証対象
+          appVersion: anyNamed('appVersion'),
         ),
       ).called(1);
+    });
+  });
+
+  group('signIn() 失敗時のクリーンアップ', () {
+    test('initUser 失敗時: サーバーユーザー削除 → Firebase Auth 削除の順で呼ばれ rethrow する', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      setupMock('iOS 14.4');
+      when(
+        mockRegisterUserRepository.initUser(
+          name: anyNamed('name'),
+          osVersion: anyNamed('osVersion'),
+          appVersion: anyNamed('appVersion'),
+        ),
+      ).thenThrow(ApiException(statusCode: 500));
+
+      // * Act & Assert
+      await expectLater(authService.signIn(), throwsA(isA<ApiException>()));
+
+      // Firebase Auth だけでなくサーバーユーザーもベストエフォート削除される
+      verifyInOrder([
+        mockRegisterUserRepository.deleteUser(),
+        mockAuthRepository.deleteUser(),
+      ]);
+    });
+
+    test('サーバーユーザー削除も失敗した場合でも Firebase Auth 削除まで到達し rethrow する', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      setupMock('iOS 14.4');
+      when(
+        mockRegisterUserRepository.initUser(
+          name: anyNamed('name'),
+          osVersion: anyNamed('osVersion'),
+          appVersion: anyNamed('appVersion'),
+        ),
+      ).thenThrow(ApiException(statusCode: 500));
+      when(
+        mockRegisterUserRepository.deleteUser(),
+      ).thenThrow(ApiException(statusCode: 404));
+
+      // * Act & Assert
+      await expectLater(authService.signIn(), throwsA(isA<ApiException>()));
+
+      // サーバー削除が失敗しても Firebase Auth 削除は実行される
+      verify(mockAuthRepository.deleteUser()).called(1);
+    });
+  });
+
+  group('deleteUser()', () {
+    test(
+      'DELETE /v1/users/me → Firebase Auth deleteUser の順で呼ばれることを検証',
+      () async {
+        // * Arrange
+        final authService = container.read(authServiceProvider);
+        updateContainersOverride(isSignedIn: true);
+
+        // * Act
+        await authService.deleteUser();
+
+        // * Assert
+        verifyInOrder([
+          mockRegisterUserRepository.deleteUser(),
+          mockAuthRepository.deleteUser(),
+        ]);
+      },
+    );
+
+    test('サーバー削除が 404（削除済み）でも Firebase Auth 削除へ進む', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      updateContainersOverride(isSignedIn: true);
+      when(
+        mockRegisterUserRepository.deleteUser(),
+      ).thenThrow(ApiException(statusCode: 404));
+
+      // * Act
+      await authService.deleteUser();
+
+      // * Assert
+      verify(mockAuthRepository.deleteUser()).called(1);
+    });
+
+    test('サーバー削除が 500 の場合は rethrow し Firebase Auth 削除しない', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      updateContainersOverride(isSignedIn: true);
+      when(
+        mockRegisterUserRepository.deleteUser(),
+      ).thenThrow(ApiException(statusCode: 500));
+
+      // * Act & Assert
+      await expectLater(
+        authService.deleteUser(),
+        throwsA(isA<ApiException>()),
+      );
+      verifyNever(mockAuthRepository.deleteUser());
     });
   });
 }

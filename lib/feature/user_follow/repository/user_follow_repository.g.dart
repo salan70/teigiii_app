@@ -7,7 +7,7 @@ part of 'user_follow_repository.dart';
 // **************************************************************************
 
 String _$userFollowRepositoryHash() =>
-    r'4d16eb0fb64716c6c0fe917cb12953ccd894ae8e';
+    r'503d56d8b110c362155eeca842f1f2523a23f39d';
 
 /// See also [userFollowRepository].
 @ProviderFor(userFollowRepository)

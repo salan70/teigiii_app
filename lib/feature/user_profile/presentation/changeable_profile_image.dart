@@ -76,7 +76,8 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
         children: [
           userProfileForWrite.croppedFile == null
               ? AvatarNetworkImageWidget(
-                  imageUrl: userProfileForWrite.profileImageUrl,
+                  imageUrl: userProfileForWrite.avatarUrl,
+                  userId: userProfileForWrite.id,
                   avatarSize: avatarSize,
                 )
               : Container(

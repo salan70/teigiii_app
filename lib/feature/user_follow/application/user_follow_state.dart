@@ -1,29 +1,27 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../auth/application/auth_state.dart';
-import '../../user_follow/domain/follow_count.dart';
-import '../../user_follow/repository/user_follow_repository.dart';
+import '../../user_profile/application/user_profile_state.dart';
+import '../domain/follow_count.dart';
+import '../repository/user_follow_repository.dart';
 
 part 'user_follow_state.g.dart';
 
 @riverpod
-Future<FollowCount> followCount(
-  FollowCountRef ref,
-  String userId,
-) async {
-  final userFollowCountDoc =
-      await ref.read(userFollowRepositoryProvider).fetchUserFollowCount(userId);
+Future<FollowCount> followCount(FollowCountRef ref, String userId) async {
+  final userProfile = await ref.watch(userProfileProvider(userId).future);
 
-  return FollowCount.fromDocument(userFollowCountDoc);
+  return FollowCount(
+    userId: userId,
+    followerCount: userProfile.followerCount,
+    followingCount: userProfile.followingCount,
+  );
 }
 
 @riverpod
 Future<bool> isFollowing(IsFollowingRef ref, String targetUserId) async {
-  final currentUserId = ref.read(userIdProvider)!;
+  final userProfile = await ref.watch(userProfileProvider(targetUserId).future);
 
-  return ref
-      .read(userFollowRepositoryProvider)
-      .isFollowing(currentUserId, targetUserId);
+  return userProfile.isFollowedByMe;
 }
 
 @riverpod
