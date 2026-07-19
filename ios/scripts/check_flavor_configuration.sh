@@ -6,6 +6,7 @@ project_root="$(cd "$(dirname "$0")/../.." && pwd)"
 workspace="$project_root/ios/Runner.xcworkspace"
 plugin_package="$project_root/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift"
 framework_package="$project_root/ios/Flutter/ephemeral/Packages/.packages/FlutterFramework/Package.swift"
+xcode_project="$project_root/ios/Runner.xcodeproj/project.pbxproj"
 
 if [[ ! -f "$plugin_package" ]] || ! grep -Fq '.iOS("15.0")' "$plugin_package"; then
   echo "FlutterGeneratedPluginSwiftPackage is not configured for iOS 15.0. Run 'just setup'." >&2
@@ -14,6 +15,21 @@ fi
 
 if [[ ! -f "$framework_package" ]] || ! grep -Fq '.iOS("13.0")' "$framework_package"; then
   echo "FlutterFramework must remain compatible with iOS 13 plugins. Run 'just setup'." >&2
+  exit 1
+fi
+
+if ! grep -Fq 'SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run' "$xcode_project"; then
+  echo "Crashlytics must use the Firebase Swift Package Manager run script." >&2
+  exit 1
+fi
+
+if grep -Fq 'PODS_ROOT/FirebaseCrashlytics' "$xcode_project"; then
+  echo "Crashlytics must not use the CocoaPods upload-symbols path." >&2
+  exit 1
+fi
+
+if ! grep -Fq -- '-gsp \"$PROJECT_DIR/$flavor/GoogleService-Info.plist\"' "$xcode_project"; then
+  echo "Crashlytics must receive the flavor-specific GoogleService-Info.plist." >&2
   exit 1
 fi
 
@@ -69,7 +85,6 @@ check_flavor() {
   local dart_defines="$project_root/dart_defines/${flavor}.json"
   local firebase_options="$project_root/lib/util/firebase_options/firebase_options_${flavor}.dart"
   local google_service_info="$project_root/ios/${flavor}/GoogleService-Info.plist"
-  local crashlytics_config="$project_root/ios/${flavor}/firebase_app_id_file.json"
   local app_name
   local app_id_suffix
   local api_base_url
@@ -93,10 +108,6 @@ check_flavor() {
   assert_dart_ios_option "$firebase_options" projectId "$project_id"
   assert_dart_ios_option "$firebase_options" storageBucket "$storage_bucket"
   assert_dart_ios_option "$firebase_options" iosBundleId "$bundle_id"
-
-  assert_plist_value "$crashlytics_config" GOOGLE_APP_ID "$firebase_app_id"
-  assert_plist_value "$crashlytics_config" FIREBASE_PROJECT_ID "$project_id"
-  assert_plist_value "$crashlytics_config" GCM_SENDER_ID "$sender_id"
 
   for mode in Debug Profile Release; do
     local configuration="${mode}-${flavor}"
@@ -123,7 +134,7 @@ check_flavor() {
 check_flavor \
   dev \
   com.toda.teigiii.dev \
-  "Teigiii dev" \
+  "Teigiii Dev" \
   everyone-teigi-dev \
   225028441501 \
   1:225028441501:ios:370c06ac8f1486b7b5db74

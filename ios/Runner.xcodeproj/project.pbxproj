@@ -465,9 +465,8 @@
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
-				"$(BUILT_PRODUCTS_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(PROJECT_DIR)/$(flavor)/GoogleService-Info.plist",
 				"$(BUILT_PRODUCTS_DIR)/$(EXECUTABLE_PATH)",
-				"$(PROJECT_DIR)/$(flavor)/firebase_app_id_file.json",
 			);
 			name = "[firebase_crashlytics] Crashlytics Upload Symbols";
 			outputFileListPaths = (
@@ -476,7 +475,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  exit 0\nfi\n\"$PODS_ROOT/FirebaseCrashlytics/upload-symbols\" --flutter-project \"$PROJECT_DIR/$flavor/firebase_app_id_file.json\" \n\n";
+			shellScript = "if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  exit 0\nfi\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\" -gsp \"$PROJECT_DIR/$flavor/GoogleService-Info.plist\"\n";
 		};
 		FFAE953596CBE45DAD7DD1D8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
