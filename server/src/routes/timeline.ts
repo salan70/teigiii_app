@@ -1,10 +1,14 @@
-import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
+import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
 import type { AuthenticationVariables } from "../auth/middleware";
 import { BrowseService } from "../browse/browse-service";
 import { paginatedSchema, paginationQuerySchema } from "../schemas/common";
 import { definitionResponseSchema } from "../schemas/definition";
 import { discoverFeedItemSchema } from "../schemas/timeline";
 import { authErrorResponses, authenticatedSecurity, jsonContent } from "./helpers";
+
+const discoverQuerySchema = paginationQuerySchema.extend({
+  type: z.enum(["definition", "wordRegistered"]).optional(),
+});
 
 const discoverRoute = createRoute({
   method: "get",
@@ -13,7 +17,7 @@ const discoverRoute = createRoute({
   summary: "見つける（公開定義 + 言葉登録の混在フィード・完全な新着順）",
   description: "ミュート中ユーザーの活動は除外する。",
   security: authenticatedSecurity,
-  request: { query: paginationQuerySchema },
+  request: { query: discoverQuerySchema },
   responses: {
     200: jsonContent(paginatedSchema(discoverFeedItemSchema), "フィード"),
     ...authErrorResponses,
@@ -46,6 +50,7 @@ export const timelineRoutes = new OpenAPIHono<TimelineRouteEnvironment>()
       context.get("firebaseUid"),
       query.limit,
       query.cursor,
+      query.type,
     );
     return context.json(result, 200);
   })

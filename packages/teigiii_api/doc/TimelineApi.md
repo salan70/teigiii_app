@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 
 # **v1TimelineDiscoverGet**
-> V1TimelineDiscoverGet200Response v1TimelineDiscoverGet(cursor, limit)
+> V1TimelineDiscoverGet200Response v1TimelineDiscoverGet(cursor, limit, type)
 
 見つける（公開定義 + 言葉登録の混在フィード・完全な新着順）
 
@@ -31,9 +31,10 @@ import 'package:teigiii_api/api.dart';
 final api = TeigiiiApi().getTimelineApi();
 final String cursor = cursor_example; // String | 
 final int limit = 56; // int | 
+final String type = type_example; // String |
 
 try {
-    final response = api.v1TimelineDiscoverGet(cursor, limit);
+    final response = api.v1TimelineDiscoverGet(cursor, limit, type);
     print(response);
 } on DioException catch (e) {
     print('Exception when calling TimelineApi->v1TimelineDiscoverGet: $e\n');
@@ -46,6 +47,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **cursor** | **String**|  | [optional] 
  **limit** | **int**|  | [optional] [default to 20]
+ **type** | **String**|  | [optional]
 
 ### Return type
 
@@ -110,4 +112,3 @@ Name | Type | Description  | Notes
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

@@ -25,7 +25,7 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
       fetchFunction: () async => _fetchBasedOnType(isFirstFetch: false),
       mergeFunction: (currentData, newData) => UserIdListState(
         list: currentData.list + newData.list,
-        lastReadQueryDocumentSnapshot: newData.lastReadQueryDocumentSnapshot,
+        nextCursor: newData.nextCursor,
         hasMore: newData.hasMore,
       ),
     );
@@ -34,36 +34,32 @@ class UserIdListStateNotifier extends _$UserIdListStateNotifier
   Future<UserIdListState> _fetchBasedOnType({
     required bool isFirstFetch,
   }) async {
-    final lastDocument =
-        isFirstFetch ? null : state.value!.lastReadQueryDocumentSnapshot;
+    final cursor = isFirstFetch ? null : state.value!.nextCursor;
 
     switch (userListType) {
       case UserListType.following:
         if (targetUserId == null) {
           throw ArgumentError('targetUserIdがnullです');
         }
-        return ref.read(fetchUserListRepositoryProvider).fetchFollowingIdList(
-              targetUserId!,
-              lastDocument,
-            );
+        return ref
+            .read(fetchUserListRepositoryProvider)
+            .fetchFollowingIdList(targetUserId!, cursor);
 
       case UserListType.follower:
         if (targetUserId == null) {
           throw ArgumentError('targetUserIdがnullです');
         }
-        return ref.read(fetchUserListRepositoryProvider).fetchFollowerIdList(
-              targetUserId!,
-              lastDocument,
-            );
+        return ref
+            .read(fetchUserListRepositoryProvider)
+            .fetchFollowerIdList(targetUserId!, cursor);
 
       case UserListType.liked:
         if (targetDefinitionId == null) {
           throw ArgumentError('targetDefinitionIdがnullです');
         }
-        return ref.read(fetchUserListRepositoryProvider).fetchLikedUserIdList(
-              targetDefinitionId!,
-              lastDocument,
-            );
+        return ref
+            .read(fetchUserListRepositoryProvider)
+            .fetchLikedUserIdList(targetDefinitionId!, cursor);
     }
   }
 }

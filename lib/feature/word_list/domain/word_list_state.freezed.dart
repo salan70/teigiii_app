@@ -12,16 +12,13 @@ part of 'word_list_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$WordListState {
   List<Word> get list => throw _privateConstructorUsedError;
-
-  /// 最後に読み取られたQueryDocumentSnapshot
-  /// これがnullの場合、1件もwordを取得していない（[wordList]が空）
-  QueryDocumentSnapshot<Object?>? get lastReadQueryDocumentSnapshot =>
-      throw _privateConstructorUsedError;
+  String? get nextCursor => throw _privateConstructorUsedError;
   bool get hasMore => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -32,13 +29,11 @@ mixin _$WordListState {
 /// @nodoc
 abstract class $WordListStateCopyWith<$Res> {
   factory $WordListStateCopyWith(
-          WordListState value, $Res Function(WordListState) then) =
-      _$WordListStateCopyWithImpl<$Res, WordListState>;
+    WordListState value,
+    $Res Function(WordListState) then,
+  ) = _$WordListStateCopyWithImpl<$Res, WordListState>;
   @useResult
-  $Res call(
-      {List<Word> list,
-      QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
-      bool hasMore});
+  $Res call({List<Word> list, String? nextCursor, bool hasMore});
 }
 
 /// @nodoc
@@ -55,23 +50,26 @@ class _$WordListStateCopyWithImpl<$Res, $Val extends WordListState>
   @override
   $Res call({
     Object? list = null,
-    Object? lastReadQueryDocumentSnapshot = freezed,
+    Object? nextCursor = freezed,
     Object? hasMore = null,
   }) {
-    return _then(_value.copyWith(
-      list: null == list
-          ? _value.list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<Word>,
-      lastReadQueryDocumentSnapshot: freezed == lastReadQueryDocumentSnapshot
-          ? _value.lastReadQueryDocumentSnapshot
-          : lastReadQueryDocumentSnapshot // ignore: cast_nullable_to_non_nullable
-              as QueryDocumentSnapshot<Object?>?,
-      hasMore: null == hasMore
-          ? _value.hasMore
-          : hasMore // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            list: null == list
+                ? _value.list
+                : list // ignore: cast_nullable_to_non_nullable
+                      as List<Word>,
+            nextCursor: freezed == nextCursor
+                ? _value.nextCursor
+                : nextCursor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            hasMore: null == hasMore
+                ? _value.hasMore
+                : hasMore // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -79,14 +77,12 @@ class _$WordListStateCopyWithImpl<$Res, $Val extends WordListState>
 abstract class _$$WordListStateImplCopyWith<$Res>
     implements $WordListStateCopyWith<$Res> {
   factory _$$WordListStateImplCopyWith(
-          _$WordListStateImpl value, $Res Function(_$WordListStateImpl) then) =
-      __$$WordListStateImplCopyWithImpl<$Res>;
+    _$WordListStateImpl value,
+    $Res Function(_$WordListStateImpl) then,
+  ) = __$$WordListStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {List<Word> list,
-      QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
-      bool hasMore});
+  $Res call({List<Word> list, String? nextCursor, bool hasMore});
 }
 
 /// @nodoc
@@ -94,41 +90,44 @@ class __$$WordListStateImplCopyWithImpl<$Res>
     extends _$WordListStateCopyWithImpl<$Res, _$WordListStateImpl>
     implements _$$WordListStateImplCopyWith<$Res> {
   __$$WordListStateImplCopyWithImpl(
-      _$WordListStateImpl _value, $Res Function(_$WordListStateImpl) _then)
-      : super(_value, _then);
+    _$WordListStateImpl _value,
+    $Res Function(_$WordListStateImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? list = null,
-    Object? lastReadQueryDocumentSnapshot = freezed,
+    Object? nextCursor = freezed,
     Object? hasMore = null,
   }) {
-    return _then(_$WordListStateImpl(
-      list: null == list
-          ? _value._list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<Word>,
-      lastReadQueryDocumentSnapshot: freezed == lastReadQueryDocumentSnapshot
-          ? _value.lastReadQueryDocumentSnapshot
-          : lastReadQueryDocumentSnapshot // ignore: cast_nullable_to_non_nullable
-              as QueryDocumentSnapshot<Object?>?,
-      hasMore: null == hasMore
-          ? _value.hasMore
-          : hasMore // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$WordListStateImpl(
+        list: null == list
+            ? _value._list
+            : list // ignore: cast_nullable_to_non_nullable
+                  as List<Word>,
+        nextCursor: freezed == nextCursor
+            ? _value.nextCursor
+            : nextCursor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        hasMore: null == hasMore
+            ? _value.hasMore
+            : hasMore // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$WordListStateImpl implements _WordListState {
-  const _$WordListStateImpl(
-      {required final List<Word> list,
-      required this.lastReadQueryDocumentSnapshot,
-      required this.hasMore})
-      : _list = list;
+  const _$WordListStateImpl({
+    required final List<Word> list,
+    required this.nextCursor,
+    required this.hasMore,
+  }) : _list = list;
 
   final List<Word> _list;
   @override
@@ -138,16 +137,14 @@ class _$WordListStateImpl implements _WordListState {
     return EqualUnmodifiableListView(_list);
   }
 
-  /// 最後に読み取られたQueryDocumentSnapshot
-  /// これがnullの場合、1件もwordを取得していない（[wordList]が空）
   @override
-  final QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot;
+  final String? nextCursor;
   @override
   final bool hasMore;
 
   @override
   String toString() {
-    return 'WordListState(list: $list, lastReadQueryDocumentSnapshot: $lastReadQueryDocumentSnapshot, hasMore: $hasMore)';
+    return 'WordListState(list: $list, nextCursor: $nextCursor, hasMore: $hasMore)';
   }
 
   @override
@@ -156,19 +153,18 @@ class _$WordListStateImpl implements _WordListState {
         (other.runtimeType == runtimeType &&
             other is _$WordListStateImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
-            (identical(other.lastReadQueryDocumentSnapshot,
-                    lastReadQueryDocumentSnapshot) ||
-                other.lastReadQueryDocumentSnapshot ==
-                    lastReadQueryDocumentSnapshot) &&
+            (identical(other.nextCursor, nextCursor) ||
+                other.nextCursor == nextCursor) &&
             (identical(other.hasMore, hasMore) || other.hasMore == hasMore));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_list),
-      lastReadQueryDocumentSnapshot,
-      hasMore);
+    runtimeType,
+    const DeepCollectionEquality().hash(_list),
+    nextCursor,
+    hasMore,
+  );
 
   @JsonKey(ignore: true)
   @override
@@ -178,19 +174,16 @@ class _$WordListStateImpl implements _WordListState {
 }
 
 abstract class _WordListState implements WordListState {
-  const factory _WordListState(
-      {required final List<Word> list,
-      required final QueryDocumentSnapshot<Object?>?
-          lastReadQueryDocumentSnapshot,
-      required final bool hasMore}) = _$WordListStateImpl;
+  const factory _WordListState({
+    required final List<Word> list,
+    required final String? nextCursor,
+    required final bool hasMore,
+  }) = _$WordListStateImpl;
 
   @override
   List<Word> get list;
   @override
-
-  /// 最後に読み取られたQueryDocumentSnapshot
-  /// これがnullの場合、1件もwordを取得していない（[wordList]が空）
-  QueryDocumentSnapshot<Object?>? get lastReadQueryDocumentSnapshot;
+  String? get nextCursor;
   @override
   bool get hasMore;
   @override

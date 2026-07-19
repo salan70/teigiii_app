@@ -171,7 +171,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 <!-- @code server/src/browse/browse-service.ts#BrowseService -->
 ### タイムラインと検索
 
-- 見つけるは public 定義を `finalized_at DESC`、言葉登録を `created_at DESC` として混在させる
+- 見つけるは public 定義を `finalized_at DESC`、言葉登録を `created_at DESC` として混在させる。任意の `type=definition|wordRegistered` が指定された場合は対応する activity だけを返す
 - フォロー中はフォロー対象者の public 定義だけを返す
 - タイムラインと検索は認証利用者がミュートしたユーザーを除外する
 - 言葉検索は表記・よみの部分一致、ユーザー検索は表示名・publicId の部分一致を適用する

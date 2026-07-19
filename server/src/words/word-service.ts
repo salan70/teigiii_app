@@ -269,13 +269,23 @@ export class WordService {
     }
     if (input.filter === "defined") {
       conditions.push(
-        "exists(select 1 from definitions d where d.word_id = w.id and d.status = 'public' and d.deleted_at is null)",
+        `exists(select 1 from definitions d
+          join users author on author.id = d.author_id and author.deleted_at is null
+          where d.word_id = w.id and d.status = 'public' and d.deleted_at is null
+            and not exists(select 1 from user_mutes m
+              where m.muter_id = ? and m.muted_user_id = d.author_id))`,
       );
+      parameters.push(uid);
     }
     if (input.filter === "undefined") {
       conditions.push(
-        "not exists(select 1 from definitions d where d.word_id = w.id and d.status = 'public' and d.deleted_at is null)",
+        `not exists(select 1 from definitions d
+          join users author on author.id = d.author_id and author.deleted_at is null
+          where d.word_id = w.id and d.status = 'public' and d.deleted_at is null
+            and not exists(select 1 from user_mutes m
+              where m.muter_id = ? and m.muted_user_id = d.author_id))`,
       );
+      parameters.push(uid);
     }
     if (cursor !== null) {
       conditions.push("(w.reading > ? or (w.reading = ? and w.id > ?))");
@@ -291,14 +301,17 @@ export class WordService {
            w.reading,
            w.reading_sub_group,
            (select count(*) from definitions d
-            where d.word_id = w.id and d.status = 'public' and d.deleted_at is null)
+            join users author on author.id = d.author_id and author.deleted_at is null
+            where d.word_id = w.id and d.status = 'public' and d.deleted_at is null
+              and not exists(select 1 from user_mutes m
+                where m.muter_id = ? and m.muted_user_id = d.author_id))
              as public_definition_count
          from words w
          ${whereClause}
          order by w.reading asc, w.id asc
          limit ?`,
       )
-        .bind(...parameters, input.limit + 1)
+        .bind(uid, ...parameters, input.limit + 1)
         .all<WordListRow>()
     ).results;
 

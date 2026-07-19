@@ -24,6 +24,7 @@ class TimelineApi {
   /// Parameters:
   /// * [cursor]
   /// * [limit]
+  /// * [type]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -36,6 +37,7 @@ class TimelineApi {
   Future<Response<V1TimelineDiscoverGet200Response>> v1TimelineDiscoverGet({
     String? cursor,
     int? limit = 20,
+    String? type,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -65,6 +67,7 @@ class TimelineApi {
     final _queryParameters = <String, dynamic>{
       if (cursor != null) r'cursor': cursor,
       if (limit != null) r'limit': limit,
+      if (type != null) r'type': type,
     };
 
     final _response = await _dio.request<Object>(

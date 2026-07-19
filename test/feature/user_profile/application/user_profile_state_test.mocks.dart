@@ -6,8 +6,6 @@
 import 'dart:async' as _i4;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart'
-    as _i5;
 import 'package:teigi_app/feature/user_profile/domain/user_profile.dart' as _i2;
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart'
     as _i3;
@@ -62,39 +60,4 @@ class MockUserProfileRepository extends _i1.Mock
             returnValueForMissingStub: _i4.Future<void>.value(),
           )
           as _i4.Future<void>);
-}
-
-/// A class which mocks [UserFollowRepository].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockUserFollowRepository extends _i1.Mock
-    implements _i5.UserFollowRepository {
-  @override
-  _i4.Future<void> follow(String? targetUserId) =>
-      (super.noSuchMethod(
-            Invocation.method(#follow, [targetUserId]),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
-          )
-          as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> unfollow(String? targetUserId) =>
-      (super.noSuchMethod(
-            Invocation.method(#unfollow, [targetUserId]),
-            returnValue: _i4.Future<void>.value(),
-            returnValueForMissingStub: _i4.Future<void>.value(),
-          )
-          as _i4.Future<void>);
-
-  @override
-  _i4.Future<List<String>> fetchAllFollowingIdList(String? userId) =>
-      (super.noSuchMethod(
-            Invocation.method(#fetchAllFollowingIdList, [userId]),
-            returnValue: _i4.Future<List<String>>.value(<String>[]),
-            returnValueForMissingStub: _i4.Future<List<String>>.value(
-              <String>[],
-            ),
-          )
-          as _i4.Future<List<String>>);
 }

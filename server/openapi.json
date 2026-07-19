@@ -3137,6 +3137,18 @@
             "required": false,
             "name": "limit",
             "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "definition",
+                "wordRegistered"
+              ]
+            },
+            "required": false,
+            "name": "type",
+            "in": "query"
           }
         ],
         "responses": {
