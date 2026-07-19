@@ -14,6 +14,8 @@ import 'select_post_type_button.dart';
 ///
 /// この画面に直接遷移はせず、
 /// この画面をもとに作成した画面（定義投稿, 定義編集など）へ遷移すること。
+///
+/// @doc doc/specs/legacy-repository-api-mapping.md#フェーズ-4-の挙動変更-例外-まとめ
 class WriteDefinitionBasePage extends ConsumerWidget {
   const WriteDefinitionBasePage({
     super.key,
@@ -32,6 +34,8 @@ class WriteDefinitionBasePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isEditing = definitionForWrite.id != null;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -48,7 +52,9 @@ class WriteDefinitionBasePage extends ConsumerWidget {
             }
 
             // 確認ダイアログを表示
-            ref.read(dialogControllerProvider).show(
+            ref
+                .read(dialogControllerProvider)
+                .show(
                   ConfirmDialog(
                     confirmMessage: '入力した内容は保存されません。\nよろしいですか？',
                     onAccept: context.popRoute,
@@ -77,6 +83,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                 TextFormField(
                   initialValue: definitionForWrite.word,
                   autofocus: autoFocusForm == WriteDefinitionFormType.word,
+                  readOnly: isEditing,
                   maxLength: definitionForWrite.maxWordLength,
                   maxLines: null,
                   textInputAction: TextInputAction.next,
@@ -93,6 +100,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                   initialValue: definitionForWrite.wordReading,
                   autofocus:
                       autoFocusForm == WriteDefinitionFormType.wordReading,
+                  readOnly: isEditing,
                   maxLength: definitionForWrite.maxWordReadingLength,
                   maxLines: null,
                   textInputAction: TextInputAction.next,
@@ -131,8 +139,4 @@ class WriteDefinitionBasePage extends ConsumerWidget {
 }
 
 /// Definition新規投稿/編集時に入力するフォームの種類
-enum WriteDefinitionFormType {
-  word,
-  wordReading,
-  definition,
-}
+enum WriteDefinitionFormType { word, wordReading, definition }

@@ -7,7 +7,7 @@ part of 'like_definition_repository.dart';
 // **************************************************************************
 
 String _$likeDefinitionRepositoryHash() =>
-    r'df4a85cc1209532419402667d80fc53d6531c7e8';
+    r'b8fb37c48da86c2055ff69f6a2d5b7cc45957230';
 
 /// See also [likeDefinitionRepository].
 @ProviderFor(likeDefinitionRepository)

@@ -2,16 +2,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition_like/application/like_definition_service.dart';
 import 'package:teigi_app/feature/definition_like/repository/like_definition_repository.dart';
 
 import '../../../mock/mock_data.dart';
 import 'definition_service_test.mocks.dart';
 
-@GenerateNiceMocks([
-  MockSpec<LikeDefinitionRepository>(),
-])
+@GenerateNiceMocks([MockSpec<LikeDefinitionRepository>()])
 void main() {
   final mockLikeDefinitionRepository = MockLikeDefinitionRepository();
 
@@ -20,9 +17,9 @@ void main() {
   setUp(() {
     container = ProviderContainer(
       overrides: [
-        userIdProvider.overrideWith((ref) => 'userId'),
-        likeDefinitionRepositoryProvider
-            .overrideWithValue(mockLikeDefinitionRepository),
+        likeDefinitionRepositoryProvider.overrideWithValue(
+          mockLikeDefinitionRepository,
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -45,11 +42,11 @@ void main() {
       // * Assert
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockLikeDefinitionRepository.likeDefinition(definition.id, any),
+        mockLikeDefinitionRepository.likeDefinition(definition.id),
       ).called(1);
 
       // 想定外の関数が呼ばれていないか検証
-      verifyNever(mockLikeDefinitionRepository.unlikeDefinition(any, any));
+      verifyNever(mockLikeDefinitionRepository.unlikeDefinition(any));
     });
 
     test('いいね解除: stateと、想定通りにrepositoryの関数が呼ばれることを検証', () async {
@@ -64,11 +61,11 @@ void main() {
       // * Assert
       // 想定通りにrepositoryの関数が呼ばれているか検証
       verify(
-        mockLikeDefinitionRepository.unlikeDefinition(definition.id, any),
+        mockLikeDefinitionRepository.unlikeDefinition(definition.id),
       ).called(1);
 
       // 想定外の関数が呼ばれていないか検証
-      verifyNever(mockLikeDefinitionRepository.likeDefinition(any, any));
+      verifyNever(mockLikeDefinitionRepository.likeDefinition(any));
     });
 
     // TODO(me): definitionProviderが再生成されているか検証するテスト書く

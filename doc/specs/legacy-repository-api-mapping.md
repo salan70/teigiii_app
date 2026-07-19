@@ -24,6 +24,8 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 | `app_config_repository.subscribeAppConfig` | `GET /v1/app-config`。**例外**: リアルタイム監視 → 起動時ポーリング（戦略で決定済み） |
 | `is_first_launch_repository` / `package_info_repository` / `device_info_repository` | **対象外**: ローカル処理 |
 
+<!-- @code lib/feature/definition/repository/fetch_definition_repository.dart#FetchDefinitionRepository -->
+<!-- @code lib/feature/definition/repository/write_definition_repository.dart#WriteDefinitionRepository -->
 ## 定義の読み書き
 
 | 旧操作 | 対応 |
@@ -37,6 +39,7 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 | `write_definition_repository.deleteDefinition` | `DELETE /v1/definitions/{id}`。**例外**: 孤児になった言葉の削除は行わない（言葉はグローバル資産として残す） |
 | `write_definition_repository.updatePostType` | `PATCH /v1/definitions/{id}`（`status` の変更） |
 
+<!-- @code lib/feature/definition_like/repository/like_definition_repository.dart#LikeDefinitionRepository -->
 ## いいね
 
 | 旧操作 | 対応 |
@@ -58,6 +61,7 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 | `definition_id_list_repository.fetchForIndividualDictionary` | `GET /v1/users/{id}/definitions?subGroup=&sort=reading`（旧実装と同じ、よみ昇順） |
 | 各メソッドの `mutedUserIdList` 引数によるクライアント側フィルタ | **集約**: ミュート除外はサーバー側クエリで実施 |
 
+<!-- @code lib/feature/word/repository/word_repository.dart#WordRepository -->
 ## 言葉
 
 | 旧操作 | 対応 |
@@ -96,6 +100,7 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 - `unlikeAllLikedDefinition` / `unfollowByAllFollower` 等の fan-out 処理
 - `deleteUserConfig` / `deleteUserProfile` / `deleteUserFollowCount` / `storage_repository.deleteFile` の個別削除呼び出し
 
+<!-- @code lib/feature/definition/presentation/write_definition_base_page.dart#WriteDefinitionBasePage -->
 ## フェーズ 4 の挙動変更（例外）まとめ
 
 1. **確定済み定義の言葉変更を廃止**: 編集画面の言葉・よみを読み取り専用化（本文と公開設定のみ編集可）

@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../util/constant/firestore_collections.dart';
-import '../../../util/constant/initial_main_group.dart';
 import '../../../util/constant/string_regex.dart';
 import '../../../util/extension/string_extension.dart';
 import '../../word/domain/word.dart';
@@ -116,36 +114,6 @@ class DefinitionForWrite with _$DefinitionForWrite {
     return isValidWord && isValidWordReading && isValidDefinition;
   }
 
-  Map<String, dynamic> toFirestoreForCreate() {
-    return {
-      DefinitionsCollection.authorId: authorId,
-      DefinitionsCollection.word: trimmedWord,
-      DefinitionsCollection.wordReading: trimmedWordReading,
-      DefinitionsCollection.wordReadingInitialSubGroupLabel:
-          wordReadingInitialLabel,
-      DefinitionsCollection.definition: definition,
-      DefinitionsCollection.likesCount: 0,
-      DefinitionsCollection.isPublic: isPublic,
-      DefinitionsCollection.isEdited: false,
-    };
-  }
-
-  Map<String, dynamic> toFirestoreForUpdate() {
-    return {
-      DefinitionsCollection.authorId: authorId,
-      DefinitionsCollection.word: trimmedWord,
-      DefinitionsCollection.wordReading: trimmedWordReading,
-      DefinitionsCollection.wordReadingInitialSubGroupLabel:
-          wordReadingInitialLabel,
-      DefinitionsCollection.definition: definition,
-      DefinitionsCollection.isPublic: isPublic,
-      DefinitionsCollection.isEdited: true,
-    };
-  }
-
   bool get isEmptyAllFields =>
       word.isEmpty && wordReading.isEmpty && definition.isEmpty;
-
-  String get wordReadingInitialLabel =>
-      InitialSubGroup.fromString(wordReading).label;
 }

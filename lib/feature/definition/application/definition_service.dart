@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../definition_like/repository/like_definition_repository.dart';
 import '../../definition_list/appication/definition_id_list_state.dart';
 import '../../word/application/word_state.dart';
 import '../../word_list/application/word_list_state_by_initial.dart';
@@ -24,13 +23,7 @@ class DefinitionService {
   Future<void> deleteDefinition(Definition definition) async {
     await ref
         .read(writeDefinitionRepositoryProvider)
-        .deleteDefinition(definition.id, definition.wordId);
-
-    // TODO(me): 定義削除とバッチ実行したい
-    // 紐づくいいねを削除する。
-    await ref
-        .read(likeDefinitionRepositoryProvider)
-        .deleteLikeByDefinitionId(definition.id);
+        .deleteDefinition(definition.id);
 
     ref
       ..invalidate(definitionIdListStateNotifierProvider)
@@ -40,7 +33,9 @@ class DefinitionService {
   }
 
   Future<void> updatePostType(Definition definition) async {
-    await ref.read(writeDefinitionRepositoryProvider).updatePostType(
+    await ref
+        .read(writeDefinitionRepositoryProvider)
+        .updatePostType(
           definitionId: definition.id,
           isPublic: !definition.isPublic,
         );

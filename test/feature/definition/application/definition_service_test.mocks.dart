@@ -3,12 +3,11 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i3;
 
-import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:teigi_app/feature/definition_like/repository/like_definition_repository.dart'
-    as _i3;
+    as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -23,105 +22,26 @@ import 'package:teigi_app/feature/definition_like/repository/like_definition_rep
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeFirebaseFirestore_0 extends _i1.SmartFake
-    implements _i2.FirebaseFirestore {
-  _FakeFirebaseFirestore_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
 /// A class which mocks [LikeDefinitionRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLikeDefinitionRepository extends _i1.Mock
-    implements _i3.LikeDefinitionRepository {
+    implements _i2.LikeDefinitionRepository {
   @override
-  _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
-        Invocation.getter(#firestore),
-        returnValue: _FakeFirebaseFirestore_0(
-          this,
-          Invocation.getter(#firestore),
-        ),
-        returnValueForMissingStub: _FakeFirebaseFirestore_0(
-          this,
-          Invocation.getter(#firestore),
-        ),
-      ) as _i2.FirebaseFirestore);
+  _i3.Future<void> likeDefinition(String? definitionId) =>
+      (super.noSuchMethod(
+            Invocation.method(#likeDefinition, [definitionId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  _i4.Future<void> likeDefinition(
-    String? definitionId,
-    String? userId,
-  ) =>
+  _i3.Future<void> unlikeDefinition(String? definitionId) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #likeDefinition,
-          [
-            definitionId,
-            userId,
-          ],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> unlikeDefinition(
-    String? definitionId,
-    String? userId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #unlikeDefinition,
-          [
-            definitionId,
-            userId,
-          ],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<List<String>> fetchAllLikedDefinitionIdList(String? userId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #fetchAllLikedDefinitionIdList,
-          [userId],
-        ),
-        returnValue: _i4.Future<List<String>>.value(<String>[]),
-        returnValueForMissingStub: _i4.Future<List<String>>.value(<String>[]),
-      ) as _i4.Future<List<String>>);
-
-  @override
-  _i4.Future<void> deleteLikeByDefinitionId(String? definitionId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #deleteLikeByDefinitionId,
-          [definitionId],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<bool> isLikedByUser(
-    String? userId,
-    String? definitionId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #isLikedByUser,
-          [
-            userId,
-            definitionId,
-          ],
-        ),
-        returnValue: _i4.Future<bool>.value(false),
-        returnValueForMissingStub: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+            Invocation.method(#unlikeDefinition, [definitionId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 }

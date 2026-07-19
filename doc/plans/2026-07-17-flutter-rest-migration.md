@@ -67,6 +67,16 @@ Issue #185 のフェーズ 4 として、Flutter アプリの repository 層を 
 - **ユーザー検索**: `GET /v1/search/users` は部分一致のため、repository 側で publicId 完全一致のみを有効として現行挙動を維持する
 - **PR 粒度**: 1 issue = 1 PR（`feature/203-user-follow-mute-avatar`）
 
+### Slice 3 の設計・実装結果
+
+- **言葉の重複解決**: 定義作成時は常に `POST /v1/words` を先行し、成功時はレスポンスの `id`、409 時は `WordConflictResponse.existingWord.id` を `POST /v1/definitions` に渡す
+- **domain 変換**: `fetch_definition` / `word` repository は生成 DTO を内部で domain 型へ変換する。`DefinitionResponse.isLikedByMe` と `WordResponse.publicDefinitionCount` を使い、旧 Firestore の追加問い合わせを廃止する
+- **確定後の編集**: 編集画面では既存定義（`id != null`）の言葉・よみを読み取り専用にし、更新 API には本文と公開設定だけを送る
+- **定義削除**: `DELETE /v1/definitions/{id}` のみを呼び、クライアント側でいいねや孤児言葉を削除しない
+- **いいね**: repository は `PUT` / `DELETE /v1/definitions/{id}/like` のみを呼ぶ。認証ユーザーは HTTP クライアント基盤から付与されるため、公開メソッドの `userId` 引数を廃止する
+- **旧 entity**: 参照がなくなった `LikeDocument` を削除する。`DefinitionDocument` / `WordDocument` は Slice 4 対象の一覧 repository が参照中のため、Slice 4 まで残す
+- **PR 粒度**: 1 issue = 1 PR（`feature/204-word-definition-like`）
+
 ### 置き換え方式
 
 - repository の公開インターフェース（メソッドシグネチャと戻り値の domain 型）を可能な限り維持し、内部実装のみ REST 化する。呼び出し側の変更は「埋め込み」「集約」で呼び出し自体が消えるものと例外 4 件に限定する

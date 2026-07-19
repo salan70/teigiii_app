@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../auth/application/auth_state.dart';
 import '../../definition/application/definition_state.dart';
 import '../../definition/domain/definition.dart';
 import '../repository/like_definition_repository.dart';
@@ -27,21 +26,17 @@ class LikeDefinitionService {
 
   /// いいね登録/解除を行う。
   Future<void> _updateLikeStatus(Definition definition) async {
-    final userId = ref.read(userIdProvider)!;
-
     if (definition.isLikedByUser) {
       // いいね解除
-      await ref.read(likeDefinitionRepositoryProvider).unlikeDefinition(
-            definition.id,
-            userId,
-          );
+      await ref
+          .read(likeDefinitionRepositoryProvider)
+          .unlikeDefinition(definition.id);
       return;
     }
 
     // いいね登録
-    await ref.read(likeDefinitionRepositoryProvider).likeDefinition(
-          definition.id,
-          userId,
-        );
+    await ref
+        .read(likeDefinitionRepositoryProvider)
+        .likeDefinition(definition.id);
   }
 }
