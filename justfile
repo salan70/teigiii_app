@@ -37,10 +37,13 @@ coverage-open: coverage
     open coverage/html/index.html
 
 run-dev:
-    flutter run --dart-define-from-file=dart_defines/dev.json
+    flutter run --flavor dev --dart-define-from-file=dart_defines/dev.json
 
 run-prod:
-    flutter run --dart-define-from-file=dart_defines/prod.json
+    flutter run --flavor prod --dart-define-from-file=dart_defines/prod.json
+
+check-ios-flavors:
+    bash ios/scripts/check_flavor_configuration.sh
 
 # --- server（Cloudflare Workers API）---
 

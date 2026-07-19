@@ -52,7 +52,7 @@ jobs:
         run: nix develop --command just setup
 
       - name: Build ipa
-        run: nix develop --command flutter build ipa --dart-define-from-file=dart_defines/prod.json --export-options-plist=./ios/ExportOptions.plist
+        run: nix develop --command flutter build ipa --flavor prod --dart-define-from-file=dart_defines/prod.json --export-options-plist=./ios/ExportOptions.plist
 
       - name: Detect path for ipa file
         run: echo "IPA_PATH=$(find build/ios/ipa -type f -name '*.ipa')" >> $GITHUB_ENV

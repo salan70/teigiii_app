@@ -29,6 +29,8 @@ just run-dev
 just run-prod
 ```
 
+Xcode GUIから起動する場合は`ios/Runner.xcworkspace`を開き、開発環境は`dev`、本番環境は`prod` Schemeを選択します。Schemeに対応するBuild Configuration、Bundle ID、App Icon、Firebase設定、Dart Defineが自動的に選択されるため、Build Settingsを手動で変更する必要はありません。
+
 # 使用技術
 ## Flutter
 
