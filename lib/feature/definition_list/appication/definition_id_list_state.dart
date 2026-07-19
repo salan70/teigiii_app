@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../util/constant/initial_main_group.dart';
 import '../../../util/mixin/fetch_more_mixin.dart';
+import '../../auth/application/auth_state.dart';
 import '../domain/definition_id_list_state.dart';
 import '../repository/definition_id_list_repository.dart';
 import '../util/definition_feed_type.dart';
@@ -17,10 +18,13 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     String? wordId,
     String? targetUserId,
     InitialSubGroup? initialSubGroup,
-  }) => _fetchBasedOnType(isFirstFetch: true);
+  }) {
+    ref.watch(userIdProvider);
+    return _fetchBasedOnType(isFirstFetch: true);
+  }
 
   String? _cursor(bool isFirstFetch) =>
-      isFirstFetch ? null : state.value?.nextCursor;
+      isFirstFetch ? null : state.value!.nextCursor;
 
   Future<DefinitionIdListState> _fetchForHomeRecommend({
     required bool isFirstFetch,

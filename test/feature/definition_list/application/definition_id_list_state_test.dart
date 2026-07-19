@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition_list/appication/definition_id_list_state.dart';
 import 'package:teigi_app/feature/definition_list/domain/definition_id_list_state.dart';
 import 'package:teigi_app/feature/definition_list/repository/definition_id_list_repository.dart';
@@ -12,11 +13,14 @@ import 'definition_id_list_state_test.mocks.dart';
 @GenerateNiceMocks([MockSpec<DefinitionIdListRepository>()])
 void main() {
   final repository = MockDefinitionIdListRepository();
+  var currentUserId = 'user-1';
   late ProviderContainer container;
 
   setUp(() {
+    currentUserId = 'user-1';
     container = ProviderContainer(
       overrides: [
+        userIdProvider.overrideWith((ref) => currentUserId),
         definitionIdListRepositoryProvider.overrideWithValue(repository),
       ],
     );
@@ -93,5 +97,49 @@ void main() {
 
     verify(repository.fetchForHomeRecommend(null)).called(1);
     verifyNoMoreInteractions(repository);
+  });
+
+  test('アカウントが切り替わると初回 cursor から再取得する', () async {
+    when(repository.fetchForHomeRecommend(null)).thenAnswer(
+      (_) async => DefinitionIdListState(
+        list: [currentUserId],
+        nextCursor: null,
+        hasMore: false,
+      ),
+    );
+    final provider = definitionIdListStateNotifierProvider(
+      DefinitionFeedType.homeRecommend,
+    );
+
+    expect((await container.read(provider.future)).list, ['user-1']);
+    currentUserId = 'user-2';
+    container.invalidate(userIdProvider);
+
+    expect((await container.read(provider.future)).list, ['user-2']);
+    verify(repository.fetchForHomeRecommend(null)).called(2);
+  });
+
+  test('fetchMore 失敗時は AsyncError に前回の一覧を保持する', () async {
+    const initialState = DefinitionIdListState(
+      list: ['definition-1'],
+      nextCursor: 'cursor-1',
+      hasMore: true,
+    );
+    final exception = Exception('fetch failed');
+    when(
+      repository.fetchForHomeRecommend(null),
+    ).thenAnswer((_) async => initialState);
+    when(repository.fetchForHomeRecommend('cursor-1')).thenThrow(exception);
+    final provider = definitionIdListStateNotifierProvider(
+      DefinitionFeedType.homeRecommend,
+    );
+    await container.read(provider.future);
+
+    await container.read(provider.notifier).fetchMore();
+
+    final result = container.read(provider);
+    expect(result, isA<AsyncError<DefinitionIdListState>>());
+    expect(result.error, same(exception));
+    expect(result.value, initialState);
   });
 }

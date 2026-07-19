@@ -3,7 +3,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../auth/application/auth_state.dart';
 import '../../definition_list/appication/definition_id_list_state.dart';
+import '../../definition_list/util/definition_feed_type.dart';
 import '../../user_list/application/user_id_list_state_notifier.dart';
+import '../../user_list/util/user_list_type.dart';
 import '../../user_profile/application/user_profile_state.dart';
 import '../repository/user_follow_repository.dart';
 
@@ -46,7 +48,22 @@ class UserFollowService {
     ref
       ..invalidate(userProfileProvider(currentUserId))
       ..invalidate(userProfileProvider(targetUserId))
-      ..invalidate(definitionIdListStateNotifierProvider)
-      ..invalidate(userIdListStateNotifierProvider);
+      ..invalidate(
+        definitionIdListStateNotifierProvider(DefinitionFeedType.homeFollowing),
+      )
+      ..invalidate(
+        userIdListStateNotifierProvider(
+          UserListType.following,
+          targetUserId: currentUserId,
+          targetDefinitionId: null,
+        ),
+      )
+      ..invalidate(
+        userIdListStateNotifierProvider(
+          UserListType.follower,
+          targetUserId: targetUserId,
+          targetDefinitionId: null,
+        ),
+      );
   }
 }

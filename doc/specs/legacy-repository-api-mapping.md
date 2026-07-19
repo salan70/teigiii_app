@@ -54,7 +54,7 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 
 | 旧操作 | 対応 |
 |---|---|
-| `definition_id_list_repository.fetchForHomeRecommend` | `GET /v1/timeline/discover`。**例外**: 公開定義のみとし、自分の非公開定義は表示しない。`type: "wordRegistered"` を読み飛ばし、定義が上限件数に達するか cursor が尽きるまで次ページを取得する |
+| `definition_id_list_repository.fetchForHomeRecommend` | `GET /v1/timeline/discover?type=definition`。**例外**: 公開定義のみとし、自分の非公開定義は表示しない。定義だけにサーバー側で絞り込んだ1ページずつ取得する |
 | `definition_id_list_repository.fetchForHomeFollowing` | `GET /v1/timeline/following`。**例外**: フォロー中ユーザーの公開定義のみとし、自分の定義と非公開定義は表示しない |
 | `definition_id_list_repository.fetchForWordTop`（createdAt / likesCount 順） | `GET /v1/words/{id}/definitions?scope=all&sort=newest\|reactions` |
 | `definition_id_list_repository.fetchForProfileCreatedAt` | `GET /v1/users/{id}/definitions` |

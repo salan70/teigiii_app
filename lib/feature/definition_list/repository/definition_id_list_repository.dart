@@ -35,29 +35,20 @@ class DefinitionIdListRepository {
 
   Future<DefinitionIdListState> fetchForHomeRecommend(String? cursor) async {
     try {
-      final idList = <String>[];
-      var nextCursor = cursor;
-
-      do {
-        final remaining = fetchLimitForDefinitionList - idList.length;
-        final response = await _timelineApi.v1TimelineDiscoverGet(
-          cursor: nextCursor,
-          limit: remaining,
-        );
-        final page = response.data!;
-        idList.addAll(
-          page.items.whereType<DiscoverFeedDefinitionItem>().map(
-            (item) => item.activity.definition.id,
-          ),
-        );
-        nextCursor = page.nextCursor;
-      } while (idList.length < fetchLimitForDefinitionList &&
-          nextCursor != null);
+      final response = await _timelineApi.v1TimelineDiscoverGet(
+        cursor: cursor,
+        limit: fetchLimitForDefinitionList,
+        type: 'definition',
+      );
+      final page = response.data!;
 
       return DefinitionIdListState(
-        list: idList,
-        nextCursor: nextCursor,
-        hasMore: nextCursor != null,
+        list: page.items
+            .whereType<DiscoverFeedDefinitionItem>()
+            .map((item) => item.activity.definition.id)
+            .toList(),
+        nextCursor: page.nextCursor,
+        hasMore: page.nextCursor != null,
       );
     } on DioException catch (exception) {
       throw ApiException.fromDioException(exception);

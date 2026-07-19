@@ -80,7 +80,7 @@ Issue #185 のフェーズ 4 として、Flutter アプリの repository 層を 
 ### Slice 4 の設計（grilling で確定）
 
 - **state / UI interface**: 定義一覧は従来どおり ID のみを state に保持し、各 tile で個別定義を取得する。API の埋め込み定義 DTO は ID 以外を破棄し、Firestore cursor は `String? nextCursor` へ置換する
-- **おすすめフィード**: `GET /v1/timeline/discover` の公開定義のみを表示する。言葉登録 activity は現行 UI に表示せず、定義が 20 件集まるか cursor が尽きるまで API ページを続けて取得する。自分の非公開定義は表示しない
+- **おすすめフィード**: `GET /v1/timeline/discover?type=definition` で公開定義のみを1ページずつ取得・表示する。言葉登録 activity は現行 UI に表示しない。自分の非公開定義は表示しない
 - **フォロー中フィード**: `GET /v1/timeline/following` に合わせ、フォロー中ユーザーの公開定義のみを表示する。自分の定義と非公開定義は含めない
 - **みんなの辞書**: 公開定義 0 件の言葉も `GET /v1/words` の結果どおり表示する
 - **言葉検索**: 旧実装の「言葉の前方一致」から、`GET /v1/search/words` の「言葉またはよみの部分一致」へ変更する

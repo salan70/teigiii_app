@@ -57,6 +57,7 @@ class MockTimelineApi extends _i1.Mock implements _i3.TimelineApi {
   v1TimelineDiscoverGet({
     String? cursor,
     int? limit = 20,
+    String? type,
     _i2.CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -68,6 +69,7 @@ class MockTimelineApi extends _i1.Mock implements _i3.TimelineApi {
             Invocation.method(#v1TimelineDiscoverGet, [], {
               #cursor: cursor,
               #limit: limit,
+              #type: type,
               #cancelToken: cancelToken,
               #headers: headers,
               #extra: extra,
@@ -84,6 +86,7 @@ class MockTimelineApi extends _i1.Mock implements _i3.TimelineApi {
                     Invocation.method(#v1TimelineDiscoverGet, [], {
                       #cursor: cursor,
                       #limit: limit,
+                      #type: type,
                       #cancelToken: cancelToken,
                       #headers: headers,
                       #extra: extra,
@@ -102,6 +105,7 @@ class MockTimelineApi extends _i1.Mock implements _i3.TimelineApi {
                     Invocation.method(#v1TimelineDiscoverGet, [], {
                       #cursor: cursor,
                       #limit: limit,
+                      #type: type,
                       #cancelToken: cancelToken,
                       #headers: headers,
                       #extra: extra,

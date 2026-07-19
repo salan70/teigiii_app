@@ -691,7 +691,12 @@ export class BrowseService {
     );
   }
 
-  async listDiscover(uid: string, limit: number, cursorValue?: string) {
+  async listDiscover(
+    uid: string,
+    limit: number,
+    cursorValue?: string,
+    activityType?: "definition" | "wordRegistered",
+  ) {
     const parsed =
       cursorValue === undefined ? null : decodeCursor(cursorValue, "timeline_discover");
     let cursor: DiscoverCursor | null = null;
@@ -707,15 +712,21 @@ export class BrowseService {
       }
       cursor = parsed as unknown as DiscoverCursor;
     }
-    const cursorClause =
-      cursor === null
-        ? ""
-        : `where (a.occurred_at < ?
-           or (a.occurred_at = ? and (a.type < ? or (a.type = ? and a.item_id < ?))))`;
+    const activityConditions: string[] = [];
     const parameters: unknown[] = [uid, uid];
+    if (activityType !== undefined) {
+      activityConditions.push("a.type = ?");
+      parameters.push(activityType);
+    }
     if (cursor !== null) {
+      activityConditions.push(
+        `(a.occurred_at < ?
+         or (a.occurred_at = ? and (a.type < ? or (a.type = ? and a.item_id < ?))))`,
+      );
       parameters.push(cursor.sortAt, cursor.sortAt, cursor.type, cursor.type, cursor.id);
     }
+    const activityWhere =
+      activityConditions.length === 0 ? "" : `where ${activityConditions.join(" and ")}`;
     type DiscoverRow = DefinitionListRow & {
       type: "definition" | "wordRegistered";
       item_id: string;
@@ -751,7 +762,7 @@ export class BrowseService {
          left join definitions d on a.type = 'definition' and d.id = a.item_id
          join words w on w.id = case when a.type = 'definition' then d.word_id else a.item_id end
          left join users u on u.id = d.author_id and u.deleted_at is null
-         ${cursorClause}
+         ${activityWhere}
          order by a.occurred_at desc, a.type desc, a.item_id desc limit ?`,
       )
         .bind(uid, ...parameters, limit + 1)

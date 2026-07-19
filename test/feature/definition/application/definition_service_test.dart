@@ -2,23 +2,36 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition_like/application/like_definition_service.dart';
 import 'package:teigi_app/feature/definition_like/repository/like_definition_repository.dart';
+import 'package:teigi_app/feature/definition_list/appication/definition_id_list_state.dart';
+import 'package:teigi_app/feature/definition_list/domain/definition_id_list_state.dart';
+import 'package:teigi_app/feature/definition_list/repository/definition_id_list_repository.dart';
+import 'package:teigi_app/feature/definition_list/util/definition_feed_type.dart';
 
 import '../../../mock/mock_data.dart';
 import 'definition_service_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<LikeDefinitionRepository>()])
+@GenerateNiceMocks([
+  MockSpec<LikeDefinitionRepository>(),
+  MockSpec<DefinitionIdListRepository>(),
+])
 void main() {
   final mockLikeDefinitionRepository = MockLikeDefinitionRepository();
+  final mockDefinitionIdListRepository = MockDefinitionIdListRepository();
 
   late ProviderContainer container;
 
   setUp(() {
     container = ProviderContainer(
       overrides: [
+        userIdProvider.overrideWith((ref) => 'current-user'),
         likeDefinitionRepositoryProvider.overrideWithValue(
           mockLikeDefinitionRepository,
+        ),
+        definitionIdListRepositoryProvider.overrideWithValue(
+          mockDefinitionIdListRepository,
         ),
       ],
     );
@@ -27,6 +40,7 @@ void main() {
 
   tearDown(() {
     reset(mockLikeDefinitionRepository);
+    reset(mockDefinitionIdListRepository);
   });
 
   group('tapLike()', () {
@@ -66,6 +80,51 @@ void main() {
 
       // 想定外の関数が呼ばれていないか検証
       verifyNever(mockLikeDefinitionRepository.likeDefinition(any));
+    });
+
+    test('ホームフィードのページング状態を保ったままいいねする', () async {
+      when(
+        mockDefinitionIdListRepository.fetchForHomeRecommend(null),
+      ).thenAnswer(
+        (_) async => const DefinitionIdListState(
+          list: ['definition-1'],
+          nextCursor: 'cursor-1',
+          hasMore: true,
+        ),
+      );
+      when(
+        mockDefinitionIdListRepository.fetchForHomeRecommend('cursor-1'),
+      ).thenAnswer(
+        (_) async => const DefinitionIdListState(
+          list: ['definition-2'],
+          nextCursor: null,
+          hasMore: false,
+        ),
+      );
+      final provider = definitionIdListStateNotifierProvider(
+        DefinitionFeedType.homeRecommend,
+      );
+      final subscription = container.listen(
+        provider,
+        (_, _) {},
+        fireImmediately: true,
+      );
+      addTearDown(subscription.close);
+      await container.read(provider.future);
+      await container.read(provider.notifier).fetchMore();
+
+      await container
+          .read(likeDefinitionServiceProvider)
+          .tapLike(mockDefinition.copyWith(isLikedByUser: false));
+      await Future<void>.delayed(Duration.zero);
+
+      expect(subscription.read().value?.list, ['definition-1', 'definition-2']);
+      verify(
+        mockDefinitionIdListRepository.fetchForHomeRecommend(null),
+      ).called(1);
+      verify(
+        mockDefinitionIdListRepository.fetchForHomeRecommend('cursor-1'),
+      ).called(1);
     });
 
     // TODO(me): definitionProviderが再生成されているか検証するテスト書く

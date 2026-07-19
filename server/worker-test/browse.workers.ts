@@ -338,6 +338,23 @@ describe("timelines and search", () => {
     ]);
   });
 
+  test("見つけるは type=definition で定義 activity だけを返す", async () => {
+    await insertUser("alice");
+    await insertWord("word", "言葉", "ことば", "alice", 100);
+    await insertDefinition("definition", "word", "alice", "public", 200);
+
+    const response = await request("alice", "/v1/timeline/discover?type=definition");
+    expect(response.status).toBe(200);
+    const body = await response.json<Page<{ type: string; definition?: { id: string } }>>();
+
+    expect(body.items).toEqual([
+      expect.objectContaining({
+        definition: expect.objectContaining({ id: "definition" }),
+        type: "definition",
+      }),
+    ]);
+  });
+
   test("フォロー中はフォロー対象の公開定義だけを返しミュートを優先する", async () => {
     await insertUser("alice");
     await insertUser("bob");

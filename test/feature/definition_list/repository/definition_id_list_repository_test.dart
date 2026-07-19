@@ -51,8 +51,14 @@ void main() {
     updatedAt: DateTime.utc(2026),
   );
 
-  test('discover は言葉登録を読み飛ばし、次ページの定義 ID を返す', () async {
-    when(timelineApi.v1TimelineDiscoverGet(cursor: null, limit: 20)).thenAnswer(
+  test('discover は定義タイプを指定して1ページの定義 ID を返す', () async {
+    when(
+      timelineApi.v1TimelineDiscoverGet(
+        cursor: null,
+        limit: 20,
+        type: 'definition',
+      ),
+    ).thenAnswer(
       (_) async => Response(
         data: V1TimelineDiscoverGet200Response(
           items: [
@@ -76,31 +82,12 @@ void main() {
         requestOptions: RequestOptions(path: '/v1/timeline/discover'),
       ),
     );
-    when(
-      timelineApi.v1TimelineDiscoverGet(cursor: 'cursor-1', limit: 19),
-    ).thenAnswer(
-      (_) async => Response(
-        data: V1TimelineDiscoverGet200Response(
-          items: [
-            DiscoverFeedDefinitionItem(
-              DefinitionActivity(
-                type: DefinitionActivityTypeEnum.definition,
-                occurredAt: DateTime.utc(2026),
-                definition: definition('definition-2'),
-              ),
-            ),
-          ],
-          nextCursor: null,
-        ),
-        requestOptions: RequestOptions(path: '/v1/timeline/discover'),
-      ),
-    );
 
     final result = await repository.fetchForHomeRecommend(null);
 
-    expect(result.list, ['definition-1', 'definition-2']);
-    expect(result.nextCursor, isNull);
-    expect(result.hasMore, isFalse);
+    expect(result.list, ['definition-1']);
+    expect(result.nextCursor, 'cursor-1');
+    expect(result.hasMore, isTrue);
   });
 
   test('フォロー中は API の cursor を引き継ぐ', () async {

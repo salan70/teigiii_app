@@ -462,6 +462,27 @@ describe("GET /v1/words", () => {
     expect(undefinedBody.items.map((item) => item.word)).toEqual(["朝"]);
   });
 
+  test("公開定義数と filter は論理削除済み作者を除外する", async () => {
+    await createUser("alice");
+    await createUser("deleted-author");
+    const word = await createWord("alice", "朝", "あさ");
+    await insertPublicDefinitionRow("definition-1", word.id, "deleted-author");
+    await env.DB.prepare("update users set deleted_at = 1 where id = 'deleted-author'").run();
+
+    const all = await request("alice", "/v1/words");
+    const definedOnly = await request("alice", "/v1/words?filter=defined");
+    const undefinedOnly = await request("alice", "/v1/words?filter=undefined");
+    const allBody = await all.json<{
+      items: Array<{ word: string; publicDefinitionCount: number }>;
+    }>();
+    const definedBody = await definedOnly.json<{ items: Array<{ word: string }> }>();
+    const undefinedBody = await undefinedOnly.json<{ items: Array<{ word: string }> }>();
+
+    expect(allBody.items).toMatchObject([{ word: "朝", publicDefinitionCount: 0 }]);
+    expect(definedBody.items).toEqual([]);
+    expect(undefinedBody.items.map((item) => item.word)).toEqual(["朝"]);
+  });
+
   test("q で表記・よみを部分一致検索できる", async () => {
     await createUser("alice");
     await createWord("alice", "青りんご", "あおりんご");
