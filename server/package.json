@@ -12,7 +12,10 @@
     "test:workers": "vitest run --config vitest.config.ts",
     "generate:openapi": "bun run scripts/generate-openapi.ts",
     "generate:migrations": "drizzle-kit generate",
-    "dev": "wrangler dev"
+    "dev": "wrangler dev",
+    "migration:export": "bun run scripts/migration/export.ts",
+    "migration:import": "bun run scripts/migration/import.ts",
+    "migration:verify": "bun run scripts/migration/verify.ts"
   },
   "dependencies": {
     "@hono/zod-openapi": "^1.5.0",
@@ -27,6 +30,7 @@
     "@seriousme/openapi-schema-validator": "^2.9.0",
     "@types/bun": "^1.3.14",
     "drizzle-kit": "^0.31.10",
+    "firebase-admin": "^14.2.0",
     "oxfmt": "^0.59.0",
     "oxlint": "^1.74.0",
     "typescript": "^7.0.2",
