@@ -3,6 +3,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../definition/application/definition_state.dart';
 import '../../definition/domain/definition.dart';
+import '../../definition_list/appication/definition_id_list_state.dart';
+import '../../user_list/application/user_id_list_state_notifier.dart';
 import '../repository/like_definition_repository.dart';
 
 part 'like_definition_service.g.dart';
@@ -21,7 +23,10 @@ class LikeDefinitionService {
     await _updateLikeStatus(definition);
 
     // いいね登録/解除した Definition を保持する Provider を再生成する。
-    ref.invalidate(definitionProvider(definition.id));
+    ref
+      ..invalidate(definitionProvider(definition.id))
+      ..invalidate(definitionIdListStateNotifierProvider)
+      ..invalidate(userIdListStateNotifierProvider);
   }
 
   /// いいね登録/解除を行う。

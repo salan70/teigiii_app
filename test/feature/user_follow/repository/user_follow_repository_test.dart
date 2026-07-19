@@ -14,26 +14,6 @@ void main() {
 
   tearDown(() => reset(mockUsersApi));
 
-  UserListItem buildItem(String id) => UserListItem(
-    id: id,
-    publicId: '123456789',
-    name: 'テスト太郎',
-    avatarUrl: null,
-    isFollowedByMe: true,
-    isMutedByMe: false,
-  );
-
-  Response<V1UsersIdFollowersGet200Response> buildPage(
-    List<String> ids,
-    String? nextCursor,
-  ) => Response(
-    data: V1UsersIdFollowersGet200Response(
-      items: ids.map(buildItem).toList(),
-      nextCursor: nextCursor,
-    ),
-    requestOptions: RequestOptions(path: '/v1/users/user1/following'),
-  );
-
   group('follow', () {
     test('PUT /v1/users/{id}/follow を呼ぶ', () async {
       // * Arrange
@@ -65,31 +45,6 @@ void main() {
 
       // * Assert
       verify(mockUsersApi.v1UsersIdFollowDelete(id: 'target1')).called(1);
-    });
-  });
-
-  group('fetchAllFollowingIdList', () {
-    test('nextCursor が尽きるまで走査して全 ID を返す', () async {
-      // * Arrange
-      when(
-        mockUsersApi.v1UsersIdFollowingGet(
-          id: 'user1',
-          limit: anyNamed('limit'),
-        ),
-      ).thenAnswer((_) async => buildPage(['a', 'b'], 'cursor1'));
-      when(
-        mockUsersApi.v1UsersIdFollowingGet(
-          id: 'user1',
-          cursor: 'cursor1',
-          limit: anyNamed('limit'),
-        ),
-      ).thenAnswer((_) async => buildPage(['c'], null));
-
-      // * Act
-      final idList = await repository.fetchAllFollowingIdList('user1');
-
-      // * Assert
-      expect(idList, ['a', 'b', 'c']);
     });
   });
 }

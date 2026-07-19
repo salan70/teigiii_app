@@ -12,16 +12,13 @@ part of 'user_id_list_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$UserIdListState {
   List<String> get list => throw _privateConstructorUsedError;
-
-  /// 最後に読み取られたQueryDocumentSnapshot
-  /// これがnullの場合、1件もuserIdを取得していない（[userIdList]が空）
-  QueryDocumentSnapshot<Object?>? get lastReadQueryDocumentSnapshot =>
-      throw _privateConstructorUsedError;
+  String? get nextCursor => throw _privateConstructorUsedError;
   bool get hasMore => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -32,13 +29,11 @@ mixin _$UserIdListState {
 /// @nodoc
 abstract class $UserIdListStateCopyWith<$Res> {
   factory $UserIdListStateCopyWith(
-          UserIdListState value, $Res Function(UserIdListState) then) =
-      _$UserIdListStateCopyWithImpl<$Res, UserIdListState>;
+    UserIdListState value,
+    $Res Function(UserIdListState) then,
+  ) = _$UserIdListStateCopyWithImpl<$Res, UserIdListState>;
   @useResult
-  $Res call(
-      {List<String> list,
-      QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
-      bool hasMore});
+  $Res call({List<String> list, String? nextCursor, bool hasMore});
 }
 
 /// @nodoc
@@ -55,38 +50,39 @@ class _$UserIdListStateCopyWithImpl<$Res, $Val extends UserIdListState>
   @override
   $Res call({
     Object? list = null,
-    Object? lastReadQueryDocumentSnapshot = freezed,
+    Object? nextCursor = freezed,
     Object? hasMore = null,
   }) {
-    return _then(_value.copyWith(
-      list: null == list
-          ? _value.list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      lastReadQueryDocumentSnapshot: freezed == lastReadQueryDocumentSnapshot
-          ? _value.lastReadQueryDocumentSnapshot
-          : lastReadQueryDocumentSnapshot // ignore: cast_nullable_to_non_nullable
-              as QueryDocumentSnapshot<Object?>?,
-      hasMore: null == hasMore
-          ? _value.hasMore
-          : hasMore // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            list: null == list
+                ? _value.list
+                : list // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            nextCursor: freezed == nextCursor
+                ? _value.nextCursor
+                : nextCursor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            hasMore: null == hasMore
+                ? _value.hasMore
+                : hasMore // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$UserIdListStateImplCopyWith<$Res>
     implements $UserIdListStateCopyWith<$Res> {
-  factory _$$UserIdListStateImplCopyWith(_$UserIdListStateImpl value,
-          $Res Function(_$UserIdListStateImpl) then) =
-      __$$UserIdListStateImplCopyWithImpl<$Res>;
+  factory _$$UserIdListStateImplCopyWith(
+    _$UserIdListStateImpl value,
+    $Res Function(_$UserIdListStateImpl) then,
+  ) = __$$UserIdListStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {List<String> list,
-      QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot,
-      bool hasMore});
+  $Res call({List<String> list, String? nextCursor, bool hasMore});
 }
 
 /// @nodoc
@@ -94,41 +90,44 @@ class __$$UserIdListStateImplCopyWithImpl<$Res>
     extends _$UserIdListStateCopyWithImpl<$Res, _$UserIdListStateImpl>
     implements _$$UserIdListStateImplCopyWith<$Res> {
   __$$UserIdListStateImplCopyWithImpl(
-      _$UserIdListStateImpl _value, $Res Function(_$UserIdListStateImpl) _then)
-      : super(_value, _then);
+    _$UserIdListStateImpl _value,
+    $Res Function(_$UserIdListStateImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? list = null,
-    Object? lastReadQueryDocumentSnapshot = freezed,
+    Object? nextCursor = freezed,
     Object? hasMore = null,
   }) {
-    return _then(_$UserIdListStateImpl(
-      list: null == list
-          ? _value._list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      lastReadQueryDocumentSnapshot: freezed == lastReadQueryDocumentSnapshot
-          ? _value.lastReadQueryDocumentSnapshot
-          : lastReadQueryDocumentSnapshot // ignore: cast_nullable_to_non_nullable
-              as QueryDocumentSnapshot<Object?>?,
-      hasMore: null == hasMore
-          ? _value.hasMore
-          : hasMore // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$UserIdListStateImpl(
+        list: null == list
+            ? _value._list
+            : list // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        nextCursor: freezed == nextCursor
+            ? _value.nextCursor
+            : nextCursor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        hasMore: null == hasMore
+            ? _value.hasMore
+            : hasMore // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$UserIdListStateImpl implements _UserIdListState {
-  const _$UserIdListStateImpl(
-      {required final List<String> list,
-      required this.lastReadQueryDocumentSnapshot,
-      required this.hasMore})
-      : _list = list;
+  const _$UserIdListStateImpl({
+    required final List<String> list,
+    required this.nextCursor,
+    required this.hasMore,
+  }) : _list = list;
 
   final List<String> _list;
   @override
@@ -138,16 +137,14 @@ class _$UserIdListStateImpl implements _UserIdListState {
     return EqualUnmodifiableListView(_list);
   }
 
-  /// 最後に読み取られたQueryDocumentSnapshot
-  /// これがnullの場合、1件もuserIdを取得していない（[userIdList]が空）
   @override
-  final QueryDocumentSnapshot<Object?>? lastReadQueryDocumentSnapshot;
+  final String? nextCursor;
   @override
   final bool hasMore;
 
   @override
   String toString() {
-    return 'UserIdListState(list: $list, lastReadQueryDocumentSnapshot: $lastReadQueryDocumentSnapshot, hasMore: $hasMore)';
+    return 'UserIdListState(list: $list, nextCursor: $nextCursor, hasMore: $hasMore)';
   }
 
   @override
@@ -156,42 +153,40 @@ class _$UserIdListStateImpl implements _UserIdListState {
         (other.runtimeType == runtimeType &&
             other is _$UserIdListStateImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
-            (identical(other.lastReadQueryDocumentSnapshot,
-                    lastReadQueryDocumentSnapshot) ||
-                other.lastReadQueryDocumentSnapshot ==
-                    lastReadQueryDocumentSnapshot) &&
+            (identical(other.nextCursor, nextCursor) ||
+                other.nextCursor == nextCursor) &&
             (identical(other.hasMore, hasMore) || other.hasMore == hasMore));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_list),
-      lastReadQueryDocumentSnapshot,
-      hasMore);
+    runtimeType,
+    const DeepCollectionEquality().hash(_list),
+    nextCursor,
+    hasMore,
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$UserIdListStateImplCopyWith<_$UserIdListStateImpl> get copyWith =>
       __$$UserIdListStateImplCopyWithImpl<_$UserIdListStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _UserIdListState implements UserIdListState {
-  const factory _UserIdListState(
-      {required final List<String> list,
-      required final QueryDocumentSnapshot<Object?>?
-          lastReadQueryDocumentSnapshot,
-      required final bool hasMore}) = _$UserIdListStateImpl;
+  const factory _UserIdListState({
+    required final List<String> list,
+    required final String? nextCursor,
+    required final bool hasMore,
+  }) = _$UserIdListStateImpl;
 
   @override
   List<String> get list;
   @override
-
-  /// 最後に読み取られたQueryDocumentSnapshot
-  /// これがnullの場合、1件もuserIdを取得していない（[userIdList]が空）
-  QueryDocumentSnapshot<Object?>? get lastReadQueryDocumentSnapshot;
+  String? get nextCursor;
   @override
   bool get hasMore;
   @override

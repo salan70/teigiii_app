@@ -144,6 +144,25 @@ describe("dictionary and definition lists", () => {
     const body = await response.json<Page<{ id: string }>>();
     expect(body.items.map((item) => item.id)).toEqual(["public"]);
   });
+
+  test("いいね一覧は閲覧者がミュートした作者の定義を除外する", async () => {
+    await insertUser("alice");
+    await insertUser("bob");
+    await insertUser("carol");
+    await insertWord("w1", "朝", "あさ", "alice", 10);
+    await insertDefinition("alice-public", "w1", "alice", "public", 100);
+    await insertDefinition("bob-public", "w1", "bob", "public", 200);
+    await env.DB.batch([
+      env.DB.prepare("insert into likes values ('carol', 'alice-public', 10)"),
+      env.DB.prepare("insert into likes values ('carol', 'bob-public', 20)"),
+      env.DB.prepare("insert into user_mutes values ('alice', 'bob', 30)"),
+    ]);
+
+    const response = await request("alice", "/v1/users/carol/liked-definitions");
+    const body = await response.json<Page<{ id: string }>>();
+
+    expect(body.items.map((item) => item.id)).toEqual(["alice-public"]);
+  });
 });
 
 describe("my dictionary lists", () => {
@@ -254,6 +273,29 @@ describe("word definition lists", () => {
     const secondBody = await second.json<Page<{ id: string; likesCount: number }>>();
     expect(secondBody.items).toMatchObject([{ id: "older", likesCount: 1 }]);
   });
+
+  test("新着順とリアクション順は閲覧者がミュートした作者の定義を除外する", async () => {
+    await insertUser("alice");
+    await insertUser("bob");
+    await insertUser("carol");
+    await insertWord("w1", "朝", "あさ", "alice", 10);
+    await insertDefinition("bob-public", "w1", "bob", "public", 300);
+    await insertDefinition("carol-public", "w1", "carol", "public", 200);
+    await env.DB.batch([
+      env.DB.prepare("insert into likes values ('alice', 'bob-public', 1)"),
+      env.DB.prepare("insert into likes values ('carol', 'bob-public', 2)"),
+      env.DB.prepare("insert into likes values ('alice', 'carol-public', 3)"),
+      env.DB.prepare("insert into user_mutes values ('alice', 'bob', 4)"),
+    ]);
+
+    const newest = await request("alice", "/v1/words/w1/definitions?scope=all&sort=newest");
+    const reactions = await request("alice", "/v1/words/w1/definitions?scope=all&sort=reactions");
+    const newestBody = await newest.json<Page<{ id: string }>>();
+    const reactionsBody = await reactions.json<Page<{ id: string }>>();
+
+    expect(newestBody.items.map((item) => item.id)).toEqual(["carol-public"]);
+    expect(reactionsBody.items.map((item) => item.id)).toEqual(["carol-public"]);
+  });
 });
 
 describe("timelines and search", () => {
@@ -338,6 +380,19 @@ describe("timelines and search", () => {
     await insertWord("w1", "朝", "あさ", "alice", 10);
     await insertDefinition("hidden", "w1", "deleted-author", "public", 100);
     await env.DB.prepare("update users set deleted_at = 200 where id = 'deleted-author'").run();
+
+    const response = await request("alice", "/v1/search/words?q=%E6%9C%9D");
+    const body = await response.json<Page<{ id: string; publicDefinitionCount: number }>>();
+
+    expect(body.items).toMatchObject([{ id: "w1", publicDefinitionCount: 0 }]);
+  });
+
+  test("言葉検索の公開定義数は閲覧者がミュートした作者の定義を除外する", async () => {
+    await insertUser("alice");
+    await insertUser("bob");
+    await insertWord("w1", "朝", "あさ", "alice", 10);
+    await insertDefinition("hidden", "w1", "bob", "public", 100);
+    await env.DB.prepare("insert into user_mutes values ('alice', 'bob', 200)").run();
 
     const response = await request("alice", "/v1/search/words?q=%E6%9C%9D");
     const body = await response.json<Page<{ id: string; publicDefinitionCount: number }>>();

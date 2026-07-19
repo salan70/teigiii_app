@@ -44,15 +44,4 @@ class MockUserFollowRepository extends _i1.Mock
             returnValueForMissingStub: _i3.Future<void>.value(),
           )
           as _i3.Future<void>);
-
-  @override
-  _i3.Future<List<String>> fetchAllFollowingIdList(String? userId) =>
-      (super.noSuchMethod(
-            Invocation.method(#fetchAllFollowingIdList, [userId]),
-            returnValue: _i3.Future<List<String>>.value(<String>[]),
-            returnValueForMissingStub: _i3.Future<List<String>>.value(
-              <String>[],
-            ),
-          )
-          as _i3.Future<List<String>>);
 }

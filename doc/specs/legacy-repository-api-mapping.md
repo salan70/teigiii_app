@@ -49,29 +49,32 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 | `like_definition_repository.isLikedByUser` | **埋め込み**: `DefinitionResponse.isLikedByMe` |
 | `like_definition_repository.fetchAllLikedDefinitionIdList` / `deleteLikeByDefinitionId` | **集約**: アカウント削除のクライアント側 fan-out。`DELETE /v1/users/me` に集約 |
 
+<!-- @code lib/feature/definition_list/repository/definition_id_list_repository.dart#DefinitionIdListRepository -->
 ## 定義一覧（フィード）
 
 | 旧操作 | 対応 |
 |---|---|
-| `definition_id_list_repository.fetchForHomeRecommend` | `GET /v1/timeline/discover`。`type: "definition"` のアイテムを使用（並びは現行と同じ新着順） |
-| `definition_id_list_repository.fetchForHomeFollowing` | `GET /v1/timeline/following` |
+| `definition_id_list_repository.fetchForHomeRecommend` | `GET /v1/timeline/discover`。**例外**: 公開定義のみとし、自分の非公開定義は表示しない。`type: "wordRegistered"` を読み飛ばし、定義が上限件数に達するか cursor が尽きるまで次ページを取得する |
+| `definition_id_list_repository.fetchForHomeFollowing` | `GET /v1/timeline/following`。**例外**: フォロー中ユーザーの公開定義のみとし、自分の定義と非公開定義は表示しない |
 | `definition_id_list_repository.fetchForWordTop`（createdAt / likesCount 順） | `GET /v1/words/{id}/definitions?scope=all&sort=newest\|reactions` |
 | `definition_id_list_repository.fetchForProfileCreatedAt` | `GET /v1/users/{id}/definitions` |
-| `definition_id_list_repository.fetchForLikedByUser` | `GET /v1/users/{id}/liked-definitions`（他者の公開定義 + 閲覧者自身の定義は非公開でも含む。旧実装と同じ可視性） |
+| `definition_id_list_repository.fetchForLikedByUser` | `GET /v1/users/{id}/liked-definitions`（他者の公開定義 + 閲覧者自身の定義は非公開でも含む。ミュートした著者の定義は Workers 側で除外） |
 | `definition_id_list_repository.fetchForIndividualDictionary` | `GET /v1/users/{id}/definitions?subGroup=&sort=reading`（旧実装と同じ、よみ昇順） |
 | 各メソッドの `mutedUserIdList` 引数によるクライアント側フィルタ | **集約**: ミュート除外はサーバー側クエリで実施 |
 
 <!-- @code lib/feature/word/repository/word_repository.dart#WordRepository -->
+<!-- @code lib/feature/word_list/repository/fetch_word_list_repository.dart#FetchWordListRepository -->
 ## 言葉
 
 | 旧操作 | 対応 |
 |---|---|
 | `word_repository.fetchWordById` | `GET /v1/words/{id}` |
 | `word_repository.findWordId` | **集約**: 登録フローは `POST /v1/words` の 409 応答で既存判定。検索は `GET /v1/search/words?q=` |
-| `fetch_word_list_repository.fetchWordListStateByInitial` | `GET /v1/words?subGroup=` |
-| `fetch_word_list_repository.fetchWordListStateBySearchWord` | `GET /v1/search/words?q=` |
-| `fetch_word_list_repository.fetchPostedDefinitionCount` | **埋め込み**: `WordListItem.publicDefinitionCount`（ミュート考慮もサーバー側） |
+| `fetch_word_list_repository.fetchWordListStateByInitial` | `GET /v1/words?subGroup=`。**例外**: 公開定義 0 件の言葉も表示する |
+| `fetch_word_list_repository.fetchWordListStateBySearchWord` | `GET /v1/search/words?q=`。**例外**: 言葉の前方一致から、言葉またはよみの部分一致へ変更する |
+| `fetch_word_list_repository.fetchPostedDefinitionCount` | **埋め込み**: `WordListItem.publicDefinitionCount`。ミュートした著者の定義は件数と defined / undefined 判定の両方から Workers 側で除外する |
 
+<!-- @code lib/feature/user_list/repository/fetch_user_list_repository.dart#FetchUserListRepository -->
 ## ユーザー・フォロー・ミュート
 
 | 旧操作 | 対応 |
@@ -108,3 +111,6 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 3. **AppConfig のリアルタイム監視 → 起動時ポーリング**
 4. **アカウント削除の fan-out がサーバー集約**になり、削除は論理削除（30 日保持）に変わる
 5. **デフォルトアイコンの登録時ランダム保存を廃止**: 新 API に「デフォルトアイコン URL を保存する」概念がなく、アバター未設定は `avatarUrl: null` で表現される。クライアントは null のとき同梱 asset 3 種から `hash(userId)` で決定的に 1 種を表示する。既存ユーザーのアイコンを変えないため、#186 のデータ移行で `profileImageUrl` がデフォルト URL 3 種のいずれかに一致するユーザーはその PNG を R2 へアバターとしてコピーする
+6. **フィードの公開定義化**: おすすめから自分の非公開定義、フォロー中から自分の定義とフォロー中ユーザーの非公開定義を除外する
+7. **公開定義 0 件の言葉も表示**: みんなの辞書は API の言葉一覧をそのまま表示する
+8. **言葉検索の拡張**: 言葉の前方一致から、言葉またはよみの部分一致に変更する

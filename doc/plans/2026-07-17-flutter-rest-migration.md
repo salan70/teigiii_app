@@ -2,7 +2,7 @@
 
 ## 目的
 
-Issue #185 のフェーズ 4 として、Flutter アプリの repository 層を Firestore / Firebase Storage 依存から Workers REST API（dev 環境デプロイ済み）へ置換する。UI は現状維持とし、挙動変更は台帳で確定済みの例外 4 件のみとする。
+Issue #185 のフェーズ 4 として、Flutter アプリの repository 層を Firestore / Firebase Storage 依存から Workers REST API（dev 環境デプロイ済み）へ置換する。UI は現状維持とし、挙動変更は台帳と各 Slice の grilling で明示的に確定する。
 
 - 対応表の正本: `doc/specs/legacy-repository-api-mapping.md`
 - API の正本: `server/openapi.json`（41 オペレーション）
@@ -76,6 +76,18 @@ Issue #185 のフェーズ 4 として、Flutter アプリの repository 層を 
 - **いいね**: repository は `PUT` / `DELETE /v1/definitions/{id}/like` のみを呼ぶ。認証ユーザーは HTTP クライアント基盤から付与されるため、公開メソッドの `userId` 引数を廃止する
 - **旧 entity**: 参照がなくなった `LikeDocument` を削除する。`DefinitionDocument` / `WordDocument` は Slice 4 対象の一覧 repository が参照中のため、Slice 4 まで残す
 - **PR 粒度**: 1 issue = 1 PR（`feature/204-word-definition-like`）
+
+### Slice 4 の設計（grilling で確定）
+
+- **state / UI interface**: 定義一覧は従来どおり ID のみを state に保持し、各 tile で個別定義を取得する。API の埋め込み定義 DTO は ID 以外を破棄し、Firestore cursor は `String? nextCursor` へ置換する
+- **おすすめフィード**: `GET /v1/timeline/discover` の公開定義のみを表示する。言葉登録 activity は現行 UI に表示せず、定義が 20 件集まるか cursor が尽きるまで API ページを続けて取得する。自分の非公開定義は表示しない
+- **フォロー中フィード**: `GET /v1/timeline/following` に合わせ、フォロー中ユーザーの公開定義のみを表示する。自分の定義と非公開定義は含めない
+- **みんなの辞書**: 公開定義 0 件の言葉も `GET /v1/words` の結果どおり表示する
+- **言葉検索**: 旧実装の「言葉の前方一致」から、`GET /v1/search/words` の「言葉またはよみの部分一致」へ変更する
+- **ミュート**: クライアント側フィルタを廃止し、いいね済み定義、言葉別定義、言葉一覧・検索の公開定義数と defined / undefined 判定を含めて Workers 側で除外する
+- **操作後の更新**: ミュート、フォロー、いいね操作後は、閲覧者依存の一覧 provider を明示的に invalidate する
+- **旧経路の削除**: フォロー ID の全ページ取得と `DefinitionDocument` / `WordDocument` を削除する
+- **PR 粒度**: 1 issue = 1 PR（`feature/205-list-rest-migration`）
 
 ### 置き換え方式
 

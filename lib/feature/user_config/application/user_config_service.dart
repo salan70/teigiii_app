@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../definition_list/appication/definition_id_list_state.dart';
+import '../../word_list/application/word_list_state_by_initial.dart';
+import '../../word_list/application/word_list_state_by_search_word.dart';
 import '../repository/user_config_repository.dart';
 import 'user_config_state.dart';
 
@@ -21,7 +24,7 @@ class UserConfigService {
         .read(userConfigRepositoryProvider)
         .appendMutedUserIdList(targetUserId);
 
-    ref.invalidate(mutedUserIdListProvider);
+    _invalidateMuteAwareProviders();
   }
 
   /// [targetUserId] のミュートを解除する。
@@ -30,6 +33,14 @@ class UserConfigService {
         .read(userConfigRepositoryProvider)
         .removeMutedUserIdList(targetUserId);
 
-    ref.invalidate(mutedUserIdListProvider);
+    _invalidateMuteAwareProviders();
+  }
+
+  void _invalidateMuteAwareProviders() {
+    ref
+      ..invalidate(mutedUserIdListProvider)
+      ..invalidate(definitionIdListStateNotifierProvider)
+      ..invalidate(wordListStateByInitialNotifierProvider)
+      ..invalidate(wordListStateBySearchWordNotifierProvider);
   }
 }

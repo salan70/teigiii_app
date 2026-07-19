@@ -33,28 +33,4 @@ class UserFollowRepository {
       throw ApiException.fromDioException(exception);
     }
   }
-
-  /// [userId] がフォローしているユーザーのIDリストを全て取得する。
-  ///
-  /// フォロー中フィードのクライアント側 JOIN が残っている間の暫定実装。
-  /// サーバー側 JOIN（`GET /v1/timeline/following`）への切替で不要になる。
-  Future<List<String>> fetchAllFollowingIdList(String userId) async {
-    try {
-      final idList = <String>[];
-      String? cursor;
-      do {
-        final response = await _usersApi.v1UsersIdFollowingGet(
-          id: userId,
-          cursor: cursor,
-          limit: 50,
-        );
-        final page = response.data!;
-        idList.addAll(page.items.map((item) => item.id));
-        cursor = page.nextCursor;
-      } while (cursor != null);
-      return idList;
-    } on DioException catch (exception) {
-      throw ApiException.fromDioException(exception);
-    }
-  }
 }

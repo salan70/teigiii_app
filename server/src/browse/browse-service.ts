@@ -341,7 +341,7 @@ export class BrowseService {
       cursorValue === undefined ? null : decodeDescendingCursor(cursorValue, "liked_definitions");
     const cursorClause =
       cursor === null ? "" : "and (liked.created_at < ? or (liked.created_at = ? and d.id < ?))";
-    const parameters: unknown[] = [viewerUid, userId, viewerUid];
+    const parameters: unknown[] = [viewerUid, userId, viewerUid, viewerUid];
     if (cursor !== null) parameters.push(cursor.sortAt, cursor.sortAt, cursor.id);
     const rows = (
       await this.env.DB.prepare(
@@ -353,7 +353,10 @@ export class BrowseService {
          join definitions d on d.id = liked.definition_id and d.deleted_at is null
          join words w on w.id = d.word_id
          join users u on u.id = d.author_id and u.deleted_at is null
-         where liked.user_id = ? and (d.status = 'public' or d.author_id = ?) ${cursorClause}
+         where liked.user_id = ? and (d.status = 'public' or d.author_id = ?)
+           and not exists(select 1 from user_mutes m
+             where m.muter_id = ? and m.muted_user_id = d.author_id)
+           ${cursorClause}
          order by liked.created_at desc, d.id desc
          limit ?`,
       )
@@ -595,8 +598,14 @@ export class BrowseService {
         : input.scope === "others"
           ? "d.author_id <> ? and d.status = 'public'"
           : "(d.author_id = ? or d.status = 'public')";
-    const conditions = ["d.word_id = ?", "d.deleted_at is null", visibility];
-    const parameters: unknown[] = [uid, wordId, uid];
+    const conditions = [
+      "d.word_id = ?",
+      "d.deleted_at is null",
+      visibility,
+      `not exists(select 1 from user_mutes m
+        where m.muter_id = ? and m.muted_user_id = d.author_id)`,
+    ];
+    const parameters: unknown[] = [uid, wordId, uid, uid];
     let orderBy: string;
     let cursorFactory: (row: DefinitionListRow) => string;
     if (input.sort === "reactions") {
@@ -822,14 +831,16 @@ export class BrowseService {
     const cursorClause =
       cursor === null ? "" : "and (w.reading > ? or (w.reading = ? and w.id > ?))";
     const pattern = `%${escapeLikePattern(query)}%`;
-    const parameters: unknown[] = [pattern, pattern, uid];
+    const parameters: unknown[] = [uid, pattern, pattern, uid];
     if (cursor !== null) parameters.push(cursor.reading, cursor.reading, cursor.id);
     const rows = (
       await this.env.DB.prepare(
         `select w.id, w.word, w.reading, w.reading_sub_group,
            (select count(*) from definitions d
             join users author on author.id = d.author_id and author.deleted_at is null
-            where d.word_id = w.id and d.status = 'public' and d.deleted_at is null)
+            where d.word_id = w.id and d.status = 'public' and d.deleted_at is null
+              and not exists(select 1 from user_mutes m
+                where m.muter_id = ? and m.muted_user_id = d.author_id))
              as public_definition_count
          from words w
          where (w.word like ? escape '\\' or w.reading like ? escape '\\')

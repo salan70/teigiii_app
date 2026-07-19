@@ -7,7 +7,7 @@ part of 'definition_id_list_state.dart';
 // **************************************************************************
 
 String _$definitionIdListStateNotifierHash() =>
-    r'9092ae1d4461e71def5993578a371c5bb34c1ba0';
+    r'd3e7e16fc42ed4d82a48e0172036d15274017267';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -99,8 +99,12 @@ class DefinitionIdListStateNotifierFamily
 }
 
 /// See also [DefinitionIdListStateNotifier].
-class DefinitionIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
-    DefinitionIdListStateNotifier, DefinitionIdListState> {
+class DefinitionIdListStateNotifierProvider
+    extends
+        AsyncNotifierProviderImpl<
+          DefinitionIdListStateNotifier,
+          DefinitionIdListState
+        > {
   /// See also [DefinitionIdListStateNotifier].
   DefinitionIdListStateNotifierProvider(
     DefinitionFeedType definitionFeedType, {
@@ -108,25 +112,24 @@ class DefinitionIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
     String? targetUserId,
     InitialSubGroup? initialSubGroup,
   }) : this._internal(
-          () => DefinitionIdListStateNotifier()
-            ..definitionFeedType = definitionFeedType
-            ..wordId = wordId
-            ..targetUserId = targetUserId
-            ..initialSubGroup = initialSubGroup,
-          from: definitionIdListStateNotifierProvider,
-          name: r'definitionIdListStateNotifierProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$definitionIdListStateNotifierHash,
-          dependencies: DefinitionIdListStateNotifierFamily._dependencies,
-          allTransitiveDependencies:
-              DefinitionIdListStateNotifierFamily._allTransitiveDependencies,
-          definitionFeedType: definitionFeedType,
-          wordId: wordId,
-          targetUserId: targetUserId,
-          initialSubGroup: initialSubGroup,
-        );
+         () => DefinitionIdListStateNotifier()
+           ..definitionFeedType = definitionFeedType
+           ..wordId = wordId
+           ..targetUserId = targetUserId
+           ..initialSubGroup = initialSubGroup,
+         from: definitionIdListStateNotifierProvider,
+         name: r'definitionIdListStateNotifierProvider',
+         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+             ? null
+             : _$definitionIdListStateNotifierHash,
+         dependencies: DefinitionIdListStateNotifierFamily._dependencies,
+         allTransitiveDependencies:
+             DefinitionIdListStateNotifierFamily._allTransitiveDependencies,
+         definitionFeedType: definitionFeedType,
+         wordId: wordId,
+         targetUserId: targetUserId,
+         initialSubGroup: initialSubGroup,
+       );
 
   DefinitionIdListStateNotifierProvider._internal(
     super._createNotifier, {
@@ -182,8 +185,11 @@ class DefinitionIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
   }
 
   @override
-  AsyncNotifierProviderElement<DefinitionIdListStateNotifier,
-      DefinitionIdListState> createElement() {
+  AsyncNotifierProviderElement<
+    DefinitionIdListStateNotifier,
+    DefinitionIdListState
+  >
+  createElement() {
     return _DefinitionIdListStateNotifierProviderElement(this);
   }
 
@@ -224,8 +230,12 @@ mixin DefinitionIdListStateNotifierRef
 }
 
 class _DefinitionIdListStateNotifierProviderElement
-    extends AsyncNotifierProviderElement<DefinitionIdListStateNotifier,
-        DefinitionIdListState> with DefinitionIdListStateNotifierRef {
+    extends
+        AsyncNotifierProviderElement<
+          DefinitionIdListStateNotifier,
+          DefinitionIdListState
+        >
+    with DefinitionIdListStateNotifierRef {
   _DefinitionIdListStateNotifierProviderElement(super.provider);
 
   @override
@@ -241,5 +251,6 @@ class _DefinitionIdListStateNotifierProviderElement
   InitialSubGroup? get initialSubGroup =>
       (origin as DefinitionIdListStateNotifierProvider).initialSubGroup;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

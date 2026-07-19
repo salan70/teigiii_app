@@ -7,7 +7,7 @@ part of 'user_id_list_state_notifier.dart';
 // **************************************************************************
 
 String _$userIdListStateNotifierHash() =>
-    r'7957cc89931257af2edfd333da8f2e0a6685fdc9';
+    r'1b283bb76e7a526f3c3918531460f1aa205a8d89';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -93,31 +93,31 @@ class UserIdListStateNotifierFamily
 }
 
 /// See also [UserIdListStateNotifier].
-class UserIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
-    UserIdListStateNotifier, UserIdListState> {
+class UserIdListStateNotifierProvider
+    extends
+        AsyncNotifierProviderImpl<UserIdListStateNotifier, UserIdListState> {
   /// See also [UserIdListStateNotifier].
   UserIdListStateNotifierProvider(
     UserListType userListType, {
     required String? targetUserId,
     required String? targetDefinitionId,
   }) : this._internal(
-          () => UserIdListStateNotifier()
-            ..userListType = userListType
-            ..targetUserId = targetUserId
-            ..targetDefinitionId = targetDefinitionId,
-          from: userIdListStateNotifierProvider,
-          name: r'userIdListStateNotifierProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$userIdListStateNotifierHash,
-          dependencies: UserIdListStateNotifierFamily._dependencies,
-          allTransitiveDependencies:
-              UserIdListStateNotifierFamily._allTransitiveDependencies,
-          userListType: userListType,
-          targetUserId: targetUserId,
-          targetDefinitionId: targetDefinitionId,
-        );
+         () => UserIdListStateNotifier()
+           ..userListType = userListType
+           ..targetUserId = targetUserId
+           ..targetDefinitionId = targetDefinitionId,
+         from: userIdListStateNotifierProvider,
+         name: r'userIdListStateNotifierProvider',
+         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+             ? null
+             : _$userIdListStateNotifierHash,
+         dependencies: UserIdListStateNotifierFamily._dependencies,
+         allTransitiveDependencies:
+             UserIdListStateNotifierFamily._allTransitiveDependencies,
+         userListType: userListType,
+         targetUserId: targetUserId,
+         targetDefinitionId: targetDefinitionId,
+       );
 
   UserIdListStateNotifierProvider._internal(
     super._createNotifier, {
@@ -169,7 +169,7 @@ class UserIdListStateNotifierProvider extends AsyncNotifierProviderImpl<
 
   @override
   AsyncNotifierProviderElement<UserIdListStateNotifier, UserIdListState>
-      createElement() {
+  createElement() {
     return _UserIdListStateNotifierProviderElement(this);
   }
 
@@ -204,8 +204,9 @@ mixin UserIdListStateNotifierRef on AsyncNotifierProviderRef<UserIdListState> {
 }
 
 class _UserIdListStateNotifierProviderElement
-    extends AsyncNotifierProviderElement<UserIdListStateNotifier,
-        UserIdListState> with UserIdListStateNotifierRef {
+    extends
+        AsyncNotifierProviderElement<UserIdListStateNotifier, UserIdListState>
+    with UserIdListStateNotifierRef {
   _UserIdListStateNotifierProviderElement(super.provider);
 
   @override
@@ -218,5 +219,6 @@ class _UserIdListStateNotifierProviderElement
   String? get targetDefinitionId =>
       (origin as UserIdListStateNotifierProvider).targetDefinitionId;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

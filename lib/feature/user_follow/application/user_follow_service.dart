@@ -2,9 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../auth/application/auth_state.dart';
+import '../../definition_list/appication/definition_id_list_state.dart';
+import '../../user_list/application/user_id_list_state_notifier.dart';
 import '../../user_profile/application/user_profile_state.dart';
 import '../repository/user_follow_repository.dart';
-import 'user_follow_state.dart';
 
 part 'user_follow_service.g.dart';
 
@@ -45,6 +46,7 @@ class UserFollowService {
     ref
       ..invalidate(userProfileProvider(currentUserId))
       ..invalidate(userProfileProvider(targetUserId))
-      ..invalidate(followingIdListProvider(currentUserId));
+      ..invalidate(definitionIdListStateNotifierProvider)
+      ..invalidate(userIdListStateNotifierProvider);
   }
 }

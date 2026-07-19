@@ -1,8 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../util/mixin/fetch_more_mixin.dart';
-import '../../auth/application/auth_state.dart';
-import '../../user_config/application/user_config_state.dart';
 import '../domain/word_list_state.dart';
 import '../repository/fetch_word_list_repository.dart';
 
@@ -12,25 +10,15 @@ part 'word_list_state_by_initial.g.dart';
 class WordListStateByInitialNotifier extends _$WordListStateByInitialNotifier
     with FetchMoreMixin<WordListState> {
   @override
-  FutureOr<WordListState> build(
-    String initial,
-  ) async =>
+  FutureOr<WordListState> build(String initial) async =>
       _fetchList(isFirstFetch: true);
 
   Future<WordListState> _fetchList({required bool isFirstFetch}) async {
-    final currentUserId = ref.read(userIdProvider)!;
-    final mutedUserIdList = await ref.read(mutedUserIdListProvider.future);
-    final lastDocument =
-        isFirstFetch ? null : state.value!.lastReadQueryDocumentSnapshot;
+    final cursor = isFirstFetch ? null : state.value!.nextCursor;
 
     return ref
         .read(fetchWordListRepositoryProvider)
-        .fetchWordListStateByInitial(
-          initial,
-          currentUserId,
-          mutedUserIdList,
-          lastDocument,
-        );
+        .fetchWordListStateByInitial(initial, cursor);
   }
 
   Future<void> fetchMore() async {
@@ -39,7 +27,7 @@ class WordListStateByInitialNotifier extends _$WordListStateByInitialNotifier
       fetchFunction: () async => _fetchList(isFirstFetch: false),
       mergeFunction: (currentData, newData) => WordListState(
         list: currentData.list + newData.list,
-        lastReadQueryDocumentSnapshot: newData.lastReadQueryDocumentSnapshot,
+        nextCursor: newData.nextCursor,
         hasMore: newData.hasMore,
       ),
     );

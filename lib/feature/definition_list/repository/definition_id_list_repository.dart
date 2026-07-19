@@ -1,12 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:teigiii_api/teigiii_api.dart';
 
-import '../../../core/common_provider/firebase_providers.dart';
+import '../../../core/api/api_exception.dart';
+import '../../../core/api/api_providers.dart';
 import '../../../util/constant/config_constant.dart';
-import '../../../util/constant/firestore_collections.dart';
 import '../../../util/constant/initial_main_group.dart';
-import '../../../util/extension/firestore_extension.dart';
-import '../../definition/repository/entity/definition_document.dart';
 import '../domain/definition_id_list_state.dart';
 import '../util/definition_feed_type.dart';
 
@@ -15,433 +14,146 @@ part 'definition_id_list_repository.g.dart';
 @Riverpod(keepAlive: true)
 DefinitionIdListRepository definitionIdListRepository(
   DefinitionIdListRepositoryRef ref,
-) =>
-    DefinitionIdListRepository(ref.watch(firestoreProvider));
+) {
+  final api = ref.watch(teigiiiApiProvider);
+  return DefinitionIdListRepository(
+    api.getTimelineApi(),
+    api.getWordsApi(),
+    api.getUsersApi(),
+  );
+}
 
-/// [DefinitionIdListState] に関する処理を記述する Repository。
+/// 定義 ID 一覧を Workers API から取得する Repository。
+///
+/// @doc doc/specs/legacy-repository-api-mapping.md#定義一覧-フィード
 class DefinitionIdListRepository {
-  DefinitionIdListRepository(this.firestore);
+  DefinitionIdListRepository(this._timelineApi, this._wordsApi, this._usersApi);
 
-  final FirebaseFirestore firestore;
+  final TimelineApi _timelineApi;
+  final WordsApi _wordsApi;
+  final UsersApi _usersApi;
 
-  CollectionReference get _definitionsCollectionRef =>
-      firestore.collection(DefinitionsCollection.collectionName);
+  Future<DefinitionIdListState> fetchForHomeRecommend(String? cursor) async {
+    try {
+      final idList = <String>[];
+      var nextCursor = cursor;
 
-  CollectionReference get _likesCollectionRef =>
-      firestore.collection(LikesCollection.collectionName);
-
-  /// 「ホーム画面: おすすめタブ」で表示するDefinitionIDのListを取得する。
-  ///
-  /// [lastDocument] がnullの場合、最初のdocumentから取得する。
-  Future<DefinitionIdListState> fetchForHomeRecommend(
-    String currentUserId,
-    List<String> mutedUserIdList,
-    QueryDocumentSnapshot? lastDocument,
-  ) async {
-    return _fetchUnmutedDefinitionIdList(
-      (doc, limit) => _fetchHomeRecommendSnapshot(
-        currentUserId,
-        doc,
-        limit,
-      ),
-      currentUserId,
-      mutedUserIdList,
-      lastDocument,
-    );
-  }
-
-  Future<QuerySnapshot> _fetchHomeRecommendSnapshot(
-    String currentUserId,
-    QueryDocumentSnapshot? lastDocument,
-    int fetchLimit,
-  ) async {
-    return _definitionsCollectionRef
-        .where(
-          Filter.or(
-            Filter(
-              DefinitionsCollection.authorId,
-              isEqualTo: currentUserId,
-            ),
-            Filter(DefinitionsCollection.isPublic, isEqualTo: true),
+      do {
+        final remaining = fetchLimitForDefinitionList - idList.length;
+        final response = await _timelineApi.v1TimelineDiscoverGet(
+          cursor: nextCursor,
+          limit: remaining,
+        );
+        final page = response.data!;
+        idList.addAll(
+          page.items.whereType<DiscoverFeedDefinitionItem>().map(
+            (item) => item.activity.definition.id,
           ),
-        )
-        .orderBy(createdAtFieldName, descending: true)
-        .limit(fetchLimit)
-        .maybeStartAfterDocument(lastDocument)
-        .get();
-  }
+        );
+        nextCursor = page.nextCursor;
+      } while (idList.length < fetchLimitForDefinitionList &&
+          nextCursor != null);
 
-  /// 「ホーム画面: フォロー中タブ」で表示するDefinitionIDのListを取得する。
-  ///
-  /// [lastDocument] がnullの場合、最初のdocumentから取得する。
-  Future<DefinitionIdListState> fetchForHomeFollowing(
-    String currentUserId,
-    List<String> targetUserIdList,
-    QueryDocumentSnapshot? lastDocument,
-  ) async {
-    // targetUserIdList をチャンクに分割
-    final chunks = _splitListIntoChunks(targetUserIdList, 10);
-
-    final combinedDocuments = <DocumentSnapshot>[];
-    for (final chunk in chunks) {
-      final snapshot = await _fetchHomeFollowingSnapshotByChunk(
-        currentUserId,
-        chunk,
-        lastDocument,
+      return DefinitionIdListState(
+        list: idList,
+        nextCursor: nextCursor,
+        hasMore: nextCursor != null,
       );
-      combinedDocuments.addAll(snapshot.docs);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
     }
-
-    // 結果を createdAt でソートして最初の
-    // fetchLimitForDefinitionList 件を取得する。
-    final sortedDocumentList = _sortAndLimitDocumentsByCreatedAt(
-      combinedDocuments,
-      fetchLimitForDefinitionList,
-    );
-
-    return _toDefinitionIdListState(sortedDocumentList);
   }
 
-  /// [list] を [chunkSize] ごとに分割する。
-  List<List<String>> _splitListIntoChunks(List<String> list, int chunkSize) {
-    final chunks = <List<String>>[];
-    for (var i = 0; i < list.length; i += chunkSize) {
-      final chunkEnd = i + chunkSize;
-      chunks.add(
-        list.sublist(i, chunkEnd > list.length ? list.length : chunkEnd),
+  Future<DefinitionIdListState> fetchForHomeFollowing(String? cursor) async {
+    try {
+      final response = await _timelineApi.v1TimelineFollowingGet(
+        cursor: cursor,
+        limit: fetchLimitForDefinitionList,
       );
+      return _toState(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
     }
-    return chunks;
   }
 
-  /// 「ホーム画面: フォロー中タブ」表示対象の Snapshot を取得する。
-  Future<QuerySnapshot> _fetchHomeFollowingSnapshotByChunk(
-    String currentUserId,
-    List<String> targetUserIdChunk,
-    QueryDocumentSnapshot? lastDocument,
-  ) async {
-    return _definitionsCollectionRef
-        .where(DefinitionsCollection.authorId, whereIn: targetUserIdChunk)
-        .where(
-          Filter.or(
-            Filter(
-              DefinitionsCollection.authorId,
-              isEqualTo: currentUserId,
-            ),
-            Filter(DefinitionsCollection.isPublic, isEqualTo: true),
-          ),
-        )
-        .orderBy(createdAtFieldName, descending: true)
-        .limit(fetchLimitForDefinitionList)
-        .maybeStartAfterDocument(lastDocument)
-        .get();
-  }
-
-  /// [documentList] を createdAt でソートし、
-  /// [limit] 件のドキュメントを取得する。
-  List<QueryDocumentSnapshot> _sortAndLimitDocumentsByCreatedAt(
-    List<DocumentSnapshot> documentList,
-    int limit,
-  ) {
-    // ソート処理
-    documentList.sort((a, b) {
-      final timestampA = a.get(createdAtFieldName) as Timestamp;
-      final timestampB = b.get(createdAtFieldName) as Timestamp;
-      return timestampB.toDate().compareTo(timestampA.toDate());
-    });
-    // 最初の limit 件のドキュメントを取得
-    return documentList.take(limit).cast<QueryDocumentSnapshot>().toList();
-  }
-
-  /// List<DocumentSnapshot> から [DefinitionIdListState] を生成する。
-  DefinitionIdListState _toDefinitionIdListState(
-    List<QueryDocumentSnapshot> documentList,
-  ) {
-    final idList = documentList.map((doc) => doc.id).toList();
-
-    // documentListが空でなければ最後のドキュメントを取得、空ならnull
-    final lastDoc = documentList.isNotEmpty ? documentList.last : null;
-
-    return DefinitionIdListState(
-      list: idList,
-      lastReadQueryDocumentSnapshot: lastDoc,
-      hasMore: idList.length == fetchLimitForDefinitionList,
-    );
-  }
-
-  /// 「語句トップ画面」で表示する DefinitionIDのListを取得する。
-  ///
-  /// [lastDocument] がnullの場合、最初のdocumentから取得する。
   Future<DefinitionIdListState> fetchForWordTop(
     WordTopOrderByType orderByType,
-    String currentUserId,
-    List<String> mutedUserIdList,
     String wordId,
-    QueryDocumentSnapshot? lastDocument,
+    String? cursor,
   ) async {
-    return _fetchUnmutedDefinitionIdList(
-      (doc, limit) => _fetchWordTopSnapshot(
-        orderByType,
-        currentUserId,
-        wordId,
-        doc,
-        limit,
-      ),
-      currentUserId,
-      mutedUserIdList,
-      lastDocument,
-    );
-  }
-
-  Future<QuerySnapshot> _fetchWordTopSnapshot(
-    WordTopOrderByType orderByType,
-    String currentUserId,
-    String wordId,
-    DocumentSnapshot? lastDocument,
-    int fetchLimit,
-  ) async {
-    late final String orderByField;
-    switch (orderByType) {
-      case WordTopOrderByType.createdAt:
-        orderByField = createdAtFieldName;
-        break;
-      case WordTopOrderByType.likesCount:
-        orderByField = DefinitionsCollection.likesCount;
-        break;
-    }
-
-    return _definitionsCollectionRef
-        .where(DefinitionsCollection.wordId, isEqualTo: wordId)
-        .where(
-          Filter.or(
-            Filter(
-              DefinitionsCollection.authorId,
-              isEqualTo: currentUserId,
-            ),
-            Filter(DefinitionsCollection.isPublic, isEqualTo: true),
-          ),
-        )
-        .orderBy(orderByField, descending: true)
-        .limit(fetchLimit)
-        .maybeStartAfterDocument(lastDocument)
-        .get();
-  }
-
-  /// 「プロフィール画面: 投稿順タブ」で表示するDefinitionIDのListを取得する。
-  ///
-  /// [lastDocument] がnullの場合、最初のdocumentから取得する。
-  Future<DefinitionIdListState> fetchForProfileCreatedAt(
-    String currentUserId,
-    String targetUserId,
-    QueryDocumentSnapshot? lastDocument,
-  ) async {
-    final snapshot = await _definitionsCollectionRef
-        .where(DefinitionsCollection.authorId, isEqualTo: targetUserId)
-        .where(
-          Filter.or(
-            Filter(
-              DefinitionsCollection.authorId,
-              isEqualTo: currentUserId,
-            ),
-            Filter(DefinitionsCollection.isPublic, isEqualTo: true),
-          ),
-        )
-        .orderBy(createdAtFieldName, descending: true)
-        .limit(fetchLimitForDefinitionList)
-        .maybeStartAfterDocument(lastDocument)
-        .get();
-
-    return _toDefinitionIdListState(snapshot.docs);
-  }
-
-  Future<QuerySnapshot> _fetchLikeSnapshotByLikedUser(
-    String likedUserId,
-    QueryDocumentSnapshot? lastDocument,
-    int fetchLimit,
-  ) async {
-    return _likesCollectionRef
-        .where(LikesCollection.userId, isEqualTo: likedUserId)
-        .orderBy(createdAtFieldName, descending: true)
-        .limit(fetchLimit)
-        .maybeStartAfterDocument(lastDocument)
-        .get();
-  }
-
-  /// [targetUserId] がいいねしたDefinitionIDのListを取得する。
-  ///
-  /// [initialLastDocument] がnullの場合、最初のdocumentから取得する。
-  Future<DefinitionIdListState> fetchForLikedByUser(
-    String currentUserId,
-    String targetUserId,
-    List<String> mutedUserIdList,
-    QueryDocumentSnapshot? initialLastDocument,
-  ) async {
-    final idList = <String>[];
-    var lastDocument = initialLastDocument;
-    var hasMore = true;
-    var fetchLimit = fetchLimitForDefinitionList;
-
-    while (fetchLimit > 0) {
-      final snapshot = await _fetchLikeSnapshotByLikedUser(
-        targetUserId,
-        lastDocument,
-        fetchLimit,
+    try {
+      final response = await _wordsApi.v1WordsIdDefinitionsGet(
+        id: wordId,
+        cursor: cursor,
+        limit: fetchLimitForDefinitionList,
+        scope: 'all',
+        sort: switch (orderByType) {
+          WordTopOrderByType.createdAt => 'newest',
+          WordTopOrderByType.likesCount => 'reactions',
+        },
       );
-
-      for (final likeDoc in snapshot.docs) {
-        final definitionId = likeDoc[LikesCollection.definitionId] as String;
-        late final DefinitionDocument definitionDoc;
-        try {
-          definitionDoc = await _fetchDefinition(definitionId);
-        } on FirebaseException catch (e) {
-          if (e.code == 'permission-denied') {
-            // 取得しようとした Definition ドキュメントの isPublic が false の場合、
-            // permission-denied エラーが発生するため、ここでキャッチし、
-            // idListに加えないようにする。
-            continue;
-          }
-          rethrow;
-        }
-
-        final isValid = _isValidDefinitionId(
-          definitionDoc,
-          currentUserId,
-          mutedUserIdList,
-        );
-        if (isValid) {
-          idList.add(definitionId);
-          fetchLimit--;
-        }
-      }
-
-      // 条件合う合わないに限らずこれ以上取得できるドキュメントがない場合、
-      // [lastDocument]を更新せずにループを抜ける
-      if (snapshot.docs.length < fetchLimit) {
-        hasMore = false;
-        break;
-      }
-
-      lastDocument = snapshot.docs.last;
+      return _toState(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
     }
-
-    return DefinitionIdListState(
-      list: idList,
-      lastReadQueryDocumentSnapshot: lastDocument,
-      hasMore: hasMore,
-    );
   }
 
-  /// [definitionDoc] が表示可能かどうかを返す。
-  bool _isValidDefinitionId(
-    DefinitionDocument definitionDoc,
-    String currentUserId,
-    List<String> mutedUserIdList,
-  ) {
-    // 条件に合うdefinitionのidのみ返す
-    // 条件: 自分の投稿
-    if (definitionDoc.authorId == currentUserId) {
-      return true;
-    }
-
-    // 条件: ミュートしていないユーザーの投稿
-    final isPostedByMutedUser =
-        mutedUserIdList.contains(definitionDoc.authorId);
-    if (!isPostedByMutedUser) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /// ミュートしていないDefinitionIdのリストを
-  /// [fetchLimitForDefinitionList] に達するまで取得する。
-  Future<DefinitionIdListState> _fetchUnmutedDefinitionIdList(
-    Future<QuerySnapshot> Function(QueryDocumentSnapshot?, int)
-        fetchWordDocSnapshot,
-    String currentUserId,
-    List<String> mutedUserIdList,
-    QueryDocumentSnapshot? documentSnapshot,
+  Future<DefinitionIdListState> fetchForProfileCreatedAt(
+    String targetUserId,
+    String? cursor,
   ) async {
-    final idList = <String>[];
-    var lastDocument = documentSnapshot;
-    var hasMore = true;
-    var fetchLimit = fetchLimitForDefinitionList;
-
-    // ミュートしていない Definition のId取得数の合計が
-    // fetchLimitForDefinitionList に達するまでループする。
-    while (fetchLimit > 0) {
-      final snapshot = await fetchWordDocSnapshot(lastDocument, fetchLimit);
-
-      final validIdList = snapshot.docs
-          .map((doc) {
-            final definitionDoc = DefinitionDocument.fromFirestore(doc);
-            // ミュートしていないユーザーが投稿したidのみ返す
-            if (!mutedUserIdList.contains(definitionDoc.authorId)) {
-              return definitionDoc.id;
-            }
-          })
-          .whereType<String>()
-          .toList();
-
-      idList.addAll(validIdList);
-      fetchLimit -= validIdList.length;
-
-      // muteに限らずこれ以上取得できるドキュメントがない場合、
-      // lastDocument を更新せずにループを抜ける。
-      if (snapshot.docs.length < fetchLimit) {
-        hasMore = false;
-        break;
-      }
-
-      lastDocument = snapshot.docs.last;
+    try {
+      final response = await _usersApi.v1UsersIdDefinitionsGet(
+        id: targetUserId,
+        cursor: cursor,
+        limit: fetchLimitForDefinitionList,
+        sort: 'newest',
+      );
+      return _toState(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
     }
-
-    return DefinitionIdListState(
-      list: idList,
-      lastReadQueryDocumentSnapshot: lastDocument,
-      hasMore: hasMore,
-    );
   }
 
-  /// 「ユーザー毎の辞書 -> InitialSubGroup毎の定義一覧 画面」
-  /// で表示するDefinitionIDのListを取得する。
-  ///
-  /// [lastDocument] がnullの場合、最初のdocumentから取得する。
+  Future<DefinitionIdListState> fetchForLikedByUser(
+    String targetUserId,
+    String? cursor,
+  ) async {
+    try {
+      final response = await _usersApi.v1UsersIdLikedDefinitionsGet(
+        id: targetUserId,
+        cursor: cursor,
+        limit: fetchLimitForDefinitionList,
+      );
+      return _toState(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
+  }
+
   Future<DefinitionIdListState> fetchForIndividualDictionary(
-    String currentUserId,
     String targetUserId,
     InitialSubGroup initialSubGroup,
-    QueryDocumentSnapshot? lastDocument,
+    String? cursor,
   ) async {
-    final snapshot = await _definitionsCollectionRef
-        .where(DefinitionsCollection.authorId, isEqualTo: targetUserId)
-        .where(
-          DefinitionsCollection.wordReadingInitialSubGroupLabel,
-          isEqualTo: initialSubGroup.label,
-        )
-        .where(
-          Filter.or(
-            Filter(
-              DefinitionsCollection.authorId,
-              isEqualTo: currentUserId,
-            ),
-            Filter(DefinitionsCollection.isPublic, isEqualTo: true),
-          ),
-        )
-        .orderBy(DefinitionsCollection.wordReading)
-        .limit(fetchLimitForDefinitionList)
-        .maybeStartAfterDocument(lastDocument)
-        .get();
-
-    return _toDefinitionIdListState(snapshot.docs);
+    try {
+      final response = await _usersApi.v1UsersIdDefinitionsGet(
+        id: targetUserId,
+        cursor: cursor,
+        limit: fetchLimitForDefinitionList,
+        subGroup: initialSubGroup.label,
+        sort: 'reading',
+      );
+      return _toState(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
   }
 
-  Future<DefinitionDocument> _fetchDefinition(String definitionId) async {
-    final snapshot = await _definitionsCollectionRef
-        .doc(definitionId)
-        .get()
-        .then((snapshot) => snapshot);
-
-    return DefinitionDocument.fromFirestore(snapshot);
-  }
+  DefinitionIdListState _toState(V1UsersIdDefinitionsGet200Response page) =>
+      DefinitionIdListState(
+        list: page.items.map((item) => item.id).toList(),
+        nextCursor: page.nextCursor,
+        hasMore: page.nextCursor != null,
+      );
 }

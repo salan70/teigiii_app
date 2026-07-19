@@ -7,20 +7,20 @@ part of 'definition_id_list_repository.dart';
 // **************************************************************************
 
 String _$definitionIdListRepositoryHash() =>
-    r'36f916bd3ad0c257e943b47885ccda0094fa6817';
+    r'a918e7396ff0a140773c5a30855e3cf4b71b4377';
 
 /// See also [definitionIdListRepository].
 @ProviderFor(definitionIdListRepository)
 final definitionIdListRepositoryProvider =
     Provider<DefinitionIdListRepository>.internal(
-  definitionIdListRepository,
-  name: r'definitionIdListRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$definitionIdListRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      definitionIdListRepository,
+      name: r'definitionIdListRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$definitionIdListRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef DefinitionIdListRepositoryRef = ProviderRef<DefinitionIdListRepository>;
 // ignore_for_file: type=lint

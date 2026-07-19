@@ -7,20 +7,20 @@ part of 'fetch_user_list_repository.dart';
 // **************************************************************************
 
 String _$fetchUserListRepositoryHash() =>
-    r'ac69d1c5439582d058a01aa4868a06bd8befa435';
+    r'c0817f9d7b9552ea087103983512142abae8b575';
 
 /// See also [fetchUserListRepository].
 @ProviderFor(fetchUserListRepository)
 final fetchUserListRepositoryProvider =
     Provider<FetchUserListRepository>.internal(
-  fetchUserListRepository,
-  name: r'fetchUserListRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$fetchUserListRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      fetchUserListRepository,
+      name: r'fetchUserListRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$fetchUserListRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef FetchUserListRepositoryRef = ProviderRef<FetchUserListRepository>;
 // ignore_for_file: type=lint

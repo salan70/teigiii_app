@@ -1,10 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:teigiii_api/teigiii_api.dart';
 
-import '../../../core/common_provider/firebase_providers.dart';
+import '../../../core/api/api_exception.dart';
+import '../../../core/api/api_providers.dart';
 import '../../../util/constant/config_constant.dart';
-import '../../../util/constant/firestore_collections.dart';
-import '../../../util/extension/firestore_extension.dart';
 import '../domain/user_id_list_state.dart';
 
 part 'fetch_user_list_repository.g.dart';
@@ -12,91 +12,72 @@ part 'fetch_user_list_repository.g.dart';
 @Riverpod(keepAlive: true)
 FetchUserListRepository fetchUserListRepository(
   FetchUserListRepositoryRef ref,
-) =>
-    FetchUserListRepository(ref.watch(firestoreProvider));
+) {
+  final api = ref.watch(teigiiiApiProvider);
+  return FetchUserListRepository(api.getUsersApi(), api.getDefinitionsApi());
+}
 
+/// ユーザー ID 一覧を Workers API から取得する Repository。
+///
+/// @doc doc/specs/legacy-repository-api-mapping.md#ユーザー-フォロー-ミュート
 class FetchUserListRepository {
-  FetchUserListRepository(this.firestore);
+  FetchUserListRepository(this._usersApi, this._definitionsApi);
 
-  final FirebaseFirestore firestore;
+  final UsersApi _usersApi;
+  final DefinitionsApi _definitionsApi;
 
-  /// [userId] がフォローしているユーザーIDリストを
-  /// [fetchLimitForUserIdList] 件取得する。
-  ///
-  /// [lastDocument] がnullの場合、最初のdocumentから取得する。
   Future<UserIdListState> fetchFollowingIdList(
     String userId,
-    QueryDocumentSnapshot? lastDocument,
+    String? cursor,
   ) async {
-    final snapshot = await firestore
-        .collection(UserFollowsCollection.collectionName)
-        .where(UserFollowsCollection.followingId, isEqualTo: userId)
-        .orderBy(createdAtFieldName, descending: true)
-        .limit(fetchLimitForUserIdList)
-        .maybeStartAfterDocument(lastDocument)
-        .get();
-
-    final followerIdList = snapshot.docs
-        .map((doc) => doc[UserFollowsCollection.followerId] as String)
-        .toList();
-
-    return _toUserIdListState(snapshot, followerIdList);
+    try {
+      final response = await _usersApi.v1UsersIdFollowingGet(
+        id: userId,
+        cursor: cursor,
+        limit: fetchLimitForUserIdList,
+      );
+      return _toState(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
   }
 
-  /// [userId] をフォローしているユーザーIDのリストを
-  /// [fetchLimitForUserIdList]件取得する。
-  ///
-  /// [lastDocument] がnullの場合、最初のdocumentから取得する。
   Future<UserIdListState> fetchFollowerIdList(
     String userId,
-    QueryDocumentSnapshot? lastDocument,
+    String? cursor,
   ) async {
-    final snapshot = await firestore
-        .collection(UserFollowsCollection.collectionName)
-        .where(UserFollowsCollection.followerId, isEqualTo: userId)
-        .orderBy(createdAtFieldName, descending: true)
-        .limit(fetchLimitForUserIdList)
-        .maybeStartAfterDocument(lastDocument)
-        .get();
-
-    final followingIdList = snapshot.docs
-        .map((doc) => doc[UserFollowsCollection.followingId] as String)
-        .toList();
-
-    return _toUserIdListState(snapshot, followingIdList);
+    try {
+      final response = await _usersApi.v1UsersIdFollowersGet(
+        id: userId,
+        cursor: cursor,
+        limit: fetchLimitForUserIdList,
+      );
+      return _toState(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
   }
 
-  /// [definitionId] をいいねしたユーザーのIDリストを
-  /// [fetchLimitForUserIdList] 件取得する。
-  ///
-  /// [lastDocument] がnullの場合、最初のdocumentから取得する。
   Future<UserIdListState> fetchLikedUserIdList(
     String definitionId,
-    QueryDocumentSnapshot? lastDocument,
+    String? cursor,
   ) async {
-    final snapshot = await firestore
-        .collection(LikesCollection.collectionName)
-        .where(LikesCollection.definitionId, isEqualTo: definitionId)
-        .orderBy(createdAtFieldName, descending: true)
-        .limit(fetchLimitForUserIdList)
-        .maybeStartAfterDocument(lastDocument)
-        .get();
-
-    final favoriteUserIdList = snapshot.docs
-        .map((doc) => doc[LikesCollection.userId] as String)
-        .toList();
-
-    return _toUserIdListState(snapshot, favoriteUserIdList);
+    try {
+      final response = await _definitionsApi.v1DefinitionsIdLikesGet(
+        id: definitionId,
+        cursor: cursor,
+        limit: fetchLimitForUserIdList,
+      );
+      return _toState(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
   }
 
-  UserIdListState _toUserIdListState(
-    QuerySnapshot snapshot,
-    List<String> userIdList,
-  ) {
-    return UserIdListState(
-      list: userIdList,
-      lastReadQueryDocumentSnapshot: snapshot.docs.lastOrNull,
-      hasMore: userIdList.length == fetchLimitForUserIdList,
-    );
-  }
+  UserIdListState _toState(V1UsersIdFollowersGet200Response page) =>
+      UserIdListState(
+        list: page.items.map((item) => item.id).toList(),
+        nextCursor: page.nextCursor,
+        hasMore: page.nextCursor != null,
+      );
 }
