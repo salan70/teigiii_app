@@ -246,16 +246,36 @@ describe("transformLikes", () => {
 });
 
 describe("transformFollows", () => {
-  const follow: UserFollowRecord = { id: "f1", followerId: "u1", followingId: "u2", createdAt: 5 };
+  // 旧 UserFollowRepository.follow(currentUserId, targetUserId) の保存形状を明示:
+  // actor が target をフォローすると followerId=target, followingId=actor で保存される。
+  const actor = "actor";
+  const target = "target";
+  const oldFollow: UserFollowRecord = {
+    id: "f1",
+    followerId: target, // 旧: される側
+    followingId: actor, // 旧: する側
+    createdAt: 5,
+  };
 
-  test("両ユーザーが有効ならそのまま変換する", () => {
-    const result = transformFollows([follow], new Set(["u1", "u2"]));
-    expect(result.rows).toEqual([{ follower_id: "u1", following_id: "u2", created_at: 5 }]);
+  test("旧フィールドの向きを D1 の follower_id=する側 / following_id=される側 へ入れ替える", () => {
+    const result = transformFollows([oldFollow], new Set([actor, target]));
+    // 反転バグがあると follower_id=target になり、このアサーションが落ちる。
+    expect(result.rows).toEqual([
+      { follower_id: actor, following_id: target, created_at: 5 },
+    ]);
   });
 
-  test("フォロー先ユーザーが孤児なら drop する", () => {
-    const result = transformFollows([follow], new Set(["u1"]));
+  test("フォローする側（旧 followingId）が孤児なら drop する", () => {
+    // target のみ有効・actor は無効 → follower_id=actor が孤児で drop。
+    const result = transformFollows([oldFollow], new Set([target]));
     expect(result.rows).toEqual([]);
+    expect(result.dropped[0]!.reason).toBe(`orphan: follower_id ${actor} not found`);
+  });
+
+  test("フォローされる側（旧 followerId）が孤児なら drop する", () => {
+    const result = transformFollows([oldFollow], new Set([actor]));
+    expect(result.rows).toEqual([]);
+    expect(result.dropped[0]!.reason).toBe(`orphan: following_id ${target} not found`);
   });
 
   test("自己フォローは drop する", () => {

@@ -6,10 +6,13 @@
 //   bun run scripts/migration/export.ts \
 //     --service-account ./secrets/prod-service-account.json \
 //     --project-id everyone-teigi-prod \
+//     --storage-bucket everyone-teigi-prod.appspot.com \
 //     --out ./migration-snapshots/prod-2026-07-20
 //
-// サービスアカウントキーのパス・プロジェクト ID は CLI 引数または環境変数
-// (FIREBASE_SERVICE_ACCOUNT_PATH / FIREBASE_PROJECT_ID) で受け取る。
+// サービスアカウントキーのパス・プロジェクト ID・Storage バケット名は CLI 引数または環境変数
+// (FIREBASE_SERVICE_ACCOUNT_PATH / FIREBASE_PROJECT_ID / FIREBASE_STORAGE_BUCKET) で受け取る。
+// バケット名は projectId から一意に導出できない（.appspot.com / .firebasestorage.app 等）ため
+// 必須入力とし、未指定なら fail-fast する。
 // キー・スナップショットはコミットしない（server/.gitignore を参照）。
 
 import { parseArgs } from "node:util";
@@ -26,7 +29,7 @@ type Args = {
   serviceAccount: string;
   projectId: string;
   out: string;
-  storageBucket: string | undefined;
+  storageBucket: string;
 };
 
 function parseCliArgs(argv: string[]): Args {
@@ -43,6 +46,7 @@ function parseCliArgs(argv: string[]): Args {
   const serviceAccount = values["service-account"] ?? process.env["FIREBASE_SERVICE_ACCOUNT_PATH"];
   const projectId = values["project-id"] ?? process.env["FIREBASE_PROJECT_ID"];
   const out = values.out ?? process.env["MIGRATION_SNAPSHOT_DIR"];
+  const storageBucket = values["storage-bucket"] ?? process.env["FIREBASE_STORAGE_BUCKET"];
 
   if (serviceAccount === undefined) {
     throw new Error(
@@ -55,12 +59,17 @@ function parseCliArgs(argv: string[]): Args {
   if (out === undefined) {
     throw new Error("--out またはMIGRATION_SNAPSHOT_DIR で出力先ディレクトリを指定してください");
   }
+  if (storageBucket === undefined) {
+    throw new Error(
+      "--storage-bucket またはFIREBASE_STORAGE_BUCKET で Storage バケット名（例: everyone-teigi-prod.appspot.com）を指定してください",
+    );
+  }
 
   return {
     serviceAccount,
     projectId,
     out,
-    storageBucket: values["storage-bucket"],
+    storageBucket,
   };
 }
 
@@ -95,11 +104,11 @@ function sanitizeObjectPathForFilename(objectPath: string): string {
 
 async function exportAvatars(
   db: Firestore,
-  bucketName: string | undefined,
+  bucketName: string,
   outDir: string,
 ): Promise<AvatarManifest> {
   const storage = getStorage();
-  const bucket = bucketName === undefined ? storage.bucket() : storage.bucket(bucketName);
+  const bucket = storage.bucket(bucketName);
 
   const profilesSnapshot = await db.collection("UserProfiles").get();
   const entries: AvatarManifestEntry[] = [];
@@ -143,6 +152,7 @@ async function main(): Promise<void> {
   initializeApp({
     credential: cert(args.serviceAccount),
     projectId: args.projectId,
+    storageBucket: args.storageBucket,
   });
   const db = getFirestore();
 

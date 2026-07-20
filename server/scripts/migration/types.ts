@@ -65,6 +65,12 @@ export type UserConfigRecord = {
   updatedAt: number;
 };
 
+/**
+ * 旧 Firestore UserFollows。フィールド名と実際の向きが逆な点に注意:
+ * `followerId` はフォローされる側、`followingId` はフォローする側を指す
+ * （旧 `UserFollowRepository.follow` の保存形状）。D1 の follows へは
+ * `transformFollows` で向きを入れ替えて変換する。
+ */
 export type UserFollowRecord = {
   id: string;
   followerId: string;

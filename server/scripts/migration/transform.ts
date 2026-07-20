@@ -207,7 +207,17 @@ export function transformLikes(
 
 export type TransformFollowsResult = { rows: FollowRow[]; dropped: DroppedRecord[] };
 
-/** UserFollows → follows。follower/following が存在しない、または自己フォローの行は drop する。 */
+/**
+ * UserFollows → follows。follower/following が存在しない、または自己フォローの行は drop する。
+ *
+ * 旧 Firestore はフィールド名と実際の向きが逆だった:
+ *   `UserFollowRepository.follow(currentUserId, targetUserId)` は
+ *   `followerId = targetUserId`（される側）, `followingId = currentUserId`（する側）で保存していた。
+ * 現行 D1 の `UserService.follow(uid, targetId)` は
+ *   `follower_id = uid`（する側）, `following_id = targetId`（される側）。
+ * そのため旧 `followingId → follower_id`, `followerId → following_id` と入れ替える。
+ * 直コピーすると全フォロー関係が反転する。
+ */
 export function transformFollows(
   follows: readonly UserFollowRecord[],
   validUserIds: ReadonlySet<string>,
@@ -216,27 +226,30 @@ export function transformFollows(
   const dropped: DroppedRecord[] = [];
 
   for (const follow of follows) {
-    if (!validUserIds.has(follow.followerId)) {
+    const followerId = follow.followingId; // D1 follower_id（フォローする側）
+    const followingId = follow.followerId; // D1 following_id（フォローされる側）
+
+    if (!validUserIds.has(followerId)) {
       dropped.push({
         id: follow.id,
-        reason: `orphan: follower_id ${follow.followerId} not found`,
+        reason: `orphan: follower_id ${followerId} not found`,
       });
       continue;
     }
-    if (!validUserIds.has(follow.followingId)) {
+    if (!validUserIds.has(followingId)) {
       dropped.push({
         id: follow.id,
-        reason: `orphan: following_id ${follow.followingId} not found`,
+        reason: `orphan: following_id ${followingId} not found`,
       });
       continue;
     }
-    if (follow.followerId === follow.followingId) {
+    if (followerId === followingId) {
       dropped.push({ id: follow.id, reason: "invalid: self follow" });
       continue;
     }
     rows.push({
-      follower_id: follow.followerId,
-      following_id: follow.followingId,
+      follower_id: followerId,
+      following_id: followingId,
       created_at: follow.createdAt,
     });
   }

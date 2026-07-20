@@ -122,6 +122,30 @@ describe("recomputeExpectedState", () => {
     expect(state.definitions).toHaveLength(1);
     expect(state.droppedCounts).toEqual({ definitions: 1, likes: 1, follows: 1, userMutes: 1 });
   });
+
+  test("follows は旧フィールドの向き（followingId=する側）を D1 の follower_id へ入れ替える", () => {
+    // 旧 UserFollowRepository.follow(actor, target) の保存形状: followerId=target, followingId=actor。
+    const snapshot = emptySnapshot();
+    const makeProfile = (id: string) => ({
+      id,
+      publicId: id,
+      name: id,
+      bio: "",
+      profileImageUrl: defaultIconUrl,
+      createdAt: 1,
+      updatedAt: 1,
+    });
+    snapshot.userProfiles = [makeProfile("actor"), makeProfile("target")];
+    snapshot.userFollows = [
+      { id: "f1", followerId: "target", followingId: "actor", createdAt: 5 },
+    ];
+
+    const state = recomputeExpectedState(snapshot, 0);
+    // 反転バグがあると follower_id=target になり落ちる。
+    expect(state.follows).toEqual([
+      { follower_id: "actor", following_id: "target", created_at: 5 },
+    ]);
+  });
 });
 
 describe("parseD1JsonOutput", () => {

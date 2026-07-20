@@ -33,26 +33,43 @@ describe("convertTimestamps", () => {
 });
 
 describe("parseCliArgs", () => {
+  const requiredArgs = [
+    "--service-account",
+    "./key.json",
+    "--project-id",
+    "everyone-teigi-prod",
+    "--out",
+    "./snapshot",
+    "--storage-bucket",
+    "everyone-teigi-prod.appspot.com",
+  ];
+
   test("CLI 引数から必須パラメータを取り出す", () => {
-    const args = parseCliArgs([
-      "--service-account",
-      "./key.json",
-      "--project-id",
-      "everyone-teigi-prod",
-      "--out",
-      "./snapshot",
-    ]);
+    const args = parseCliArgs(requiredArgs);
     expect(args).toEqual({
       serviceAccount: "./key.json",
       projectId: "everyone-teigi-prod",
       out: "./snapshot",
-      storageBucket: undefined,
+      storageBucket: "everyone-teigi-prod.appspot.com",
     });
   });
 
   test("service-account が欠けている場合はエラーになる", () => {
     expect(() =>
-      parseCliArgs(["--project-id", "everyone-teigi-prod", "--out", "./snapshot"]),
+      parseCliArgs([
+        "--project-id",
+        "everyone-teigi-prod",
+        "--out",
+        "./snapshot",
+        "--storage-bucket",
+        "everyone-teigi-prod.appspot.com",
+      ]),
     ).toThrow(/service-account/);
+  });
+
+  test("storage-bucket が欠けている場合はエラーになる", () => {
+    expect(() =>
+      parseCliArgs(["--service-account", "./key.json", "--project-id", "p", "--out", "./snapshot"]),
+    ).toThrow(/storage-bucket/);
   });
 });

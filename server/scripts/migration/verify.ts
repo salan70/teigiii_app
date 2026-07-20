@@ -195,17 +195,19 @@ export function recomputeExpectedState(
   const follows: FollowRow[] = [];
   let droppedFollows = 0;
   for (const follow of snapshot.userFollows) {
-    const valid =
-      userIds.has(follow.followerId) &&
-      userIds.has(follow.followingId) &&
-      follow.followerId !== follow.followingId;
+    // 旧 Firestore はフィールド名と向きが逆（followingId=する側, followerId=される側）。
+    // 現行 D1 の向き（follower_id=する側, following_id=される側）へ入れ替える。
+    // transform.ts とは独立に再実装する（決定事項 5）が、期待値は正しい向きで組む。
+    const followerId = follow.followingId;
+    const followingId = follow.followerId;
+    const valid = userIds.has(followerId) && userIds.has(followingId) && followerId !== followingId;
     if (!valid) {
       droppedFollows += 1;
       continue;
     }
     follows.push({
-      follower_id: follow.followerId,
-      following_id: follow.followingId,
+      follower_id: followerId,
+      following_id: followingId,
       created_at: follow.createdAt,
     });
   }

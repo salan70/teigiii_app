@@ -184,8 +184,23 @@ async function main(): Promise<void> {
     if (!validUserIds.has(entry.uid)) continue; // drop されたユーザー（実運用では発生しない想定）
     const filePath = resolve(args.snapshot, entry.snapshotRelativePath);
     const key = `avatars/${encodeURIComponent(entry.uid)}`;
+    // 通常の AvatarService.upload は httpMetadata.contentType を設定し、GET ルートは
+    // object.writeHttpMetadata で MIME type を復元する。--content-type を渡さないと
+    // 移行分だけ Content-Type が欠落し、nosniff により表示不良になる。
+    // 移行対象アバターは全て PNG（default/custom とも profile_image.png）。
     await runWrangler(
-      ["r2", "object", "put", `${args.r2Bucket}/${key}`, "--file", filePath, "--remote", "-y"],
+      [
+        "r2",
+        "object",
+        "put",
+        `${args.r2Bucket}/${key}`,
+        "--file",
+        filePath,
+        "--content-type",
+        "image/png",
+        "--remote",
+        "-y",
+      ],
       args.dryRun,
       serverDir,
     );
