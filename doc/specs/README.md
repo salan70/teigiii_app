@@ -2,6 +2,13 @@
 
 このディレクトリは [DocBridge](https://github.com/salan70/docbridge) のスキャン対象となる仕様書の置き場所。
 
+## 正本
+
+- `mobile-app-information-architecture.md`: モバイルアプリの画面マップ、ナビゲーション、Tier 境界
+- `mobile-app-functional-spec.md`: モバイルアプリの画面状態、操作、遷移、失敗時の挙動
+- `workers-api-server.md`: Workers API のサーバー契約
+- `legacy-repository-api-mapping.md`: 旧 repository interface と REST API の移行対応
+
 - コード側: Dart の doc コメントに `/// @doc doc/specs/<file>.md#<section>` を書く
 - 仕様書側: 見出しの直前に `<!-- @code mobile_app/lib/<file>.dart#<canonical-id> -->` を書く
 - リンクの検証: `just docbridge-check`

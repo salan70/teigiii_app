@@ -5,7 +5,7 @@
 issue #183（Cloudflare 移行 2/6）の実行計画。grilling による設計判断の確定記録を含む。
 
 - 戦略: `doc/plans/2026-07-12-cloudflare-migration-strategy.md`
-- 情報設計: `doc/specs/new-ui-information-architecture.md`
+- 情報設計: `doc/specs/mobile-app-information-architecture.md`
 
 ## 目的
 

@@ -1,16 +1,16 @@
-# 新 UI Tier 2（初期リリース後の段階投入）統括プラン
+# モバイルアプリ Tier 2（初期リリース後の段階投入）統括プラン
 
 > 注記: ディレクトリ再編に伴いパス表記を現行構成へ更新した（#230）。
 
 ## 目的
 
-`doc/specs/new-ui-information-architecture.md` の Tier 2 スコープを、Tier 1 リリース後に機能単位で段階投入する。
+`doc/specs/mobile-app-information-architecture.md` の Tier 2 スコープを、Tier 1 リリース後に機能単位で段階投入する。
 
 本プランは統括用であり、各機能に着手する際は詳細プランを `doc/plans/` に別途作成する。スキーマは事前に作らず、各機能の投入時に Drizzle のマイグレーションで追加する。
 
 ## 前提
 
-- Tier 1（`2026-07-14-new-ui-tier1.md`）のリリースが完了していること
+- Tier 1（`2026-07-14-mobile-app-tier1.md`）のリリースが完了していること
 - 各機能の投入順・要否は Tier 1 リリース後の利用状況を見て判断する（本プランの順序は仮）
 
 ## スコープ（Tier 2）
