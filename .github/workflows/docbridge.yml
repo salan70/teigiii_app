@@ -9,6 +9,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: docbridge-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -20,11 +24,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Nix
-        uses: DeterminateSystems/determinate-nix-action@v3
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
 
       - name: DocBridge check
-        run: nix develop --command just docbridge-check
+        run: bunx docbridge@0.5.2 check
 
   # informational: 違反があってもワークフローは fail させず、
   # sticky コメントで報告してマージ判断はレビュアーに委ねる。
@@ -40,8 +44,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Nix
-        uses: DeterminateSystems/determinate-nix-action@v3
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Run related-gate over the PR change set
         env:
@@ -51,9 +55,9 @@ jobs:
           gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files" --paginate \
             -q '.[].filename' > changed-files.txt
           gate_status=0
-          nix develop --command sh -c \
-            "bunx docbridge@0.5.2 related --stdin --gate < \"\$1\" > \"\$2\" 2> \"\$3\"" \
-            sh changed-files.txt gate-output.txt gate-error.txt || gate_status=$?
+          bunx docbridge@0.5.2 related --stdin --gate \
+            < changed-files.txt > gate-output.txt 2> gate-error.txt \
+            || gate_status=$?
           cat gate-error.txt >&2
           if [ "$gate_status" != "0" ] && [ ! -s gate-output.txt ]; then
             echo "DocBridge related-gate がレポートを生成できませんでした。詳細は CI ログを確認してください。" \

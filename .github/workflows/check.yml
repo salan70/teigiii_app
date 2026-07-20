@@ -11,44 +11,140 @@ on:
       - '**.md'
   workflow_dispatch:
 
+concurrency:
+  group: check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
+  id-token: write
 
 jobs:
-  analyze:
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      mobile: ${{ steps.gates.outputs.mobile }}
+      backend: ${{ steps.gates.outputs.backend }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect path changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            mobile:
+              - 'mobile_app/**'
+              - 'flake.nix'
+              - 'flake.lock'
+              - 'nix/**'
+              - 'justfile'
+              - '.github/workflows/check.yml'
+              - '.github/actions/**'
+            backend:
+              - 'backend/**'
+              - 'flake.nix'
+              - 'flake.lock'
+              - 'nix/**'
+              - 'justfile'
+              - '.github/workflows/check.yml'
+              - '.github/actions/**'
+
+      # フィルタ外の変更で workflow が起動した場合は両方走らせる（黙って skip しない）
+      - name: Resolve job gates
+        id: gates
+        run: |
+          mobile="${{ steps.filter.outputs.mobile }}"
+          backend="${{ steps.filter.outputs.backend }}"
+          if [ "$mobile" != "true" ] && [ "$backend" != "true" ]; then
+            mobile=true
+            backend=true
+          fi
+          echo "mobile=$mobile" >> "$GITHUB_OUTPUT"
+          echo "backend=$backend" >> "$GITHUB_OUTPUT"
+
+  mobile-analyze:
+    needs: changes
+    if: needs.changes.outputs.mobile == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Nix
-        uses: DeterminateSystems/determinate-nix-action@v3
-
-      - name: Create dot env file
-        run: touch mobile_app/.env
+      - name: CI Nix setup
+        uses: ./.github/actions/ci-nix-setup
+        with:
+          cache-flutter: "true"
+          cache-pub: "true"
+          touch-env: "true"
 
       - name: Install dependencies
-        run: nix develop --command just setup
+        run: nix develop --command just mobile-setup
 
       - name: Analyze
-        run: nix develop --command just analyze
+        run: nix develop --command just mobile-analyze
 
-  test:
+  mobile-test:
+    needs: changes
+    if: needs.changes.outputs.mobile == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Nix
-        uses: DeterminateSystems/determinate-nix-action@v3
-
-      - name: Create dot env file
-        run: touch mobile_app/.env
+      - name: CI Nix setup
+        uses: ./.github/actions/ci-nix-setup
+        with:
+          cache-flutter: "true"
+          cache-pub: "true"
+          touch-env: "true"
 
       - name: Install dependencies
-        run: nix develop --command just setup
+        run: nix develop --command just mobile-setup
 
       - name: Test
-        run: nix develop --command just test
+        run: nix develop --command just mobile-test
+
+  backend-analyze:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: CI Nix setup
+        uses: ./.github/actions/ci-nix-setup
+        with:
+          cache-bun: "true"
+
+      - name: Install dependencies
+        run: nix develop --command just backend-setup
+
+      - name: Analyze
+        run: nix develop --command just backend-analyze
+
+  backend-test:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: CI Nix setup
+        uses: ./.github/actions/ci-nix-setup
+        with:
+          cache-bun: "true"
+
+      - name: Install dependencies
+        run: nix develop --command just backend-setup
+
+      - name: Test
+        run: nix develop --command just backend-test
