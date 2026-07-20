@@ -149,7 +149,10 @@ issue #186 コメントで「実トラフィックが Cloudflare に乗るのは
 3. 本番と同一手順で prod D1/R2 へスナップショット投入（export → import → verify）
 4. TestFlight ビルドで prod バックエンド疎通を実機確認（App Check・匿名登録・既存データ表示まで）
 5. 新バージョンを App Store に提出し、審査通過済み・**手動リリース待機**の状態にする
-6. Workers 通知（週次サマリ / CPU 使用レポート）が有効か、通知先メールが届く宛先かをダッシュボードで確認する（Free アカウントはデフォルト有効。枠監視の役には立たないため確認のみで、未設定でも切替はブロックしない。決定事項 10）
+6. Cloudflare のプラン確認と通知設定（決定事項 10。**プラン確認を先に行う** — 決定事項 10 は Workers Free 前提の判断のため）
+   1. ダッシュボードの Workers & Pages で Workers のプランを確認する
+   2. **Workers Free の場合**: 枠超過はエラー応答で請求が発生しないため Budget alerts は不要。Workers 通知（週次サマリ / CPU 使用レポート）が有効か、通知先メールが届く宛先かを確認する（デフォルト有効。枠監視の役には立たないため確認のみで、未設定でも切替はブロックしない）
+   3. **Workers Paid / Pay-as-you-go の場合**: 枠超過が従量課金となり請求リスクが生じるため、**切替前に Budget alerts を設定する**（Manage Account → Billing → Billable Usage → Create budget alert）。この場合「通知設定は行わない」という決定事項 10 の判断は適用されない
 
 **切替当日（runbook）**
 1. Firestore `AppConfig` を `inMaintenance = true` に設定（+ `maintenanceScheduledEndTime`）。旧アプリはメンテ表示になる
@@ -164,7 +167,10 @@ issue #186 コメントで「実トラフィックが Cloudflare に乗るのは
 8. 新アプリで既存データの表示を実機確認
 
 **切替後**
-- 切替直後の 1 週間は毎日、以後は週次程度で、ダッシュボードの Workers リクエスト数と D1 行数を目視確認する（決定事項 10）
+- 切替直後の 1 週間は毎日、以後は週次程度で、ダッシュボードで以下を目視確認する（決定事項 10）
+  - Workers: リクエスト数（対 100,000 / 日）
+  - D1: `rows read`（対 5,000,000 / 日）、`rows written`（対 100,000 / 日）
+  - storage（D1 5GB / R2 10GB）は移行データ量が 3 桁以上小さく日次で動く指標ではないため、定期確認の対象外とする
 
 ## 完了条件
 
@@ -172,4 +178,5 @@ issue #186 コメントで「実トラフィックが Cloudflare に乗るのは
 - 旧アプリで強制アップデートが表示されることを実機確認済み
 - 新アプリで既存ユーザーのデータ（プロフィール・定義・いいね・フォロー・デフォルトアイコン維持）が見えることを実機確認済み
 - Firestore / Firebase Storage の旧データは削除せず保持している（戦略どおり）
-- 切替後の Cloudflare 使用量の目視確認を開始している（事前の通知設定は行わない。決定事項 10）
+- 事前準備で Workers のプランを確認済み（Paid / Pay-as-you-go の場合は Budget alerts 設定済み）
+- 切替後の Cloudflare 使用量（Workers リクエスト数、D1 `rows read` / `rows written`）の目視確認を開始している（Free プラン前提で事前の通知設定は行わない。決定事項 10）
