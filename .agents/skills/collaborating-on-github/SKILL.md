@@ -33,6 +33,10 @@ description: GitHub CLI を使った Issue、PR、進捗共有の操作 — コ�
 2. Draft 状態でセルフレビューと検証を完了する。
 3. レビュー準備ができたら: `gh pr ready <number>`
 
+### レビューの投稿
+
+指摘は本文にまとめず、該当行にインラインコメントとして付ける。レビュー本文とインラインを 1 リクエストで投稿する手順、行指定（`line` / `start_line` / `side`）、インラインを付けられないケースの扱いは [references/gh-commands.md](references/gh-commands.md) を参照。
+
 ### 作業前の同期
 
 PR 関連の作業を始める前に、ベースブランチを同期する:
