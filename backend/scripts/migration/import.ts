@@ -6,7 +6,7 @@
 //   bun run scripts/migration/import.ts \
 //     --snapshot ./migration-snapshots/prod-2026-07-20 \
 //     --d1-database teigiii-prod \
-//     --r2-bucket teigiii-avatars-prod
+//     --r2-bucket teigiii-prod-avatars
 //
 // wrangler は child_process 経由で呼ぶ（backend/ ディレクトリの wrangler.toml を使う）。
 

@@ -12,7 +12,7 @@
 //   bun run scripts/migration/verify.ts \
 //     --snapshot ./migration-snapshots/prod-2026-07-20 \
 //     --d1-database teigiii-prod \
-//     --r2-bucket teigiii-avatars-prod
+//     --r2-bucket teigiii-prod-avatars
 
 import { execFile } from "node:child_process";
 import { mkdtemp, readFile, stat } from "node:fs/promises";
