@@ -1,7 +1,7 @@
 // Firestore スナップショット → D1 行への変換（純粋関数群）。
 // plan（doc/plans/2026-07-20-data-migration-bigbang-switchover.md）決定事項 3・4 に準拠。
 //
-// - words の正規化衝突: fail-fast（WordCollisionError を投げる）
+// - words の重複（正規化後に同一）: createdAt 最古を正として自動マージし、定義を付け替えてレポートに記録
 // - FK 孤児（存在しないユーザー/定義/言葉への参照）: drop してレポートに記録
 // - UserConfigs 欠損: 'unknown' 補完してレポートに記録
 // - profileImageUrl が既知パターン外: fail-fast（avatar.ts の classifyAvatarUrl が投げる）
@@ -29,54 +29,63 @@ const unknownVersionPlaceholder = "unknown";
 
 // ---- words ----
 
-export type WordCollisionGroup = {
+export type WordMergeGroup = {
   normalizedWord: string;
-  originalWords: { id: string; word: string }[];
+  canonicalId: string;
+  mergedIds: string[];
 };
 
-/** trim + NFC 正規化後に同一になる語をグループ化し、2 件以上のグループのみ返す。 */
-export function detectWordCollisions(words: readonly WordRecord[]): WordCollisionGroup[] {
-  const groups = new Map<string, { id: string; word: string }[]>();
+export type TransformWordsResult = {
+  rows: WordRow[];
+  /** マージで消えた word ID → 残した（canonical）word ID */
+  wordIdRemap: Map<string, string>;
+  mergedGroups: WordMergeGroup[];
+};
+
+/**
+ * Words → words。trim + NFC 正規化後に同一になる語は createdAt 最古
+ * （同値なら id 昇順）を正として自動マージし、消えた ID の付け替え表を返す。
+ * 旧 Firestore に一意性制約がなく完全同一文字列の重複ドキュメントが実在する
+ * （リハーサルで 7 組確認）ため、fail-fast ではなくマージで対処する。
+ */
+export function transformWords(words: readonly WordRecord[]): TransformWordsResult {
+  const groups = new Map<string, WordRecord[]>();
   for (const word of words) {
     const normalizedWord = normalizeText(word.word);
     const group = groups.get(normalizedWord) ?? [];
-    group.push({ id: word.id, word: word.word });
+    group.push(word);
     groups.set(normalizedWord, group);
   }
-  return [...groups.entries()]
-    .filter(([, originalWords]) => originalWords.length > 1)
-    .map(([normalizedWord, originalWords]) => ({ normalizedWord, originalWords }));
-}
 
-export class WordCollisionError extends Error {
-  constructor(readonly collisions: WordCollisionGroup[]) {
-    super(
-      `word normalization collisions detected (${collisions.length} group(s)): ` +
-        collisions
-          .map(
-            (group) =>
-              `"${group.normalizedWord}" <- [${group.originalWords.map((w) => `${w.id}:${w.word}`).join(", ")}]`,
-          )
-          .join("; "),
+  const rows: WordRow[] = [];
+  const wordIdRemap = new Map<string, string>();
+  const mergedGroups: WordMergeGroup[] = [];
+
+  for (const [normalizedWord, group] of groups) {
+    const [canonical, ...merged] = group.toSorted(
+      (a, b) => a.createdAt - b.createdAt || a.id.localeCompare(b.id),
     );
-    this.name = "WordCollisionError";
+    if (canonical === undefined) continue;
+    rows.push({
+      id: canonical.id,
+      word: normalizedWord,
+      reading: canonical.reading,
+      reading_sub_group: readingSubGroup(canonical.reading),
+      created_by: null,
+      created_at: canonical.createdAt,
+      updated_at: canonical.updatedAt,
+    });
+    if (merged.length > 0) {
+      for (const word of merged) wordIdRemap.set(word.id, canonical.id);
+      mergedGroups.push({
+        normalizedWord,
+        canonicalId: canonical.id,
+        mergedIds: merged.map((w) => w.id),
+      });
+    }
   }
-}
 
-/** Words → words。衝突があれば WordCollisionError を投げる（fail-fast）。 */
-export function transformWords(words: readonly WordRecord[]): WordRow[] {
-  const collisions = detectWordCollisions(words);
-  if (collisions.length > 0) throw new WordCollisionError(collisions);
-
-  return words.map((word) => ({
-    id: word.id,
-    word: normalizeText(word.word),
-    reading: word.reading,
-    reading_sub_group: readingSubGroup(word.reading),
-    created_by: null,
-    created_at: word.createdAt,
-    updated_at: word.updatedAt,
-  }));
+  return { rows, wordIdRemap, mergedGroups };
 }
 
 // ---- users ----
@@ -134,18 +143,23 @@ export type TransformDefinitionsResult = {
   dropped: DroppedRecord[];
 };
 
-/** Definitions → definitions。word_id / author_id が存在しない行は drop する。 */
+/**
+ * Definitions → definitions。word マージで消えた word_id は canonical へ付け替える。
+ * word_id / author_id が存在しない行は drop する。
+ */
 export function transformDefinitions(
   definitions: readonly DefinitionRecord[],
   validWordIds: ReadonlySet<string>,
   validUserIds: ReadonlySet<string>,
+  wordIdRemap: ReadonlyMap<string, string>,
 ): TransformDefinitionsResult {
   const rows: DefinitionRow[] = [];
   const dropped: DroppedRecord[] = [];
 
   for (const definition of definitions) {
-    if (!validWordIds.has(definition.wordId)) {
-      dropped.push({ id: definition.id, reason: `orphan: word_id ${definition.wordId} not found` });
+    const wordId = wordIdRemap.get(definition.wordId) ?? definition.wordId;
+    if (!validWordIds.has(wordId)) {
+      dropped.push({ id: definition.id, reason: `orphan: word_id ${wordId} not found` });
       continue;
     }
     if (!validUserIds.has(definition.authorId)) {
@@ -157,7 +171,7 @@ export function transformDefinitions(
     }
     rows.push({
       id: definition.id,
-      word_id: definition.wordId,
+      word_id: wordId,
       author_id: definition.authorId,
       body: definition.definition,
       status: definition.isPublic ? "public" : "private",
@@ -305,6 +319,7 @@ export type BuildReportInput = {
   droppedLikes: DroppedRecord[];
   droppedFollows: DroppedRecord[];
   droppedUserMutes: DroppedRecord[];
+  mergedWordGroups: WordMergeGroup[];
   avatarClassifications: ReadonlyMap<string, AvatarClassification>;
   now: () => Date;
 };
@@ -347,5 +362,6 @@ export function buildMigrationReport(input: BuildReportInput): MigrationReport {
     ],
     defaultedMissingUserConfigs: input.defaultedMissingUserConfigs.map((userId) => ({ userId })),
     avatarClassificationCounts: { default: defaultCount, custom: customCount },
+    mergedWordDuplicates: input.mergedWordGroups,
   };
 }

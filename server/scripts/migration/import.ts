@@ -113,7 +113,11 @@ async function main(): Promise<void> {
   const snapshot = await loadSnapshot(args.snapshot);
   const configsById = new Map(snapshot.userConfigsList.map((c) => [c.id, c]));
 
-  const wordRows = transformWords(snapshot.words);
+  const {
+    rows: wordRows,
+    wordIdRemap,
+    mergedGroups: mergedWordGroups,
+  } = transformWords(snapshot.words);
   const validWordIds = new Set(wordRows.map((w) => w.id));
 
   const {
@@ -127,6 +131,7 @@ async function main(): Promise<void> {
     snapshot.definitions,
     validWordIds,
     validUserIds,
+    wordIdRemap,
   );
   const validDefinitionIds = new Set(definitionRows.map((d) => d.id));
 
@@ -151,6 +156,7 @@ async function main(): Promise<void> {
     droppedLikes,
     droppedFollows,
     droppedUserMutes,
+    mergedWordGroups,
     avatarClassifications,
     now: () => new Date(now),
   });

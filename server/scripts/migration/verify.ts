@@ -114,6 +114,7 @@ export type ExpectedState = {
     userMutes: number;
   };
   defaultedUserConfigCount: number;
+  mergedWordGroupCount: number;
 };
 
 /** スナップショットから D1 の期待状態を再計算する（transform.ts を経由しない独自実装）。 */
@@ -121,19 +122,37 @@ export function recomputeExpectedState(
   snapshot: Snapshot,
   migrationTimestamp: number,
 ): ExpectedState {
-  const words: WordRow[] = snapshot.words.map((word) => ({
-    id: word.id,
-    word: normalizeText(word.word),
-    reading: word.reading,
-    reading_sub_group: readingSubGroup(word.reading),
-    created_by: null,
-    created_at: word.createdAt,
-    updated_at: word.updatedAt,
-  }));
-  const wordIds = new Set(words.map((w) => w.id));
-  if (wordIds.size !== words.length) {
-    throw new Error("verify: normalized word collisions found while recomputing expected state");
+  // 重複 word（正規化後に同一）は createdAt 最古（同値なら id 昇順）を正としてマージする。
+  // transform.ts と同じポリシーだが、決定事項 5 に従いここで独立に再実装する。
+  const wordGroups = new Map<string, WordRecord[]>();
+  for (const word of snapshot.words) {
+    const normalizedWord = normalizeText(word.word);
+    const group = wordGroups.get(normalizedWord) ?? [];
+    group.push(word);
+    wordGroups.set(normalizedWord, group);
   }
+  const words: WordRow[] = [];
+  const wordIdRemap = new Map<string, string>();
+  let mergedWordGroupCount = 0;
+  for (const [normalizedWord, group] of wordGroups) {
+    const sorted = group.toSorted((a, b) => a.createdAt - b.createdAt || a.id.localeCompare(b.id));
+    const canonical = sorted[0];
+    if (canonical === undefined) continue;
+    words.push({
+      id: canonical.id,
+      word: normalizedWord,
+      reading: canonical.reading,
+      reading_sub_group: readingSubGroup(canonical.reading),
+      created_by: null,
+      created_at: canonical.createdAt,
+      updated_at: canonical.updatedAt,
+    });
+    if (sorted.length > 1) {
+      mergedWordGroupCount += 1;
+      for (const merged of sorted.slice(1)) wordIdRemap.set(merged.id, canonical.id);
+    }
+  }
+  const wordIds = new Set(words.map((w) => w.id));
 
   const configById = new Map(snapshot.userConfigs.map((c) => [c.id, c]));
   let defaultedUserConfigCount = 0;
@@ -159,13 +178,14 @@ export function recomputeExpectedState(
   const definitions: DefinitionRow[] = [];
   let droppedDefinitions = 0;
   for (const definition of snapshot.definitions) {
-    if (!wordIds.has(definition.wordId) || !userIds.has(definition.authorId)) {
+    const wordId = wordIdRemap.get(definition.wordId) ?? definition.wordId;
+    if (!wordIds.has(wordId) || !userIds.has(definition.authorId)) {
       droppedDefinitions += 1;
       continue;
     }
     definitions.push({
       id: definition.id,
-      word_id: definition.wordId,
+      word_id: wordId,
       author_id: definition.authorId,
       body: definition.definition,
       status: definition.isPublic ? "public" : "private",
@@ -247,6 +267,7 @@ export function recomputeExpectedState(
       userMutes: droppedUserMutes,
     },
     defaultedUserConfigCount,
+    mergedWordGroupCount,
   };
 }
 
@@ -384,16 +405,8 @@ async function verifyR2Avatars(
     try {
       await execFileAsync(
         "./node_modules/.bin/wrangler",
-        [
-          "r2",
-          "object",
-          "get",
-          `${bucket}/${user.avatar_key}`,
-          "--file",
-          downloadPath,
-          "--remote",
-          "-y",
-        ],
+        // put と異なり get は -y を受け付けない（Unknown argument になる）
+        ["r2", "object", "get", `${bucket}/${user.avatar_key}`, "--file", downloadPath, "--remote"],
         { cwd: serverDir, maxBuffer: 1024 * 1024 * 64 },
       );
     } catch {
@@ -500,6 +513,11 @@ async function main(): Promise<void> {
     `  defaultedMissingUserConfigs: 再計算=${expected.defaultedUserConfigCount} レポート=${report.defaultedMissingUserConfigs.length} ${defaultedOk ? "OK" : "NG"}`,
   );
   if (!defaultedOk) hasProblem = true;
+  const mergedOk = expected.mergedWordGroupCount === report.mergedWordDuplicates.length;
+  console.log(
+    `  mergedWordDuplicates: 再計算=${expected.mergedWordGroupCount} レポート=${report.mergedWordDuplicates.length} ${mergedOk ? "OK" : "NG"}`,
+  );
+  if (!mergedOk) hasProblem = true;
 
   console.log("=== R2 アバター突合 ===");
   const avatarProblems = await verifyR2Avatars(
