@@ -97,6 +97,37 @@ git pull --ff-only origin "$base_branch"
 git switch "$head_branch"
 ```
 
+## インラインコメント付きレビューの投稿
+
+レビュー本文とインラインコメントは 1 リクエストでまとめて投稿する。本文に改行やバッククォートが入るため、JSON をファイルに書いて `--input` で渡す。
+
+```bash
+# 1. インラインを付けられる行か事前確認する（patch が空のファイルには付けられない）
+gh api "repos/<owner>/<repo>/pulls/<number>/files?per_page=100" --paginate \
+  --jq '.[] | "\(.filename) status=\(.status) patch_len=\(.patch|length? // 0)"'
+
+# 2. レビューを投稿する
+cat > review.json <<'JSON'
+{
+  "event": "COMMENT",
+  "body": "<レビュー本文>",
+  "comments": [
+    {"path": "<file>", "line": 58, "side": "RIGHT", "body": "<指摘>"},
+    {"path": "<file>", "line": 51, "start_line": 49, "side": "RIGHT", "body": "<複数行への指摘>"}
+  ]
+}
+JSON
+gh api -X POST "repos/<owner>/<repo>/pulls/<number>/reviews" --input review.json --jq '.html_url'
+
+# 3. 着弾を確認する
+gh api "repos/<owner>/<repo>/pulls/<number>/comments" --jq '.[] | "\(.path):\(.line)"'
+```
+
+- `event`: `COMMENT` / `APPROVE` / `REQUEST_CHANGES`
+- `line` は変更後ファイルの行番号（`side: "RIGHT"`）。範囲で指すときは `start_line` を併用する
+- 修正案は body 内に ` ```suggestion ` ブロックで書く。レビュイーが GitHub 上でそのまま commit できる
+- **制約**: diff の hunk 内の行にしか付けられない。rename のみで patch が空のファイル（手順 1 で `patch_len=0`）は 422 になるため、その指摘はレビュー本文に回す
+
 ## レビューコメント / スレッド
 
 ```bash
