@@ -174,6 +174,6 @@ check_flavor \
   "Teigiii prod" \
   everyone-teigi-prod \
   713374936833 \
-  1:713374936833:ios:245c65657f69da4a927500
+  1:713374936833:ios:662108d31ce8b881927500
 
 echo "iOS flavor configurations are valid."
