@@ -5,6 +5,7 @@ import 'package:teigiii_api/teigiii_api.dart';
 import '../../../core/api/api_exception.dart';
 import '../../../core/api/api_providers.dart';
 import '../../../util/constant/config_constant.dart';
+import '../../community_dictionary/domain/community_dictionary.dart';
 import '../../word/domain/word.dart';
 import '../domain/word_list_state.dart';
 
@@ -36,6 +37,24 @@ class FetchWordListRepository {
         cursor: cursor,
         limit: fetchLimitForWordList,
         subGroup: initial,
+      );
+      return _toState(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
+  }
+
+  Future<WordListState> fetchCommunityWordList({
+    required CommunityWordFilter filter,
+    required String query,
+    required String? cursor,
+  }) async {
+    try {
+      final response = await _wordsApi.v1WordsGet(
+        cursor: cursor,
+        limit: fetchLimitForWordList,
+        filter: filter.apiValue,
+        q: query.isEmpty ? null : query,
       );
       return _toState(response.data!);
     } on DioException catch (exception) {

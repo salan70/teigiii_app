@@ -183,6 +183,7 @@
 - 自分が定義済みかを表示する
 - タップで言葉ページへ遷移する
 
+<!-- @code mobile_app/lib/core/page/dictionary_everyone_page.dart#DictionaryEveryonePage -->
 ## 7. みんなの辞書
 
 - 全言葉を読み順の単一連続リストで表示する
@@ -194,6 +195,7 @@
 - filter または検索文字列変更時は cursor を破棄して先頭から取得する
 - loading、empty、error は一覧領域内に表示し、ヘッダー操作は維持する
 
+<!-- @code mobile_app/lib/core/page/word_registration_page.dart#WordRegistrationPage -->
 ### 7.1 言葉の登録
 
 - 表記とよみを入力する

@@ -61,11 +61,7 @@ class DictionarySubIndexPage extends ConsumerWidget {
                   onTap: () {
                     switch (dictionaryPageType) {
                       case DictionaryPageType.everyone:
-                        context.pushRoute(
-                          WordListRoute(
-                            selectedInitialSubGroup: initialSubGroups[index],
-                          ),
-                        );
+                        context.replaceRoute(const DictionaryEveryoneRoute());
                         return;
                       case DictionaryPageType.individual:
                         context.pushRoute(

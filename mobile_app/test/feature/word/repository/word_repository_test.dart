@@ -147,6 +147,42 @@ void main() {
     });
   });
 
+  group('言葉の登録', () {
+    test('create は POST の結果を Word に変換して返す', () async {
+      when(
+        mockWordsApi.v1WordsPost(
+          createWordRequest: anyNamed('createWordRequest'),
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+          data: WordResponse(
+            id: 'word1',
+            word: '余白',
+            reading: 'よはく',
+            readingSubGroup: 'よ',
+            publicDefinitionCount: 0,
+            isSavedByMe: false,
+            isEditableByMe: true,
+          ),
+          requestOptions: RequestOptions(path: '/v1/words'),
+        ),
+      );
+
+      final created = await repository.create(word: '余白', reading: 'よはく');
+
+      expect(created.id, 'word1');
+      final request =
+          verify(
+                mockWordsApi.v1WordsPost(
+                  createWordRequest: captureAnyNamed('createWordRequest'),
+                ),
+              ).captured.single
+              as CreateWordRequest;
+      expect(request.word, '余白');
+      expect(request.reading, 'よはく');
+    });
+  });
+
   group('言葉の修正', () {
     test('update は PATCH の結果を Word に変換して返す', () async {
       when(

@@ -34,6 +34,7 @@ import '../page/user_search_page.dart';
 import '../page/user_search_result_page.dart';
 import '../page/welcome_page.dart';
 import '../page/word_list_page.dart';
+import '../page/word_registration_page.dart';
 import '../page/word_search_result_page.dart';
 import '../page/word_top_page.dart';
 import 'auth_guard.dart';
@@ -104,7 +105,10 @@ class AppRouter extends _$AppRouter {
           page: DictionaryEveryoneRouterRoute.page,
           children: [
             AdaptiveRoute(initial: true, page: DictionaryEveryoneRoute.page),
-            AdaptiveRoute(path: 'word_list', page: WordListRoute.page),
+            AdaptiveRoute(
+              path: 'word-registration',
+              page: WordRegistrationRoute.page,
+            ),
             AdaptiveRoute(
               path: 'word_search_result',
               page: WordSearchResultRoute.page,

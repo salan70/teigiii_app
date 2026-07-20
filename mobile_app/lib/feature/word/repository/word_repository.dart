@@ -60,6 +60,17 @@ class WordRepository {
     }
   }
 
+  Future<Word> create({required String word, required String reading}) async {
+    try {
+      final response = await _wordsApi.v1WordsPost(
+        createWordRequest: CreateWordRequest(word: word, reading: reading),
+      );
+      return _fromResponse(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
+  }
+
   Future<Word> update({
     required String wordId,
     required String word,

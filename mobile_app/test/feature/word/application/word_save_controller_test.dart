@@ -12,6 +12,10 @@ class _WordRepositoryStub implements WordRepository {
   final Future<void> Function(String wordId) onSave;
 
   @override
+  Future<Word> create({required String word, required String reading}) =>
+      throw UnimplementedError();
+
+  @override
   Future<Word?> fetchWordById(String wordId) => throw UnimplementedError();
 
   @override

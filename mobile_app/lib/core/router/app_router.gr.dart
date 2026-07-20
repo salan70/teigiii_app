@@ -250,6 +250,12 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    WordRegistrationRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const WordRegistrationPage(),
+      );
+    },
     WordSearchResultRoute.name: (routeData) {
       final args = routeData.argsAs<WordSearchResultRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -1015,6 +1021,20 @@ class WordListRouteArgs {
   String toString() {
     return 'WordListRouteArgs{key: $key, selectedInitialSubGroup: $selectedInitialSubGroup}';
   }
+}
+
+/// generated route for
+/// [WordRegistrationPage]
+class WordRegistrationRoute extends PageRouteInfo<void> {
+  const WordRegistrationRoute({List<PageRouteInfo>? children})
+      : super(
+          WordRegistrationRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'WordRegistrationRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

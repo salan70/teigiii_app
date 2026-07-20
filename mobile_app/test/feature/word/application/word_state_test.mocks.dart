@@ -67,6 +67,44 @@ class MockWordRepository extends _i1.Mock implements _i3.WordRepository {
       ) as _i4.Future<void>);
 
   @override
+  _i4.Future<_i2.Word> create({
+    required String? word,
+    required String? reading,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #create,
+          [],
+          {
+            #word: word,
+            #reading: reading,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Word>.value(_FakeWord_0(
+          this,
+          Invocation.method(
+            #create,
+            [],
+            {
+              #word: word,
+              #reading: reading,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i4.Future<_i2.Word>.value(_FakeWord_0(
+          this,
+          Invocation.method(
+            #create,
+            [],
+            {
+              #word: word,
+              #reading: reading,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Word>);
+
+  @override
   _i4.Future<_i2.Word> update({
     required String? wordId,
     required String? word,
