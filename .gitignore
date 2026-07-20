@@ -57,3 +57,9 @@ app.*.map.json
 /coverage/
 
 *.env
+
+# Wrangler のローカルキャッシュ・state
+.wrangler/
+
+# Claude Code がエージェント実行用に作成する worktree
+.claude/worktrees/
