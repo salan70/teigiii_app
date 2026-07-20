@@ -1,0 +1,45 @@
+name: CI Nix setup
+description: Install Nix and optionally restore Flutter/pub caches for mobile CI jobs
+
+inputs:
+  cache-flutter:
+    description: Cache .nix/flutter SDK bootstrap directory
+    required: false
+    default: "false"
+  cache-pub:
+    description: Cache .nix/pub-cache
+    required: false
+    default: "false"
+  touch-env:
+    description: Create empty mobile_app/.env for Flutter asset requirements
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Install Nix
+      uses: DeterminateSystems/determinate-nix-action@v3
+
+    - name: Cache Flutter SDK bootstrap
+      if: inputs.cache-flutter == 'true'
+      uses: actions/cache@v4
+      with:
+        path: .nix/flutter
+        key: flutter-${{ runner.os }}-${{ hashFiles('flake.nix', 'nix/patches/**') }}
+        restore-keys: |
+          flutter-${{ runner.os }}-
+
+    - name: Cache pub
+      if: inputs.cache-pub == 'true'
+      uses: actions/cache@v4
+      with:
+        path: .nix/pub-cache
+        key: pub-${{ runner.os }}-${{ hashFiles('mobile_app/pubspec.lock') }}
+        restore-keys: |
+          pub-${{ runner.os }}-
+
+    - name: Create dot env file
+      if: inputs.touch-env == 'true'
+      shell: bash
+      run: touch mobile_app/.env
