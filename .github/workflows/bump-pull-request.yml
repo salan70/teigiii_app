@@ -6,6 +6,7 @@ on:
       bump:
         type: choice
         description: Please Choice Bump Target
+        default: build
         options:
           - build
           - patch
