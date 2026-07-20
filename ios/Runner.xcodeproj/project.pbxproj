@@ -475,7 +475,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  exit 0\nfi\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\" -gsp \"$PROJECT_DIR/$flavor/GoogleService-Info.plist\"\n";
+			shellScript = "if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  exit 0\nfi\ncrashlytics_run=\"${CRASHLYTICS_RUN_SCRIPT:-${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run}\"\n\"$crashlytics_run\" -gsp \"$PROJECT_DIR/$flavor/GoogleService-Info.plist\"\n";
 		};
 		FFAE953596CBE45DAD7DD1D8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

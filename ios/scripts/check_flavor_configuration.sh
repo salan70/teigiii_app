@@ -24,6 +24,11 @@ if ! grep -Fq 'SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run' "$xcod
   exit 1
 fi
 
+if ! grep -Fq 'CRASHLYTICS_RUN_SCRIPT' "$xcode_project"; then
+  echo "Crashlytics must accept an explicit run script path for clean CI builds." >&2
+  exit 1
+fi
+
 if grep -Fq 'PODS_ROOT/FirebaseCrashlytics' "$xcode_project"; then
   echo "Crashlytics must not use the CocoaPods upload-symbols path." >&2
   exit 1
@@ -46,6 +51,13 @@ build_ipa_line="$(
 if [[ -z "$resolve_packages_line" ]] || [[ -z "$build_ipa_line" ]] ||
   ((resolve_packages_line >= build_ipa_line)); then
   echo "The deliver workflow must resolve iOS Swift packages before building the IPA." >&2
+  exit 1
+fi
+
+if ! grep -Fq -- '-clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages"' "$deliver_workflow" ||
+  ! grep -Fq 'CRASHLYTICS_RUN_SCRIPT=$RUNNER_TEMP/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run' \
+    "$deliver_workflow"; then
+  echo "The deliver workflow must pass its fixed Crashlytics run script path to Xcode." >&2
   exit 1
 fi
 

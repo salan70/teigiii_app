@@ -58,7 +58,10 @@ jobs:
         run: nix develop --command just setup
 
       - name: Resolve iOS Swift packages
-        run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme prod
+        run: |
+          xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme prod \
+            -clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages"
+          echo "CRASHLYTICS_RUN_SCRIPT=$RUNNER_TEMP/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" >> "$GITHUB_ENV"
 
       - name: Build ipa
         run: nix develop --command flutter build ipa --flavor prod --dart-define-from-file=dart_defines/prod.json --export-options-plist=./ios/ExportOptions.plist
