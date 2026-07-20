@@ -71,7 +71,20 @@ Firestore → D1、Firebase Storage → R2 の移行スクリプトを作成し�
 - export → transform → import → 全件突合まで本番と同一手順を通しで実行する。word 正規化衝突・FK 孤児の実在件数はここで判明する
 - 実機での表示確認はリハーサルでは行わず、切替当日の本番投入後の目視確認で行う
 
-### 7. 「書き込み停止確認」の読み替え
+### 7. ストア審査の考慮: prod インフラを提出前に整備し、スナップショットを事前投入
+
+App Store の審査員は提出バイナリを実際に起動・操作する。新アプリは起動直後に prod Workers API へアクセスする（`GET /v1/app-config`、匿名登録の `POST /v1/users`）ため、**提出より前に** prod インフラ一式（Worker デプロイ・D1 マイグレーション・`app_config` 行・実 URL のビルド反映）が稼働している必要がある。
+
+- prod Worker の URL は workers.dev（`https://teigiii-api-prod.tetsuo21ad.workers.dev`）を使う。将来カスタムドメインへ移す場合はアプリ更新で切り替える
+- 審査前に本番と同一手順で prod D1/R2 へスナップショットを投入する（審査員に実データを見せる + 本番手順の追加リハーサル。wipe-and-reload のため切替当日にやり直すだけでよく、鮮度は問わない）
+- 審査中に prod D1 へ作られる審査員アカウントは切替当日の wipe-and-reload で消えるが、使い捨てであり、パターンとしても自己修復で救済されるため無害
+- 手動リリース待機により、審査通過後も切替当日まで実ユーザーに新バイナリは配信されない。既存ユーザー（旧バイナリ = Firestore 参照）への影響は一切ない
+
+### 8. Android はスコープ外
+
+Google Play は配信停止中のため、提出・リリース・強制アップデートの対象は App Store のみ。`app_config.minAppVersionAndroid` は参照されないが、スキーマ上必要なため iOS と同値を形式的に設定する。
+
+### 9. 「書き込み停止確認」の読み替え
 
 戦略 doc の「旧バージョンの書き込み停止を確認してからエクスポート」は厳密には達成不可能。メンテ中も旧アプリは起動時に (a) `UserConfigs` のバージョン情報更新、(b) 新規匿名登録、を書き込む。(a) は喪失許容（実害なし）、(b) は自己修復で救済済み。よって「実質的な書き込み（投稿・いいね等）が UI 遮断で停止していることの確認」と読み替える。スナップショットはエクスポート時点のファイルとして確定し、以後不変として扱う。
 
@@ -94,11 +107,16 @@ Firestore → D1、Firebase Storage → R2 の移行スクリプトを作成し�
 
 ### 切替
 
-**事前準備（切替日より前）**
-1. PR 1 / PR 2 マージ、リハーサル完了
-2. 新バージョンを App Store / Google Play に提出し、審査通過済み・**手動リリース待機**の状態にする
-3. prod の D1 マイグレーション適用・R2 バケット・`app_config` 行（`minAppVersion` = 新バージョン、`inMaintenance` = false）を整備
-4. Cloudflare 無料枠の使用量通知を設定（Workers リクエスト数、D1 読み書き行数、R2 ストレージ/操作数）
+**事前準備（切替日より前。順序厳守 — 審査員が prod API を実際に叩くため、インフラ整備が提出より先）**
+1. PR 1 / PR 2 マージ、リハーサル完了（一時 D1/R2 に対して export → import → verify、結果を issue #186 に記録、一時リソース削除）
+2. prod インフラ整備
+   - prod Worker デプロイ（`https://teigiii-api-prod.tetsuo21ad.workers.dev`）
+   - `server/wrangler.toml` の `env.prod.vars.AVATAR_BASE_URL` と `dart_defines/prod.json` の `apiBaseUrl` を実 URL に置換
+   - prod D1 マイグレーション適用・R2 バケット作成・`app_config` 行投入（`minAppVersionIos` = 新バージョン、`minAppVersionAndroid` = 同値（形式値）、`inMaintenance` = false）
+3. 本番と同一手順で prod D1/R2 へスナップショット投入（export → import → verify）
+4. TestFlight ビルドで prod バックエンド疎通を実機確認（App Check・匿名登録・既存データ表示まで）
+5. 新バージョンを App Store に提出し、審査通過済み・**手動リリース待機**の状態にする
+6. Cloudflare 無料枠の使用量通知を設定（Workers リクエスト数、D1 読み書き行数、R2 ストレージ/操作数）
 
 **切替当日（runbook）**
 1. Firestore `AppConfig` を `inMaintenance = true` に設定（+ `maintenanceScheduledEndTime`）。旧アプリはメンテ表示になる
@@ -107,14 +125,14 @@ Firestore → D1、Firebase Storage → R2 の移行スクリプトを作成し�
 4. 全件突合を実行
    - **NG**: `inMaintenance = false` に戻して中止（= ロールバック。旧環境は無傷。D1 の中途データは次回 wipe されるので放置可）
    - **OK**: 次へ
-5. 両ストアで手動リリース実行
+5. App Store で手動リリース実行
 6. ストアで新版がダウンロード可能になったことを実機で確認する（先に強制アップデートを発動すると「新版がストアにない」状態に陥るため、この順序を厳守）
 7. Firestore `AppConfig` の `minAppVersion` を新バージョンへ引き上げ + `inMaintenance = false`。旧アプリは強制アップデート表示へ移行
 8. 新アプリで既存データの表示を実機確認
 
 ## 完了条件
 
-- prod の全件突合がパスし、新バージョンが両ストアで公開済み
+- prod の全件突合がパスし、新バージョンが App Store で公開済み（Android は配信停止中のためスコープ外）
 - 旧アプリで強制アップデートが表示されることを実機確認済み
 - 新アプリで既存ユーザーのデータ（プロフィール・定義・いいね・フォロー・デフォルトアイコン維持）が見えることを実機確認済み
 - Firestore / Firebase Storage の旧データは削除せず保持している（戦略どおり）
