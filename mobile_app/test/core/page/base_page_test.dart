@@ -13,6 +13,8 @@ import 'package:teigi_app/core/router/first_launch_guard.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition_list/domain/definition_id_list_state.dart';
 import 'package:teigi_app/feature/definition_list/repository/definition_id_list_repository.dart';
+import 'package:teigi_app/feature/personal_dictionary/application/personal_dictionary_state.dart';
+import 'package:teigi_app/feature/personal_dictionary/domain/personal_dictionary.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
 
 import '../../mock/mock_data.dart';
@@ -81,6 +83,9 @@ Widget _testApp() {
       authGuardProvider.overrideWith(_PassAuthGuard.new),
       firstLaunchGuardProvider.overrideWith(_PassFirstLaunchGuard.new),
       userIdProvider.overrideWithValue('current-user'),
+      personalDictionaryOverviewProvider.overrideWith(
+        (ref) async => const PersonalDictionaryOverview.empty(),
+      ),
       definitionIdListRepositoryProvider.overrideWithValue(
         repositories.definitionIdList,
       ),
@@ -101,6 +106,9 @@ Widget _testTimeline() {
   return ProviderScope(
     overrides: [
       userIdProvider.overrideWithValue('current-user'),
+      personalDictionaryOverviewProvider.overrideWith(
+        (ref) async => const PersonalDictionaryOverview.empty(),
+      ),
       definitionIdListRepositoryProvider.overrideWithValue(
         repositories.definitionIdList,
       ),
@@ -115,6 +123,9 @@ Widget _testPersonalDictionary() {
   return ProviderScope(
     overrides: [
       userIdProvider.overrideWithValue('current-user'),
+      personalDictionaryOverviewProvider.overrideWith(
+        (ref) async => const PersonalDictionaryOverview.empty(),
+      ),
       userProfileRepositoryProvider.overrideWithValue(repositories.userProfile),
     ],
     child: const MaterialApp(
@@ -153,8 +164,12 @@ void main() {
       'タイムライン',
     ]);
     expect(navigationBar.currentIndex, 0);
-    await _pumpUntilFound(tester, find.text('nameの辞書'));
-    expect(find.text('nameの辞書'), findsOneWidget);
+    final personalDictionaryTitle = find.descendant(
+      of: find.byType(AppBar),
+      matching: find.text('あなたの辞書'),
+    );
+    await _pumpUntilFound(tester, personalDictionaryTitle);
+    expect(personalDictionaryTitle, findsOneWidget);
 
     await _disposeApp(tester);
   });
@@ -195,7 +210,13 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.text('言葉またはユーザーを検索'), findsNothing);
-    expect(find.text('nameの辞書'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text('あなたの辞書'),
+      ),
+      findsOneWidget,
+    );
 
     await _disposeApp(tester);
   });

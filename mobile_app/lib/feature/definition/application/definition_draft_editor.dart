@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../definition_list/appication/definition_id_list_state.dart';
+import '../../personal_dictionary/application/personal_dictionary_state.dart';
 import '../../word/application/word_state.dart';
 import '../../word_list/application/word_list_state_by_initial.dart';
 import '../../word_list/application/word_list_state_by_search_word.dart';
@@ -84,6 +85,9 @@ class DefinitionDraftEditor extends _$DefinitionDraftEditor {
     final draft = state.requireValue;
     if (draft.isPersisted) {
       await ref.read(definitionDraftRepositoryProvider).delete(draft.id);
+      ref
+        ..invalidate(definitionDraftListProvider)
+        ..invalidate(personalDictionaryOverviewProvider);
     }
   }
 
@@ -99,6 +103,9 @@ class DefinitionDraftEditor extends _$DefinitionDraftEditor {
 
     ref
       ..invalidate(definitionIdListStateNotifierProvider)
+      ..invalidate(definedWordListProvider)
+      ..invalidate(definitionDraftListProvider)
+      ..invalidate(personalDictionaryOverviewProvider)
       ..invalidate(wordListStateByInitialNotifierProvider)
       ..invalidate(wordListStateBySearchWordNotifierProvider)
       ..invalidate(wordProvider);

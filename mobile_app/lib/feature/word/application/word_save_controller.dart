@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../personal_dictionary/application/personal_dictionary_state.dart';
 import '../domain/word.dart';
 import '../repository/word_repository.dart';
 
@@ -39,6 +40,9 @@ class WordSaveController {
       } else {
         await repository.unsave(word.id);
       }
+      ref
+        ..invalidate(personalDictionaryOverviewProvider)
+        ..invalidate(savedWordListProvider);
     } catch (_) {
       savedState.state = previous;
       rethrow;

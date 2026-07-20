@@ -22,7 +22,7 @@ final definitionDraftIdProvider = AutoDisposeProvider<String>.internal(
 
 typedef DefinitionDraftIdRef = AutoDisposeProviderRef<String>;
 String _$definitionDraftEditorHash() =>
-    r'795e10f4c2df70f59335b9db45ad5469c9ceeca8';
+    r'f99d7e30b8eb7a703f6c0ac055af5e4e04e17eb0';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
+import '../../feature/personal_dictionary/presentation/personal_dictionary_overview.dart';
 import '../../feature/user_profile/application/user_profile_state.dart';
 import '../../feature/user_profile/presentation/dictionary_author_widget.dart';
 import '../../feature/word/presentation/initial_main_group_list.dart';
@@ -32,6 +33,9 @@ class DictionaryIndividualPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (isTopRoute) {
+      return const PersonalDictionaryOverviewView();
+    }
     final asyncTargetUserProfile = ref.watch(userProfileProvider(targetUserId));
 
     return asyncTargetUserProfile.when(

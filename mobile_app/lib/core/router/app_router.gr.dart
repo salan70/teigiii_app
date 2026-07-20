@@ -27,6 +27,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const BaseRouterPage(),
       );
     },
+    DefinedWordListRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const DefinedWordListPage(),
+      );
+    },
     DefinitionDetailRoute.name: (routeData) {
       final args = routeData.argsAs<DefinitionDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -35,6 +41,12 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           definitionId: args.definitionId,
         ),
+      );
+    },
+    DefinitionDraftListRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const DefinitionDraftListPage(),
       );
     },
     DefinitionEditRoute.name: (routeData) {
@@ -153,6 +165,12 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           targetUserId: args.targetUserId,
         ),
+      );
+    },
+    SavedWordListRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SavedWordListPage(),
       );
     },
     SettingRoute.name: (routeData) {
@@ -284,6 +302,20 @@ class BaseRouterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [DefinedWordListPage]
+class DefinedWordListRoute extends PageRouteInfo<void> {
+  const DefinedWordListRoute({List<PageRouteInfo>? children})
+      : super(
+          DefinedWordListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'DefinedWordListRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [DefinitionDetailPage]
 class DefinitionDetailRoute extends PageRouteInfo<DefinitionDetailRouteArgs> {
   DefinitionDetailRoute({
@@ -319,6 +351,20 @@ class DefinitionDetailRouteArgs {
   String toString() {
     return 'DefinitionDetailRouteArgs{key: $key, definitionId: $definitionId}';
   }
+}
+
+/// generated route for
+/// [DefinitionDraftListPage]
+class DefinitionDraftListRoute extends PageRouteInfo<void> {
+  const DefinitionDraftListRoute({List<PageRouteInfo>? children})
+      : super(
+          DefinitionDraftListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'DefinitionDraftListRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -713,6 +759,20 @@ class ProfileTopRouteArgs {
   String toString() {
     return 'ProfileTopRouteArgs{key: $key, targetUserId: $targetUserId}';
   }
+}
+
+/// generated route for
+/// [SavedWordListPage]
+class SavedWordListRoute extends PageRouteInfo<void> {
+  const SavedWordListRoute({List<PageRouteInfo>? children})
+      : super(
+          SavedWordListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SavedWordListRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

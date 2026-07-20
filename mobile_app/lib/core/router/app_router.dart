@@ -11,7 +11,9 @@ import '../../feature/definition_list/presentation/individual_dictionary_definit
 import '../../feature/word/util/dictionary_page_type.dart';
 import '../../util/constant/initial_main_group.dart';
 import '../page/base_page.dart';
+import '../page/defined_word_list_page.dart';
 import '../page/definition_detail_page.dart';
+import '../page/definition_draft_list_page.dart';
 import '../page/definition_edit_page.dart';
 import '../page/definition_post_page.dart';
 import '../page/dictionary_everyone_page.dart';
@@ -22,6 +24,7 @@ import '../page/home_page.dart';
 import '../page/license_page.dart';
 import '../page/profile_edit_page.dart';
 import '../page/profile_top_page.dart';
+import '../page/saved_word_list_page.dart';
 import '../page/setting_page.dart';
 import '../page/sign_in_failure_page.dart';
 import '../page/user_list_following_or_follower_page.dart';
@@ -84,6 +87,15 @@ class AppRouter extends _$AppRouter {
           page: DictionaryIndividualRouterRoute.page,
           children: [
             AdaptiveRoute(initial: true, page: DictionaryIndividualRoute.page),
+            AdaptiveRoute(
+              path: 'defined-words',
+              page: DefinedWordListRoute.page,
+            ),
+            AdaptiveRoute(
+              path: 'definition-drafts',
+              page: DefinitionDraftListRoute.page,
+            ),
+            AdaptiveRoute(path: 'saved-words', page: SavedWordListRoute.page),
             ...commonRouteList,
           ],
         ),

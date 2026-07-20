@@ -140,6 +140,8 @@
 - 確定済み定義を Draft へ戻せない
 - 削除は確認後に実行し、成功後は一覧、言葉ページ、タイムラインを再取得する
 
+<!-- @code mobile_app/lib/feature/personal_dictionary/repository/personal_dictionary_repository.dart#PersonalDictionaryRepository -->
+<!-- @code mobile_app/lib/feature/personal_dictionary/presentation/personal_dictionary_overview.dart#PersonalDictionaryOverviewView -->
 ## 6. あなたの辞書
 
 ### 6.1 data 状態
