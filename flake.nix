@@ -130,8 +130,10 @@
                   export CXX="$(xcrun --find clang++)"
                 fi
               ''}
-              echo "[nix] teigi_app dev shell ready (Flutter ${flutterVersion}, just, lcov${lib.optionalString pkgs.stdenv.isDarwin ", CocoaPods"})"
-              echo "[nix] Run tasks with: just <task>"
+              # stdout は `$(nix develop --command ...)` で捕捉されるコマンド出力用に空けておく。
+              # バナーは informational なので stderr へ出す。
+              echo "[nix] teigi_app dev shell ready (Flutter ${flutterVersion}, just, lcov${lib.optionalString pkgs.stdenv.isDarwin ", CocoaPods"})" >&2
+              echo "[nix] Run tasks with: just <task>" >&2
             '';
           };
         }
