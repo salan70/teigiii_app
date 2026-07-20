@@ -57,6 +57,28 @@ jobs:
       - name: Install dependencies
         run: nix develop --command just setup
 
+      - name: Prepare Crashlytics scripts
+        run: |
+          package_resolved=ios/Runner.xcworkspace/xcshareddata/swiftpm/Package.resolved
+          firebase_revision="$(
+            jq -r '.pins[] | select(.identity == "firebase-ios-sdk") | .state.revision' \
+              "$package_resolved"
+          )"
+          if [[ -z "$firebase_revision" || "$firebase_revision" == "null" ]]; then
+            echo "Firebase iOS SDK revision was not found in $package_resolved." >&2
+            exit 1
+          fi
+
+          crashlytics_dir="$RUNNER_TEMP/FirebaseCrashlytics"
+          mkdir -p "$crashlytics_dir"
+          for script in run upload-symbols; do
+            curl --fail --location --silent --show-error \
+              "https://raw.githubusercontent.com/firebase/firebase-ios-sdk/$firebase_revision/Crashlytics/$script" \
+              --output "$crashlytics_dir/$script"
+            chmod +x "$crashlytics_dir/$script"
+          done
+          echo "CRASHLYTICS_RUN_SCRIPT=$crashlytics_dir/run" >> "$GITHUB_ENV"
+
       - name: Build ipa
         run: nix develop --command flutter build ipa --flavor prod --dart-define-from-file=dart_defines/prod.json --export-options-plist=./ios/ExportOptions.plist
 

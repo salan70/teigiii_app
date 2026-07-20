@@ -7,6 +7,7 @@ workspace="$project_root/ios/Runner.xcworkspace"
 plugin_package="$project_root/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift"
 framework_package="$project_root/ios/Flutter/ephemeral/Packages/.packages/FlutterFramework/Package.swift"
 xcode_project="$project_root/ios/Runner.xcodeproj/project.pbxproj"
+deliver_workflow="$project_root/.github/workflows/deliver.yml"
 
 if [[ ! -f "$plugin_package" ]] || ! grep -Fq '.iOS("15.0")' "$plugin_package"; then
   echo "FlutterGeneratedPluginSwiftPackage is not configured for iOS 15.0. Run 'just setup'." >&2
@@ -23,6 +24,11 @@ if ! grep -Fq 'SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run' "$xcod
   exit 1
 fi
 
+if ! grep -Fq 'CRASHLYTICS_RUN_SCRIPT' "$xcode_project"; then
+  echo "Crashlytics must accept an explicit run script path for clean CI builds." >&2
+  exit 1
+fi
+
 if grep -Fq 'PODS_ROOT/FirebaseCrashlytics' "$xcode_project"; then
   echo "Crashlytics must not use the CocoaPods upload-symbols path." >&2
   exit 1
@@ -30,6 +36,30 @@ fi
 
 if ! grep -Fq -- '-gsp \"$PROJECT_DIR/$flavor/GoogleService-Info.plist\"' "$xcode_project"; then
   echo "Crashlytics must receive the flavor-specific GoogleService-Info.plist." >&2
+  exit 1
+fi
+
+prepare_crashlytics_line="$(
+  grep -nF 'name: Prepare Crashlytics scripts' "$deliver_workflow" |
+    head -1 |
+    cut -d: -f1 || true
+)"
+build_ipa_line="$(
+  grep -nF 'flutter build ipa --flavor prod' "$deliver_workflow" |
+    head -1 |
+    cut -d: -f1 || true
+)"
+if [[ -z "$prepare_crashlytics_line" ]] || [[ -z "$build_ipa_line" ]] ||
+  ((prepare_crashlytics_line >= build_ipa_line)); then
+  echo "The deliver workflow must prepare Crashlytics before building the IPA." >&2
+  exit 1
+fi
+
+if ! grep -Fq 'select(.identity == "firebase-ios-sdk")' "$deliver_workflow" ||
+  ! grep -Fq 'raw.githubusercontent.com/firebase/firebase-ios-sdk/$firebase_revision/Crashlytics/$script' \
+    "$deliver_workflow" ||
+  ! grep -Fq 'CRASHLYTICS_RUN_SCRIPT=$crashlytics_dir/run' "$deliver_workflow"; then
+  echo "The deliver workflow must download locked Crashlytics scripts and pass their path to Xcode." >&2
   exit 1
 fi
 
