@@ -1,6 +1,6 @@
 # flake.nix による開発環境管理への移行 + Flutter 3.41.8 アップグレード
 
-> 注記: ディレクトリ再編に伴いパス表記を現行構成へ更新した（#230）。
+> 注記: ディレクトリ再編（#230）に伴うパス・コマンド表記の書き換えは行っていない。完了時点の記録を保持する。現行構成のパスは `mobile_app/` / `backend/` を参照。
 
 ## 目的
 
@@ -34,21 +34,21 @@ FVM とホスト依存ツールで構成された開発環境を flake.nix（Nix
 ### Phase 2: 旧環境資産の整理
 1. FVM 資産を削除: 追跡されている `.fvm/`（`fvm_config.json`）を削除（`.fvmrc` は元々存在しない。`.gitignore` の FVM 関連エントリも掃除）
 2. `justfile` を作成し、`Makefile` を削除。タスクの責務を以下に分離する（旧 `make test` は coverage 生成〜macOS `open` まで一体で、CI の Ubuntu で壊れるため）:
-   - `just setup` / `just mobile-generate` / `just analyze` / `just format`: 旧 Makefile 相当（fvm プレフィックス除去）
+   - `just setup` / `just generate` / `just analyze` / `just format`: 旧 Makefile 相当（fvm プレフィックス除去）
    - `just test`: `flutter test` のみ（CI で使用。OS 非依存）
    - `just coverage`: coverage 生成 + lcov フィルタ + HTML 生成（相対パス）
    - `just coverage-open`: macOS でレポートを開く任意タスク
 3. Danger 廃止: `Gemfile` / `Dangerfile` を削除
 
 ### Phase 3: アプリの移行（必要最小限バンプ）
-1. `mobile_app/pubspec.yaml` の `environment.sdk` を新 Dart に合わせて更新
+1. `pubspec.yaml` の `environment.sdk` を新 Dart に合わせて更新
 2. `flutter pub upgrade` で解決を試み、解決不能な箇所のみメジャーバンプ（Firebase 系、intl、google_mobile_ads 等を想定）
 3. `dart run build_runner build --delete-conflicting-outputs` で再生成
 4. 非互換 API のコード修正（deprecated / removed API 対応。リファクタは行わない）
 5. iOS deployment target の確定と統一: 依存解決後（Firebase 等が要求する最低バージョン判明後）に採用する最低 iOS バージョンを **1 つ確定**し、以下 3 箇所を同じ値に揃える（現状は 11.0 と 16.1 が混在）:
    - `ios/Podfile` の `platform :ios`（現在コメントアウト状態 → 有効化して確定値を設定）
    - Xcode project の `IPHONEOS_DEPLOYMENT_TARGET`（Runner: 11.0 ×3 / 16.1 ×3 が混在 → 全ビルド構成を統一）
-   - `mobile_app/ios/Flutter/AppFrameworkInfo.plist` の `MinimumOSVersion`（現在 11.0）
+   - `ios/Flutter/AppFrameworkInfo.plist` の `MinimumOSVersion`（現在 11.0）
 6. `pod install` を実行し、iOS ビルドが通る状態にする
 
 ### Phase 4: CI の書き換え

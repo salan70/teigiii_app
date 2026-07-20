@@ -55,7 +55,7 @@ jobs:
           echo "BANNER_ID_ANDROID=${{ secrets.BANNER_ID_ANDROID }}" >> mobile_app/.env
 
       - name: Install dependencies
-        run: nix develop --command just setup
+        run: nix develop --command just mobile-setup
 
       - name: Prepare Crashlytics scripts
         run: |
