@@ -109,10 +109,32 @@ Google Play は配信停止中のため、提出・リリース・強制アッ�
 
 **事前準備（切替日より前。順序厳守 — 審査員が prod API を実際に叩くため、インフラ整備が提出より先）**
 1. PR 1 / PR 2 マージ、リハーサル完了（一時 D1/R2 に対して export → import → verify、結果を issue #186 に記録、一時リソース削除）
-2. prod インフラ整備
-   - prod Worker デプロイ（`https://teigiii-api-prod.tetsuo21ad.workers.dev`）
-   - `server/wrangler.toml` の `env.prod.vars.AVATAR_BASE_URL` と `dart_defines/prod.json` の `apiBaseUrl` を実 URL に置換
-   - prod D1 マイグレーション適用・R2 バケット作成・`app_config` 行投入（`minAppVersionIos` = 新バージョン、`minAppVersionAndroid` = 同値（形式値）、`inMaintenance` = false）
+2. prod インフラ整備（この項内も順序厳守）
+   1. `server/wrangler.toml` の `env.prod.vars.AVATAR_BASE_URL` と `dart_defines/prod.json` の `apiBaseUrl` を実 URL（`https://teigiii-api-prod.tetsuo21ad.workers.dev`）に置換する。**必ずデプロイより前に行う**（デプロイ済み Worker の vars はローカル置換では更新されず、プレースホルダ URL のまま審査に進んでしまうため）。`dart_defines/prod.json` は TestFlight ビルドより前が必須条件だが、ここで同時に置換する
+   2. prod Worker デプロイ
+   3. prod D1 マイグレーション適用・R2 バケット作成
+   4. `app_config` 行を冪等 upsert で投入する（D1 の列は snake_case、`updated_at` は NOT NULL の Unix ミリ秒。`CHECK(id = 1)` のため `id = 1` 固定）:
+
+      ```bash
+      cd server
+      bunx wrangler d1 execute teigiii-prod --remote --command \
+        "insert into app_config (id, min_app_version_ios, min_app_version_android, in_maintenance, maintenance_scheduled_end_time, updated_at)
+         values (1, '<新バージョン>', '<新バージョン>', 0, null, unixepoch('now') * 1000)
+         on conflict(id) do update set
+           min_app_version_ios = excluded.min_app_version_ios,
+           min_app_version_android = excluded.min_app_version_android,
+           in_maintenance = excluded.in_maintenance,
+           maintenance_scheduled_end_time = excluded.maintenance_scheduled_end_time,
+           updated_at = excluded.updated_at"
+      ```
+
+   5. prod Firebase の有効な App Check トークンを付けて `GET /v1/app-config` の成功と設定値を確認する（DB 行の存在だけでなく、prod Worker・D1 binding・App Check 検証まで通ることの確認）:
+
+      ```bash
+      curl --fail-with-body -H "X-Firebase-AppCheck: <valid prod App Check token>" \
+        https://teigiii-api-prod.tetsuo21ad.workers.dev/v1/app-config
+      # minAppVersionIos / minAppVersionAndroid = 新バージョン、inMaintenance = false を確認
+      ```
 3. 本番と同一手順で prod D1/R2 へスナップショット投入（export → import → verify）
 4. TestFlight ビルドで prod バックエンド疎通を実機確認（App Check・匿名登録・既存データ表示まで）
 5. 新バージョンを App Store に提出し、審査通過済み・**手動リリース待機**の状態にする
