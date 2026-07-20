@@ -82,8 +82,16 @@ jobs:
       - name: Build ipa
         run: nix develop --command flutter build ipa --flavor prod --dart-define-from-file=dart_defines/prod.json --export-options-plist=./ios/ExportOptions.plist
 
+      # flutter build ipa は exportArchive 失敗でも exit 0 を返すため、
+      # IPA 不在をここで検出してビルド検証を fail させる
       - name: Detect path for ipa file
-        run: echo "IPA_PATH=$(find build/ios/ipa -type f -name '*.ipa')" >> $GITHUB_ENV
+        run: |
+          ipa_path="$(find build/ios/ipa -type f -name '*.ipa' | head -n 1)"
+          if [[ -z "$ipa_path" ]]; then
+            echo "No .ipa found under build/ios/ipa" >&2
+            exit 1
+          fi
+          echo "IPA_PATH=$ipa_path" >> "$GITHUB_ENV"
 
       - name: Upload to App Store Connect
         if: github.event_name != 'workflow_dispatch' || inputs.upload
