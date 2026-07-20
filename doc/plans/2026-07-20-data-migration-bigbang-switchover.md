@@ -92,12 +92,24 @@ Google Play は配信停止中のため、提出・リリース・強制アッ�
 
 issue #186 コメントで「実トラフィックが Cloudflare に乗るのは本切替時点のため」事前準備に含めたが、以下 2 点により**通知設定は不採用**とする。
 
-- **目的を果たす手段が存在しない**: Free プランで設定できるのは Workers の週次サマリと CPU 使用レポート（直近 7 日平均比 +25%、しきい値変更不可）のみで、いずれも枠の接近を通知しない。製品別の使用量しきい値通知（Usage Based Billing）は Pro 以上 + Pay-as-you-go、Budget alerts と Billable Usage ダッシュボードは Pay-as-you-go 限定。D1 / R2 の使用量通知は存在しない
+- **無料枠の接近を通知する手段が存在しない**: Free の製品で設定できるのは Workers の週次サマリと CPU 使用レポート（直近 7 日平均比 +25%、しきい値変更不可）のみで、いずれも枠の接近を通知しない。製品別の使用量しきい値通知（Usage Based Billing）は Pro 以上が必要で、D1 / R2 の使用量通知はそもそも存在しない。Budget alerts は利用可能だが**金額ベース**であり、Free の製品は超過しても課金されない（＝金額が動かない）ため、クォータ枯渇の検知には機能しない
 - **リスクの桁が合わない**: 移行規模はユーザー 192 / 定義 594。Workers 100,000 req/日、D1 rows written 100,000/日・rows read 5,000,000/日、R2 10GB・Class A 100 万/月 に対し 1〜3 桁の余裕がある。自然増で到達するにはユーザーが 10〜100 倍必要。到達し得るのはバグ（リトライループ・N+1 クエリ）か攻撃であり、それは使用量通知ではなく Crashlytics とエラー監視で捕捉すべき事象
 
-また Free プランの枠超過は課金ではなく**エラー応答**（Workers は `Error 1027`、D1 はクエリエラー）であり、監視対象は支出ではなくクォータ枯渇である。代替として切替後の目視確認を行う（runbook 参照）。
+Free の製品では枠超過は課金ではなく**エラー応答**（Workers は `Error 1027`、D1 はクエリエラー）であり、監視対象は支出ではなくクォータ枯渇である。代替として切替後の目視確認を行う（runbook 参照）。
 
-**前提**: 上記は Workers Free プランであることが前提。Workers Paid（$5/月）の場合は枠超過が従量課金となり請求リスクが生じるため、Budget alerts の設定を別途検討する。
+**前提: プランはアカウント全体ではなく製品ごとに決まる**
+
+本アカウントの構成（2026-07-20 時点）:
+
+| 製品 | サブスクリプション | 枠超過時の挙動 |
+|---|---|---|
+| Workers | Free | **fails closed** — `Error 1027` で停止。請求は発生しない |
+| D1 | Free | **fails closed** — クエリエラー。請求は発生しない |
+| R2 | **R2 Paid**（$0/月 + 従量） | **fails open** — 無料枠（10GB / Class A 100 万 / Class B 1000 万）超過分が課金され、ハードキャップがない |
+
+上記のうち **R2 のみ請求が上限なく伸び得る**ため、Budget alerts を設定済み（Manage Account → Billing → Billable Usage）。アバター 192 件という規模では超過額の期待値はほぼゼロだが、アップロードのループバグ等が起きた際に停止させるものが存在しないための保険である。
+
+「通知設定は行わない」という本決定は Free の製品（Workers / D1）に対する判断であり、従量課金の製品には適用されない。
 
 ## 実行手順
 
@@ -149,10 +161,10 @@ issue #186 コメントで「実トラフィックが Cloudflare に乗るのは
 3. 本番と同一手順で prod D1/R2 へスナップショット投入（export → import → verify）
 4. TestFlight ビルドで prod バックエンド疎通を実機確認（App Check・匿名登録・既存データ表示まで）
 5. 新バージョンを App Store に提出し、審査通過済み・**手動リリース待機**の状態にする
-6. Cloudflare のプラン確認と通知設定（決定事項 10。**プラン確認を先に行う** — 決定事項 10 は Workers Free 前提の判断のため）
-   1. ダッシュボードの Workers & Pages で Workers のプランを確認する
-   2. **Workers Free の場合**: 枠超過はエラー応答で請求が発生しないため Budget alerts は不要。Workers 通知（週次サマリ / CPU 使用レポート）が有効か、通知先メールが届く宛先かを確認する（デフォルト有効。枠監視の役には立たないため確認のみで、未設定でも切替はブロックしない）
-   3. **Workers Paid / Pay-as-you-go の場合**: 枠超過が従量課金となり請求リスクが生じるため、**切替前に Budget alerts を設定する**（Manage Account → Billing → Billable Usage → Create budget alert）。この場合「通知設定は行わない」という決定事項 10 の判断は適用されない
+6. Cloudflare のサブスクリプション確認と請求ガード（決定事項 10。**プランはアカウント全体ではなく製品ごと**に決まる点に注意し、確認を先に行う）
+   1. Manage Account → Billing → Subscriptions で Workers / D1 / R2 それぞれのサブスクリプションを確認する
+   2. **従量課金の製品がある場合**（本アカウントは R2 Paid が該当）: 枠超過にハードキャップがなく請求が上限なく伸び得るため、**切替前に Budget alerts を設定する**（Billing → Billable Usage → Create budget alert）→ **設定済み**
+   3. **Free の製品**（本アカウントは Workers / D1）: 枠超過はエラー応答で請求が発生しないため Budget alerts の対象外。Workers 通知（週次サマリ / CPU 使用レポート）が有効か、通知先メールが届く宛先かを確認する（デフォルト有効。枠監視の役には立たないため確認のみで、未設定でも切替はブロックしない）
 
 **切替当日（runbook）**
 1. Firestore `AppConfig` を `inMaintenance = true` に設定（+ `maintenanceScheduledEndTime`）。旧アプリはメンテ表示になる
@@ -168,9 +180,10 @@ issue #186 コメントで「実トラフィックが Cloudflare に乗るのは
 
 **切替後**
 - 切替直後の 1 週間は毎日、以後は週次程度で、ダッシュボードで以下を目視確認する（決定事項 10）
-  - Workers: リクエスト数（対 100,000 / 日）
-  - D1: `rows read`（対 5,000,000 / 日）、`rows written`（対 100,000 / 日）
-  - storage（D1 5GB / R2 10GB）は移行データ量が 3 桁以上小さく日次で動く指標ではないため、定期確認の対象外とする
+  - Workers（Free / fails closed）: リクエスト数（対 100,000 / 日）
+  - D1（Free / fails closed）: `rows read`（対 5,000,000 / 日）、`rows written`（対 100,000 / 日）
+  - R2（**Paid / fails open**）: Class A 操作数（対 100 万 / 月）、Class B 操作数（対 1,000 万 / 月）。超過が停止ではなく課金になるため、枠に対する比率だけでなく増加の傾きを見る
+  - storage（D1 5GB / R2 10GB）は移行データ量が 3 桁以上小さく日次で動く指標ではないため、日次確認の対象外とする（R2 は課金対象だが Budget alerts でカバーする）
 
 ## 完了条件
 
@@ -178,5 +191,5 @@ issue #186 コメントで「実トラフィックが Cloudflare に乗るのは
 - 旧アプリで強制アップデートが表示されることを実機確認済み
 - 新アプリで既存ユーザーのデータ（プロフィール・定義・いいね・フォロー・デフォルトアイコン維持）が見えることを実機確認済み
 - Firestore / Firebase Storage の旧データは削除せず保持している（戦略どおり）
-- 事前準備で Workers のプランを確認済み（Paid / Pay-as-you-go の場合は Budget alerts 設定済み）
-- 切替後の Cloudflare 使用量（Workers リクエスト数、D1 `rows read` / `rows written`）の目視確認を開始している（Free プラン前提で事前の通知設定は行わない。決定事項 10）
+- 事前準備で製品ごとのサブスクリプションを確認済みで、従量課金の製品（R2 Paid）について Budget alerts を設定済み
+- 切替後の Cloudflare 使用量（Workers リクエスト数、D1 `rows read` / `rows written`、R2 Class A / Class B 操作数）の目視確認を開始している（Free の製品について事前の通知設定は行わない。決定事項 10）
