@@ -5,11 +5,14 @@ enum DefinitionFeedType {
   /// ホーム画面: フォロー中タブ
   homeFollowing,
 
-  /// 語句毎の定義一覧画面: 投稿順タブ
-  wordTopOrderByCreatedAt,
+  /// 言葉ページ: 自分の定義
+  wordMine,
 
-  /// 語句毎の定義一覧画面: いいね数順タブ
-  wordTopOrderByLikesCount,
+  /// 言葉ページ: 他者の定義・新着順
+  wordOthersNewest,
+
+  /// 言葉ページ: 他者の定義・リアクション順
+  wordOthersReactions,
 
   /// プロフィール画面: 投稿順タブ
   profileOrderByCreatedAt,

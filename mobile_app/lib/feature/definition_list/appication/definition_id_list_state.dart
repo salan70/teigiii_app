@@ -38,7 +38,19 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
       .read(definitionIdListRepositoryProvider)
       .fetchForHomeFollowing(_cursor(isFirstFetch));
 
-  Future<DefinitionIdListState> _fetchForWordTop(
+  Future<DefinitionIdListState> _fetchForWordMine({
+    required bool isFirstFetch,
+  }) {
+    final id = wordId;
+    if (id == null) {
+      throw ArgumentError('wordIdがnullです');
+    }
+    return ref
+        .read(definitionIdListRepositoryProvider)
+        .fetchForWordMine(id, _cursor(isFirstFetch));
+  }
+
+  Future<DefinitionIdListState> _fetchForWordOthers(
     WordTopOrderByType orderByType, {
     required bool isFirstFetch,
   }) {
@@ -48,7 +60,7 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
     }
     return ref
         .read(definitionIdListRepositoryProvider)
-        .fetchForWordTop(orderByType, id, _cursor(isFirstFetch));
+        .fetchForWordOthers(orderByType, id, _cursor(isFirstFetch));
   }
 
   Future<DefinitionIdListState> _fetchForProfileCreatedAt({
@@ -111,13 +123,15 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         return _fetchForHomeRecommend(isFirstFetch: isFirstFetch);
       case DefinitionFeedType.homeFollowing:
         return _fetchForHomeFollowing(isFirstFetch: isFirstFetch);
-      case DefinitionFeedType.wordTopOrderByCreatedAt:
-        return _fetchForWordTop(
+      case DefinitionFeedType.wordMine:
+        return _fetchForWordMine(isFirstFetch: isFirstFetch);
+      case DefinitionFeedType.wordOthersNewest:
+        return _fetchForWordOthers(
           WordTopOrderByType.createdAt,
           isFirstFetch: isFirstFetch,
         );
-      case DefinitionFeedType.wordTopOrderByLikesCount:
-        return _fetchForWordTop(
+      case DefinitionFeedType.wordOthersReactions:
+        return _fetchForWordOthers(
           WordTopOrderByType.likesCount,
           isFirstFetch: isFirstFetch,
         );

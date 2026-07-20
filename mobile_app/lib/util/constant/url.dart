@@ -24,6 +24,21 @@ String userReportFormUrl({
   return 'https://docs.google.com/forms/d/e/1FAIpQLSe_Y83WDspTgZIN0obOtFxpCM3IPskdPHkQ30Rtw-mrvRmSeg/viewform?usp=pp_url&entry.1412333435=${Uri.encodeComponent(targetUserPublicId)}&entry.399122039=${Uri.encodeComponent(currentUserPublicId)}';
 }
 
+enum ReportTargetType { user, definition, word }
+
+String contentReportFormUrl({
+  required ReportTargetType targetType,
+  required String targetId,
+  required String currentUserPublicId,
+  String? initialReason,
+}) {
+  final target = '${targetType.name}:$targetId';
+  final reason = initialReason == null
+      ? ''
+      : '&entry.542125213=${Uri.encodeComponent(initialReason)}';
+  return 'https://docs.google.com/forms/d/e/1FAIpQLSe_Y83WDspTgZIN0obOtFxpCM3IPskdPHkQ30Rtw-mrvRmSeg/viewform?usp=pp_url&entry.1412333435=${Uri.encodeComponent(target)}&entry.399122039=${Uri.encodeComponent(currentUserPublicId)}$reason';
+}
+
 String inquireFormUrl(String currentUserPublicId) {
   return 'https://docs.google.com/forms/d/e/1FAIpQLScVQ21a8-CtMRwD7Syy3AZfK07SpZQQCjYSuqNNvoA4g7rSsw/viewform?usp=pp_url&entry.2104212620=${Uri.encodeComponent(currentUserPublicId)}';
 }

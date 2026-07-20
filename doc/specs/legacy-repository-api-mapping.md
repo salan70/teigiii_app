@@ -56,7 +56,8 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 |---|---|
 | `definition_id_list_repository.fetchForHomeRecommend` | `GET /v1/timeline/discover?type=definition`。**例外**: 公開定義のみとし、自分の非公開定義は表示しない。定義だけにサーバー側で絞り込んだ1ページずつ取得する |
 | `definition_id_list_repository.fetchForHomeFollowing` | `GET /v1/timeline/following`。**例外**: フォロー中ユーザーの公開定義のみとし、自分の定義と非公開定義は表示しない |
-| `definition_id_list_repository.fetchForWordTop`（createdAt / likesCount 順） | `GET /v1/words/{id}/definitions?scope=all&sort=newest\|reactions` |
+| `definition_id_list_repository.fetchForWordMine` | `GET /v1/words/{id}/definitions?scope=mine&sort=newest`。自分の確定済み定義だけを取得する |
+| `definition_id_list_repository.fetchForWordOthers`（createdAt / likesCount 順） | `GET /v1/words/{id}/definitions?scope=others&sort=newest\|reactions`。他者の公開定義だけを取得する |
 | `definition_id_list_repository.fetchForProfileCreatedAt` | `GET /v1/users/{id}/definitions` |
 | `definition_id_list_repository.fetchForLikedByUser` | `GET /v1/users/{id}/liked-definitions`（他者の公開定義 + 閲覧者自身の定義は非公開でも含む。ミュートした著者の定義は Workers 側で除外） |
 | `definition_id_list_repository.fetchForIndividualDictionary` | `GET /v1/users/{id}/definitions?subGroup=&sort=reading`（旧実装と同じ、よみ昇順） |
@@ -69,6 +70,8 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 | 旧操作 | 対応 |
 |---|---|
 | `word_repository.fetchWordById` | `GET /v1/words/{id}` |
+| `word_repository.save` / `unsave` | `PUT /v1/words/{id}/save` / `DELETE /v1/words/{id}/save`。取得時の `isSavedByMe` を初期状態とする |
+| `word_repository.update` | `PATCH /v1/words/{id}`。API の `isEditableByMe` が true の場合だけ表記・よみを修正する |
 | `word_repository.findWordId` | **集約**: 登録フローは `POST /v1/words` の 409 応答で既存判定。検索は `GET /v1/search/words?q=` |
 | `fetch_word_list_repository.fetchWordListStateByInitial` | `GET /v1/words?subGroup=`。**例外**: 公開定義 0 件の言葉も表示する |
 | `fetch_word_list_repository.fetchWordListStateBySearchWord` | `GET /v1/search/words?q=`。**例外**: 言葉の前方一致から、言葉またはよみの部分一致へ変更する |

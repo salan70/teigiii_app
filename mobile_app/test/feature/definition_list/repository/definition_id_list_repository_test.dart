@@ -110,13 +110,37 @@ void main() {
     expect(result.hasMore, isTrue);
   });
 
-  test('言葉トップのリアクション順を API パラメータへ変換する', () async {
+  test('言葉ページの自分の定義は mine と新着順を指定する', () async {
     when(
       wordsApi.v1WordsIdDefinitionsGet(
         id: 'word-1',
         cursor: null,
         limit: 20,
-        scope: 'all',
+        scope: 'mine',
+        sort: 'newest',
+      ),
+    ).thenAnswer(
+      (_) async => Response(
+        data: V1UsersIdDefinitionsGet200Response(
+          items: [definition('definition-1')],
+          nextCursor: null,
+        ),
+        requestOptions: RequestOptions(path: '/v1/words/word-1/definitions'),
+      ),
+    );
+
+    final result = await repository.fetchForWordMine('word-1', null);
+
+    expect(result.list, ['definition-1']);
+  });
+
+  test('言葉ページの他者定義は others とリアクション順を指定する', () async {
+    when(
+      wordsApi.v1WordsIdDefinitionsGet(
+        id: 'word-1',
+        cursor: null,
+        limit: 20,
+        scope: 'others',
         sort: 'reactions',
       ),
     ).thenAnswer(
@@ -129,7 +153,7 @@ void main() {
       ),
     );
 
-    final result = await repository.fetchForWordTop(
+    final result = await repository.fetchForWordOthers(
       WordTopOrderByType.likesCount,
       'word-1',
       null,

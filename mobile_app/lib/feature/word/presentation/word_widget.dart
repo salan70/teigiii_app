@@ -8,6 +8,7 @@ import '../../../../../core/router/app_router.dart';
 import '../../auth/application/auth_state.dart';
 import '../../definition/domain/definition_for_write.dart';
 import '../../definition/presentation/write_definition_base_page.dart';
+import '../application/word_save_controller.dart';
 import '../domain/word.dart';
 
 class WordWidget extends ConsumerWidget {
@@ -17,6 +18,10 @@ class WordWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final savedOverride = ref.watch(wordSavedOverrideProvider(word.id));
+    final isSaved = savedOverride ?? word.isSavedByMe;
+    final isSaving = ref.watch(wordSaveInProgressProvider(word.id));
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -33,27 +38,53 @@ class WordWidget extends ConsumerWidget {
           ),
           const Gap(24),
           Text(
-            '${word.postedDefinitionCount}投稿',
+            '公開定義 ${word.postedDefinitionCount}件',
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
           const Gap(8),
-          Center(
-            child: PrimaryFilledButton(
-              onPressed: () {
-                context.pushRoute(
-                  DefinitionPostRoute(
-                    initialDefinitionForWrite: DefinitionForWrite.fromWord(
-                      word,
-                      ref.read(userIdProvider)!,
-                    ),
-                    autoFocusForm: WriteDefinitionFormType.definition,
-                  ),
-                );
-              },
-              text: 'この語句の定義を投稿する',
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: PrimaryFilledButton(
+                  onPressed: () {
+                    context.pushRoute(
+                      DefinitionPostRoute(
+                        initialDefinitionForWrite: DefinitionForWrite.fromWord(
+                          word,
+                          ref.read(userIdProvider)!,
+                        ),
+                        autoFocusForm: WriteDefinitionFormType.definition,
+                      ),
+                    );
+                  },
+                  text: 'この言葉を定義する',
+                ),
+              ),
+              const Gap(8),
+              IconButton(
+                key: const Key('word-save-button'),
+                onPressed: isSaving
+                    ? null
+                    : () async {
+                        try {
+                          await ref
+                              .read(wordSaveControllerProvider)
+                              .toggle(word);
+                        } on Object catch (_) {
+                          if (!context.mounted) {
+                            return;
+                          }
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('保存状態を更新できませんでした。')),
+                          );
+                        }
+                      },
+                tooltip: isSaved ? '保存を解除' : '保存',
+                icon: Icon(isSaved ? Icons.bookmark : Icons.bookmark_border),
+              ),
+            ],
           ),
           const Gap(8),
         ],

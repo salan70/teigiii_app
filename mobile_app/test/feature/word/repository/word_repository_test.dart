@@ -46,8 +46,32 @@ void main() {
           reading: 'ふつかめのかれー',
           initialSubGroupLabel: 'は行',
           postedDefinitionCount: 3,
+          isSavedByMe: false,
+          isEditableByMe: false,
         ),
       );
+    });
+
+    test('保存状態と修正可否を Word に変換する', () async {
+      when(mockWordsApi.v1WordsIdGet(id: 'word1')).thenAnswer(
+        (_) async => Response(
+          data: WordResponse(
+            id: 'word1',
+            word: '自由',
+            reading: 'じゆう',
+            readingSubGroup: 'さ行',
+            publicDefinitionCount: 0,
+            isSavedByMe: true,
+            isEditableByMe: true,
+          ),
+          requestOptions: RequestOptions(path: '/v1/words/word1'),
+        ),
+      );
+
+      final word = await repository.fetchWordById('word1');
+
+      expect(word!.isSavedByMe, isTrue);
+      expect(word.isEditableByMe, isTrue);
     });
 
     test('404 の場合 null を返す', () async {
@@ -94,6 +118,76 @@ void main() {
         () => repository.fetchWordById('word1'),
         throwsA(isA<ApiException>()),
       );
+    });
+  });
+
+  group('言葉の保存', () {
+    test('save は PUT /v1/words/{id}/save を呼ぶ', () async {
+      when(mockWordsApi.v1WordsIdSavePut(id: 'word1')).thenAnswer(
+        (_) async => Response(
+          requestOptions: RequestOptions(path: '/v1/words/word1/save'),
+        ),
+      );
+
+      await repository.save('word1');
+
+      verify(mockWordsApi.v1WordsIdSavePut(id: 'word1')).called(1);
+    });
+
+    test('unsave は DELETE /v1/words/{id}/save を呼ぶ', () async {
+      when(mockWordsApi.v1WordsIdSaveDelete(id: 'word1')).thenAnswer(
+        (_) async => Response(
+          requestOptions: RequestOptions(path: '/v1/words/word1/save'),
+        ),
+      );
+
+      await repository.unsave('word1');
+
+      verify(mockWordsApi.v1WordsIdSaveDelete(id: 'word1')).called(1);
+    });
+  });
+
+  group('言葉の修正', () {
+    test('update は PATCH の結果を Word に変換して返す', () async {
+      when(
+        mockWordsApi.v1WordsIdPatch(
+          id: 'word1',
+          updateWordRequest: anyNamed('updateWordRequest'),
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+          data: WordResponse(
+            id: 'word1',
+            word: '自由',
+            reading: 'じゆう',
+            readingSubGroup: 'さ行',
+            publicDefinitionCount: 1,
+            isSavedByMe: true,
+            isEditableByMe: true,
+          ),
+          requestOptions: RequestOptions(path: '/v1/words/word1'),
+        ),
+      );
+
+      final updated = await repository.update(
+        wordId: 'word1',
+        word: '自由',
+        reading: 'じゆう',
+      );
+
+      final captured =
+          verify(
+                mockWordsApi.v1WordsIdPatch(
+                  id: 'word1',
+                  updateWordRequest: captureAnyNamed('updateWordRequest'),
+                ),
+              ).captured.single
+              as UpdateWordRequest;
+      expect(captured.word, '自由');
+      expect(captured.reading, 'じゆう');
+      expect(updated.word, '自由');
+      expect(updated.isSavedByMe, isTrue);
+      expect(updated.isEditableByMe, isTrue);
     });
   });
 }

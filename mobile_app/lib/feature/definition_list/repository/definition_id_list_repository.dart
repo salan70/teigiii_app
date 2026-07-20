@@ -67,7 +67,25 @@ class DefinitionIdListRepository {
     }
   }
 
-  Future<DefinitionIdListState> fetchForWordTop(
+  Future<DefinitionIdListState> fetchForWordMine(
+    String wordId,
+    String? cursor,
+  ) async {
+    try {
+      final response = await _wordsApi.v1WordsIdDefinitionsGet(
+        id: wordId,
+        cursor: cursor,
+        limit: fetchLimitForDefinitionList,
+        scope: 'mine',
+        sort: 'newest',
+      );
+      return _toState(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
+  }
+
+  Future<DefinitionIdListState> fetchForWordOthers(
     WordTopOrderByType orderByType,
     String wordId,
     String? cursor,
@@ -77,7 +95,7 @@ class DefinitionIdListRepository {
         id: wordId,
         cursor: cursor,
         limit: fetchLimitForDefinitionList,
-        scope: 'all',
+        scope: 'others',
         sort: switch (orderByType) {
           WordTopOrderByType.createdAt => 'newest',
           WordTopOrderByType.likesCount => 'reactions',

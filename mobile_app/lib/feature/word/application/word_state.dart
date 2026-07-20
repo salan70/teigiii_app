@@ -10,15 +10,5 @@ part 'word_state.g.dart';
 /// 該当する [Word] が見つからない場合、nullを返す。
 @riverpod
 Future<Word?> word(WordRef ref, String wordId) async {
-  final word = await ref.read(wordRepositoryProvider).fetchWordById(wordId);
-  if (word == null) {
-    return null;
-  }
-
-  /// 投稿された定義が0件の場合、 Word は存在しないとみなす。
-  if (word.postedDefinitionCount == 0) {
-    return null;
-  }
-
-  return word;
+  return ref.read(wordRepositoryProvider).fetchWordById(wordId);
 }

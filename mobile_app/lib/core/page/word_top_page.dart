@@ -4,18 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../../feature/definition/presentation/post_definition_fab.dart';
+import '../../feature/auth/application/auth_state.dart';
 import '../../feature/definition_list/presentation/definition_list.dart';
 import '../../feature/definition_list/util/definition_feed_type.dart';
+import '../../feature/user_profile/application/user_profile_state.dart';
 import '../../feature/word/application/word_state.dart';
+import '../../feature/word/presentation/word_edit_dialog.dart';
+import '../../feature/word/presentation/word_my_definitions_preview.dart';
 import '../../feature/word/presentation/word_page_shimmer.dart';
 import '../../feature/word/presentation/word_widget.dart';
+import '../../util/constant/url.dart';
 import '../../util/extension/scroll_controller_extension.dart';
 import '../../util/logger.dart';
+import '../common_provider/launch_url_controller.dart';
 import '../common_widget/error_and_retry_widget.dart';
 import '../common_widget/stickey_tab_bar_deligate.dart';
 
 @RoutePage()
+/// @doc doc/specs/mobile-app-functional-spec.md#8-言葉ページ
 class WordTopPage extends ConsumerWidget {
   const WordTopPage({super.key, required this.wordId});
 
@@ -70,10 +76,69 @@ class WordTopPage extends ConsumerWidget {
                       forceElevated: true,
                       floating: true,
                       title: Text(word.word, overflow: TextOverflow.ellipsis),
+                      actions: [
+                        PopupMenuButton<_WordAction>(
+                          key: const Key('word-actions-button'),
+                          onSelected: (action) async {
+                            if (action == _WordAction.edit) {
+                              final updated = await showDialog<bool>(
+                                context: context,
+                                builder: (_) => WordEditDialog(word: word),
+                              );
+                              if (updated == true && context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('言葉を修正しました。')),
+                                );
+                              }
+                              return;
+                            }
+
+                            final currentUserId = ref.read(userIdProvider)!;
+                            final currentUserProfile = await ref.read(
+                              userProfileProvider(currentUserId).future,
+                            );
+                            final url = contentReportFormUrl(
+                              targetType: ReportTargetType.word,
+                              targetId: word.id,
+                              currentUserPublicId: currentUserProfile.publicId,
+                              initialReason: action == _WordAction.proposeEdit
+                                  ? '修正提案: '
+                                  : null,
+                            );
+                            await ref
+                                .read(launchUrlControllerProvider)
+                                .launchURL(url);
+                          },
+                          itemBuilder: (_) => [
+                            if (word.isEditableByMe)
+                              const PopupMenuItem(
+                                value: _WordAction.edit,
+                                child: Text('言葉を修正'),
+                              )
+                            else
+                              const PopupMenuItem(
+                                value: _WordAction.proposeEdit,
+                                child: Text('修正を提案'),
+                              ),
+                            const PopupMenuItem(
+                              value: _WordAction.report,
+                              child: Text('通報'),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                     SliverList(
                       delegate: SliverChildListDelegate([
                         WordWidget(word: word),
+                        WordMyDefinitionsPreview(wordId: wordId),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                          child: Text(
+                            'みんなの定義',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ),
                       ]),
                     ),
                     SliverPersistentHeader(
@@ -83,8 +148,8 @@ class WordTopPage extends ConsumerWidget {
                           labelStyle: Theme.of(context).textTheme.titleMedium,
                           indicatorWeight: 3,
                           tabs: const [
-                            Tab(text: '投稿順'),
-                            Tab(text: 'いいね数順'),
+                            Tab(text: '新着順'),
+                            Tab(text: 'リアクション順'),
                           ],
                           onTap: (_) {
                             if (DefaultTabController.of(
@@ -102,25 +167,33 @@ class WordTopPage extends ConsumerWidget {
                     ),
                   ];
                 },
-                // WordTopは定義が投稿されていないと開けないので、emptyWidgetはnull
                 body: TabBarView(
                   children: [
                     DefinitionList(
-                      definitionFeedType:
-                          DefinitionFeedType.wordTopOrderByCreatedAt,
+                      definitionFeedType: DefinitionFeedType.wordOthersNewest,
                       wordId: wordId,
                       shimmerTileNumber: 2,
-                      emptyWidget: null,
+                      emptyWidget: const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 32),
+                          child: Text('みんなの定義はまだありません'),
+                        ),
+                      ),
                       // TODO(me): スワイプリフレッシュ時、インジケータの表示がなめらかじゃないの直したい。
                       additionalOnRefresh: () =>
                           ref.invalidate(wordProvider(wordId)),
                     ),
                     DefinitionList(
                       definitionFeedType:
-                          DefinitionFeedType.wordTopOrderByLikesCount,
+                          DefinitionFeedType.wordOthersReactions,
                       wordId: wordId,
                       shimmerTileNumber: 2,
-                      emptyWidget: null,
+                      emptyWidget: const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 32),
+                          child: Text('みんなの定義はまだありません'),
+                        ),
+                      ),
                       additionalOnRefresh: () =>
                           ref.invalidate(wordProvider(wordId)),
                     ),
@@ -128,7 +201,6 @@ class WordTopPage extends ConsumerWidget {
                 ),
               ),
             ),
-            floatingActionButton: const PostDefinitionFAB(),
           );
         },
         loading: () => Scaffold(
@@ -161,3 +233,5 @@ class WordTopPage extends ConsumerWidget {
     );
   }
 }
+
+enum _WordAction { edit, proposeEdit, report }

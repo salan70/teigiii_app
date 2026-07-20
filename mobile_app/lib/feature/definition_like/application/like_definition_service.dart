@@ -36,7 +36,7 @@ class LikeDefinitionService {
       )
       ..invalidate(
         definitionIdListStateNotifierProvider(
-          DefinitionFeedType.wordTopOrderByLikesCount,
+          DefinitionFeedType.wordOthersReactions,
           wordId: definition.wordId,
         ),
       )
