@@ -1,5 +1,5 @@
 name: CI Nix setup
-description: Install Nix, enable Magic Nix Cache, and optionally restore Flutter/pub/bun caches
+description: Install Nix and optionally restore Flutter/pub caches for mobile CI jobs
 
 inputs:
   cache-flutter:
@@ -8,10 +8,6 @@ inputs:
     default: "false"
   cache-pub:
     description: Cache .nix/pub-cache
-    required: false
-    default: "false"
-  cache-bun:
-    description: Cache Bun global install cache
     required: false
     default: "false"
   touch-env:
@@ -24,9 +20,6 @@ runs:
   steps:
     - name: Install Nix
       uses: DeterminateSystems/determinate-nix-action@v3
-
-    - name: Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v14
 
     - name: Cache Flutter SDK bootstrap
       if: inputs.cache-flutter == 'true'
@@ -45,15 +38,6 @@ runs:
         key: pub-${{ runner.os }}-${{ hashFiles('mobile_app/pubspec.lock') }}
         restore-keys: |
           pub-${{ runner.os }}-
-
-    - name: Cache bun
-      if: inputs.cache-bun == 'true'
-      uses: actions/cache@v4
-      with:
-        path: ~/.bun/install/cache
-        key: bun-${{ runner.os }}-${{ hashFiles('backend/bun.lockb') }}
-        restore-keys: |
-          bun-${{ runner.os }}-
 
     - name: Create dot env file
       if: inputs.touch-env == 'true'
