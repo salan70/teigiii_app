@@ -100,3 +100,23 @@ just test
 ```
 
 **MCP サーバー例**: github, mobile-mcp
+
+## Cursor Cloud specific instructions
+
+Cursor Cloud の VM 向けの非自明な注意点のみを記載する。標準コマンドは `justfile` を参照。
+
+### ツールチェーン
+- Cloud VM では Nix を使わない（`flake.nix` はローカル / CI 用）。`bun` / `flutter` 3.41.8 / `dart` / `just` は snapshot に導入済みで `/usr/local/bin` から解決できる。
+- 依存の更新は起動時の update script（`bun install --frozen-lockfile` + `flutter pub get`）で自動実行される。`just setup` を再実行する必要は通常ない。
+
+### mobile_app/.env（重要）
+- `mobile_app/.env` は `*.env` として git-ignore されるが、`pubspec.yaml` の必須アセットであり、無いと `flutter test` / `flutter build` が "No file or variants found for asset: .env" で失敗する。
+- update script が未存在時に AdMob テスト広告 ID 入りで自動生成する。CI は空ファイル（`touch mobile_app/.env`）で十分。
+
+### backend（Cloudflare Workers API）
+- `just backend-dev`（= `wrangler dev`）は :8787 で起動し、D1 / R2 は Miniflare のローカルエミュレーションで自動供給される。外部 DB は不要。
+- 全エンドポイントが Firebase App Check トークン必須の設計のため、有効な Firebase トークンなしの生 curl は `GET /v1/app-config` を含め 401 (`app_check_invalid`) になる。API のコア機能検証は `just backend-test`（unit + `@cloudflare/vitest-pool-workers` の統合テスト、mock verifier を注入）で行う。
+
+### mobile_app（Flutter）
+- Android SDK / エミュレータ / iOS シミュレータ / 実機がなく、実 Firebase も必要なため、Cloud VM では `flutter run` による対話起動は不可。headless では lint / test / codegen のみ実施できる。
+- 生成コード（`*.g.dart` / `*.freezed.dart` / `*.gr.dart`）はコミット済み。CI は build_runner を実行しないため、`just analyze` / `just test` 前に `just mobile-generate` は必須ではない（`.dart` を変更・追加した場合のみ再生成する）。
