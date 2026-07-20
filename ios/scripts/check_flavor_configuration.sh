@@ -39,25 +39,27 @@ if ! grep -Fq -- '-gsp \"$PROJECT_DIR/$flavor/GoogleService-Info.plist\"' "$xcod
   exit 1
 fi
 
-resolve_packages_line="$(
-  grep -nF 'xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme prod' \
-    "$deliver_workflow" | head -1 | cut -d: -f1 || true
+prepare_crashlytics_line="$(
+  grep -nF 'name: Prepare Crashlytics scripts' "$deliver_workflow" |
+    head -1 |
+    cut -d: -f1 || true
 )"
 build_ipa_line="$(
   grep -nF 'flutter build ipa --flavor prod' "$deliver_workflow" |
     head -1 |
     cut -d: -f1 || true
 )"
-if [[ -z "$resolve_packages_line" ]] || [[ -z "$build_ipa_line" ]] ||
-  ((resolve_packages_line >= build_ipa_line)); then
-  echo "The deliver workflow must resolve iOS Swift packages before building the IPA." >&2
+if [[ -z "$prepare_crashlytics_line" ]] || [[ -z "$build_ipa_line" ]] ||
+  ((prepare_crashlytics_line >= build_ipa_line)); then
+  echo "The deliver workflow must prepare Crashlytics before building the IPA." >&2
   exit 1
 fi
 
-if ! grep -Fq -- '-clonedSourcePackagesDirPath "$RUNNER_TEMP/SourcePackages"' "$deliver_workflow" ||
-  ! grep -Fq 'CRASHLYTICS_RUN_SCRIPT=$RUNNER_TEMP/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run' \
-    "$deliver_workflow"; then
-  echo "The deliver workflow must pass its fixed Crashlytics run script path to Xcode." >&2
+if ! grep -Fq 'select(.identity == "firebase-ios-sdk")' "$deliver_workflow" ||
+  ! grep -Fq 'raw.githubusercontent.com/firebase/firebase-ios-sdk/$firebase_revision/Crashlytics/$script' \
+    "$deliver_workflow" ||
+  ! grep -Fq 'CRASHLYTICS_RUN_SCRIPT=$crashlytics_dir/run' "$deliver_workflow"; then
+  echo "The deliver workflow must download locked Crashlytics scripts and pass their path to Xcode." >&2
   exit 1
 fi
 
