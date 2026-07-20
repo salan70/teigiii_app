@@ -1,5 +1,7 @@
 # Flutter repository 層の REST 繋ぎ替え
 
+> 注記: ディレクトリ再編（#230）に伴うパス・コマンド表記の書き換えは行っていない。完了時点の記録を保持する。現行構成のパスは `mobile_app/` / `backend/` を参照。
+
 ## 目的
 
 Issue #185 のフェーズ 4 として、Flutter アプリの repository 層を Firestore / Firebase Storage 依存から Workers REST API（dev 環境デプロイ済み）へ置換する。UI は現状維持とし、挙動変更は台帳と各 Slice の grilling で明示的に確定する。

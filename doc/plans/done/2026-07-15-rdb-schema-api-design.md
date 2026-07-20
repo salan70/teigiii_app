@@ -1,5 +1,7 @@
 # RDB スキーマ + API 設計（Drizzle / OpenAPI）
 
+> 注記: ディレクトリ再編（#230）に伴うパス・コマンド表記の書き換えは行っていない。完了時点の記録を保持する。現行構成のパスは `mobile_app/` / `backend/` を参照。
+
 issue #183（Cloudflare 移行 2/6）の実行計画。grilling による設計判断の確定記録を含む。
 
 - 戦略: `doc/plans/2026-07-12-cloudflare-migration-strategy.md`

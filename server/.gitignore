@@ -1,8 +1,0 @@
-node_modules/
-.wrangler/
-
-# データ移行スクリプト（server/scripts/migration/）が使う秘匿情報・成果物。
-# サービスアカウントキー・Firestore/Storage のスナップショットは絶対にコミットしない。
-migration-snapshots/
-scripts/migration/**/*.json.key
-*-service-account.json

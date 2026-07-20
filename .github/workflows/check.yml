@@ -26,7 +26,7 @@ jobs:
         uses: DeterminateSystems/determinate-nix-action@v3
 
       - name: Create dot env file
-        run: touch .env
+        run: touch mobile_app/.env
 
       - name: Install dependencies
         run: nix develop --command just setup
@@ -45,7 +45,7 @@ jobs:
         uses: DeterminateSystems/determinate-nix-action@v3
 
       - name: Create dot env file
-        run: touch .env
+        run: touch mobile_app/.env
 
       - name: Install dependencies
         run: nix develop --command just setup

@@ -5,6 +5,7 @@
             "name": "Debug dev",
             "request": "launch",
             "type": "dart",
+            "cwd": "mobile_app",
             "program": "lib/main.dart",
             "flutterMode": "debug",
             "args": [
@@ -15,6 +16,7 @@
             "name": "Debug prod",
             "request": "launch",
             "type": "dart",
+            "cwd": "mobile_app",
             "program": "lib/main.dart",
             "flutterMode": "debug",
             "args": [

@@ -1,5 +1,7 @@
 # DocBridge 導入
 
+> 注記: ディレクトリ再編（#230）に伴うパス・コマンド表記の書き換えは行っていない。完了時点の記録を保持する。現行構成のパスは `mobile_app/` / `backend/` を参照。
+
 ## 目的
 
 コード（`lib/`）と Markdown 仕様書を双方向リンクする [DocBridge](https://github.com/salan70/docbridge) を導入する。

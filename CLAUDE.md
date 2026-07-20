@@ -4,13 +4,18 @@
 
 ## プロジェクト概要
 
-Flutter/Dart アプリケーション（teigi_app）。
+モノレポ構成の teigiii プロジェクト。
+
+- `mobile_app/` — Flutter/Dart アプリ（teigi_app、iOS / Android）
+- `backend/` — Cloudflare Workers API
+- ルート — Nix / Just / DocBridge / CI / AI assets など横断オーケストレーション
 
 **技術スタック**:
 - Flutter（Nix flake でバージョン管理）
 - Riverpod（状態管理）
 - Freezed（コード生成）
 - auto_route（ルーティング）
+- Cloudflare Workers + Hono + Drizzle + D1（backend）
 
 **対象**: 個人開発者（1 人で開発するプロジェクト向け）
 
@@ -19,19 +24,19 @@ Flutter/Dart アプリケーション（teigi_app）。
 ## クイックリファレンス
 
 ```bash
-# 開発環境セットアップ
+# 開発環境セットアップ（mobile_app + backend）
 just setup
 
-# コード生成（Freezed等）
-just generate
+# コード生成（Freezed等・モバイル）
+just mobile-generate
 
-# Lint
+# Lint（両プロジェクト）
 just analyze
 
-# Format
+# Format（両プロジェクト）
 just format
 
-# テスト
+# テスト（両プロジェクト）
 just test
 ```
 

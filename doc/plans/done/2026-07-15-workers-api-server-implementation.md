@@ -1,5 +1,7 @@
 # Workers API サーバー実装
 
+> 注記: ディレクトリ再編（#230）に伴うパス・コマンド表記の書き換えは行っていない。完了時点の記録を保持する。現行構成のパスは `mobile_app/` / `backend/` を参照。
+
 ## 目的
 
 Issue #184 のフェーズ 3 として、フェーズ 2 で定義済みの OpenAPI 全ルートを Cloudflare Workers + Hono + Drizzle + D1 上で実装する。Firebase Auth と App Check を検証し、R2 アバター保存、30 日後の物理削除、dev / prod 環境分離までを完成させる。

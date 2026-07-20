@@ -2,10 +2,10 @@
   "include": {
     "code": {
       "dart": {
-        "patterns": ["lib/**/*.dart"]
+        "patterns": ["mobile_app/lib/**/*.dart"]
       },
       "typescript": {
-        "patterns": ["server/src/**/*.ts"]
+        "patterns": ["backend/src/**/*.ts"]
       }
     },
     "docs": ["doc/specs/**/*.md"]

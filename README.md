@@ -6,6 +6,19 @@
 
 TODO: DL用のリンク貼る
 
+# リポジトリ構成
+
+モノレポ構成です。ルートは横断の入口で、各プロダクトは次のディレクトリに分かれます。
+
+```text
+.
+├── mobile_app/   # Flutter アプリ（iOS / Android）
+├── backend/      # Cloudflare Workers API
+├── doc/          # プロダクト横断の仕様・計画
+├── nix/          # 共通開発環境
+└── justfile      # ルートからのオーケストレーション
+```
+
 # 開発環境セットアップ
 
 [Nix](https://nixos.org/download/) と direnv をインストール後、リポジトリで以下を実行します。
@@ -17,19 +30,21 @@ just setup
 
 direnv を使わない場合は、先に `nix develop` で開発シェルへ入ってください。
 
+`just setup` は `mobile_app/` と `backend/` の両方の依存関係を入れます。
+
 # アプリ起動（run）
 
 開発環境
 ```sh
-just run-dev
+just mobile-run-dev
 ```
 
 本番環境
 ```sh
-just run-prod
+just mobile-run-prod
 ```
 
-Xcode GUIから起動する場合は`ios/Runner.xcworkspace`を開き、開発環境は`dev`、本番環境は`prod` Schemeを選択します。Schemeに対応するBuild Configuration、Bundle ID、App Icon、Firebase設定、Dart Defineが自動的に選択されるため、Build Settingsを手動で変更する必要はありません。
+Xcode GUIから起動する場合は`mobile_app/ios/Runner.xcworkspace`を開き、開発環境は`dev`、本番環境は`prod` Schemeを選択します。Schemeに対応するBuild Configuration、Bundle ID、App Icon、Firebase設定、Dart Defineが自動的に選択されるため、Build Settingsを手動で変更する必要はありません。
 
 # 使用技術
 ## Flutter

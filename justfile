@@ -3,97 +3,108 @@ set shell := ["bash", "-euc"]
 default:
     just --list
 
-setup:
-    flutter clean
-    flutter pub get
+# --- 横断（モバイル + バックエンド）---
 
-generate:
-    dart run build_runner build --delete-conflicting-outputs
+setup: mobile-setup backend-setup
 
-# server/openapi.json から Dart API クライアントを packages/teigiii_api に生成する
+analyze: mobile-analyze backend-lint
+
+format: mobile-format backend-format
+
+test: mobile-test backend-test
+
+# backend/openapi.json から Dart API クライアントを mobile_app/packages/teigiii_api に生成する
 generate-api:
-    openapi-generator-cli generate -i server/openapi.json -g dart-dio -o packages/teigiii_api \
+    openapi-generator-cli generate -i backend/openapi.json -g dart-dio -o mobile_app/packages/teigiii_api \
       --additional-properties=pubName=teigiii_api,serializationLibrary=json_serializable
-    cd packages/teigiii_api && dart pub get && dart run build_runner build --delete-conflicting-outputs && dart format .
-
-analyze:
-    flutter analyze --no-fatal-infos
-
-format:
-    dart format .
-
-test:
-    flutter test
+    cd mobile_app/packages/teigiii_api && dart pub get && dart run build_runner build --delete-conflicting-outputs && dart format .
 
 docbridge-check:
     bunx docbridge@0.5.2 check
 
-coverage:
-    flutter test --coverage
-    lcov --remove coverage/lcov.info '*.freezed.dart' '*.g.dart' '*/repository*' -o coverage/lcov.info
-    genhtml coverage/lcov.info -o coverage/html
+# --- mobile（Flutter アプリ）---
 
-coverage-open: coverage
-    open coverage/html/index.html
+mobile-setup:
+    cd mobile_app && flutter clean && flutter pub get
 
-run-dev:
-    flutter run --flavor dev --dart-define-from-file=dart_defines/dev.json
+mobile-generate:
+    cd mobile_app && dart run build_runner build --delete-conflicting-outputs
+
+mobile-analyze:
+    cd mobile_app && flutter analyze --no-fatal-infos
+
+mobile-format:
+    cd mobile_app && dart format .
+
+mobile-test:
+    cd mobile_app && flutter test
+
+mobile-coverage:
+    cd mobile_app && flutter test --coverage
+    cd mobile_app && lcov --remove coverage/lcov.info '*.freezed.dart' '*.g.dart' '*/repository*' -o coverage/lcov.info
+    cd mobile_app && genhtml coverage/lcov.info -o coverage/html
+
+mobile-coverage-open: mobile-coverage
+    open mobile_app/coverage/html/index.html
+
+mobile-run-dev:
+    cd mobile_app && flutter run --flavor dev --dart-define-from-file=dart_defines/dev.json
 
 # 指定した端末で dev flavor を起動する（`flutter devices` で端末 ID を確認）
-run-dev-on device:
-    flutter run -d "{{device}}" --flavor dev --dart-define-from-file=dart_defines/dev.json
+mobile-run-dev-on device:
+    cd mobile_app && flutter run -d "{{device}}" --flavor dev --dart-define-from-file=dart_defines/dev.json
 
-run-prod:
-    flutter run --flavor prod --dart-define-from-file=dart_defines/prod.json
+mobile-run-prod:
+    cd mobile_app && flutter run --flavor prod --dart-define-from-file=dart_defines/prod.json
 
-check-ios-flavors:
-    bash ios/scripts/check_flavor_configuration.sh
+mobile-check-ios-flavors:
+    bash mobile_app/ios/scripts/check_flavor_configuration.sh
 
-check-ios-native-asset binary sdk:
-    bash ios/scripts/check_native_asset_platform.sh "{{binary}}" "{{sdk}}"
+mobile-check-ios-native-asset binary sdk:
+    bash mobile_app/ios/scripts/check_native_asset_platform.sh "{{binary}}" "{{sdk}}"
 
-# --- server（Cloudflare Workers API）---
+# --- backend（Cloudflare Workers API）---
 
-server-setup:
-    cd server && bun install
+backend-setup:
+    cd backend && bun install
 
-server-lint:
-    cd server && bun run lint && bun run typecheck
+backend-lint:
+    cd backend && bun run lint && bun run typecheck
 
-server-format:
-    cd server && bun run format
+backend-format:
+    cd backend && bun run format
 
-server-test:
-    cd server && bun run test
+backend-test:
+    cd backend && bun run test
 
 # openapi.json と Drizzle マイグレーション SQL を生成する
-server-generate:
-    cd server && bun run generate:openapi && bun run generate:migrations
+backend-generate:
+    cd backend && bun run generate:openapi && bun run generate:migrations
 
-server-dev:
-    cd server && bun run dev
+backend-dev:
+    cd backend && bun run dev
 
 # dev D1 に未適用の migration を反映する
-server-migrate-dev:
-    cd server && bunx wrangler d1 migrations apply DB --env dev --remote
+backend-migrate-dev:
+    cd backend && bunx wrangler d1 migrations apply DB --env dev --remote
 
 # app-config の初期行だけを冪等に作成する
-server-seed-dev:
-    cd server && bunx wrangler d1 execute DB --env dev --remote --command "insert into app_config (id, min_app_version_ios, min_app_version_android, in_maintenance, maintenance_scheduled_end_time, updated_at) values (1, '0.0.0', '0.0.0', 0, null, unixepoch('now') * 1000) on conflict(id) do nothing"
+backend-seed-dev:
+    cd backend && bunx wrangler d1 execute DB --env dev --remote --command "insert into app_config (id, min_app_version_ios, min_app_version_android, in_maintenance, maintenance_scheduled_end_time, updated_at) values (1, '0.0.0', '0.0.0', 0, null, unixepoch('now') * 1000) on conflict(id) do nothing"
 
 # migration と app-config 初期化を完了してから dev Worker を手動 deploy する
-server-deploy-dev: server-migrate-dev server-seed-dev
-    if rg -q 'AVATAR_BASE_URL = "https://api.dev.invalid/v1"' server/wrangler.toml; then echo 'Replace AVATAR_BASE_URL with the deployed dev Worker URL before deploy.' >&2; exit 1; fi
-    cd server && bunx wrangler deploy --env dev
+backend-deploy-dev: backend-migrate-dev backend-seed-dev
+    if rg -q 'AVATAR_BASE_URL = "https://api.dev.invalid/v1"' backend/wrangler.toml; then echo 'Replace AVATAR_BASE_URL with the deployed dev Worker URL before deploy.' >&2; exit 1; fi
+    cd backend && bunx wrangler deploy --env dev
 
 # 正規の Firebase ID token / App Check token を使って dev Worker を smoke test する
-server-smoke-dev:
-    server/scripts/smoke-dev.sh
+backend-smoke-dev:
+    backend/scripts/smoke-dev.sh
 
 # remote dev bindings に対して Scheduled Handler を手動起動できる状態にする
-server-dev-remote-scheduled:
-    cd server && bunx wrangler dev --env dev --remote --test-scheduled
+backend-dev-remote-scheduled:
+    cd backend && bunx wrangler dev --env dev --remote --test-scheduled
 
 # prod は #186 まで deploy せず、bundle と bindings の解決だけを検証する
-server-validate-prod:
-    cd server && bunx wrangler deploy --env prod --dry-run --outdir /tmp/teigiii-api-prod-dry-run
+backend-validate-prod:
+    cd backend && bunx wrangler deploy --env prod --dry-run --outdir /tmp/teigiii-api-prod-dry-run

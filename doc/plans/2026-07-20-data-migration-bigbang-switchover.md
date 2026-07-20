@@ -1,5 +1,7 @@
 # データ移行 & big-bang 一斉切替（issue #186）
 
+> 注記: ディレクトリ再編に伴いパス表記を現行構成へ更新した（#230）。
+
 親戦略: `doc/plans/2026-07-12-cloudflare-migration-strategy.md`（フェーズ 5）
 
 ## 目的
@@ -18,7 +20,7 @@ Firestore → D1、Firebase Storage → R2 の移行スクリプトを作成し�
 
 ### 2. スクリプト構成: ローカル実行 TS + wipe-and-reload
 
-- `server/scripts/migration/` に TypeScript スクリプトを置き、ローカルから bun で実行する（Worker 上では実行しない）
+- `backend/scripts/migration/` に TypeScript スクリプトを置き、ローカルから bun で実行する（Worker 上では実行しない）
 - **export**: `firebase-admin` SDK で全コレクションを読み、git 管理外ディレクトリに NDJSON スナップショットとして保存。gcloud マネージドエクスポート（GCS 経由）は使わない
 - **transform + import**: スナップショット → 変換 → SQL 生成 → `wrangler d1 execute --remote --file` で投入。R2 は firebase-admin で読み `wrangler r2 object put` で投入
 - **冪等性**: wipe-and-reload。実行のたびに D1 全行 DELETE → スナップショットから全量再投入。途中失敗時は再実行するだけでよい。R2 は決定的キー（`avatars/{uid}`）への上書きで冪等
@@ -42,7 +44,7 @@ Firestore → D1、Firebase Storage → R2 の移行スクリプトを作成し�
 | `UserProfiles` + `UserConfigs` | `users` | `lastOsVersion` / `lastAppVersion` は `UserConfigs` から。`avatarKey` は R2 コピー結果（下記） |
 | `UserConfigs.mutedUserIdList` | `user_mutes` 行 | `createdAt` = 移行実行時刻（元データに存在しないため） |
 | `UserFollowCounts` | （破棄） | `follows` の COUNT で算出 |
-| `Words` | `words` | `word` は trim + NFC 再正規化。`readingSubGroup` はサーバーと同じ関数（`server/src/words/reading-sub-group.ts`）で再計算。`createdBy` = NULL（元データに存在しない） |
+| `Words` | `words` | `word` は trim + NFC 再正規化。`readingSubGroup` はサーバーと同じ関数（`backend/src/words/reading-sub-group.ts`）で再計算。`createdBy` = NULL（元データに存在しない） |
 | `Definitions` | `definitions` | `status` = `isPublic ? 'public' : 'private'`（旧データに draft はない）。`finalizedAt` = `createdAt`。`isEdited` は引き継ぐ。非正規化フィールド（`word` / `likesCount` 等）は破棄 |
 | `WordDefinitionRelations` | （破棄） | `Definitions.wordId` を正とする派生データ |
 | `Likes` | `likes` | そのまま |
@@ -51,7 +53,7 @@ Firestore → D1、Firebase Storage → R2 の移行スクリプトを作成し�
 | — | `saved_words` | 新機能。空 |
 
 **アバター（Firebase Storage → R2）**: `profileImageUrl` を分類し、いずれも `avatars/{uid}` へコピーして `avatarKey` に設定する
-- デフォルト URL 3 種（旧 `lib/util/constant/url.dart` の `defaultIconImageUrlListForProd` / `ForDev`）のいずれかに一致 → 該当のデフォルト PNG をコピー（ハッシュ割当への変更で既存ユーザーのアイコンが変わるのを防ぐ。issue #186 コメント参照）
+- デフォルト URL 3 種（旧 `mobile_app/lib/util/constant/url.dart` の `defaultIconImageUrlListForProd` / `ForDev`）のいずれかに一致 → 該当のデフォルト PNG をコピー（ハッシュ割当への変更で既存ユーザーのアイコンが変わるのを防ぐ。issue #186 コメント参照）
 - `users/{uid}/profile_image.png` を指す → カスタム画像をコピー
 - それ以外 → fail-fast
 
@@ -117,7 +119,7 @@ Free の製品では枠超過は課金ではなく**エラー応答**（Workers 
 
 既存の起動時バージョン情報更新（`PATCH /v1/users/me`）が 404 `user_not_found` の場合、`POST /v1/users` で再登録する（既存の初回登録フローを再利用。Firebase Auth ユーザーは存在するためサーバー登録のみ。検知用の `GET` は追加しない）。
 
-### PR 2: 移行スクリプト一式（`server/scripts/migration/`）
+### PR 2: 移行スクリプト一式（`backend/scripts/migration/`）
 
 - `export`: Firestore 全コレクション + Storage アバター一覧 → NDJSON スナップショット
 - `transform` + `import`: 変換 → SQL 生成 → D1 投入、R2 アバターコピー。移行レポート（drop/補完の件数と ID）出力
@@ -133,13 +135,13 @@ Free の製品では枠超過は課金ではなく**エラー応答**（Workers 
 **事前準備（切替日より前。順序厳守 — 審査員が prod API を実際に叩くため、インフラ整備が提出より先）**
 1. PR 1 / PR 2 マージ、リハーサル完了（一時 D1/R2 に対して export → import → verify、結果を issue #186 に記録、一時リソース削除）
 2. prod インフラ整備（この項内も順序厳守）
-   1. リリースバージョンを `1.1.0+8` に更新する。`server/wrangler.toml` の `env.prod.vars.AVATAR_BASE_URL`、`dart_defines/prod.json` の `apiBaseUrl`、`ios/Flutter/Prod.xcconfig` の `apiBaseUrl` を実 URL（`https://teigiii-api-prod.tetsuo21ad.workers.dev`）に置換する。**必ずデプロイより前に行う**（デプロイ済み Worker の vars はローカル置換では更新されず、プレースホルダ URL のまま審査に進んでしまうため）。Dart defines と Xcode build setting の双方が TestFlight ビルドより前の必須条件である
+   1. リリースバージョンを `1.1.0+8` に更新する。`backend/wrangler.toml` の `env.prod.vars.AVATAR_BASE_URL`、`mobile_app/dart_defines/prod.json` の `apiBaseUrl`、`mobile_app/ios/Flutter/Prod.xcconfig` の `apiBaseUrl` を実 URL（`https://teigiii-api-prod.tetsuo21ad.workers.dev`）に置換する。**必ずデプロイより前に行う**（デプロイ済み Worker の vars はローカル置換では更新されず、プレースホルダ URL のまま審査に進んでしまうため）。Dart defines と Xcode build setting の双方が TestFlight ビルドより前の必須条件である
    2. prod Worker デプロイ
    3. prod D1 マイグレーション適用・R2 バケット作成
    4. `app_config` 行を冪等 upsert で投入する（D1 の列は snake_case、`updated_at` は NOT NULL の Unix ミリ秒。`CHECK(id = 1)` のため `id = 1` 固定）:
 
       ```bash
-      cd server
+      cd backend
       bunx wrangler d1 execute teigiii-prod --remote --command \
         "insert into app_config (id, min_app_version_ios, min_app_version_android, in_maintenance, maintenance_scheduled_end_time, updated_at)
          values (1, '1.1.0', '1.1.0', 0, null, unixepoch('now') * 1000)
