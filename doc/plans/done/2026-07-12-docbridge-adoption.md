@@ -1,8 +1,10 @@
 # DocBridge 導入
 
+> 注記: ディレクトリ再編に伴いパス表記を現行構成へ更新した（#230）。
+
 ## 目的
 
-コード（`lib/`）と Markdown 仕様書を双方向リンクする [DocBridge](https://github.com/salan70/docbridge) を導入する。
+コード（`mobile_app/lib/`）と Markdown 仕様書を双方向リンクする [DocBridge](https://github.com/salan70/docbridge) を導入する。
 現時点で仕様書は存在しないが、将来 `doc/specs/` に仕様書を追加した時点で
 リンク検証・エージェント向けコンテキスト注入・CI ゲートが即座に機能する状態を作る。
 
@@ -10,7 +12,7 @@
 
 - **導入範囲**: フル導入（config / 実行環境 / justfile / Claude Code・Codex フック / スキル 5 種 / CI）
 - **実行環境**: flake.nix の devShell に `pkgs.bun` を追加し、`bunx docbridge@0.5.0` でバージョンをピン留めして実行。`package.json` は持ち込まない
-- **スキャン対象**: code = `lib/**/*.dart`、docs = `doc/specs/**/*.md`（新設）。`doc/plans/` や `doc/architecture.md` は対象外
+- **スキャン対象**: code = `mobile_app/lib/**/*.dart`、docs = `doc/specs/**/*.md`（新設）。`doc/plans/` や `doc/architecture.md` は対象外
 - **CI**: 新規ワークフロー `docbridge.yml`（`paths-ignore` なし。既存 check.yml は md 変更でスキップされるため分離する）
   - `check` ジョブ: `docbridge check` — リンク切れで fail
   - `related-gate-report` ジョブ: PR 変更ファイルへの `related --gate` を informational 運用（fail させず sticky コメントで報告）
@@ -22,7 +24,7 @@
 1. GitHub Issue を作成（このスコープを記載）
 2. ブランチ作成（`feature/#<issue>_docbridge-adoption`）
 3. flake.nix の `toolPackages` に `pkgs.bun` を追加
-4. `docbridge.config.json` を作成（dart: `lib/**/*.dart`、docs: `doc/specs/**/*.md`）
+4. `docbridge.config.json` を作成（dart: `mobile_app/lib/**/*.dart`、docs: `doc/specs/**/*.md`）
 5. `doc/specs/README.md` を作成（ディレクトリの目的と `@doc`/`@code` の書き方への参照）
 6. justfile に `docbridge-check` レシピを追加（`bunx docbridge@0.5.0 check`）
 7. スキル導入: `bunx docbridge@0.5.0 init --agent-target both`（既存 config は上書きされない仕様）

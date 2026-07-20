@@ -1,11 +1,13 @@
 # Flutter repository 層の REST 繋ぎ替え
 
+> 注記: ディレクトリ再編に伴いパス表記を現行構成へ更新した（#230）。
+
 ## 目的
 
 Issue #185 のフェーズ 4 として、Flutter アプリの repository 層を Firestore / Firebase Storage 依存から Workers REST API（dev 環境デプロイ済み）へ置換する。UI は現状維持とし、挙動変更は台帳と各 Slice の grilling で明示的に確定する。
 
 - 対応表の正本: `doc/specs/legacy-repository-api-mapping.md`
-- API の正本: `server/openapi.json`（41 オペレーション）
+- API の正本: `backend/openapi.json`（41 オペレーション）
 - 挙動仕様: `doc/specs/workers-api-server.md`
 
 ## スコープ
@@ -33,13 +35,13 @@ Issue #185 のフェーズ 4 として、Flutter アプリの repository 層を 
 
 ### クライアント生成
 
-- `server/openapi.json` から openapi-generator の `dart-dio` でクライアントを生成する（`serializationLibrary=json_serializable` を指定し built_value を回避）。`openapi-generator-cli` は Nix flake で導入する
+- `backend/openapi.json` から openapi-generator の `dart-dio` でクライアントを生成する（`serializationLibrary=json_serializable` を指定し built_value を回避）。`openapi-generator-cli` は Nix flake で導入する
 - 生成物はコミットし、`just generate-api` で再生成できるようにする。openapi.json 変更時は再生成差分でクライアント側の追従漏れを検出する
 - Slice 1 冒頭で生成品質を実物確認する。判定対象は `POST /v1/words` の 409 ボディ（`WordConflictResponse`）、keyset cursor、`ErrorResponse` の共通エラー型。使い物にならない場合のみ Freezed DTO + 手書き薄クライアントへフォールバックする
 
 ### base URL 切替
 
-- `dart_defines/dev.json` / `prod.json` に `apiBaseUrl` を追加し、既存の `--dart-define-from-file` 機構で注入する
+- `mobile_app/dart_defines/dev.json` / `prod.json` に `apiBaseUrl` を追加し、既存の `--dart-define-from-file` 機構で注入する
 - dev は配備済み dev Worker（`teigiii-api-dev`）の workers.dev URL を設定する。prod は未デプロイのためプレースホルダとし、#186 で確定する
 
 ### dev 実機確認の運用
@@ -100,7 +102,7 @@ Issue #185 のフェーズ 4 として、Flutter アプリの repository 層を 
 
 ### Slice 1: API クライアント基盤
 
-1. flake に `openapi-generator-cli` を導入し、`just generate-api` で `server/openapi.json` から dart-dio クライアントを生成する
+1. flake に `openapi-generator-cli` を導入し、`just generate-api` で `backend/openapi.json` から dart-dio クライアントを生成する
 2. 生成品質（409 ボディ・cursor・共通エラー型）を確認し、フォールバック要否を判断する
 3. dio + 認証インターセプタ（ID トークン / App Check）を TDD で実装する
 4. `dart_defines` に `apiBaseUrl` を追加し、共通エラーハンドリングを実装する

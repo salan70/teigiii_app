@@ -1,14 +1,16 @@
 # Workers API サーバー実装
 
+> 注記: ディレクトリ再編に伴いパス表記を現行構成へ更新した（#230）。
+
 ## 目的
 
 Issue #184 のフェーズ 3 として、フェーズ 2 で定義済みの OpenAPI 全ルートを Cloudflare Workers + Hono + Drizzle + D1 上で実装する。Firebase Auth と App Check を検証し、R2 アバター保存、30 日後の物理削除、dev / prod 環境分離までを完成させる。
 
-実装の振る舞いは `doc/specs/workers-api-server.md`、HTTP のリクエスト・レスポンス形状は `server/openapi.json` を正本とする。
+実装の振る舞いは `doc/specs/workers-api-server.md`、HTTP のリクエスト・レスポンス形状は `backend/openapi.json` を正本とする。
 
 ## スコープ
 
-- `server/openapi.json` に定義済みの全エンドポイントの実ハンドラ
+- `backend/openapi.json` に定義済みの全エンドポイントの実ハンドラ
 - Firebase ID トークンと App Check トークンの検証
 - D1 を使うクエリ、状態遷移、認可、keyset pagination
 - R2 を使うアバターの保存・削除・認証付き Worker URL 解決
@@ -32,7 +34,7 @@ Issue #184 のフェーズ 3 として、フェーズ 2 で定義済みの OpenA
 
 - Wrangler のローカル既定環境に加え、dev / prod を別 Worker・別 D1・別 R2 として構成する
 - dev / prod のリソースは作成する。#184 では dev のみ手動デプロイし、prod は設定検証までとする
-- `just server-deploy-dev` を手動デプロイの正規コマンドとし、自動デプロイは導入しない
+- `just backend-deploy-dev` を手動デプロイの正規コマンドとし、自動デプロイは導入しない
 - R2 bucket は非公開とし、アバターは App Check と Firebase ID token が必須の Workers API から配信する
 
 ### 認証と保護
@@ -125,7 +127,7 @@ Issue #184 のフェーズ 3 として、フェーズ 2 で定義済みの OpenA
 
 ## 完了条件
 
-- `server/openapi.json` にある全ルートが 501 を返さず、仕様どおり動作する
+- `backend/openapi.json` にある全ルートが 501 を返さず、仕様どおり動作する
 - Firebase ID トークンと App Check の欠落・不正を 401 で拒否する
 - dev Workers 上で D1 読み書き、R2 アバター、認証、app-config、Scheduled Handler を検証できる
 - prod の Worker、D1、R2 設定が検証済みで、デプロイだけが #186 に残っている

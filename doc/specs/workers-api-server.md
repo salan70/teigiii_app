@@ -2,7 +2,7 @@
 
 ## 責務と境界
 
-Workers API は Firebase Auth で認証された利用者に対し、D1 上の teigiii データと R2 上のアバターを REST API として提供する。HTTP のフィールド・ステータス定義は `server/openapi.json` を正本とし、本書は認証、認可、可視性、状態遷移、並び順、運用上の振る舞いを定義する。
+Workers API は Firebase Auth で認証された利用者に対し、D1 上の teigiii データと R2 上のアバターを REST API として提供する。HTTP のフィールド・ステータス定義は `backend/openapi.json` を正本とし、本書は認証、認可、可視性、状態遷移、並び順、運用上の振る舞いを定義する。
 
 Firebase Auth、App Check、Analytics、Crashlytics は継続利用する。Workers から Firebase Admin SDK は利用せず、公開鍵による JWT 検証だけを行う。
 
@@ -18,12 +18,12 @@ Flutter repository の接続、Firestore / Firebase Storage の既存データ�
 
 Firebase project ID と project number は公開識別子として Wrangler vars に置く。トークン、秘密鍵、Cloudflare API token はコード、設定ファイル、ログへ保存しない。
 
-dev は `just server-deploy-dev` で手動デプロイする。prod のデプロイと Cron 有効化は #186 の一斉切替手順だけから行い、自動デプロイ CI は導入しない。
+dev は `just backend-deploy-dev` で手動デプロイする。prod のデプロイと Cron 有効化は #186 の一斉切替手順だけから行い、自動デプロイ CI は導入しない。
 
 ## リクエスト保護
 
-<!-- @code server/src/auth/middleware.ts#createAppCheckMiddleware -->
-<!-- @code server/src/auth/middleware.ts#createFirebaseAuthMiddleware -->
+<!-- @code backend/src/auth/middleware.ts#createAppCheckMiddleware -->
+<!-- @code backend/src/auth/middleware.ts#createFirebaseAuthMiddleware -->
 ### 適用順序
 
 1. request ID を発行する
@@ -35,7 +35,7 @@ dev は `just server-deploy-dev` で手動デプロイする。prod のデプロ
 
 認証バイパスは local / dev / prod のいずれにも設けない。単体・結合テストは検証器を依存注入し、実通信テストは dev Firebase が発行した正規トークンを使う。
 
-<!-- @code server/src/auth/app-check.ts#AppCheckTokenVerifier -->
+<!-- @code backend/src/auth/app-check.ts#AppCheckTokenVerifier -->
 ### App Check
 
 全エンドポイントで `X-Firebase-AppCheck` ヘッダーを必須とする。公式 JWKS `https://firebaseappcheck.googleapis.com/v1/jwks` を使い、以下を検証する。
@@ -49,7 +49,7 @@ dev は `just server-deploy-dev` で手動デプロイする。prod のデプロ
 
 `sub` の App ID は認証コンテキストに保持するが、許可リストでは制限しない。limited-use token とリプレイ検知は行わない。
 
-<!-- @code server/src/auth/firebase-id-token.ts#FirebaseIdTokenVerifier -->
+<!-- @code backend/src/auth/firebase-id-token.ts#FirebaseIdTokenVerifier -->
 ### Firebase ID トークン
 
 `GET /v1/app-config` を除く全エンドポイントで `Authorization: Bearer <token>` を必須とする。以下を検証し、成功時の `sub` をリクエスト利用者の UID とする。
@@ -63,7 +63,7 @@ dev は `just server-deploy-dev` で手動デプロイする。prod のデプロ
 
 トークン失効確認は行わず、最長1時間の自然失効を許容する。
 
-<!-- @code server/src/auth/firebase-public-keys.ts#FirebasePublicKeyProvider -->
+<!-- @code backend/src/auth/firebase-public-keys.ts#FirebasePublicKeyProvider -->
 ### 公開鍵キャッシュ
 
 Firebase ID トークンの X.509 公開鍵は Google の公式 endpoint から取得する。レスポンスの `Cache-Control: max-age` まで isolate 内でインポート済み CryptoKey を再利用する。ヘッダーが不正または欠落している場合の再取得間隔は5分とする。
@@ -72,12 +72,12 @@ Firebase ID トークンの X.509 公開鍵は Google の公式 endpoint から�
 
 ## 共通処理
 
-<!-- @code server/src/app.ts#createApp -->
+<!-- @code backend/src/app.ts#createApp -->
 ### リクエスト処理順序
 
 Hono app は request context、App Check、Firebase Auth の順に middleware を適用してから `/v1` ルートを実行する。検証済み UID と App ID はヘッダーやリクエスト body から受け取らず、middleware が設定したコンテキストだけを信頼する。
 
-<!-- @code server/src/errors.ts#ApiError -->
+<!-- @code backend/src/errors.ts#ApiError -->
 ### エラー形式
 
 全 API エラーは次の形式とする。
@@ -93,7 +93,7 @@ Hono app は request context、App Check、Firebase Auth の順に middleware �
 
 認証失敗は401、入力不正は400、権限不足は403、不可視または不存在のリソースは404、競合は409、画像容量超過は413、画像形式不正は415とする。予期しない例外は500 `internal_error` とし、例外メッセージや stack trace をレスポンスへ含めない。
 
-<!-- @code server/src/middleware/request-context.ts#createRequestContextMiddleware -->
+<!-- @code backend/src/middleware/request-context.ts#createRequestContextMiddleware -->
 ### リクエスト ID とログ
 
 各リクエストに UUID の request ID を発行し、`X-Request-ID` レスポンスヘッダーへ設定する。リクエストの構造化ログには request ID、method、path、status、処理時間だけを記録する。予期しない例外は相関用の request ID と例外型を別の構造化ログへ記録するが、例外メッセージと stack trace は記録しない。
@@ -112,14 +112,14 @@ JWT、Authorization、App Check token、プロフィール内容などの個人�
 
 ## API 振る舞い
 
-<!-- @code server/src/config/app-config-service.ts#AppConfigService -->
+<!-- @code backend/src/config/app-config-service.ts#AppConfigService -->
 ### App config
 
 `GET /v1/app-config` は D1 の `app_config` 単一行を返す。Firebase ID トークンは不要だが App Check は必須とする。単一行がなければ500とし、暗黙の既定値では起動を続けない。
 
 運用時の変更は `wrangler d1 execute` で行い、管理 API は追加しない。
 
-<!-- @code server/src/users/user-service.ts#UserService -->
+<!-- @code backend/src/users/user-service.ts#UserService -->
 ### ユーザー
 
 - `POST /v1/users` は認証 UID を主キーに初回登録し、9桁数字の publicId を暗号学的乱数で生成する。UNIQUE 競合時は再試行し、同じ UID が登録済みなら409 `user_already_exists` を返す
@@ -129,7 +129,7 @@ JWT、Authorization、App Check token、プロフィール内容などの個人�
 - フォローとミュートの追加・解除は冪等とする。フォロワー・フォロー中一覧は関係作成日時、ユーザー ID の降順で keyset pagination する
 - アカウント削除はユーザーと所有する定義へ `deleted_at` を設定し、通常 API から即時に不可視とする
 
-<!-- @code server/src/users/user-service.ts#AvatarService -->
+<!-- @code backend/src/users/user-service.ts#AvatarService -->
 ### アバター
 
 `PUT /v1/users/me/avatar` は JPEG / PNG を受け付け、Content-Type とファイルシグネチャの両方を検証する。10 MiB を安全上限とし、Workers では画像変換しない。
@@ -142,7 +142,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 
 #185 の Flutter クライアントは通常 API と同様に画像取得へ `X-Firebase-AppCheck` と `Authorization` ヘッダーを付ける。
 
-<!-- @code server/src/words/word-service.ts#WordService -->
+<!-- @code backend/src/words/word-service.ts#WordService -->
 ### 言葉
 
 - 登録前に前後空白を除去し NFC 正規化する。同一表記は409で既存言葉を返す
@@ -150,7 +150,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 - 言葉の修正は登録後1時間以内かつ、登録者本人で、他ユーザーの定義または保存がない場合だけ許可する
 - 一覧は reading、id の安定順とし、指定された行、定義有無、検索語を適用する
 
-<!-- @code server/src/definitions/definition-service.ts#DefinitionService -->
+<!-- @code backend/src/definitions/definition-service.ts#DefinitionService -->
 ### 定義
 
 - draft は `finalized_at=null`、public / private は初回確定時の `finalized_at` を持つ
@@ -160,7 +160,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 - 削除は所有者だけが実行でき、`deleted_at` を設定する
 - いいね対象は他者が閲覧可能な public 定義と、自分が閲覧可能な自分の定義に限定する
 
-<!-- @code server/src/browse/browse-service.ts#BrowseService -->
+<!-- @code backend/src/browse/browse-service.ts#BrowseService -->
 ### 辞書と一覧
 
 - 公開辞書は対象ユーザーの public 定義だけを言葉単位にまとめる
@@ -168,7 +168,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 - 合成 DTO の likesCount、followingCount、followerCount は有効な行だけを集計する
 - `isLikedByMe`、`isFollowedByMe`、`isMutedByMe` は認証 UID を基準に算出する
 
-<!-- @code server/src/browse/browse-service.ts#BrowseService -->
+<!-- @code backend/src/browse/browse-service.ts#BrowseService -->
 ### タイムラインと検索
 
 - 見つけるは public 定義を `finalized_at DESC`、言葉登録を `created_at DESC` として混在させる。任意の `type=definition|wordRegistered` が指定された場合は対応する activity だけを返す
@@ -177,7 +177,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 - 言葉検索は表記・よみの部分一致、ユーザー検索は表示名・publicId の部分一致を適用する
 - リアクション数順はページ移動中の件数変動による重複・欠落を許容する
 
-<!-- @code server/src/maintenance/physical-deletion.ts#runPhysicalDeletion -->
+<!-- @code backend/src/maintenance/physical-deletion.ts#runPhysicalDeletion -->
 ## 物理削除
 
 Scheduled Handler は30日以前に論理削除された定義とユーザーを物理削除する。ユーザー削除では R2 アバターを削除してから D1 ユーザーを削除し、FK CASCADE で関連行と定義を削除する。`words.created_by` は SET NULL とし、言葉自体は残す。
@@ -200,15 +200,15 @@ Scheduled Handler は30日以前に論理削除された定義とユーザーを
 
 ### dev デプロイと smoke test
 
-1. 初回 deploy で確定した `teigiii-api-dev` の workers.dev URL に `/v1` を付け、`server/wrangler.toml` の dev `AVATAR_BASE_URL` を置き換える。R2 public access は有効化しない。
-2. `just server-deploy-dev` を実行する。このコマンドは D1 migration、`app_config` 初期行の冪等な作成、`teigiii-api-dev` の deploy を順に行う。
+1. 初回 deploy で確定した `teigiii-api-dev` の workers.dev URL に `/v1` を付け、`backend/wrangler.toml` の dev `AVATAR_BASE_URL` を置き換える。R2 public access は有効化しない。
+2. `just backend-deploy-dev` を実行する。このコマンドは D1 migration、`app_config` 初期行の冪等な作成、`teigiii-api-dev` の deploy を順に行う。
 3. dev Firebase の正規トークンを shell 環境だけに設定し、次を実行する。トークンをファイル、shell history、ログへ保存しない。
 
 ```bash
 TEIGIII_API_BASE_URL=https://teigiii-api-dev.tetsuo21ad.workers.dev \
 FIREBASE_ID_TOKEN='<dev Firebase ID token>' \
 FIREBASE_APP_CHECK_TOKEN='<dev App Check token>' \
-just server-smoke-dev
+just backend-smoke-dev
 ```
 
 smoke test は app-config、認証、D1 のユーザー作成・更新、非公開 R2 アバターの upload・URL 単独アクセスの401・認証付き取得・delete を確認する。ユーザーが既存なら作成の409を許容し、更新で D1 write を検証する。
@@ -217,7 +217,7 @@ Scheduled Handler は次のように remote dev D1 / R2 に対して手動検証
 
 ```bash
 # terminal A
-just server-dev-remote-scheduled
+just backend-dev-remote-scheduled
 
 # terminal B
 curl 'http://localhost:8787/__scheduled?cron=0+3+*+*+*'
@@ -227,7 +227,7 @@ curl 'http://localhost:8787/__scheduled?cron=0+3+*+*+*'
 
 ### prod 切替前検証
 
-`just server-validate-prod` で `teigiii-api-prod`、`teigiii-prod`、`teigiii-prod-avatars`、prod Firebase vars の bundle / bindings 解決を dry-run する。#186 では prod `AVATAR_BASE_URL` の `.invalid` 値を実 Worker API `/v1` URLへ置き換え、R2 public access が無効であることを確認する。同コマンドを再実行してから prod deploy と Cron Trigger 有効化を行う。Cron は Wrangler 設定を正本とし、UTC の実行時刻を切替チェックリストで確定する。
+`just backend-validate-prod` で `teigiii-api-prod`、`teigiii-prod`、`teigiii-prod-avatars`、prod Firebase vars の bundle / bindings 解決を dry-run する。#186 では prod `AVATAR_BASE_URL` の `.invalid` 値を実 Worker API `/v1` URLへ置き換え、R2 public access が無効であることを確認する。同コマンドを再実行してから prod deploy と Cron Trigger 有効化を行う。Cron は Wrangler 設定を正本とし、UTC の実行時刻を切替チェックリストで確定する。
 
 ### 使用量監視と通知
 

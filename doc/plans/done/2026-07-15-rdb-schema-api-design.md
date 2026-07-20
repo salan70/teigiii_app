@@ -1,5 +1,7 @@
 # RDB スキーマ + API 設計（Drizzle / OpenAPI）
 
+> 注記: ディレクトリ再編に伴いパス表記を現行構成へ更新した（#230）。
+
 issue #183（Cloudflare 移行 2/6）の実行計画。grilling による設計判断の確定記録を含む。
 
 - 戦略: `doc/plans/2026-07-12-cloudflare-migration-strategy.md`
@@ -7,11 +9,11 @@ issue #183（Cloudflare 移行 2/6）の実行計画。grilling による設計�
 
 ## 目的
 
-新 UI の情報設計（Tier 1 スコープ）を満たし、かつ旧 UI がその部分集合で動作する Drizzle スキーマと OpenAPI 定義を、`server/` 配下の実コードとして作成する。
+新 UI の情報設計（Tier 1 スコープ）を満たし、かつ旧 UI がその部分集合で動作する Drizzle スキーマと OpenAPI 定義を、`backend/` 配下の実コードとして作成する。
 
 ## 成果物の形（確定）
 
-- **実コード方式**: `server/` に動く Drizzle スキーマ（`schema.ts`）+ `@hono/zod-openapi` のルート定義を書く。ハンドラは未実装スタブ
+- **実コード方式**: `backend/` に動く Drizzle スキーマ（`schema.ts`）+ `@hono/zod-openapi` のルート定義を書く。ハンドラは未実装スタブ
 - `drizzle-kit generate` で SQL マイグレーションが出せる状態にする
 - ルート定義から `openapi.json` を生成するスクリプトを用意し、**生成物もコミット**する（フェーズ 4 の Dart クライアント生成が server のビルド環境なしで動く）
 - 実ハンドラ・テスト本体・dev/prod 環境分離・デプロイ設定はフェーズ 3（#184）のスコープ
@@ -237,7 +239,7 @@ docbridge（`salan70/docbridge`）の構成に寄せる。
 
 ## 実行手順
 
-1. `server/` の足場を作る: bun init、依存導入（hono / @hono/zod-openapi / drizzle-orm / drizzle-kit / wrangler / @cloudflare/workers-types / oxlint / oxfmt）、strict tsconfig、`.oxlintrc.json`、最小 wrangler.toml
+1. `backend/` の足場を作る: bun init、依存導入（hono / @hono/zod-openapi / drizzle-orm / drizzle-kit / wrangler / @cloudflare/workers-types / oxlint / oxfmt）、strict tsconfig、`.oxlintrc.json`、最小 wrangler.toml
 2. Drizzle スキーマ（8 テーブル + インデックス）を書き、`drizzle-kit generate` で初期マイグレーション SQL を生成する
 3. zod スキーマ（リクエスト / レスポンス DTO・エラー形式・カーソル）を定義する
 4. `@hono/zod-openapi` でエンドポイント一覧の全ルートを定義する（ハンドラは 501 相当のスタブ）
@@ -248,7 +250,7 @@ docbridge（`salan70/docbridge`）の構成に寄せる。
 
 ## 完了条件
 
-- `server/` がコンパイル可能（`tsc --noEmit` パス）で、oxlint / oxfmt が通る
+- `backend/` がコンパイル可能（`tsc --noEmit` パス）で、oxlint / oxfmt が通る
 - `drizzle-kit generate` が確定スキーマどおりの SQL マイグレーションを出力し、**生成 SQL に UNIQUE / FK（ON DELETE 動作含む）/ CHECK / インデックスが含まれることを確認**している
 - エンドポイント一覧の全ルートが OpenAPI 定義に含まれ、`openapi.json` が生成・コミットされ、**OpenAPI スキーマとして検証（validate）が通る**
 - **旧 repository 操作 ↔ 新 API の対応表**を作成し、旧 UI の全操作に対応先（または「読み取り専用化」等の例外方針）があることを確認している

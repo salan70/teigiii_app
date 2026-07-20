@@ -4,7 +4,7 @@
 
 - featureファーストを採用する
 - 「presentation」「application」「domain」「repository」の4層に分割する
-- lib配下にcore, feature, utilディレクトリを格納する
+- `mobile_app/lib` 配下に core, feature, util ディレクトリを格納する
 - feature配下には、必要に応じて以下を関心事に格納する
   - presentation
   - application

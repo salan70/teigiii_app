@@ -1,5 +1,7 @@
 # Cloudflare 移行 & UI 刷新 戦略
 
+> 注記: ディレクトリ再編に伴いパス表記を現行構成へ更新した（#230）。
+
 ## 目的
 
 - DB を Firestore から RDB（Cloudflare D1）へ移行し、固定費を限りなく 0 に近づける
@@ -75,7 +77,7 @@
 
 ### 7. リポジトリ構成: モノレポ
 
-- 本リポジトリ直下に `server/` を切り、Workers（API + スキーマ）の TypeScript コードを同居させる
+- 本リポジトリ直下に `backend/` を切り、Workers（API + スキーマ）の TypeScript コードを同居させる
 - OpenAPI スキーマ → Dart クライアント生成 → Flutter 側修正を 1 コンテキストで完結させる
 
 ### スキーマ設計の指針
@@ -90,7 +92,7 @@
 
 1. **新 UI の情報設計**: 画面マップとナビゲーション構造を決め、`doc/` に記録する
 2. **RDB スキーマ + API 設計**: Drizzle スキーマと OpenAPI 定義を作成する
-3. **サーバー実装**: `server/` に Workers + Hono + Drizzle + D1 の API を実装する（dev/prod 環境、Firebase ID トークン検証、App Check 検証を含む）
+3. **サーバー実装**: `backend/` に Workers + Hono + Drizzle + D1 の API を実装する（dev/prod 環境、Firebase ID トークン検証、App Check 検証を含む）
 4. **Flutter repository 層の繋ぎ替え**: OpenAPI から Dart クライアントを生成し、Firestore 依存の repository を REST に置換する（UI は変更しない）
 5. **データ移行 & 一斉切替**: Firestore → D1、Storage → R2 の移行スクリプトを作成し、`force_event` による強制停止 → 移行 → 照合 → 新版公開を実施する（照合・ロールバック手順は「決定事項 3」の安全策に従う）
 6. **UI 刷新**: フェーズ 1 の情報設計に基づき、画面単位で段階的に刷新する

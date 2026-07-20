@@ -50,16 +50,16 @@ jobs:
 
       - name: Create dot env file
         run: |
-          touch .env
-          echo "BANNER_ID_IOS=${{ secrets.BANNER_ID_IOS }}" >> .env
-          echo "BANNER_ID_ANDROID=${{ secrets.BANNER_ID_ANDROID }}" >> .env
+          touch mobile_app/.env
+          echo "BANNER_ID_IOS=${{ secrets.BANNER_ID_IOS }}" >> mobile_app/.env
+          echo "BANNER_ID_ANDROID=${{ secrets.BANNER_ID_ANDROID }}" >> mobile_app/.env
 
       - name: Install dependencies
         run: nix develop --command just setup
 
       - name: Prepare Crashlytics scripts
         run: |
-          package_resolved=ios/Runner.xcworkspace/xcshareddata/swiftpm/Package.resolved
+          package_resolved=mobile_app/ios/Runner.xcworkspace/xcshareddata/swiftpm/Package.resolved
           firebase_revision="$(
             jq -r '.pins[] | select(.identity == "firebase-ios-sdk") | .state.revision' \
               "$package_resolved"
@@ -80,15 +80,15 @@ jobs:
           echo "CRASHLYTICS_RUN_SCRIPT=$crashlytics_dir/run" >> "$GITHUB_ENV"
 
       - name: Build ipa
-        run: nix develop --command flutter build ipa --flavor prod --dart-define-from-file=dart_defines/prod.json --export-options-plist=./ios/ExportOptions.plist
+        run: nix develop --command bash -c 'cd mobile_app && flutter build ipa --flavor prod --dart-define-from-file=dart_defines/prod.json --export-options-plist=./ios/ExportOptions.plist'
 
       # flutter build ipa は exportArchive 失敗でも exit 0 を返すため、
       # IPA 不在をここで検出してビルド検証を fail させる
       - name: Detect path for ipa file
         run: |
-          ipa_path="$(find build/ios/ipa -type f -name '*.ipa' | head -n 1)"
+          ipa_path="$(find mobile_app/build/ios/ipa -type f -name '*.ipa' | head -n 1)"
           if [[ -z "$ipa_path" ]]; then
-            echo "No .ipa found under build/ios/ipa" >&2
+            echo "No .ipa found under mobile_app/build/ios/ipa" >&2
             exit 1
           fi
           echo "IPA_PATH=$ipa_path" >> "$GITHUB_ENV"

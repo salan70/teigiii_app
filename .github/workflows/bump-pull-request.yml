@@ -42,13 +42,13 @@ jobs:
 
       - name: Bump version
         run: |
-          nix develop --command dart run cider bump "${{ github.event.inputs.bump }}" --bump-build
-          echo "BUMP_VERSION=$(nix develop --command dart run cider version)" >> "$GITHUB_ENV"
+          nix develop --command bash -c 'cd mobile_app && dart run cider bump "${{ github.event.inputs.bump }}" --bump-build'
+          echo "BUMP_VERSION=$(nix develop --command bash -c 'cd mobile_app && dart run cider version')" >> "$GITHUB_ENV"
 
       - name: Commit pubspec.yaml
         run: |
           git checkout develop
-          git add -u pubspec.yaml
+          git add -u mobile_app/pubspec.yaml
           echo "Bumped version number to $BUMP_VERSION" | git commit --file=-
 
       - name: Create release branch
