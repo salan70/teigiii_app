@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../feature/auth/application/auth_state.dart';
 import '../../util/extension/scroll_controller_extension.dart';
 import '../common_provider/key_provider.dart';
+import '../common_provider/top_level_scroll_controller_provider.dart';
 import '../router/app_router.dart';
 
 // 参考
@@ -15,6 +15,7 @@ class BaseRouterPage extends AutoRouter {
   const BaseRouterPage({super.key});
 }
 
+/// @doc doc/specs/mobile-app-functional-spec.md#2-2-最上位ナビゲーション
 @RoutePage()
 class BasePage extends ConsumerWidget {
   const BasePage({super.key});
@@ -23,10 +24,9 @@ class BasePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUserId = ref.watch(userIdProvider);
     return currentUserId == null
-        ? const Scaffold(body: Center(child: CupertinoActivityIndicator()))
+        ? const Scaffold(body: Center(child: CircularProgressIndicator()))
         : AutoTabsRouter(
             routes: [
-              const HomeRouterRoute(),
               DictionaryIndividualRouterRoute(
                 children: [
                   DictionaryIndividualRoute(
@@ -36,6 +36,7 @@ class BasePage extends ConsumerWidget {
                 ],
               ),
               const DictionaryEveryoneRouterRoute(),
+              const HomeRouterRoute(),
             ],
             builder: (context, child) {
               final tabsRouter = context.tabsRouter;
@@ -53,19 +54,19 @@ class BasePage extends ConsumerWidget {
                   bottomNavigationBar: BottomNavigationBar(
                     items: const [
                       BottomNavigationBarItem(
-                        icon: Icon(CupertinoIcons.house),
-                        activeIcon: Icon(CupertinoIcons.house_fill),
-                        label: 'ホーム',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(CupertinoIcons.person),
-                        activeIcon: Icon(CupertinoIcons.person_fill),
+                        icon: Icon(Icons.menu_book_outlined),
+                        activeIcon: Icon(Icons.menu_book),
                         label: 'あなたの辞書',
                       ),
                       BottomNavigationBarItem(
-                        icon: Icon(CupertinoIcons.person_3),
-                        activeIcon: Icon(CupertinoIcons.person_3_fill),
+                        icon: Icon(Icons.people_outline),
+                        activeIcon: Icon(Icons.people),
                         label: 'みんなの辞書',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.dynamic_feed_outlined),
+                        activeIcon: Icon(Icons.dynamic_feed),
+                        label: 'タイムライン',
                       ),
                     ],
                     currentIndex: tabsRouter.activeIndex,
@@ -77,9 +78,14 @@ class BasePage extends ConsumerWidget {
                             .innerRouterOf<StackRouter>(tabsRouter.current.name)
                             ?.popUntilRoot();
 
-                        PrimaryScrollController.of(
-                          ref.read(globalKeyProvider).currentContext!,
-                        ).scrollToTop();
+                        final scrollController = ref.read(
+                          topLevelScrollControllerProvider(
+                            TopLevelTab.values[index],
+                          ),
+                        );
+                        if (scrollController.hasClients) {
+                          scrollController.scrollToTop();
+                        }
                         return;
                       }
                       // 選択中でないタブをTapした場合

@@ -9,7 +9,9 @@ import '../../feature/user_profile/presentation/dictionary_author_widget.dart';
 import '../../feature/word/presentation/initial_main_group_list.dart';
 import '../../feature/word/util/dictionary_page_type.dart';
 import '../../util/logger.dart';
-import '../common_widget/button/to_setting_button.dart';
+import '../common_provider/top_level_scroll_controller_provider.dart';
+import '../common_widget/button/account_menu_button.dart';
+import '../common_widget/button/to_global_search_button.dart';
 import '../common_widget/error_and_retry_widget.dart';
 
 @RoutePage()
@@ -37,9 +39,19 @@ class DictionaryIndividualPage extends ConsumerWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text('${targetUserProfile.name}の辞書'),
-            leading: isTopRoute ? const ToSettingButton() : const BackButton(),
+            automaticallyImplyLeading: !isTopRoute,
+            actions: isTopRoute
+                ? const [ToGlobalSearchButton(), AccountMenuButton()]
+                : null,
           ),
           body: ListView(
+            controller: isTopRoute
+                ? ref.watch(
+                    topLevelScrollControllerProvider(
+                      TopLevelTab.personalDictionary,
+                    ),
+                  )
+                : null,
             children: [
               SizedBox(
                 height: 80,

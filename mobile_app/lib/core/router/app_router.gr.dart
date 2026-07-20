@@ -100,6 +100,12 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    GlobalSearchRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const GlobalSearchPage(),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -498,6 +504,17 @@ class DictionarySubIndexRouteArgs {
   String toString() {
     return 'DictionarySubIndexRouteArgs{key: $key, selectedInitialMainGroup: $selectedInitialMainGroup, dictionaryPageType: $dictionaryPageType, targetUserId: $targetUserId}';
   }
+}
+
+/// generated route for
+/// [GlobalSearchPage]
+class GlobalSearchRoute extends PageRouteInfo<void> {
+  const GlobalSearchRoute({List<PageRouteInfo>? children})
+    : super(GlobalSearchRoute.name, initialChildren: children);
+
+  static const String name = 'GlobalSearchRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

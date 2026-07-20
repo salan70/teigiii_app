@@ -19,6 +19,8 @@
 - タップ対象は 44 pt 相当以上を確保し、文字拡大時に主要操作が欠けないようにする
 - loading、empty、error、data の各状態を画面ごとに明示する
 
+<!-- @code mobile_app/lib/core/page/base_page.dart#BasePage -->
+<!-- @code mobile_app/lib/core/common_provider/top_level_scroll_controller_provider.dart#topLevelScrollControllerProvider -->
 ### 2.2 最上位ナビゲーション
 
 下部ナビゲーションを次の順序で固定する。
@@ -32,6 +34,8 @@
 - 選択中のタブを再度タップした場合は、そのタブのルートへ戻して先頭までスクロールする
 - 各タブは独立した navigation stack を持つ
 
+<!-- @code mobile_app/lib/core/common_widget/button/to_global_search_button.dart#ToGlobalSearchButton -->
+<!-- @code mobile_app/lib/core/common_widget/button/account_menu_button.dart#AccountMenuButton -->
 ### 2.3 共通ヘッダー
 
 - すべての最上位画面にグローバル検索を置く
@@ -229,6 +233,7 @@
 - 自分の定義、下書き、非公開定義、言葉登録を表示しない
 - ミュート対象を表示しない
 
+<!-- @code mobile_app/lib/core/page/global_search_page.dart#GlobalSearchPage -->
 ## 10. グローバル検索
 
 - 最上位画面の検索アイコンから同じ検索画面を開く

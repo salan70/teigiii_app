@@ -12,7 +12,7 @@ ThemeData getThemeData(ThemeMode themeMode, BuildContext context) {
 
   return ThemeData(
     // Flutter 3.16 以降のデフォルト M3 化による意図しない見た目変更を防ぐ。
-    // M3 への移行は #187 の UI 刷新で意図的に行う。
+    // #187 の UI 刷新後も既存ブランドとコンポーネントを維持する。
     useMaterial3: false,
     fontFamily: lineFontFamily,
     colorScheme: colorScheme,

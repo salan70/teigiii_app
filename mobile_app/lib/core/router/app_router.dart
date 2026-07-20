@@ -17,6 +17,7 @@ import '../page/definition_post_page.dart';
 import '../page/dictionary_everyone_page.dart';
 import '../page/dictionary_individual_page.dart';
 import '../page/dictionary_sub_index_page.dart';
+import '../page/global_search_page.dart';
 import '../page/home_page.dart';
 import '../page/license_page.dart';
 import '../page/profile_edit_page.dart';
@@ -49,6 +50,7 @@ class AppRouter extends _$AppRouter {
   final Ref ref;
 
   final List<AdaptiveRoute> commonRouteList = [
+    AdaptiveRoute(path: 'search', page: GlobalSearchRoute.page),
     AdaptiveRoute(path: 'definition_detail', page: DefinitionDetailRoute.page),
     AdaptiveRoute(path: 'user_list_liked', page: UserListLikedRoute.page),
     AdaptiveRoute(path: 'word_top', page: WordTopRoute.page),
@@ -78,18 +80,6 @@ class AppRouter extends _$AppRouter {
       guards: [ref.read(firstLaunchGuardProvider), ref.read(authGuardProvider)],
       children: [
         AdaptiveRoute(
-          path: 'home',
-          page: HomeRouterRoute.page,
-          children: [
-            AdaptiveRoute(initial: true, page: HomeRoute.page),
-            AdaptiveRoute(
-              path: 'dictionary_individual',
-              page: DictionaryIndividualRoute.page,
-            ),
-            ...commonRouteList,
-          ],
-        ),
-        AdaptiveRoute(
           path: 'dictionary_individual',
           page: DictionaryIndividualRouterRoute.page,
           children: [
@@ -107,6 +97,18 @@ class AppRouter extends _$AppRouter {
               path: 'word_search_result',
               page: WordSearchResultRoute.page,
             ),
+            AdaptiveRoute(
+              path: 'dictionary_individual',
+              page: DictionaryIndividualRoute.page,
+            ),
+            ...commonRouteList,
+          ],
+        ),
+        AdaptiveRoute(
+          path: 'home',
+          page: HomeRouterRoute.page,
+          children: [
+            AdaptiveRoute(initial: true, page: HomeRoute.page),
             AdaptiveRoute(
               path: 'dictionary_individual',
               page: DictionaryIndividualRoute.page,

@@ -7,7 +7,8 @@ import '../../feature/definition_list/presentation/definition_list.dart';
 import '../../feature/definition_list/util/definition_feed_type.dart';
 import '../../util/extension/scroll_controller_extension.dart';
 import '../common_provider/key_provider.dart';
-import '../common_widget/button/to_setting_button.dart';
+import '../common_provider/top_level_scroll_controller_provider.dart';
+import '../common_widget/button/to_global_search_button.dart';
 import '../common_widget/simple_empty_widget.dart';
 import '../common_widget/stickey_tab_bar_deligate.dart';
 
@@ -28,12 +29,16 @@ class HomePage extends ConsumerWidget {
         body: SafeArea(
           child: NestedScrollView(
             key: ref.watch(globalKeyProvider),
+            controller: ref.watch(
+              topLevelScrollControllerProvider(TopLevelTab.timeline),
+            ),
             headerSliverBuilder: (BuildContext context, bool _) {
               return <Widget>[
                 const SliverAppBar(
                   elevation: 0,
-                  title: Text('ホーム'),
-                  leading: ToSettingButton(),
+                  title: Text('タイムライン'),
+                  automaticallyImplyLeading: false,
+                  actions: [ToGlobalSearchButton()],
                 ),
                 SliverPersistentHeader(
                   pinned: true,
@@ -42,7 +47,7 @@ class HomePage extends ConsumerWidget {
                       labelStyle: Theme.of(context).textTheme.titleMedium,
                       indicatorWeight: 3,
                       tabs: const [
-                        Tab(text: 'おすすめ'),
+                        Tab(text: '見つける'),
                         Tab(text: 'フォロー中'),
                       ],
                       onTap: (_) {
@@ -63,7 +68,7 @@ class HomePage extends ConsumerWidget {
               children: <Widget>[
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.homeRecommend,
-                  emptyWidget: SimpleEmptyWidget(message: 'おすすめの投稿がありません...'),
+                  emptyWidget: SimpleEmptyWidget(message: '新しい活動がありません。'),
                 ),
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.homeFollowing,
