@@ -41,8 +41,7 @@ name = "teigiii-api-prod"
 [env.prod.vars]
 FIREBASE_PROJECT_ID = "everyone-teigi-prod"
 FIREBASE_PROJECT_NUMBER = "713374936833"
-# #186 で prod Worker の実 URL へ置換してから deploy する。
-AVATAR_BASE_URL = "https://api.prod.invalid/v1"
+AVATAR_BASE_URL = "https://teigiii-api-prod.tetsuo21ad.workers.dev/v1"
 
 [[env.prod.d1_databases]]
 binding = "DB"

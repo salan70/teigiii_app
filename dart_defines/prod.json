@@ -2,5 +2,5 @@
     "flavor": "prod",
     "appName": "Teigiii",
     "appIdSuffix": "",
-    "apiBaseUrl": "https://api.prod.invalid"
+    "apiBaseUrl": "https://teigiii-api-prod.tetsuo21ad.workers.dev"
 }
