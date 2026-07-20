@@ -7,6 +7,7 @@ workspace="$project_root/ios/Runner.xcworkspace"
 plugin_package="$project_root/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift"
 framework_package="$project_root/ios/Flutter/ephemeral/Packages/.packages/FlutterFramework/Package.swift"
 xcode_project="$project_root/ios/Runner.xcodeproj/project.pbxproj"
+deliver_workflow="$project_root/.github/workflows/deliver.yml"
 
 if [[ ! -f "$plugin_package" ]] || ! grep -Fq '.iOS("15.0")' "$plugin_package"; then
   echo "FlutterGeneratedPluginSwiftPackage is not configured for iOS 15.0. Run 'just setup'." >&2
@@ -30,6 +31,21 @@ fi
 
 if ! grep -Fq -- '-gsp \"$PROJECT_DIR/$flavor/GoogleService-Info.plist\"' "$xcode_project"; then
   echo "Crashlytics must receive the flavor-specific GoogleService-Info.plist." >&2
+  exit 1
+fi
+
+resolve_packages_line="$(
+  grep -nF 'xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme prod' \
+    "$deliver_workflow" | head -1 | cut -d: -f1 || true
+)"
+build_ipa_line="$(
+  grep -nF 'flutter build ipa --flavor prod' "$deliver_workflow" |
+    head -1 |
+    cut -d: -f1 || true
+)"
+if [[ -z "$resolve_packages_line" ]] || [[ -z "$build_ipa_line" ]] ||
+  ((resolve_packages_line >= build_ipa_line)); then
+  echo "The deliver workflow must resolve iOS Swift packages before building the IPA." >&2
   exit 1
 fi
 

@@ -57,6 +57,9 @@ jobs:
       - name: Install dependencies
         run: nix develop --command just setup
 
+      - name: Resolve iOS Swift packages
+        run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme prod
+
       - name: Build ipa
         run: nix develop --command flutter build ipa --flavor prod --dart-define-from-file=dart_defines/prod.json --export-options-plist=./ios/ExportOptions.plist
 
