@@ -2,7 +2,7 @@
 flavor=prod
 appName=Teigiii
 appIdSuffix=
-apiBaseUrl=https:/$()/api.prod.invalid
+apiBaseUrl=https:/$()/teigiii-api-prod.tetsuo21ad.workers.dev
 
 CODE_SIGN_IDENTITY=Apple Development
 CODE_SIGN_IDENTITY[sdk=iphoneos*]=iPhone Distribution
