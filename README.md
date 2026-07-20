@@ -30,7 +30,7 @@ just setup
 
 direnv を使わない場合は、先に `nix develop` で開発シェルへ入ってください。
 
-`just setup` は `mobile_app/` と `backend/` の両方の依存関係を入れます。
+`just setup`（および `just mobile-setup`）は依存関係の導入のみで、`flutter clean` は実行しません。ビルドキャッシュを消すときは `just mobile-clean` を使ってください。
 
 # アプリ起動（run）
 

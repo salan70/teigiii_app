@@ -5,9 +5,10 @@ default:
 
 # --- 横断（モバイル + バックエンド）---
 
+# mobile / backend の依存を入れる（flutter clean はしない）
 setup: mobile-setup backend-setup
 
-analyze: mobile-analyze backend-lint
+analyze: mobile-analyze backend-analyze
 
 format: mobile-format backend-format
 
@@ -24,8 +25,13 @@ docbridge-check:
 
 # --- mobile（Flutter アプリ）---
 
+# 依存導入のみ（ビルドキャッシュは消さない）
 mobile-setup:
-    cd mobile_app && flutter clean && flutter pub get
+    cd mobile_app && flutter pub get
+
+# ビルドキャッシュを明示的に消すとき用
+mobile-clean:
+    cd mobile_app && flutter clean
 
 mobile-generate:
     cd mobile_app && dart run build_runner build --delete-conflicting-outputs
@@ -68,7 +74,8 @@ mobile-check-ios-native-asset binary sdk:
 backend-setup:
     cd backend && bun install
 
-backend-lint:
+# lint + typecheck（横断の `analyze` から呼ばれる）
+backend-analyze:
     cd backend && bun run lint && bun run typecheck
 
 backend-format:
