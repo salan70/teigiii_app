@@ -2,14 +2,12 @@ import { describe, expect, test } from "bun:test";
 
 import {
   buildMigrationReport,
-  detectWordCollisions,
   transformDefinitions,
   transformFollows,
   transformLikes,
   transformUserMutes,
   transformUsers,
   transformWords,
-  WordCollisionError,
 } from "./transform";
 import type {
   DefinitionRecord,
@@ -27,24 +25,39 @@ function customIconUrl(uid: string): string {
   return `https://firebasestorage.googleapis.com/v0/b/everyone-teigi-prod.appspot.com/o/users%2F${uid}%2Fprofile_image.png?alt=media&token=dummy`;
 }
 
-describe("detectWordCollisions / transformWords", () => {
-  test("衝突がなければそのまま変換する", () => {
+describe("transformWords", () => {
+  test("重複がなければそのまま変換する", () => {
     const words: WordRecord[] = [
       { id: "w1", word: "言葉", reading: "ことば", createdAt: 1, updatedAt: 1 },
       { id: "w2", word: "定義", reading: "ていぎ", createdAt: 2, updatedAt: 2 },
     ];
-    expect(detectWordCollisions(words)).toEqual([]);
-    const rows = transformWords(words);
-    expect(rows).toHaveLength(2);
-    expect(rows[0]).toMatchObject({
+    const result = transformWords(words);
+    expect(result.rows).toHaveLength(2);
+    expect(result.rows[0]).toMatchObject({
       id: "w1",
       word: "言葉",
       reading_sub_group: "こ",
       created_by: null,
     });
+    expect(result.wordIdRemap.size).toBe(0);
+    expect(result.mergedGroups).toEqual([]);
   });
 
-  test("trim + NFC 正規化後に同一になる語を衝突として検出する", () => {
+  test("完全同一文字列の重複 word は createdAt 最古を正としてマージする", () => {
+    const words: WordRecord[] = [
+      { id: "w1", word: "同じ", createdAt: 20, updatedAt: 20, reading: "おなじ" },
+      { id: "w2", word: "同じ", createdAt: 10, updatedAt: 10, reading: "おなじ" },
+    ];
+    const result = transformWords(words);
+    expect(result.rows).toHaveLength(1);
+    expect(result.rows[0]).toMatchObject({ id: "w2", word: "同じ", created_at: 10 });
+    expect([...result.wordIdRemap.entries()]).toEqual([["w1", "w2"]]);
+    expect(result.mergedGroups).toEqual([
+      { normalizedWord: "同じ", canonicalId: "w2", mergedIds: ["w1"] },
+    ]);
+  });
+
+  test("trim + NFC 正規化後に同一になる word もマージする", () => {
     const combiningVoicedMark = String.fromCharCode(0x3099);
     const words: WordRecord[] = [
       { id: "w1", word: "がっこう", createdAt: 1, updatedAt: 1, reading: "がっこう" },
@@ -56,25 +69,39 @@ describe("detectWordCollisions / transformWords", () => {
         reading: "がっこう",
       },
     ];
-    const collisions = detectWordCollisions(words);
-    expect(collisions).toHaveLength(1);
-    expect(collisions[0]!.normalizedWord).toBe("がっこう");
-    expect(collisions[0]!.originalWords.map((w) => w.id).toSorted()).toEqual(["w1", "w2"]);
+    const result = transformWords(words);
+    expect(result.rows).toHaveLength(1);
+    expect(result.rows[0]).toMatchObject({ id: "w1", word: "がっこう" });
+    expect([...result.wordIdRemap.entries()]).toEqual([["w2", "w1"]]);
   });
 
-  test("衝突がある場合 transformWords は WordCollisionError を投げる（fail-fast）", () => {
+  test("createdAt が同値なら id 昇順で決定的に正を選ぶ", () => {
     const words: WordRecord[] = [
-      { id: "w1", word: "同じ", createdAt: 1, updatedAt: 1, reading: "おなじ" },
-      { id: "w2", word: "同じ", createdAt: 2, updatedAt: 2, reading: "おなじ" },
+      { id: "wB", word: "同時", createdAt: 5, updatedAt: 5, reading: "どうじ" },
+      { id: "wA", word: "同時", createdAt: 5, updatedAt: 5, reading: "どうじ" },
     ];
-    expect(() => transformWords(words)).toThrow(WordCollisionError);
+    const result = transformWords(words);
+    expect(result.rows[0]!.id).toBe("wA");
+    expect([...result.wordIdRemap.entries()]).toEqual([["wB", "wA"]]);
+  });
+
+  test("id のタイブレークはロケール非依存のコードポイント順で行う", () => {
+    // localeCompare だと "a1" < "B1" となり環境のロケール設定に依存する。
+    // コードポイント順（大文字が先）なら "B1" < "a1" で決定的。
+    const words: WordRecord[] = [
+      { id: "a1", word: "同時刻", createdAt: 5, updatedAt: 5, reading: "どうじこく" },
+      { id: "B1", word: "同時刻", createdAt: 5, updatedAt: 5, reading: "どうじこく" },
+    ];
+    const result = transformWords(words);
+    expect(result.rows[0]!.id).toBe("B1");
+    expect([...result.wordIdRemap.entries()]).toEqual([["a1", "B1"]]);
   });
 
   test("readingSubGroup をサーバーと同じ関数で再計算する", () => {
     const words: WordRecord[] = [
       { id: "w1", word: "アイス", reading: "アイス", createdAt: 1, updatedAt: 1 },
     ];
-    expect(transformWords(words)[0]!.reading_sub_group).toBe("あ");
+    expect(transformWords(words).rows[0]!.reading_sub_group).toBe("あ");
   });
 });
 
@@ -191,7 +218,7 @@ describe("transformDefinitions", () => {
   };
 
   test("word/author が有効なら status と finalized_at を変換する", () => {
-    const result = transformDefinitions([base], new Set(["w1"]), new Set(["u1"]));
+    const result = transformDefinitions([base], new Set(["w1"]), new Set(["u1"]), new Map());
     expect(result.dropped).toEqual([]);
     expect(result.rows[0]).toMatchObject({
       id: "d1",
@@ -207,20 +234,32 @@ describe("transformDefinitions", () => {
       [{ ...base, isPublic: false }],
       new Set(["w1"]),
       new Set(["u1"]),
+      new Map(),
     );
     expect(result.rows[0]!.status).toBe("private");
   });
 
   test("word_id が存在しない行は drop してレポートに記録する", () => {
-    const result = transformDefinitions([base], new Set(), new Set(["u1"]));
+    const result = transformDefinitions([base], new Set(), new Set(["u1"]), new Map());
     expect(result.rows).toEqual([]);
     expect(result.dropped).toEqual([{ id: "d1", reason: "orphan: word_id w1 not found" }]);
   });
 
   test("author_id が存在しない行は drop してレポートに記録する", () => {
-    const result = transformDefinitions([base], new Set(["w1"]), new Set());
+    const result = transformDefinitions([base], new Set(["w1"]), new Set(), new Map());
     expect(result.rows).toEqual([]);
     expect(result.dropped[0]!.reason).toMatch(/author_id/);
+  });
+
+  test("マージで消えた word を参照する定義は canonical word に付け替える", () => {
+    const result = transformDefinitions(
+      [{ ...base, wordId: "wDup" }],
+      new Set(["w1"]),
+      new Set(["u1"]),
+      new Map([["wDup", "w1"]]),
+    );
+    expect(result.dropped).toEqual([]);
+    expect(result.rows[0]).toMatchObject({ id: "d1", word_id: "w1" });
   });
 });
 
@@ -353,13 +392,14 @@ describe("transformUserMutes", () => {
 });
 
 describe("buildMigrationReport", () => {
-  test("drop 件数・補完件数・アバター分類件数を集計する", () => {
+  test("drop 件数・補完件数・アバター分類件数・word マージを集計する", () => {
     const report = buildMigrationReport({
       defaultedMissingUserConfigs: ["u1"],
       droppedDefinitions: [{ id: "d1", reason: "orphan" }],
       droppedLikes: [],
       droppedFollows: [],
       droppedUserMutes: [],
+      mergedWordGroups: [{ normalizedWord: "同じ", canonicalId: "w2", mergedIds: ["w1"] }],
       avatarClassifications: new Map([
         ["u1", { type: "default", slug: "ghost_writer", objectPath: "x" } as const],
         ["u2", { type: "custom", objectPath: "y" } as const],
@@ -373,5 +413,8 @@ describe("buildMigrationReport", () => {
     });
     expect(report.defaultedMissingUserConfigs).toEqual([{ userId: "u1" }]);
     expect(report.avatarClassificationCounts).toEqual({ default: 1, custom: 1 });
+    expect(report.mergedWordDuplicates).toEqual([
+      { normalizedWord: "同じ", canonicalId: "w2", mergedIds: ["w1"] },
+    ]);
   });
 });

@@ -46,6 +46,54 @@ describe("recomputeExpectedState", () => {
     expect(state.words[0]).toMatchObject({ id: "w1", word: "言葉", reading_sub_group: "こ" });
   });
 
+  test("重複 word は createdAt 最古（同値なら id 昇順）を正としてマージし定義を付け替える", () => {
+    const snapshot = emptySnapshot();
+    snapshot.words = [
+      { id: "w1", word: "同じ", reading: "おなじ", createdAt: 20, updatedAt: 20 },
+      { id: "w2", word: "同じ", reading: "おなじ", createdAt: 10, updatedAt: 10 },
+    ];
+    snapshot.userProfiles = [
+      {
+        id: "u1",
+        publicId: "000000001",
+        name: "太郎",
+        bio: "",
+        profileImageUrl: defaultIconUrl,
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    ];
+    snapshot.definitions = [
+      {
+        id: "d1",
+        wordId: "w1",
+        authorId: "u1",
+        definition: "本文",
+        isPublic: true,
+        isEdited: false,
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    ];
+    const state = recomputeExpectedState(snapshot, 0);
+    expect(state.words).toHaveLength(1);
+    expect(state.words[0]).toMatchObject({ id: "w2", word: "同じ", created_at: 10 });
+    expect(state.definitions[0]).toMatchObject({ id: "d1", word_id: "w2" });
+    expect(state.droppedCounts.definitions).toBe(0);
+    expect(state.mergedWordGroupCount).toBe(1);
+  });
+
+  test("id のタイブレークはロケール非依存のコードポイント順で行う", () => {
+    const snapshot = emptySnapshot();
+    snapshot.words = [
+      { id: "a1", word: "同時刻", reading: "どうじこく", createdAt: 5, updatedAt: 5 },
+      { id: "B1", word: "同時刻", reading: "どうじこく", createdAt: 5, updatedAt: 5 },
+    ];
+    const state = recomputeExpectedState(snapshot, 0);
+    expect(state.words).toHaveLength(1);
+    expect(state.words[0]!.id).toBe("B1");
+  });
+
   test("UserConfigs 欠損ユーザーは 'unknown' 補完としてカウントする", () => {
     const snapshot = emptySnapshot();
     snapshot.userProfiles = [
