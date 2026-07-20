@@ -165,9 +165,11 @@ export type MigrationReport = {
     default: number;
     custom: number;
   };
-  mergedWordDuplicates: {
-    normalizedWord: string;
-    canonicalId: string;
-    mergedIds: string[];
-  }[];
+  mergedWordDuplicates: WordMergeGroup[];
+};
+
+export type WordMergeGroup = {
+  normalizedWord: string;
+  canonicalId: string;
+  mergedIds: string[];
 };

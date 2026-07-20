@@ -85,6 +85,18 @@ describe("transformWords", () => {
     expect([...result.wordIdRemap.entries()]).toEqual([["wB", "wA"]]);
   });
 
+  test("id のタイブレークはロケール非依存のコードポイント順で行う", () => {
+    // localeCompare だと "a1" < "B1" となり環境のロケール設定に依存する。
+    // コードポイント順（大文字が先）なら "B1" < "a1" で決定的。
+    const words: WordRecord[] = [
+      { id: "a1", word: "同時刻", createdAt: 5, updatedAt: 5, reading: "どうじこく" },
+      { id: "B1", word: "同時刻", createdAt: 5, updatedAt: 5, reading: "どうじこく" },
+    ];
+    const result = transformWords(words);
+    expect(result.rows[0]!.id).toBe("B1");
+    expect([...result.wordIdRemap.entries()]).toEqual([["a1", "B1"]]);
+  });
+
   test("readingSubGroup をサーバーと同じ関数で再計算する", () => {
     const words: WordRecord[] = [
       { id: "w1", word: "アイス", reading: "アイス", createdAt: 1, updatedAt: 1 },

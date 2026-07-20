@@ -21,6 +21,7 @@ import type {
   UserMuteRow,
   UserProfileRecord,
   UserRow,
+  WordMergeGroup,
   WordRecord,
   WordRow,
 } from "./types";
@@ -28,12 +29,6 @@ import type {
 const unknownVersionPlaceholder = "unknown";
 
 // ---- words ----
-
-export type WordMergeGroup = {
-  normalizedWord: string;
-  canonicalId: string;
-  mergedIds: string[];
-};
 
 export type TransformWordsResult = {
   rows: WordRow[];
@@ -62,8 +57,9 @@ export function transformWords(words: readonly WordRecord[]): TransformWordsResu
   const mergedGroups: WordMergeGroup[] = [];
 
   for (const [normalizedWord, group] of groups) {
+    // タイブレークはロケール非依存のコードポイント順（localeCompare は環境依存）
     const [canonical, ...merged] = group.toSorted(
-      (a, b) => a.createdAt - b.createdAt || a.id.localeCompare(b.id),
+      (a, b) => a.createdAt - b.createdAt || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
     );
     if (canonical === undefined) continue;
     rows.push({

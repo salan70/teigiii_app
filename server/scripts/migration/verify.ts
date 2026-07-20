@@ -135,7 +135,10 @@ export function recomputeExpectedState(
   const wordIdRemap = new Map<string, string>();
   let mergedWordGroupCount = 0;
   for (const [normalizedWord, group] of wordGroups) {
-    const sorted = group.toSorted((a, b) => a.createdAt - b.createdAt || a.id.localeCompare(b.id));
+    // タイブレークはロケール非依存のコードポイント順（localeCompare は環境依存）
+    const sorted = group.toSorted(
+      (a, b) => a.createdAt - b.createdAt || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
+    );
     const canonical = sorted[0];
     if (canonical === undefined) continue;
     words.push({

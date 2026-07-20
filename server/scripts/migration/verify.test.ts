@@ -83,6 +83,17 @@ describe("recomputeExpectedState", () => {
     expect(state.mergedWordGroupCount).toBe(1);
   });
 
+  test("id のタイブレークはロケール非依存のコードポイント順で行う", () => {
+    const snapshot = emptySnapshot();
+    snapshot.words = [
+      { id: "a1", word: "同時刻", reading: "どうじこく", createdAt: 5, updatedAt: 5 },
+      { id: "B1", word: "同時刻", reading: "どうじこく", createdAt: 5, updatedAt: 5 },
+    ];
+    const state = recomputeExpectedState(snapshot, 0);
+    expect(state.words).toHaveLength(1);
+    expect(state.words[0]!.id).toBe("B1");
+  });
+
   test("UserConfigs 欠損ユーザーは 'unknown' 補完としてカウントする", () => {
     const snapshot = emptySnapshot();
     snapshot.userProfiles = [
