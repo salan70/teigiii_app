@@ -39,11 +39,14 @@
           flutterSrc = pkgs.fetchzip release;
           mkFlutterWrapper = name: executable: pkgs.writeShellApplication {
             inherit name;
+            # rsync を runtimeInputs に入れると exec 先の flutter → xcodebuild にも
+            # PATH が継承され、exportArchive が起動する rsync server が GNU 版に
+            # 化けて `--extended-attributes` 非対応で "Copy failed" になる。
+            # rsync は PATH 注入せず絶対パスで呼ぶ。
             runtimeInputs = [
               pkgs.coreutils
               pkgs.git
               pkgs.patch
-              pkgs.rsync
             ];
             text = ''
               repo_root="$PWD"
@@ -58,7 +61,7 @@
                 tmp="$flutter_root.tmp"
                 rm -rf "$tmp"
                 mkdir -p "$(dirname "$tmp")"
-                rsync -a --delete "${flutterSrc}/" "$tmp/"
+                ${pkgs.rsync}/bin/rsync -a --delete "${flutterSrc}/" "$tmp/"
                 chmod -R u+w "$tmp"
                 patch -d "$tmp" -p1 < ${./nix/patches/flutter-ios-15.patch}
                 patch -d "$tmp" -p1 < ${./nix/patches/flutter-ios-native-assets.patch}
