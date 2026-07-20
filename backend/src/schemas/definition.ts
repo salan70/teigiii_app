@@ -6,9 +6,7 @@ import { wordSummarySchema } from "./word";
 // 現行実装（definition_for_write.dart）に準拠
 export const maxBodyLength = 500;
 
-export const definitionStatusSchema = z
-  .enum(["draft", "public", "private"])
-  .openapi("DefinitionStatus");
+export const definitionStatusSchema = z.enum(["public", "private"]).openapi("DefinitionStatus");
 
 /** 定義の合成 DTO。word / author / いいね情報を埋め込んで返す。 */
 export const definitionResponseSchema = z
@@ -21,10 +19,10 @@ export const definitionResponseSchema = z
     isEdited: z.boolean(),
     likesCount: z.number().int(),
     isLikedByMe: z.boolean(),
-    // 初めて public/private で確定した時刻。draft は null。
-    finalizedAt: isoDateTime.nullable(),
+    // 初めて public/private で確定した時刻。
+    finalizedAt: isoDateTime,
     // 本文の編集期限（finalized_at + 1 時間）。サーバー時計を正とするため明示的に返す。
-    editableUntil: isoDateTime.nullable(),
+    editableUntil: isoDateTime,
     createdAt: isoDateTime,
     updatedAt: isoDateTime,
   })
@@ -39,13 +37,13 @@ export const createDefinitionRequestSchema = z
   .openapi("CreateDefinitionRequest");
 
 /**
- * 本文編集・状態遷移・（下書きのみ）言葉の変更。
- * 許可される遷移: draft→public/private、public↔private。下書き戻し・期限後の本文変更はサーバーで拒否する。
+ * 本文編集・公開範囲変更。
+ * public/private は相互に変更できる。期限後の本文変更はサーバーで拒否する。
  */
 export const updateDefinitionRequestSchema = z
   .object({
-    wordId: z.string().optional(),
     body: z.string().min(1).max(maxBodyLength).optional(),
     status: definitionStatusSchema.optional(),
   })
+  .strict()
   .openapi("UpdateDefinitionRequest");

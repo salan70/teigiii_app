@@ -1,117 +1,327 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../feature/definition/application/definition_for_write_notifier.dart';
+import '../../feature/definition/application/definition_draft_editor.dart';
 import '../../feature/definition/domain/definition_for_write.dart';
 import '../../feature/definition/presentation/write_definition_base_page.dart';
+import '../../feature/definition/repository/definition_draft_repository.dart';
 import '../../feature/definition/util/after_post_navigation_type.dart';
+import '../../util/logger.dart';
 import '../../util/mixin/presentation_mixin.dart';
 import '../router/app_router.dart';
 
-/// 定義を投稿するページ
+/// 定義の新規入力・Draft 再開・投稿を一画面で扱うページ。
 @RoutePage()
-class DefinitionPostPage extends ConsumerWidget with PresentationMixin {
+class DefinitionPostPage extends ConsumerStatefulWidget {
   const DefinitionPostPage({
     super.key,
+    this.draftId,
     required this.initialDefinitionForWrite,
     required this.autoFocusForm,
-    this.afterPostNavigation = AfterPostNavigationType.pop,
+    this.afterPostNavigation = AfterPostNavigationType.toDetail,
   });
 
-  /// 遷移時にフォーカスする TextFormField 。
+  final String? draftId;
   final WriteDefinitionFormType? autoFocusForm;
-
-  /// 初期値として持つ [DefinitionForWrite]。
-  /// TextField などに初期表示させたい値がある場合はこの値を渡す。
   final DefinitionForWrite? initialDefinitionForWrite;
-
-  /// 投稿完了後の遷移先。
-  ///
-  /// - [AfterPostNavigationType.pop]（デフォルト）の場合、前の画面に戻る。
-  /// - [AfterPostNavigationType.toDetail] の場合、投稿した定義の詳細画面に遷移する。
   final AfterPostNavigationType afterPostNavigation;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final asyncDefinitionForWrite = ref.watch(
-      definitionForWriteNotifierProvider(initialDefinitionForWrite),
-    );
-    final notifier = ref.watch(
-      definitionForWriteNotifierProvider(initialDefinitionForWrite).notifier,
-    );
+  ConsumerState<DefinitionPostPage> createState() => _DefinitionPostPageState();
+}
 
-    return asyncDefinitionForWrite.when(
-      data: (definitionForWrite) {
-        final canPost = notifier.canPost();
+class _DefinitionPostPageState extends ConsumerState<DefinitionPostPage>
+    with WidgetsBindingObserver, PresentationMixin {
+  bool _allowPop = false;
+  bool _completed = false;
+  bool _backgroundSaveFailed = false;
+  Future<bool>? _backgroundSave;
 
-        return WriteDefinitionBasePage(
-          autoFocusForm: autoFocusForm,
-          definitionForWrite: definitionForWrite,
-          notifier: notifier,
-          appBarActionWidget: InkWell(
-            onTap: canPost
-                ? () async {
-                    primaryFocus?.unfocus();
+  DefinitionDraftEditorProvider get _provider => definitionDraftEditorProvider(
+    widget.draftId,
+    widget.initialDefinitionForWrite,
+  );
 
-                    late final String definitionId;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
 
-                    // TODO(me): フラグを使わないようにしたい。
-                    var isActionCompleted = false;
-                    await executeWithOverlayLoading(
-                      ref,
-                      action: () async {
-                        definitionId = await notifier.post();
-                        isActionCompleted = true;
-                      },
-                      errorToastMessage: '投稿できませんでした。もう一度お試しください。',
-                      successToastMessage: '投稿しました！',
-                      inBaseRouteBeforeAction: false,
-                    );
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
-                    if (!isActionCompleted) {
-                      return;
-                    }
-
-                    // pop すると ref が破棄され、`executeWithOverlayLoading` 内で
-                    // ローディング終了ができなくなる。
-                    // そのため、`executeWithOverlayLoading` 完了後に画面遷移を行っている。
-
-                    // [afterPostNavigation] に応じて画面遷移する。
-                    await ref.read(appRouterProvider).pop();
-                    switch (afterPostNavigation) {
-                      case AfterPostNavigationType.pop:
-                        break;
-                      case AfterPostNavigationType.toDetail:
-                        await ref
-                            .read(appRouterProvider)
-                            .push(
-                              DefinitionDetailRoute(definitionId: definitionId),
-                            );
-                        break;
-                    }
-                  }
-                : null,
-            child: Text(
-              '投稿',
-              style: canPost
-                  ? Theme.of(context).textTheme.titleLarge
-                  : Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.3),
-                    ),
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed &&
+        _backgroundSaveFailed &&
+        mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !_backgroundSaveFailed) {
+          return;
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('下書きを保存できませんでした。'),
+            action: SnackBarAction(
+              label: '再試行',
+              onPressed: () => unawaited(_saveInBackground()),
             ),
           ),
         );
+      });
+      return;
+    }
+    if (_completed ||
+        (state != AppLifecycleState.inactive &&
+            state != AppLifecycleState.paused &&
+            state != AppLifecycleState.hidden)) {
+      return;
+    }
+    unawaited(_saveInBackground());
+  }
+
+  Future<bool> _saveInBackground() {
+    return _backgroundSave ??= ref
+        .read(_provider.notifier)
+        .save()
+        .then((saved) {
+          _backgroundSaveFailed = false;
+          return saved;
+        })
+        .catchError((Object error, StackTrace stackTrace) {
+          _backgroundSaveFailed = true;
+          logger.e(
+            'Draft autosave failed',
+            error: error,
+            stackTrace: stackTrace,
+          );
+          return false;
+        })
+        .whenComplete(() => _backgroundSave = null);
+  }
+
+  Future<void> _close() async {
+    final draft = ref.read(_provider).valueOrNull;
+    if (draft == null) {
+      return;
+    }
+    final notifier = ref.read(_provider.notifier);
+
+    if (!draft.hasAnyInput) {
+      if (draft.isPersisted) {
+        final delete = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: const Text('空になった下書きを削除しますか？'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('キャンセル'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('削除'),
+              ),
+            ],
+          ),
+        );
+        if (delete != true) {
+          return;
+        }
+        var deleted = false;
+        await executeWithOverlayLoading(
+          ref,
+          action: () async {
+            await notifier.delete();
+            deleted = true;
+          },
+          errorToastMessage: '下書きを削除できませんでした。',
+          inBaseRouteBeforeAction: false,
+        );
+        if (!deleted) {
+          return;
+        }
+      }
+      await _pop();
+      return;
+    }
+
+    try {
+      if (await notifier.save()) {
+        await _pop();
+      }
+    } on Object catch (error, stackTrace) {
+      logger.e(
+        'Draft save on close failed',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      if (!mounted) {
+        return;
+      }
+      final retry = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: const Text('下書きを保存できませんでした。'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('編集に戻る'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('変更を破棄'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('再試行'),
+            ),
+          ],
+        ),
+      );
+      if (retry == true) {
+        await _close();
+      } else if (retry == false) {
+        await _pop();
+      }
+    }
+  }
+
+  Future<void> _pop() async {
+    if (mounted) {
+      setState(() => _allowPop = true);
+      await WidgetsBinding.instance.endOfFrame;
+    }
+    await ref.read(appRouterProvider).maybePop();
+  }
+
+  Future<void> _saveExplicitly() async {
+    await executeWithOverlayLoading(
+      ref,
+      action: () => ref.read(_provider.notifier).save(),
+      errorToastMessage: '下書きを保存できませんでした。',
+      successToastMessage: '下書きを保存しました。',
+      inBaseRouteBeforeAction: false,
+      inBaseRouteAfterAction: false,
+    );
+  }
+
+  Future<void> _post() async {
+    final notifier = ref.read(_provider.notifier);
+    String? definitionId;
+    try {
+      definitionId = await notifier.finalize();
+    } on WordReadingMismatchException catch (mismatch) {
+      if (!mounted) {
+        return;
+      }
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('よみが登録内容と異なります'),
+          content: Text(
+            '「${mismatch.word}」は「${mismatch.existingReading}」で登録されています。'
+            'この言葉に定義を投稿しますか？',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('キャンセル'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('投稿する'),
+            ),
+          ],
+        ),
+      );
+      if (confirmed == true) {
+        definitionId = await notifier.finalize(confirmReadingMismatch: true);
+      }
+    }
+    if (definitionId == null || !mounted) {
+      return;
+    }
+
+    _completed = true;
+    await _pop();
+    if (widget.afterPostNavigation == AfterPostNavigationType.toDetail) {
+      await ref
+          .read(appRouterProvider)
+          .push(DefinitionDetailRoute(definitionId: definitionId));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final asyncDraft = ref.watch(_provider);
+    final notifier = ref.watch(_provider.notifier);
+
+    return PopScope(
+      canPop: _allowPop || _completed,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          unawaited(_close());
+        }
       },
-      loading: () => Scaffold(
-        appBar: AppBar(elevation: 0),
-        body: const Center(child: CircularProgressIndicator()),
-      ),
-      error: (error, stackTrace) => Scaffold(
-        appBar: AppBar(elevation: 0),
-        body: Center(child: Text(error.toString())),
+      child: asyncDraft.when(
+        data: (draft) {
+          final fields = draft.fields;
+          return WriteDefinitionBasePage(
+            autoFocusForm: widget.autoFocusForm,
+            definitionForWrite: fields,
+            wordFieldsReadOnly: draft.wordId != null,
+            onWordChanged: notifier.changeWord,
+            onWordReadingChanged: notifier.changeWordReading,
+            onPublicChanged: (value) =>
+                notifier.changePublicState(isPublic: value),
+            onDefinitionChanged: notifier.changeDefinition,
+            isChanged: notifier.isChanged,
+            onClose: _close,
+            bodyActionWidget: TextButton.icon(
+              onPressed: draft.hasAnyInput ? _saveExplicitly : null,
+              icon: const Icon(Icons.save_outlined),
+              label: const Text('下書きを保存'),
+            ),
+            appBarActionWidget: TextButton(
+              onPressed: draft.canFinalize
+                  ? () async {
+                      primaryFocus?.unfocus();
+                      try {
+                        await _post();
+                      } on Object catch (error, stackTrace) {
+                        logger.e(
+                          'Definition finalize failed',
+                          error: error,
+                          stackTrace: stackTrace,
+                        );
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('投稿できませんでした。')),
+                          );
+                        }
+                      }
+                    }
+                  : null,
+              child: const Text('投稿'),
+            ),
+          );
+        },
+        loading: () => Scaffold(
+          appBar: AppBar(elevation: 0),
+          body: const Center(child: CircularProgressIndicator()),
+        ),
+        error: (error, stackTrace) => Scaffold(
+          appBar: AppBar(elevation: 0),
+          body: Center(child: Text(error.toString())),
+        ),
       ),
     );
   }

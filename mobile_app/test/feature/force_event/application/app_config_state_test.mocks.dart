@@ -24,8 +24,13 @@ import 'package:teigi_app/feature/force_event/repository/app_config_repository.d
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeAppConfig_0 extends _i1.SmartFake implements _i2.AppConfig {
-  _FakeAppConfig_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeAppConfig_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 /// A class which mocks [AppConfigRepository].
@@ -34,15 +39,25 @@ class _FakeAppConfig_0 extends _i1.SmartFake implements _i2.AppConfig {
 class MockAppConfigRepository extends _i1.Mock
     implements _i3.AppConfigRepository {
   @override
-  _i4.Future<_i2.AppConfig> fetchAppConfig() =>
-      (super.noSuchMethod(
-            Invocation.method(#fetchAppConfig, []),
-            returnValue: _i4.Future<_i2.AppConfig>.value(
-              _FakeAppConfig_0(this, Invocation.method(#fetchAppConfig, [])),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.AppConfig>.value(
-              _FakeAppConfig_0(this, Invocation.method(#fetchAppConfig, [])),
-            ),
-          )
-          as _i4.Future<_i2.AppConfig>);
+  _i4.Future<_i2.AppConfig> fetchAppConfig() => (super.noSuchMethod(
+        Invocation.method(
+          #fetchAppConfig,
+          [],
+        ),
+        returnValue: _i4.Future<_i2.AppConfig>.value(_FakeAppConfig_0(
+          this,
+          Invocation.method(
+            #fetchAppConfig,
+            [],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.AppConfig>.value(_FakeAppConfig_0(
+          this,
+          Invocation.method(
+            #fetchAppConfig,
+            [],
+          ),
+        )),
+      ) as _i4.Future<_i2.AppConfig>);
 }

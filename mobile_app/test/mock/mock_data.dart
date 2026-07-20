@@ -19,6 +19,7 @@ final mockDefinition = Definition(
   isPublic: true,
   likesCount: 0,
   isLikedByUser: false,
+  editableUntil: nowDateTime.add(const Duration(hours: 1)),
   createdAt: nowDateTime,
 );
 

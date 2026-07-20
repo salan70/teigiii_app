@@ -40,15 +40,21 @@ class UserIdSearchByPublicIdFamily extends Family<AsyncValue<String?>> {
   const UserIdSearchByPublicIdFamily();
 
   /// See also [userIdSearchByPublicId].
-  UserIdSearchByPublicIdProvider call(String publicId) {
-    return UserIdSearchByPublicIdProvider(publicId);
+  UserIdSearchByPublicIdProvider call(
+    String publicId,
+  ) {
+    return UserIdSearchByPublicIdProvider(
+      publicId,
+    );
   }
 
   @override
   UserIdSearchByPublicIdProvider getProviderOverride(
     covariant UserIdSearchByPublicIdProvider provider,
   ) {
-    return call(provider.publicId);
+    return call(
+      provider.publicId,
+    );
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -70,20 +76,24 @@ class UserIdSearchByPublicIdFamily extends Family<AsyncValue<String?>> {
 class UserIdSearchByPublicIdProvider
     extends AutoDisposeFutureProvider<String?> {
   /// See also [userIdSearchByPublicId].
-  UserIdSearchByPublicIdProvider(String publicId)
-    : this._internal(
-        (ref) =>
-            userIdSearchByPublicId(ref as UserIdSearchByPublicIdRef, publicId),
-        from: userIdSearchByPublicIdProvider,
-        name: r'userIdSearchByPublicIdProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$userIdSearchByPublicIdHash,
-        dependencies: UserIdSearchByPublicIdFamily._dependencies,
-        allTransitiveDependencies:
-            UserIdSearchByPublicIdFamily._allTransitiveDependencies,
-        publicId: publicId,
-      );
+  UserIdSearchByPublicIdProvider(
+    String publicId,
+  ) : this._internal(
+          (ref) => userIdSearchByPublicId(
+            ref as UserIdSearchByPublicIdRef,
+            publicId,
+          ),
+          from: userIdSearchByPublicIdProvider,
+          name: r'userIdSearchByPublicIdProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$userIdSearchByPublicIdHash,
+          dependencies: UserIdSearchByPublicIdFamily._dependencies,
+          allTransitiveDependencies:
+              UserIdSearchByPublicIdFamily._allTransitiveDependencies,
+          publicId: publicId,
+        );
 
   UserIdSearchByPublicIdProvider._internal(
     super._createNotifier, {
@@ -148,6 +158,5 @@ class _UserIdSearchByPublicIdProviderElement
   @override
   String get publicId => (origin as UserIdSearchByPublicIdProvider).publicId;
 }
-
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:teigi_app/feature/definition/application/definition_for_write_notifier.dart';
 import 'package:teigi_app/feature/definition/domain/definition_for_write.dart';
 import 'package:teigi_app/feature/definition/presentation/write_definition_base_page.dart';
 
-class MockDefinitionForWriteNotifier extends Mock
-    implements DefinitionForWriteNotifier {}
-
 void main() {
-  final notifier = MockDefinitionForWriteNotifier();
-
   Future<void> pumpPage(
     WidgetTester tester,
     DefinitionForWrite definitionForWrite,
@@ -21,7 +14,11 @@ void main() {
         child: MaterialApp(
           home: WriteDefinitionBasePage(
             definitionForWrite: definitionForWrite,
-            notifier: notifier,
+            onWordChanged: (_) {},
+            onWordReadingChanged: (_) {},
+            onPublicChanged: (_) {},
+            onDefinitionChanged: (_) {},
+            isChanged: false,
             appBarActionWidget: const SizedBox.shrink(),
           ),
         ),

@@ -34,7 +34,9 @@ abstract class _$WordListStateBySearchWordNotifier
     extends BuildlessAsyncNotifier<WordListState> {
   late final String searchWord;
 
-  FutureOr<WordListState> build(String searchWord);
+  FutureOr<WordListState> build(
+    String searchWord,
+  );
 }
 
 /// See also [WordListStateBySearchWordNotifier].
@@ -49,15 +51,21 @@ class WordListStateBySearchWordNotifierFamily
   const WordListStateBySearchWordNotifierFamily();
 
   /// See also [WordListStateBySearchWordNotifier].
-  WordListStateBySearchWordNotifierProvider call(String searchWord) {
-    return WordListStateBySearchWordNotifierProvider(searchWord);
+  WordListStateBySearchWordNotifierProvider call(
+    String searchWord,
+  ) {
+    return WordListStateBySearchWordNotifierProvider(
+      searchWord,
+    );
   }
 
   @override
   WordListStateBySearchWordNotifierProvider getProviderOverride(
     covariant WordListStateBySearchWordNotifierProvider provider,
   ) {
-    return call(provider.searchWord);
+    return call(
+      provider.searchWord,
+    );
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -77,25 +85,24 @@ class WordListStateBySearchWordNotifierFamily
 
 /// See also [WordListStateBySearchWordNotifier].
 class WordListStateBySearchWordNotifierProvider
-    extends
-        AsyncNotifierProviderImpl<
-          WordListStateBySearchWordNotifier,
-          WordListState
-        > {
+    extends AsyncNotifierProviderImpl<WordListStateBySearchWordNotifier,
+        WordListState> {
   /// See also [WordListStateBySearchWordNotifier].
-  WordListStateBySearchWordNotifierProvider(String searchWord)
-    : this._internal(
-        () => WordListStateBySearchWordNotifier()..searchWord = searchWord,
-        from: wordListStateBySearchWordNotifierProvider,
-        name: r'wordListStateBySearchWordNotifierProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$wordListStateBySearchWordNotifierHash,
-        dependencies: WordListStateBySearchWordNotifierFamily._dependencies,
-        allTransitiveDependencies:
-            WordListStateBySearchWordNotifierFamily._allTransitiveDependencies,
-        searchWord: searchWord,
-      );
+  WordListStateBySearchWordNotifierProvider(
+    String searchWord,
+  ) : this._internal(
+          () => WordListStateBySearchWordNotifier()..searchWord = searchWord,
+          from: wordListStateBySearchWordNotifierProvider,
+          name: r'wordListStateBySearchWordNotifierProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$wordListStateBySearchWordNotifierHash,
+          dependencies: WordListStateBySearchWordNotifierFamily._dependencies,
+          allTransitiveDependencies: WordListStateBySearchWordNotifierFamily
+              ._allTransitiveDependencies,
+          searchWord: searchWord,
+        );
 
   WordListStateBySearchWordNotifierProvider._internal(
     super._createNotifier, {
@@ -113,7 +120,9 @@ class WordListStateBySearchWordNotifierProvider
   FutureOr<WordListState> runNotifierBuild(
     covariant WordListStateBySearchWordNotifier notifier,
   ) {
-    return notifier.build(searchWord);
+    return notifier.build(
+      searchWord,
+    );
   }
 
   @override
@@ -134,7 +143,7 @@ class WordListStateBySearchWordNotifierProvider
 
   @override
   AsyncNotifierProviderElement<WordListStateBySearchWordNotifier, WordListState>
-  createElement() {
+      createElement() {
     return _WordListStateBySearchWordNotifierProviderElement(this);
   }
 
@@ -160,18 +169,13 @@ mixin WordListStateBySearchWordNotifierRef
 }
 
 class _WordListStateBySearchWordNotifierProviderElement
-    extends
-        AsyncNotifierProviderElement<
-          WordListStateBySearchWordNotifier,
-          WordListState
-        >
-    with WordListStateBySearchWordNotifierRef {
+    extends AsyncNotifierProviderElement<WordListStateBySearchWordNotifier,
+        WordListState> with WordListStateBySearchWordNotifierRef {
   _WordListStateBySearchWordNotifierProviderElement(super.provider);
 
   @override
   String get searchWord =>
       (origin as WordListStateBySearchWordNotifierProvider).searchWord;
 }
-
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -13,14 +13,14 @@ String _$fetchUserListRepositoryHash() =>
 @ProviderFor(fetchUserListRepository)
 final fetchUserListRepositoryProvider =
     Provider<FetchUserListRepository>.internal(
-      fetchUserListRepository,
-      name: r'fetchUserListRepositoryProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$fetchUserListRepositoryHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  fetchUserListRepository,
+  name: r'fetchUserListRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$fetchUserListRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef FetchUserListRepositoryRef = ProviderRef<FetchUserListRepository>;
 // ignore_for_file: type=lint

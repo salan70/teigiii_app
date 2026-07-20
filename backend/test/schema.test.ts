@@ -10,6 +10,13 @@ import { join } from "node:path";
 
 const migrationsDir = new URL("../drizzle", import.meta.url).pathname;
 
+function applyMigration(db: Database, file: string): void {
+  const sql = readFileSync(join(migrationsDir, file), "utf8");
+  for (const statement of sql.split("--> statement-breakpoint")) {
+    db.run(statement);
+  }
+}
+
 function createDb(): Database {
   const db = new Database(":memory:");
   db.run("PRAGMA foreign_keys = ON");
@@ -17,10 +24,7 @@ function createDb(): Database {
     .filter((f) => f.endsWith(".sql"))
     .toSorted();
   for (const file of files) {
-    const sql = readFileSync(join(migrationsDir, file), "utf8");
-    for (const statement of sql.split("--> statement-breakpoint")) {
-      db.run(statement);
-    }
+    applyMigration(db, file);
   }
   return db;
 }
@@ -49,9 +53,7 @@ function insertDefinition(
   opts: { wordId: string; authorId: string; status?: string; finalizedAt?: number | null },
 ): void {
   const status = opts.status ?? "public";
-  // 不変条件: draft は finalized_at NULL、public/private は NOT NULL
-  const finalizedAt =
-    opts.finalizedAt !== undefined ? opts.finalizedAt : status === "draft" ? null : now;
+  const finalizedAt = opts.finalizedAt !== undefined ? opts.finalizedAt : now;
   db.run(
     `insert into definitions (id, word_id, author_id, body, status, finalized_at, created_at, updated_at)
      values (?, ?, ?, '本文', ?, ?, ?, ?)`,
@@ -75,6 +77,7 @@ describe("migration SQL", () => {
       .map((row) => row.name);
     expect(tables).toEqual([
       "app_config",
+      "definition_drafts",
       "definitions",
       "follows",
       "likes",
@@ -85,39 +88,109 @@ describe("migration SQL", () => {
     ]);
   });
 
+  test("definition_drafts は部分入力と同一言葉の複数下書きを保持できる", () => {
+    insertUser(db, "u1");
+    insertWord(db, "w1", "自由");
+
+    db.run(
+      `insert into definition_drafts
+       (id, user_id, word_id, word, reading, body, visibility, created_at, updated_at)
+       values ('draft-1', 'u1', 'w1', '', '', '本文だけ', 'public', ?, ?),
+              ('draft-2', 'u1', 'w1', '自由', '', '', 'private', ?, ?)`,
+      [now, now, now, now],
+    );
+
+    expect(db.query("select id, word_id, body from definition_drafts order by id").all()).toEqual([
+      { body: "本文だけ", id: "draft-1", word_id: "w1" },
+      { body: "", id: "draft-2", word_id: "w1" },
+    ]);
+  });
+
+  test("definition_drafts は公開範囲と finalize 対応の制約を持つ", () => {
+    insertUser(db, "u1");
+
+    expect(() =>
+      db.run(
+        `insert into definition_drafts
+         (id, user_id, word, reading, body, visibility, created_at, updated_at)
+         values ('draft-1', 'u1', '言葉', 'ことば', '本文', 'draft', ?, ?)`,
+        [now, now],
+      ),
+    ).toThrow();
+  });
+
+  test("既存の definitions draft を専用テーブルへ欠損なく移行する", () => {
+    const legacyDb = new Database(":memory:");
+    legacyDb.run("PRAGMA foreign_keys = ON");
+    applyMigration(legacyDb, "0000_absurd_power_pack.sql");
+    applyMigration(legacyDb, "0001_brief_sumo.sql");
+    insertUser(legacyDb, "u1");
+    insertUser(legacyDb, "u2");
+    insertWord(legacyDb, "w1", "自由");
+    insertDefinition(legacyDb, "draft-1", {
+      authorId: "u1",
+      finalizedAt: null,
+      status: "draft",
+      wordId: "w1",
+    });
+    insertDefinition(legacyDb, "public-1", { authorId: "u1", wordId: "w1" });
+    legacyDb.run(
+      "insert into likes (user_id, definition_id, created_at) values ('u2', 'draft-1', ?), ('u2', 'public-1', ?)",
+      [now, now],
+    );
+
+    applyMigration(legacyDb, "0002_tense_carmella_unuscione.sql");
+
+    expect(
+      legacyDb.query("select id, word_id, user_id, body, visibility from definition_drafts").all(),
+    ).toEqual([
+      {
+        body: "本文",
+        id: "draft-1",
+        user_id: "u1",
+        visibility: "public",
+        word_id: "w1",
+      },
+    ]);
+    expect(legacyDb.query("select id, status from definitions").all()).toEqual([
+      { id: "public-1", status: "public" },
+    ]);
+    expect(legacyDb.query("select definition_id from likes").all()).toEqual([
+      { definition_id: "public-1" },
+    ]);
+    expect(legacyDb.query("pragma foreign_key_check").all()).toEqual([]);
+  });
+
   test("words.word の UNIQUE 制約が効く", () => {
     insertWord(db, "w1", "自由");
     expect(() => insertWord(db, "w2", "自由")).toThrow();
   });
 
-  test("definitions.status の CHECK 制約が効く", () => {
+  test("definitions.status は確定状態だけを許可する", () => {
     insertUser(db, "u1");
     insertWord(db, "w1", "自由");
     expect(() =>
       insertDefinition(db, "d1", { wordId: "w1", authorId: "u1", status: "archived" }),
     ).toThrow();
+    expect(() =>
+      insertDefinition(db, "d2", {
+        wordId: "w1",
+        authorId: "u1",
+        status: "draft",
+        finalizedAt: null,
+      }),
+    ).toThrow();
   });
 
-  test("finalized_at の不変条件が CHECK で強制される", () => {
+  test("確定済み定義は finalized_at が必須", () => {
     insertUser(db, "u1");
     insertWord(db, "w1", "自由");
     // public なのに finalized_at が NULL → 拒否
     expect(() =>
       insertDefinition(db, "d1", { wordId: "w1", authorId: "u1", finalizedAt: null }),
     ).toThrow();
-    // draft なのに finalized_at がある → 拒否
-    expect(() =>
-      insertDefinition(db, "d2", {
-        wordId: "w1",
-        authorId: "u1",
-        status: "draft",
-        finalizedAt: now,
-      }),
-    ).toThrow();
-    // 正しい組み合わせは通る
-    insertDefinition(db, "d3", { wordId: "w1", authorId: "u1" });
-    insertDefinition(db, "d4", { wordId: "w1", authorId: "u1", status: "draft" });
-    expect(db.query("select count(*) as c from definitions").get()).toEqual({ c: 2 });
+    insertDefinition(db, "d2", { wordId: "w1", authorId: "u1" });
+    expect(db.query("select count(*) as c from definitions").get()).toEqual({ c: 1 });
   });
 
   test("自分自身へのフォローが CHECK で拒否される", () => {

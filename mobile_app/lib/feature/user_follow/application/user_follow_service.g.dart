@@ -12,14 +12,14 @@ String _$userFollowServiceHash() => r'63e9b0fc118d390fff55fd1722b33db5ca11ef5d';
 @ProviderFor(userFollowService)
 final userFollowServiceProvider =
     AutoDisposeProvider<UserFollowService>.internal(
-      userFollowService,
-      name: r'userFollowServiceProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$userFollowServiceHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  userFollowService,
+  name: r'userFollowServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$userFollowServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef UserFollowServiceRef = AutoDisposeProviderRef<UserFollowService>;
 // ignore_for_file: type=lint

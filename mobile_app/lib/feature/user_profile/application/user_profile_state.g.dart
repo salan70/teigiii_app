@@ -39,15 +39,21 @@ class UserProfileFamily extends Family<AsyncValue<UserProfile>> {
   const UserProfileFamily();
 
   /// See also [userProfile].
-  UserProfileProvider call(String userId) {
-    return UserProfileProvider(userId);
+  UserProfileProvider call(
+    String userId,
+  ) {
+    return UserProfileProvider(
+      userId,
+    );
   }
 
   @override
   UserProfileProvider getProviderOverride(
     covariant UserProfileProvider provider,
   ) {
-    return call(provider.userId);
+    return call(
+      provider.userId,
+    );
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -68,18 +74,24 @@ class UserProfileFamily extends Family<AsyncValue<UserProfile>> {
 /// See also [userProfile].
 class UserProfileProvider extends AutoDisposeFutureProvider<UserProfile> {
   /// See also [userProfile].
-  UserProfileProvider(String userId)
-    : this._internal(
-        (ref) => userProfile(ref as UserProfileRef, userId),
-        from: userProfileProvider,
-        name: r'userProfileProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$userProfileHash,
-        dependencies: UserProfileFamily._dependencies,
-        allTransitiveDependencies: UserProfileFamily._allTransitiveDependencies,
-        userId: userId,
-      );
+  UserProfileProvider(
+    String userId,
+  ) : this._internal(
+          (ref) => userProfile(
+            ref as UserProfileRef,
+            userId,
+          ),
+          from: userProfileProvider,
+          name: r'userProfileProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$userProfileHash,
+          dependencies: UserProfileFamily._dependencies,
+          allTransitiveDependencies:
+              UserProfileFamily._allTransitiveDependencies,
+          userId: userId,
+        );
 
   UserProfileProvider._internal(
     super._createNotifier, {
@@ -136,13 +148,11 @@ mixin UserProfileRef on AutoDisposeFutureProviderRef<UserProfile> {
 }
 
 class _UserProfileProviderElement
-    extends AutoDisposeFutureProviderElement<UserProfile>
-    with UserProfileRef {
+    extends AutoDisposeFutureProviderElement<UserProfile> with UserProfileRef {
   _UserProfileProviderElement(super.provider);
 
   @override
   String get userId => (origin as UserProfileProvider).userId;
 }
-
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -331,6 +331,7 @@ issue #182 の成果物。Cloudflare 移行戦略（`doc/plans/2026-07-12-cloudf
 
 よみは必須とする。
 
+<!-- @code backend/src/db/schema.ts#definitionDrafts -->
 ### 8.3 状態
 
 **公開**: 他者に表示される / 確定後 1 時間だけ本文を編集可能 / 以後も公開・非公開の変更は可能

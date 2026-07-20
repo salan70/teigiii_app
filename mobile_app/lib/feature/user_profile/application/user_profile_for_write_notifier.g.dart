@@ -13,19 +13,16 @@ String _$userProfileForWriteNotifierHash() =>
 ///
 /// Copied from [UserProfileForWriteNotifier].
 @ProviderFor(UserProfileForWriteNotifier)
-final userProfileForWriteNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<
-      UserProfileForWriteNotifier,
-      UserProfile
-    >.internal(
-      UserProfileForWriteNotifier.new,
-      name: r'userProfileForWriteNotifierProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$userProfileForWriteNotifierHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+final userProfileForWriteNotifierProvider = AutoDisposeAsyncNotifierProvider<
+    UserProfileForWriteNotifier, UserProfile>.internal(
+  UserProfileForWriteNotifier.new,
+  name: r'userProfileForWriteNotifierProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$userProfileForWriteNotifierHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef _$UserProfileForWriteNotifier = AutoDisposeAsyncNotifier<UserProfile>;
 // ignore_for_file: type=lint

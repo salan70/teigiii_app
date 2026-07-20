@@ -40,11 +40,11 @@ const getMyDefinitionsRoute = createRoute({
   method: "get",
   path: "/me/definitions",
   tags: ["me"],
-  summary: "自分の定義一覧（状態で絞り込み。下書き一覧は status=draft）",
+  summary: "自分の確定済み定義一覧（公開範囲で絞り込み）",
   security: authenticatedSecurity,
   request: {
     query: paginationQuerySchema.extend({
-      status: z.enum(["draft", "public", "private"]).optional(),
+      status: z.enum(["public", "private"]).optional(),
     }),
   },
   responses: {

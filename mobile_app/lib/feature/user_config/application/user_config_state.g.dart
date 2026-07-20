@@ -28,9 +28,8 @@ String _$appVersionHash() => r'9305422aa57f020fb7cce5e07dac8610a528e41c';
 final appVersionProvider = FutureProvider<String>.internal(
   appVersion,
   name: r'appVersionProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$appVersionHash,
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$appVersionHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

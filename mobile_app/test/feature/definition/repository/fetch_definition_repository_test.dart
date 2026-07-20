@@ -72,6 +72,7 @@ void main() {
           isPublic: true,
           likesCount: 5,
           isLikedByUser: true,
+          editableUntil: DateTime.utc(2026, 7, 1, 1),
           createdAt: DateTime.utc(2026, 7),
         ),
       );

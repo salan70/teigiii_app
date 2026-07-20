@@ -26,8 +26,13 @@ import 'package:teigi_app/feature/user_list/repository/fetch_user_list_repositor
 
 class _FakeUserIdListState_0 extends _i1.SmartFake
     implements _i2.UserIdListState {
-  _FakeUserIdListState_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeUserIdListState_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 /// A class which mocks [FetchUserListRepository].
@@ -41,21 +46,36 @@ class MockFetchUserListRepository extends _i1.Mock
     String? cursor,
   ) =>
       (super.noSuchMethod(
-            Invocation.method(#fetchFollowingIdList, [userId, cursor]),
-            returnValue: _i4.Future<_i2.UserIdListState>.value(
-              _FakeUserIdListState_0(
-                this,
-                Invocation.method(#fetchFollowingIdList, [userId, cursor]),
-              ),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.UserIdListState>.value(
-              _FakeUserIdListState_0(
-                this,
-                Invocation.method(#fetchFollowingIdList, [userId, cursor]),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.UserIdListState>);
+        Invocation.method(
+          #fetchFollowingIdList,
+          [
+            userId,
+            cursor,
+          ],
+        ),
+        returnValue:
+            _i4.Future<_i2.UserIdListState>.value(_FakeUserIdListState_0(
+          this,
+          Invocation.method(
+            #fetchFollowingIdList,
+            [
+              userId,
+              cursor,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.UserIdListState>.value(_FakeUserIdListState_0(
+          this,
+          Invocation.method(
+            #fetchFollowingIdList,
+            [
+              userId,
+              cursor,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.UserIdListState>);
 
   @override
   _i4.Future<_i2.UserIdListState> fetchFollowerIdList(
@@ -63,21 +83,36 @@ class MockFetchUserListRepository extends _i1.Mock
     String? cursor,
   ) =>
       (super.noSuchMethod(
-            Invocation.method(#fetchFollowerIdList, [userId, cursor]),
-            returnValue: _i4.Future<_i2.UserIdListState>.value(
-              _FakeUserIdListState_0(
-                this,
-                Invocation.method(#fetchFollowerIdList, [userId, cursor]),
-              ),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.UserIdListState>.value(
-              _FakeUserIdListState_0(
-                this,
-                Invocation.method(#fetchFollowerIdList, [userId, cursor]),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.UserIdListState>);
+        Invocation.method(
+          #fetchFollowerIdList,
+          [
+            userId,
+            cursor,
+          ],
+        ),
+        returnValue:
+            _i4.Future<_i2.UserIdListState>.value(_FakeUserIdListState_0(
+          this,
+          Invocation.method(
+            #fetchFollowerIdList,
+            [
+              userId,
+              cursor,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.UserIdListState>.value(_FakeUserIdListState_0(
+          this,
+          Invocation.method(
+            #fetchFollowerIdList,
+            [
+              userId,
+              cursor,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.UserIdListState>);
 
   @override
   _i4.Future<_i2.UserIdListState> fetchLikedUserIdList(
@@ -85,25 +120,34 @@ class MockFetchUserListRepository extends _i1.Mock
     String? cursor,
   ) =>
       (super.noSuchMethod(
-            Invocation.method(#fetchLikedUserIdList, [definitionId, cursor]),
-            returnValue: _i4.Future<_i2.UserIdListState>.value(
-              _FakeUserIdListState_0(
-                this,
-                Invocation.method(#fetchLikedUserIdList, [
-                  definitionId,
-                  cursor,
-                ]),
-              ),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.UserIdListState>.value(
-              _FakeUserIdListState_0(
-                this,
-                Invocation.method(#fetchLikedUserIdList, [
-                  definitionId,
-                  cursor,
-                ]),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.UserIdListState>);
+        Invocation.method(
+          #fetchLikedUserIdList,
+          [
+            definitionId,
+            cursor,
+          ],
+        ),
+        returnValue:
+            _i4.Future<_i2.UserIdListState>.value(_FakeUserIdListState_0(
+          this,
+          Invocation.method(
+            #fetchLikedUserIdList,
+            [
+              definitionId,
+              cursor,
+            ],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.UserIdListState>.value(_FakeUserIdListState_0(
+          this,
+          Invocation.method(
+            #fetchLikedUserIdList,
+            [
+              definitionId,
+              cursor,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.UserIdListState>);
 }

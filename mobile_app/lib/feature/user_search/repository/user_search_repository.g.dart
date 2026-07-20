@@ -13,14 +13,14 @@ String _$userSearchRepositoryHash() =>
 @ProviderFor(userSearchRepository)
 final userSearchRepositoryProvider =
     AutoDisposeProvider<UserSearchRepository>.internal(
-      userSearchRepository,
-      name: r'userSearchRepositoryProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$userSearchRepositoryHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  userSearchRepository,
+  name: r'userSearchRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$userSearchRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef UserSearchRepositoryRef = AutoDisposeProviderRef<UserSearchRepository>;
 // ignore_for_file: type=lint

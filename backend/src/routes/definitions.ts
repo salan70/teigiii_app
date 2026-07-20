@@ -16,7 +16,7 @@ const createDefinitionRoute = createRoute({
   method: "post",
   path: "/definitions",
   tags: ["definitions"],
-  summary: "定義を作成（draft / public / private のいずれでも）",
+  summary: "確定済み定義を作成（public / private）",
   security: authenticatedSecurity,
   request: {
     body: jsonContent(createDefinitionRequestSchema, "作成内容"),
@@ -48,9 +48,9 @@ const updateDefinitionRoute = createRoute({
   method: "patch",
   path: "/definitions/{id}",
   tags: ["definitions"],
-  summary: "本文編集・状態遷移・（下書きのみ）言葉の変更",
+  summary: "本文編集・公開範囲変更",
   description:
-    "許可される遷移: draft→public/private、public↔private。確定時に finalized_at を設定し、本文編集は finalized_at + 1 時間まで。確定後の wordId 変更・下書きへの巻き戻しは拒否する。",
+    "public/private は相互に変更できる。本文編集は finalized_at + 1 時間まで。wordId は変更できない。",
   security: authenticatedSecurity,
   request: {
     params: definitionIdParams,
@@ -58,7 +58,6 @@ const updateDefinitionRoute = createRoute({
   },
   responses: {
     200: jsonContent(definitionResponseSchema, "更新後の定義"),
-    400: errorContent("許可されない状態遷移・確定後の言葉変更（invalid_transition）"),
     403: errorContent("編集期限切れ（edit_window_expired）・本人以外（forbidden）"),
     404: errorContent("定義が存在しない（definition_not_found）"),
     ...authErrorResponses,

@@ -13,9 +13,8 @@ String _$authGuardHash() => r'ca0593bb139c88d8f1aaa3c45b038e438ee3facd';
 final authGuardProvider = AutoDisposeProvider<AuthGuard>.internal(
   authGuard,
   name: r'authGuardProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$authGuardHash,
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$authGuardHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

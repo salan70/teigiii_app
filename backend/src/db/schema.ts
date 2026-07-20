@@ -64,7 +64,7 @@ export const words = sqliteTable(
 );
 
 /**
- * 定義は独立した投稿（同一ユーザー・同一言葉に複数可）。下書きも状態の 1 つとして持つ。
+ * 定義は独立した確定済み投稿（同一ユーザー・同一言葉に複数可）。下書きは definition_drafts に分離する。
  *
  * @doc doc/specs/mobile-app-information-architecture.md#8-定義
  */
@@ -72,7 +72,7 @@ export const definitions = sqliteTable(
   "definitions",
   {
     id: text("id").primaryKey(),
-    // 確定後は変更不可・下書き中は変更可（アプリ層で検証）
+    // 確定後は変更不可（アプリ層で検証）
     wordId: text("word_id")
       .notNull()
       .references(() => words.id),
@@ -81,8 +81,8 @@ export const definitions = sqliteTable(
       .references(() => users.id, { onDelete: "cascade" }),
     body: text("body").notNull(),
     status: text("status").notNull(),
-    // 初めて public/private で確定した時刻。編集期限 = finalized_at + 1h はサーバーで毎回計算する。
-    finalizedAt: integer("finalized_at"),
+    // 初めて確定した時刻。編集期限 = finalized_at + 1h はサーバーで毎回計算する。
+    finalizedAt: integer("finalized_at").notNull(),
     // 確定後に本文を編集した場合のみ true。下書き中の編集・公開/非公開切り替えでは立てない。
     isEdited: integer("is_edited", { mode: "boolean" }).notNull().default(false),
     // 論理削除（30 日保持）
@@ -91,12 +91,7 @@ export const definitions = sqliteTable(
     updatedAt: integer("updated_at").notNull(),
   },
   (table) => [
-    check("definitions_status_check", sql`${table.status} in ('draft', 'public', 'private')`),
-    // 確定状態と finalized_at の不変条件: draft は NULL、public/private は NOT NULL
-    check(
-      "definitions_finalized_at_check",
-      sql`(${table.status} = 'draft') = (${table.finalizedAt} is null)`,
-    ),
+    check("definitions_status_check", sql`${table.status} in ('public', 'private')`),
     // タイムライン（見つける / フォロー中）
     index("definitions_timeline_idx")
       .on(table.status, sql`${table.finalizedAt} desc`, table.id)
@@ -105,10 +100,52 @@ export const definitions = sqliteTable(
     index("definitions_word_idx")
       .on(table.wordId, table.status, sql`${table.finalizedAt} desc`)
       .where(sql`${table.deletedAt} is null`),
-    // 自分の定義・下書き一覧
+    // 自分の確定済み定義一覧
     index("definitions_author_idx")
       .on(table.authorId, table.status, sql`${table.updatedAt} desc`)
       .where(sql`${table.deletedAt} is null`),
+  ],
+);
+
+/**
+ * 定義の下書き。共有言葉・確定済み定義とは分離し、本人だけが参照する。
+ * finalize 済みの行は冪等な再試行の対応表として保持し、一覧からは除外する。
+ *
+ * @doc doc/specs/mobile-app-information-architecture.md#8-3-状態
+ */
+export const definitionDrafts = sqliteTable(
+  "definition_drafts",
+  {
+    // クライアント生成 UUID。PUT /definition-drafts/{id} の冪等キーを兼ねる。
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    // 言葉ページ起点または既存語への解決後だけ設定する。
+    wordId: text("word_id").references(() => words.id),
+    word: text("word").notNull().default(""),
+    reading: text("reading").notNull().default(""),
+    body: text("body").notNull().default(""),
+    visibility: text("visibility").notNull().default("public"),
+    // finalize の再試行時に同じ定義を返すための対応表。
+    finalizedDefinitionId: text("finalized_definition_id").references(() => definitions.id),
+    finalizedAt: integer("finalized_at"),
+    createdAt: integer("created_at").notNull(),
+    updatedAt: integer("updated_at").notNull(),
+  },
+  (table) => [
+    check("definition_drafts_visibility_check", sql`${table.visibility} in ('public', 'private')`),
+    check(
+      "definition_drafts_finalized_check",
+      sql`(${table.finalizedDefinitionId} is null) = (${table.finalizedAt} is null)`,
+    ),
+    uniqueIndex("definition_drafts_finalized_definition_unique").on(table.finalizedDefinitionId),
+    index("definition_drafts_user_updated_idx")
+      .on(table.userId, sql`${table.updatedAt} desc`, table.id)
+      .where(sql`${table.finalizedDefinitionId} is null`),
+    index("definition_drafts_word_idx")
+      .on(table.userId, table.wordId, sql`${table.updatedAt} desc`)
+      .where(sql`${table.finalizedDefinitionId} is null`),
   ],
 );
 

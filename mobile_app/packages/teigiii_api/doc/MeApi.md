@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**v1MeDefinedWordsGet**](MeApi.md#v1medefinedwordsget) | **GET** /v1/me/defined-words | 定義済みの言葉一覧（言葉単位 + 状態別件数）
-[**v1MeDefinitionsGet**](MeApi.md#v1medefinitionsget) | **GET** /v1/me/definitions | 自分の定義一覧（状態で絞り込み。下書き一覧は status&#x3D;draft）
+[**v1MeDefinitionsGet**](MeApi.md#v1medefinitionsget) | **GET** /v1/me/definitions | 自分の確定済み定義一覧（公開範囲で絞り込み）
 [**v1MeDictionaryOverviewGet**](MeApi.md#v1medictionaryoverviewget) | **GET** /v1/me/dictionary/overview | あなたの辞書の概要（各件数 + 最近の定義）
 [**v1MeMutesGet**](MeApi.md#v1memutesget) | **GET** /v1/me/mutes | ミュート中のユーザー一覧
 [**v1MeSavedWordsGet**](MeApi.md#v1mesavedwordsget) | **GET** /v1/me/saved-words | 保存した言葉の一覧
@@ -30,8 +30,8 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getMeApi();
-final String cursor = cursor_example; // String | 
-final int limit = 56; // int | 
+final String cursor = cursor_example; // String |
+final int limit = 56; // int |
 
 try {
     final response = api.v1MeDefinedWordsGet(cursor, limit);
@@ -45,7 +45,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cursor** | **String**|  | [optional] 
+ **cursor** | **String**|  | [optional]
  **limit** | **int**|  | [optional] [default to 20]
 
 ### Return type
@@ -66,7 +66,7 @@ Name | Type | Description  | Notes
 # **v1MeDefinitionsGet**
 > V1UsersIdDefinitionsGet200Response v1MeDefinitionsGet(cursor, limit, status)
 
-自分の定義一覧（状態で絞り込み。下書き一覧は status=draft）
+自分の確定済み定義一覧（公開範囲で絞り込み）
 
 ### Example
 ```dart
@@ -77,9 +77,9 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getMeApi();
-final String cursor = cursor_example; // String | 
-final int limit = 56; // int | 
-final String status = status_example; // String | 
+final String cursor = cursor_example; // String |
+final int limit = 56; // int |
+final String status = status_example; // String |
 
 try {
     final response = api.v1MeDefinitionsGet(cursor, limit, status);
@@ -93,9 +93,9 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cursor** | **String**|  | [optional] 
+ **cursor** | **String**|  | [optional]
  **limit** | **int**|  | [optional] [default to 20]
- **status** | **String**|  | [optional] 
+ **status** | **String**|  | [optional]
 
 ### Return type
 
@@ -167,8 +167,8 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getMeApi();
-final String cursor = cursor_example; // String | 
-final int limit = 56; // int | 
+final String cursor = cursor_example; // String |
+final int limit = 56; // int |
 
 try {
     final response = api.v1MeMutesGet(cursor, limit);
@@ -182,7 +182,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cursor** | **String**|  | [optional] 
+ **cursor** | **String**|  | [optional]
  **limit** | **int**|  | [optional] [default to 20]
 
 ### Return type
@@ -214,8 +214,8 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getMeApi();
-final String cursor = cursor_example; // String | 
-final int limit = 56; // int | 
+final String cursor = cursor_example; // String |
+final int limit = 56; // int |
 
 try {
     final response = api.v1MeSavedWordsGet(cursor, limit);
@@ -229,7 +229,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cursor** | **String**|  | [optional] 
+ **cursor** | **String**|  | [optional]
  **limit** | **int**|  | [optional] [default to 20]
 
 ### Return type

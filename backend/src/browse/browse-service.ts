@@ -8,7 +8,7 @@ type BrowseBindings = {
   DB: D1Database;
 };
 
-type DefinitionStatus = "draft" | "public" | "private";
+type DefinitionStatus = "public" | "private";
 
 type DefinitionListRow = {
   id: string;
@@ -21,7 +21,7 @@ type DefinitionListRow = {
   author_avatar_key: string | null;
   body: string;
   status: DefinitionStatus;
-  finalized_at: number | null;
+  finalized_at: number;
   is_edited: number;
   created_at: number;
   updated_at: number;
@@ -125,8 +125,7 @@ function definitionColumns(): string {
 }
 
 function toDefinition(row: DefinitionListRow, baseUrl: string) {
-  const editableUntil =
-    row.finalized_at === null ? null : row.finalized_at + editWindowMilliseconds;
+  const editableUntil = row.finalized_at + editWindowMilliseconds;
   return {
     author: {
       avatarUrl: avatarUrl(baseUrl, row.author_avatar_key),
@@ -136,8 +135,8 @@ function toDefinition(row: DefinitionListRow, baseUrl: string) {
     },
     body: row.body,
     createdAt: new Date(row.created_at).toISOString(),
-    editableUntil: editableUntil === null ? null : new Date(editableUntil).toISOString(),
-    finalizedAt: row.finalized_at === null ? null : new Date(row.finalized_at).toISOString(),
+    editableUntil: new Date(editableUntil).toISOString(),
+    finalizedAt: new Date(row.finalized_at).toISOString(),
     id: row.id,
     isEdited: row.is_edited !== 0,
     isLikedByMe: row.is_liked_by_me !== 0,
@@ -381,12 +380,13 @@ export class BrowseService {
     const counts = await this.env.DB.prepare(
       `select
          count(distinct d.word_id) as defined_word_count,
-         sum(case when d.status = 'draft' then 1 else 0 end) as draft_count,
+         (select count(*) from definition_drafts draft
+          where draft.user_id = ? and draft.finalized_definition_id is null) as draft_count,
          (select count(*) from saved_words s where s.user_id = ?) as saved_word_count
        from definitions d
        where d.author_id = ? and d.deleted_at is null`,
     )
-      .bind(uid, uid)
+      .bind(uid, uid, uid)
       .first<{ defined_word_count: number; draft_count: number; saved_word_count: number }>();
     const rows = (
       await this.env.DB.prepare(
@@ -417,8 +417,7 @@ export class BrowseService {
     const statement = this.env.DB.prepare(
       `select w.id, w.word, w.reading,
          sum(case when d.status = 'public' then 1 else 0 end) as public_count,
-         sum(case when d.status = 'private' then 1 else 0 end) as private_count,
-         sum(case when d.status = 'draft' then 1 else 0 end) as draft_count
+         sum(case when d.status = 'private' then 1 else 0 end) as private_count
        from definitions d join words w on w.id = d.word_id
        where d.author_id = ? and d.deleted_at is null ${cursorClause}
        group by w.id, w.word, w.reading
@@ -430,7 +429,6 @@ export class BrowseService {
       reading: string;
       public_count: number;
       private_count: number;
-      draft_count: number;
     };
     const rows = (
       await (
@@ -443,7 +441,6 @@ export class BrowseService {
       rows,
       limit,
       (row) => ({
-        draftCount: row.draft_count,
         privateCount: row.private_count,
         publicCount: row.public_count,
         word: { id: row.id, reading: row.reading, word: row.word },

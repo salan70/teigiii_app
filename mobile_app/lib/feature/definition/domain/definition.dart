@@ -18,12 +18,16 @@ class Definition with _$Definition {
     required bool isPublic,
     required int likesCount,
     required bool isLikedByUser,
+    required DateTime editableUntil,
     required DateTime createdAt,
   }) = _Definition;
   const Definition._();
 
+  bool canEditAt(DateTime now) => now.isBefore(editableUntil);
+
   DefinitionForWrite toDefinitionForWrite() {
     return DefinitionForWrite(
+      wordId: wordId,
       id: id,
       authorId: authorId,
       word: word,

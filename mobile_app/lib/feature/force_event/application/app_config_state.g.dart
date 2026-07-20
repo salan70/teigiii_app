@@ -15,9 +15,8 @@ String _$appConfigHash() => r'3b502a13d3804001a07c6bdb48449f75446af81f';
 final appConfigProvider = FutureProvider<AppConfig>.internal(
   appConfig,
   name: r'appConfigProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$appConfigHash,
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$appConfigHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

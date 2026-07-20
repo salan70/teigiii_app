@@ -24,8 +24,6 @@ class DefinedWordItem {
     required this.publicCount,
 
     required this.privateCount,
-
-    required this.draftCount,
   });
 
   @JsonKey(name: r'word', required: true, includeIfNull: false)
@@ -37,24 +35,17 @@ class DefinedWordItem {
   @JsonKey(name: r'privateCount', required: true, includeIfNull: false)
   final int privateCount;
 
-  @JsonKey(name: r'draftCount', required: true, includeIfNull: false)
-  final int draftCount;
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is DefinedWordItem &&
           other.word == word &&
           other.publicCount == publicCount &&
-          other.privateCount == privateCount &&
-          other.draftCount == draftCount;
+          other.privateCount == privateCount;
 
   @override
   int get hashCode =>
-      word.hashCode +
-      publicCount.hashCode +
-      privateCount.hashCode +
-      draftCount.hashCode;
+      word.hashCode + publicCount.hashCode + privateCount.hashCode;
 
   factory DefinedWordItem.fromJson(Map<String, dynamic> json) =>
       _$DefinedWordItemFromJson(json);

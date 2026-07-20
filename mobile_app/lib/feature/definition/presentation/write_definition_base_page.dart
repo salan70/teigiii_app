@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 
 import '../../../../core/common_provider/dialog_controller.dart';
 import '../../../../core/common_widget/dialog/confirm_dialog.dart';
-import '../application/definition_for_write_notifier.dart';
 import '../domain/definition_for_write.dart';
 import 'select_post_type_button.dart';
 
@@ -21,20 +20,34 @@ class WriteDefinitionBasePage extends ConsumerWidget {
     super.key,
     this.autoFocusForm,
     required this.definitionForWrite,
-    required this.notifier,
+    required this.onWordChanged,
+    required this.onWordReadingChanged,
+    required this.onPublicChanged,
+    required this.onDefinitionChanged,
+    required this.isChanged,
     required this.appBarActionWidget,
+    this.onClose,
+    this.wordFieldsReadOnly,
+    this.bodyActionWidget,
   });
 
   /// 遷移時にフォーカスする [TextFormField]
   /// どの [TextFormField] にもフォーカスしない場合はnullを渡す。
   final WriteDefinitionFormType? autoFocusForm;
   final DefinitionForWrite definitionForWrite;
-  final DefinitionForWriteNotifier notifier;
+  final ValueChanged<String> onWordChanged;
+  final ValueChanged<String> onWordReadingChanged;
+  final ValueChanged<bool> onPublicChanged;
+  final ValueChanged<String> onDefinitionChanged;
+  final bool isChanged;
   final Widget appBarActionWidget;
+  final Future<void> Function()? onClose;
+  final bool? wordFieldsReadOnly;
+  final Widget? bodyActionWidget;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isEditing = definitionForWrite.id != null;
+    final isEditing = wordFieldsReadOnly ?? definitionForWrite.id != null;
 
     return Scaffold(
       appBar: AppBar(
@@ -45,7 +58,12 @@ class WriteDefinitionBasePage extends ConsumerWidget {
             // キーボードを閉じる
             primaryFocus?.unfocus();
 
-            if (!notifier.isChanged()) {
+            if (onClose != null) {
+              await onClose!();
+              return;
+            }
+
+            if (!isChanged) {
               // 初期表示時から入力内容に変更がない場合、確認ダイアログを表示せずに画面を閉じる
               await context.popRoute();
               return;
@@ -64,8 +82,8 @@ class WriteDefinitionBasePage extends ConsumerWidget {
           },
         ),
         title: SelectPostTypeButton(
-          definitionForWrite: definitionForWrite,
-          notifier: notifier,
+          isPublic: definitionForWrite.isPublic,
+          onChanged: onPublicChanged,
         ),
         actions: [
           Center(child: appBarActionWidget),
@@ -87,7 +105,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                   maxLength: definitionForWrite.maxWordLength,
                   maxLines: null,
                   textInputAction: TextInputAction.next,
-                  onChanged: notifier.changeWord,
+                  onChanged: onWordChanged,
                   style: Theme.of(context).textTheme.titleLarge,
                   decoration: InputDecoration(
                     hintText: '例: 二日目のカレー',
@@ -104,7 +122,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                   maxLength: definitionForWrite.maxWordReadingLength,
                   maxLines: null,
                   textInputAction: TextInputAction.next,
-                  onChanged: notifier.changeWordReading,
+                  onChanged: onWordReadingChanged,
                   style: Theme.of(context).textTheme.titleMedium,
                   decoration: InputDecoration(
                     hintText: '例: ふつかめのかれー',
@@ -120,7 +138,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                       autoFocusForm == WriteDefinitionFormType.definition,
                   maxLength: definitionForWrite.maxDefinitionLength,
                   maxLines: null,
-                  onChanged: notifier.changeDefinition,
+                  onChanged: onDefinitionChanged,
                   style: Theme.of(context).textTheme.titleLarge,
                   decoration: const InputDecoration(
                     hintText: '例: 作ってから一晩経ったカレー。ばり美味い',
@@ -128,6 +146,10 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                     border: InputBorder.none,
                   ),
                 ),
+                if (bodyActionWidget case final widget?) ...[
+                  const Gap(8),
+                  Align(alignment: Alignment.centerRight, child: widget),
+                ],
                 const Gap(300),
               ],
             ),

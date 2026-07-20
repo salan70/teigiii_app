@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../auth/application/auth_state.dart';
 import '../../definition_list/appication/definition_id_list_state.dart';
 import '../../word/application/word_state.dart';
 import '../../word_list/application/word_list_state_by_initial.dart';
@@ -20,13 +19,10 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     DefinitionForWrite? definitionForWrite,
   ) async {
     if (definitionForWrite == null) {
-      final currentUserId = ref.read(userIdProvider)!;
-      _initialState = DefinitionForWrite.empty(currentUserId);
-    } else {
-      _initialState = definitionForWrite;
+      throw ArgumentError('Editing requires an existing definition');
     }
-
-    return _initialState;
+    _initialState = definitionForWrite;
+    return definitionForWrite;
   }
 
   /// 初期状態として渡された [DefinitionForWrite].
@@ -49,21 +45,6 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
     state = AsyncData(state.value!.copyWith(definition: definition));
   }
 
-  /// 投稿し、投稿した定義のIdを返す。
-  Future<String> post() async {
-    final definitionId = await ref
-        .read(writeDefinitionRepositoryProvider)
-        .createDefinition(state.value!);
-
-    ref
-      ..invalidate(definitionIdListStateNotifierProvider)
-      ..invalidate(wordListStateByInitialNotifierProvider)
-      ..invalidate(wordListStateBySearchWordNotifierProvider)
-      ..invalidate(wordProvider);
-
-    return definitionId;
-  }
-
   Future<void> edit() async {
     await ref
         .read(writeDefinitionRepositoryProvider)
@@ -75,10 +56,6 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
       ..invalidate(wordListStateByInitialNotifierProvider)
       ..invalidate(wordListStateBySearchWordNotifierProvider)
       ..invalidate(wordProvider);
-  }
-
-  bool canPost() {
-    return state.value!.isValidAllFields();
   }
 
   bool canEdit() {

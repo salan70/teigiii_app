@@ -276,12 +276,10 @@
           },
           "finalizedAt": {
             "type": "string",
-            "nullable": true,
             "format": "date-time"
           },
           "editableUntil": {
             "type": "string",
-            "nullable": true,
             "format": "date-time"
           },
           "createdAt": {
@@ -311,7 +309,6 @@
       "DefinitionStatus": {
         "type": "string",
         "enum": [
-          "draft",
           "public",
           "private"
         ]
@@ -375,16 +372,12 @@
           },
           "privateCount": {
             "type": "integer"
-          },
-          "draftCount": {
-            "type": "integer"
           }
         },
         "required": [
           "word",
           "publicCount",
-          "privateCount",
-          "draftCount"
+          "privateCount"
         ]
       },
       "SavedWordItem": {
@@ -508,6 +501,130 @@
           }
         }
       },
+      "DefinitionDraftResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "wordId": {
+            "type": "string",
+            "nullable": true
+          },
+          "word": {
+            "type": "string"
+          },
+          "reading": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/DefinitionVisibility"
+          },
+          "finalizedDefinitionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "wordId",
+          "word",
+          "reading",
+          "body",
+          "visibility",
+          "finalizedDefinitionId",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "DefinitionVisibility": {
+        "type": "string",
+        "enum": [
+          "public",
+          "private"
+        ]
+      },
+      "PutDefinitionDraftRequest": {
+        "type": "object",
+        "properties": {
+          "wordId": {
+            "type": "string",
+            "nullable": true
+          },
+          "word": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "reading": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/DefinitionVisibility"
+          }
+        },
+        "required": [
+          "word",
+          "reading",
+          "body",
+          "visibility"
+        ]
+      },
+      "WordReadingMismatchResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "word_reading_mismatch"
+                ]
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          },
+          "existingWord": {
+            "$ref": "#/components/schemas/WordSummary"
+          }
+        },
+        "required": [
+          "error",
+          "existingWord"
+        ]
+      },
+      "FinalizeDefinitionDraftRequest": {
+        "type": "object",
+        "properties": {
+          "confirmReadingMismatch": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
       "CreateDefinitionRequest": {
         "type": "object",
         "properties": {
@@ -532,9 +649,6 @@
       "UpdateDefinitionRequest": {
         "type": "object",
         "properties": {
-          "wordId": {
-            "type": "string"
-          },
           "body": {
             "type": "string",
             "minLength": 1,
@@ -543,7 +657,8 @@
           "status": {
             "$ref": "#/components/schemas/DefinitionStatus"
           }
-        }
+        },
+        "additionalProperties": false
       },
       "DiscoverFeedItem": {
         "oneOf": [
@@ -1933,7 +2048,7 @@
         "tags": [
           "me"
         ],
-        "summary": "自分の定義一覧（状態で絞り込み。下書き一覧は status=draft）",
+        "summary": "自分の確定済み定義一覧（公開範囲で絞り込み）",
         "security": [
           {
             "appCheck": [],
@@ -1964,7 +2079,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "draft",
                 "public",
                 "private"
               ]
@@ -2475,7 +2589,7 @@
           "words"
         ],
         "summary": "言葉ページの定義一覧",
-        "description": "scope=mine は自分の定義（下書き含む）、scope=others は他者の公開定義のみ、scope=all は自分 + 他者の公開定義の混在（旧 UI の言葉トップのパリティ）。sort=reactions はいいね数順。",
+        "description": "scope=mine は自分の確定済み定義、scope=others は他者の公開定義のみ、scope=all は自分 + 他者の公開定義の混在。Draft は専用 API で取得する。sort=reactions はいいね数順。",
         "security": [
           {
             "appCheck": [],
@@ -2674,12 +2788,342 @@
         }
       }
     },
+    "/v1/definition-drafts/{id}": {
+      "put": {
+        "tags": [
+          "definition-drafts"
+        ],
+        "summary": "定義 Draft を冪等に保存",
+        "security": [
+          {
+            "appCheck": [],
+            "firebaseIdToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "description": "Draft の入力内容",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PutDefinitionDraftRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "保存された Draft",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinitionDraftResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "全項目空（draft_empty）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "App Check または Firebase ID トークンが欠落・無効",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Draft・言葉・ユーザーが存在しない",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "definition-drafts"
+        ],
+        "summary": "本人の定義 Draft を取得",
+        "security": [
+          {
+            "appCheck": [],
+            "firebaseIdToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Draft",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinitionDraftResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "App Check または Firebase ID トークンが欠落・無効",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "本人の未確定 Draft が存在しない（definition_draft_not_found）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "definition-drafts"
+        ],
+        "summary": "本人の Draft を冪等に削除",
+        "security": [
+          {
+            "appCheck": [],
+            "firebaseIdToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "削除完了"
+          },
+          "401": {
+            "description": "App Check または Firebase ID トークンが欠落・無効",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/definition-drafts": {
+      "get": {
+        "tags": [
+          "definition-drafts"
+        ],
+        "summary": "本人の未確定 Draft 一覧（更新日時降順）",
+        "security": [
+          {
+            "appCheck": [],
+            "firebaseIdToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "cursor",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20
+            },
+            "required": false,
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Draft 一覧",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DefinitionDraftResponse"
+                      }
+                    },
+                    "nextCursor": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "nextCursor"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "App Check または Firebase ID トークンが欠落・無効",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/definition-drafts/{id}/finalize": {
+      "post": {
+        "tags": [
+          "definition-drafts"
+        ],
+        "summary": "Draft を定義として冪等に確定",
+        "security": [
+          {
+            "appCheck": [],
+            "firebaseIdToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "description": "既存語のよみ不一致確認",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FinalizeDefinitionDraftRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "確定済み定義",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefinitionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "必須項目不足または入力不正（draft_incomplete / draft_invalid）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "App Check または Firebase ID トークンが欠落・無効",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "本人の Draft・固定済み言葉が存在しない",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "同一表記の既存語とよみが異なる（word_reading_mismatch）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WordReadingMismatchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/definitions": {
       "post": {
         "tags": [
           "definitions"
         ],
-        "summary": "定義を作成（draft / public / private のいずれでも）",
+        "summary": "確定済み定義を作成（public / private）",
         "security": [
           {
             "appCheck": [],
@@ -2789,8 +3233,8 @@
         "tags": [
           "definitions"
         ],
-        "summary": "本文編集・状態遷移・（下書きのみ）言葉の変更",
-        "description": "許可される遷移: draft→public/private、public↔private。確定時に finalized_at を設定し、本文編集は finalized_at + 1 時間まで。確定後の wordId 変更・下書きへの巻き戻しは拒否する。",
+        "summary": "本文編集・公開範囲変更",
+        "description": "public/private は相互に変更できる。本文編集は finalized_at + 1 時間まで。wordId は変更できない。",
         "security": [
           {
             "appCheck": [],
@@ -2824,16 +3268,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DefinitionResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "許可されない状態遷移・確定後の言葉変更（invalid_transition）",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }

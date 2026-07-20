@@ -107,14 +107,51 @@ class MockDefinitionIdListRepository extends _i1.Mock
       ) as _i5.Future<_i2.DefinitionIdListState>);
 
   @override
-  _i5.Future<_i2.DefinitionIdListState> fetchForWordTop(
+  _i5.Future<_i2.DefinitionIdListState> fetchForWordMine(
+    String? wordId,
+    String? cursor,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchForWordMine,
+          [
+            wordId,
+            cursor,
+          ],
+        ),
+        returnValue: _i5.Future<_i2.DefinitionIdListState>.value(
+            _FakeDefinitionIdListState_0(
+          this,
+          Invocation.method(
+            #fetchForWordMine,
+            [
+              wordId,
+              cursor,
+            ],
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<_i2.DefinitionIdListState>.value(
+            _FakeDefinitionIdListState_0(
+          this,
+          Invocation.method(
+            #fetchForWordMine,
+            [
+              wordId,
+              cursor,
+            ],
+          ),
+        )),
+      ) as _i5.Future<_i2.DefinitionIdListState>);
+
+  @override
+  _i5.Future<_i2.DefinitionIdListState> fetchForWordOthers(
     _i6.WordTopOrderByType? orderByType,
     String? wordId,
     String? cursor,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #fetchForWordTop,
+          #fetchForWordOthers,
           [
             orderByType,
             wordId,
@@ -125,7 +162,7 @@ class MockDefinitionIdListRepository extends _i1.Mock
             _FakeDefinitionIdListState_0(
           this,
           Invocation.method(
-            #fetchForWordTop,
+            #fetchForWordOthers,
             [
               orderByType,
               wordId,
@@ -137,7 +174,7 @@ class MockDefinitionIdListRepository extends _i1.Mock
             _FakeDefinitionIdListState_0(
           this,
           Invocation.method(
-            #fetchForWordTop,
+            #fetchForWordOthers,
             [
               orderByType,
               wordId,

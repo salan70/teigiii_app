@@ -10,6 +10,8 @@ part 'definition_for_write.freezed.dart';
 @freezed
 class DefinitionForWrite with _$DefinitionForWrite {
   const factory DefinitionForWrite({
+    String? wordId,
+
     /// 更新時のみ使用する。新規投稿時はnull
     required String? id,
     required String authorId,
@@ -33,6 +35,7 @@ class DefinitionForWrite with _$DefinitionForWrite {
   /// [Word]から[DefinitionForWrite]を生成する
   factory DefinitionForWrite.fromWord(Word word, String authorId) {
     return DefinitionForWrite(
+      wordId: word.id,
       id: null,
       authorId: authorId,
       word: word.word,

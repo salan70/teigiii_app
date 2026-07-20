@@ -39,15 +39,21 @@ class FollowCountFamily extends Family<AsyncValue<FollowCount>> {
   const FollowCountFamily();
 
   /// See also [followCount].
-  FollowCountProvider call(String userId) {
-    return FollowCountProvider(userId);
+  FollowCountProvider call(
+    String userId,
+  ) {
+    return FollowCountProvider(
+      userId,
+    );
   }
 
   @override
   FollowCountProvider getProviderOverride(
     covariant FollowCountProvider provider,
   ) {
-    return call(provider.userId);
+    return call(
+      provider.userId,
+    );
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -68,18 +74,24 @@ class FollowCountFamily extends Family<AsyncValue<FollowCount>> {
 /// See also [followCount].
 class FollowCountProvider extends AutoDisposeFutureProvider<FollowCount> {
   /// See also [followCount].
-  FollowCountProvider(String userId)
-    : this._internal(
-        (ref) => followCount(ref as FollowCountRef, userId),
-        from: followCountProvider,
-        name: r'followCountProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$followCountHash,
-        dependencies: FollowCountFamily._dependencies,
-        allTransitiveDependencies: FollowCountFamily._allTransitiveDependencies,
-        userId: userId,
-      );
+  FollowCountProvider(
+    String userId,
+  ) : this._internal(
+          (ref) => followCount(
+            ref as FollowCountRef,
+            userId,
+          ),
+          from: followCountProvider,
+          name: r'followCountProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$followCountHash,
+          dependencies: FollowCountFamily._dependencies,
+          allTransitiveDependencies:
+              FollowCountFamily._allTransitiveDependencies,
+          userId: userId,
+        );
 
   FollowCountProvider._internal(
     super._createNotifier, {
@@ -136,8 +148,7 @@ mixin FollowCountRef on AutoDisposeFutureProviderRef<FollowCount> {
 }
 
 class _FollowCountProviderElement
-    extends AutoDisposeFutureProviderElement<FollowCount>
-    with FollowCountRef {
+    extends AutoDisposeFutureProviderElement<FollowCount> with FollowCountRef {
   _FollowCountProviderElement(super.provider);
 
   @override
@@ -156,15 +167,21 @@ class IsFollowingFamily extends Family<AsyncValue<bool>> {
   const IsFollowingFamily();
 
   /// See also [isFollowing].
-  IsFollowingProvider call(String targetUserId) {
-    return IsFollowingProvider(targetUserId);
+  IsFollowingProvider call(
+    String targetUserId,
+  ) {
+    return IsFollowingProvider(
+      targetUserId,
+    );
   }
 
   @override
   IsFollowingProvider getProviderOverride(
     covariant IsFollowingProvider provider,
   ) {
-    return call(provider.targetUserId);
+    return call(
+      provider.targetUserId,
+    );
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -185,18 +202,24 @@ class IsFollowingFamily extends Family<AsyncValue<bool>> {
 /// See also [isFollowing].
 class IsFollowingProvider extends AutoDisposeFutureProvider<bool> {
   /// See also [isFollowing].
-  IsFollowingProvider(String targetUserId)
-    : this._internal(
-        (ref) => isFollowing(ref as IsFollowingRef, targetUserId),
-        from: isFollowingProvider,
-        name: r'isFollowingProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$isFollowingHash,
-        dependencies: IsFollowingFamily._dependencies,
-        allTransitiveDependencies: IsFollowingFamily._allTransitiveDependencies,
-        targetUserId: targetUserId,
-      );
+  IsFollowingProvider(
+    String targetUserId,
+  ) : this._internal(
+          (ref) => isFollowing(
+            ref as IsFollowingRef,
+            targetUserId,
+          ),
+          from: isFollowingProvider,
+          name: r'isFollowingProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$isFollowingHash,
+          dependencies: IsFollowingFamily._dependencies,
+          allTransitiveDependencies:
+              IsFollowingFamily._allTransitiveDependencies,
+          targetUserId: targetUserId,
+        );
 
   IsFollowingProvider._internal(
     super._createNotifier, {
@@ -259,6 +282,5 @@ class _IsFollowingProviderElement extends AutoDisposeFutureProviderElement<bool>
   @override
   String get targetUserId => (origin as IsFollowingProvider).targetUserId;
 }
-
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

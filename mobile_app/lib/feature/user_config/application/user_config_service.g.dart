@@ -12,14 +12,14 @@ String _$userConfigServiceHash() => r'22ddd3bef2bfaf1376e3f88ddf008e7ddea1810a';
 @ProviderFor(userConfigService)
 final userConfigServiceProvider =
     AutoDisposeProvider<UserConfigService>.internal(
-      userConfigService,
-      name: r'userConfigServiceProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$userConfigServiceHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  userConfigService,
+  name: r'userConfigServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$userConfigServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef UserConfigServiceRef = AutoDisposeProviderRef<UserConfigService>;
 // ignore_for_file: type=lint

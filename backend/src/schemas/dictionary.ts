@@ -18,7 +18,6 @@ export const definedWordItemSchema = z
     word: wordSummarySchema,
     publicCount: z.number().int(),
     privateCount: z.number().int(),
-    draftCount: z.number().int(),
   })
   .openapi("DefinedWordItem");
 

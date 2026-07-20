@@ -13,16 +13,16 @@ String _$likeDefinitionRepositoryHash() =>
 @ProviderFor(likeDefinitionRepository)
 final likeDefinitionRepositoryProvider =
     AutoDisposeProvider<LikeDefinitionRepository>.internal(
-      likeDefinitionRepository,
-      name: r'likeDefinitionRepositoryProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$likeDefinitionRepositoryHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  likeDefinitionRepository,
+  name: r'likeDefinitionRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$likeDefinitionRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
-typedef LikeDefinitionRepositoryRef =
-    AutoDisposeProviderRef<LikeDefinitionRepository>;
+typedef LikeDefinitionRepositoryRef
+    = AutoDisposeProviderRef<LikeDefinitionRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

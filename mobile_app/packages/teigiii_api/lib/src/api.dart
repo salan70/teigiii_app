@@ -8,6 +8,7 @@ import 'package:teigiii_api/src/auth/basic_auth.dart';
 import 'package:teigiii_api/src/auth/bearer_auth.dart';
 import 'package:teigiii_api/src/auth/oauth.dart';
 import 'package:teigiii_api/src/api/app_config_api.dart';
+import 'package:teigiii_api/src/api/definition_drafts_api.dart';
 import 'package:teigiii_api/src/api/definitions_api.dart';
 import 'package:teigiii_api/src/api/me_api.dart';
 import 'package:teigiii_api/src/api/search_api.dart';
@@ -142,6 +143,12 @@ class TeigiiiApi {
   /// by doing that all interceptors will not be executed
   AppConfigApi getAppConfigApi() {
     return AppConfigApi(dio);
+  }
+
+  /// Get DefinitionDraftsApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  DefinitionDraftsApi getDefinitionDraftsApi() {
+    return DefinitionDraftsApi(dio);
   }
 
   /// Get DefinitionsApi instance, base route and serializer can be overridden by a given but be careful,

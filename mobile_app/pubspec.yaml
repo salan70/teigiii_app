@@ -45,6 +45,7 @@ dependencies:
   shared_preferences: ^2.2.2
   shimmer: ^3.0.0
   url_launcher: ^6.2.1
+  uuid: ^4.5.3
   version: ^3.0.2
 
   # Workers API クライアント（backend/openapi.json から生成）

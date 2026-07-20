@@ -1,27 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-import '../application/definition_for_write_notifier.dart';
-import '../domain/definition_for_write.dart';
 import '../util/definition_post_type.dart';
 
-class SelectPostTypeButton extends ConsumerWidget {
+class SelectPostTypeButton extends StatelessWidget {
   SelectPostTypeButton({
     super.key,
-    required this.definitionForWrite,
-    required this.notifier,
+    required this.isPublic,
+    required this.onChanged,
   });
 
-  final DefinitionForWrite definitionForWrite;
-  final DefinitionForWriteNotifier notifier;
+  final bool isPublic;
+  final ValueChanged<bool> onChanged;
   final globalKey = GlobalKey();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final postType = definitionForWrite.isPublic
+  Widget build(BuildContext context) {
+    final postType = isPublic
         ? DefinitionPostType.public
         : DefinitionPostType.private;
 
@@ -45,14 +42,14 @@ class SelectPostTypeButton extends ConsumerWidget {
             items: [
               PullDownMenuItem(
                 onTap: () {
-                  notifier.changePublicState(isPublic: true);
+                  onChanged(true);
                 },
                 title: DefinitionPostType.public.labelForWrite,
                 icon: DefinitionPostType.public.icon,
               ),
               PullDownMenuItem(
                 onTap: () {
-                  notifier.changePublicState(isPublic: false);
+                  onChanged(false);
                 },
                 title: DefinitionPostType.private.labelForWrite,
                 icon: DefinitionPostType.private.icon,

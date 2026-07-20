@@ -153,18 +153,27 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 <!-- @code backend/src/definitions/definition-service.ts#DefinitionService -->
 ### 定義
 
-- draft は `finalized_at=null`、public / private は初回確定時の `finalized_at` を持つ
-- 許可する状態遷移は draft から public / private、public と private の相互切替だけとし、draft へ戻さない
+- 確定済み定義だけを保持し、状態は public / private のいずれかとする
+- public と private は相互に切り替えられるが、Draft へ戻す状態遷移は持たない
 - 確定後1時間を超えた本文編集を403で拒否する。公開範囲の変更では `finalized_at` を更新しない
-- 他者は public だけを閲覧でき、本人は自分の draft / private も閲覧できる。不可視な定義は404として存在を秘匿する
+- 他者は public だけを閲覧でき、本人は自分の private も閲覧できる。不可視な定義は404として存在を秘匿する
 - 削除は所有者だけが実行でき、`deleted_at` を設定する
 - いいね対象は他者が閲覧可能な public 定義と、自分が閲覧可能な自分の定義に限定する
+
+<!-- @code backend/src/definition-drafts/definition-draft-service.ts#DefinitionDraftService -->
+### 定義 Draft
+
+- `definition_drafts` は確定済み定義と分離し、本人だけが取得・更新・削除できる
+- クライアント生成 UUID に対する PUT は冪等とし、言葉・よみ・本文のいずれか一項目が入力済みなら保存できる
+- Draft 保存時には新しい言葉を共有登録しない。確定時に表記で既存語を解決し、既存語とよみが異なる場合だけ確認を要求する
+- 確定は必須項目とよみを検証し、言葉解決、定義作成、Draft 完了を一貫して行う。同じ Draft の再確定は同じ定義を返す
+- 一覧は未確定 Draft だけを `updated_at DESC, id DESC` の安定順で返す
 
 <!-- @code backend/src/browse/browse-service.ts#BrowseService -->
 ### 辞書と一覧
 
 - 公開辞書は対象ユーザーの public 定義だけを言葉単位にまとめる
-- 本人向け辞書は draft / private を含め、endpoint ごとの status 条件を適用する
+- 本人向け辞書は public / private の確定済み定義を含め、Draft は専用一覧へ分離する
 - 合成 DTO の likesCount、followingCount、followerCount は有効な行だけを集計する
 - `isLikedByMe`、`isFollowedByMe`、`isMutedByMe` は認証 UID を基準に算出する
 

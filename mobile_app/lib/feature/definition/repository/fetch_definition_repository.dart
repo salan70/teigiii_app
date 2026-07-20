@@ -41,6 +41,7 @@ class FetchDefinitionRepository {
         isPublic: definition.status == DefinitionStatus.public,
         likesCount: definition.likesCount,
         isLikedByUser: definition.isLikedByMe,
+        editableUntil: definition.editableUntil,
         createdAt: definition.createdAt,
       );
     } on DioException catch (exception) {

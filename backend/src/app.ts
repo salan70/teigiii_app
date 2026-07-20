@@ -17,6 +17,7 @@ import {
 } from "./middleware/request-context";
 import { createApiErrorHandler, handleNotFound } from "./errors";
 import { appConfigRoutes } from "./routes/app-config";
+import { definitionDraftRoutes } from "./routes/definition-drafts";
 import { definitionRoutes } from "./routes/definitions";
 import { meRoutes } from "./routes/me";
 import { searchRoutes } from "./routes/search";
@@ -61,6 +62,7 @@ export function createApp({
     .route("/", createUserRoutes(generatePublicId ? { generatePublicId } : {}))
     .route("/", meRoutes)
     .route("/", wordRoutes)
+    .route("/", definitionDraftRoutes)
     .route("/", definitionRoutes)
     .route("/", timelineRoutes)
     .route("/", searchRoutes);

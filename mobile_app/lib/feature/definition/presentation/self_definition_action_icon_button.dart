@@ -2,18 +2,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../../core/common_provider/dialog_controller.dart';
 import '../../../../core/common_widget/dialog/confirm_dialog.dart';
 import '../../../../core/router/app_router.dart';
-import '../../../../util/extension/date_time_extension.dart';
 import '../../../util/mixin/presentation_mixin.dart';
 import '../../word/application/word_state.dart';
 import '../application/definition_service.dart';
 import '../domain/definition.dart';
-import '../util/after_post_navigation_type.dart';
 import '../util/definition_post_type.dart';
 
 class SelfDefinitionActionIconButton extends ConsumerWidget
@@ -45,7 +42,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget
           icon: CupertinoIcons.pencil,
           onTap: () {
             // 投稿から1時間以内の定義のみ編集可能。
-            final canEdit = !definition.createdAt.hasOneHourPassed();
+            final canEdit = definition.canEditAt(DateTime.now());
             if (!canEdit) {
               ref
                   .read(dialogControllerProvider)
@@ -134,15 +131,7 @@ class _CannotEditAlertDialog extends StatelessWidget {
         left: 32,
         bottom: 8,
       ),
-      content: const Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('編集は投稿してから1時間以内にしかできません。', overflow: TextOverflow.clip),
-          Gap(8),
-          Text('代わりに、この投稿の内容をもとに新規投稿を作成しませんか？', overflow: TextOverflow.clip),
-        ],
-      ),
+      content: const Text('この定義の本文編集期限は終了しました。', overflow: TextOverflow.clip),
       actionsAlignment: MainAxisAlignment.spaceEvenly,
       actionsPadding: const EdgeInsets.only(bottom: 16),
       actions: [
@@ -151,27 +140,7 @@ class _CannotEditAlertDialog extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
-              'キャンセル',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            context
-              ..popRoute()
-              ..pushRoute(
-                DefinitionPostRoute(
-                  initialDefinitionForWrite: definition.toDefinitionForWrite(),
-                  autoFocusForm: null,
-                  afterPostNavigation: AfterPostNavigationType.toDetail,
-                ),
-              );
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              '作成する',
+              '閉じる',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Theme.of(context).colorScheme.primary,
               ),

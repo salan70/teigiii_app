@@ -40,8 +40,13 @@ import 'package:teigiii_api/src/model/v1_users_me_avatar_put200_response.dart'
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
-  _FakeResponse_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeResponse_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 /// A class which mocks [UsersApi].
@@ -59,7 +64,26 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1AvatarsIdGet, [], {
+        Invocation.method(
+          #v1AvatarsIdGet,
+          [],
+          {
+            #id: id,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<_i5.Uint8List>>.value(
+            _FakeResponse_0<_i5.Uint8List>(
+          this,
+          Invocation.method(
+            #v1AvatarsIdGet,
+            [],
+            {
               #id: id,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -67,42 +91,33 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<_i5.Uint8List>>.value(
-              _FakeResponse_0<_i5.Uint8List>(
-                this,
-                Invocation.method(#v1AvatarsIdGet, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i5.Uint8List>>.value(
-                  _FakeResponse_0<_i5.Uint8List>(
-                    this,
-                    Invocation.method(#v1AvatarsIdGet, [], {
-                      #id: id,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i5.Uint8List>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<_i5.Uint8List>>.value(
+                _FakeResponse_0<_i5.Uint8List>(
+          this,
+          Invocation.method(
+            #v1AvatarsIdGet,
+            [],
+            {
+              #id: id,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i5.Uint8List>>);
 
   @override
-  _i4.Future<_i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>
-  v1UsersIdDefinitionsGet({
+  _i4.Future<
+      _i2.Response<
+          _i6.V1UsersIdDefinitionsGet200Response>> v1UsersIdDefinitionsGet({
     required String? id,
     String? cursor,
     int? limit = 20,
@@ -117,7 +132,32 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1UsersIdDefinitionsGet, [], {
+        Invocation.method(
+          #v1UsersIdDefinitionsGet,
+          [],
+          {
+            #id: id,
+            #cursor: cursor,
+            #limit: limit,
+            #wordId: wordId,
+            #subGroup: subGroup,
+            #sort: sort,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4
+            .Future<_i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>.value(
+            _FakeResponse_0<_i6.V1UsersIdDefinitionsGet200Response>(
+          this,
+          Invocation.method(
+            #v1UsersIdDefinitionsGet,
+            [],
+            {
               #id: id,
               #cursor: cursor,
               #limit: limit,
@@ -130,57 +170,37 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue:
-                _i4.Future<
-                  _i2.Response<_i6.V1UsersIdDefinitionsGet200Response>
-                >.value(
-                  _FakeResponse_0<_i6.V1UsersIdDefinitionsGet200Response>(
-                    this,
-                    Invocation.method(#v1UsersIdDefinitionsGet, [], {
-                      #id: id,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #wordId: wordId,
-                      #subGroup: subGroup,
-                      #sort: sort,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-            returnValueForMissingStub:
-                _i4.Future<
-                  _i2.Response<_i6.V1UsersIdDefinitionsGet200Response>
-                >.value(
-                  _FakeResponse_0<_i6.V1UsersIdDefinitionsGet200Response>(
-                    this,
-                    Invocation.method(#v1UsersIdDefinitionsGet, [], {
-                      #id: id,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #wordId: wordId,
-                      #subGroup: subGroup,
-                      #sort: sort,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i4
+            .Future<_i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>.value(
+            _FakeResponse_0<_i6.V1UsersIdDefinitionsGet200Response>(
+          this,
+          Invocation.method(
+            #v1UsersIdDefinitionsGet,
+            [],
+            {
+              #id: id,
+              #cursor: cursor,
+              #limit: limit,
+              #wordId: wordId,
+              #subGroup: subGroup,
+              #sort: sort,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>);
 
   @override
   _i4.Future<_i2.Response<_i7.V1UsersIdDictionaryGet200Response>>
-  v1UsersIdDictionaryGet({
+      v1UsersIdDictionaryGet({
     required String? id,
     String? cursor,
     int? limit = 20,
@@ -191,58 +211,63 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onSendProgress,
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
-      (super.noSuchMethod(
-            Invocation.method(#v1UsersIdDictionaryGet, [], {
-              #id: id,
-              #cursor: cursor,
-              #limit: limit,
-              #cancelToken: cancelToken,
-              #headers: headers,
-              #extra: extra,
-              #validateStatus: validateStatus,
-              #onSendProgress: onSendProgress,
-              #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue:
-                _i4.Future<
-                  _i2.Response<_i7.V1UsersIdDictionaryGet200Response>
-                >.value(
-                  _FakeResponse_0<_i7.V1UsersIdDictionaryGet200Response>(
-                    this,
-                    Invocation.method(#v1UsersIdDictionaryGet, [], {
-                      #id: id,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-            returnValueForMissingStub:
-                _i4.Future<
-                  _i2.Response<_i7.V1UsersIdDictionaryGet200Response>
-                >.value(
-                  _FakeResponse_0<_i7.V1UsersIdDictionaryGet200Response>(
-                    this,
-                    Invocation.method(#v1UsersIdDictionaryGet, [], {
-                      #id: id,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i7.V1UsersIdDictionaryGet200Response>>);
+          (super.noSuchMethod(
+            Invocation.method(
+              #v1UsersIdDictionaryGet,
+              [],
+              {
+                #id: id,
+                #cursor: cursor,
+                #limit: limit,
+                #cancelToken: cancelToken,
+                #headers: headers,
+                #extra: extra,
+                #validateStatus: validateStatus,
+                #onSendProgress: onSendProgress,
+                #onReceiveProgress: onReceiveProgress,
+              },
+            ),
+            returnValue: _i4.Future<
+                    _i2.Response<_i7.V1UsersIdDictionaryGet200Response>>.value(
+                _FakeResponse_0<_i7.V1UsersIdDictionaryGet200Response>(
+              this,
+              Invocation.method(
+                #v1UsersIdDictionaryGet,
+                [],
+                {
+                  #id: id,
+                  #cursor: cursor,
+                  #limit: limit,
+                  #cancelToken: cancelToken,
+                  #headers: headers,
+                  #extra: extra,
+                  #validateStatus: validateStatus,
+                  #onSendProgress: onSendProgress,
+                  #onReceiveProgress: onReceiveProgress,
+                },
+              ),
+            )),
+            returnValueForMissingStub: _i4.Future<
+                    _i2.Response<_i7.V1UsersIdDictionaryGet200Response>>.value(
+                _FakeResponse_0<_i7.V1UsersIdDictionaryGet200Response>(
+              this,
+              Invocation.method(
+                #v1UsersIdDictionaryGet,
+                [],
+                {
+                  #id: id,
+                  #cursor: cursor,
+                  #limit: limit,
+                  #cancelToken: cancelToken,
+                  #headers: headers,
+                  #extra: extra,
+                  #validateStatus: validateStatus,
+                  #onSendProgress: onSendProgress,
+                  #onReceiveProgress: onReceiveProgress,
+                },
+              ),
+            )),
+          ) as _i4.Future<_i2.Response<_i7.V1UsersIdDictionaryGet200Response>>);
 
   @override
   _i4.Future<_i2.Response<void>> v1UsersIdFollowDelete({
@@ -255,7 +280,25 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1UsersIdFollowDelete, [], {
+        Invocation.method(
+          #v1UsersIdFollowDelete,
+          [],
+          {
+            #id: id,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1UsersIdFollowDelete,
+            [],
+            {
               #id: id,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -263,37 +306,27 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1UsersIdFollowDelete, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1UsersIdFollowDelete, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Response<void>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1UsersIdFollowDelete,
+            [],
+            {
+              #id: id,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<void>>);
 
   @override
   _i4.Future<_i2.Response<void>> v1UsersIdFollowPut({
@@ -306,7 +339,25 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1UsersIdFollowPut, [], {
+        Invocation.method(
+          #v1UsersIdFollowPut,
+          [],
+          {
+            #id: id,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1UsersIdFollowPut,
+            [],
+            {
               #id: id,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -314,41 +365,31 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1UsersIdFollowPut, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1UsersIdFollowPut, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Response<void>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1UsersIdFollowPut,
+            [],
+            {
+              #id: id,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<void>>);
 
   @override
   _i4.Future<_i2.Response<_i8.V1UsersIdFollowersGet200Response>>
-  v1UsersIdFollowersGet({
+      v1UsersIdFollowersGet({
     required String? id,
     String? cursor,
     int? limit = 20,
@@ -359,62 +400,67 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onSendProgress,
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
-      (super.noSuchMethod(
-            Invocation.method(#v1UsersIdFollowersGet, [], {
-              #id: id,
-              #cursor: cursor,
-              #limit: limit,
-              #cancelToken: cancelToken,
-              #headers: headers,
-              #extra: extra,
-              #validateStatus: validateStatus,
-              #onSendProgress: onSendProgress,
-              #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue:
-                _i4.Future<
-                  _i2.Response<_i8.V1UsersIdFollowersGet200Response>
-                >.value(
-                  _FakeResponse_0<_i8.V1UsersIdFollowersGet200Response>(
-                    this,
-                    Invocation.method(#v1UsersIdFollowersGet, [], {
-                      #id: id,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-            returnValueForMissingStub:
-                _i4.Future<
-                  _i2.Response<_i8.V1UsersIdFollowersGet200Response>
-                >.value(
-                  _FakeResponse_0<_i8.V1UsersIdFollowersGet200Response>(
-                    this,
-                    Invocation.method(#v1UsersIdFollowersGet, [], {
-                      #id: id,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i8.V1UsersIdFollowersGet200Response>>);
+          (super.noSuchMethod(
+            Invocation.method(
+              #v1UsersIdFollowersGet,
+              [],
+              {
+                #id: id,
+                #cursor: cursor,
+                #limit: limit,
+                #cancelToken: cancelToken,
+                #headers: headers,
+                #extra: extra,
+                #validateStatus: validateStatus,
+                #onSendProgress: onSendProgress,
+                #onReceiveProgress: onReceiveProgress,
+              },
+            ),
+            returnValue: _i4.Future<
+                    _i2.Response<_i8.V1UsersIdFollowersGet200Response>>.value(
+                _FakeResponse_0<_i8.V1UsersIdFollowersGet200Response>(
+              this,
+              Invocation.method(
+                #v1UsersIdFollowersGet,
+                [],
+                {
+                  #id: id,
+                  #cursor: cursor,
+                  #limit: limit,
+                  #cancelToken: cancelToken,
+                  #headers: headers,
+                  #extra: extra,
+                  #validateStatus: validateStatus,
+                  #onSendProgress: onSendProgress,
+                  #onReceiveProgress: onReceiveProgress,
+                },
+              ),
+            )),
+            returnValueForMissingStub: _i4.Future<
+                    _i2.Response<_i8.V1UsersIdFollowersGet200Response>>.value(
+                _FakeResponse_0<_i8.V1UsersIdFollowersGet200Response>(
+              this,
+              Invocation.method(
+                #v1UsersIdFollowersGet,
+                [],
+                {
+                  #id: id,
+                  #cursor: cursor,
+                  #limit: limit,
+                  #cancelToken: cancelToken,
+                  #headers: headers,
+                  #extra: extra,
+                  #validateStatus: validateStatus,
+                  #onSendProgress: onSendProgress,
+                  #onReceiveProgress: onReceiveProgress,
+                },
+              ),
+            )),
+          ) as _i4.Future<_i2.Response<_i8.V1UsersIdFollowersGet200Response>>);
 
   @override
   _i4.Future<_i2.Response<_i8.V1UsersIdFollowersGet200Response>>
-  v1UsersIdFollowingGet({
+      v1UsersIdFollowingGet({
     required String? id,
     String? cursor,
     int? limit = 20,
@@ -425,58 +471,63 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onSendProgress,
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
-      (super.noSuchMethod(
-            Invocation.method(#v1UsersIdFollowingGet, [], {
-              #id: id,
-              #cursor: cursor,
-              #limit: limit,
-              #cancelToken: cancelToken,
-              #headers: headers,
-              #extra: extra,
-              #validateStatus: validateStatus,
-              #onSendProgress: onSendProgress,
-              #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue:
-                _i4.Future<
-                  _i2.Response<_i8.V1UsersIdFollowersGet200Response>
-                >.value(
-                  _FakeResponse_0<_i8.V1UsersIdFollowersGet200Response>(
-                    this,
-                    Invocation.method(#v1UsersIdFollowingGet, [], {
-                      #id: id,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-            returnValueForMissingStub:
-                _i4.Future<
-                  _i2.Response<_i8.V1UsersIdFollowersGet200Response>
-                >.value(
-                  _FakeResponse_0<_i8.V1UsersIdFollowersGet200Response>(
-                    this,
-                    Invocation.method(#v1UsersIdFollowingGet, [], {
-                      #id: id,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i8.V1UsersIdFollowersGet200Response>>);
+          (super.noSuchMethod(
+            Invocation.method(
+              #v1UsersIdFollowingGet,
+              [],
+              {
+                #id: id,
+                #cursor: cursor,
+                #limit: limit,
+                #cancelToken: cancelToken,
+                #headers: headers,
+                #extra: extra,
+                #validateStatus: validateStatus,
+                #onSendProgress: onSendProgress,
+                #onReceiveProgress: onReceiveProgress,
+              },
+            ),
+            returnValue: _i4.Future<
+                    _i2.Response<_i8.V1UsersIdFollowersGet200Response>>.value(
+                _FakeResponse_0<_i8.V1UsersIdFollowersGet200Response>(
+              this,
+              Invocation.method(
+                #v1UsersIdFollowingGet,
+                [],
+                {
+                  #id: id,
+                  #cursor: cursor,
+                  #limit: limit,
+                  #cancelToken: cancelToken,
+                  #headers: headers,
+                  #extra: extra,
+                  #validateStatus: validateStatus,
+                  #onSendProgress: onSendProgress,
+                  #onReceiveProgress: onReceiveProgress,
+                },
+              ),
+            )),
+            returnValueForMissingStub: _i4.Future<
+                    _i2.Response<_i8.V1UsersIdFollowersGet200Response>>.value(
+                _FakeResponse_0<_i8.V1UsersIdFollowersGet200Response>(
+              this,
+              Invocation.method(
+                #v1UsersIdFollowingGet,
+                [],
+                {
+                  #id: id,
+                  #cursor: cursor,
+                  #limit: limit,
+                  #cancelToken: cancelToken,
+                  #headers: headers,
+                  #extra: extra,
+                  #validateStatus: validateStatus,
+                  #onSendProgress: onSendProgress,
+                  #onReceiveProgress: onReceiveProgress,
+                },
+              ),
+            )),
+          ) as _i4.Future<_i2.Response<_i8.V1UsersIdFollowersGet200Response>>);
 
   @override
   _i4.Future<_i2.Response<_i9.UserResponse>> v1UsersIdGet({
@@ -489,7 +540,26 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1UsersIdGet, [], {
+        Invocation.method(
+          #v1UsersIdGet,
+          [],
+          {
+            #id: id,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<_i9.UserResponse>>.value(
+            _FakeResponse_0<_i9.UserResponse>(
+          this,
+          Invocation.method(
+            #v1UsersIdGet,
+            [],
+            {
               #id: id,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -497,42 +567,32 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<_i9.UserResponse>>.value(
-              _FakeResponse_0<_i9.UserResponse>(
-                this,
-                Invocation.method(#v1UsersIdGet, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i9.UserResponse>>.value(
-                  _FakeResponse_0<_i9.UserResponse>(
-                    this,
-                    Invocation.method(#v1UsersIdGet, [], {
-                      #id: id,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i9.UserResponse>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<_i9.UserResponse>>.value(
+                _FakeResponse_0<_i9.UserResponse>(
+          this,
+          Invocation.method(
+            #v1UsersIdGet,
+            [],
+            {
+              #id: id,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i9.UserResponse>>);
 
   @override
   _i4.Future<_i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>
-  v1UsersIdLikedDefinitionsGet({
+      v1UsersIdLikedDefinitionsGet({
     required String? id,
     String? cursor,
     int? limit = 20,
@@ -543,58 +603,64 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onSendProgress,
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
-      (super.noSuchMethod(
-            Invocation.method(#v1UsersIdLikedDefinitionsGet, [], {
-              #id: id,
-              #cursor: cursor,
-              #limit: limit,
-              #cancelToken: cancelToken,
-              #headers: headers,
-              #extra: extra,
-              #validateStatus: validateStatus,
-              #onSendProgress: onSendProgress,
-              #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue:
-                _i4.Future<
-                  _i2.Response<_i6.V1UsersIdDefinitionsGet200Response>
-                >.value(
-                  _FakeResponse_0<_i6.V1UsersIdDefinitionsGet200Response>(
-                    this,
-                    Invocation.method(#v1UsersIdLikedDefinitionsGet, [], {
-                      #id: id,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-            returnValueForMissingStub:
-                _i4.Future<
-                  _i2.Response<_i6.V1UsersIdDefinitionsGet200Response>
-                >.value(
-                  _FakeResponse_0<_i6.V1UsersIdDefinitionsGet200Response>(
-                    this,
-                    Invocation.method(#v1UsersIdLikedDefinitionsGet, [], {
-                      #id: id,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>);
+          (super.noSuchMethod(
+            Invocation.method(
+              #v1UsersIdLikedDefinitionsGet,
+              [],
+              {
+                #id: id,
+                #cursor: cursor,
+                #limit: limit,
+                #cancelToken: cancelToken,
+                #headers: headers,
+                #extra: extra,
+                #validateStatus: validateStatus,
+                #onSendProgress: onSendProgress,
+                #onReceiveProgress: onReceiveProgress,
+              },
+            ),
+            returnValue: _i4.Future<
+                    _i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>.value(
+                _FakeResponse_0<_i6.V1UsersIdDefinitionsGet200Response>(
+              this,
+              Invocation.method(
+                #v1UsersIdLikedDefinitionsGet,
+                [],
+                {
+                  #id: id,
+                  #cursor: cursor,
+                  #limit: limit,
+                  #cancelToken: cancelToken,
+                  #headers: headers,
+                  #extra: extra,
+                  #validateStatus: validateStatus,
+                  #onSendProgress: onSendProgress,
+                  #onReceiveProgress: onReceiveProgress,
+                },
+              ),
+            )),
+            returnValueForMissingStub: _i4.Future<
+                    _i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>.value(
+                _FakeResponse_0<_i6.V1UsersIdDefinitionsGet200Response>(
+              this,
+              Invocation.method(
+                #v1UsersIdLikedDefinitionsGet,
+                [],
+                {
+                  #id: id,
+                  #cursor: cursor,
+                  #limit: limit,
+                  #cancelToken: cancelToken,
+                  #headers: headers,
+                  #extra: extra,
+                  #validateStatus: validateStatus,
+                  #onSendProgress: onSendProgress,
+                  #onReceiveProgress: onReceiveProgress,
+                },
+              ),
+            )),
+          ) as _i4
+              .Future<_i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>);
 
   @override
   _i4.Future<_i2.Response<void>> v1UsersIdMuteDelete({
@@ -607,7 +673,25 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1UsersIdMuteDelete, [], {
+        Invocation.method(
+          #v1UsersIdMuteDelete,
+          [],
+          {
+            #id: id,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1UsersIdMuteDelete,
+            [],
+            {
               #id: id,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -615,37 +699,27 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1UsersIdMuteDelete, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1UsersIdMuteDelete, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Response<void>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1UsersIdMuteDelete,
+            [],
+            {
+              #id: id,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<void>>);
 
   @override
   _i4.Future<_i2.Response<void>> v1UsersIdMutePut({
@@ -658,7 +732,25 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1UsersIdMutePut, [], {
+        Invocation.method(
+          #v1UsersIdMutePut,
+          [],
+          {
+            #id: id,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1UsersIdMutePut,
+            [],
+            {
               #id: id,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -666,37 +758,27 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1UsersIdMutePut, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1UsersIdMutePut, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Response<void>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1UsersIdMutePut,
+            [],
+            {
+              #id: id,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<void>>);
 
   @override
   _i4.Future<_i2.Response<void>> v1UsersMeAvatarDelete({
@@ -708,46 +790,54 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1UsersMeAvatarDelete, [], {
+        Invocation.method(
+          #v1UsersMeAvatarDelete,
+          [],
+          {
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1UsersMeAvatarDelete,
+            [],
+            {
               #cancelToken: cancelToken,
               #headers: headers,
               #extra: extra,
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1UsersMeAvatarDelete, [], {
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1UsersMeAvatarDelete, [], {
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Response<void>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1UsersMeAvatarDelete,
+            [],
+            {
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<void>>);
 
   @override
-  _i4.Future<_i2.Response<_i10.V1UsersMeAvatarPut200Response>>
-  v1UsersMeAvatarPut({
+  _i4.Future<
+      _i2.Response<_i10.V1UsersMeAvatarPut200Response>> v1UsersMeAvatarPut({
     _i2.MultipartFile? body,
     _i2.CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -757,7 +847,27 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1UsersMeAvatarPut, [], {
+        Invocation.method(
+          #v1UsersMeAvatarPut,
+          [],
+          {
+            #body: body,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue:
+            _i4.Future<_i2.Response<_i10.V1UsersMeAvatarPut200Response>>.value(
+                _FakeResponse_0<_i10.V1UsersMeAvatarPut200Response>(
+          this,
+          Invocation.method(
+            #v1UsersMeAvatarPut,
+            [],
+            {
               #body: body,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -765,43 +875,28 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue:
-                _i4.Future<
-                  _i2.Response<_i10.V1UsersMeAvatarPut200Response>
-                >.value(
-                  _FakeResponse_0<_i10.V1UsersMeAvatarPut200Response>(
-                    this,
-                    Invocation.method(#v1UsersMeAvatarPut, [], {
-                      #body: body,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-            returnValueForMissingStub:
-                _i4.Future<
-                  _i2.Response<_i10.V1UsersMeAvatarPut200Response>
-                >.value(
-                  _FakeResponse_0<_i10.V1UsersMeAvatarPut200Response>(
-                    this,
-                    Invocation.method(#v1UsersMeAvatarPut, [], {
-                      #body: body,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i10.V1UsersMeAvatarPut200Response>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<_i10.V1UsersMeAvatarPut200Response>>.value(
+                _FakeResponse_0<_i10.V1UsersMeAvatarPut200Response>(
+          this,
+          Invocation.method(
+            #v1UsersMeAvatarPut,
+            [],
+            {
+              #body: body,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i10.V1UsersMeAvatarPut200Response>>);
 
   @override
   _i4.Future<_i2.Response<void>> v1UsersMeDelete({
@@ -813,42 +908,50 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1UsersMeDelete, [], {
+        Invocation.method(
+          #v1UsersMeDelete,
+          [],
+          {
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1UsersMeDelete,
+            [],
+            {
               #cancelToken: cancelToken,
               #headers: headers,
               #extra: extra,
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1UsersMeDelete, [], {
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1UsersMeDelete, [], {
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Response<void>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1UsersMeDelete,
+            [],
+            {
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<void>>);
 
   @override
   _i4.Future<_i2.Response<_i11.MeResponse>> v1UsersMeGet({
@@ -860,43 +963,52 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1UsersMeGet, [], {
+        Invocation.method(
+          #v1UsersMeGet,
+          [],
+          {
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<_i11.MeResponse>>.value(
+            _FakeResponse_0<_i11.MeResponse>(
+          this,
+          Invocation.method(
+            #v1UsersMeGet,
+            [],
+            {
               #cancelToken: cancelToken,
               #headers: headers,
               #extra: extra,
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<_i11.MeResponse>>.value(
-              _FakeResponse_0<_i11.MeResponse>(
-                this,
-                Invocation.method(#v1UsersMeGet, [], {
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i11.MeResponse>>.value(
-                  _FakeResponse_0<_i11.MeResponse>(
-                    this,
-                    Invocation.method(#v1UsersMeGet, [], {
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i11.MeResponse>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<_i11.MeResponse>>.value(
+                _FakeResponse_0<_i11.MeResponse>(
+          this,
+          Invocation.method(
+            #v1UsersMeGet,
+            [],
+            {
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i11.MeResponse>>);
 
   @override
   _i4.Future<_i2.Response<_i11.MeResponse>> v1UsersMePatch({
@@ -909,7 +1021,26 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1UsersMePatch, [], {
+        Invocation.method(
+          #v1UsersMePatch,
+          [],
+          {
+            #updateMeRequest: updateMeRequest,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<_i11.MeResponse>>.value(
+            _FakeResponse_0<_i11.MeResponse>(
+          this,
+          Invocation.method(
+            #v1UsersMePatch,
+            [],
+            {
               #updateMeRequest: updateMeRequest,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -917,38 +1048,28 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<_i11.MeResponse>>.value(
-              _FakeResponse_0<_i11.MeResponse>(
-                this,
-                Invocation.method(#v1UsersMePatch, [], {
-                  #updateMeRequest: updateMeRequest,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i11.MeResponse>>.value(
-                  _FakeResponse_0<_i11.MeResponse>(
-                    this,
-                    Invocation.method(#v1UsersMePatch, [], {
-                      #updateMeRequest: updateMeRequest,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i11.MeResponse>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<_i11.MeResponse>>.value(
+                _FakeResponse_0<_i11.MeResponse>(
+          this,
+          Invocation.method(
+            #v1UsersMePatch,
+            [],
+            {
+              #updateMeRequest: updateMeRequest,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i11.MeResponse>>);
 
   @override
   _i4.Future<_i2.Response<_i11.MeResponse>> v1UsersPost({
@@ -961,7 +1082,26 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1UsersPost, [], {
+        Invocation.method(
+          #v1UsersPost,
+          [],
+          {
+            #createUserRequest: createUserRequest,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<_i11.MeResponse>>.value(
+            _FakeResponse_0<_i11.MeResponse>(
+          this,
+          Invocation.method(
+            #v1UsersPost,
+            [],
+            {
               #createUserRequest: createUserRequest,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -969,38 +1109,28 @@ class MockUsersApi extends _i1.Mock implements _i3.UsersApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<_i11.MeResponse>>.value(
-              _FakeResponse_0<_i11.MeResponse>(
-                this,
-                Invocation.method(#v1UsersPost, [], {
-                  #createUserRequest: createUserRequest,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i11.MeResponse>>.value(
-                  _FakeResponse_0<_i11.MeResponse>(
-                    this,
-                    Invocation.method(#v1UsersPost, [], {
-                      #createUserRequest: createUserRequest,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i11.MeResponse>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<_i11.MeResponse>>.value(
+                _FakeResponse_0<_i11.MeResponse>(
+          this,
+          Invocation.method(
+            #v1UsersPost,
+            [],
+            {
+              #createUserRequest: createUserRequest,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i11.MeResponse>>);
 }
 
 /// A class which mocks [DefinitionsApi].
@@ -1018,7 +1148,25 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1DefinitionsIdDelete, [], {
+        Invocation.method(
+          #v1DefinitionsIdDelete,
+          [],
+          {
+            #id: id,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1DefinitionsIdDelete,
+            [],
+            {
               #id: id,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -1026,37 +1174,27 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1DefinitionsIdDelete, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1DefinitionsIdDelete, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Response<void>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1DefinitionsIdDelete,
+            [],
+            {
+              #id: id,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<void>>);
 
   @override
   _i4.Future<_i2.Response<_i15.DefinitionResponse>> v1DefinitionsIdGet({
@@ -1069,7 +1207,26 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1DefinitionsIdGet, [], {
+        Invocation.method(
+          #v1DefinitionsIdGet,
+          [],
+          {
+            #id: id,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<_i15.DefinitionResponse>>.value(
+            _FakeResponse_0<_i15.DefinitionResponse>(
+          this,
+          Invocation.method(
+            #v1DefinitionsIdGet,
+            [],
+            {
               #id: id,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -1077,39 +1234,28 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue:
-                _i4.Future<_i2.Response<_i15.DefinitionResponse>>.value(
-                  _FakeResponse_0<_i15.DefinitionResponse>(
-                    this,
-                    Invocation.method(#v1DefinitionsIdGet, [], {
-                      #id: id,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-            returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i15.DefinitionResponse>>.value(
-                  _FakeResponse_0<_i15.DefinitionResponse>(
-                    this,
-                    Invocation.method(#v1DefinitionsIdGet, [], {
-                      #id: id,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i15.DefinitionResponse>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<_i15.DefinitionResponse>>.value(
+                _FakeResponse_0<_i15.DefinitionResponse>(
+          this,
+          Invocation.method(
+            #v1DefinitionsIdGet,
+            [],
+            {
+              #id: id,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i15.DefinitionResponse>>);
 
   @override
   _i4.Future<_i2.Response<void>> v1DefinitionsIdLikeDelete({
@@ -1122,7 +1268,25 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1DefinitionsIdLikeDelete, [], {
+        Invocation.method(
+          #v1DefinitionsIdLikeDelete,
+          [],
+          {
+            #id: id,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1DefinitionsIdLikeDelete,
+            [],
+            {
               #id: id,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -1130,37 +1294,27 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1DefinitionsIdLikeDelete, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1DefinitionsIdLikeDelete, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Response<void>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1DefinitionsIdLikeDelete,
+            [],
+            {
+              #id: id,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<void>>);
 
   @override
   _i4.Future<_i2.Response<void>> v1DefinitionsIdLikePut({
@@ -1173,7 +1327,25 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1DefinitionsIdLikePut, [], {
+        Invocation.method(
+          #v1DefinitionsIdLikePut,
+          [],
+          {
+            #id: id,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1DefinitionsIdLikePut,
+            [],
+            {
               #id: id,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -1181,41 +1353,31 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1DefinitionsIdLikePut, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub: _i4.Future<_i2.Response<void>>.value(
-              _FakeResponse_0<void>(
-                this,
-                Invocation.method(#v1DefinitionsIdLikePut, [], {
-                  #id: id,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Response<void>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<void>>.value(_FakeResponse_0<void>(
+          this,
+          Invocation.method(
+            #v1DefinitionsIdLikePut,
+            [],
+            {
+              #id: id,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<void>>);
 
   @override
   _i4.Future<_i2.Response<_i8.V1UsersIdFollowersGet200Response>>
-  v1DefinitionsIdLikesGet({
+      v1DefinitionsIdLikesGet({
     required String? id,
     String? cursor,
     int? limit = 20,
@@ -1226,58 +1388,63 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
     _i2.ProgressCallback? onSendProgress,
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
-      (super.noSuchMethod(
-            Invocation.method(#v1DefinitionsIdLikesGet, [], {
-              #id: id,
-              #cursor: cursor,
-              #limit: limit,
-              #cancelToken: cancelToken,
-              #headers: headers,
-              #extra: extra,
-              #validateStatus: validateStatus,
-              #onSendProgress: onSendProgress,
-              #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue:
-                _i4.Future<
-                  _i2.Response<_i8.V1UsersIdFollowersGet200Response>
-                >.value(
-                  _FakeResponse_0<_i8.V1UsersIdFollowersGet200Response>(
-                    this,
-                    Invocation.method(#v1DefinitionsIdLikesGet, [], {
-                      #id: id,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-            returnValueForMissingStub:
-                _i4.Future<
-                  _i2.Response<_i8.V1UsersIdFollowersGet200Response>
-                >.value(
-                  _FakeResponse_0<_i8.V1UsersIdFollowersGet200Response>(
-                    this,
-                    Invocation.method(#v1DefinitionsIdLikesGet, [], {
-                      #id: id,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i8.V1UsersIdFollowersGet200Response>>);
+          (super.noSuchMethod(
+            Invocation.method(
+              #v1DefinitionsIdLikesGet,
+              [],
+              {
+                #id: id,
+                #cursor: cursor,
+                #limit: limit,
+                #cancelToken: cancelToken,
+                #headers: headers,
+                #extra: extra,
+                #validateStatus: validateStatus,
+                #onSendProgress: onSendProgress,
+                #onReceiveProgress: onReceiveProgress,
+              },
+            ),
+            returnValue: _i4.Future<
+                    _i2.Response<_i8.V1UsersIdFollowersGet200Response>>.value(
+                _FakeResponse_0<_i8.V1UsersIdFollowersGet200Response>(
+              this,
+              Invocation.method(
+                #v1DefinitionsIdLikesGet,
+                [],
+                {
+                  #id: id,
+                  #cursor: cursor,
+                  #limit: limit,
+                  #cancelToken: cancelToken,
+                  #headers: headers,
+                  #extra: extra,
+                  #validateStatus: validateStatus,
+                  #onSendProgress: onSendProgress,
+                  #onReceiveProgress: onReceiveProgress,
+                },
+              ),
+            )),
+            returnValueForMissingStub: _i4.Future<
+                    _i2.Response<_i8.V1UsersIdFollowersGet200Response>>.value(
+                _FakeResponse_0<_i8.V1UsersIdFollowersGet200Response>(
+              this,
+              Invocation.method(
+                #v1DefinitionsIdLikesGet,
+                [],
+                {
+                  #id: id,
+                  #cursor: cursor,
+                  #limit: limit,
+                  #cancelToken: cancelToken,
+                  #headers: headers,
+                  #extra: extra,
+                  #validateStatus: validateStatus,
+                  #onSendProgress: onSendProgress,
+                  #onReceiveProgress: onReceiveProgress,
+                },
+              ),
+            )),
+          ) as _i4.Future<_i2.Response<_i8.V1UsersIdFollowersGet200Response>>);
 
   @override
   _i4.Future<_i2.Response<_i15.DefinitionResponse>> v1DefinitionsIdPatch({
@@ -1291,7 +1458,27 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1DefinitionsIdPatch, [], {
+        Invocation.method(
+          #v1DefinitionsIdPatch,
+          [],
+          {
+            #id: id,
+            #updateDefinitionRequest: updateDefinitionRequest,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<_i15.DefinitionResponse>>.value(
+            _FakeResponse_0<_i15.DefinitionResponse>(
+          this,
+          Invocation.method(
+            #v1DefinitionsIdPatch,
+            [],
+            {
               #id: id,
               #updateDefinitionRequest: updateDefinitionRequest,
               #cancelToken: cancelToken,
@@ -1300,41 +1487,29 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue:
-                _i4.Future<_i2.Response<_i15.DefinitionResponse>>.value(
-                  _FakeResponse_0<_i15.DefinitionResponse>(
-                    this,
-                    Invocation.method(#v1DefinitionsIdPatch, [], {
-                      #id: id,
-                      #updateDefinitionRequest: updateDefinitionRequest,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-            returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i15.DefinitionResponse>>.value(
-                  _FakeResponse_0<_i15.DefinitionResponse>(
-                    this,
-                    Invocation.method(#v1DefinitionsIdPatch, [], {
-                      #id: id,
-                      #updateDefinitionRequest: updateDefinitionRequest,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i15.DefinitionResponse>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<_i15.DefinitionResponse>>.value(
+                _FakeResponse_0<_i15.DefinitionResponse>(
+          this,
+          Invocation.method(
+            #v1DefinitionsIdPatch,
+            [],
+            {
+              #id: id,
+              #updateDefinitionRequest: updateDefinitionRequest,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i15.DefinitionResponse>>);
 
   @override
   _i4.Future<_i2.Response<_i15.DefinitionResponse>> v1DefinitionsPost({
@@ -1347,7 +1522,26 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1DefinitionsPost, [], {
+        Invocation.method(
+          #v1DefinitionsPost,
+          [],
+          {
+            #createDefinitionRequest: createDefinitionRequest,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<_i15.DefinitionResponse>>.value(
+            _FakeResponse_0<_i15.DefinitionResponse>(
+          this,
+          Invocation.method(
+            #v1DefinitionsPost,
+            [],
+            {
               #createDefinitionRequest: createDefinitionRequest,
               #cancelToken: cancelToken,
               #headers: headers,
@@ -1355,37 +1549,26 @@ class MockDefinitionsApi extends _i1.Mock implements _i14.DefinitionsApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue:
-                _i4.Future<_i2.Response<_i15.DefinitionResponse>>.value(
-                  _FakeResponse_0<_i15.DefinitionResponse>(
-                    this,
-                    Invocation.method(#v1DefinitionsPost, [], {
-                      #createDefinitionRequest: createDefinitionRequest,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-            returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i15.DefinitionResponse>>.value(
-                  _FakeResponse_0<_i15.DefinitionResponse>(
-                    this,
-                    Invocation.method(#v1DefinitionsPost, [], {
-                      #createDefinitionRequest: createDefinitionRequest,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i15.DefinitionResponse>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<_i15.DefinitionResponse>>.value(
+                _FakeResponse_0<_i15.DefinitionResponse>(
+          this,
+          Invocation.method(
+            #v1DefinitionsPost,
+            [],
+            {
+              #createDefinitionRequest: createDefinitionRequest,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i15.DefinitionResponse>>);
 }

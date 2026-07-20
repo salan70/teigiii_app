@@ -13,14 +13,14 @@ String _$fetchDefinitionRepositoryHash() =>
 @ProviderFor(fetchDefinitionRepository)
 final fetchDefinitionRepositoryProvider =
     Provider<FetchDefinitionRepository>.internal(
-      fetchDefinitionRepository,
-      name: r'fetchDefinitionRepositoryProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$fetchDefinitionRepositoryHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  fetchDefinitionRepository,
+  name: r'fetchDefinitionRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$fetchDefinitionRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef FetchDefinitionRepositoryRef = ProviderRef<FetchDefinitionRepository>;
 // ignore_for_file: type=lint

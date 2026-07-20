@@ -123,7 +123,7 @@ class WordsApi {
   }
 
   /// 言葉ページの定義一覧
-  /// scope&#x3D;mine は自分の定義（下書き含む）、scope&#x3D;others は他者の公開定義のみ、scope&#x3D;all は自分 + 他者の公開定義の混在（旧 UI の言葉トップのパリティ）。sort&#x3D;reactions はいいね数順。
+  /// scope&#x3D;mine は自分の確定済み定義、scope&#x3D;others は他者の公開定義のみ、scope&#x3D;all は自分 + 他者の公開定義の混在。Draft は専用 API で取得する。sort&#x3D;reactions はいいね数順。
   ///
   /// Parameters:
   /// * [id]

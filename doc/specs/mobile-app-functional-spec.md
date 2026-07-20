@@ -84,6 +84,7 @@
 - 確認をキャンセルした場合は入力画面へ戻し、Draft を維持する
 - 新規語は定義確定時に初めて共有言葉として登録する
 
+<!-- @code mobile_app/lib/feature/definition/repository/definition_draft_repository.dart#DefinitionDraftRepository -->
 ## 4. 下書き
 
 ### 4.1 データモデル

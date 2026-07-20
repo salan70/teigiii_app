@@ -24,8 +24,13 @@ import 'package:teigiii_api/src/model/app_config_response.dart' as _i5;
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
-  _FakeResponse_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeResponse_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 /// A class which mocks [AppConfigApi].
@@ -42,41 +47,50 @@ class MockAppConfigApi extends _i1.Mock implements _i3.AppConfigApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1AppConfigGet, [], {
+        Invocation.method(
+          #v1AppConfigGet,
+          [],
+          {
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<_i5.AppConfigResponse>>.value(
+            _FakeResponse_0<_i5.AppConfigResponse>(
+          this,
+          Invocation.method(
+            #v1AppConfigGet,
+            [],
+            {
               #cancelToken: cancelToken,
               #headers: headers,
               #extra: extra,
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue: _i4.Future<_i2.Response<_i5.AppConfigResponse>>.value(
-              _FakeResponse_0<_i5.AppConfigResponse>(
-                this,
-                Invocation.method(#v1AppConfigGet, [], {
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
-            returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i5.AppConfigResponse>>.value(
-                  _FakeResponse_0<_i5.AppConfigResponse>(
-                    this,
-                    Invocation.method(#v1AppConfigGet, [], {
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i5.AppConfigResponse>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<_i5.AppConfigResponse>>.value(
+                _FakeResponse_0<_i5.AppConfigResponse>(
+          this,
+          Invocation.method(
+            #v1AppConfigGet,
+            [],
+            {
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i5.AppConfigResponse>>);
 }

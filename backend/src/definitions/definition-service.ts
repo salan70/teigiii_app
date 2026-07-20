@@ -11,7 +11,7 @@ type DefinitionBindings = {
   DB: D1Database;
 };
 
-type DefinitionStatus = "draft" | "public" | "private";
+type DefinitionStatus = "public" | "private";
 
 type DefinitionRow = {
   id: string;
@@ -19,7 +19,7 @@ type DefinitionRow = {
   author_id: string;
   body: string;
   status: DefinitionStatus;
-  finalized_at: number | null;
+  finalized_at: number;
   is_edited: number;
   created_at: number;
   updated_at: number;
@@ -61,7 +61,6 @@ export type CreateDefinitionInput = {
 export type UpdateDefinitionInput = {
   body?: string | undefined;
   status?: DefinitionStatus | undefined;
-  wordId?: string | undefined;
 };
 
 function avatarUrl(baseUrl: string, key: string | null): string | null {
@@ -155,8 +154,7 @@ export class DefinitionService {
       .first<DefinitionDetailRow>();
     if (row === null || (row.author_id !== uid && row.status !== "public")) definitionNotFound();
 
-    const editableUntil =
-      row.finalized_at === null ? null : row.finalized_at + editWindowMilliseconds;
+    const editableUntil = row.finalized_at + editWindowMilliseconds;
     return {
       author: {
         avatarUrl: avatarUrl(this.env.AVATAR_BASE_URL, row.author_avatar_key),
@@ -166,8 +164,8 @@ export class DefinitionService {
       },
       body: row.body,
       createdAt: new Date(row.created_at).toISOString(),
-      editableUntil: editableUntil === null ? null : new Date(editableUntil).toISOString(),
-      finalizedAt: row.finalized_at === null ? null : new Date(row.finalized_at).toISOString(),
+      editableUntil: new Date(editableUntil).toISOString(),
+      finalizedAt: new Date(row.finalized_at).toISOString(),
       id: row.id,
       isEdited: row.is_edited !== 0,
       isLikedByMe: row.is_liked_by_me !== 0,
@@ -188,16 +186,7 @@ export class DefinitionService {
       `insert into definitions (id, word_id, author_id, body, status, finalized_at, is_edited, created_at, updated_at)
        values (?, ?, ?, ?, ?, ?, 0, ?, ?)`,
     )
-      .bind(
-        id,
-        input.wordId,
-        uid,
-        input.body,
-        input.status,
-        input.status === "draft" ? null : now,
-        now,
-        now,
-      )
+      .bind(id, input.wordId, uid, input.body, input.status, now, now, now)
       .run();
     return this.#getDetail(uid, id);
   }
@@ -207,36 +196,22 @@ export class DefinitionService {
   }
 
   async update(uid: string, id: string, input: UpdateDefinitionInput) {
-    // 読み取りと更新の間に並行リクエストが割り込むと確定済み定義が draft へ巻き戻り得るため、
-    // 観測した status / updated_at を条件にした楽観ロックで更新し、外れたら再評価する
+    // 本文と公開範囲の並行更新で片方を失わないよう、観測した status / updated_at を条件にした
+    // 楽観ロックで更新し、外れたら最新状態から再評価する。
     for (let attempt = 0; attempt < maxUpdateAttempts; attempt += 1) {
       const row = await this.#findRow(id);
       if (row === null || (row.author_id !== uid && row.status !== "public")) definitionNotFound();
       if (row.author_id !== uid) throw new ApiError(403, "forbidden", "Forbidden");
 
       const now = Date.now();
-      const wasFinalized = row.finalized_at !== null;
       const nextStatus = input.status ?? row.status;
 
-      if (wasFinalized && nextStatus === "draft") {
-        throw new ApiError(400, "invalid_transition", "Cannot revert to draft");
-      }
-
-      const wordChanged = input.wordId !== undefined && input.wordId !== row.word_id;
-      if (wordChanged) {
-        if (wasFinalized) {
-          throw new ApiError(400, "invalid_transition", "Cannot change word after finalization");
-        }
-        await this.#requireWordExists(input.wordId!);
-      }
-
       const bodyChanged = input.body !== undefined && input.body !== row.body;
-      if (bodyChanged && wasFinalized && now - row.finalized_at! >= editWindowMilliseconds) {
+      if (bodyChanged && now - row.finalized_at >= editWindowMilliseconds) {
         throw new ApiError(403, "edit_window_expired", "Edit window expired");
       }
 
-      const finalizedAt = !wasFinalized && nextStatus !== "draft" ? now : row.finalized_at;
-      const isEdited = row.is_edited !== 0 || (bodyChanged && wasFinalized);
+      const isEdited = row.is_edited !== 0 || bodyChanged;
 
       const result = await this.env.DB.prepare(
         `update definitions
@@ -244,10 +219,10 @@ export class DefinitionService {
          where id = ? and status = ? and updated_at = ?`,
       )
         .bind(
-          wordChanged ? input.wordId! : row.word_id,
+          row.word_id,
           input.body ?? row.body,
           nextStatus,
-          finalizedAt,
+          row.finalized_at,
           isEdited ? 1 : 0,
           now,
           id,

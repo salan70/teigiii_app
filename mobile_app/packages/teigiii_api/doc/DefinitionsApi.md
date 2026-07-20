@@ -14,8 +14,8 @@ Method | HTTP request | Description
 [**v1DefinitionsIdLikeDelete**](DefinitionsApi.md#v1definitionsidlikedelete) | **DELETE** /v1/definitions/{id}/like | いいね解除
 [**v1DefinitionsIdLikePut**](DefinitionsApi.md#v1definitionsidlikeput) | **PUT** /v1/definitions/{id}/like | いいね
 [**v1DefinitionsIdLikesGet**](DefinitionsApi.md#v1definitionsidlikesget) | **GET** /v1/definitions/{id}/likes | いいねしたユーザー一覧
-[**v1DefinitionsIdPatch**](DefinitionsApi.md#v1definitionsidpatch) | **PATCH** /v1/definitions/{id} | 本文編集・状態遷移・（下書きのみ）言葉の変更
-[**v1DefinitionsPost**](DefinitionsApi.md#v1definitionspost) | **POST** /v1/definitions | 定義を作成（draft / public / private のいずれでも）
+[**v1DefinitionsIdPatch**](DefinitionsApi.md#v1definitionsidpatch) | **PATCH** /v1/definitions/{id} | 本文編集・公開範囲変更
+[**v1DefinitionsPost**](DefinitionsApi.md#v1definitionspost) | **POST** /v1/definitions | 確定済み定義を作成（public / private）
 
 
 # **v1DefinitionsIdDelete**
@@ -247,9 +247,9 @@ Name | Type | Description  | Notes
 # **v1DefinitionsIdPatch**
 > DefinitionResponse v1DefinitionsIdPatch(id, updateDefinitionRequest)
 
-本文編集・状態遷移・（下書きのみ）言葉の変更
+本文編集・公開範囲変更
 
-許可される遷移: draft→public/private、public↔private。確定時に finalized_at を設定し、本文編集は finalized_at + 1 時間まで。確定後の wordId 変更・下書きへの巻き戻しは拒否する。
+public/private は相互に変更できる。本文編集は finalized_at + 1 時間まで。wordId は変更できない。
 
 ### Example
 ```dart
@@ -296,7 +296,7 @@ Name | Type | Description  | Notes
 # **v1DefinitionsPost**
 > DefinitionResponse v1DefinitionsPost(createDefinitionRequest)
 
-定義を作成（draft / public / private のいずれでも）
+確定済み定義を作成（public / private）
 
 ### Example
 ```dart

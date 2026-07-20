@@ -4,12 +4,15 @@ import 'package:teigiii_api/src/model/create_user_request.dart';
 import 'package:teigiii_api/src/model/create_word_request.dart';
 import 'package:teigiii_api/src/model/defined_word_item.dart';
 import 'package:teigiii_api/src/model/definition_activity.dart';
+import 'package:teigiii_api/src/model/definition_draft_response.dart';
 import 'package:teigiii_api/src/model/definition_response.dart';
 import 'package:teigiii_api/src/model/discover_feed_item.dart';
 import 'package:teigiii_api/src/model/error_response.dart';
 import 'package:teigiii_api/src/model/error_response_error.dart';
+import 'package:teigiii_api/src/model/finalize_definition_draft_request.dart';
 import 'package:teigiii_api/src/model/me_response.dart';
 import 'package:teigiii_api/src/model/my_dictionary_overview.dart';
+import 'package:teigiii_api/src/model/put_definition_draft_request.dart';
 import 'package:teigiii_api/src/model/saved_word_item.dart';
 import 'package:teigiii_api/src/model/update_definition_request.dart';
 import 'package:teigiii_api/src/model/update_me_request.dart';
@@ -19,6 +22,7 @@ import 'package:teigiii_api/src/model/user_list_item.dart';
 import 'package:teigiii_api/src/model/user_response.dart';
 import 'package:teigiii_api/src/model/user_summary.dart';
 import 'package:teigiii_api/src/model/v1_me_defined_words_get200_response.dart';
+import 'package:teigiii_api/src/model/v1_me_definition_drafts_get200_response.dart';
 import 'package:teigiii_api/src/model/v1_me_saved_words_get200_response.dart';
 import 'package:teigiii_api/src/model/v1_timeline_discover_get200_response.dart';
 import 'package:teigiii_api/src/model/v1_users_id_definitions_get200_response.dart';
@@ -28,6 +32,8 @@ import 'package:teigiii_api/src/model/v1_users_me_avatar_put200_response.dart';
 import 'package:teigiii_api/src/model/v1_words_get200_response.dart';
 import 'package:teigiii_api/src/model/word_conflict_response.dart';
 import 'package:teigiii_api/src/model/word_list_item.dart';
+import 'package:teigiii_api/src/model/word_reading_mismatch_response.dart';
+import 'package:teigiii_api/src/model/word_reading_mismatch_response_error.dart';
 import 'package:teigiii_api/src/model/word_registered_activity.dart';
 import 'package:teigiii_api/src/model/word_response.dart';
 import 'package:teigiii_api/src/model/word_summary.dart';
@@ -72,10 +78,14 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'DefinitionActivity':
       return DefinitionActivity.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'DefinitionDraftResponse':
+      return DefinitionDraftResponse.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'DefinitionResponse':
       return DefinitionResponse.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'DefinitionStatus':
+    case 'DefinitionVisibility':
     case 'DiscoverFeedItem':
       return DiscoverFeedItem.fromJson(value as Map<String, dynamic>)
           as ReturnType;
@@ -85,10 +95,18 @@ ReturnType deserialize<ReturnType, BaseType>(
     case 'ErrorResponseError':
       return ErrorResponseError.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'FinalizeDefinitionDraftRequest':
+      return FinalizeDefinitionDraftRequest.fromJson(
+            value as Map<String, dynamic>,
+          )
+          as ReturnType;
     case 'MeResponse':
       return MeResponse.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'MyDictionaryOverview':
       return MyDictionaryOverview.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PutDefinitionDraftRequest':
+      return PutDefinitionDraftRequest.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'SavedWordItem':
       return SavedWordItem.fromJson(value as Map<String, dynamic>)
@@ -113,6 +131,11 @@ ReturnType deserialize<ReturnType, BaseType>(
       return UserSummary.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'V1MeDefinedWordsGet200Response':
       return V1MeDefinedWordsGet200Response.fromJson(
+            value as Map<String, dynamic>,
+          )
+          as ReturnType;
+    case 'V1MeDefinitionDraftsGet200Response':
+      return V1MeDefinitionDraftsGet200Response.fromJson(
             value as Map<String, dynamic>,
           )
           as ReturnType;
@@ -154,6 +177,14 @@ ReturnType deserialize<ReturnType, BaseType>(
           as ReturnType;
     case 'WordListItem':
       return WordListItem.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'WordReadingMismatchResponse':
+      return WordReadingMismatchResponse.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'WordReadingMismatchResponseError':
+      return WordReadingMismatchResponseError.fromJson(
+            value as Map<String, dynamic>,
+          )
+          as ReturnType;
     case 'WordRegisteredActivity':
       return WordRegisteredActivity.fromJson(value as Map<String, dynamic>)
           as ReturnType;

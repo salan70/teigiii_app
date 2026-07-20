@@ -66,15 +66,20 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 [*AppConfigApi*](doc/AppConfigApi.md) | [**v1AppConfigGet**](doc/AppConfigApi.md#v1appconfigget) | **GET** /v1/app-config | アプリ設定（強制アップデート・メンテナンス）を取得
+[*DefinitionDraftsApi*](doc/DefinitionDraftsApi.md) | [**v1DefinitionDraftsIdDelete**](doc/DefinitionDraftsApi.md#v1definitiondraftsiddelete) | **DELETE** /v1/definition-drafts/{id} | 本人の Draft を冪等に削除
+[*DefinitionDraftsApi*](doc/DefinitionDraftsApi.md) | [**v1DefinitionDraftsIdFinalizePost**](doc/DefinitionDraftsApi.md#v1definitiondraftsidfinalizepost) | **POST** /v1/definition-drafts/{id}/finalize | Draft を定義として冪等に確定
+[*DefinitionDraftsApi*](doc/DefinitionDraftsApi.md) | [**v1DefinitionDraftsIdGet**](doc/DefinitionDraftsApi.md#v1definitiondraftsidget) | **GET** /v1/definition-drafts/{id} | 本人の定義 Draft を取得
+[*DefinitionDraftsApi*](doc/DefinitionDraftsApi.md) | [**v1DefinitionDraftsIdPut**](doc/DefinitionDraftsApi.md#v1definitiondraftsidput) | **PUT** /v1/definition-drafts/{id} | 定義 Draft を冪等に保存
+[*DefinitionDraftsApi*](doc/DefinitionDraftsApi.md) | [**v1MeDefinitionDraftsGet**](doc/DefinitionDraftsApi.md#v1medefinitiondraftsget) | **GET** /v1/me/definition-drafts | 本人の未確定 Draft 一覧（更新日時降順）
 [*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdDelete**](doc/DefinitionsApi.md#v1definitionsiddelete) | **DELETE** /v1/definitions/{id} | 定義を削除（論理削除・30 日保持）
 [*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdGet**](doc/DefinitionsApi.md#v1definitionsidget) | **GET** /v1/definitions/{id} | 定義詳細を取得
 [*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdLikeDelete**](doc/DefinitionsApi.md#v1definitionsidlikedelete) | **DELETE** /v1/definitions/{id}/like | いいね解除
 [*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdLikePut**](doc/DefinitionsApi.md#v1definitionsidlikeput) | **PUT** /v1/definitions/{id}/like | いいね
 [*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdLikesGet**](doc/DefinitionsApi.md#v1definitionsidlikesget) | **GET** /v1/definitions/{id}/likes | いいねしたユーザー一覧
-[*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdPatch**](doc/DefinitionsApi.md#v1definitionsidpatch) | **PATCH** /v1/definitions/{id} | 本文編集・状態遷移・（下書きのみ）言葉の変更
-[*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsPost**](doc/DefinitionsApi.md#v1definitionspost) | **POST** /v1/definitions | 定義を作成（draft / public / private のいずれでも）
+[*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdPatch**](doc/DefinitionsApi.md#v1definitionsidpatch) | **PATCH** /v1/definitions/{id} | 本文編集・公開範囲変更
+[*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsPost**](doc/DefinitionsApi.md#v1definitionspost) | **POST** /v1/definitions | 確定済み定義を作成（public / private）
 [*MeApi*](doc/MeApi.md) | [**v1MeDefinedWordsGet**](doc/MeApi.md#v1medefinedwordsget) | **GET** /v1/me/defined-words | 定義済みの言葉一覧（言葉単位 + 状態別件数）
-[*MeApi*](doc/MeApi.md) | [**v1MeDefinitionsGet**](doc/MeApi.md#v1medefinitionsget) | **GET** /v1/me/definitions | 自分の定義一覧（状態で絞り込み。下書き一覧は status&#x3D;draft）
+[*MeApi*](doc/MeApi.md) | [**v1MeDefinitionsGet**](doc/MeApi.md#v1medefinitionsget) | **GET** /v1/me/definitions | 自分の確定済み定義一覧（公開範囲で絞り込み）
 [*MeApi*](doc/MeApi.md) | [**v1MeDictionaryOverviewGet**](doc/MeApi.md#v1medictionaryoverviewget) | **GET** /v1/me/dictionary/overview | あなたの辞書の概要（各件数 + 最近の定義）
 [*MeApi*](doc/MeApi.md) | [**v1MeMutesGet**](doc/MeApi.md#v1memutesget) | **GET** /v1/me/mutes | ミュート中のユーザー一覧
 [*MeApi*](doc/MeApi.md) | [**v1MeSavedWordsGet**](doc/MeApi.md#v1mesavedwordsget) | **GET** /v1/me/saved-words | 保存した言葉の一覧
@@ -116,13 +121,17 @@ Class | Method | HTTP request | Description
  - [CreateWordRequest](doc/CreateWordRequest.md)
  - [DefinedWordItem](doc/DefinedWordItem.md)
  - [DefinitionActivity](doc/DefinitionActivity.md)
+ - [DefinitionDraftResponse](doc/DefinitionDraftResponse.md)
  - [DefinitionResponse](doc/DefinitionResponse.md)
  - [DefinitionStatus](doc/DefinitionStatus.md)
+ - [DefinitionVisibility](doc/DefinitionVisibility.md)
  - [DiscoverFeedItem](doc/DiscoverFeedItem.md)
  - [ErrorResponse](doc/ErrorResponse.md)
  - [ErrorResponseError](doc/ErrorResponseError.md)
+ - [FinalizeDefinitionDraftRequest](doc/FinalizeDefinitionDraftRequest.md)
  - [MeResponse](doc/MeResponse.md)
  - [MyDictionaryOverview](doc/MyDictionaryOverview.md)
+ - [PutDefinitionDraftRequest](doc/PutDefinitionDraftRequest.md)
  - [SavedWordItem](doc/SavedWordItem.md)
  - [UpdateDefinitionRequest](doc/UpdateDefinitionRequest.md)
  - [UpdateMeRequest](doc/UpdateMeRequest.md)
@@ -132,6 +141,7 @@ Class | Method | HTTP request | Description
  - [UserResponse](doc/UserResponse.md)
  - [UserSummary](doc/UserSummary.md)
  - [V1MeDefinedWordsGet200Response](doc/V1MeDefinedWordsGet200Response.md)
+ - [V1MeDefinitionDraftsGet200Response](doc/V1MeDefinitionDraftsGet200Response.md)
  - [V1MeSavedWordsGet200Response](doc/V1MeSavedWordsGet200Response.md)
  - [V1TimelineDiscoverGet200Response](doc/V1TimelineDiscoverGet200Response.md)
  - [V1UsersIdDefinitionsGet200Response](doc/V1UsersIdDefinitionsGet200Response.md)
@@ -141,6 +151,8 @@ Class | Method | HTTP request | Description
  - [V1WordsGet200Response](doc/V1WordsGet200Response.md)
  - [WordConflictResponse](doc/WordConflictResponse.md)
  - [WordListItem](doc/WordListItem.md)
+ - [WordReadingMismatchResponse](doc/WordReadingMismatchResponse.md)
+ - [WordReadingMismatchResponseError](doc/WordReadingMismatchResponseError.md)
  - [WordRegisteredActivity](doc/WordRegisteredActivity.md)
  - [WordResponse](doc/WordResponse.md)
  - [WordSummary](doc/WordSummary.md)

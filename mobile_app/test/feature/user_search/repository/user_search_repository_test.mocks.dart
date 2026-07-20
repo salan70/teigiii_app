@@ -26,8 +26,13 @@ import 'package:teigiii_api/src/model/v1_words_get200_response.dart' as _i6;
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
-  _FakeResponse_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeResponse_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 /// A class which mocks [SearchApi].
@@ -35,8 +40,8 @@ class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
 /// See the documentation for Mockito's code generation for more information.
 class MockSearchApi extends _i1.Mock implements _i3.SearchApi {
   @override
-  _i4.Future<_i2.Response<_i5.V1UsersIdFollowersGet200Response>>
-  v1SearchUsersGet({
+  _i4.Future<
+      _i2.Response<_i5.V1UsersIdFollowersGet200Response>> v1SearchUsersGet({
     required String? q,
     String? cursor,
     int? limit = 20,
@@ -48,7 +53,29 @@ class MockSearchApi extends _i1.Mock implements _i3.SearchApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1SearchUsersGet, [], {
+        Invocation.method(
+          #v1SearchUsersGet,
+          [],
+          {
+            #q: q,
+            #cursor: cursor,
+            #limit: limit,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4
+            .Future<_i2.Response<_i5.V1UsersIdFollowersGet200Response>>.value(
+            _FakeResponse_0<_i5.V1UsersIdFollowersGet200Response>(
+          this,
+          Invocation.method(
+            #v1SearchUsersGet,
+            [],
+            {
               #q: q,
               #cursor: cursor,
               #limit: limit,
@@ -58,47 +85,30 @@ class MockSearchApi extends _i1.Mock implements _i3.SearchApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue:
-                _i4.Future<
-                  _i2.Response<_i5.V1UsersIdFollowersGet200Response>
-                >.value(
-                  _FakeResponse_0<_i5.V1UsersIdFollowersGet200Response>(
-                    this,
-                    Invocation.method(#v1SearchUsersGet, [], {
-                      #q: q,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-            returnValueForMissingStub:
-                _i4.Future<
-                  _i2.Response<_i5.V1UsersIdFollowersGet200Response>
-                >.value(
-                  _FakeResponse_0<_i5.V1UsersIdFollowersGet200Response>(
-                    this,
-                    Invocation.method(#v1SearchUsersGet, [], {
-                      #q: q,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i5.V1UsersIdFollowersGet200Response>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i4
+            .Future<_i2.Response<_i5.V1UsersIdFollowersGet200Response>>.value(
+            _FakeResponse_0<_i5.V1UsersIdFollowersGet200Response>(
+          this,
+          Invocation.method(
+            #v1SearchUsersGet,
+            [],
+            {
+              #q: q,
+              #cursor: cursor,
+              #limit: limit,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i5.V1UsersIdFollowersGet200Response>>);
 
   @override
   _i4.Future<_i2.Response<_i6.V1WordsGet200Response>> v1SearchWordsGet({
@@ -113,7 +123,28 @@ class MockSearchApi extends _i1.Mock implements _i3.SearchApi {
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#v1SearchWordsGet, [], {
+        Invocation.method(
+          #v1SearchWordsGet,
+          [],
+          {
+            #q: q,
+            #cursor: cursor,
+            #limit: limit,
+            #cancelToken: cancelToken,
+            #headers: headers,
+            #extra: extra,
+            #validateStatus: validateStatus,
+            #onSendProgress: onSendProgress,
+            #onReceiveProgress: onReceiveProgress,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Response<_i6.V1WordsGet200Response>>.value(
+            _FakeResponse_0<_i6.V1WordsGet200Response>(
+          this,
+          Invocation.method(
+            #v1SearchWordsGet,
+            [],
+            {
               #q: q,
               #cursor: cursor,
               #limit: limit,
@@ -123,41 +154,28 @@ class MockSearchApi extends _i1.Mock implements _i3.SearchApi {
               #validateStatus: validateStatus,
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
-            }),
-            returnValue:
-                _i4.Future<_i2.Response<_i6.V1WordsGet200Response>>.value(
-                  _FakeResponse_0<_i6.V1WordsGet200Response>(
-                    this,
-                    Invocation.method(#v1SearchWordsGet, [], {
-                      #q: q,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-            returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i6.V1WordsGet200Response>>.value(
-                  _FakeResponse_0<_i6.V1WordsGet200Response>(
-                    this,
-                    Invocation.method(#v1SearchWordsGet, [], {
-                      #q: q,
-                      #cursor: cursor,
-                      #limit: limit,
-                      #cancelToken: cancelToken,
-                      #headers: headers,
-                      #extra: extra,
-                      #validateStatus: validateStatus,
-                      #onSendProgress: onSendProgress,
-                      #onReceiveProgress: onReceiveProgress,
-                    }),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Response<_i6.V1WordsGet200Response>>);
+            },
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response<_i6.V1WordsGet200Response>>.value(
+                _FakeResponse_0<_i6.V1WordsGet200Response>(
+          this,
+          Invocation.method(
+            #v1SearchWordsGet,
+            [],
+            {
+              #q: q,
+              #cursor: cursor,
+              #limit: limit,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<_i6.V1WordsGet200Response>>);
 }
