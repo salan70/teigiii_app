@@ -266,7 +266,7 @@
 
 <!-- @code mobile_app/lib/core/page/profile_top_page.dart#ProfileTopPage -->
 <!-- @code mobile_app/lib/core/page/liked_definition_list_page.dart#LikedDefinitionListPage -->
-<!-- @code mobile_app/lib/feature/public_dictionary/application/public_dictionary_state.dart#PublicDictionaryNotifier -->
+<!-- @code mobile_app/lib/feature/public_dictionary/presentation/public_dictionary_list.dart#PublicDictionaryList -->
 ## 12. 公開プロフィール
 
 - アバター、表示名、自己紹介、公開定義数、フォロー数、フォロワー数を表示する
@@ -288,6 +288,8 @@ Tier 1 は外部フォームを使う。
 - 言葉通報は言葉ページから開く
 - 送信は外部フォームで行い、アプリ内 reports テーブルと履歴画面は作らない
 
+<!-- @code mobile_app/lib/core/page/welcome_page.dart#WelcomePage -->
+<!-- @code mobile_app/lib/core/page/definition_post_page.dart#DefinitionPostPage -->
 ## 14. 初回利用
 
 - 初回案内は 1 画面

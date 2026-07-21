@@ -9,6 +9,7 @@ import '../common_provider/dialog_controller.dart';
 import '../common_provider/launch_url_controller.dart';
 import '../common_widget/button/filled_button.dart';
 
+/// @doc doc/specs/mobile-app-functional-spec.md#14-初回利用
 @RoutePage()
 class WelcomePage extends ConsumerWidget {
   const WelcomePage({super.key});
@@ -17,76 +18,83 @@ class WelcomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: Image.asset(
-                      'assets/images/introduction_icon/introduction_icon.png',
-                    ).image,
-                  ),
-                ),
-              ),
-              const Gap(24),
-              Text('ようこそ！', style: Theme.of(context).textTheme.titleLarge),
-              const Gap(24),
-              Text(
-                '思うがままに\n言葉を定義しちゃってください😆',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const Gap(24),
-              PrimaryFilledButton(
-                onPressed: () {
-                  ref
-                      .read(dialogControllerProvider)
-                      .show(const ConfirmAgreementDialog());
-                },
-                text: 'はじめる',
-              ),
-              const Gap(16),
-              Row(
+        child: LayoutBuilder(
+          builder: (context, constraints) => SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InkWell(
-                    onTap: () => ref
-                        .read(launchUrlControllerProvider)
-                        .launchURL(termPageUrl, inBaseRoute: false),
-                    child: Text(
-                      '利用規約',
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
+                  Image.asset(
+                    'assets/images/introduction_icon/introduction_icon.png',
+                    width: 180,
+                    height: 180,
                   ),
-                  const Text(' と '),
-                  InkWell(
-                    onTap: () => ref
-                        .read(launchUrlControllerProvider)
-                        .launchURL(privacyPolicyPageUrl, inBaseRoute: false),
-                    child: Text(
-                      'プライバシーポリシー',
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
+                  const Gap(24),
+                  Text(
+                    '言葉を、自分の言葉で残す辞書です',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
+                  const Gap(12),
+                  Text(
+                    '気づいた言葉と、そのときの意味を\nあなたの辞書に残せます。',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const Gap(32),
+                  PrimaryFilledButton(
+                    onPressed: () {
+                      ref
+                          .read(dialogControllerProvider)
+                          .show(const ConfirmAgreementDialog());
+                    },
+                    text: 'はじめる',
+                  ),
+                  const Gap(16),
+                  _PolicyLinks(ref: ref),
+                  const Gap(24),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _PolicyLinks extends StatelessWidget {
+  const _PolicyLinks({required this.ref});
+
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    TextStyle? linkStyle() => Theme.of(context).textTheme.titleSmall?.copyWith(
+      fontWeight: FontWeight.bold,
+      color: Theme.of(context).colorScheme.onSurfaceVariant,
+      decoration: TextDecoration.underline,
+    );
+
+    return Wrap(
+      alignment: WrapAlignment.center,
+      children: [
+        InkWell(
+          onTap: () => ref
+              .read(launchUrlControllerProvider)
+              .launchURL(termPageUrl, inBaseRoute: false),
+          child: Text('利用規約', style: linkStyle()),
+        ),
+        const Text(' と '),
+        InkWell(
+          onTap: () => ref
+              .read(launchUrlControllerProvider)
+              .launchURL(privacyPolicyPageUrl, inBaseRoute: false),
+          child: Text('プライバシーポリシー', style: linkStyle()),
+        ),
+      ],
     );
   }
 }

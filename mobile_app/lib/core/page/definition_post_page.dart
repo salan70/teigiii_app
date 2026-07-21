@@ -9,11 +9,14 @@ import '../../feature/definition/domain/definition_for_write.dart';
 import '../../feature/definition/presentation/write_definition_base_page.dart';
 import '../../feature/definition/repository/definition_draft_repository.dart';
 import '../../feature/definition/util/after_post_navigation_type.dart';
+import '../../feature/introduction/repository/definition_guide_repository.dart';
 import '../../util/logger.dart';
 import '../../util/mixin/presentation_mixin.dart';
 import '../router/app_router.dart';
 
 /// 定義の新規入力・Draft 再開・投稿を一画面で扱うページ。
+///
+/// @doc doc/specs/mobile-app-functional-spec.md#14-初回利用
 @RoutePage()
 class DefinitionPostPage extends ConsumerStatefulWidget {
   const DefinitionPostPage({
@@ -39,6 +42,7 @@ class _DefinitionPostPageState extends ConsumerState<DefinitionPostPage>
   bool _completed = false;
   bool _backgroundSaveFailed = false;
   Future<bool>? _backgroundSave;
+  bool _showDefinitionGuide = false;
 
   DefinitionDraftEditorProvider get _provider => definitionDraftEditorProvider(
     widget.draftId,
@@ -49,6 +53,27 @@ class _DefinitionPostPageState extends ConsumerState<DefinitionPostPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    unawaited(_loadDefinitionGuide());
+  }
+
+  Future<void> _loadDefinitionGuide() async {
+    if (widget.draftId != null) {
+      return;
+    }
+    try {
+      final repository = ref.read(definitionGuideRepositoryProvider);
+      if (!await repository.shouldShow() || !mounted) {
+        return;
+      }
+      setState(() => _showDefinitionGuide = true);
+      await repository.markAsShown();
+    } on Object catch (error, stackTrace) {
+      logger.e(
+        'Definition guide state could not be loaded',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   @override
@@ -278,6 +303,14 @@ class _DefinitionPostPageState extends ConsumerState<DefinitionPostPage>
             autoFocusForm: widget.autoFocusForm,
             definitionForWrite: fields,
             wordFieldsReadOnly: draft.wordId != null,
+            guideWidget: _showDefinitionGuide
+                ? const Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Text('全体に公開／非公開を選べます。入力途中でも「下書きを保存」で、あとから続けられます。'),
+                    ),
+                  )
+                : null,
             onWordChanged: notifier.changeWord,
             onWordReadingChanged: notifier.changeWordReading,
             onPublicChanged: (value) =>

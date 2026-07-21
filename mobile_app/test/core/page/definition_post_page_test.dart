@@ -7,11 +7,13 @@ import 'package:teigi_app/feature/definition/application/definition_draft_editor
 import 'package:teigi_app/feature/definition/domain/definition_draft.dart';
 import 'package:teigi_app/feature/definition/repository/definition_draft_repository.dart';
 import 'package:teigi_app/feature/definition/util/after_post_navigation_type.dart';
+import 'package:teigi_app/feature/introduction/repository/definition_guide_repository.dart';
 
 import '../../feature/definition/application/definition_draft_editor_test.mocks.dart';
 
 void main() {
   final repository = MockDefinitionDraftRepository();
+  final guideRepository = _DefinitionGuideRepositoryStub();
 
   Future<void> pumpPage(WidgetTester tester, {String? draftId}) async {
     await tester.pumpWidget(
@@ -21,6 +23,7 @@ void main() {
             '00000000-0000-4000-8000-000000000001',
           ),
           definitionDraftRepositoryProvider.overrideWithValue(repository),
+          definitionGuideRepositoryProvider.overrideWithValue(guideRepository),
         ],
         child: MaterialApp(
           home: DefinitionPostPage(
@@ -34,7 +37,22 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  setUp(() => reset(repository));
+  setUp(() {
+    reset(repository);
+    guideRepository
+      ..show = false
+      ..marked = false;
+  });
+
+  testWidgets('最初の定義作成では公開範囲と下書き保存を説明する', (tester) async {
+    guideRepository.show = true;
+
+    await pumpPage(tester);
+
+    expect(find.textContaining('全体に公開／非公開'), findsOneWidget);
+    expect(find.textContaining('下書きを保存'), findsWidgets);
+    expect(guideRepository.marked, isTrue);
+  });
 
   testWidgets('作成成功後の既定遷移先は定義詳細', (tester) async {
     await pumpPage(tester);
@@ -116,4 +134,15 @@ void main() {
     expect(find.text('キャンセル'), findsOneWidget);
     expect(find.text('削除'), findsOneWidget);
   });
+}
+
+class _DefinitionGuideRepositoryStub implements DefinitionGuideRepository {
+  bool show = false;
+  bool marked = false;
+
+  @override
+  Future<bool> shouldShow() async => show;
+
+  @override
+  Future<void> markAsShown() async => marked = true;
 }

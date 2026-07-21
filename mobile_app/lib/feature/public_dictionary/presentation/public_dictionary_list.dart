@@ -11,6 +11,7 @@ import '../../../core/router/app_router.dart';
 import '../application/public_dictionary_state.dart';
 import '../domain/public_dictionary.dart';
 
+/// @doc doc/specs/mobile-app-functional-spec.md#12-公開プロフィール
 class PublicDictionaryList extends ConsumerWidget {
   const PublicDictionaryList({super.key, required this.userId});
 

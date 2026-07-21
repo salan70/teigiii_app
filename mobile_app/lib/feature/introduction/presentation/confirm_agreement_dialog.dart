@@ -28,13 +28,13 @@ class ConfirmAgreementDialog extends ConsumerWidget {
           ),
         ),
         InkWell(
-          onTap: () {
-            ref.read(introductionServiceProvider).onAgreePolicy();
+          onTap: () async {
+            await ref.read(introductionServiceProvider).onAgreePolicy();
 
             if (!context.mounted) {
               return;
             }
-            context.pushRoute(const BaseRoute());
+            await context.replaceRoute(const BaseRoute());
           },
           child: Padding(
             padding: const EdgeInsets.all(16),

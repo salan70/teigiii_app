@@ -6,7 +6,6 @@ import '../repository/public_dictionary_repository.dart';
 
 part 'public_dictionary_state.g.dart';
 
-/// @doc doc/specs/mobile-app-functional-spec.md#12-公開プロフィール
 @Riverpod(keepAlive: true)
 class PublicDictionaryNotifier extends _$PublicDictionaryNotifier
     with FetchMoreMixin<PublicDictionaryState> {

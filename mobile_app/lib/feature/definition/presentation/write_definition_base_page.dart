@@ -29,6 +29,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
     this.onClose,
     this.wordFieldsReadOnly,
     this.bodyActionWidget,
+    this.guideWidget,
   });
 
   /// 遷移時にフォーカスする [TextFormField]
@@ -44,6 +45,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
   final Future<void> Function()? onClose;
   final bool? wordFieldsReadOnly;
   final Widget? bodyActionWidget;
+  final Widget? guideWidget;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -98,6 +100,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
             child: ListView(
               children: [
                 const Gap(8),
+                if (guideWidget case final widget?) ...[widget, const Gap(16)],
                 TextFormField(
                   initialValue: definitionForWrite.word,
                   autofocus: autoFocusForm == WriteDefinitionFormType.word,
