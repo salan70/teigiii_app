@@ -10,6 +10,7 @@ import '../../feature/community_dictionary/application/community_word_list.dart'
 import '../../feature/community_dictionary/domain/community_dictionary.dart';
 import '../../feature/definition/domain/definition_for_write.dart';
 import '../../feature/definition/presentation/write_definition_base_page.dart';
+import '../../feature/timeline/application/timeline_state.dart';
 import '../../feature/word/domain/word.dart';
 import '../../feature/word/repository/word_repository.dart';
 import '../../feature/word_list/repository/fetch_word_list_repository.dart';
@@ -97,7 +98,9 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage> {
           .read(wordRepositoryProvider)
           .create(word: word, reading: reading);
       if (mounted) {
-        ref.invalidate(communityWordListProvider);
+        ref
+          ..invalidate(communityWordListProvider)
+          ..invalidate(discoverTimelineProvider);
         setState(() => _createdWord = created);
       }
     } on ApiException catch (error) {

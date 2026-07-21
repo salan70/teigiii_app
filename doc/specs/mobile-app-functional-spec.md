@@ -218,6 +218,7 @@
 - 言葉の修正可否は API の `isEditableByMe` を正とする
 - 修正不可の場合は外部通報フォームへの導線を表示する
 
+<!-- @code mobile_app/lib/core/page/home_page.dart#HomePage -->
 ## 9. タイムライン
 
 ### 9.1 タブ状態
@@ -226,6 +227,7 @@
 - 2 回目以降は最後に開いていたタブを端末内へ保存して復元する
 - 両タブに `定義を書く` の拡張 FAB を置く
 
+<!-- @code mobile_app/lib/feature/timeline/repository/timeline_repository.dart#TimelineRepository -->
 ### 9.2 見つける
 
 - 公開定義と新規言葉登録を完全な新着順で混在表示する

@@ -16,6 +16,8 @@ import 'package:teigi_app/feature/definition_list/domain/definition_id_list_stat
 import 'package:teigi_app/feature/definition_list/repository/definition_id_list_repository.dart';
 import 'package:teigi_app/feature/personal_dictionary/application/personal_dictionary_state.dart';
 import 'package:teigi_app/feature/personal_dictionary/domain/personal_dictionary.dart';
+import 'package:teigi_app/feature/timeline/domain/timeline.dart';
+import 'package:teigi_app/feature/timeline/repository/timeline_repository.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
 import 'package:teigi_app/feature/word_list/domain/word_list_state.dart';
 import 'package:teigi_app/feature/word_list/repository/fetch_word_list_repository.dart';
@@ -72,6 +74,12 @@ class _EmptyWordListRepository implements FetchWordListRepository {
   ) => throw UnimplementedError();
 }
 
+class _EmptyTimelineRepository implements TimelineRepository {
+  @override
+  Future<TimelinePage> fetchDiscover({String? cursor, int limit = 20}) async =>
+      const TimelinePage(items: [], nextCursor: null);
+}
+
 ({
   MockDefinitionIdListRepository definitionIdList,
   MockUserProfileRepository userProfile,
@@ -113,6 +121,7 @@ Widget _testApp() {
       definitionIdListRepositoryProvider.overrideWithValue(
         repositories.definitionIdList,
       ),
+      timelineRepositoryProvider.overrideWithValue(_EmptyTimelineRepository()),
       userProfileRepositoryProvider.overrideWithValue(repositories.userProfile),
     ],
     child: Consumer(
@@ -136,6 +145,7 @@ Widget _testTimeline() {
       definitionIdListRepositoryProvider.overrideWithValue(
         repositories.definitionIdList,
       ),
+      timelineRepositoryProvider.overrideWithValue(_EmptyTimelineRepository()),
       userProfileRepositoryProvider.overrideWithValue(repositories.userProfile),
     ],
     child: const MaterialApp(home: HomePage()),
@@ -235,10 +245,7 @@ void main() {
 
     expect(find.text('言葉またはユーザーを検索'), findsNothing);
     expect(
-      find.descendant(
-        of: find.byType(AppBar),
-        matching: find.text('あなたの辞書'),
-      ),
+      find.descendant(of: find.byType(AppBar), matching: find.text('あなたの辞書')),
       findsOneWidget,
     );
 

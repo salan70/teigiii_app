@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/router/app_router.dart';
@@ -11,7 +10,7 @@ class PostDefinitionFAB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
+    return FloatingActionButton.extended(
       heroTag: null,
       elevation: 3,
       onPressed: () {
@@ -22,7 +21,8 @@ class PostDefinitionFAB extends StatelessWidget {
           ),
         );
       },
-      child: const Icon(CupertinoIcons.add),
+      icon: const Icon(Icons.add),
+      label: const Text('定義を書く'),
     );
   }
 }
