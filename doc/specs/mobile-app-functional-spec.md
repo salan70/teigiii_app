@@ -254,6 +254,7 @@
 - 各タブは独立した cursor と loading／empty／error 状態を持つ
 - 定義本文検索は Tier 2 まで表示しない
 
+<!-- @code mobile_app/lib/core/page/definition_detail_page.dart#DefinitionDetailPage -->
 ## 11. 定義詳細
 
 - 言葉、よみ、本文、投稿者、投稿日時、編集済み表示、リアクションを表示する
@@ -263,6 +264,9 @@
 - 汎用の定義作成 FAB は置かない
 - いいねの付与／解除と件数、いいねしたユーザー一覧を維持する
 
+<!-- @code mobile_app/lib/core/page/profile_top_page.dart#ProfileTopPage -->
+<!-- @code mobile_app/lib/core/page/liked_definition_list_page.dart#LikedDefinitionListPage -->
+<!-- @code mobile_app/lib/feature/public_dictionary/application/public_dictionary_state.dart#PublicDictionaryNotifier -->
 ## 12. 公開プロフィール
 
 - アバター、表示名、自己紹介、公開定義数、フォロー数、フォロワー数を表示する
@@ -272,6 +276,7 @@
 - 自分・他ユーザーのどちらからも、そのユーザーがいいねした公開定義を表示できる
 - 獲得リアクション総数、人気順位、平均リアクション数は表示しない
 
+<!-- @code mobile_app/lib/feature/user_config/presentation/other_user_action_icon_button.dart#OtherUserActionIconButton -->
 ## 13. 通報
 
 Tier 1 は外部フォームを使う。

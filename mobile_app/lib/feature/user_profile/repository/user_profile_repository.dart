@@ -27,6 +27,7 @@ class UserProfileRepository {
         publicId: user.publicId,
         name: user.name,
         bio: user.bio,
+        publicDefinitionCount: user.publicDefinitionCount,
         avatarUrl: user.avatarUrl,
         followingCount: user.followingCount,
         followerCount: user.followerCount,

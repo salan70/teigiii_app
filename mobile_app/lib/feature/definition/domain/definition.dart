@@ -4,6 +4,7 @@ import 'definition_for_write.dart';
 
 part 'definition.freezed.dart';
 
+/// アプリ内で表示・操作する確定済み定義。
 @freezed
 class Definition with _$Definition {
   const factory Definition({
@@ -18,6 +19,7 @@ class Definition with _$Definition {
     required bool isPublic,
     required int likesCount,
     required bool isLikedByUser,
+    @Default(false) bool isEdited,
     required DateTime editableUntil,
     required DateTime createdAt,
   }) = _Definition;

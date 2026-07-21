@@ -143,6 +143,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    LikedDefinitionListRoute.name: (routeData) {
+      final args = routeData.argsAs<LikedDefinitionListRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: LikedDefinitionListPage(
+          key: args.key,
+          targetUserId: args.targetUserId,
+        ),
+      );
+    },
     MyLicenseRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -683,6 +693,45 @@ class IndividualDictionaryDefinitionListRouteArgs {
   @override
   String toString() {
     return 'IndividualDictionaryDefinitionListRouteArgs{key: $key, targetUserId: $targetUserId, initialSubGroup: $initialSubGroup}';
+  }
+}
+
+/// generated route for
+/// [LikedDefinitionListPage]
+class LikedDefinitionListRoute
+    extends PageRouteInfo<LikedDefinitionListRouteArgs> {
+  LikedDefinitionListRoute({
+    Key? key,
+    required String targetUserId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          LikedDefinitionListRoute.name,
+          args: LikedDefinitionListRouteArgs(
+            key: key,
+            targetUserId: targetUserId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'LikedDefinitionListRoute';
+
+  static const PageInfo<LikedDefinitionListRouteArgs> page =
+      PageInfo<LikedDefinitionListRouteArgs>(name);
+}
+
+class LikedDefinitionListRouteArgs {
+  const LikedDefinitionListRouteArgs({
+    this.key,
+    required this.targetUserId,
+  });
+
+  final Key? key;
+
+  final String targetUserId;
+
+  @override
+  String toString() {
+    return 'LikedDefinitionListRouteArgs{key: $key, targetUserId: $targetUserId}';
   }
 }
 

@@ -19,6 +19,7 @@ void main() {
   DefinitionResponse buildDefinitionResponse({
     required DefinitionStatus status,
     required bool isLikedByMe,
+    bool isEdited = false,
   }) {
     return DefinitionResponse(
       id: 'definition1',
@@ -31,7 +32,7 @@ void main() {
       ),
       body: '作ってから一晩経ったカレー。',
       status: status,
-      isEdited: false,
+      isEdited: isEdited,
       likesCount: 5,
       isLikedByMe: isLikedByMe,
       finalizedAt: DateTime.utc(2026, 7),
@@ -96,6 +97,23 @@ void main() {
       // * Assert
       expect(definition.isPublic, isFalse);
       expect(definition.isLikedByUser, isFalse);
+    });
+
+    test('編集済み状態を Definition へ引き継ぐ', () async {
+      when(mockDefinitionsApi.v1DefinitionsIdGet(id: 'definition1')).thenAnswer(
+        (_) async => Response(
+          data: buildDefinitionResponse(
+            status: DefinitionStatus.public,
+            isLikedByMe: false,
+            isEdited: true,
+          ),
+          requestOptions: RequestOptions(path: '/v1/definitions/definition1'),
+        ),
+      );
+
+      final definition = await repository.fetchDefinition('definition1');
+
+      expect(definition.isEdited, isTrue);
     });
 
     test('エラーの場合 ApiException を投げる', () async {

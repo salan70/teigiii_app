@@ -27,6 +27,7 @@ mixin _$Definition {
   bool get isPublic => throw _privateConstructorUsedError;
   int get likesCount => throw _privateConstructorUsedError;
   bool get isLikedByUser => throw _privateConstructorUsedError;
+  bool get isEdited => throw _privateConstructorUsedError;
   DateTime get editableUntil => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
 
@@ -53,6 +54,7 @@ abstract class $DefinitionCopyWith<$Res> {
       bool isPublic,
       int likesCount,
       bool isLikedByUser,
+      bool isEdited,
       DateTime editableUntil,
       DateTime createdAt});
 }
@@ -81,6 +83,7 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
     Object? isPublic = null,
     Object? likesCount = null,
     Object? isLikedByUser = null,
+    Object? isEdited = null,
     Object? editableUntil = null,
     Object? createdAt = null,
   }) {
@@ -129,6 +132,10 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
           ? _value.isLikedByUser
           : isLikedByUser // ignore: cast_nullable_to_non_nullable
               as bool,
+      isEdited: null == isEdited
+          ? _value.isEdited
+          : isEdited // ignore: cast_nullable_to_non_nullable
+              as bool,
       editableUntil: null == editableUntil
           ? _value.editableUntil
           : editableUntil // ignore: cast_nullable_to_non_nullable
@@ -161,6 +168,7 @@ abstract class _$$DefinitionImplCopyWith<$Res>
       bool isPublic,
       int likesCount,
       bool isLikedByUser,
+      bool isEdited,
       DateTime editableUntil,
       DateTime createdAt});
 }
@@ -187,6 +195,7 @@ class __$$DefinitionImplCopyWithImpl<$Res>
     Object? isPublic = null,
     Object? likesCount = null,
     Object? isLikedByUser = null,
+    Object? isEdited = null,
     Object? editableUntil = null,
     Object? createdAt = null,
   }) {
@@ -235,6 +244,10 @@ class __$$DefinitionImplCopyWithImpl<$Res>
           ? _value.isLikedByUser
           : isLikedByUser // ignore: cast_nullable_to_non_nullable
               as bool,
+      isEdited: null == isEdited
+          ? _value.isEdited
+          : isEdited // ignore: cast_nullable_to_non_nullable
+              as bool,
       editableUntil: null == editableUntil
           ? _value.editableUntil
           : editableUntil // ignore: cast_nullable_to_non_nullable
@@ -262,6 +275,7 @@ class _$DefinitionImpl extends _Definition {
       required this.isPublic,
       required this.likesCount,
       required this.isLikedByUser,
+      this.isEdited = false,
       required this.editableUntil,
       required this.createdAt})
       : super._();
@@ -289,13 +303,16 @@ class _$DefinitionImpl extends _Definition {
   @override
   final bool isLikedByUser;
   @override
+  @JsonKey()
+  final bool isEdited;
+  @override
   final DateTime editableUntil;
   @override
   final DateTime createdAt;
 
   @override
   String toString() {
-    return 'Definition(id: $id, wordId: $wordId, word: $word, wordReading: $wordReading, authorId: $authorId, authorName: $authorName, authorImageUrl: $authorImageUrl, definition: $definition, isPublic: $isPublic, likesCount: $likesCount, isLikedByUser: $isLikedByUser, editableUntil: $editableUntil, createdAt: $createdAt)';
+    return 'Definition(id: $id, wordId: $wordId, word: $word, wordReading: $wordReading, authorId: $authorId, authorName: $authorName, authorImageUrl: $authorImageUrl, definition: $definition, isPublic: $isPublic, likesCount: $likesCount, isLikedByUser: $isLikedByUser, isEdited: $isEdited, editableUntil: $editableUntil, createdAt: $createdAt)';
   }
 
   @override
@@ -322,6 +339,8 @@ class _$DefinitionImpl extends _Definition {
                 other.likesCount == likesCount) &&
             (identical(other.isLikedByUser, isLikedByUser) ||
                 other.isLikedByUser == isLikedByUser) &&
+            (identical(other.isEdited, isEdited) ||
+                other.isEdited == isEdited) &&
             (identical(other.editableUntil, editableUntil) ||
                 other.editableUntil == editableUntil) &&
             (identical(other.createdAt, createdAt) ||
@@ -342,6 +361,7 @@ class _$DefinitionImpl extends _Definition {
       isPublic,
       likesCount,
       isLikedByUser,
+      isEdited,
       editableUntil,
       createdAt);
 
@@ -365,6 +385,7 @@ abstract class _Definition extends Definition {
       required final bool isPublic,
       required final int likesCount,
       required final bool isLikedByUser,
+      final bool isEdited,
       required final DateTime editableUntil,
       required final DateTime createdAt}) = _$DefinitionImpl;
   const _Definition._() : super._();
@@ -391,6 +412,8 @@ abstract class _Definition extends Definition {
   int get likesCount;
   @override
   bool get isLikedByUser;
+  @override
+  bool get isEdited;
   @override
   DateTime get editableUntil;
   @override

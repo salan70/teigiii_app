@@ -3,6 +3,7 @@ import 'package:image_cropper/image_cropper.dart';
 
 part 'user_profile.freezed.dart';
 
+/// 公開プロフィールの表示に必要なユーザー情報。
 @freezed
 class UserProfile with _$UserProfile {
   const factory UserProfile({
@@ -10,6 +11,7 @@ class UserProfile with _$UserProfile {
     required String publicId,
     required String name,
     required String bio,
+    @Default(0) int publicDefinitionCount,
 
     /// アバター画像の URL。未設定の場合は null
     required String? avatarUrl,

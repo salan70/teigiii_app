@@ -7,18 +7,19 @@ import 'package:gap/gap.dart';
 
 import '../../feature/auth/application/auth_state.dart';
 import '../../feature/definition/application/definition_state.dart';
-import '../../feature/definition/presentation/post_definition_fab.dart';
 import '../../feature/definition/presentation/self_definition_action_icon_button.dart';
 import '../../feature/definition_like/presentation/like_widget.dart';
 import '../../feature/user_config/presentation/other_user_action_icon_button.dart';
 import '../../feature/user_follow/presentation/follow_or_unfollow_button.dart';
 import '../../feature/user_profile/presentation/avatar_network_image_widget.dart';
+import '../../util/constant/url.dart';
 import '../../util/extension/date_time_extension.dart';
 import '../../util/logger.dart';
 import '../common_widget/error_and_retry_widget.dart';
 import '../common_widget/shimmer_widget.dart';
 import '../router/app_router.dart';
 
+/// @doc doc/specs/mobile-app-functional-spec.md#11-定義詳細
 @RoutePage()
 class DefinitionDetailPage extends ConsumerWidget {
   const DefinitionDetailPage({super.key, required this.definitionId});
@@ -40,7 +41,11 @@ class DefinitionDetailPage extends ConsumerWidget {
             actions: [
               isSelfDefinition
                   ? SelfDefinitionActionIconButton(definition: definition)
-                  : OtherUserActionIconButton(ownerId: definition.authorId),
+                  : OtherUserActionIconButton(
+                      ownerId: definition.authorId,
+                      reportTargetType: ReportTargetType.definition,
+                      reportTargetId: definition.id,
+                    ),
             ],
           ),
           body: EasyRefresh(
@@ -163,7 +168,8 @@ class DefinitionDetailPage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          '${definition.createdAt.toDisplayFormat()} 投稿',
+                          '${definition.createdAt.toDisplayFormat()} 投稿'
+                          '${definition.isEdited ? '・編集済み' : ''}',
                           style: Theme.of(context).textTheme.bodyMedium!
                               .copyWith(
                                 color: Theme.of(
@@ -198,7 +204,6 @@ class DefinitionDetailPage extends ConsumerWidget {
               ),
             ),
           ),
-          floatingActionButton: const PostDefinitionFAB(),
         );
       },
       loading: () {

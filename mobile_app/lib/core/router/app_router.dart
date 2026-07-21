@@ -22,6 +22,7 @@ import '../page/dictionary_sub_index_page.dart';
 import '../page/global_search_page.dart';
 import '../page/home_page.dart';
 import '../page/license_page.dart';
+import '../page/liked_definition_list_page.dart';
 import '../page/profile_edit_page.dart';
 import '../page/profile_top_page.dart';
 import '../page/saved_word_list_page.dart';
@@ -57,6 +58,10 @@ class AppRouter extends _$AppRouter {
     AdaptiveRoute(path: 'search', page: GlobalSearchRoute.page),
     AdaptiveRoute(path: 'definition_detail', page: DefinitionDetailRoute.page),
     AdaptiveRoute(path: 'user_list_liked', page: UserListLikedRoute.page),
+    AdaptiveRoute(
+      path: 'liked_definitions',
+      page: LikedDefinitionListRoute.page,
+    ),
     AdaptiveRoute(path: 'word_top', page: WordTopRoute.page),
     AdaptiveRoute(path: 'profile_top', page: ProfileTopRoute.page),
     AdaptiveRoute(

@@ -4,6 +4,8 @@ import 'package:teigiii_api/teigiii_api.dart';
 
 import '../../../core/api/api_exception.dart';
 import '../../../core/api/api_providers.dart';
+import '../domain/user_search_result.dart';
+import '../domain/user_search_result_state.dart';
 
 part 'user_search_repository.g.dart';
 
@@ -15,6 +17,32 @@ class UserSearchRepository {
   UserSearchRepository(this._searchApi);
 
   final SearchApi _searchApi;
+
+  Future<UserSearchResultState> search(String query, String? cursor) async {
+    try {
+      final response = await _searchApi.v1SearchUsersGet(
+        q: query,
+        cursor: cursor,
+      );
+      final page = response.data!;
+      return UserSearchResultState(
+        list: page.items
+            .map(
+              (item) => UserSearchResult(
+                id: item.id,
+                publicId: item.publicId,
+                name: item.name,
+                avatarUrl: item.avatarUrl,
+              ),
+            )
+            .toList(),
+        nextCursor: page.nextCursor,
+        hasMore: page.nextCursor != null,
+      );
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
+  }
 
   /// [publicId] からユーザー ID を取得する。
   ///

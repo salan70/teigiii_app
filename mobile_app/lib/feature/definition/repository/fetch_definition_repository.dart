@@ -41,6 +41,7 @@ class FetchDefinitionRepository {
         isPublic: definition.status == DefinitionStatus.public,
         likesCount: definition.likesCount,
         isLikedByUser: definition.isLikedByMe,
+        isEdited: definition.isEdited,
         editableUntil: definition.editableUntil,
         createdAt: definition.createdAt,
       );

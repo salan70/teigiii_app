@@ -104,4 +104,23 @@ void main() {
       ).called(1);
     });
   });
+
+  group('search', () {
+    test('部分一致結果と次 cursor を一覧状態へ変換する', () async {
+      when(
+        mockSearchApi.v1SearchUsersGet(q: '太郎', cursor: 'before'),
+      ).thenAnswer(
+        (_) async => buildResponse([
+          buildItem('userA', '123456789'),
+        ], nextCursor: 'next'),
+      );
+
+      final result = await repository.search('太郎', 'before');
+
+      expect(result.list.single.id, 'userA');
+      expect(result.list.single.name, 'テスト太郎');
+      expect(result.nextCursor, 'next');
+      expect(result.hasMore, isTrue);
+    });
+  });
 }

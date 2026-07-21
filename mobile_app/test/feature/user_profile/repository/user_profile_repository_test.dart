@@ -52,6 +52,7 @@ void main() {
           name: 'テスト太郎',
           avatarUrl: 'https://api.example.com/v1/avatars/user1',
           bio: 'よろしく',
+          publicDefinitionCount: 3,
           followingCount: 10,
           followerCount: 20,
           isFollowedByMe: true,

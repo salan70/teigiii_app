@@ -72,29 +72,9 @@ class ProfileWidget extends ConsumerWidget {
               const Gap(16),
               FollowingAndFollowerCountWidget(targetUserId: targetUserId),
               const Gap(16),
-              InkWell(
-                onTap: () async {
-                  await context.pushRoute(
-                    DictionaryIndividualRoute(
-                      targetUserId: targetUserProfile.id,
-                    ),
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      '辞書を見る',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    const Gap(4),
-                    Icon(
-                      CupertinoIcons.chevron_forward,
-                      size: 16,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ],
-                ),
+              Text(
+                '公開定義 ${targetUserProfile.publicDefinitionCount}',
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               const Gap(8),
             ],

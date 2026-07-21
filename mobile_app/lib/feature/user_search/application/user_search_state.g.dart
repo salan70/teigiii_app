@@ -158,5 +158,152 @@ class _UserIdSearchByPublicIdProviderElement
   @override
   String get publicId => (origin as UserIdSearchByPublicIdProvider).publicId;
 }
+
+String _$userSearchResultNotifierHash() =>
+    r'433cd803795fd9a009977f0665b8c2661d18ab52';
+
+abstract class _$UserSearchResultNotifier
+    extends BuildlessAsyncNotifier<UserSearchResultState> {
+  late final String query;
+
+  FutureOr<UserSearchResultState> build(
+    String query,
+  );
+}
+
+/// See also [UserSearchResultNotifier].
+@ProviderFor(UserSearchResultNotifier)
+const userSearchResultNotifierProvider = UserSearchResultNotifierFamily();
+
+/// See also [UserSearchResultNotifier].
+class UserSearchResultNotifierFamily
+    extends Family<AsyncValue<UserSearchResultState>> {
+  /// See also [UserSearchResultNotifier].
+  const UserSearchResultNotifierFamily();
+
+  /// See also [UserSearchResultNotifier].
+  UserSearchResultNotifierProvider call(
+    String query,
+  ) {
+    return UserSearchResultNotifierProvider(
+      query,
+    );
+  }
+
+  @override
+  UserSearchResultNotifierProvider getProviderOverride(
+    covariant UserSearchResultNotifierProvider provider,
+  ) {
+    return call(
+      provider.query,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'userSearchResultNotifierProvider';
+}
+
+/// See also [UserSearchResultNotifier].
+class UserSearchResultNotifierProvider extends AsyncNotifierProviderImpl<
+    UserSearchResultNotifier, UserSearchResultState> {
+  /// See also [UserSearchResultNotifier].
+  UserSearchResultNotifierProvider(
+    String query,
+  ) : this._internal(
+          () => UserSearchResultNotifier()..query = query,
+          from: userSearchResultNotifierProvider,
+          name: r'userSearchResultNotifierProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$userSearchResultNotifierHash,
+          dependencies: UserSearchResultNotifierFamily._dependencies,
+          allTransitiveDependencies:
+              UserSearchResultNotifierFamily._allTransitiveDependencies,
+          query: query,
+        );
+
+  UserSearchResultNotifierProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.query,
+  }) : super.internal();
+
+  final String query;
+
+  @override
+  FutureOr<UserSearchResultState> runNotifierBuild(
+    covariant UserSearchResultNotifier notifier,
+  ) {
+    return notifier.build(
+      query,
+    );
+  }
+
+  @override
+  Override overrideWith(UserSearchResultNotifier Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: UserSearchResultNotifierProvider._internal(
+        () => create()..query = query,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        query: query,
+      ),
+    );
+  }
+
+  @override
+  AsyncNotifierProviderElement<UserSearchResultNotifier, UserSearchResultState>
+      createElement() {
+    return _UserSearchResultNotifierProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserSearchResultNotifierProvider && other.query == query;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, query.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UserSearchResultNotifierRef
+    on AsyncNotifierProviderRef<UserSearchResultState> {
+  /// The parameter `query` of this provider.
+  String get query;
+}
+
+class _UserSearchResultNotifierProviderElement
+    extends AsyncNotifierProviderElement<UserSearchResultNotifier,
+        UserSearchResultState> with UserSearchResultNotifierRef {
+  _UserSearchResultNotifierProviderElement(super.provider);
+
+  @override
+  String get query => (origin as UserSearchResultNotifierProvider).query;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
