@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'word_list_state.dart';
+part of 'discover_feed_list_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,29 +15,30 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$WordListState {
-  List<Word> get list => throw _privateConstructorUsedError;
+mixin _$DiscoverFeedListState {
+  List<dynamic> get list => throw _privateConstructorUsedError;
   String? get nextCursor => throw _privateConstructorUsedError;
   bool get hasMore => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $WordListStateCopyWith<WordListState> get copyWith =>
+  $DiscoverFeedListStateCopyWith<DiscoverFeedListState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $WordListStateCopyWith<$Res> {
-  factory $WordListStateCopyWith(
-          WordListState value, $Res Function(WordListState) then) =
-      _$WordListStateCopyWithImpl<$Res, WordListState>;
+abstract class $DiscoverFeedListStateCopyWith<$Res> {
+  factory $DiscoverFeedListStateCopyWith(DiscoverFeedListState value,
+          $Res Function(DiscoverFeedListState) then) =
+      _$DiscoverFeedListStateCopyWithImpl<$Res, DiscoverFeedListState>;
   @useResult
-  $Res call({List<Word> list, String? nextCursor, bool hasMore});
+  $Res call({List<dynamic> list, String? nextCursor, bool hasMore});
 }
 
 /// @nodoc
-class _$WordListStateCopyWithImpl<$Res, $Val extends WordListState>
-    implements $WordListStateCopyWith<$Res> {
-  _$WordListStateCopyWithImpl(this._value, this._then);
+class _$DiscoverFeedListStateCopyWithImpl<$Res,
+        $Val extends DiscoverFeedListState>
+    implements $DiscoverFeedListStateCopyWith<$Res> {
+  _$DiscoverFeedListStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -55,7 +56,7 @@ class _$WordListStateCopyWithImpl<$Res, $Val extends WordListState>
       list: null == list
           ? _value.list
           : list // ignore: cast_nullable_to_non_nullable
-              as List<Word>,
+              as List<dynamic>,
       nextCursor: freezed == nextCursor
           ? _value.nextCursor
           : nextCursor // ignore: cast_nullable_to_non_nullable
@@ -69,22 +70,24 @@ class _$WordListStateCopyWithImpl<$Res, $Val extends WordListState>
 }
 
 /// @nodoc
-abstract class _$$WordListStateImplCopyWith<$Res>
-    implements $WordListStateCopyWith<$Res> {
-  factory _$$WordListStateImplCopyWith(
-          _$WordListStateImpl value, $Res Function(_$WordListStateImpl) then) =
-      __$$WordListStateImplCopyWithImpl<$Res>;
+abstract class _$$DiscoverFeedListStateImplCopyWith<$Res>
+    implements $DiscoverFeedListStateCopyWith<$Res> {
+  factory _$$DiscoverFeedListStateImplCopyWith(
+          _$DiscoverFeedListStateImpl value,
+          $Res Function(_$DiscoverFeedListStateImpl) then) =
+      __$$DiscoverFeedListStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Word> list, String? nextCursor, bool hasMore});
+  $Res call({List<dynamic> list, String? nextCursor, bool hasMore});
 }
 
 /// @nodoc
-class __$$WordListStateImplCopyWithImpl<$Res>
-    extends _$WordListStateCopyWithImpl<$Res, _$WordListStateImpl>
-    implements _$$WordListStateImplCopyWith<$Res> {
-  __$$WordListStateImplCopyWithImpl(
-      _$WordListStateImpl _value, $Res Function(_$WordListStateImpl) _then)
+class __$$DiscoverFeedListStateImplCopyWithImpl<$Res>
+    extends _$DiscoverFeedListStateCopyWithImpl<$Res,
+        _$DiscoverFeedListStateImpl>
+    implements _$$DiscoverFeedListStateImplCopyWith<$Res> {
+  __$$DiscoverFeedListStateImplCopyWithImpl(_$DiscoverFeedListStateImpl _value,
+      $Res Function(_$DiscoverFeedListStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -94,11 +97,11 @@ class __$$WordListStateImplCopyWithImpl<$Res>
     Object? nextCursor = freezed,
     Object? hasMore = null,
   }) {
-    return _then(_$WordListStateImpl(
+    return _then(_$DiscoverFeedListStateImpl(
       list: null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
-              as List<Word>,
+              as List<dynamic>,
       nextCursor: freezed == nextCursor
           ? _value.nextCursor
           : nextCursor // ignore: cast_nullable_to_non_nullable
@@ -113,16 +116,16 @@ class __$$WordListStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$WordListStateImpl implements _WordListState {
-  const _$WordListStateImpl(
-      {required final List<Word> list,
+class _$DiscoverFeedListStateImpl implements _DiscoverFeedListState {
+  const _$DiscoverFeedListStateImpl(
+      {required final List<dynamic> list,
       required this.nextCursor,
       required this.hasMore})
       : _list = list;
 
-  final List<Word> _list;
+  final List<dynamic> _list;
   @override
-  List<Word> get list {
+  List<dynamic> get list {
     if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
@@ -135,14 +138,14 @@ class _$WordListStateImpl implements _WordListState {
 
   @override
   String toString() {
-    return 'WordListState(list: $list, nextCursor: $nextCursor, hasMore: $hasMore)';
+    return 'DiscoverFeedListState(list: $list, nextCursor: $nextCursor, hasMore: $hasMore)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$WordListStateImpl &&
+            other is _$DiscoverFeedListStateImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.nextCursor, nextCursor) ||
                 other.nextCursor == nextCursor) &&
@@ -156,24 +159,25 @@ class _$WordListStateImpl implements _WordListState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$WordListStateImplCopyWith<_$WordListStateImpl> get copyWith =>
-      __$$WordListStateImplCopyWithImpl<_$WordListStateImpl>(this, _$identity);
+  _$$DiscoverFeedListStateImplCopyWith<_$DiscoverFeedListStateImpl>
+      get copyWith => __$$DiscoverFeedListStateImplCopyWithImpl<
+          _$DiscoverFeedListStateImpl>(this, _$identity);
 }
 
-abstract class _WordListState implements WordListState {
-  const factory _WordListState(
-      {required final List<Word> list,
+abstract class _DiscoverFeedListState implements DiscoverFeedListState {
+  const factory _DiscoverFeedListState(
+      {required final List<dynamic> list,
       required final String? nextCursor,
-      required final bool hasMore}) = _$WordListStateImpl;
+      required final bool hasMore}) = _$DiscoverFeedListStateImpl;
 
   @override
-  List<Word> get list;
+  List<dynamic> get list;
   @override
   String? get nextCursor;
   @override
   bool get hasMore;
   @override
   @JsonKey(ignore: true)
-  _$$WordListStateImplCopyWith<_$WordListStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$DiscoverFeedListStateImplCopyWith<_$DiscoverFeedListStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

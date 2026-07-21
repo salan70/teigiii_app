@@ -8,6 +8,7 @@ import '../../../../../core/router/app_router.dart';
 import '../../auth/application/auth_state.dart';
 import '../../definition/domain/definition_for_write.dart';
 import '../../definition/presentation/write_definition_base_page.dart';
+import '../application/word_save_controller.dart';
 import '../domain/word.dart';
 
 class WordWidget extends ConsumerWidget {
@@ -17,19 +18,51 @@ class WordWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final savedOverride =
+        ref.watch(wordSavedOverrideNotifierProvider(word.id));
+    final isSaved = savedOverride ?? word.isSavedByMe;
+    final inProgress =
+        ref.watch(wordSaveInProgressNotifierProvider(word.id));
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Gap(24),
-          Text(word.word, style: Theme.of(context).textTheme.titleLarge),
-          Text(
-            word.reading,
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      word.word,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    Text(
+                      word.reading,
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                icon: Icon(
+                  isSaved ? Icons.bookmark : Icons.bookmark_border,
+                  color: isSaved
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                onPressed: inProgress
+                    ? null
+                    : () => ref.read(wordSaveControllerProvider).toggle(word),
+              ),
+            ],
           ),
           const Gap(24),
           Text(

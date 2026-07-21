@@ -26,7 +26,6 @@ class BasePage extends ConsumerWidget {
         ? const Scaffold(body: Center(child: CupertinoActivityIndicator()))
         : AutoTabsRouter(
             routes: [
-              const HomeRouterRoute(),
               DictionaryIndividualRouterRoute(
                 children: [
                   DictionaryIndividualRoute(
@@ -36,6 +35,7 @@ class BasePage extends ConsumerWidget {
                 ],
               ),
               const DictionaryEveryoneRouterRoute(),
+              const HomeRouterRoute(),
             ],
             builder: (context, child) {
               final tabsRouter = context.tabsRouter;
@@ -53,11 +53,6 @@ class BasePage extends ConsumerWidget {
                   bottomNavigationBar: BottomNavigationBar(
                     items: const [
                       BottomNavigationBarItem(
-                        icon: Icon(CupertinoIcons.house),
-                        activeIcon: Icon(CupertinoIcons.house_fill),
-                        label: 'ホーム',
-                      ),
-                      BottomNavigationBarItem(
                         icon: Icon(CupertinoIcons.person),
                         activeIcon: Icon(CupertinoIcons.person_fill),
                         label: 'あなたの辞書',
@@ -66,6 +61,11 @@ class BasePage extends ConsumerWidget {
                         icon: Icon(CupertinoIcons.person_3),
                         activeIcon: Icon(CupertinoIcons.person_3_fill),
                         label: 'みんなの辞書',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(CupertinoIcons.house),
+                        activeIcon: Icon(CupertinoIcons.house_fill),
+                        label: 'タイムライン',
                       ),
                     ],
                     currentIndex: tabsRouter.activeIndex,

@@ -5,8 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../feature/definition/presentation/post_definition_fab.dart';
 import '../../feature/definition_list/presentation/definition_list.dart';
 import '../../feature/definition_list/util/definition_feed_type.dart';
+import '../../feature/timeline/presentation/discover_timeline_list.dart';
 import '../../util/extension/scroll_controller_extension.dart';
 import '../common_provider/key_provider.dart';
+import '../common_widget/button/to_profile_button.dart';
 import '../common_widget/button/to_setting_button.dart';
 import '../common_widget/simple_empty_widget.dart';
 import '../common_widget/stickey_tab_bar_deligate.dart';
@@ -32,8 +34,9 @@ class HomePage extends ConsumerWidget {
               return <Widget>[
                 const SliverAppBar(
                   elevation: 0,
-                  title: Text('ホーム'),
+                  title: Text('タイムライン'),
                   leading: ToSettingButton(),
+                  actions: [ToProfileButton()],
                 ),
                 SliverPersistentHeader(
                   pinned: true,
@@ -61,8 +64,7 @@ class HomePage extends ConsumerWidget {
             },
             body: const TabBarView(
               children: <Widget>[
-                DefinitionList(
-                  definitionFeedType: DefinitionFeedType.homeRecommend,
+                DiscoverTimelineList(
                   emptyWidget: SimpleEmptyWidget(message: 'おすすめの投稿がありません...'),
                 ),
                 DefinitionList(

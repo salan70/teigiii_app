@@ -48,6 +48,47 @@ enum InitialMainGroup {
         return '数字・記号';
     }
   }
+
+  /// 連絡先風リストのセクションヘッダーに表示する短縮ラベル。
+  String get sectionHeaderLabel {
+    switch (this) {
+      case InitialMainGroup.japaneseAColumn:
+        return 'あ';
+      case InitialMainGroup.japaneseKaColumn:
+        return 'か';
+      case InitialMainGroup.japaneseSaColumn:
+        return 'さ';
+      case InitialMainGroup.japaneseTaColumn:
+        return 'た';
+      case InitialMainGroup.japaneseNaColumn:
+        return 'な';
+      case InitialMainGroup.japaneseHaColumn:
+        return 'は';
+      case InitialMainGroup.japaneseMaColumn:
+        return 'ま';
+      case InitialMainGroup.japaneseYaColumn:
+        return 'や';
+      case InitialMainGroup.japaneseRaColumn:
+        return 'ら';
+      case InitialMainGroup.japaneseWaColumn:
+        return 'わ';
+      case InitialMainGroup.alphabet:
+        return 'A-Z';
+      case InitialMainGroup.other:
+        return '数字・記号';
+    }
+  }
+
+  /// [reading] の先頭文字から対応する [InitialMainGroup] を返す。
+  static InitialMainGroup fromReading(String reading) {
+    final sub = InitialSubGroup.fromString(reading);
+    for (final entry in initialMapping.entries) {
+      if (entry.value.contains(sub)) {
+        return entry.key;
+      }
+    }
+    return InitialMainGroup.other;
+  }
 }
 
 enum InitialSubGroup {
@@ -329,6 +370,10 @@ enum InitialSubGroup {
     // その他
     return InitialSubGroup.other;
   }
+}
+
+InitialMainGroup initialMainGroupFromReading(String reading) {
+  return InitialMainGroup.fromReading(reading);
 }
 
 final Map<InitialMainGroup, List<InitialSubGroup>> initialMapping = {

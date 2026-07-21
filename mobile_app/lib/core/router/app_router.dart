@@ -21,6 +21,7 @@ import '../page/home_page.dart';
 import '../page/license_page.dart';
 import '../page/profile_edit_page.dart';
 import '../page/profile_top_page.dart';
+import '../page/saved_word_list_page.dart';
 import '../page/setting_page.dart';
 import '../page/sign_in_failure_page.dart';
 import '../page/user_list_following_or_follower_page.dart';
@@ -30,6 +31,7 @@ import '../page/user_search_page.dart';
 import '../page/user_search_result_page.dart';
 import '../page/welcome_page.dart';
 import '../page/word_list_page.dart';
+import '../page/word_registration_page.dart';
 import '../page/word_search_result_page.dart';
 import '../page/word_top_page.dart';
 import 'auth_guard.dart';
@@ -78,22 +80,11 @@ class AppRouter extends _$AppRouter {
       guards: [ref.read(firstLaunchGuardProvider), ref.read(authGuardProvider)],
       children: [
         AdaptiveRoute(
-          path: 'home',
-          page: HomeRouterRoute.page,
-          children: [
-            AdaptiveRoute(initial: true, page: HomeRoute.page),
-            AdaptiveRoute(
-              path: 'dictionary_individual',
-              page: DictionaryIndividualRoute.page,
-            ),
-            ...commonRouteList,
-          ],
-        ),
-        AdaptiveRoute(
           path: 'dictionary_individual',
           page: DictionaryIndividualRouterRoute.page,
           children: [
             AdaptiveRoute(initial: true, page: DictionaryIndividualRoute.page),
+            AdaptiveRoute(path: 'saved_words', page: SavedWordListRoute.page),
             ...commonRouteList,
           ],
         ),
@@ -102,11 +93,27 @@ class AppRouter extends _$AppRouter {
           page: DictionaryEveryoneRouterRoute.page,
           children: [
             AdaptiveRoute(initial: true, page: DictionaryEveryoneRoute.page),
+            AdaptiveRoute(
+              path: 'word_registration',
+              page: WordRegistrationRoute.page,
+            ),
             AdaptiveRoute(path: 'word_list', page: WordListRoute.page),
             AdaptiveRoute(
               path: 'word_search_result',
               page: WordSearchResultRoute.page,
             ),
+            AdaptiveRoute(
+              path: 'dictionary_individual',
+              page: DictionaryIndividualRoute.page,
+            ),
+            ...commonRouteList,
+          ],
+        ),
+        AdaptiveRoute(
+          path: 'home',
+          page: HomeRouterRoute.page,
+          children: [
+            AdaptiveRoute(initial: true, page: HomeRoute.page),
             AdaptiveRoute(
               path: 'dictionary_individual',
               page: DictionaryIndividualRoute.page,
