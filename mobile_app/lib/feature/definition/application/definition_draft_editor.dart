@@ -74,6 +74,9 @@ class DefinitionDraftEditor extends _$DefinitionDraftEditor {
       final latest = state.requireValue;
       if (revision == _revision) {
         state = AsyncData(saved);
+        ref
+          ..invalidate(definitionDraftListProvider)
+          ..invalidate(personalDictionaryOverviewProvider);
         return true;
       }
 
