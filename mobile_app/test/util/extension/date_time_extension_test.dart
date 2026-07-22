@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:intl/intl.dart';
 import 'package:teigi_app/util/extension/date_time_extension.dart';
 
 void main() {
@@ -142,7 +141,8 @@ void main() {
 
     test('UTC DateTime はローカルタイムゾーンの壁時計で表示される', () {
       // * Arrange
-      // API が返す ISO 8601（末尾 Z）相当の UTC DateTime
+      // API が返す ISO 8601（末尾 Z）相当の UTC DateTime。
+      // 期待値は Asia/Tokyo（UTC+9）固定。CI / just mobile-test も同 TZ で実行する。
       final utcDate = DateTime.parse('2023-10-22T05:30:00.000Z');
 
       // * Act
@@ -150,10 +150,7 @@ void main() {
 
       // * Assert
       expect(utcDate.isUtc, isTrue);
-      expect(
-        actual,
-        DateFormat('yyyy/MM/dd HH:mm').format(utcDate.toLocal()),
-      );
+      expect(actual, '2023/10/22 14:30');
     });
   });
 
