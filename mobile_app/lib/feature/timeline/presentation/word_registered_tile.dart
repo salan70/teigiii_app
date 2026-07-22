@@ -7,7 +7,7 @@ import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../user_profile/presentation/avatar_network_image_widget.dart';
 
-/// タイムラインの「言葉追加」タイル。
+/// タイムラインの「新たな言葉」タイル。
 ///
 /// 定義タイルと同じ余白・タイポ階層に揃え、専用アイコンを左に置く。
 class WordRegisteredTile extends StatelessWidget {
@@ -35,11 +35,13 @@ class WordRegisteredTile extends StatelessWidget {
                   height: avatarDiameter,
                   child: CircleAvatar(
                     radius: avatarDiameter / 2,
-                    backgroundColor: theme.colorScheme.primaryContainer,
-                    foregroundColor: theme.colorScheme.onPrimaryContainer,
+                    // primaryContainer は蛍光寄りなので、既存 primary に近い
+                    // secondaryContainer + primary で抑えた緑系にする。
+                    backgroundColor: theme.colorScheme.secondaryContainer,
                     child: Icon(
                       Icons.auto_stories_outlined,
                       size: avatarDiameter / 2,
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                 ),
@@ -55,7 +57,7 @@ class WordRegisteredTile extends StatelessWidget {
                         children: [
                           const Expanded(
                             child: Text(
-                              '言葉追加',
+                              '新たな言葉',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
