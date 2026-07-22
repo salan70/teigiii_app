@@ -38,7 +38,17 @@ just format
 
 # テスト（両プロジェクト）
 just test
+
+# iOS 実機（iOS 26）: 日常はシミュレータ、実機確認は profile。詳細は doc/ios-physical-device-debug.md
+flutter config --enable-lldb-debugging
+just mobile-run-dev-profile-on <device-id>
 ```
+
+## iOS 実機デバッグ（要約）
+
+- iOS 26 実機の **無線 debug は LLDB 経由 JIT のため実用不可レベルに重い**（アプリ側の問題ではない）
+- 実機 debug には `flutter config --enable-lldb-debugging` が必須
+- 使い分け: シミュレータ debug / 実機 `--profile` / 実機 debug は USB。手順は `doc/ios-physical-device-debug.md`
 
 ## 指示の優先順位
 
