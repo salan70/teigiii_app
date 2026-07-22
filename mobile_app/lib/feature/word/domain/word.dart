@@ -10,5 +10,6 @@ class Word with _$Word {
     required String reading,
     required String initialSubGroupLabel,
     required int postedDefinitionCount,
+    @Default(false) bool isSavedByMe,
   }) = _Word;
 }

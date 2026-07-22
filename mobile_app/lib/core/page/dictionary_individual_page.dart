@@ -2,13 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 
+import '../../feature/definition/presentation/post_definition_fab.dart';
 import '../../feature/user_profile/application/user_profile_state.dart';
 import '../../feature/user_profile/presentation/dictionary_author_widget.dart';
-import '../../feature/word/presentation/initial_main_group_list.dart';
-import '../../feature/word/util/dictionary_page_type.dart';
+import '../../feature/word_list/presentation/dictionary_word_index_list.dart';
 import '../../util/logger.dart';
+import '../common_widget/button/to_profile_button.dart';
 import '../common_widget/button/to_setting_button.dart';
 import '../common_widget/error_and_retry_widget.dart';
 
@@ -38,23 +38,20 @@ class DictionaryIndividualPage extends ConsumerWidget {
           appBar: AppBar(
             title: Text('${targetUserProfile.name}の辞書'),
             leading: isTopRoute ? const ToSettingButton() : const BackButton(),
+            actions: [if (isTopRoute) const ToProfileButton()],
           ),
-          body: ListView(
+          body: Column(
             children: [
               SizedBox(
                 height: 80,
                 child: DictionaryAuthorWidget(targetUserId: targetUserId),
               ),
-              const Gap(24),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: InitialMainGroupList(
-                  dictionaryPageType: DictionaryPageType.individual,
-                  targetUserId: targetUserId,
-                ),
+              Expanded(
+                child: DictionaryWordIndexList(targetUserId: targetUserId),
               ),
             ],
           ),
+          floatingActionButton: const PostDefinitionFAB(),
         );
       },
       loading: () =>

@@ -35,5 +35,6 @@ export const savedWordItemSchema = z
   .object({
     word: wordSummarySchema,
     isDefinedByMe: z.boolean(),
+    publicCount: z.number().int(),
   })
   .openapi("SavedWordItem");

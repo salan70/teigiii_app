@@ -13,6 +13,7 @@ import '../../feature/word/presentation/word_widget.dart';
 import '../../util/extension/scroll_controller_extension.dart';
 import '../../util/logger.dart';
 import '../common_widget/error_and_retry_widget.dart';
+import '../common_widget/simple_empty_widget.dart';
 import '../common_widget/stickey_tab_bar_deligate.dart';
 
 @RoutePage()
@@ -30,9 +31,7 @@ class WordTopPage extends ConsumerWidget {
       child: asyncWord.when(
         data: (word) {
           if (word == null) {
-            // * 該当するWordがない場合
-            // [WordTopPage] から [DefinitionDetailPage] に遷移し、投稿削除/編集して
-            // 戻ってきた場合にnullになる想定
+            // * 該当する Word が存在しない場合（不正な ID など）
             return Scaffold(
               appBar: AppBar(),
               body: Padding(
@@ -48,19 +47,21 @@ class WordTopPage extends ConsumerWidget {
                     Align(
                       alignment: Alignment.topCenter,
                       child: Text(
-                        '対象の語句が見つかりませんでした。',
+                        '対象の言葉が見つかりませんでした。',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
-                    const Gap(8),
-                    const Text('投稿が0件になり、語句が削除された可能性があります。'),
                   ],
                 ),
               ),
             );
           }
 
-          // * 該当するWordがある場合
+          // * 該当するWordがある場合（投稿0件も含む）
+          const emptyWidget = SimpleEmptyWidget(
+            message: '最初に定義してみませんか？',
+          );
+
           return Scaffold(
             body: SafeArea(
               child: NestedScrollView(
@@ -102,7 +103,6 @@ class WordTopPage extends ConsumerWidget {
                     ),
                   ];
                 },
-                // WordTopは定義が投稿されていないと開けないので、emptyWidgetはnull
                 body: TabBarView(
                   children: [
                     DefinitionList(
@@ -110,7 +110,7 @@ class WordTopPage extends ConsumerWidget {
                           DefinitionFeedType.wordTopOrderByCreatedAt,
                       wordId: wordId,
                       shimmerTileNumber: 2,
-                      emptyWidget: null,
+                      emptyWidget: emptyWidget,
                       // TODO(me): スワイプリフレッシュ時、インジケータの表示がなめらかじゃないの直したい。
                       additionalOnRefresh: () =>
                           ref.invalidate(wordProvider(wordId)),
@@ -120,7 +120,7 @@ class WordTopPage extends ConsumerWidget {
                           DefinitionFeedType.wordTopOrderByLikesCount,
                       wordId: wordId,
                       shimmerTileNumber: 2,
-                      emptyWidget: null,
+                      emptyWidget: emptyWidget,
                       additionalOnRefresh: () =>
                           ref.invalidate(wordProvider(wordId)),
                     ),
@@ -137,7 +137,7 @@ class WordTopPage extends ConsumerWidget {
         ),
         error: (error, stackTrace) {
           logger.e(
-            '語句[$wordId]の取得に失敗しました。'
+            '言葉[$wordId]の取得に失敗しました。'
             'error: $error, stackTrace: $stackTrace',
           );
 

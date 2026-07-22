@@ -395,11 +395,15 @@
           },
           "isDefinedByMe": {
             "type": "boolean"
+          },
+          "publicCount": {
+            "type": "integer"
           }
         },
         "required": [
           "word",
-          "isDefinedByMe"
+          "isDefinedByMe",
+          "publicCount"
         ]
       },
       "WordResponse": {

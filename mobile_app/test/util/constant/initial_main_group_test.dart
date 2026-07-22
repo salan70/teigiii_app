@@ -148,4 +148,37 @@ void main() {
       expect(actual, InitialSubGroup.other.label);
     });
   });
+
+  group('InitialMainGroup', () {
+    test('sectionHeaderLabelは各グループの短縮ラベルを返す', () {
+      const expectedLabels = <InitialMainGroup, String>{
+        InitialMainGroup.japaneseAColumn: 'あ',
+        InitialMainGroup.japaneseKaColumn: 'か',
+        InitialMainGroup.japaneseSaColumn: 'さ',
+        InitialMainGroup.japaneseTaColumn: 'た',
+        InitialMainGroup.japaneseNaColumn: 'な',
+        InitialMainGroup.japaneseHaColumn: 'は',
+        InitialMainGroup.japaneseMaColumn: 'ま',
+        InitialMainGroup.japaneseYaColumn: 'や',
+        InitialMainGroup.japaneseRaColumn: 'ら',
+        InitialMainGroup.japaneseWaColumn: 'わ',
+        InitialMainGroup.alphabet: 'A-Z',
+        InitialMainGroup.other: '数字・記号',
+      };
+
+      for (final entry in expectedLabels.entries) {
+        expect(entry.key.sectionHeaderLabel, entry.value);
+      }
+    });
+
+    test('fromReadingは読みの先頭文字に対応するグループを返す', () {
+      expect(
+        InitialMainGroup.fromReading('がっこう'),
+        InitialMainGroup.japaneseKaColumn,
+      );
+      expect(InitialMainGroup.fromReading('apple'), InitialMainGroup.alphabet);
+      expect(InitialMainGroup.fromReading('123'), InitialMainGroup.other);
+      expect(InitialMainGroup.fromReading(''), InitialMainGroup.other);
+    });
+  });
 }

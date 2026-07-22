@@ -30,6 +30,7 @@ import '../page/user_search_page.dart';
 import '../page/user_search_result_page.dart';
 import '../page/welcome_page.dart';
 import '../page/word_list_page.dart';
+import '../page/word_registration_page.dart';
 import '../page/word_search_result_page.dart';
 import '../page/word_top_page.dart';
 import 'auth_guard.dart';
@@ -78,18 +79,6 @@ class AppRouter extends _$AppRouter {
       guards: [ref.read(firstLaunchGuardProvider), ref.read(authGuardProvider)],
       children: [
         AdaptiveRoute(
-          path: 'home',
-          page: HomeRouterRoute.page,
-          children: [
-            AdaptiveRoute(initial: true, page: HomeRoute.page),
-            AdaptiveRoute(
-              path: 'dictionary_individual',
-              page: DictionaryIndividualRoute.page,
-            ),
-            ...commonRouteList,
-          ],
-        ),
-        AdaptiveRoute(
           path: 'dictionary_individual',
           page: DictionaryIndividualRouterRoute.page,
           children: [
@@ -114,6 +103,18 @@ class AppRouter extends _$AppRouter {
             ...commonRouteList,
           ],
         ),
+        AdaptiveRoute(
+          path: 'home',
+          page: HomeRouterRoute.page,
+          children: [
+            AdaptiveRoute(initial: true, page: HomeRoute.page),
+            AdaptiveRoute(
+              path: 'dictionary_individual',
+              page: DictionaryIndividualRoute.page,
+            ),
+            ...commonRouteList,
+          ],
+        ),
       ],
     ),
     AdaptiveRoute(
@@ -129,6 +130,11 @@ class AppRouter extends _$AppRouter {
     AdaptiveRoute(
       path: '/definition_post',
       page: DefinitionPostRoute.page,
+      fullscreenDialog: true,
+    ),
+    AdaptiveRoute(
+      path: '/word_registration',
+      page: WordRegistrationRoute.page,
       fullscreenDialog: true,
     ),
     AdaptiveRoute(

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/router/app_router.dart';
 
-/// 語句を検索する用の [TextField]。
+/// 言葉を検索する用の [TextField]。
 class SearchWordTextField extends StatefulWidget {
   const SearchWordTextField({super.key, this.defaultText});
 
@@ -61,7 +61,7 @@ class _SearchWordTextFieldState extends State<SearchWordTextField> {
                 child: const Icon(CupertinoIcons.clear_thick_circled, size: 20),
               ),
         suffixIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        hintText: '語句を検索',
+        hintText: '言葉を検索',
         filled: true,
         contentPadding: EdgeInsets.zero,
         border: OutlineInputBorder(

@@ -229,7 +229,7 @@ export class BrowseService {
       rows,
       limit,
       (row) => ({
-        publicCount: row.public_count,
+        publicCount: Number(row.public_count ?? 0),
         word: { id: row.id, reading: row.reading, word: row.word },
       }),
       (row) =>
@@ -443,9 +443,9 @@ export class BrowseService {
       rows,
       limit,
       (row) => ({
-        draftCount: row.draft_count,
-        privateCount: row.private_count,
-        publicCount: row.public_count,
+        draftCount: Number(row.draft_count ?? 0),
+        privateCount: Number(row.private_count ?? 0),
+        publicCount: Number(row.public_count ?? 0),
         word: { id: row.id, reading: row.reading, word: row.word },
       }),
       (row) =>
@@ -516,13 +516,16 @@ export class BrowseService {
       word: string;
       reading: string;
       is_defined_by_me: number;
+      public_count: number;
       saved_at: number;
     };
     const rows = (
       await this.env.DB.prepare(
         `select w.id, w.word, w.reading, s.created_at as saved_at,
            exists(select 1 from definitions d
-            where d.word_id = w.id and d.author_id = ? and d.deleted_at is null) as is_defined_by_me
+            where d.word_id = w.id and d.author_id = ? and d.deleted_at is null) as is_defined_by_me,
+           (select count(*) from definitions d
+            where d.word_id = w.id and d.status = 'public' and d.deleted_at is null) as public_count
          from saved_words s join words w on w.id = s.word_id
          where s.user_id = ? ${cursorClause}
          order by s.created_at desc, w.id desc limit ?`,
@@ -535,6 +538,7 @@ export class BrowseService {
       limit,
       (row) => ({
         isDefinedByMe: row.is_defined_by_me !== 0,
+        publicCount: Number(row.public_count ?? 0),
         word: { id: row.id, reading: row.reading, word: row.word },
       }),
       (row) =>

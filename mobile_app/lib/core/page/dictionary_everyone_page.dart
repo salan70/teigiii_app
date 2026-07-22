@@ -2,9 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../feature/word/presentation/initial_main_group_list.dart';
-import '../../feature/word/util/dictionary_page_type.dart';
+import '../../feature/definition/presentation/post_definition_fab.dart';
+import '../../feature/word_list/presentation/dictionary_word_index_list.dart';
 import '../../feature/word_list/presentation/search_word_text_field.dart';
+import '../common_widget/button/to_profile_button.dart';
 import '../common_widget/button/to_setting_button.dart';
 
 @RoutePage()
@@ -24,26 +25,22 @@ class DictionaryEveryonePage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('みんなの辞書'),
           leading: const ToSettingButton(),
+          actions: const [ToProfileButton()],
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: ListView(
-            children: const [
-              Gap(24),
-              SizedBox(
-                height: 80,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  child: SearchWordTextField(),
-                ),
+        body: const Column(
+          children: [
+            Gap(16),
+            SizedBox(
+              height: 80,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: SearchWordTextField(),
               ),
-              InitialMainGroupList(
-                dictionaryPageType: DictionaryPageType.everyone,
-                targetUserId: null,
-              ),
-            ],
-          ),
+            ),
+            Expanded(child: DictionaryWordIndexList(targetUserId: null)),
+          ],
         ),
+        floatingActionButton: const PostDefinitionFAB(),
       ),
     );
   }

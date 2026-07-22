@@ -13,16 +13,16 @@ String _$fetchWordListRepositoryHash() =>
 @ProviderFor(fetchWordListRepository)
 final fetchWordListRepositoryProvider =
     AutoDisposeProvider<FetchWordListRepository>.internal(
-      fetchWordListRepository,
-      name: r'fetchWordListRepositoryProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$fetchWordListRepositoryHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  fetchWordListRepository,
+  name: r'fetchWordListRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$fetchWordListRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
-typedef FetchWordListRepositoryRef =
-    AutoDisposeProviderRef<FetchWordListRepository>;
+typedef FetchWordListRepositoryRef
+    = AutoDisposeProviderRef<FetchWordListRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

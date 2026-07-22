@@ -75,4 +75,44 @@ void main() {
     expect(exception.statusCode, isNull);
     expect(exception.code, isNull);
   });
+
+  test('Map<dynamic, dynamic> でも ErrorResponse を取り出せる', () {
+    final exception = ApiException.fromDioException(
+      dioException(
+        response: Response(
+          requestOptions: RequestOptions(path: '/v1/me/defined-words'),
+          statusCode: 401,
+          data: <dynamic, dynamic>{
+            'error': <dynamic, dynamic>{
+              'code': 'app_check_invalid',
+              'message': 'invalid',
+            },
+          },
+        ),
+      ),
+    );
+
+    expect(exception.statusCode, 401);
+    expect(exception.code, 'app_check_invalid');
+    expect(exception.message, 'invalid');
+  });
+
+  test('HTTP 200 のデシリアライズ失敗は underlying error を message に残す', () {
+    final options = RequestOptions(path: '/v1/me/defined-words');
+    final exception = ApiException.fromDioException(
+      DioException(
+        requestOptions: options,
+        response: Response(
+          requestOptions: options,
+          statusCode: 200,
+          data: {'items': <Object>[]},
+        ),
+        error: const FormatException('CheckedFromJsonException: draftCount'),
+      ),
+    );
+
+    expect(exception.statusCode, 200);
+    expect(exception.code, isNull);
+    expect(exception.message, contains('CheckedFromJsonException'));
+  });
 }

@@ -27,6 +27,18 @@ class FetchWordListRepository {
   final WordsApi _wordsApi;
   final SearchApi _searchApi;
 
+  Future<WordListState> fetchCommunityWordList(String? cursor) async {
+    try {
+      final response = await _wordsApi.v1WordsGet(
+        cursor: cursor,
+        limit: fetchLimitForWordList,
+      );
+      return _toState(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
+  }
+
   Future<WordListState> fetchWordListStateByInitial(
     String initial,
     String? cursor,

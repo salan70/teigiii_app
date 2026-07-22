@@ -12,8 +12,10 @@ import '../../feature/word/presentation/word_tile_shimmer.dart';
 import '../../feature/word_list/application/word_list_state_by_search_word.dart';
 import '../../feature/word_list/presentation/search_word_text_field.dart';
 import '../../util/extension/scroll_controller_extension.dart';
+import '../common_widget/button/filled_button.dart';
 import '../common_widget/infinity_scroll_widget.dart';
 import '../common_widget/simple_empty_widget.dart';
+import '../router/app_router.dart';
 
 @RoutePage()
 class WordSearchResultPage extends ConsumerWidget {
@@ -29,8 +31,8 @@ class WordSearchResultPage extends ConsumerWidget {
 
     String generateEmptyMessage(String label) {
       final messageList = [
-        '検索した語句は見つかりませんでした。',
-        '検索した語句は見つかりませんでした。。\nどうでしょう、あなたが投稿しませんか？😎',
+        '検索した言葉は見つかりませんでした。',
+        '検索した言葉は見つかりませんでした。。\nどうでしょう、あなたが投稿しませんか？😎',
       ];
 
       // ランダムでメッセージを返す
@@ -74,8 +76,19 @@ class WordSearchResultPage extends ConsumerWidget {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   shimmerTile: const WordTileShimmer(),
                   shimmerTileNumber: 2,
-                  emptyWidget: SimpleEmptyWidget(
-                    message: generateEmptyMessage(searchWord),
+                  emptyWidget: Column(
+                    children: [
+                      SimpleEmptyWidget(
+                        message: generateEmptyMessage(searchWord),
+                      ),
+                      const Gap(24),
+                      PrimaryFilledButton(
+                        onPressed: () => context.pushRoute(
+                          WordRegistrationRoute(initialWord: searchWord),
+                        ),
+                        text: '「$searchWord」を登録',
+                      ),
+                    ],
                   ),
                 ),
               ),

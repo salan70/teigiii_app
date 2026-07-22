@@ -18,7 +18,11 @@ part 'saved_word_item.g.dart';
 )
 class SavedWordItem {
   /// Returns a new [SavedWordItem] instance.
-  SavedWordItem({required this.word, required this.isDefinedByMe});
+  SavedWordItem({
+    required this.word,
+    required this.isDefinedByMe,
+    required this.publicCount,
+  });
 
   @JsonKey(name: r'word', required: true, includeIfNull: false)
   final WordSummary word;
@@ -26,15 +30,20 @@ class SavedWordItem {
   @JsonKey(name: r'isDefinedByMe', required: true, includeIfNull: false)
   final bool isDefinedByMe;
 
+  @JsonKey(name: r'publicCount', required: true, includeIfNull: false)
+  final int publicCount;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SavedWordItem &&
           other.word == word &&
-          other.isDefinedByMe == isDefinedByMe;
+          other.isDefinedByMe == isDefinedByMe &&
+          other.publicCount == publicCount;
 
   @override
-  int get hashCode => word.hashCode + isDefinedByMe.hashCode;
+  int get hashCode =>
+      word.hashCode + isDefinedByMe.hashCode + publicCount.hashCode;
 
   factory SavedWordItem.fromJson(Map<String, dynamic> json) =>
       _$SavedWordItemFromJson(json);
