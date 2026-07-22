@@ -48,12 +48,12 @@ class WordTopPage extends ConsumerWidget {
                     Align(
                       alignment: Alignment.topCenter,
                       child: Text(
-                        '対象の語句が見つかりませんでした。',
+                        '対象の言葉が見つかりませんでした。',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
                     const Gap(8),
-                    const Text('投稿が0件になり、語句が削除された可能性があります。'),
+                    const Text('投稿が0件になり、言葉が削除された可能性があります。'),
                   ],
                 ),
               ),
@@ -137,7 +137,7 @@ class WordTopPage extends ConsumerWidget {
         ),
         error: (error, stackTrace) {
           logger.e(
-            '語句[$wordId]の取得に失敗しました。'
+            '言葉[$wordId]の取得に失敗しました。'
             'error: $error, stackTrace: $stackTrace',
           );
 

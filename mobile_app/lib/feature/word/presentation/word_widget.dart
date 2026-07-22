@@ -85,7 +85,7 @@ class WordWidget extends ConsumerWidget {
                   ),
                 );
               },
-              text: 'この語句の定義を投稿する',
+              text: 'この言葉を定義する',
             ),
           ),
           const Gap(8),

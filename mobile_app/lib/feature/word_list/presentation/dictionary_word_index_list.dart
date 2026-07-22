@@ -14,7 +14,7 @@ const _horizontalPadding = EdgeInsets.symmetric(horizontal: 16);
 /// あかさたな連絡先風辞書リスト。
 ///
 /// [targetUserId] が null → みんなの辞書（community）。
-/// 非 null → 指定ユーザーの辞書（自分の場合は定義済み語句、他ユーザーは公開辞書）。
+/// 非 null → 指定ユーザーの辞書（自分の場合は定義済み言葉、他ユーザーは公開辞書）。
 class DictionaryWordIndexList extends ConsumerWidget {
   const DictionaryWordIndexList({super.key, required this.targetUserId});
 
@@ -25,7 +25,7 @@ class DictionaryWordIndexList extends ConsumerWidget {
     final userId = targetUserId;
 
     // あかさたなヘッダー全幅のため contentPadding は zero。
-    // 語句・shimmer はタイムラインと同じ左右 16。
+    // 言葉・shimmer はタイムラインと同じ左右 16。
     const shimmerTile = Padding(
       padding: _horizontalPadding,
       child: WordTileShimmer(),

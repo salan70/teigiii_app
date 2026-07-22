@@ -54,7 +54,7 @@ class WordRepository {
 
   /// 新しい言葉を登録する。
   ///
-  /// 409 (既存語句との重複) の場合、既存の [Word] を返す。
+  /// 409 (既存言葉との重複) の場合、既存の [Word] を返す。
   Future<Word> create({
     required String word,
     required String reading,

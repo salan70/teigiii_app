@@ -5,10 +5,10 @@ enum DefinitionFeedType {
   /// ホーム画面: フォロー中タブ
   homeFollowing,
 
-  /// 語句毎の定義一覧画面: 投稿順タブ
+  /// 言葉毎の定義一覧画面: 投稿順タブ
   wordTopOrderByCreatedAt,
 
-  /// 語句毎の定義一覧画面: いいね数順タブ
+  /// 言葉毎の定義一覧画面: いいね数順タブ
   wordTopOrderByLikesCount,
 
   /// プロフィール画面: 投稿順タブ

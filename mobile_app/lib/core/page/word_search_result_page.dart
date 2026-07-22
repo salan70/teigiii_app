@@ -29,8 +29,8 @@ class WordSearchResultPage extends ConsumerWidget {
 
     String generateEmptyMessage(String label) {
       final messageList = [
-        '検索した語句は見つかりませんでした。',
-        '検索した語句は見つかりませんでした。。\nどうでしょう、あなたが投稿しませんか？😎',
+        '検索した言葉は見つかりませんでした。',
+        '検索した言葉は見つかりませんでした。。\nどうでしょう、あなたが投稿しませんか？😎',
       ];
 
       // ランダムでメッセージを返す

@@ -19,7 +19,7 @@ UserDictionaryWordRepository userDictionaryWordRepository(
   return UserDictionaryWordRepository(api.getMeApi(), api.getUsersApi());
 }
 
-/// 自分・他ユーザーの辞書語句一覧および保存語句一覧を取得する Repository。
+/// 自分・他ユーザーの辞書言葉一覧および保存言葉一覧を取得する Repository。
 class UserDictionaryWordRepository {
   UserDictionaryWordRepository(this._meApi, this._usersApi);
 
@@ -56,7 +56,7 @@ class UserDictionaryWordRepository {
     }
   }
 
-  /// 他ユーザーの公開辞書語句一覧を取得する。
+  /// 他ユーザーの公開辞書言葉一覧を取得する。
   Future<WordListState> fetchUserDictionary(
     String userId,
     String? cursor,
