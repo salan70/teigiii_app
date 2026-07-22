@@ -37,7 +37,7 @@ flowchart LR
 4. **みんなの辞書の検索窓**: develop の [`SearchWordTextField`](mobile_app/lib/feature/word_list/presentation/search_word_text_field.dart) を維持（画面内 debounce 検索・filter チップなし）
 5. **タイムラインおすすめに言葉追加を混ぜる**: `GET /v1/timeline/discover` の `definition` + `wordRegistered`。言葉行文言は **`言葉が登録されました`**。empty は develop の `おすすめの投稿がありません...`。二次タブ名は **おすすめ / フォロー中** のまま（「見つける」にしない）。フォロー中は定義のみ
 6. **拡張 FAB（Speed Dial）**: 現行 `PostDefinitionFAB` をクラシック Speed Dial に置換。展開後は **「定義を書く」（主位置・メイン FAB に近い）** と **「言葉を登録」**。定義も言葉も展開後にもう1タップ（定義は意図的に2タップ）。言葉登録は常に空の `WordRegistrationPage`（言葉ページ等でも文脈プリフィルなし）
-7. **言葉だけの追加**: 導線はグローバル拡張 FAB。みんなの辞書 AppBar の「言葉を登録」は削除し、同画面に拡張 FAB を新設。検索ゼロ件時のみ `WordSearchResultPage` に検索語プリフィル付き CTA。登録後「続けて定義を書く / 完了」は既存どおり（`POST /v1/words`）
+7. **言葉だけの追加**: 導線はグローバル拡張 FAB。みんなの辞書 AppBar の「言葉を登録」は削除し、同画面に拡張 FAB を新設。検索ゼロ件時のみ `WordSearchResultPage` に検索語プリフィル付き CTA。登録後は定義追加と同じくトースト＋前画面へ戻る（`POST /v1/words`）
 8. **言葉ブックマーク**: 言葉ページで保存トグル（API は develop 済み）。保存一覧への入口は overview ハブ全体は作らず、**あなたの辞書から「保存した言葉」一覧へ行ける最小導線**のみ
 
 ## 明示的にやらないこと
@@ -160,7 +160,7 @@ git switch -c cursor/ui-refresh-from-develop-808f
 - `SearchWordTextField` + 連続リスト
 - AppBar の `言葉を登録` TextButton は**削除**
 - 拡張 FAB を新設（他画面と同じ Speed Dial）
-- `WordRegistrationPage`: 表記/よみ、`POST /v1/words`、完了後「続けて定義を書く / 完了」。検索ゼロ件 CTA 用に表記の初期値を受け取れるようにする
+- `WordRegistrationPage`: 表記/よみ、`POST /v1/words`、完了後はトースト「登録しました！」＋ pop。検索ゼロ件 CTA 用に表記の初期値を受け取れるようにする
 
 ### 5b. 拡張 FAB
 
