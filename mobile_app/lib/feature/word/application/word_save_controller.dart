@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../word_list/application/saved_word_list_state.dart';
 import '../domain/word.dart';
 import '../repository/word_repository.dart';
 
@@ -57,6 +58,8 @@ class WordSaveController {
       } else {
         await ref.read(wordRepositoryProvider).save(word.id);
       }
+      // keepAlive の保存一覧キャッシュを同期する。
+      ref.invalidate(savedWordListStateNotifierProvider);
     } on Exception catch (_) {
       ref
           .read(wordSavedOverrideNotifierProvider(word.id).notifier)

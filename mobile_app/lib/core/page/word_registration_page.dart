@@ -8,6 +8,7 @@ import '../../feature/definition/domain/definition_for_write.dart';
 import '../../feature/timeline/application/discover_timeline_state.dart';
 import '../../feature/word/repository/word_repository.dart';
 import '../../feature/word_list/application/community_dictionary_index_list_state.dart';
+import '../../feature/word_list/application/word_list_state_by_search_word.dart';
 import '../../util/mixin/presentation_mixin.dart';
 import '../common_provider/dialog_controller.dart';
 import '../common_widget/dialog/confirm_dialog.dart';
@@ -120,7 +121,8 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
     // そのため、`executeWithOverlayLoading` 完了後に画面遷移を行っている。
     ref
       ..invalidate(communityDictionaryIndexListStateNotifierProvider)
-      ..invalidate(discoverTimelineStateNotifierProvider);
+      ..invalidate(discoverTimelineStateNotifierProvider)
+      ..invalidate(wordListStateBySearchWordNotifierProvider);
     await ref.read(appRouterProvider).pop();
   }
 

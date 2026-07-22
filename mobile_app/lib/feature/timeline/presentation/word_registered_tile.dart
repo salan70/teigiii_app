@@ -7,7 +7,7 @@ import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../user_profile/presentation/avatar_network_image_widget.dart';
 
-/// タイムラインの「新たな言葉」タイル。
+/// タイムラインの「言葉が登録されました」タイル。
 ///
 /// 定義タイルと同じ余白・タイポ階層に揃え、専用アイコンを左に置く。
 class WordRegisteredTile extends StatelessWidget {
@@ -57,7 +57,7 @@ class WordRegisteredTile extends StatelessWidget {
                         children: [
                           const Expanded(
                             child: Text(
-                              '新たな言葉',
+                              '言葉が登録されました',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
