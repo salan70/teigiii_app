@@ -105,10 +105,9 @@ void main() {
         response: Response(
           requestOptions: options,
           statusCode: 200,
-          data: {'items': []},
+          data: {'items': <Object>[]},
         ),
-        type: DioExceptionType.unknown,
-        error: FormatException('CheckedFromJsonException: draftCount'),
+        error: const FormatException('CheckedFromJsonException: draftCount'),
       ),
     );
 
