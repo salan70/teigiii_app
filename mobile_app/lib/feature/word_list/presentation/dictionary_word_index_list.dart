@@ -8,6 +8,9 @@ import '../../word/presentation/word_tile_shimmer.dart';
 import '../application/community_dictionary_index_list_state.dart';
 import '../application/user_dictionary_index_list_state.dart';
 
+/// タイムラインの contentPadding と同じ左右余白。
+const _horizontalPadding = EdgeInsets.symmetric(horizontal: 16);
+
 /// あかさたな連絡先風辞書リスト。
 ///
 /// [targetUserId] が null → みんなの辞書（community）。
@@ -21,6 +24,13 @@ class DictionaryWordIndexList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = targetUserId;
 
+    // あかさたなヘッダー全幅のため contentPadding は zero。
+    // 語句・shimmer はタイムラインと同じ左右 16。
+    const shimmerTile = Padding(
+      padding: _horizontalPadding,
+      child: WordTileShimmer(),
+    );
+
     if (userId == null) {
       return InfinityScrollWidget(
         listStateNotifierProvider:
@@ -30,7 +40,7 @@ class DictionaryWordIndexList extends ConsumerWidget {
             .fetchMore,
         tileBuilder: _buildTile,
         contentPadding: EdgeInsets.zero,
-        shimmerTile: const WordTileShimmer(),
+        shimmerTile: shimmerTile,
         shimmerTileNumber: 12,
         emptyWidget: const SizedBox.shrink(),
       );
@@ -44,7 +54,7 @@ class DictionaryWordIndexList extends ConsumerWidget {
           .fetchMore,
       tileBuilder: _buildTile,
       contentPadding: EdgeInsets.zero,
-      shimmerTile: const WordTileShimmer(),
+      shimmerTile: shimmerTile,
       shimmerTileNumber: 12,
       emptyWidget: const SizedBox.shrink(),
     );
@@ -56,7 +66,7 @@ class DictionaryWordIndexList extends ConsumerWidget {
     }
     if (item is Word) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: _horizontalPadding,
         child: WordTile(word: item),
       );
     }
