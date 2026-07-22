@@ -226,9 +226,14 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     WordRegistrationRoute.name: (routeData) {
+      final args = routeData.argsAs<WordRegistrationRouteArgs>(
+          orElse: () => const WordRegistrationRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const WordRegistrationPage(),
+        child: WordRegistrationPage(
+          key: args.key,
+          initialWord: args.initialWord,
+        ),
       );
     },
     WordSearchResultRoute.name: (routeData) {
@@ -938,16 +943,40 @@ class WordListRouteArgs {
 
 /// generated route for
 /// [WordRegistrationPage]
-class WordRegistrationRoute extends PageRouteInfo<void> {
-  const WordRegistrationRoute({List<PageRouteInfo>? children})
-      : super(
+class WordRegistrationRoute extends PageRouteInfo<WordRegistrationRouteArgs> {
+  WordRegistrationRoute({
+    Key? key,
+    String? initialWord,
+    List<PageRouteInfo>? children,
+  }) : super(
           WordRegistrationRoute.name,
+          args: WordRegistrationRouteArgs(
+            key: key,
+            initialWord: initialWord,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'WordRegistrationRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<WordRegistrationRouteArgs> page =
+      PageInfo<WordRegistrationRouteArgs>(name);
+}
+
+class WordRegistrationRouteArgs {
+  const WordRegistrationRouteArgs({
+    this.key,
+    this.initialWord,
+  });
+
+  final Key? key;
+
+  final String? initialWord;
+
+  @override
+  String toString() {
+    return 'WordRegistrationRouteArgs{key: $key, initialWord: $initialWord}';
+  }
 }
 
 /// generated route for

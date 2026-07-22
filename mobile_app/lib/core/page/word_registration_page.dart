@@ -14,7 +14,10 @@ import '../router/app_router.dart';
 
 @RoutePage()
 class WordRegistrationPage extends ConsumerStatefulWidget {
-  const WordRegistrationPage({super.key});
+  const WordRegistrationPage({super.key, this.initialWord});
+
+  /// 検索ゼロ件 CTA などから渡す表記の初期値。
+  final String? initialWord;
 
   @override
   ConsumerState<WordRegistrationPage> createState() =>
@@ -23,9 +26,15 @@ class WordRegistrationPage extends ConsumerStatefulWidget {
 
 class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage> {
   final _formKey = GlobalKey<FormState>();
-  final _wordController = TextEditingController();
+  late final TextEditingController _wordController;
   final _readingController = TextEditingController();
   bool _isSubmitting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _wordController = TextEditingController(text: widget.initialWord ?? '');
+  }
 
   @override
   void dispose() {
@@ -45,10 +54,12 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage> {
     setState(() => _isSubmitting = true);
 
     try {
-      final word = await ref.read(wordRepositoryProvider).create(
-        word: _wordController.text.trim(),
-        reading: _readingController.text.trim(),
-      );
+      final word = await ref
+          .read(wordRepositoryProvider)
+          .create(
+            word: _wordController.text.trim(),
+            reading: _readingController.text.trim(),
+          );
       if (!mounted) {
         return;
       }
@@ -60,9 +71,9 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage> {
       if (!mounted) {
         return;
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('登録できませんでした。もう一度お試しください。')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('登録できませんでした。もう一度お試しください。')));
     } finally {
       if (mounted) {
         setState(() => _isSubmitting = false);

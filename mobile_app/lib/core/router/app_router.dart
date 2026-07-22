@@ -91,10 +91,6 @@ class AppRouter extends _$AppRouter {
           page: DictionaryEveryoneRouterRoute.page,
           children: [
             AdaptiveRoute(initial: true, page: DictionaryEveryoneRoute.page),
-            AdaptiveRoute(
-              path: 'word_registration',
-              page: WordRegistrationRoute.page,
-            ),
             AdaptiveRoute(path: 'word_list', page: WordListRoute.page),
             AdaptiveRoute(
               path: 'word_search_result',
@@ -134,6 +130,11 @@ class AppRouter extends _$AppRouter {
     AdaptiveRoute(
       path: '/definition_post',
       page: DefinitionPostRoute.page,
+      fullscreenDialog: true,
+    ),
+    AdaptiveRoute(
+      path: '/word_registration',
+      page: WordRegistrationRoute.page,
       fullscreenDialog: true,
     ),
     AdaptiveRoute(

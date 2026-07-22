@@ -2,11 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../feature/definition/presentation/post_definition_fab.dart';
 import '../../feature/word_list/presentation/dictionary_word_index_list.dart';
 import '../../feature/word_list/presentation/search_word_text_field.dart';
 import '../common_widget/button/to_profile_button.dart';
 import '../common_widget/button/to_setting_button.dart';
-import '../router/app_router.dart';
 
 @RoutePage()
 class DictionaryEveryoneRouterPage extends AutoRouter {
@@ -25,13 +25,7 @@ class DictionaryEveryonePage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('みんなの辞書'),
           leading: const ToSettingButton(),
-          actions: [
-            TextButton(
-              onPressed: () => context.pushRoute(const WordRegistrationRoute()),
-              child: const Text('言葉を登録'),
-            ),
-            const ToProfileButton(),
-          ],
+          actions: const [ToProfileButton()],
         ),
         body: const Column(
           children: [
@@ -46,6 +40,7 @@ class DictionaryEveryonePage extends StatelessWidget {
             Expanded(child: DictionaryWordIndexList(targetUserId: null)),
           ],
         ),
+        floatingActionButton: const PostDefinitionFAB(),
       ),
     );
   }

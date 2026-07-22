@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../feature/definition/presentation/post_definition_fab.dart';
 import '../../feature/user_profile/application/user_profile_state.dart';
 import '../../feature/user_profile/presentation/dictionary_author_widget.dart';
 import '../../feature/word_list/presentation/dictionary_word_index_list.dart';
@@ -50,6 +51,7 @@ class DictionaryIndividualPage extends ConsumerWidget {
               ),
             ],
           ),
+          floatingActionButton: const PostDefinitionFAB(),
         );
       },
       loading: () =>

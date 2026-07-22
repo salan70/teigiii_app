@@ -3,17 +3,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:teigi_app/core/page/dictionary_individual_page.dart';
+import 'package:teigi_app/core/page/dictionary_everyone_page.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition/presentation/post_definition_fab.dart';
 import 'package:teigi_app/feature/user_profile/application/user_profile_state.dart';
 import 'package:teigi_app/feature/user_profile/domain/user_profile.dart';
-import 'package:teigi_app/feature/word_list/application/user_dictionary_index_list_state.dart';
+import 'package:teigi_app/feature/word_list/application/community_dictionary_index_list_state.dart';
 import 'package:teigi_app/feature/word_list/domain/dictionary_index_list_state.dart';
 
-class _EmptyUserDictionaryIndex extends UserDictionaryIndexListStateNotifier {
+class _EmptyCommunityDictionaryIndex
+    extends CommunityDictionaryIndexListStateNotifier {
   @override
-  FutureOr<DictionaryIndexListState> build(String targetUserId) async {
+  FutureOr<DictionaryIndexListState> build() async {
     return const DictionaryIndexListState(
       list: [],
       allWords: [],
@@ -36,27 +37,25 @@ const _profile = UserProfile(
 );
 
 void main() {
-  testWidgets('自分の辞書トップに保存した言葉の導線を置かない', (tester) async {
+  testWidgets('AppBar に言葉を登録がなく拡張 FAB がある', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           userIdProvider.overrideWithValue('user-1'),
           userProfileProvider('user-1').overrideWith((ref) async => _profile),
-          userDictionaryIndexListStateNotifierProvider(
-            'user-1',
-          ).overrideWith(_EmptyUserDictionaryIndex.new),
-        ],
-        child: const MaterialApp(
-          home: DictionaryIndividualPage(
-            targetUserId: 'user-1',
-            isTopRoute: true,
+          communityDictionaryIndexListStateNotifierProvider.overrideWith(
+            _EmptyCommunityDictionaryIndex.new,
           ),
-        ),
+        ],
+        child: const MaterialApp(home: DictionaryEveryonePage()),
       ),
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('保存した言葉'), findsNothing);
+    expect(
+      find.descendant(of: find.byType(AppBar), matching: find.text('言葉を登録')),
+      findsNothing,
+    );
     expect(find.byType(PostDefinitionFAB), findsOneWidget);
   });
 }
