@@ -19,7 +19,7 @@ class OverlayInMaintenanceDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scheduledEndTime =
-        appMaintenance.scheduledEndTime?.toLocal().toDisplayFormat() ?? '未定';
+        appMaintenance.scheduledEndTime?.toDisplayFormat() ?? '未定';
 
     return WillPopScope(
       onWillPop: () async => false,

@@ -42,8 +42,9 @@ mobile-analyze:
 mobile-format:
     cd mobile_app && dart format .
 
+# 日時表示の回帰テストが UTC では検出漏れになるため Asia/Tokyo に固定する
 mobile-test:
-    cd mobile_app && flutter test
+    cd mobile_app && TZ=Asia/Tokyo flutter test
 
 mobile-coverage:
     cd mobile_app && flutter test --coverage

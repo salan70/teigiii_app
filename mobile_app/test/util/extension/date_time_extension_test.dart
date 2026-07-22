@@ -138,6 +138,20 @@ void main() {
       // * Assert
       expect(expected, '2023/10/22 14:30');
     });
+
+    test('UTC DateTime はローカルタイムゾーンの壁時計で表示される', () {
+      // * Arrange
+      // API が返す ISO 8601（末尾 Z）相当の UTC DateTime。
+      // 期待値は Asia/Tokyo（UTC+9）固定。CI / just mobile-test も同 TZ で実行する。
+      final utcDate = DateTime.parse('2023-10-22T05:30:00.000Z');
+
+      // * Act
+      final actual = utcDate.toDisplayFormat();
+
+      // * Assert
+      expect(utcDate.isUtc, isTrue);
+      expect(actual, '2023/10/22 14:30');
+    });
   });
 
   group('hasOneHourPassed()', () {

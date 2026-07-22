@@ -29,8 +29,10 @@ extension DateTimeExtension on DateTime {
   }
 
   /// UIで表示する形式に変換する
+  ///
+  /// 絶対時刻の壁時計表示のチョークポイント。UTC の DateTime もローカルに変換してから整形する。
   String toDisplayFormat() {
-    return DateFormat('yyyy/MM/dd HH:mm').format(this);
+    return DateFormat('yyyy/MM/dd HH:mm').format(toLocal());
   }
 
   /// 呼び出したインスタンスの時刻から1時間以上が経過しているかを返す
