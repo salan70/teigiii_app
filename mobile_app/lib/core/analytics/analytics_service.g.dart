@@ -8,13 +8,7 @@ part of 'analytics_service.dart';
 
 String _$analyticsServiceHash() => r'2a9ebfd27e90caf7554a5a8d281b5f2111246b92';
 
-/// Firebase Analytics への薄い facade。
-///
-/// Crashlytics 用 logger とは分離する。application 層からのみ呼び出す。
-///
-/// @doc doc/specs/analytics-events.md#概要
-///
-/// Copied from [analyticsService].
+/// See also [analyticsService].
 @ProviderFor(analyticsService)
 final analyticsServiceProvider = Provider<AnalyticsService>.internal(
   analyticsService,

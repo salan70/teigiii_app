@@ -26,13 +26,19 @@ import 'package:teigi_app/core/analytics/analytics_client.dart' as _i2;
 /// See the documentation for Mockito's code generation for more information.
 class MockAnalyticsClient extends _i1.Mock implements _i2.AnalyticsClient {
   @override
-  _i3.Future<void> logEvent(String? name, {Map<String, Object>? parameters}) =>
+  _i3.Future<void> logEvent(
+    String? name, {
+    Map<String, Object>? parameters,
+  }) =>
       (super.noSuchMethod(
-            Invocation.method(#logEvent, [name], {#parameters: parameters}),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
+        Invocation.method(
+          #logEvent,
+          [name],
+          {#parameters: parameters},
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 
   @override
   _i3.Future<void> logScreenView({
@@ -40,21 +46,25 @@ class MockAnalyticsClient extends _i1.Mock implements _i2.AnalyticsClient {
     String? screenClass,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#logScreenView, [], {
-              #screenName: screenName,
-              #screenClass: screenClass,
-            }),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
+        Invocation.method(
+          #logScreenView,
+          [],
+          {
+            #screenName: screenName,
+            #screenClass: screenClass,
+          },
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 
   @override
-  _i3.Future<void> setUserId(String? userId) =>
-      (super.noSuchMethod(
-            Invocation.method(#setUserId, [userId]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
+  _i3.Future<void> setUserId(String? userId) => (super.noSuchMethod(
+        Invocation.method(
+          #setUserId,
+          [userId],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 }

@@ -63,5 +63,26 @@ void main() {
 
       verify(mockClient.setUserId(null)).called(1);
     });
+
+    test('logEvent の失敗は呼び出し元へ伝播しない', () async {
+      when(
+        mockClient.logEvent(any, parameters: anyNamed('parameters')),
+      ).thenThrow(Exception('analytics unavailable'));
+      final service = container.read(analyticsServiceProvider);
+
+      await expectLater(
+        service.logEvent(AnalyticsEvent.appLaunched),
+        completes,
+      );
+    });
+
+    test('setUserId の失敗は呼び出し元へ伝播しない', () async {
+      when(
+        mockClient.setUserId(any),
+      ).thenThrow(Exception('analytics unavailable'));
+      final service = container.read(analyticsServiceProvider);
+
+      await expectLater(service.setUserId('uid-1'), completes);
+    });
   });
 }

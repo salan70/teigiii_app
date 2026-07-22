@@ -85,6 +85,9 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
 
   Future<void> edit() async {
     final before = _initialState;
+    // AvatarRepository はユーザーごとに固定 URL を返すため、
+    // 画像差し替え後も avatarUrl は変わらない。選択ファイルの有無で判定する。
+    final changedAvatar = state.value!.croppedFile != null;
 
     // 必要があれば画像をアップロードする。
     await _maybeUploadImage();
@@ -102,7 +105,7 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
           parameters: {
             AnalyticsParam.changedName: before.name != after.name,
             AnalyticsParam.changedBio: before.bio != after.bio,
-            AnalyticsParam.changedAvatar: before.avatarUrl != after.avatarUrl,
+            AnalyticsParam.changedAvatar: changedAvatar,
           },
         );
 

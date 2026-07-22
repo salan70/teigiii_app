@@ -2,6 +2,7 @@
 
 Firebase Analytics のイベント名・パラメータ・発火タイミング・call site の正本。
 
+<!-- @code mobile_app/lib/core/analytics/analytics_service.dart#AnalyticsService -->
 ## 概要
 
 - 画面は `screen_view`（`FirebaseAnalyticsObserver`）
