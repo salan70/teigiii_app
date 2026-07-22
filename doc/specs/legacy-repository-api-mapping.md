@@ -32,8 +32,8 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 |---|---|
 | `fetch_definition_repository.fetchDefinition` | `GET /v1/definitions/{id}` |
 | `fetch_definition_repository.fetchAllPostedDefinitionDocList` | **集約**: アカウント削除フローの一部。`DELETE /v1/users/me` に集約 |
-| `write_definition_repository.createDefinition` | `POST /v1/definitions` |
-| `write_definition_repository.createDefinitionAndWord` | `POST /v1/words` → `POST /v1/definitions` の 2 段。言葉が既存なら 409 レスポンスの `existingWord.id` を使う |
+| `write_definition_repository.createDefinition` | `POST /v1/definitions`（`word` + `reading` + `body` + `status`）。言葉の解決・内部作成はサーバー側の一操作 |
+| `write_definition_repository.createDefinitionAndWord` | **集約**: 上記と同じ `POST /v1/definitions`。クライアントが先に `POST /v1/words` を呼ぶフローは廃止 |
 | `write_definition_repository.updateDefinition` | `PATCH /v1/definitions/{id}` |
 | `write_definition_repository.updateWordChangedDefinition` / `updateDefinitionAndCreateWord` | **例外**: 確定後の言葉変更は新モデルで廃止（情報設計 §8.4）。フェーズ 4 で編集画面の言葉・よみを読み取り専用にする |
 | `write_definition_repository.deleteDefinition` | `DELETE /v1/definitions/{id}`。**例外**: 孤児になった言葉の削除は行わない（言葉はグローバル資産として残す） |
@@ -68,10 +68,11 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 
 | 旧操作 | 対応 |
 |---|---|
-| `word_repository.fetchWordById` | `GET /v1/words/{id}` |
-| `word_repository.findWordId` | **集約**: 登録フローは `POST /v1/words` の 409 応答で既存判定。検索は `GET /v1/search/words?q=` |
-| `fetch_word_list_repository.fetchWordListStateByInitial` | `GET /v1/words?subGroup=`。**例外**: 公開定義 0 件の言葉も表示する |
-| `fetch_word_list_repository.fetchWordListStateBySearchWord` | `GET /v1/search/words?q=`。**例外**: 言葉の前方一致から、言葉またはよみの部分一致へ変更する |
+| `word_repository.fetchWordById` | `GET /v1/words/{id}`。公開判定を満たさない、かつ自分の定義もない言葉は 404 |
+| `word_repository.create` | `POST /v1/words`（明示登録。新規 201 / 既存・昇格 200） |
+| `word_repository.findWordId` | **集約**: 明示登録は `POST /v1/words` の 200/201。検索は `GET /v1/search/words?q=` |
+| `fetch_word_list_repository.fetchWordListStateByInitial` | `GET /v1/words?subGroup=`。公開判定を満たす言葉だけ。明示登録済みで公開定義 0 件の言葉も含む |
+| `fetch_word_list_repository.fetchWordListStateBySearchWord` | `GET /v1/search/words?q=`。公開判定を満たす言葉だけ。言葉またはよみの部分一致 |
 | `fetch_word_list_repository.fetchPostedDefinitionCount` | **埋め込み**: `WordListItem.publicDefinitionCount`。ミュートした著者の定義は件数と defined / undefined 判定の両方から Workers 側で除外する |
 
 <!-- @code mobile_app/lib/feature/user_list/repository/fetch_user_list_repository.dart#FetchUserListRepository -->
@@ -112,5 +113,5 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 4. **アカウント削除の fan-out がサーバー集約**になり、削除は論理削除（30 日保持）に変わる
 5. **デフォルトアイコンの登録時ランダム保存を廃止**: 新 API に「デフォルトアイコン URL を保存する」概念がなく、アバター未設定は `avatarUrl: null` で表現される。クライアントは null のとき同梱 asset 3 種から `hash(userId)` で決定的に 1 種を表示する。既存ユーザーのアイコンを変えないため、#186 のデータ移行で `profileImageUrl` がデフォルト URL 3 種のいずれかに一致するユーザーはその PNG を R2 へアバターとしてコピーする
 6. **フィードの公開定義化**: おすすめから自分の非公開定義、フォロー中から自分の定義とフォロー中ユーザーの非公開定義を除外する
-7. **公開定義 0 件の言葉も表示**: みんなの辞書は API の言葉一覧をそのまま表示する
+7. **公開経路の言葉表示**: みんなの辞書は明示登録または公開定義がある言葉だけを表示する（明示登録済みで公開定義 0 件の言葉も含む）
 8. **言葉検索の拡張**: 言葉の前方一致から、言葉またはよみの部分一致に変更する

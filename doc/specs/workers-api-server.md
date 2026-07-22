@@ -145,15 +145,18 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 <!-- @code backend/src/words/word-service.ts#WordService -->
 ### 言葉
 
-- 登録前に前後空白を除去し NFC 正規化する。同一表記は409で既存言葉を返す
+- 登録前に前後空白を除去し NFC 正規化する。`POST /v1/words` は言葉単体の明示登録専用で、新規は 201、既存への明示登録・公開昇格は 200。重複する言葉は作らず、読みが異なっても既存の読みを採用する
 - 新規 ID は UUIDv7、読みグループは正規化済み reading からサーバーが算出する
-- 言葉の修正は登録後1時間以内かつ、登録者本人で、他ユーザーの定義または保存がない場合だけ許可する
+- 最初の明示登録日時・登録者と、ユーザーごとの `word_registrations` を保持する。同じユーザーの再登録は冪等で、別ユーザーの再登録は最初の登録日時を更新しない
+- 公開経路（みんなの辞書・検索・保存一覧・直接取得・タイムラインの言葉登録）は、ミュートしていない明示登録または公開定義がある言葉だけを返す。閲覧権限のない直接取得は 404 `word_not_found`
+- 言葉の修正は登録後1時間以内かつ、行の作成者と最初の明示登録者が同一の本人で、他ユーザーの定義または保存がない場合だけ許可する
 - 一覧は reading、id の安定順とし、指定された行、定義有無、検索語を適用する
 
 <!-- @code backend/src/definitions/definition-service.ts#DefinitionService -->
 ### 定義
 
 - draft は `finalized_at=null`、public / private は初回確定時の `finalized_at` を持つ
+- `POST /v1/definitions` は `wordId` または `word` + `reading` のいずれか一方を受け付ける。後者ではサーバーが言葉を解決／必要時に内部作成してから定義を作成する。内部作成は明示登録にしない
 - 許可する状態遷移は draft から public / private、public と private の相互切替だけとし、draft へ戻さない
 - 確定後1時間を超えた本文編集を403で拒否する。公開範囲の変更では `finalized_at` を更新しない
 - 他者は public だけを閲覧でき、本人は自分の draft / private も閲覧できる。不可視な定義は404として存在を秘匿する
@@ -171,16 +174,17 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 <!-- @code backend/src/browse/browse-service.ts#BrowseService -->
 ### タイムラインと検索
 
-- 見つけるは public 定義を `finalized_at DESC`、言葉登録を `created_at DESC` として混在させる。任意の `type=definition|wordRegistered` が指定された場合は対応する activity だけを返す
+- 見つけるは public 定義を `finalized_at DESC`、最初の明示登録を `first_registered_at DESC` として混在させる。任意の `type=definition|wordRegistered` が指定された場合は対応する activity だけを返す
+- 言葉登録 activity は最初の明示登録時だけ表示し、再登録では再掲しない。内部作成だけの言葉は言葉登録 activity に出さない
 - フォロー中はフォロー対象者の public 定義だけを返す
-- タイムラインと検索は認証利用者がミュートしたユーザーを除外する
-- 言葉検索は表記・よみの部分一致、ユーザー検索は表示名・publicId の部分一致を適用する
+- タイムラインと検索は認証利用者がミュートしたユーザーを除外する。言葉登録のミュート判定は最初の明示登録者を基準にする
+- 言葉検索は公開判定を満たす言葉だけを対象に、表記・よみの部分一致を適用する。ユーザー検索は表示名・publicId の部分一致を適用する
 - リアクション数順はページ移動中の件数変動による重複・欠落を許容する
 
 <!-- @code backend/src/maintenance/physical-deletion.ts#runPhysicalDeletion -->
 ## 物理削除
 
-Scheduled Handler は30日以前に論理削除された定義とユーザーを物理削除する。ユーザー削除では R2 アバターを削除してから D1 ユーザーを削除し、FK CASCADE で関連行と定義を削除する。`words.created_by` は SET NULL とし、言葉自体は残す。
+Scheduled Handler は30日以前に論理削除された定義とユーザーを物理削除する。ユーザー削除では R2 アバターを削除してから D1 ユーザーを削除し、FK CASCADE で関連行と定義を削除する。`words.created_by` と `words.first_registered_by`、`word_registrations.user_id` は SET NULL とし、言葉自体と匿名化された明示登録関係は残す。
 
 期限は Scheduled Event の `scheduledTime - 30日` とし、`deleted_at` が期限と同値の行も対象に含める。定義は一括削除し、ユーザーは R2 削除後に1件ずつ D1 から削除する。R2 またはユーザー D1 削除に失敗した場合は当該ユーザーを D1 に保持して他のユーザーを継続する。定義の一括削除に失敗した場合もユーザー削除は継続する。残った対象は次回実行で再試行するため、処理は冪等である。
 

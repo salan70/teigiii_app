@@ -1,5 +1,6 @@
 import { ApiError } from "../errors";
 import { decodeOpaqueCursor, encodeOpaqueCursor } from "../lib/cursor";
+import { accessibleWordSql, publiclyVisibleWordSql } from "../words/word-visibility";
 
 const editWindowMilliseconds = 60 * 60 * 1000;
 
@@ -187,8 +188,14 @@ async function requireUser(db: D1Database, id: string): Promise<void> {
   if (row === null) throw new ApiError(404, "user_not_found", "User not found");
 }
 
-async function requireWord(db: D1Database, id: string): Promise<void> {
-  const row = await db.prepare("select id from words where id = ?").bind(id).first();
+async function requireAccessibleWord(db: D1Database, viewerUid: string, id: string): Promise<void> {
+  const row = await db
+    .prepare(
+      `select w.id from words w
+       where w.id = ? and ${accessibleWordSql("?")}`,
+    )
+    .bind(id, viewerUid, viewerUid, viewerUid)
+    .first();
   if (row === null) throw new ApiError(404, "word_not_found", "Word not found");
 }
 
@@ -382,11 +389,13 @@ export class BrowseService {
       `select
          count(distinct d.word_id) as defined_word_count,
          sum(case when d.status = 'draft' then 1 else 0 end) as draft_count,
-         (select count(*) from saved_words s where s.user_id = ?) as saved_word_count
+         (select count(*) from saved_words s
+          join words w on w.id = s.word_id
+          where s.user_id = ? and ${publiclyVisibleWordSql("?")}) as saved_word_count
        from definitions d
        where d.author_id = ? and d.deleted_at is null`,
     )
-      .bind(uid, uid)
+      .bind(uid, uid, uid, uid)
       .first<{ defined_word_count: number; draft_count: number; saved_word_count: number }>();
     const rows = (
       await this.env.DB.prepare(
@@ -509,7 +518,7 @@ export class BrowseService {
       cursorValue === undefined ? null : decodeDescendingCursor(cursorValue, "saved_words");
     const cursorClause =
       cursor === null ? "" : "and (s.created_at < ? or (s.created_at = ? and w.id < ?))";
-    const parameters: unknown[] = [uid];
+    const parameters: unknown[] = [uid, uid, uid, uid];
     if (cursor !== null) parameters.push(cursor.sortAt, cursor.sortAt, cursor.id);
     type Row = {
       id: string;
@@ -527,10 +536,12 @@ export class BrowseService {
            (select count(*) from definitions d
             where d.word_id = w.id and d.status = 'public' and d.deleted_at is null) as public_count
          from saved_words s join words w on w.id = s.word_id
-         where s.user_id = ? ${cursorClause}
+         where s.user_id = ?
+           and ${publiclyVisibleWordSql("?")}
+           ${cursorClause}
          order by s.created_at desc, w.id desc limit ?`,
       )
-        .bind(uid, ...parameters, limit + 1)
+        .bind(...parameters, limit + 1)
         .all<Row>()
     ).results;
     return page(
@@ -595,7 +606,7 @@ export class BrowseService {
       sort: "newest" | "reactions";
     },
   ) {
-    await requireWord(this.env.DB, wordId);
+    await requireAccessibleWord(this.env.DB, uid, wordId);
     const visibility =
       input.scope === "mine"
         ? "d.author_id = ?"
@@ -748,10 +759,14 @@ export class BrowseService {
              and not exists(select 1 from user_mutes m
               where m.muter_id = ? and m.muted_user_id = d.author_id)
            union all
-           select 'wordRegistered', source.id, source.created_at
+           select 'wordRegistered', source.id, source.first_registered_at
            from words source
-           where source.created_by is null or not exists(select 1 from user_mutes m
-             where m.muter_id = ? and m.muted_user_id = source.created_by)
+           where source.first_registered_at is not null
+             and (
+               source.first_registered_by is null
+               or not exists(select 1 from user_mutes m
+                 where m.muter_id = ? and m.muted_user_id = source.first_registered_by)
+             )
          )
          select a.type, a.item_id, a.occurred_at,
            d.id, d.word_id, w.word, w.reading,
@@ -846,7 +861,7 @@ export class BrowseService {
     const cursorClause =
       cursor === null ? "" : "and (w.reading > ? or (w.reading = ? and w.id > ?))";
     const pattern = `%${escapeLikePattern(query)}%`;
-    const parameters: unknown[] = [uid, pattern, pattern, uid];
+    const parameters: unknown[] = [uid, pattern, pattern, uid, uid];
     if (cursor !== null) parameters.push(cursor.reading, cursor.reading, cursor.id);
     const rows = (
       await this.env.DB.prepare(
@@ -859,8 +874,7 @@ export class BrowseService {
              as public_definition_count
          from words w
          where (w.word like ? escape '\\' or w.reading like ? escape '\\')
-           and (w.created_by is null or not exists(select 1 from user_mutes m
-             where m.muter_id = ? and m.muted_user_id = w.created_by))
+           and ${publiclyVisibleWordSql("?")}
            ${cursorClause}
          order by w.reading asc, w.id asc limit ?`,
       )

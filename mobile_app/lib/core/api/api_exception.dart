@@ -35,7 +35,7 @@ class ApiException implements Exception {
   final String? code;
   final String? message;
 
-  /// エラーレスポンスの生ボディ。409 の `WordConflictResponse` など、
+  /// エラーレスポンスの生ボディ。PATCH 時の 409 `WordConflictResponse` など、
   /// `error` 以外のフィールドを持つレスポンスの復元に使う。
   final Map<String, dynamic>? body;
 

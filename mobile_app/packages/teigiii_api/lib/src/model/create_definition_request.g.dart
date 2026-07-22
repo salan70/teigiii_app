@@ -7,7 +7,11 @@ part of 'create_definition_request.dart';
 // **************************************************************************
 
 abstract class _$CreateDefinitionRequestCWProxy {
-  CreateDefinitionRequest wordId(String wordId);
+  CreateDefinitionRequest wordId(String? wordId);
+
+  CreateDefinitionRequest word(String? word);
+
+  CreateDefinitionRequest reading(String? reading);
 
   CreateDefinitionRequest body(String body);
 
@@ -20,7 +24,9 @@ abstract class _$CreateDefinitionRequestCWProxy {
   /// CreateDefinitionRequest(...).copyWith(id: 12, name: "My name")
   /// ````
   CreateDefinitionRequest call({
-    String wordId,
+    String? wordId,
+    String? word,
+    String? reading,
     String body,
     DefinitionStatus status,
   });
@@ -34,7 +40,13 @@ class _$CreateDefinitionRequestCWProxyImpl
   final CreateDefinitionRequest _value;
 
   @override
-  CreateDefinitionRequest wordId(String wordId) => this(wordId: wordId);
+  CreateDefinitionRequest wordId(String? wordId) => this(wordId: wordId);
+
+  @override
+  CreateDefinitionRequest word(String? word) => this(word: word);
+
+  @override
+  CreateDefinitionRequest reading(String? reading) => this(reading: reading);
 
   @override
   CreateDefinitionRequest body(String body) => this(body: body);
@@ -52,6 +64,8 @@ class _$CreateDefinitionRequestCWProxyImpl
   /// ````
   CreateDefinitionRequest call({
     Object? wordId = const $CopyWithPlaceholder(),
+    Object? word = const $CopyWithPlaceholder(),
+    Object? reading = const $CopyWithPlaceholder(),
     Object? body = const $CopyWithPlaceholder(),
     Object? status = const $CopyWithPlaceholder(),
   }) {
@@ -59,7 +73,15 @@ class _$CreateDefinitionRequestCWProxyImpl
       wordId: wordId == const $CopyWithPlaceholder()
           ? _value.wordId
           // ignore: cast_nullable_to_non_nullable
-          : wordId as String,
+          : wordId as String?,
+      word: word == const $CopyWithPlaceholder()
+          ? _value.word
+          // ignore: cast_nullable_to_non_nullable
+          : word as String?,
+      reading: reading == const $CopyWithPlaceholder()
+          ? _value.reading
+          // ignore: cast_nullable_to_non_nullable
+          : reading as String?,
       body: body == const $CopyWithPlaceholder()
           ? _value.body
           // ignore: cast_nullable_to_non_nullable
@@ -86,9 +108,11 @@ extension $CreateDefinitionRequestCopyWith on CreateDefinitionRequest {
 CreateDefinitionRequest _$CreateDefinitionRequestFromJson(
   Map<String, dynamic> json,
 ) => $checkedCreate('CreateDefinitionRequest', json, ($checkedConvert) {
-  $checkKeys(json, requiredKeys: const ['wordId', 'body', 'status']);
+  $checkKeys(json, requiredKeys: const ['body', 'status']);
   final val = CreateDefinitionRequest(
-    wordId: $checkedConvert('wordId', (v) => v as String),
+    wordId: $checkedConvert('wordId', (v) => v as String?),
+    word: $checkedConvert('word', (v) => v as String?),
+    reading: $checkedConvert('reading', (v) => v as String?),
     body: $checkedConvert('body', (v) => v as String),
     status: $checkedConvert(
       'status',
@@ -101,7 +125,9 @@ CreateDefinitionRequest _$CreateDefinitionRequestFromJson(
 Map<String, dynamic> _$CreateDefinitionRequestToJson(
   CreateDefinitionRequest instance,
 ) => <String, dynamic>{
-  'wordId': instance.wordId,
+  'wordId': ?instance.wordId,
+  'word': ?instance.word,
+  'reading': ?instance.reading,
   'body': instance.body,
   'status': _$DefinitionStatusEnumMap[instance.status]!,
 };

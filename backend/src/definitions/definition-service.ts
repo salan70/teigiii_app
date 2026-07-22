@@ -1,6 +1,9 @@
 import { ApiError } from "../errors";
 import { decodeOpaqueCursor, encodeOpaqueCursor } from "../lib/cursor";
+import { normalizeText } from "../lib/normalize";
 import { uuidv7 } from "../lib/uuidv7";
+import { readingSubGroup } from "../words/reading-sub-group";
+import { WordService } from "../words/word-service";
 
 const editWindowMilliseconds = 60 * 60 * 1000;
 // 楽観ロックの再試行上限。自分の定義への並行更新だけが対象のため衝突は稀
@@ -54,8 +57,10 @@ type LikedUsersCursor = {
 
 export type CreateDefinitionInput = {
   body: string;
+  reading?: string | undefined;
   status: DefinitionStatus;
-  wordId: string;
+  word?: string | undefined;
+  wordId?: string | undefined;
 };
 
 export type UpdateDefinitionInput = {
@@ -180,25 +185,56 @@ export class DefinitionService {
 
   async create(uid: string, input: CreateDefinitionInput) {
     await this.#requireActiveUser(uid);
-    await this.#requireWordExists(input.wordId);
 
     const id = uuidv7();
     const now = Date.now();
-    await this.env.DB.prepare(
-      `insert into definitions (id, word_id, author_id, body, status, finalized_at, is_edited, created_at, updated_at)
-       values (?, ?, ?, ?, ?, ?, 0, ?, ?)`,
-    )
-      .bind(
-        id,
-        input.wordId,
-        uid,
-        input.body,
-        input.status,
-        input.status === "draft" ? null : now,
-        now,
-        now,
-      )
-      .run();
+    const finalizedAt = input.status === "draft" ? null : now;
+    const insertDefinition = (wordId: string) =>
+      this.env.DB.prepare(
+        `insert into definitions (id, word_id, author_id, body, status, finalized_at, is_edited, created_at, updated_at)
+         values (?, ?, ?, ?, ?, ?, 0, ?, ?)`,
+      ).bind(id, wordId, uid, input.body, input.status, finalizedAt, now, now);
+
+    if (input.wordId !== undefined && input.wordId !== "") {
+      await this.#requireWordExists(input.wordId);
+      await insertDefinition(input.wordId).run();
+      return this.#getDetail(uid, id);
+    }
+
+    if (input.word === undefined || input.reading === undefined) {
+      throw new ApiError(400, "invalid_request", "either wordId or word+reading is required");
+    }
+
+    const word = normalizeText(input.word);
+    const reading = normalizeText(input.reading);
+    if (word === "") throw new ApiError(400, "invalid_request", "word must not be empty");
+    if (reading === "") throw new ApiError(400, "invalid_request", "reading must not be empty");
+
+    const wordService = new WordService(this.env);
+    const existingWordId = await wordService.findIdByNormalizedWord(word);
+    if (existingWordId !== null) {
+      await insertDefinition(existingWordId).run();
+      return this.#getDetail(uid, id);
+    }
+
+    // 新しい言葉の内部作成と定義作成を同一 batch で実行し、片方だけ残る状態を作らない。
+    // 明示登録（first_registered_* / word_registrations）は記録しない。
+    const wordId = uuidv7();
+    try {
+      await this.env.DB.batch([
+        this.env.DB.prepare(
+          `insert into words (
+             id, word, reading, reading_sub_group, created_by,
+             first_registered_at, first_registered_by, created_at, updated_at
+           ) values (?, ?, ?, ?, ?, null, null, ?, ?)`,
+        ).bind(wordId, word, reading, readingSubGroup(reading), uid, now, now),
+        insertDefinition(wordId),
+      ]);
+    } catch (error) {
+      const racedWordId = await wordService.findIdByNormalizedWord(word);
+      if (racedWordId === null) throw error;
+      await insertDefinition(racedWordId).run();
+    }
     return this.#getDetail(uid, id);
   }
 

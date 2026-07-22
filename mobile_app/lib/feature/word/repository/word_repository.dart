@@ -4,7 +4,6 @@ import 'package:teigiii_api/teigiii_api.dart';
 
 import '../../../core/api/api_exception.dart';
 import '../../../core/api/api_providers.dart';
-import '../../../util/constant/initial_main_group.dart';
 import '../domain/word.dart';
 
 part 'word_repository.g.dart';
@@ -52,9 +51,9 @@ class WordRepository {
     }
   }
 
-  /// 新しい言葉を登録する。
+  /// 言葉を明示登録する。
   ///
-  /// 409 (既存言葉との重複) の場合、既存の [Word] を返す。
+  /// 新規作成は 201、既存言葉への登録・公開昇格は 200。いずれも [Word] を返す。
   Future<Word> create({
     required String word,
     required String reading,
@@ -65,20 +64,6 @@ class WordRepository {
       );
       return _wordFromResponse(response.data!);
     } on DioException catch (exception) {
-      if (exception.response?.statusCode == 409) {
-        final data = exception.response!.data;
-        if (data is Map<String, dynamic>) {
-          final conflict = WordConflictResponse.fromJson(data);
-          return Word(
-            id: conflict.existingWord.id,
-            word: conflict.existingWord.word,
-            reading: conflict.existingWord.reading,
-            initialSubGroupLabel:
-                InitialSubGroup.fromString(conflict.existingWord.reading).label,
-            postedDefinitionCount: 0,
-          );
-        }
-      }
       throw ApiException.fromDioException(exception);
     }
   }

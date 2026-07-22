@@ -15,7 +15,7 @@ Method | HTTP request | Description
 [**v1WordsIdPatch**](WordsApi.md#v1wordsidpatch) | **PATCH** /v1/words/{id} | 作成者修正（表記・よみ）
 [**v1WordsIdSaveDelete**](WordsApi.md#v1wordsidsavedelete) | **DELETE** /v1/words/{id}/save | 言葉の保存を解除
 [**v1WordsIdSavePut**](WordsApi.md#v1wordsidsaveput) | **PUT** /v1/words/{id}/save | 言葉を保存
-[**v1WordsPost**](WordsApi.md#v1wordspost) | **POST** /v1/words | 言葉を登録
+[**v1WordsPost**](WordsApi.md#v1wordspost) | **POST** /v1/words | 言葉を明示登録する
 
 
 # **v1WordsGet**
@@ -32,11 +32,11 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getWordsApi();
-final String cursor = cursor_example; // String | 
-final int limit = 56; // int | 
-final String subGroup = subGroup_example; // String | 
-final String filter = filter_example; // String | 
-final String q = q_example; // String | 
+final String cursor = cursor_example; // String |
+final int limit = 56; // int |
+final String subGroup = subGroup_example; // String |
+final String filter = filter_example; // String |
+final String q = q_example; // String |
 
 try {
     final response = api.v1WordsGet(cursor, limit, subGroup, filter, q);
@@ -50,11 +50,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cursor** | **String**|  | [optional] 
+ **cursor** | **String**|  | [optional]
  **limit** | **int**|  | [optional] [default to 20]
- **subGroup** | **String**|  | [optional] 
+ **subGroup** | **String**|  | [optional]
  **filter** | **String**|  | [optional] [default to 'all']
- **q** | **String**|  | [optional] 
+ **q** | **String**|  | [optional]
 
 ### Return type
 
@@ -87,11 +87,11 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getWordsApi();
-final String id = id_example; // String | 
-final String cursor = cursor_example; // String | 
-final int limit = 56; // int | 
-final String scope = scope_example; // String | 
-final String sort = sort_example; // String | 
+final String id = id_example; // String |
+final String cursor = cursor_example; // String |
+final int limit = 56; // int |
+final String scope = scope_example; // String |
+final String sort = sort_example; // String |
 
 try {
     final response = api.v1WordsIdDefinitionsGet(id, cursor, limit, scope, sort);
@@ -105,8 +105,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
- **cursor** | **String**|  | [optional] 
+ **id** | **String**|  |
+ **cursor** | **String**|  | [optional]
  **limit** | **int**|  | [optional] [default to 20]
  **scope** | **String**|  | [optional] [default to 'all']
  **sort** | **String**|  | [optional] [default to 'newest']
@@ -140,7 +140,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getWordsApi();
-final String id = id_example; // String | 
+final String id = id_example; // String |
 
 try {
     final response = api.v1WordsIdGet(id);
@@ -154,7 +154,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
+ **id** | **String**|  |
 
 ### Return type
 
@@ -187,7 +187,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getWordsApi();
-final String id = id_example; // String | 
+final String id = id_example; // String |
 final UpdateWordRequest updateWordRequest = ; // UpdateWordRequest | 修正内容
 
 try {
@@ -202,8 +202,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
- **updateWordRequest** | [**UpdateWordRequest**](UpdateWordRequest.md)| 修正内容 | [optional] 
+ **id** | **String**|  |
+ **updateWordRequest** | [**UpdateWordRequest**](UpdateWordRequest.md)| 修正内容 | [optional]
 
 ### Return type
 
@@ -234,7 +234,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getWordsApi();
-final String id = id_example; // String | 
+final String id = id_example; // String |
 
 try {
     api.v1WordsIdSaveDelete(id);
@@ -247,7 +247,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
+ **id** | **String**|  |
 
 ### Return type
 
@@ -278,7 +278,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getWordsApi();
-final String id = id_example; // String | 
+final String id = id_example; // String |
 
 try {
     api.v1WordsIdSavePut(id);
@@ -291,7 +291,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  | 
+ **id** | **String**|  |
 
 ### Return type
 
@@ -311,9 +311,9 @@ void (empty response body)
 # **v1WordsPost**
 > WordResponse v1WordsPost(createWordRequest)
 
-言葉を登録
+言葉を明示登録する
 
-表記はサーバーで前後トリム + NFC 正規化してから完全一致で重複判定する。
+表記はサーバーで前後トリム + NFC 正規化してから完全一致で解決する。新規作成は 201、既存言葉への明示登録・公開昇格は 200。読みが異なっても既存の読みを採用し、重複する言葉は作らない。
 
 ### Example
 ```dart
@@ -338,7 +338,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **createWordRequest** | [**CreateWordRequest**](CreateWordRequest.md)| 登録内容 | [optional] 
+ **createWordRequest** | [**CreateWordRequest**](CreateWordRequest.md)| 登録内容 | [optional]
 
 ### Return type
 

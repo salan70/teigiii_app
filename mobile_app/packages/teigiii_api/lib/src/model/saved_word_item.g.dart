@@ -19,11 +19,7 @@ abstract class _$SavedWordItemCWProxy {
   /// ```dart
   /// SavedWordItem(...).copyWith(id: 12, name: "My name")
   /// ````
-  SavedWordItem call({
-    WordSummary word,
-    bool isDefinedByMe,
-    int publicCount,
-  });
+  SavedWordItem call({WordSummary word, bool isDefinedByMe, int publicCount});
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfSavedWordItem.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfSavedWordItem.copyWith.fieldName(...)`

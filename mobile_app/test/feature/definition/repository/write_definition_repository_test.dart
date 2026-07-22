@@ -9,17 +9,12 @@ import 'package:teigiii_api/teigiii_api.dart';
 
 import 'write_definition_repository_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<WordsApi>(), MockSpec<DefinitionsApi>()])
+@GenerateNiceMocks([MockSpec<DefinitionsApi>()])
 void main() {
-  final mockWordsApi = MockWordsApi();
   final mockDefinitionsApi = MockDefinitionsApi();
-  final repository = WriteDefinitionRepository(
-    mockWordsApi,
-    mockDefinitionsApi,
-  );
+  final repository = WriteDefinitionRepository(mockDefinitionsApi);
 
   tearDown(() {
-    reset(mockWordsApi);
     reset(mockDefinitionsApi);
   });
 
@@ -31,18 +26,6 @@ void main() {
     isPublic: true,
     definition: '作ってから一晩経ったカレー。',
   );
-
-  WordResponse buildWordResponse(String wordId) {
-    return WordResponse(
-      id: wordId,
-      word: '二日目のカレー',
-      reading: 'ふつかめのかれー',
-      readingSubGroup: 'は行',
-      publicDefinitionCount: 0,
-      isSavedByMe: false,
-      isEditableByMe: true,
-    );
-  }
 
   DefinitionResponse buildDefinitionResponse(String definitionId) {
     return DefinitionResponse(
@@ -67,18 +50,7 @@ void main() {
   }
 
   group('createDefinition', () {
-    test('言葉を新規登録し、その id で定義を作成して定義 id を返す', () async {
-      // * Arrange
-      when(
-        mockWordsApi.v1WordsPost(
-          createWordRequest: anyNamed('createWordRequest'),
-        ),
-      ).thenAnswer(
-        (_) async => Response(
-          data: buildWordResponse('word1'),
-          requestOptions: RequestOptions(path: '/v1/words'),
-        ),
-      );
+    test('word + reading で定義を作成し、定義 id を返す', () async {
       when(
         mockDefinitionsApi.v1DefinitionsPost(
           createDefinitionRequest: anyNamed('createDefinitionRequest'),
@@ -90,22 +62,11 @@ void main() {
         ),
       );
 
-      // * Act
       final definitionId = await repository.createDefinition(
         definitionForWrite,
       );
 
-      // * Assert
       expect(definitionId, 'definition1');
-      final capturedWordRequest =
-          verify(
-                mockWordsApi.v1WordsPost(
-                  createWordRequest: captureAnyNamed('createWordRequest'),
-                ),
-              ).captured.single
-              as CreateWordRequest;
-      expect(capturedWordRequest.word, '二日目のカレー');
-      expect(capturedWordRequest.reading, 'ふつかめのかれー');
       final capturedDefinitionRequest =
           verify(
                 mockDefinitionsApi.v1DefinitionsPost(
@@ -115,80 +76,14 @@ void main() {
                 ),
               ).captured.single
               as CreateDefinitionRequest;
-      expect(capturedDefinitionRequest.wordId, 'word1');
+      expect(capturedDefinitionRequest.wordId, isNull);
+      expect(capturedDefinitionRequest.word, '二日目のカレー');
+      expect(capturedDefinitionRequest.reading, 'ふつかめのかれー');
       expect(capturedDefinitionRequest.body, '作ってから一晩経ったカレー。');
       expect(capturedDefinitionRequest.status, DefinitionStatus.public);
     });
 
-    test('言葉が既存（409）の場合 existingWord.id で定義を作成する', () async {
-      // * Arrange
-      final requestOptions = RequestOptions(path: '/v1/words');
-      when(
-        mockWordsApi.v1WordsPost(
-          createWordRequest: anyNamed('createWordRequest'),
-        ),
-      ).thenThrow(
-        DioException(
-          requestOptions: requestOptions,
-          response: Response(
-            statusCode: 409,
-            data: {
-              'error': {
-                'code': 'word_already_exists',
-                'message': 'Word already exists',
-              },
-              'existingWord': {
-                'id': 'existingWord1',
-                'word': '二日目のカレー',
-                'reading': 'ふつかめのかれー',
-              },
-            },
-            requestOptions: requestOptions,
-          ),
-        ),
-      );
-      when(
-        mockDefinitionsApi.v1DefinitionsPost(
-          createDefinitionRequest: anyNamed('createDefinitionRequest'),
-        ),
-      ).thenAnswer(
-        (_) async => Response(
-          data: buildDefinitionResponse('definition1'),
-          requestOptions: RequestOptions(path: '/v1/definitions'),
-        ),
-      );
-
-      // * Act
-      final definitionId = await repository.createDefinition(
-        definitionForWrite,
-      );
-
-      // * Assert
-      expect(definitionId, 'definition1');
-      final capturedDefinitionRequest =
-          verify(
-                mockDefinitionsApi.v1DefinitionsPost(
-                  createDefinitionRequest: captureAnyNamed(
-                    'createDefinitionRequest',
-                  ),
-                ),
-              ).captured.single
-              as CreateDefinitionRequest;
-      expect(capturedDefinitionRequest.wordId, 'existingWord1');
-    });
-
     test('isPublic が false の場合 status が private になる', () async {
-      // * Arrange
-      when(
-        mockWordsApi.v1WordsPost(
-          createWordRequest: anyNamed('createWordRequest'),
-        ),
-      ).thenAnswer(
-        (_) async => Response(
-          data: buildWordResponse('word1'),
-          requestOptions: RequestOptions(path: '/v1/words'),
-        ),
-      );
       when(
         mockDefinitionsApi.v1DefinitionsPost(
           createDefinitionRequest: anyNamed('createDefinitionRequest'),
@@ -200,12 +95,10 @@ void main() {
         ),
       );
 
-      // * Act
       await repository.createDefinition(
         definitionForWrite.copyWith(isPublic: false),
       );
 
-      // * Assert
       final captured =
           verify(
                 mockDefinitionsApi.v1DefinitionsPost(
@@ -218,12 +111,11 @@ void main() {
       expect(captured.status, DefinitionStatus.private);
     });
 
-    test('言葉登録が 409 以外で失敗した場合 ApiException を投げる', () async {
-      // * Arrange
-      final requestOptions = RequestOptions(path: '/v1/words');
+    test('定義作成が失敗した場合 ApiException を投げる', () async {
+      final requestOptions = RequestOptions(path: '/v1/definitions');
       when(
-        mockWordsApi.v1WordsPost(
-          createWordRequest: anyNamed('createWordRequest'),
+        mockDefinitionsApi.v1DefinitionsPost(
+          createDefinitionRequest: anyNamed('createDefinitionRequest'),
         ),
       ).thenThrow(
         DioException(
@@ -238,22 +130,15 @@ void main() {
         ),
       );
 
-      // * Act & Assert
       expect(
         () => repository.createDefinition(definitionForWrite),
         throwsA(isA<ApiException>()),
-      );
-      verifyNever(
-        mockDefinitionsApi.v1DefinitionsPost(
-          createDefinitionRequest: anyNamed('createDefinitionRequest'),
-        ),
       );
     });
   });
 
   group('updateDefinition', () {
     test('本文と公開設定を PATCH する（言葉は変更しない）', () async {
-      // * Arrange
       when(
         mockDefinitionsApi.v1DefinitionsIdPatch(
           id: anyNamed('id'),
@@ -266,10 +151,8 @@ void main() {
         ),
       );
 
-      // * Act
       await repository.updateDefinition(definitionForWrite);
 
-      // * Assert
       final captured = verify(
         mockDefinitionsApi.v1DefinitionsIdPatch(
           id: captureAnyNamed('id'),
@@ -286,7 +169,6 @@ void main() {
 
   group('updatePostType', () {
     test('status のみを PATCH する', () async {
-      // * Arrange
       when(
         mockDefinitionsApi.v1DefinitionsIdPatch(
           id: anyNamed('id'),
@@ -299,13 +181,11 @@ void main() {
         ),
       );
 
-      // * Act
       await repository.updatePostType(
         definitionId: 'definition1',
         isPublic: false,
       );
 
-      // * Assert
       final captured = verify(
         mockDefinitionsApi.v1DefinitionsIdPatch(
           id: captureAnyNamed('id'),
@@ -322,7 +202,6 @@ void main() {
 
   group('deleteDefinition', () {
     test('DELETE /v1/definitions/{id} を呼ぶ', () async {
-      // * Arrange
       when(
         mockDefinitionsApi.v1DefinitionsIdDelete(id: anyNamed('id')),
       ).thenAnswer(
@@ -331,15 +210,12 @@ void main() {
         ),
       );
 
-      // * Act
       await repository.deleteDefinition('definition1');
 
-      // * Assert
       verify(mockDefinitionsApi.v1DefinitionsIdDelete(id: 'definition1'));
     });
 
     test('エラーの場合 ApiException を投げる', () async {
-      // * Arrange
       final requestOptions = RequestOptions(
         path: '/v1/definitions/definition1',
       );
@@ -358,7 +234,6 @@ void main() {
         ),
       );
 
-      // * Act & Assert
       expect(
         () => repository.deleteDefinition('definition1'),
         throwsA(isA<ApiException>()),

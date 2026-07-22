@@ -436,24 +436,6 @@
           }
         ]
       },
-      "WordConflictResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/ErrorResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "existingWord": {
-                "$ref": "#/components/schemas/WordSummary"
-              }
-            },
-            "required": [
-              "existingWord"
-            ]
-          }
-        ]
-      },
       "CreateWordRequest": {
         "type": "object",
         "properties": {
@@ -496,6 +478,24 @@
           }
         ]
       },
+      "WordConflictResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ErrorResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "existingWord": {
+                "$ref": "#/components/schemas/WordSummary"
+              }
+            },
+            "required": [
+              "existingWord"
+            ]
+          }
+        ]
+      },
       "UpdateWordRequest": {
         "type": "object",
         "properties": {
@@ -518,6 +518,17 @@
           "wordId": {
             "type": "string"
           },
+          "word": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 30
+          },
+          "reading": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "pattern": "^[ \\u3041-\\u3093\\u3094\\u30A1-\\u30F3\\u30F4\\u30F7\\u30F8\\u30F9\\u30FAa-zA-Z0-9!#$%&()*+,\\-./:;<=>?@[\\\\\\]^_`{|}~\\uFF08\\uFF09\\u300C\\u300D\\u300E\\u300F\\u30FC]+$"
+          },
           "body": {
             "type": "string",
             "minLength": 1,
@@ -528,7 +539,6 @@
           }
         },
         "required": [
-          "wordId",
           "body",
           "status"
         ]
@@ -2169,8 +2179,8 @@
         "tags": [
           "words"
         ],
-        "summary": "言葉を登録",
-        "description": "表記はサーバーで前後トリム + NFC 正規化してから完全一致で重複判定する。",
+        "summary": "言葉を明示登録する",
+        "description": "表記はサーバーで前後トリム + NFC 正規化してから完全一致で解決する。新規作成は 201、既存言葉への明示登録・公開昇格は 200。読みが異なっても既存の読みを採用し、重複する言葉は作らない。",
         "security": [
           {
             "appCheck": [],
@@ -2188,8 +2198,18 @@
           }
         },
         "responses": {
+          "200": {
+            "description": "既存言葉への明示登録（公開昇格・再登録を含む）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WordResponse"
+                }
+              }
+            }
+          },
           "201": {
-            "description": "登録された言葉",
+            "description": "新規に作成・明示登録された言葉",
             "content": {
               "application/json": {
                 "schema": {
@@ -2214,16 +2234,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "同一表記が登録済み（word_already_exists）。既存の言葉を返す",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WordConflictResponse"
                 }
               }
             }
@@ -2684,6 +2694,7 @@
           "definitions"
         ],
         "summary": "定義を作成（draft / public / private のいずれでも）",
+        "description": "wordId 指定、または word + reading 指定のいずれか一方を受け付ける。後者ではサーバーが言葉を解決／必要時に内部作成してから定義を作成する。内部作成は明示登録にしない。",
         "security": [
           {
             "appCheck": [],
@@ -2707,6 +2718,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DefinitionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "wordId と word/reading の同時指定・不足（invalid_request）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }

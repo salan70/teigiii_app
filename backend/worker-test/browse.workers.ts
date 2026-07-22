@@ -58,10 +58,16 @@ async function insertWord(
 ) {
   await env.DB.prepare(
     `insert into words
-       (id, word, reading, reading_sub_group, created_by, created_at, updated_at)
-     values (?, ?, ?, 'あ', ?, ?, ?)`,
+       (id, word, reading, reading_sub_group, created_by,
+        first_registered_at, first_registered_by, created_at, updated_at)
+     values (?, ?, ?, 'あ', ?, ?, ?, ?, ?)`,
   )
-    .bind(id, word, reading, createdBy, createdAt, createdAt)
+    .bind(id, word, reading, createdBy, createdAt, createdBy, createdAt, createdAt)
+    .run();
+  await env.DB.prepare(
+    `insert into word_registrations (id, word_id, user_id, created_at) values (?, ?, ?, ?)`,
+  )
+    .bind(`reg-${id}`, id, createdBy, createdAt)
     .run();
 }
 
@@ -373,7 +379,7 @@ describe("timelines and search", () => {
     expect(body.items.map((item) => item.id)).toEqual(["bob-public"]);
   });
 
-  test("言葉・ユーザーを部分一致検索し、ミュート対象とその登録語を除外する", async () => {
+  test("言葉・ユーザーを部分一致検索し、ミュートした明示登録者の言葉を除外する", async () => {
     await insertUser("alice", "Alice", "111111111");
     await insertUser("bob", "Bobby", "222222222");
     await insertUser("carol", "Carol", "333333333");

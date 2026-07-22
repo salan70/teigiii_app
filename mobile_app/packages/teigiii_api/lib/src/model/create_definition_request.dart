@@ -19,15 +19,25 @@ part 'create_definition_request.g.dart';
 class CreateDefinitionRequest {
   /// Returns a new [CreateDefinitionRequest] instance.
   CreateDefinitionRequest({
-    required this.wordId,
+    this.wordId,
+
+    this.word,
+
+    this.reading,
 
     required this.body,
 
     required this.status,
   });
 
-  @JsonKey(name: r'wordId', required: true, includeIfNull: false)
-  final String wordId;
+  @JsonKey(name: r'wordId', required: false, includeIfNull: false)
+  final String? wordId;
+
+  @JsonKey(name: r'word', required: false, includeIfNull: false)
+  final String? word;
+
+  @JsonKey(name: r'reading', required: false, includeIfNull: false)
+  final String? reading;
 
   @JsonKey(name: r'body', required: true, includeIfNull: false)
   final String body;
@@ -40,11 +50,18 @@ class CreateDefinitionRequest {
       identical(this, other) ||
       other is CreateDefinitionRequest &&
           other.wordId == wordId &&
+          other.word == word &&
+          other.reading == reading &&
           other.body == body &&
           other.status == status;
 
   @override
-  int get hashCode => wordId.hashCode + body.hashCode + status.hashCode;
+  int get hashCode =>
+      wordId.hashCode +
+      word.hashCode +
+      reading.hashCode +
+      body.hashCode +
+      status.hashCode;
 
   factory CreateDefinitionRequest.fromJson(Map<String, dynamic> json) =>
       _$CreateDefinitionRequestFromJson(json);

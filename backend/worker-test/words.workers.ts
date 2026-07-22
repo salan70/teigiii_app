@@ -55,10 +55,18 @@ async function insertWordRow(options: {
   readingSubGroup: string;
   createdBy: string;
   createdAt: number;
+  firstRegisteredAt?: number | null;
+  firstRegisteredBy?: string | null;
 }) {
+  const firstRegisteredAt =
+    options.firstRegisteredAt === undefined ? options.createdAt : options.firstRegisteredAt;
+  const firstRegisteredBy =
+    options.firstRegisteredBy === undefined ? options.createdBy : options.firstRegisteredBy;
   await env.DB.prepare(
-    `insert into words (id, word, reading, reading_sub_group, created_by, created_at, updated_at)
-     values (?, ?, ?, ?, ?, ?, ?)`,
+    `insert into words (
+       id, word, reading, reading_sub_group, created_by,
+       first_registered_at, first_registered_by, created_at, updated_at
+     ) values (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
   )
     .bind(
       options.id,
@@ -66,10 +74,24 @@ async function insertWordRow(options: {
       options.reading,
       options.readingSubGroup,
       options.createdBy,
+      firstRegisteredAt,
+      firstRegisteredBy,
       options.createdAt,
       options.createdAt,
     )
     .run();
+  if (firstRegisteredBy !== null) {
+    await env.DB.prepare(
+      `insert into word_registrations (id, word_id, user_id, created_at) values (?, ?, ?, ?)`,
+    )
+      .bind(
+        `reg-${options.id}`,
+        options.id,
+        firstRegisteredBy,
+        firstRegisteredAt ?? options.createdAt,
+      )
+      .run();
+  }
 }
 
 async function insertPublicDefinitionRow(id: string, wordId: string, authorId: string) {
@@ -161,20 +183,223 @@ describe("POST /v1/words", () => {
     expect(response.status).toBe(404);
   });
 
-  test("正規化後に同一表記が存在する場合は 409 で既存の言葉を返す", async () => {
+  test("正規化後に同一表記が存在する場合は 200 で明示登録し既存の言葉を返す", async () => {
     await createUser("alice");
     const first = await createWord("alice", "りんご", "りんご");
 
     const response = await requestJson("alice", "/v1/words", "POST", {
-      reading: "りんご",
+      reading: "べつのよみ",
       word: "  りんご ",
     });
 
-    expect(response.status).toBe(409);
+    expect(response.status).toBe(200);
     await expect(response.json()).resolves.toMatchObject({
-      error: { code: "word_already_exists" },
-      existingWord: { id: first.id, reading: "りんご", word: "りんご" },
+      id: first.id,
+      reading: "りんご",
+      word: "りんご",
     });
+  });
+
+  test("隠れた既存言葉を初めて明示登録すると 200 で公開昇格する", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    await insertWordRow({
+      createdAt: Date.now() - 1000,
+      createdBy: "alice",
+      firstRegisteredAt: null,
+      firstRegisteredBy: null,
+      id: "hidden-word",
+      reading: "かくれ",
+      readingSubGroup: "か",
+      word: "隠れ語",
+    });
+    await env.DB.prepare(
+      `insert into definitions (id, word_id, author_id, body, status, finalized_at, is_edited, created_at, updated_at)
+       values ('private-def', 'hidden-word', 'alice', 'secret', 'private', ?, 0, ?, ?)`,
+    )
+      .bind(Date.now(), Date.now(), Date.now())
+      .run();
+
+    expect((await request("bob", "/v1/words/hidden-word")).status).toBe(404);
+
+    const response = await requestJson("bob", "/v1/words", "POST", {
+      reading: "べつのよみ",
+      word: "隠れ語",
+    });
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toMatchObject({
+      id: "hidden-word",
+      reading: "かくれ",
+      word: "隠れ語",
+    });
+    expect((await request("bob", "/v1/words/hidden-word")).status).toBe(200);
+    expect((await request("alice", "/v1/words/hidden-word")).status).toBe(200);
+  });
+
+  test("別ユーザーの再登録は登録関係だけ追加し最初の明示登録日時を更新しない", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    const first = await createWord("alice", "共有語", "きょうゆうご");
+    const before = await env.DB.prepare(
+      "select first_registered_at, first_registered_by from words where id = ?",
+    )
+      .bind(first.id)
+      .first<{ first_registered_at: number; first_registered_by: string }>();
+
+    const response = await requestJson("bob", "/v1/words", "POST", {
+      reading: "きょうゆうご",
+      word: "共有語",
+    });
+    expect(response.status).toBe(200);
+
+    const after = await env.DB.prepare(
+      "select first_registered_at, first_registered_by from words where id = ?",
+    )
+      .bind(first.id)
+      .first<{ first_registered_at: number; first_registered_by: string }>();
+    expect(after).toEqual(before);
+
+    const registrations = await env.DB.prepare(
+      "select user_id from word_registrations where word_id = ? order by user_id",
+    )
+      .bind(first.id)
+      .all<{ user_id: string }>();
+    expect(registrations.results.map((row) => row.user_id)).toEqual(["alice", "bob"]);
+  });
+
+  test("昇格登録した言葉は元の作成者にも公開登録者にも編集権がない", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    await insertWordRow({
+      createdAt: Date.now(),
+      createdBy: "alice",
+      firstRegisteredAt: null,
+      firstRegisteredBy: null,
+      id: "upgrade-word",
+      reading: "しょうかく",
+      readingSubGroup: "し",
+      word: "昇格語",
+    });
+
+    await requestJson("bob", "/v1/words", "POST", { reading: "しょうかく", word: "昇格語" });
+
+    await expect(
+      request("alice", "/v1/words/upgrade-word").then((r) => r.json()),
+    ).resolves.toMatchObject({
+      isEditableByMe: false,
+    });
+    await expect(
+      request("bob", "/v1/words/upgrade-word").then((r) => r.json()),
+    ).resolves.toMatchObject({
+      isEditableByMe: false,
+    });
+  });
+});
+
+describe("word visibility", () => {
+  test("非公開定義しかない言葉はみんなの辞書・検索・直接取得に出ない", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    await insertWordRow({
+      createdAt: Date.now(),
+      createdBy: "alice",
+      firstRegisteredAt: null,
+      firstRegisteredBy: null,
+      id: "private-only",
+      reading: "ひこうかい",
+      readingSubGroup: "ひ",
+      word: "非公開語",
+    });
+    await env.DB.prepare(
+      `insert into definitions (id, word_id, author_id, body, status, finalized_at, is_edited, created_at, updated_at)
+       values ('priv', 'private-only', 'alice', 'secret', 'private', ?, 0, ?, ?)`,
+    )
+      .bind(Date.now(), Date.now(), Date.now())
+      .run();
+
+    const list = await request("bob", "/v1/words");
+    const listBody = await list.json<{ items: Array<{ id: string }> }>();
+    expect(listBody.items.map((item) => item.id)).not.toContain("private-only");
+
+    const search = await request("bob", `/v1/search/words?q=${encodeURIComponent("非公開")}`);
+    const searchBody = await search.json<{ items: Array<{ id: string }> }>();
+    expect(searchBody.items.map((item) => item.id)).not.toContain("private-only");
+
+    expect((await request("bob", "/v1/words/private-only")).status).toBe(404);
+    // 本人は自分の非公開定義があるため詳細を取得できる
+    expect((await request("alice", "/v1/words/private-only")).status).toBe(200);
+  });
+
+  test("言葉単体登録された定義 0 件の言葉はみんなの辞書と検索に出る", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    const word = await createWord("alice", "単独登録", "たんどくとうろく");
+
+    const list = await request("bob", "/v1/words");
+    const listBody = await list.json<{
+      items: Array<{ id: string; publicDefinitionCount: number }>;
+    }>();
+    expect(listBody.items).toContainEqual(
+      expect.objectContaining({ id: word.id, publicDefinitionCount: 0 }),
+    );
+
+    const search = await request("bob", `/v1/search/words?q=${encodeURIComponent("単独")}`);
+    const searchBody = await search.json<{ items: Array<{ id: string }> }>();
+    expect(searchBody.items.map((item) => item.id)).toContain(word.id);
+  });
+
+  test("公開定義の非公開化で他の公開根拠がなければ言葉も非表示になる", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    await insertWordRow({
+      createdAt: Date.now(),
+      createdBy: "alice",
+      firstRegisteredAt: null,
+      firstRegisteredBy: null,
+      id: "temp-public",
+      reading: "いちじ",
+      readingSubGroup: "い",
+      word: "一時公開",
+    });
+    await insertPublicDefinitionRow("pub-def", "temp-public", "alice");
+
+    expect((await request("bob", "/v1/words/temp-public")).status).toBe(200);
+
+    await env.DB.prepare("update definitions set status = 'private' where id = 'pub-def'").run();
+
+    expect((await request("bob", "/v1/words/temp-public")).status).toBe(404);
+    const list = await request("bob", "/v1/words");
+    const listBody = await list.json<{ items: Array<{ id: string }> }>();
+    expect(listBody.items.map((item) => item.id)).not.toContain("temp-public");
+  });
+
+  test("保存した言葉が非公開になると一覧と直接取得から隠れ、saved_words は残る", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    await insertWordRow({
+      createdAt: Date.now(),
+      createdBy: "alice",
+      firstRegisteredAt: null,
+      firstRegisteredBy: null,
+      id: "saved-hidden",
+      reading: "ほぞん",
+      readingSubGroup: "ほ",
+      word: "保存隠れ",
+    });
+    await insertPublicDefinitionRow("saved-pub", "saved-hidden", "alice");
+    await request("bob", "/v1/words/saved-hidden/save", { method: "PUT" });
+
+    await env.DB.prepare("update definitions set status = 'private' where id = 'saved-pub'").run();
+
+    const saved = await request("bob", "/v1/me/saved-words");
+    const savedBody = await saved.json<{ items: Array<{ word: { id: string } }> }>();
+    expect(savedBody.items.map((item) => item.word.id)).not.toContain("saved-hidden");
+    expect((await request("bob", "/v1/words/saved-hidden")).status).toBe(404);
+
+    const row = await env.DB.prepare(
+      "select 1 as ok from saved_words where user_id = 'bob' and word_id = 'saved-hidden'",
+    ).first();
+    expect(row).toEqual({ ok: 1 });
   });
 });
 
