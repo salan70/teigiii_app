@@ -57,8 +57,13 @@ mobile-run-dev:
     cd mobile_app && flutter run --flavor dev --dart-define-from-file=dart_defines/dev.json
 
 # 指定した端末で dev flavor を起動する（`flutter devices` で端末 ID を確認）
+# iOS 26 実機の debug は USB 推奨。無線 debug は重い。詳細は doc/ios-physical-device-debug.md
 mobile-run-dev-on device:
     cd mobile_app && flutter run -d "{{device}}" --flavor dev --dart-define-from-file=dart_defines/dev.json
+
+# 実機向け（無線可）: AOT profile。hot reload なし。端末固有確認向き
+mobile-run-dev-profile-on device:
+    cd mobile_app && flutter run -d "{{device}}" --profile --flavor dev --dart-define-from-file=dart_defines/dev.json
 
 mobile-run-prod:
     cd mobile_app && flutter run --flavor prod --dart-define-from-file=dart_defines/prod.json
