@@ -11,13 +11,19 @@ abstract class _$SavedWordItemCWProxy {
 
   SavedWordItem isDefinedByMe(bool isDefinedByMe);
 
+  SavedWordItem publicCount(int publicCount);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SavedWordItem(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
   /// ```dart
   /// SavedWordItem(...).copyWith(id: 12, name: "My name")
   /// ````
-  SavedWordItem call({WordSummary word, bool isDefinedByMe});
+  SavedWordItem call({
+    WordSummary word,
+    bool isDefinedByMe,
+    int publicCount,
+  });
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfSavedWordItem.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfSavedWordItem.copyWith.fieldName(...)`
@@ -34,6 +40,9 @@ class _$SavedWordItemCWProxyImpl implements _$SavedWordItemCWProxy {
       this(isDefinedByMe: isDefinedByMe);
 
   @override
+  SavedWordItem publicCount(int publicCount) => this(publicCount: publicCount);
+
+  @override
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SavedWordItem(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -43,6 +52,7 @@ class _$SavedWordItemCWProxyImpl implements _$SavedWordItemCWProxy {
   SavedWordItem call({
     Object? word = const $CopyWithPlaceholder(),
     Object? isDefinedByMe = const $CopyWithPlaceholder(),
+    Object? publicCount = const $CopyWithPlaceholder(),
   }) {
     return SavedWordItem(
       word: word == const $CopyWithPlaceholder()
@@ -53,6 +63,10 @@ class _$SavedWordItemCWProxyImpl implements _$SavedWordItemCWProxy {
           ? _value.isDefinedByMe
           // ignore: cast_nullable_to_non_nullable
           : isDefinedByMe as bool,
+      publicCount: publicCount == const $CopyWithPlaceholder()
+          ? _value.publicCount
+          // ignore: cast_nullable_to_non_nullable
+          : publicCount as int,
     );
   }
 }
@@ -69,13 +83,17 @@ extension $SavedWordItemCopyWith on SavedWordItem {
 
 SavedWordItem _$SavedWordItemFromJson(Map<String, dynamic> json) =>
     $checkedCreate('SavedWordItem', json, ($checkedConvert) {
-      $checkKeys(json, requiredKeys: const ['word', 'isDefinedByMe']);
+      $checkKeys(
+        json,
+        requiredKeys: const ['word', 'isDefinedByMe', 'publicCount'],
+      );
       final val = SavedWordItem(
         word: $checkedConvert(
           'word',
           (v) => WordSummary.fromJson(v as Map<String, dynamic>),
         ),
         isDefinedByMe: $checkedConvert('isDefinedByMe', (v) => v as bool),
+        publicCount: $checkedConvert('publicCount', (v) => (v as num).toInt()),
       );
       return val;
     });
@@ -84,4 +102,5 @@ Map<String, dynamic> _$SavedWordItemToJson(SavedWordItem instance) =>
     <String, dynamic>{
       'word': instance.word.toJson(),
       'isDefinedByMe': instance.isDefinedByMe,
+      'publicCount': instance.publicCount,
     };

@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../feature/auth/application/auth_state.dart';
 import '../../feature/user_profile/application/user_profile_state.dart';
 import '../../feature/user_profile/presentation/dictionary_author_widget.dart';
 import '../../feature/word_list/presentation/dictionary_word_index_list.dart';
@@ -11,7 +10,6 @@ import '../../util/logger.dart';
 import '../common_widget/button/to_profile_button.dart';
 import '../common_widget/button/to_setting_button.dart';
 import '../common_widget/error_and_retry_widget.dart';
-import '../router/app_router.dart';
 
 @RoutePage()
 class DictionaryIndividualRouterPage extends AutoRouter {
@@ -32,7 +30,6 @@ class DictionaryIndividualPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncTargetUserProfile = ref.watch(userProfileProvider(targetUserId));
-    final isMe = ref.watch(userIdProvider) == targetUserId;
 
     return asyncTargetUserProfile.when(
       data: (targetUserProfile) {
@@ -48,12 +45,6 @@ class DictionaryIndividualPage extends ConsumerWidget {
                 height: 80,
                 child: DictionaryAuthorWidget(targetUserId: targetUserId),
               ),
-              if (isTopRoute && isMe)
-                ListTile(
-                  title: const Text('保存した言葉'),
-                  trailing: const Icon(CupertinoIcons.chevron_forward),
-                  onTap: () => context.pushRoute(const SavedWordListRoute()),
-                ),
               Expanded(
                 child: DictionaryWordIndexList(targetUserId: targetUserId),
               ),

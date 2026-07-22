@@ -107,7 +107,7 @@ class UserDictionaryWordRepository {
                 reading: item.word.reading,
                 initialSubGroupLabel:
                     InitialSubGroup.fromString(item.word.reading).label,
-                postedDefinitionCount: 0,
+                postedDefinitionCount: item.publicCount,
                 isSavedByMe: true,
               ),
             )

@@ -148,12 +148,6 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
-    SavedWordListRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SavedWordListPage(),
-      );
-    },
     SettingRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -698,20 +692,6 @@ class ProfileTopRouteArgs {
   String toString() {
     return 'ProfileTopRouteArgs{key: $key, targetUserId: $targetUserId}';
   }
-}
-
-/// generated route for
-/// [SavedWordListPage]
-class SavedWordListRoute extends PageRouteInfo<void> {
-  const SavedWordListRoute({List<PageRouteInfo>? children})
-      : super(
-          SavedWordListRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SavedWordListRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

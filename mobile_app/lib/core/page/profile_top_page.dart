@@ -9,6 +9,7 @@ import '../../feature/definition_list/util/definition_feed_type.dart';
 import '../../feature/user_config/presentation/other_user_action_icon_button.dart';
 import '../../feature/user_profile/application/user_profile_state.dart';
 import '../../feature/user_profile/presentation/profile_widget.dart';
+import '../../feature/word_list/presentation/saved_word_list.dart';
 import '../../util/extension/scroll_controller_extension.dart';
 import '../../util/logger.dart';
 import '../common_widget/button/to_search_user_button.dart';
@@ -27,9 +28,10 @@ class ProfileTopPage extends ConsumerWidget {
     final asyncTargetUserProfile = ref.watch(userProfileProvider(targetUserId));
 
     final isMyProfile = currentUserId == targetUserId;
+    final tabLength = isMyProfile ? 3 : 2;
 
     return DefaultTabController(
-      length: 2,
+      length: tabLength,
       child: Scaffold(
         body: SafeArea(
           child: NestedScrollView(
@@ -68,9 +70,10 @@ class ProfileTopPage extends ConsumerWidget {
                     tabBar: TabBar(
                       labelStyle: Theme.of(context).textTheme.titleMedium,
                       indicatorWeight: 3,
-                      tabs: const [
-                        Tab(text: '投稿順'),
-                        Tab(text: 'いいね'),
+                      tabs: [
+                        const Tab(text: '投稿順'),
+                        const Tab(text: 'いいね'),
+                        if (isMyProfile) const Tab(text: '保存'),
                       ],
                       onTap: (_) {
                         if (DefaultTabController.of(context).indexIsChanging) {
@@ -103,6 +106,12 @@ class ProfileTopPage extends ConsumerWidget {
                     message: isMyProfile ? 'いいねした投稿が表示されます💖' : 'いいねした投稿がありません',
                   ),
                 ),
+                if (isMyProfile)
+                  const SavedWordList(
+                    emptyWidget: SimpleEmptyWidget(
+                      message: '保存した言葉が表示されます🐬',
+                    ),
+                  ),
               ],
             ),
           ),

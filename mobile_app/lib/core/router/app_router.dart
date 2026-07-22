@@ -21,7 +21,6 @@ import '../page/home_page.dart';
 import '../page/license_page.dart';
 import '../page/profile_edit_page.dart';
 import '../page/profile_top_page.dart';
-import '../page/saved_word_list_page.dart';
 import '../page/setting_page.dart';
 import '../page/sign_in_failure_page.dart';
 import '../page/user_list_following_or_follower_page.dart';
@@ -84,7 +83,6 @@ class AppRouter extends _$AppRouter {
           page: DictionaryIndividualRouterRoute.page,
           children: [
             AdaptiveRoute(initial: true, page: DictionaryIndividualRoute.page),
-            AdaptiveRoute(path: 'saved_words', page: SavedWordListRoute.page),
             ...commonRouteList,
           ],
         ),

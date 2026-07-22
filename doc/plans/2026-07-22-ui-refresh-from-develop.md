@@ -35,9 +35,9 @@ flowchart LR
 2. **AppBar**: develop のタイトル感 + 左 `ToSettingButton` を維持。右端に**自分のプロフィールへ直遷移するアバターボタン**（ポップアップなし、検索ボタンなし）
 3. **辞書トップ**: 個人辞書（自分・他ユーザー）は develop どおり `DictionaryAuthorWidget` を残し、その下を連絡先風連続リストに差し替え。みんなの辞書は検索窓 + 連絡先風連続リスト。見出し **あ / か / さ / た / な / は / ま / や / ら / わ**（＋ A-Z・数字・記号）。ドリルダウンなし
 4. **みんなの辞書の検索窓**: develop の [`SearchWordTextField`](mobile_app/lib/feature/word_list/presentation/search_word_text_field.dart) を維持（画面内 debounce 検索・filter チップなし）
-5. **タイムラインおすすめに語句追加を混ぜる**: `GET /v1/timeline/discover` の `definition` + `wordRegistered`。語句行文言は **`言葉が登録されました`**。empty は develop の `おすすめの投稿がありません...`。二次タブ名は **おすすめ / フォロー中** のまま（「見つける」にしない）。フォロー中は定義のみ
-6. **語句だけの追加**: みんなの辞書から `言葉を登録`（表記+よみ → `POST /v1/words`。定義は任意で後から）。登録後にタイムラインへも載る既存 API 契約を利用
-7. **語句ブックマーク**: 言葉ページで保存トグル（API は develop 済み）。保存一覧への入口は overview ハブ全体は作らず、**あなたの辞書から「保存した言葉」一覧へ行ける最小導線**のみ
+5. **タイムラインおすすめに言葉追加を混ぜる**: `GET /v1/timeline/discover` の `definition` + `wordRegistered`。言葉行文言は **`言葉が登録されました`**。empty は develop の `おすすめの投稿がありません...`。二次タブ名は **おすすめ / フォロー中** のまま（「見つける」にしない）。フォロー中は定義のみ
+6. **言葉だけの追加**: みんなの辞書から `言葉を登録`（表記+よみ → `POST /v1/words`。定義は任意で後から）。登録後にタイムラインへも載る既存 API 契約を利用
+7. **言葉ブックマーク**: 言葉ページで保存トグル（API は develop 済み）。保存一覧への入口は overview ハブ全体は作らず、**あなたの辞書から「保存した言葉」一覧へ行ける最小導線**のみ
 
 ## 明示的にやらないこと
 
@@ -55,12 +55,12 @@ flowchart LR
 
 | 項目 | 決定 |
 |------|------|
-| 語句追加タイル文言 | `言葉が登録されました`。empty は develop のまま |
+| 言葉追加タイル文言 | `言葉が登録されました`。empty は develop のまま |
 | DictionaryAuthorWidget | **残す**（develop どおり。連絡先風リストの上に配置） |
 | 他ユーザー辞書 | 同じ連絡先風にする |
 | 辞書 empty | **メッセージなしの空リスト**（新規コピーを増やさない） |
 | Draft backend 掃除 | 本 PR 外。別 Issue を立てる |
-| 語句のみ登録 | やる（みんなの辞書 → 言葉を登録） |
+| 言葉のみ登録 | やる（みんなの辞書 → 言葉を登録） |
 | ブックマーク | やる（言葉ページ + 保存一覧） |
 
 ## GitHub Issue / PR のキャンセルと更新（実装前に実施）
@@ -78,10 +78,10 @@ flowchart LR
 
 1. ボトムナビ: あなたの辞書 → みんなの辞書 → タイムライン
 2. AppBar: 左設定、右アバター→自分プロフィール
-3. 両辞書（自分・他ユーザー）: あかさたな連絡先風語句リスト
+3. 両辞書（自分・他ユーザー）: あかさたな連絡先風言葉リスト
 4. みんなの辞書: `SearchWordTextField` 維持、filter なし、`言葉を登録` あり
-5. タイムラインおすすめ: 定義 + 語句追加（`言葉が登録されました`）
-6. 語句ブックマーク（言葉ページ + 保存一覧）
+5. タイムラインおすすめ: 定義 + 言葉追加（`言葉が登録されました`）
+6. 言葉ブックマーク（言葉ページ + 保存一覧）
 7. Draft / 言葉分割 / AppBar 検索 / Welcome 文言改変なし
 
 Close コメント共通テンプレ:
@@ -131,7 +131,7 @@ git switch -c cursor/ui-refresh-from-develop-808f
 - [`app_router.dart`](mobile_app/lib/core/router/app_router.dart): 初期タブをあなたの辞書
 - [`home_page.dart`](mobile_app/lib/core/page/home_page.dart): タイトル `タイムライン`、二次タブはおすすめ / フォロー中
 
-### 2b. タイムラインに語句追加
+### 2b. タイムラインに言葉追加
 
 - おすすめ側を mixed discover リストに差し替え（`type=definition` フィルタをやめる）
 - `wordRegistered` 行: 表記・よみ + `言葉が登録されました` → `WordTopRoute`
@@ -155,16 +155,16 @@ git switch -c cursor/ui-refresh-from-develop-808f
 - AppBar に `言葉を登録`（既存 TextButton パターンで develop に寄せる）
 - `WordRegistrationPage`: 表記/よみ、候補、`POST /v1/words`、完了後「続けて定義を書く / 完了」
 
-### 6. 語句ブックマーク
+### 6. 言葉ブックマーク
 
 - 言葉ページ（`WordWidget`）に bookmark トグル。API: `PUT`/`DELETE /v1/words/{id}/save`（develop 済み）
-- `SavedWordListPage`（`GET /v1/me/saved-words`）
-- 入口: あなたの辞書トップから「保存した言葉」へ（overview ハブは作らない最小導線）
+- 保存一覧は自分のプロフィール「保存」タブ（`GET /v1/me/saved-words`）。他者プロフィールは投稿順 / いいねの 2 タブのまま
+- あなたの辞書トップからの「保存した言葉」導線は置かない
 
 ### 7. 検証
 
 - `just mobile-generate` / `just analyze` / `just test`
-- タブ順、AppBar、両辞書、語句登録、ブックマーク、タイムライン語句追加、Welcome 文言非改変
+- タブ順、AppBar、両辞書、言葉登録、ブックマーク、タイムライン言葉追加、Welcome 文言非改変
 
 ## 完了条件
 

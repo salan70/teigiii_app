@@ -175,7 +175,7 @@ describe("my dictionary lists", () => {
     await insertDefinition("private", "w1", "alice", "private", 200);
     await insertDefinition("draft", "w2", "alice", "draft", 300);
     await env.DB.batch([
-      env.DB.prepare("insert into saved_words values ('alice', 'w2', 400)"),
+      env.DB.prepare("insert into saved_words values ('alice', 'w1', 400)"),
       env.DB.prepare("insert into user_mutes values ('alice', 'bob', 500)"),
     ]);
 
@@ -201,7 +201,7 @@ describe("my dictionary lists", () => {
 
     const saved = await request("alice", "/v1/me/saved-words");
     await expect(saved.json()).resolves.toMatchObject({
-      items: [{ isDefinedByMe: true, word: { id: "w2" } }],
+      items: [{ isDefinedByMe: true, publicCount: 1, word: { id: "w1" } }],
     });
 
     const mutes = await request("alice", "/v1/me/mutes");
