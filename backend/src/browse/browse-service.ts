@@ -229,7 +229,7 @@ export class BrowseService {
       rows,
       limit,
       (row) => ({
-        publicCount: row.public_count,
+        publicCount: Number(row.public_count ?? 0),
         word: { id: row.id, reading: row.reading, word: row.word },
       }),
       (row) =>
@@ -443,9 +443,9 @@ export class BrowseService {
       rows,
       limit,
       (row) => ({
-        draftCount: row.draft_count,
-        privateCount: row.private_count,
-        publicCount: row.public_count,
+        draftCount: Number(row.draft_count ?? 0),
+        privateCount: Number(row.private_count ?? 0),
+        publicCount: Number(row.public_count ?? 0),
         word: { id: row.id, reading: row.reading, word: row.word },
       }),
       (row) =>

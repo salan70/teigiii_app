@@ -1,10 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:teigiii_api/teigiii_api.dart';
 
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
+import '../../user_profile/presentation/avatar_network_image_widget.dart';
 
+/// タイムラインの「言葉が登録されました」タイル。
+///
+/// 定義タイルと同じ余白・タイポ階層に揃え、専用アイコンを左に置く。
 class WordRegisteredTile extends StatelessWidget {
   const WordRegisteredTile({super.key, required this.activity});
 
@@ -12,6 +17,10 @@ class WordRegisteredTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final onSurfaceVariant = theme.colorScheme.onSurfaceVariant;
+    final avatarDiameter = AvatarSize.medium.diameter;
+
     return InkWell(
       onTap: () => context.pushRoute(WordTopRoute(wordId: activity.word.id)),
       child: Column(
@@ -21,38 +30,54 @@ class WordRegisteredTile extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  width: avatarDiameter,
+                  height: avatarDiameter,
+                  child: CircleAvatar(
+                    radius: avatarDiameter / 2,
+                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                    foregroundColor: onSurfaceVariant,
+                    child: Icon(
+                      Icons.auto_stories_outlined,
+                      size: avatarDiameter / 2,
+                    ),
+                  ),
+                ),
+                const Gap(8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // 定義タイルの「著者名 + 時刻」行と同じ高さ・配置にする。
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Expanded(child: SizedBox.shrink()),
+                          Text(activity.occurredAt.timeAgo(DateTime.now())),
+                        ],
+                      ),
                       Text(
                         activity.word.word,
                         overflow: TextOverflow.clip,
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: theme.textTheme.titleLarge,
                       ),
+                      const Gap(8),
                       Text(
                         activity.word.reading,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium!.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant,
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          color: onSurfaceVariant,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const Gap(8),
                       Text(
                         '言葉が登録されました',
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant,
+                        style: theme.textTheme.bodySmall!.copyWith(
+                          color: onSurfaceVariant,
                         ),
                       ),
                     ],
                   ),
-                ),
-                Text(
-                  activity.occurredAt.timeAgo(DateTime.now()),
-                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
             ),

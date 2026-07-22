@@ -10,14 +10,18 @@ class ApiException implements Exception {
     String? message;
     Map<String, dynamic>? body;
     final data = response?.data;
-    if (data is Map<String, dynamic>) {
-      body = data;
-      final error = data['error'];
-      if (error is Map<String, dynamic>) {
-        code = error['code'] as String?;
-        message = error['message'] as String?;
+    if (data is Map) {
+      body = Map<String, dynamic>.from(data);
+      final error = body['error'];
+      if (error is Map) {
+        final errorMap = Map<String, dynamic>.from(error);
+        code = errorMap['code'] as String?;
+        message = errorMap['message'] as String?;
       }
     }
+
+    // デシリアライズ失敗など、HTTP エラーボディ以外の原因をメッセージに残す。
+    message ??= exception.error?.toString() ?? exception.message;
 
     return ApiException(
       statusCode: response?.statusCode,
