@@ -12,6 +12,7 @@ import '../../feature/word/presentation/word_tile_shimmer.dart';
 import '../../feature/word_list/application/word_list_state_by_search_word.dart';
 import '../../feature/word_list/presentation/search_word_text_field.dart';
 import '../../util/extension/scroll_controller_extension.dart';
+import '../common_widget/button/filled_button.dart';
 import '../common_widget/infinity_scroll_widget.dart';
 import '../common_widget/simple_empty_widget.dart';
 import '../router/app_router.dart';
@@ -80,12 +81,12 @@ class WordSearchResultPage extends ConsumerWidget {
                       SimpleEmptyWidget(
                         message: generateEmptyMessage(searchWord),
                       ),
-                      const Gap(16),
-                      TextButton(
+                      const Gap(24),
+                      PrimaryFilledButton(
                         onPressed: () => context.pushRoute(
                           WordRegistrationRoute(initialWord: searchWord),
                         ),
-                        child: Text('「$searchWord」を登録'),
+                        text: '「$searchWord」を登録',
                       ),
                     ],
                   ),
