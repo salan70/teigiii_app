@@ -7,7 +7,7 @@ import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../user_profile/presentation/avatar_network_image_widget.dart';
 
-/// タイムラインの「言葉が登録されました」タイル。
+/// タイムラインの「言葉追加」タイル。
 ///
 /// 定義タイルと同じ余白・タイポ階層に揃え、専用アイコンを左に置く。
 class WordRegisteredTile extends StatelessWidget {
@@ -35,8 +35,8 @@ class WordRegisteredTile extends StatelessWidget {
                   height: avatarDiameter,
                   child: CircleAvatar(
                     radius: avatarDiameter / 2,
-                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                    foregroundColor: onSurfaceVariant,
+                    backgroundColor: theme.colorScheme.primaryContainer,
+                    foregroundColor: theme.colorScheme.onPrimaryContainer,
                     child: Icon(
                       Icons.auto_stories_outlined,
                       size: avatarDiameter / 2,
@@ -48,12 +48,18 @@ class WordRegisteredTile extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 定義タイルの「著者名 + 時刻」行と同じ高さ・配置にする。
+                      // 定義タイルの「投稿者名 + 時刻」行と同じ配置・スタイル。
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Expanded(child: SizedBox.shrink()),
+                          const Expanded(
+                            child: Text(
+                              '言葉追加',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                           Text(activity.occurredAt.timeAgo(DateTime.now())),
                         ],
                       ),
@@ -66,13 +72,6 @@ class WordRegisteredTile extends StatelessWidget {
                       Text(
                         activity.word.reading,
                         style: theme.textTheme.bodyMedium!.copyWith(
-                          color: onSurfaceVariant,
-                        ),
-                      ),
-                      const Gap(8),
-                      Text(
-                        '言葉が登録されました',
-                        style: theme.textTheme.bodySmall!.copyWith(
                           color: onSurfaceVariant,
                         ),
                       ),
