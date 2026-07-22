@@ -6,6 +6,7 @@ import 'package:teigi_app/feature/force_event/application/app_config_state.dart'
 import 'package:teigi_app/feature/force_event/domain/app_config.dart';
 import 'package:teigi_app/feature/force_event/repository/app_config_repository.dart';
 
+import '../../../mock/fake_analytics.dart';
 import 'app_config_state_test.mocks.dart';
 
 @GenerateNiceMocks([MockSpec<AppConfigRepository>()])
@@ -18,6 +19,7 @@ void main() {
     container = ProviderContainer(
       overrides: [
         appConfigRepositoryProvider.overrideWithValue(mockAppConfigRepository),
+        ...analyticsTestOverrides(),
       ],
     );
   });

@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/analytics/analytics_event.dart';
+import '../../../core/analytics/analytics_service.dart';
 import '../../definition_list/appication/definition_id_list_state.dart';
 import '../../word/application/word_state.dart';
 import '../../word_list/application/community_dictionary_index_list_state.dart';
@@ -27,6 +29,17 @@ class DefinitionService {
         .read(writeDefinitionRepositoryProvider)
         .deleteDefinition(definition.id);
 
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(
+          AnalyticsEvent.definitionDeleted,
+          parameters: {
+            AnalyticsParam.definitionId: definition.id,
+            AnalyticsParam.wordId: definition.wordId,
+            AnalyticsParam.wasPublic: definition.isPublic,
+          },
+        );
+
     ref
       ..invalidate(definitionIdListStateNotifierProvider)
       ..invalidate(wordListStateByInitialNotifierProvider)
@@ -37,11 +50,20 @@ class DefinitionService {
   }
 
   Future<void> updatePostType(Definition definition) async {
+    final isPublic = !definition.isPublic;
     await ref
         .read(writeDefinitionRepositoryProvider)
-        .updatePostType(
-          definitionId: definition.id,
-          isPublic: !definition.isPublic,
+        .updatePostType(definitionId: definition.id, isPublic: isPublic);
+
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(
+          AnalyticsEvent.definitionVisibilityChanged,
+          parameters: {
+            AnalyticsParam.definitionId: definition.id,
+            AnalyticsParam.wordId: definition.wordId,
+            AnalyticsParam.isPublic: isPublic,
+          },
         );
 
     ref.invalidate(definitionProvider(definition.id));

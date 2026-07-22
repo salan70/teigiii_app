@@ -3,6 +3,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../util/logger.dart';
+import '../analytics/analytics_event.dart';
+import '../analytics/analytics_link_type.dart';
+import '../analytics/analytics_service.dart';
 import 'key_provider.dart';
 import 'snack_bar_controller.dart';
 
@@ -22,7 +25,14 @@ class LaunchUrlController {
   ///
   /// 呼び出し元が `BaseRoute` 内でない（ `BottomNavBar` を表示していない）場合は、
   /// [inBaseRoute] を `false` にする。
-  Future<void> launchURL(String url, {bool inBaseRoute = true}) async {
+  ///
+  /// [linkType] を渡すと `external_link_opened` の分類を明示できる
+  ///（未指定時は URL から推定）。
+  Future<void> launchURL(
+    String url, {
+    bool inBaseRoute = true,
+    String? linkType,
+  }) async {
     final uri = Uri.parse(url);
     if (!await launchUrl(uri)) {
       logger.e('$uri を開けませんでした。');
@@ -36,6 +46,20 @@ class LaunchUrlController {
           .showErrorSnackBar(
             'ページを開けませんでした。もう一度お試しください。',
             scaffoldMessengerType,
+          );
+      return;
+    }
+
+    final resolvedLinkType = inferAnalyticsLinkType(
+      url,
+      explicitLinkType: linkType,
+    );
+    if (resolvedLinkType != null) {
+      await ref
+          .read(analyticsServiceProvider)
+          .logEvent(
+            AnalyticsEvent.externalLinkOpened,
+            parameters: {AnalyticsParam.linkType: resolvedLinkType},
           );
     }
   }

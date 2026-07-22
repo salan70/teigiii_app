@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/core/analytics/analytics_event.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition_list/appication/definition_id_list_state.dart';
 import 'package:teigi_app/feature/definition_list/domain/definition_id_list_state.dart';
@@ -10,6 +11,7 @@ import 'package:teigi_app/feature/definition_list/util/definition_feed_type.dart
 import 'package:teigi_app/feature/user_follow/application/user_follow_service.dart';
 import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart';
 
+import '../../../mock/fake_analytics.dart';
 import 'user_follow_service_test.mocks.dart';
 
 @GenerateNiceMocks([
@@ -22,8 +24,10 @@ void main() {
   const currentUserId = 'userId';
 
   late ProviderContainer container;
+  late FakeAnalyticsClient fakeAnalytics;
 
   setUp(() {
+    fakeAnalytics = FakeAnalyticsClient();
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => currentUserId),
@@ -33,6 +37,7 @@ void main() {
         definitionIdListRepositoryProvider.overrideWithValue(
           mockDefinitionIdListRepository,
         ),
+        ...analyticsTestOverrides(fakeAnalytics),
       ],
     );
     addTearDown(container.dispose);
@@ -58,6 +63,13 @@ void main() {
 
       // 想定外のrepositoryの関数が呼ばれていないか検証
       verifyNever(mockUserFollowRepository.unfollow(any));
+      expect(
+        fakeAnalytics.loggedEvents.single.name,
+        AnalyticsEvent.userFollowed,
+      );
+      expect(fakeAnalytics.loggedEvents.single.parameters, {
+        AnalyticsParam.targetUserId: targetUserId,
+      });
     });
 
     test('無関係なおすすめフィードのページング状態を保つ', () async {

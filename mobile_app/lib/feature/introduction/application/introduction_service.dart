@@ -2,6 +2,8 @@ import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/analytics/analytics_event.dart';
+import '../../../core/analytics/analytics_service.dart';
 import '../../../core/router/app_router.dart';
 import '../repository/is_first_launch_repository.dart';
 
@@ -23,11 +25,20 @@ class IntroductionService {
   Future<void> onAgreePolicy() async {
     // 初回起動フラグを保存する。
     await ref.read(isFirstLaunchRepositoryProvider).saveFirstLaunch();
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(AnalyticsEvent.policyAgreed);
 
     // トラッキングダイアログを表示する。
-    final status = await AppTrackingTransparency.trackingAuthorizationStatus;
+    var status = await AppTrackingTransparency.trackingAuthorizationStatus;
     if (status == TrackingStatus.notDetermined) {
-      await AppTrackingTransparency.requestTrackingAuthorization();
+      status = await AppTrackingTransparency.requestTrackingAuthorization();
     }
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(
+          AnalyticsEvent.trackingAuthorizationCompleted,
+          parameters: {AnalyticsParam.status: status.name},
+        );
   }
 }

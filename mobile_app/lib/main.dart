@@ -13,6 +13,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import 'core/analytics/analytics_event.dart';
+import 'core/analytics/analytics_service.dart';
+import 'core/common_provider/firebase_providers.dart';
 import 'core/common_provider/flavor_state.dart';
 import 'core/common_provider/is_loading_overlay_state.dart';
 import 'core/common_provider/key_provider.dart';
@@ -42,8 +45,6 @@ Future<void> main() async {
         ? AppleProvider.deviceCheck
         : AppleProvider.debug,
   );
-
-  await FirebaseAnalytics.instance.logEvent(name: 'launch App');
 
   // Flutterフレームワークがキャッチしたエラーを記録する
   FlutterError.onError = (errorDetails) {
@@ -83,11 +84,34 @@ Future<void> main() async {
   });
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  var _didLogAppLaunched = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didLogAppLaunched) {
+      return;
+    }
+    _didLogAppLaunched = true;
+    // ignore: discarded_futures
+    ref
+        .read(analyticsServiceProvider)
+        .logEvent(
+          AnalyticsEvent.appLaunched,
+          parameters: {AnalyticsParam.flavor: ref.read(flavorProvider).name},
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
@@ -96,7 +120,15 @@ class MyApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('ja')],
-      routerConfig: ref.watch(appRouterProvider).config(),
+      routerConfig: ref
+          .watch(appRouterProvider)
+          .config(
+            navigatorObservers: () => [
+              FirebaseAnalyticsObserver(
+                analytics: ref.watch(firebaseAnalyticsProvider),
+              ),
+            ],
+          ),
       theme: getThemeData(ThemeMode.light, context),
       darkTheme: getThemeData(ThemeMode.dark, context),
       builder: (context, child) {

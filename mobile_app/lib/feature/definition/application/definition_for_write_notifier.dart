@@ -1,5 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/analytics/analytics_event.dart';
+import '../../../core/analytics/analytics_service.dart';
 import '../../auth/application/auth_state.dart';
 import '../../definition_list/appication/definition_id_list_state.dart';
 import '../../word/application/word_state.dart';
@@ -53,9 +55,20 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
 
   /// 投稿し、投稿した定義のIdを返す。
   Future<String> post() async {
+    final definitionForWrite = state.value!;
     final definitionId = await ref
         .read(writeDefinitionRepositoryProvider)
-        .createDefinition(state.value!);
+        .createDefinition(definitionForWrite);
+
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(
+          AnalyticsEvent.definitionPosted,
+          parameters: {
+            AnalyticsParam.definitionId: definitionId,
+            AnalyticsParam.isPublic: definitionForWrite.isPublic,
+          },
+        );
 
     ref
       ..invalidate(definitionIdListStateNotifierProvider)
@@ -69,12 +82,23 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
   }
 
   Future<void> edit() async {
+    final definitionForWrite = state.value!;
     await ref
         .read(writeDefinitionRepositoryProvider)
-        .updateDefinition(state.value!);
+        .updateDefinition(definitionForWrite);
+
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(
+          AnalyticsEvent.definitionUpdated,
+          parameters: {
+            AnalyticsParam.definitionId: definitionForWrite.id!,
+            AnalyticsParam.isPublic: definitionForWrite.isPublic,
+          },
+        );
 
     ref
-      ..invalidate(definitionProvider(state.value!.id!))
+      ..invalidate(definitionProvider(definitionForWrite.id!))
       ..invalidate(definitionIdListStateNotifierProvider)
       ..invalidate(wordListStateByInitialNotifierProvider)
       ..invalidate(wordListStateBySearchWordNotifierProvider)

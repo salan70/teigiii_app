@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/analytics/analytics_event.dart';
+import '../../../core/analytics/analytics_service.dart';
 import '../../auth/application/auth_state.dart';
 import '../../definition/application/definition_state.dart';
 import '../../definition/domain/definition.dart';
@@ -51,11 +53,22 @@ class LikeDefinitionService {
 
   /// いいね登録/解除を行う。
   Future<void> _updateLikeStatus(Definition definition) async {
+    final analytics = ref.read(analyticsServiceProvider);
+    final params = {
+      AnalyticsParam.definitionId: definition.id,
+      AnalyticsParam.wordId: definition.wordId,
+      AnalyticsParam.authorId: definition.authorId,
+    };
+
     if (definition.isLikedByUser) {
       // いいね解除
       await ref
           .read(likeDefinitionRepositoryProvider)
           .unlikeDefinition(definition.id);
+      await analytics.logEvent(
+        AnalyticsEvent.definitionUnliked,
+        parameters: params,
+      );
       return;
     }
 
@@ -63,5 +76,9 @@ class LikeDefinitionService {
     await ref
         .read(likeDefinitionRepositoryProvider)
         .likeDefinition(definition.id);
+    await analytics.logEvent(
+      AnalyticsEvent.definitionLiked,
+      parameters: params,
+    );
   }
 }

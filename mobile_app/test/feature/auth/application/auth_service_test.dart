@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/core/analytics/analytics_event.dart';
 import 'package:teigi_app/core/api/api_exception.dart';
 import 'package:teigi_app/core/common_provider/flavor_state.dart';
 import 'package:teigi_app/feature/auth/application/auth_service.dart';
@@ -13,6 +14,7 @@ import 'package:teigi_app/feature/user_config/application/user_config_state.dart
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart';
 import 'package:teigi_app/feature/user_profile/domain/user_profile.dart';
 
+import '../../../mock/fake_analytics.dart';
 import 'auth_service_test.mocks.dart';
 
 @GenerateNiceMocks([
@@ -26,6 +28,7 @@ void main() {
   final mockAuthRepository = MockAuthRepository();
 
   late ProviderContainer container;
+  late FakeAnalyticsClient fakeAnalytics;
 
   const mockUserId = 'userId';
   const mockAppVersion = '1.0.0';
@@ -33,6 +36,7 @@ void main() {
   // ProviderContainerの初期化を行う。
   // このとき、isSignedInProvider はfalse（未ログイン状態）であることに注意する。
   setUp(() {
+    fakeAnalytics = FakeAnalyticsClient();
     container = ProviderContainer(
       overrides: [
         flavorProvider.overrideWithValue(Flavor.dev),
@@ -46,6 +50,7 @@ void main() {
           mockDeviceInfoRepository,
         ),
         authRepositoryProvider.overrideWithValue(mockAuthRepository),
+        ...analyticsTestOverrides(fakeAnalytics),
       ],
     );
     addTearDown(container.dispose);
@@ -69,6 +74,7 @@ void main() {
       ),
       deviceInfoRepositoryProvider.overrideWithValue(mockDeviceInfoRepository),
       authRepositoryProvider.overrideWithValue(mockAuthRepository),
+      ...analyticsTestOverrides(fakeAnalytics),
     ]);
   }
 
@@ -100,6 +106,11 @@ void main() {
           appVersion: mockAppVersion,
         ),
       ).called(1);
+      expect(fakeAnalytics.loggedEvents.map((e) => e.name), [
+        AnalyticsEvent.userSignedInAnonymously,
+        AnalyticsEvent.userRegistered,
+      ]);
+      expect(fakeAnalytics.userIds, [mockUserId]);
     });
 
     test('ログイン済: stateと、想定通りにrepositoryの関数が呼ばれることを検証', () async {
@@ -124,6 +135,7 @@ void main() {
 
       // 想定外の関数が呼ばれていないか検証
       verifyNever(mockAuthRepository.signInAnonymously());
+      expect(fakeAnalytics.userIds, [mockUserId]);
     });
 
     test('未ログイン（OSがiOSでもAndroidでもない場合）: 処理の中で渡される引数が想定通りであることを検証', () async {
@@ -166,33 +178,30 @@ void main() {
   });
 
   group('updateUserConfig() の自己修復', () {
-    test(
-      '404 user_not_found: initUser による再登録が呼ばれることを検証',
-      () async {
-        // * Arrange
-        final authService = container.read(authServiceProvider);
-        setupMock('iOS 14.4');
-        updateContainersOverride(isSignedIn: true);
-        when(
-          mockRegisterUserRepository.updateVersionInfo(
-            osVersion: anyNamed('osVersion'),
-            appVersion: anyNamed('appVersion'),
-          ),
-        ).thenThrow(ApiException(statusCode: 404, code: 'user_not_found'));
+    test('404 user_not_found: initUser による再登録が呼ばれることを検証', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      setupMock('iOS 14.4');
+      updateContainersOverride(isSignedIn: true);
+      when(
+        mockRegisterUserRepository.updateVersionInfo(
+          osVersion: anyNamed('osVersion'),
+          appVersion: anyNamed('appVersion'),
+        ),
+      ).thenThrow(ApiException(statusCode: 404, code: 'user_not_found'));
 
-        // * Act
-        await authService.updateUserConfig();
+      // * Act
+      await authService.updateUserConfig();
 
-        // * Assert
-        verify(
-          mockRegisterUserRepository.initUser(
-            name: UserProfile.defaultName,
-            osVersion: 'iOS 14.4',
-            appVersion: mockAppVersion,
-          ),
-        ).called(1);
-      },
-    );
+      // * Assert
+      verify(
+        mockRegisterUserRepository.initUser(
+          name: UserProfile.defaultName,
+          osVersion: 'iOS 14.4',
+          appVersion: mockAppVersion,
+        ),
+      ).called(1);
+    });
 
     test('404 だが code が user_not_found でない場合は再登録せず rethrow する', () async {
       // * Arrange
@@ -338,6 +347,10 @@ void main() {
           mockRegisterUserRepository.deleteUser(),
           mockAuthRepository.deleteUser(),
         ]);
+        expect(fakeAnalytics.loggedEvents.map((e) => e.name), [
+          AnalyticsEvent.accountDeleted,
+        ]);
+        expect(fakeAnalytics.userIds, [null]);
       },
     );
 

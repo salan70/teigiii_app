@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:teigi_app/core/analytics/analytics_event.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition/application/definition_for_write_notifier.dart';
 import 'package:teigi_app/feature/definition/domain/definition_for_write.dart';
@@ -7,6 +8,8 @@ import 'package:teigi_app/feature/definition/repository/write_definition_reposit
 import 'package:teigi_app/feature/word_list/application/user_dictionary_index_list_state.dart';
 import 'package:teigi_app/feature/word_list/domain/word_list_state.dart';
 import 'package:teigi_app/feature/word_list/repository/user_dictionary_word_repository.dart';
+
+import '../../../mock/fake_analytics.dart';
 
 class _FakeWriteDefinitionRepository implements WriteDefinitionRepository {
   @override
@@ -34,11 +37,7 @@ class _FakeUserDictionaryWordRepository
   @override
   Future<WordListState> fetchMyDefinedWords(String? cursor) async {
     fetchMyDefinedWordsCallCount++;
-    return const WordListState(
-      list: [],
-      nextCursor: null,
-      hasMore: false,
-    );
+    return const WordListState(list: [], nextCursor: null, hasMore: false);
   }
 
   @override
@@ -46,20 +45,12 @@ class _FakeUserDictionaryWordRepository
     String userId,
     String? cursor,
   ) async {
-    return const WordListState(
-      list: [],
-      nextCursor: null,
-      hasMore: false,
-    );
+    return const WordListState(list: [], nextCursor: null, hasMore: false);
   }
 
   @override
   Future<WordListState> fetchMySavedWords(String? cursor) async {
-    return const WordListState(
-      list: [],
-      nextCursor: null,
-      hasMore: false,
-    );
+    return const WordListState(list: [], nextCursor: null, hasMore: false);
   }
 }
 
@@ -68,9 +59,11 @@ void main() {
 
   late ProviderContainer container;
   late _FakeUserDictionaryWordRepository userDictionaryRepository;
+  late FakeAnalyticsClient fakeAnalytics;
 
   setUp(() {
     userDictionaryRepository = _FakeUserDictionaryWordRepository();
+    fakeAnalytics = FakeAnalyticsClient();
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => currentUserId),
@@ -80,14 +73,16 @@ void main() {
         userDictionaryWordRepositoryProvider.overrideWithValue(
           userDictionaryRepository,
         ),
+        ...analyticsTestOverrides(fakeAnalytics),
       ],
     );
     addTearDown(container.dispose);
   });
 
   test('post 後に自分の辞書一覧が再取得される', () async {
-    final dictionaryProvider =
-        userDictionaryIndexListStateNotifierProvider(currentUserId);
+    final dictionaryProvider = userDictionaryIndexListStateNotifierProvider(
+      currentUserId,
+    );
     final subscription = container.listen(
       dictionaryProvider,
       (_, _) {},
@@ -110,5 +105,13 @@ void main() {
     await container.read(dictionaryProvider.future);
 
     expect(userDictionaryRepository.fetchMyDefinedWordsCallCount, 2);
+    expect(
+      fakeAnalytics.loggedEvents.single.name,
+      AnalyticsEvent.definitionPosted,
+    );
+    expect(fakeAnalytics.loggedEvents.single.parameters, {
+      AnalyticsParam.definitionId: 'new-definition-id',
+      AnalyticsParam.isPublic: true,
+    });
   });
 }
