@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/analytics/analytics_event.dart';
+import '../../../core/analytics/analytics_service.dart';
 import '../../definition_list/appication/definition_id_list_state.dart';
 import '../../word_list/application/word_list_state_by_initial.dart';
 import '../../word_list/application/word_list_state_by_search_word.dart';
@@ -23,6 +25,12 @@ class UserConfigService {
     await ref
         .read(userConfigRepositoryProvider)
         .appendMutedUserIdList(targetUserId);
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(
+          AnalyticsEvent.userMuted,
+          parameters: {AnalyticsParam.targetUserId: targetUserId},
+        );
 
     _invalidateMuteAwareProviders();
   }
@@ -32,6 +40,12 @@ class UserConfigService {
     await ref
         .read(userConfigRepositoryProvider)
         .removeMutedUserIdList(targetUserId);
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(
+          AnalyticsEvent.userUnmuted,
+          parameters: {AnalyticsParam.targetUserId: targetUserId},
+        );
 
     _invalidateMuteAwareProviders();
   }

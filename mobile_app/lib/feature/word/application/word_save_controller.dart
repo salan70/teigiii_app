@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/analytics/analytics_event.dart';
+import '../../../core/analytics/analytics_service.dart';
 import '../../word_list/application/saved_word_list_state.dart';
 import '../domain/word.dart';
 import '../repository/word_repository.dart';
@@ -55,8 +57,20 @@ class WordSaveController {
     try {
       if (currentSaved) {
         await ref.read(wordRepositoryProvider).unsave(word.id);
+        await ref
+            .read(analyticsServiceProvider)
+            .logEvent(
+              AnalyticsEvent.wordUnsaved,
+              parameters: {AnalyticsParam.wordId: word.id},
+            );
       } else {
         await ref.read(wordRepositoryProvider).save(word.id);
+        await ref
+            .read(analyticsServiceProvider)
+            .logEvent(
+              AnalyticsEvent.wordSaved,
+              parameters: {AnalyticsParam.wordId: word.id},
+            );
       }
       // keepAlive の保存一覧キャッシュを同期する。
       ref.invalidate(savedWordListStateNotifierProvider);

@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/analytics/analytics_event.dart';
+import '../../../core/analytics/analytics_service.dart';
 import '../../auth/application/auth_state.dart';
 import '../../definition_list/appication/definition_id_list_state.dart';
 import '../../definition_list/util/definition_feed_type.dart';
@@ -24,6 +26,12 @@ class UserFollowService {
   /// ログイン中のユーザーが [targetUserId] をフォローする。
   Future<void> follow(String targetUserId) async {
     await ref.read(userFollowRepositoryProvider).follow(targetUserId);
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(
+          AnalyticsEvent.userFollowed,
+          parameters: {AnalyticsParam.targetUserId: targetUserId},
+        );
 
     // フォローした/されたユーザーのProviderを再生成
     _invalidateRelatedUserProvider(targetUserId);
@@ -32,6 +40,12 @@ class UserFollowService {
   /// ログイン中のユーザーが [targetUserId] のフォローを解除する。
   Future<void> unfollow(String targetUserId) async {
     await ref.read(userFollowRepositoryProvider).unfollow(targetUserId);
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(
+          AnalyticsEvent.userUnfollowed,
+          parameters: {AnalyticsParam.targetUserId: targetUserId},
+        );
 
     // UI上でのフォロー/フォロワー数を更新するため、
     // フォローした/されたユーザーのProviderを再生成する。

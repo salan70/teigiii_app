@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/core/analytics/analytics_event.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition_like/application/like_definition_service.dart';
 import 'package:teigi_app/feature/definition_like/repository/like_definition_repository.dart';
@@ -10,6 +11,7 @@ import 'package:teigi_app/feature/definition_list/domain/definition_id_list_stat
 import 'package:teigi_app/feature/definition_list/repository/definition_id_list_repository.dart';
 import 'package:teigi_app/feature/definition_list/util/definition_feed_type.dart';
 
+import '../../../mock/fake_analytics.dart';
 import '../../../mock/mock_data.dart';
 import 'definition_service_test.mocks.dart';
 
@@ -22,8 +24,10 @@ void main() {
   final mockDefinitionIdListRepository = MockDefinitionIdListRepository();
 
   late ProviderContainer container;
+  late FakeAnalyticsClient fakeAnalytics;
 
   setUp(() {
+    fakeAnalytics = FakeAnalyticsClient();
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => 'current-user'),
@@ -33,6 +37,7 @@ void main() {
         definitionIdListRepositoryProvider.overrideWithValue(
           mockDefinitionIdListRepository,
         ),
+        ...analyticsTestOverrides(fakeAnalytics),
       ],
     );
     addTearDown(container.dispose);
@@ -61,6 +66,10 @@ void main() {
 
       // 想定外の関数が呼ばれていないか検証
       verifyNever(mockLikeDefinitionRepository.unlikeDefinition(any));
+      expect(
+        fakeAnalytics.loggedEvents.single.name,
+        AnalyticsEvent.definitionLiked,
+      );
     });
 
     test('いいね解除: stateと、想定通りにrepositoryの関数が呼ばれることを検証', () async {
@@ -77,6 +86,10 @@ void main() {
       verify(
         mockLikeDefinitionRepository.unlikeDefinition(definition.id),
       ).called(1);
+      expect(
+        fakeAnalytics.loggedEvents.single.name,
+        AnalyticsEvent.definitionUnliked,
+      );
 
       // 想定外の関数が呼ばれていないか検証
       verifyNever(mockLikeDefinitionRepository.likeDefinition(any));

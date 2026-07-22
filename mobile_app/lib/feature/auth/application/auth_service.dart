@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/analytics/analytics_event.dart';
+import '../../../core/analytics/analytics_service.dart';
 import '../../../core/api/api_exception.dart';
 import '../../../util/logger.dart';
 import '../../user_config/application/user_config_state.dart';
@@ -27,6 +29,9 @@ class AuthService {
   Future<void> signIn() async {
     // 匿名ユーザーとして登録する。
     await ref.read(authRepositoryProvider).signInAnonymously();
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(AnalyticsEvent.userSignedInAnonymously);
 
     try {
       // ユーザー情報を登録する。
@@ -53,6 +58,7 @@ class AuthService {
       // ユーザー情報登録時にエラーが発生した場合、
       // 最初からやり直すために Firebase Auth を削除する。
       await ref.read(authRepositoryProvider).deleteUser();
+      await ref.read(analyticsServiceProvider).setUserId(null);
       rethrow;
     }
   }
@@ -74,6 +80,10 @@ class AuthService {
           osVersion: osVersion,
           appVersion: appVersion,
         );
+    await ref.read(analyticsServiceProvider).setUserId(userId);
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(AnalyticsEvent.userRegistered);
     logger.i('ユーザー情報の登録が完了しました。');
   }
 
@@ -98,6 +108,7 @@ class AuthService {
       await ref
           .read(registerUserRepositoryProvider)
           .updateVersionInfo(osVersion: osVersion, appVersion: appVersion);
+      await ref.read(analyticsServiceProvider).setUserId(userId);
     } on ApiException catch (e) {
       if (e.statusCode != 404 || e.code != 'user_not_found') {
         rethrow;
@@ -130,5 +141,8 @@ class AuthService {
       );
     }
     await ref.read(authRepositoryProvider).deleteUser();
+    final analytics = ref.read(analyticsServiceProvider);
+    await analytics.logEvent(AnalyticsEvent.accountDeleted);
+    await analytics.setUserId(null);
   }
 }

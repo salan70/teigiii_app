@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,3 +11,7 @@ FirebaseAuth firebaseAuth(FirebaseAuthRef ref) => FirebaseAuth.instance;
 @Riverpod(keepAlive: true)
 FirebaseAppCheck firebaseAppCheck(FirebaseAppCheckRef ref) =>
     FirebaseAppCheck.instance;
+
+@Riverpod(keepAlive: true)
+FirebaseAnalytics firebaseAnalytics(FirebaseAnalyticsRef ref) =>
+    FirebaseAnalytics.instance;

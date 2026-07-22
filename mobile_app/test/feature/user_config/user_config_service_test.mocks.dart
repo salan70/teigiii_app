@@ -6,11 +6,8 @@
 import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:riverpod_annotation/riverpod_annotation.dart' as _i5;
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart'
     as _i2;
-
-import 'user_config_service_test.dart' as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -31,44 +28,34 @@ import 'user_config_service_test.dart' as _i4;
 class MockUserConfigRepository extends _i1.Mock
     implements _i2.UserConfigRepository {
   @override
-  _i3.Future<List<String>> fetchMutedUserIdList() =>
-      (super.noSuchMethod(
-            Invocation.method(#fetchMutedUserIdList, []),
-            returnValue: _i3.Future<List<String>>.value(<String>[]),
-            returnValueForMissingStub: _i3.Future<List<String>>.value(
-              <String>[],
-            ),
-          )
-          as _i3.Future<List<String>>);
+  _i3.Future<List<String>> fetchMutedUserIdList() => (super.noSuchMethod(
+        Invocation.method(
+          #fetchMutedUserIdList,
+          [],
+        ),
+        returnValue: _i3.Future<List<String>>.value(<String>[]),
+        returnValueForMissingStub: _i3.Future<List<String>>.value(<String>[]),
+      ) as _i3.Future<List<String>>);
 
   @override
   _i3.Future<void> appendMutedUserIdList(String? mutedUserId) =>
       (super.noSuchMethod(
-            Invocation.method(#appendMutedUserIdList, [mutedUserId]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
+        Invocation.method(
+          #appendMutedUserIdList,
+          [mutedUserId],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 
   @override
   _i3.Future<void> removeMutedUserIdList(String? mutedUserId) =>
       (super.noSuchMethod(
-            Invocation.method(#removeMutedUserIdList, [mutedUserId]),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
-          )
-          as _i3.Future<void>);
-}
-
-/// A class which mocks [Listener].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockListener extends _i1.Mock
-    implements _i4.Listener<_i5.AsyncValue<void>> {
-  @override
-  void call(_i5.AsyncValue<void>? previous, _i5.AsyncValue<void>? next) =>
-      super.noSuchMethod(
-        Invocation.method(#call, [previous, next]),
-        returnValueForMissingStub: null,
-      );
+        Invocation.method(
+          #removeMutedUserIdList,
+          [mutedUserId],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 }

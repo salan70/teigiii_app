@@ -4,6 +4,8 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/analytics/analytics_event.dart';
+import '../../../core/analytics/analytics_service.dart';
 import '../../auth/application/auth_state.dart';
 import '../domain/user_profile.dart';
 import '../repository/avatar_repository.dart';
@@ -82,6 +84,8 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
       ref.read(imageRepositoryProvider).cropImage(path);
 
   Future<void> edit() async {
+    final before = _initialState;
+
     // 必要があれば画像をアップロードする。
     await _maybeUploadImage();
 
@@ -89,6 +93,18 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
     await ref
         .read(userProfileRepositoryProvider)
         .updateUserProfile(state.value!);
+
+    final after = state.value!;
+    await ref
+        .read(analyticsServiceProvider)
+        .logEvent(
+          AnalyticsEvent.profileUpdated,
+          parameters: {
+            AnalyticsParam.changedName: before.name != after.name,
+            AnalyticsParam.changedBio: before.bio != after.bio,
+            AnalyticsParam.changedAvatar: before.avatarUrl != after.avatarUrl,
+          },
+        );
 
     final userId = ref.read(userIdProvider)!;
     ref.invalidate(userProfileProvider(userId));

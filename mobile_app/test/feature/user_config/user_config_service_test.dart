@@ -2,80 +2,47 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:teigi_app/core/analytics/analytics_event.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
+import 'package:teigi_app/feature/user_config/application/user_config_service.dart';
 import 'package:teigi_app/feature/user_config/repository/user_config_repository.dart';
 
+import '../../mock/fake_analytics.dart';
 import 'user_config_service_test.mocks.dart';
 
-@GenerateNiceMocks([
-  MockSpec<UserConfigRepository>(),
-  MockSpec<Listener<AsyncValue<void>>>(),
-])
-// ignore: one_member_abstracts, unreachable_from_main
-abstract class Listener<T> {
-  // ignore: unreachable_from_main
-  void call(T? previous, T next);
-}
-
+@GenerateNiceMocks([MockSpec<UserConfigRepository>()])
 void main() {
   final mockUserConfigRepository = MockUserConfigRepository();
-  final listener = MockListener();
-
   late ProviderContainer container;
+  late FakeAnalyticsClient fakeAnalytics;
 
   setUp(() {
+    fakeAnalytics = FakeAnalyticsClient();
     container = ProviderContainer(
       overrides: [
         userIdProvider.overrideWith((ref) => 'userId'),
         userConfigRepositoryProvider.overrideWithValue(
           mockUserConfigRepository,
         ),
+        ...analyticsTestOverrides(fakeAnalytics),
       ],
     );
     addTearDown(container.dispose);
   });
 
-  tearDown(() {
-    reset(mockUserConfigRepository);
-    reset(listener);
+  tearDown(() => reset(mockUserConfigRepository));
+
+  test('muteUser 成功時に user_muted を送る', () async {
+    await container.read(userConfigServiceProvider).muteUser('target');
+
+    verify(mockUserConfigRepository.appendMutedUserIdList('target')).called(1);
+    expect(fakeAnalytics.loggedEvents.single.name, AnalyticsEvent.userMuted);
   });
 
-  /// userConfigServiceProviderをlistenし、UserConfigServiceを返す
-  // UserConfigService init() {
-  //   container.listen(
-  //     userConfigServiceProvider,
-  //     listener,
-  //     fireImmediately: true,
-  //   );
+  test('unmuteUser 成功時に user_unmuted を送る', () async {
+    await container.read(userConfigServiceProvider).unmuteUser('target');
 
-  //   return container.read(
-  //     userConfigServiceProvider.notifier,
-  //   );
-  // }
-
-  // TODO(me): addMutedUserのテスト書く
-  // 他のServiceProvider（Notifier）を読んでるからか、うまくいかないため保留
-  // group('addMutedUser', () {
-  //   test('stateと、想定通りにrepositoryの関数が呼ばれることを検証', () async {
-  //     // * Arrange
-  //     final userConfigService = init();
-
-  //     // * Act
-  //     await userConfigService.addMutedUser('targetUserId');
-
-  //     // * Assert
-  //     // stateの検証
-  //     verifyInOrder([
-  //       // build()時
-  //       listener.call(null, const AsyncData(null)),
-  //       // tapLike()時もstateは変わらない
-  //     ]);
-  //     // 他にlistenerが発火されないことを検証
-  //     verifyNoMoreInteractions(listener);
-
-  //     // 想定通りにrepositoryの関数が呼ばれているか検証
-
-  //     // 想定外の関数が呼ばれていないか検証
-  //   });
-  // });
+    verify(mockUserConfigRepository.removeMutedUserIdList('target')).called(1);
+    expect(fakeAnalytics.loggedEvents.single.name, AnalyticsEvent.userUnmuted);
+  });
 }
