@@ -19,19 +19,17 @@ const createWordRoute = createRoute({
   method: "post",
   path: "/words",
   tags: ["words"],
-  summary: "言葉を登録",
-  description: "表記はサーバーで前後トリム + NFC 正規化してから完全一致で重複判定する。",
+  summary: "言葉を明示登録する",
+  description:
+    "表記はサーバーで前後トリム + NFC 正規化してから完全一致で解決する。新規作成は 201、既存言葉への明示登録・公開昇格は 200。読みが異なっても既存の読みを採用し、重複する言葉は作らない。",
   security: authenticatedSecurity,
   request: {
     body: jsonContent(createWordRequestSchema, "登録内容"),
   },
   responses: {
-    201: jsonContent(wordResponseSchema, "登録された言葉"),
+    201: jsonContent(wordResponseSchema, "新規に作成・明示登録された言葉"),
+    200: jsonContent(wordResponseSchema, "既存言葉への明示登録（公開昇格・再登録を含む）"),
     404: errorContent("未登録・削除済みユーザー（user_not_found）"),
-    409: {
-      content: { "application/json": { schema: wordConflictResponseSchema } },
-      description: "同一表記が登録済み（word_already_exists）。既存の言葉を返す",
-    },
     ...authErrorResponses,
   },
 });
@@ -155,7 +153,7 @@ type WordRouteEnvironment = {
   Variables: AuthenticationVariables;
 };
 
-/** 登録・修正時の表記重複は 409 と既存の言葉で返す（レスポンス形状が通常のエラーと異なる）。 */
+/** 修正時の表記重複は 409 と既存の言葉で返す（レスポンス形状が通常のエラーと異なる）。 */
 function wordConflictResponse(error: WordConflictError) {
   return {
     error: { code: error.code, message: error.message },
@@ -165,16 +163,11 @@ function wordConflictResponse(error: WordConflictError) {
 
 export const wordRoutes = new OpenAPIHono<WordRouteEnvironment>()
   .openapi(createWordRoute, async (context) => {
-    const service = new WordService(context.env);
-    try {
-      const word = await service.create(context.get("firebaseUid"), context.req.valid("json"));
-      return context.json(word, 201);
-    } catch (error) {
-      if (error instanceof WordConflictError) {
-        return context.json(wordConflictResponse(error), 409);
-      }
-      throw error;
-    }
+    const result = await new WordService(context.env).create(
+      context.get("firebaseUid"),
+      context.req.valid("json"),
+    );
+    return context.json(result.word, result.created ? 201 : 200);
   })
   .openapi(listWordsRoute, async (context) => {
     const result = await new WordService(context.env).list(

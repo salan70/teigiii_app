@@ -105,7 +105,7 @@ Class | Method | HTTP request | Description
 [*WordsApi*](doc/WordsApi.md) | [**v1WordsIdPatch**](doc/WordsApi.md#v1wordsidpatch) | **PATCH** /v1/words/{id} | 作成者修正（表記・よみ）
 [*WordsApi*](doc/WordsApi.md) | [**v1WordsIdSaveDelete**](doc/WordsApi.md#v1wordsidsavedelete) | **DELETE** /v1/words/{id}/save | 言葉の保存を解除
 [*WordsApi*](doc/WordsApi.md) | [**v1WordsIdSavePut**](doc/WordsApi.md#v1wordsidsaveput) | **PUT** /v1/words/{id}/save | 言葉を保存
-[*WordsApi*](doc/WordsApi.md) | [**v1WordsPost**](doc/WordsApi.md#v1wordspost) | **POST** /v1/words | 言葉を登録
+[*WordsApi*](doc/WordsApi.md) | [**v1WordsPost**](doc/WordsApi.md#v1wordspost) | **POST** /v1/words | 言葉を明示登録する
 
 
 ## Documentation For Models

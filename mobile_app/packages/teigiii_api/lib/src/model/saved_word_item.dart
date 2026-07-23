@@ -20,7 +20,9 @@ class SavedWordItem {
   /// Returns a new [SavedWordItem] instance.
   SavedWordItem({
     required this.word,
+
     required this.isDefinedByMe,
+
     required this.publicCount,
   });
 

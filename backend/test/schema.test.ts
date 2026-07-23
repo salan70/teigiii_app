@@ -81,8 +81,59 @@ describe("migration SQL", () => {
       "saved_words",
       "user_mutes",
       "users",
+      "word_registrations",
       "words",
     ]);
+  });
+
+  test("既存言葉は明示登録なし（first_registered_* が NULL）で移行される", () => {
+    insertWord(db, "w1", "自由");
+    expect(
+      db.query("select first_registered_at, first_registered_by from words where id = 'w1'").get(),
+    ).toEqual({
+      first_registered_at: null,
+      first_registered_by: null,
+    });
+  });
+
+  test("同じユーザーの word_registrations は UNIQUE で拒否される", () => {
+    insertUser(db, "u1");
+    insertWord(db, "w1", "自由");
+    db.run(
+      "insert into word_registrations (id, word_id, user_id, created_at) values ('r1', 'w1', 'u1', ?)",
+      [now],
+    );
+    expect(() =>
+      db.run(
+        "insert into word_registrations (id, word_id, user_id, created_at) values ('r2', 'w1', 'u1', ?)",
+        [now],
+      ),
+    ).toThrow();
+  });
+
+  test("ユーザー物理削除で word_registrations.user_id と first_registered_by が NULL になる", () => {
+    insertUser(db, "u1");
+    insertWord(db, "w1", "自由");
+    db.run(
+      "update words set created_by = 'u1', first_registered_at = ?, first_registered_by = 'u1' where id = 'w1'",
+      [now],
+    );
+    db.run(
+      "insert into word_registrations (id, word_id, user_id, created_at) values ('r1', 'w1', 'u1', ?)",
+      [now],
+    );
+
+    db.run("delete from users where id = 'u1'");
+
+    expect(db.query("select user_id from word_registrations where id = 'r1'").get()).toEqual({
+      user_id: null,
+    });
+    expect(
+      db.query("select created_by, first_registered_by from words where id = 'w1'").get(),
+    ).toEqual({
+      created_by: null,
+      first_registered_by: null,
+    });
   });
 
   test("words.word の UNIQUE 制約が効く", () => {

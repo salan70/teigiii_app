@@ -90,6 +90,71 @@ beforeEach(async () => {
 });
 
 describe("POST /v1/definitions", () => {
+  test("word + reading で言葉を解決／内部作成し、明示登録は残さない", async () => {
+    await createUser("alice");
+    await createUser("bob");
+
+    const response = await requestJson("alice", "/v1/definitions", "POST", {
+      body: "非公開の定義",
+      reading: "ないぶ",
+      status: "private",
+      word: "内部作成語",
+    });
+    expect(response.status).toBe(201);
+    const body = await response.json<DefinitionResponse>();
+    expect(body.word).toMatchObject({ reading: "ないぶ", word: "内部作成語" });
+
+    const wordRow = await env.DB.prepare(
+      "select first_registered_at, first_registered_by from words where id = ?",
+    )
+      .bind(body.word.id)
+      .first<{ first_registered_at: number | null; first_registered_by: string | null }>();
+    expect(wordRow).toEqual({ first_registered_at: null, first_registered_by: null });
+
+    const registrations = await env.DB.prepare(
+      "select count(*) as c from word_registrations where word_id = ?",
+    )
+      .bind(body.word.id)
+      .first<{ c: number }>();
+    expect(registrations).toEqual({ c: 0 });
+
+    expect((await request("bob", `/v1/words/${body.word.id}`)).status).toBe(404);
+  });
+
+  test("公開定義なら内部作成した言葉も公開経路に出る", async () => {
+    await createUser("alice");
+    await createUser("bob");
+
+    const response = await requestJson("alice", "/v1/definitions", "POST", {
+      body: "公開の定義",
+      reading: "こうかい",
+      status: "public",
+      word: "公開内部語",
+    });
+    expect(response.status).toBe(201);
+    const body = await response.json<DefinitionResponse>();
+
+    expect((await request("bob", `/v1/words/${body.word.id}`)).status).toBe(200);
+    const list = await request("bob", "/v1/words");
+    const listBody = await list.json<{ items: Array<{ id: string }> }>();
+    expect(listBody.items.map((item) => item.id)).toContain(body.word.id);
+  });
+
+  test("既存言葉への word + reading は既存の読みを採用する", async () => {
+    await createUser("alice");
+    const existing = await createWord("alice", "既存語", "きそんご");
+
+    const response = await requestJson("alice", "/v1/definitions", "POST", {
+      body: "定義",
+      reading: "ちがうよみ",
+      status: "public",
+      word: "既存語",
+    });
+    expect(response.status).toBe(201);
+    const body = await response.json<DefinitionResponse>();
+    expect(body.word).toMatchObject({ id: existing.id, reading: "きそんご", word: "既存語" });
+  });
+
   test("draft は finalizedAt / editableUntil なしで作成される", async () => {
     await createUser("alice");
     const word = await createWord("alice", "ことば", "ことば");

@@ -3,6 +3,7 @@ import { decodeOpaqueCursor, encodeOpaqueCursor } from "../lib/cursor";
 import { normalizeText } from "../lib/normalize";
 import { uuidv7 } from "../lib/uuidv7";
 import { readingSubGroup } from "./reading-sub-group";
+import { accessibleWordSql, publiclyVisibleWordSql } from "./word-visibility";
 
 const editWindowMilliseconds = 60 * 60 * 1000;
 
@@ -16,6 +17,8 @@ type WordRow = {
   reading: string;
   reading_sub_group: string;
   created_by: string | null;
+  first_registered_at: number | null;
+  first_registered_by: string | null;
   created_at: number;
 };
 
@@ -59,7 +62,17 @@ export type ListWordsInput = {
   subGroup?: string | undefined;
 };
 
-/** 登録時に同一表記が存在した場合の 409。既存の言葉を添えて返す。 */
+export type WordResponse = {
+  id: string;
+  isEditableByMe: boolean;
+  isSavedByMe: boolean;
+  publicDefinitionCount: number;
+  reading: string;
+  readingSubGroup: string;
+  word: string;
+};
+
+/** 修正時に同一表記が存在した場合の 409。既存の言葉を添えて返す。 */
 export class WordConflictError extends ApiError {
   constructor(readonly existingWord: { id: string; word: string; reading: string }) {
     super(409, "word_already_exists", "Word already exists");
@@ -92,11 +105,14 @@ function escapeLikePattern(value: string): string {
   return value.replaceAll("\\", "\\\\").replaceAll("%", "\\%").replaceAll("_", "\\_");
 }
 
-function toWordResponse(row: WordDetailRow, uid: string, now: number) {
+function toWordResponse(row: WordDetailRow, uid: string, now: number): WordResponse {
+  // 昇格登録では created_by と first_registered_by が一致しないため、どちらにも編集権を与えない。
+  const isOriginalExplicitRegistrant =
+    row.created_by === uid && (row.first_registered_by === null || row.first_registered_by === uid);
   return {
     id: row.id,
     isEditableByMe:
-      row.created_by === uid &&
+      isOriginalExplicitRegistrant &&
       now - row.created_at < editWindowMilliseconds &&
       row.has_other_user_definition === 0 &&
       row.has_other_user_save === 0,
@@ -109,7 +125,7 @@ function toWordResponse(row: WordDetailRow, uid: string, now: number) {
 }
 
 /**
- * D1 上の言葉の登録・一覧・取得・期限付き修正・保存を扱う。
+ * D1 上の言葉の明示登録・一覧・取得・期限付き修正・保存を扱う。
  *
  * @doc doc/specs/workers-api-server.md#言葉
  */
@@ -118,7 +134,9 @@ export class WordService {
 
   async #findByWord(word: string): Promise<WordRow | null> {
     return this.env.DB.prepare(
-      "select id, word, reading, reading_sub_group, created_by, created_at from words where word = ?",
+      `select id, word, reading, reading_sub_group, created_by,
+              first_registered_at, first_registered_by, created_at
+       from words where word = ?`,
     )
       .bind(word)
       .first<WordRow>();
@@ -132,9 +150,14 @@ export class WordService {
          w.reading,
          w.reading_sub_group,
          w.created_by,
+         w.first_registered_at,
+         w.first_registered_by,
          w.created_at,
          (select count(*) from definitions d
-          where d.word_id = w.id and d.status = 'public' and d.deleted_at is null)
+          join users author on author.id = d.author_id and author.deleted_at is null
+          where d.word_id = w.id and d.status = 'public' and d.deleted_at is null
+            and not exists(select 1 from user_mutes m
+              where m.muter_id = ? and m.muted_user_id = d.author_id))
            as public_definition_count,
          exists(select 1 from saved_words s
           where s.word_id = w.id and s.user_id = ?) as is_saved_by_me,
@@ -144,9 +167,10 @@ export class WordService {
          exists(select 1 from saved_words s
           where s.word_id = w.id and s.user_id <> ?) as has_other_user_save
        from words w
-       where w.id = ?`,
+       where w.id = ?
+         and ${accessibleWordSql("?")}`,
     )
-      .bind(uid, uid, uid, id)
+      .bind(uid, uid, uid, uid, id, uid, uid, uid)
       .first<WordDetailRow>();
     if (row === null) throw new ApiError(404, "word_not_found", "Word not found");
     return row;
@@ -161,6 +185,16 @@ export class WordService {
     if (user === null) throw new ApiError(404, "user_not_found", "User not found");
   }
 
+  async #requirePubliclyVisibleWord(uid: string, wordId: string): Promise<void> {
+    const row = await this.env.DB.prepare(
+      `select w.id from words w
+       where w.id = ? and ${publiclyVisibleWordSql("?")}`,
+    )
+      .bind(wordId, uid, uid)
+      .first();
+    if (row === null) throw new ApiError(404, "word_not_found", "Word not found");
+  }
+
   async #throwIfWordTaken(word: string): Promise<void> {
     const existing = await this.#findByWord(word);
     if (existing !== null) {
@@ -172,27 +206,89 @@ export class WordService {
     }
   }
 
-  async create(uid: string, input: CreateWordInput) {
+  async #ensureRegistration(uid: string, wordId: string, now: number): Promise<void> {
+    await this.env.DB.prepare(
+      `update words
+       set first_registered_at = ?, first_registered_by = ?, updated_at = ?
+       where id = ? and first_registered_at is null`,
+    )
+      .bind(now, uid, now, wordId)
+      .run();
+
+    try {
+      await this.env.DB.prepare(
+        `insert into word_registrations (id, word_id, user_id, created_at)
+         select ?, ?, ?, ?
+         where not exists(
+           select 1 from word_registrations
+           where word_id = ? and user_id = ?
+         )`,
+      )
+        .bind(uuidv7(), wordId, uid, now, wordId, uid)
+        .run();
+    } catch (error) {
+      // where not exists と INSERT の間に同時リクエストが入ると部分 UNIQUE に落ちうる。
+      // 既に同一ユーザーの登録があるなら冪等成功として扱う。
+      const existing = await this.env.DB.prepare(
+        `select 1 as ok from word_registrations where word_id = ? and user_id = ?`,
+      )
+        .bind(wordId, uid)
+        .first();
+      if (existing !== null) return;
+      throw error;
+    }
+  }
+
+  /**
+   * 言葉単体の明示登録。
+   * 新規作成は created=true（201）、既存への登録・昇格は created=false（200）。
+   */
+  async create(
+    uid: string,
+    input: CreateWordInput,
+  ): Promise<{ created: boolean; word: WordResponse }> {
     await this.#requireActiveUser(uid);
     const word = requireNonEmpty(normalizeText(input.word), "word");
     const reading = requireNonEmpty(normalizeText(input.reading), "reading");
-    await this.#throwIfWordTaken(word);
+    const now = Date.now();
+
+    const existing = await this.#findByWord(word);
+    if (existing !== null) {
+      await this.#ensureRegistration(uid, existing.id, now);
+      return { created: false, word: await this.get(uid, existing.id) };
+    }
 
     const id = uuidv7();
-    const now = Date.now();
     try {
-      await this.env.DB.prepare(
-        `insert into words (id, word, reading, reading_sub_group, created_by, created_at, updated_at)
-         values (?, ?, ?, ?, ?, ?, ?)`,
-      )
-        .bind(id, word, reading, readingSubGroup(reading), uid, now, now)
-        .run();
+      await this.env.DB.batch([
+        this.env.DB.prepare(
+          `insert into words (
+             id, word, reading, reading_sub_group, created_by,
+             first_registered_at, first_registered_by, created_at, updated_at
+           ) values (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        ).bind(id, word, reading, readingSubGroup(reading), uid, now, uid, now, now),
+        this.env.DB.prepare(
+          `insert into word_registrations (id, word_id, user_id, created_at)
+           values (?, ?, ?, ?)`,
+        ).bind(uuidv7(), id, uid, now),
+      ]);
     } catch (error) {
-      // UNIQUE 競合（同時登録）だけを 409 に変換し、それ以外は再送出する
-      await this.#throwIfWordTaken(word);
-      throw error;
+      // UNIQUE 競合（同時登録）は既存行への明示登録へフォールバックする
+      const raced = await this.#findByWord(word);
+      if (raced === null) throw error;
+      await this.#ensureRegistration(uid, raced.id, now);
+      return { created: false, word: await this.get(uid, raced.id) };
     }
-    return this.get(uid, id);
+    return { created: true, word: await this.get(uid, id) };
+  }
+
+  /**
+   * 定義作成時の言葉解決（検索のみ）。明示登録は行わない。
+   * 表記が同じ既存言葉があればその ID を返し、読みは既存を採用する。
+   */
+  async findIdByNormalizedWord(word: string): Promise<string | null> {
+    const existing = await this.#findByWord(word);
+    return existing?.id ?? null;
   }
 
   async get(uid: string, id: string) {
@@ -224,6 +320,7 @@ export class WordService {
          set word = ?, reading = ?, reading_sub_group = ?, updated_at = ?
          where id = ?
            and created_by = ?
+           and (first_registered_by is null or first_registered_by = ?)
            and created_at > ?
            and not exists(select 1 from definitions d
             where d.word_id = words.id and d.author_id <> ? and d.deleted_at is null)
@@ -236,6 +333,7 @@ export class WordService {
           readingSubGroup(reading),
           now,
           id,
+          uid,
           uid,
           now - editWindowMilliseconds,
           uid,
@@ -255,8 +353,8 @@ export class WordService {
 
   async list(uid: string, input: ListWordsInput) {
     const cursor = input.cursor === undefined ? null : decodeWordListCursor(input.cursor);
-    const conditions: string[] = [];
-    const parameters: unknown[] = [];
+    const conditions: string[] = [publiclyVisibleWordSql("?")];
+    const parameters: unknown[] = [uid, uid];
 
     if (input.subGroup !== undefined) {
       conditions.push("w.reading_sub_group = ?");
@@ -292,7 +390,7 @@ export class WordService {
       parameters.push(cursor.reading, cursor.reading, cursor.id);
     }
 
-    const whereClause = conditions.length === 0 ? "" : `where ${conditions.join(" and ")}`;
+    const whereClause = `where ${conditions.join(" and ")}`;
     const rows = (
       await this.env.DB.prepare(
         `select
@@ -340,10 +438,7 @@ export class WordService {
 
   async save(uid: string, wordId: string): Promise<void> {
     await this.#requireActiveUser(uid);
-    const word = await this.env.DB.prepare("select id from words where id = ?")
-      .bind(wordId)
-      .first();
-    if (word === null) throw new ApiError(404, "word_not_found", "Word not found");
+    await this.#requirePubliclyVisibleWord(uid, wordId);
     await this.env.DB.prepare(
       "insert or ignore into saved_words (user_id, word_id, created_at) values (?, ?, ?)",
     )

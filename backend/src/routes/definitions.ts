@@ -17,12 +17,15 @@ const createDefinitionRoute = createRoute({
   path: "/definitions",
   tags: ["definitions"],
   summary: "定義を作成（draft / public / private のいずれでも）",
+  description:
+    "wordId 指定、または word + reading 指定のいずれか一方を受け付ける。後者ではサーバーが言葉を解決／必要時に内部作成してから定義を作成する。内部作成は明示登録にしない。",
   security: authenticatedSecurity,
   request: {
     body: jsonContent(createDefinitionRequestSchema, "作成内容"),
   },
   responses: {
     201: jsonContent(definitionResponseSchema, "作成された定義"),
+    400: errorContent("wordId と word/reading の同時指定・不足（invalid_request）"),
     404: errorContent(
       "言葉が存在しない（word_not_found）・未登録・削除済みユーザー（user_not_found）",
     ),

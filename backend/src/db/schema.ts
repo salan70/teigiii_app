@@ -38,7 +38,11 @@ export const users = sqliteTable(
  * 言葉はユーザー削除不可のグローバル資産のため deleted_at を持たない。
  * word の一意性は完全一致（前後トリム + NFC 正規化をサーバーで適用してから保存）。
  *
+ * 公開経路への露出は「明示登録」または「公開定義」で判定する。
+ * created_by は行の作成者（内部作成含む）。first_registered_* は最初の明示登録のみ。
+ *
  * @doc doc/specs/new-ui-information-architecture.md#16-言葉の管理
+ * @doc doc/specs/new-ui-information-architecture.md#言葉の公開性
  */
 export const words = sqliteTable(
   "words",
@@ -48,8 +52,13 @@ export const words = sqliteTable(
     reading: text("reading").notNull(),
     // あかさたな行ラベル。「ゃ→や」「が→か」等の行判定は SQL で書けないため書き込み時にサーバーで算出する。
     readingSubGroup: text("reading_sub_group").notNull(),
-    // 登録者。内部記録のみで API レスポンスに含めない。
+    // 行の作成者（定義投稿時の内部作成を含む）。内部記録のみで API レスポンスに含めない。
     createdBy: text("created_by").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    // 最初の明示登録（POST /v1/words）の日時・登録者。未明示登録は NULL。
+    firstRegisteredAt: integer("first_registered_at"),
+    firstRegisteredBy: text("first_registered_by").references(() => users.id, {
       onDelete: "set null",
     }),
     createdAt: integer("created_at").notNull(),
@@ -58,8 +67,31 @@ export const words = sqliteTable(
   (table) => [
     uniqueIndex("words_word_unique").on(table.word),
     index("words_reading_order_idx").on(table.readingSubGroup, table.reading, table.id),
-    // 「見つける」フィードの言葉登録アクティビティ用
-    index("words_created_at_idx").on(sql`${table.createdAt} desc`, table.id),
+    // 「見つける」フィードの言葉登録アクティビティ用（最初の明示登録時のみ）
+    index("words_first_registered_at_idx").on(sql`${table.firstRegisteredAt} desc`, table.id),
+  ],
+);
+
+/**
+ * ユーザーごとの言葉の明示登録。同じユーザーの再登録は UNIQUE で冪等にする。
+ * 退会時は user_id を NULL にして関係を匿名化し、言葉の公開根拠を残す。
+ */
+export const wordRegistrations = sqliteTable(
+  "word_registrations",
+  {
+    id: text("id").primaryKey(),
+    wordId: text("word_id")
+      .notNull()
+      .references(() => words.id, { onDelete: "cascade" }),
+    // 退会後は NULL（匿名化）。有効ユーザーとの組み合わせは UNIQUE。
+    userId: text("user_id").references(() => users.id, { onDelete: "set null" }),
+    createdAt: integer("created_at").notNull(),
+  },
+  (table) => [
+    uniqueIndex("word_registrations_word_user_unique")
+      .on(table.wordId, table.userId)
+      .where(sql`${table.userId} is not null`),
+    index("word_registrations_word_idx").on(table.wordId),
   ],
 );
 

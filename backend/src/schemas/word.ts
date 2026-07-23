@@ -51,7 +51,7 @@ export const updateWordRequestSchema = z
   })
   .openapi("UpdateWordRequest");
 
-/** 登録時に同一表記が存在した場合の 409 レスポンス。既存の言葉を返す。 */
+/** 修正時に同一表記が存在した場合の 409 レスポンス。既存の言葉を返す。 */
 export const wordConflictResponseSchema = errorResponseSchema
   .extend({
     existingWord: wordSummarySchema,
