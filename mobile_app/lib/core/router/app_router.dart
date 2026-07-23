@@ -28,6 +28,7 @@ import '../page/user_list_liked_page.dart';
 import '../page/user_list_muted_page.dart';
 import '../page/user_search_page.dart';
 import '../page/user_search_result_page.dart';
+import '../page/user_word_definition_list_page.dart';
 import '../page/welcome_page.dart';
 import '../page/word_list_page.dart';
 import '../page/word_registration_page.dart';
@@ -53,6 +54,10 @@ class AppRouter extends _$AppRouter {
     AdaptiveRoute(path: 'definition_detail', page: DefinitionDetailRoute.page),
     AdaptiveRoute(path: 'user_list_liked', page: UserListLikedRoute.page),
     AdaptiveRoute(path: 'word_top', page: WordTopRoute.page),
+    AdaptiveRoute(
+      path: 'user_word_definition_list',
+      page: UserWordDefinitionListRoute.page,
+    ),
     AdaptiveRoute(path: 'profile_top', page: ProfileTopRoute.page),
     AdaptiveRoute(
       path: 'user_list_following_or_follower',
@@ -79,6 +84,18 @@ class AppRouter extends _$AppRouter {
       guards: [ref.read(firstLaunchGuardProvider), ref.read(authGuardProvider)],
       children: [
         AdaptiveRoute(
+          path: 'home',
+          page: HomeRouterRoute.page,
+          children: [
+            AdaptiveRoute(initial: true, page: HomeRoute.page),
+            AdaptiveRoute(
+              path: 'dictionary_individual',
+              page: DictionaryIndividualRoute.page,
+            ),
+            ...commonRouteList,
+          ],
+        ),
+        AdaptiveRoute(
           path: 'dictionary_individual',
           page: DictionaryIndividualRouterRoute.page,
           children: [
@@ -96,18 +113,6 @@ class AppRouter extends _$AppRouter {
               path: 'word_search_result',
               page: WordSearchResultRoute.page,
             ),
-            AdaptiveRoute(
-              path: 'dictionary_individual',
-              page: DictionaryIndividualRoute.page,
-            ),
-            ...commonRouteList,
-          ],
-        ),
-        AdaptiveRoute(
-          path: 'home',
-          page: HomeRouterRoute.page,
-          children: [
-            AdaptiveRoute(initial: true, page: HomeRoute.page),
             AdaptiveRoute(
               path: 'dictionary_individual',
               page: DictionaryIndividualRoute.page,

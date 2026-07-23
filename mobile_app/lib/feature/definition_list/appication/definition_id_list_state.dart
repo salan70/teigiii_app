@@ -91,6 +91,22 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         .fetchForIndividualDictionary(userId, subGroup, _cursor(isFirstFetch));
   }
 
+  Future<DefinitionIdListState> _fetchForUserWord({
+    required bool isFirstFetch,
+  }) {
+    final userId = targetUserId;
+    final id = wordId;
+    if (userId == null) {
+      throw ArgumentError('targetUserIdがnullです');
+    }
+    if (id == null) {
+      throw ArgumentError('wordIdがnullです');
+    }
+    return ref
+        .read(definitionIdListRepositoryProvider)
+        .fetchForUserWord(userId, id, _cursor(isFirstFetch));
+  }
+
   Future<void> fetchMore() async {
     await fetchMoreHelper(
       ref: ref,
@@ -127,6 +143,8 @@ class DefinitionIdListStateNotifier extends _$DefinitionIdListStateNotifier
         return _fetchForProfileLiked(isFirstFetch: isFirstFetch);
       case DefinitionFeedType.individualIndex:
         return _fetchForIndividualDictionary(isFirstFetch: isFirstFetch);
+      case DefinitionFeedType.userWordDefinitions:
+        return _fetchForUserWord(isFirstFetch: isFirstFetch);
     }
   }
 }

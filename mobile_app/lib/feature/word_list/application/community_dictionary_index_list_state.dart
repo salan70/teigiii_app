@@ -9,9 +9,24 @@ import '../repository/fetch_word_list_repository.dart';
 part 'community_dictionary_index_list_state.g.dart';
 
 List<dynamic> buildIndexedList(List<Word> words) {
+  final sorted = [...words]
+    ..sort((a, b) {
+      final groupCompare = initialMainGroupFromReading(
+        a.reading,
+      ).index.compareTo(initialMainGroupFromReading(b.reading).index);
+      if (groupCompare != 0) {
+        return groupCompare;
+      }
+      final readingCompare = a.reading.compareTo(b.reading);
+      if (readingCompare != 0) {
+        return readingCompare;
+      }
+      return a.id.compareTo(b.id);
+    });
+
   final out = <dynamic>[];
   InitialMainGroup? last;
-  for (final w in words) {
+  for (final w in sorted) {
     final g = initialMainGroupFromReading(w.reading);
     if (g != last) {
       out.add(g.sectionHeaderLabel);

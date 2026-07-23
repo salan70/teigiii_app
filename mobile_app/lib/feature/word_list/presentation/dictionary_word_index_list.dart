@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common_widget/infinity_scroll_widget.dart';
+import '../../auth/application/auth_state.dart';
 import '../../word/domain/word.dart';
 import '../../word/presentation/word_tile.dart';
 import '../../word/presentation/word_tile_shimmer.dart';
 import '../application/community_dictionary_index_list_state.dart';
+import '../application/personal_dictionary_word_navigation.dart';
 import '../application/user_dictionary_index_list_state.dart';
 
 /// タイムラインの contentPadding と同じ左右余白。
@@ -23,6 +25,8 @@ class DictionaryWordIndexList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = targetUserId;
+    final currentUserId = ref.watch(userIdProvider);
+    final isMyDictionary = userId != null && userId == currentUserId;
 
     // あかさたなヘッダー全幅のため contentPadding は zero。
     // 言葉・shimmer はタイムラインと同じ左右 16。
@@ -31,6 +35,9 @@ class DictionaryWordIndexList extends ConsumerWidget {
       child: WordTileShimmer(),
     );
 
+    Widget tileBuilder(dynamic item) =>
+        _buildTile(context, ref, item, isMyDictionary: isMyDictionary);
+
     if (userId == null) {
       return InfinityScrollWidget(
         listStateNotifierProvider:
@@ -38,7 +45,7 @@ class DictionaryWordIndexList extends ConsumerWidget {
         fetchMore: ref
             .read(communityDictionaryIndexListStateNotifierProvider.notifier)
             .fetchMore,
-        tileBuilder: _buildTile,
+        tileBuilder: tileBuilder,
         contentPadding: EdgeInsets.zero,
         shimmerTile: shimmerTile,
         shimmerTileNumber: 12,
@@ -52,7 +59,7 @@ class DictionaryWordIndexList extends ConsumerWidget {
       fetchMore: ref
           .read(userDictionaryIndexListStateNotifierProvider(userId).notifier)
           .fetchMore,
-      tileBuilder: _buildTile,
+      tileBuilder: tileBuilder,
       contentPadding: EdgeInsets.zero,
       shimmerTile: shimmerTile,
       shimmerTileNumber: 12,
@@ -60,14 +67,32 @@ class DictionaryWordIndexList extends ConsumerWidget {
     );
   }
 
-  Widget _buildTile(dynamic item) {
+  Widget _buildTile(
+    BuildContext context,
+    WidgetRef ref,
+    dynamic item, {
+    required bool isMyDictionary,
+  }) {
     if (item is String) {
       return _SectionHeader(label: item);
     }
     if (item is Word) {
       return Padding(
         padding: _horizontalPadding,
-        child: WordTile(word: item),
+        child: WordTile(
+          word: item,
+          showPostedDefinitionCount: !isMyDictionary,
+          onTap: isMyDictionary
+              ? () {
+                  openPersonalDictionaryWord(
+                    context: context,
+                    ref: ref,
+                    word: item,
+                    userId: targetUserId!,
+                  );
+                }
+              : null,
+        ),
       );
     }
     return const SizedBox.shrink();

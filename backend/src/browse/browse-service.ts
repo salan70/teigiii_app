@@ -1,5 +1,10 @@
 import { ApiError } from "../errors";
 import { decodeOpaqueCursor, encodeOpaqueCursor } from "../lib/cursor";
+import {
+  readingScriptClass,
+  readingScriptClassCursorClause,
+  readingScriptClassOrderBy,
+} from "../words/reading-script-class";
 import { accessibleWordSql, publiclyVisibleWordSql } from "../words/word-visibility";
 
 const editWindowMilliseconds = 60 * 60 * 1000;
@@ -60,6 +65,8 @@ type ReadingCursor = {
   id: string;
   kind: string;
   reading: string;
+  /** 五十音(0) → 英字(1) → 数字・記号(2)。旧カーソルには無い場合がある */
+  scriptClass?: number;
   version: 1;
 };
 
@@ -105,7 +112,27 @@ function decodeReadingCursor(value: string, kind: string): ReadingCursor {
   ) {
     throw new ApiError(400, "invalid_cursor", "Invalid cursor");
   }
-  return parsed as unknown as ReadingCursor;
+  const cursor = parsed as unknown as ReadingCursor;
+  const scriptClass =
+    typeof parsed["scriptClass"] === "number" && Number.isInteger(parsed["scriptClass"])
+      ? (parsed["scriptClass"] as number)
+      : readingScriptClass(cursor.reading);
+  return { ...cursor, scriptClass };
+}
+
+function readingCursorBindings(cursor: ReadingCursor): unknown[] {
+  const scriptClass = cursor.scriptClass ?? readingScriptClass(cursor.reading);
+  return [scriptClass, scriptClass, cursor.reading, scriptClass, cursor.reading, cursor.id];
+}
+
+function encodeReadingCursor(kind: string, row: { id: string; reading: string }): string {
+  return encodeOpaqueCursor({
+    id: row.id,
+    kind,
+    reading: row.reading,
+    scriptClass: readingScriptClass(row.reading),
+    version: 1,
+  } satisfies ReadingCursor);
 }
 
 function activeLikesCount(definitionId = "d.id"): string {
@@ -213,15 +240,15 @@ export class BrowseService {
     const cursor =
       cursorValue === undefined ? null : decodeReadingCursor(cursorValue, "user_dictionary");
     const cursorClause =
-      cursor === null ? "" : "and (w.reading > ? or (w.reading = ? and w.id > ?))";
+      cursor === null ? "" : `and ${readingScriptClassCursorClause()}`;
     const statement = this.env.DB.prepare(
       `select w.id, w.word, w.reading, count(*) as public_count
        from definitions d
        join words w on w.id = d.word_id
        join users u on u.id = d.author_id and u.deleted_at is null
        where d.author_id = ? and d.status = 'public' and d.deleted_at is null ${cursorClause}
-       group by w.id, w.word, w.reading
-       order by w.reading asc, w.id asc
+       group by w.id, w.word, w.reading, w.reading_sub_group
+       order by ${readingScriptClassOrderBy()}
        limit ?`,
     );
     type Row = { id: string; word: string; reading: string; public_count: number };
@@ -229,7 +256,7 @@ export class BrowseService {
       await (
         cursor === null
           ? statement.bind(userId, limit + 1)
-          : statement.bind(userId, cursor.reading, cursor.reading, cursor.id, limit + 1)
+          : statement.bind(userId, ...readingCursorBindings(cursor), limit + 1)
       ).all<Row>()
     ).results;
     return page(
@@ -239,13 +266,7 @@ export class BrowseService {
         publicCount: Number(row.public_count ?? 0),
         word: { id: row.id, reading: row.reading, word: row.word },
       }),
-      (row) =>
-        encodeOpaqueCursor({
-          id: row.id,
-          kind: "user_dictionary",
-          reading: row.reading,
-          version: 1,
-        } satisfies ReadingCursor),
+      (row) => encodeReadingCursor("user_dictionary", row),
     );
   }
 
@@ -422,7 +443,7 @@ export class BrowseService {
     const cursor =
       cursorValue === undefined ? null : decodeReadingCursor(cursorValue, "defined_words");
     const cursorClause =
-      cursor === null ? "" : "and (w.reading > ? or (w.reading = ? and w.id > ?))";
+      cursor === null ? "" : `and ${readingScriptClassCursorClause()}`;
     const statement = this.env.DB.prepare(
       `select w.id, w.word, w.reading,
          sum(case when d.status = 'public' then 1 else 0 end) as public_count,
@@ -430,8 +451,8 @@ export class BrowseService {
          sum(case when d.status = 'draft' then 1 else 0 end) as draft_count
        from definitions d join words w on w.id = d.word_id
        where d.author_id = ? and d.deleted_at is null ${cursorClause}
-       group by w.id, w.word, w.reading
-       order by w.reading asc, w.id asc limit ?`,
+       group by w.id, w.word, w.reading, w.reading_sub_group
+       order by ${readingScriptClassOrderBy()} limit ?`,
     );
     type Row = {
       id: string;
@@ -445,7 +466,7 @@ export class BrowseService {
       await (
         cursor === null
           ? statement.bind(uid, limit + 1)
-          : statement.bind(uid, cursor.reading, cursor.reading, cursor.id, limit + 1)
+          : statement.bind(uid, ...readingCursorBindings(cursor), limit + 1)
       ).all<Row>()
     ).results;
     return page(
@@ -457,13 +478,7 @@ export class BrowseService {
         publicCount: Number(row.public_count ?? 0),
         word: { id: row.id, reading: row.reading, word: row.word },
       }),
-      (row) =>
-        encodeOpaqueCursor({
-          id: row.id,
-          kind: "defined_words",
-          reading: row.reading,
-          version: 1,
-        } satisfies ReadingCursor),
+      (row) => encodeReadingCursor("defined_words", row),
     );
   }
 
