@@ -215,6 +215,27 @@ describe("my dictionary lists", () => {
       items: [{ id: "bob", isMutedByMe: true, name: "Bob" }],
     });
   });
+
+  test("保存一覧の publicCount はミュートした作者と退会作者の公開定義を除外する", async () => {
+    await insertUser("alice");
+    await insertUser("bob");
+    await insertUser("carol");
+    await insertUser("deleted-author");
+    await insertWord("w1", "朝", "あさ", "alice", 10);
+    await insertDefinition("alice-public", "w1", "alice", "public", 100);
+    await insertDefinition("bob-public", "w1", "bob", "public", 200);
+    await insertDefinition("deleted-public", "w1", "deleted-author", "public", 300);
+    await env.DB.batch([
+      env.DB.prepare("insert into saved_words values ('alice', 'w1', 400)"),
+      env.DB.prepare("insert into user_mutes values ('alice', 'bob', 500)"),
+      env.DB.prepare("update users set deleted_at = 600 where id = 'deleted-author'"),
+    ]);
+
+    const saved = await request("alice", "/v1/me/saved-words");
+    await expect(saved.json()).resolves.toMatchObject({
+      items: [{ publicCount: 1, word: { id: "w1" } }],
+    });
+  });
 });
 
 describe("word definition lists", () => {

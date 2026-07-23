@@ -267,6 +267,50 @@ describe("POST /v1/words", () => {
     expect(registrations.results.map((row) => row.user_id)).toEqual(["alice", "bob"]);
   });
 
+  test("同一ユーザーの同時再登録で UNIQUE 競合しても 200 になる", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    const word = await createWord("bob", "競合語", "きょうごうご");
+    let intercepted = false;
+    const racingDatabase = {
+      batch: env.DB.batch.bind(env.DB),
+      prepare(query: string) {
+        const statement = env.DB.prepare(query);
+        if (!query.includes("insert into word_registrations") || intercepted) return statement;
+        intercepted = true;
+        return {
+          bind: (..._values: unknown[]) => ({
+            run: async () => {
+              // 同時リクエストが先に登録を完了したあとに、自リクエストが UNIQUE 違反する状況を再現する
+              await env.DB.prepare(
+                `insert into word_registrations (id, word_id, user_id, created_at)
+                 values (?, ?, ?, ?)`,
+              )
+                .bind("racing-reg", word.id, "alice", Date.now())
+                .run();
+              throw new Error(
+                "UNIQUE constraint failed: word_registrations.word_id, word_registrations.user_id",
+              );
+            },
+          }),
+        } as unknown as D1PreparedStatement;
+      },
+    } as unknown as D1Database;
+
+    const response = await testApp("alice").request(
+      "/v1/words",
+      {
+        body: JSON.stringify({ reading: "きょうごうご", word: "競合語" }),
+        headers: { ...authHeaders, "Content-Type": "application/json" },
+        method: "POST",
+      },
+      { ...env, DB: racingDatabase },
+    );
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toMatchObject({ id: word.id, word: "競合語" });
+  });
+
   test("昇格登録した言葉は元の作成者にも公開登録者にも編集権がない", async () => {
     await createUser("alice");
     await createUser("bob");

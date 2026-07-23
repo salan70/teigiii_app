@@ -215,16 +215,28 @@ export class WordService {
       .bind(now, uid, now, wordId)
       .run();
 
-    await this.env.DB.prepare(
-      `insert into word_registrations (id, word_id, user_id, created_at)
-       select ?, ?, ?, ?
-       where not exists(
-         select 1 from word_registrations
-         where word_id = ? and user_id = ?
-       )`,
-    )
-      .bind(uuidv7(), wordId, uid, now, wordId, uid)
-      .run();
+    try {
+      await this.env.DB.prepare(
+        `insert into word_registrations (id, word_id, user_id, created_at)
+         select ?, ?, ?, ?
+         where not exists(
+           select 1 from word_registrations
+           where word_id = ? and user_id = ?
+         )`,
+      )
+        .bind(uuidv7(), wordId, uid, now, wordId, uid)
+        .run();
+    } catch (error) {
+      // where not exists と INSERT の間に同時リクエストが入ると部分 UNIQUE に落ちうる。
+      // 既に同一ユーザーの登録があるなら冪等成功として扱う。
+      const existing = await this.env.DB.prepare(
+        `select 1 as ok from word_registrations where word_id = ? and user_id = ?`,
+      )
+        .bind(wordId, uid)
+        .first();
+      if (existing !== null) return;
+      throw error;
+    }
   }
 
   /**

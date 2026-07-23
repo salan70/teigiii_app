@@ -518,7 +518,8 @@ export class BrowseService {
       cursorValue === undefined ? null : decodeDescendingCursor(cursorValue, "saved_words");
     const cursorClause =
       cursor === null ? "" : "and (s.created_at < ? or (s.created_at = ? and w.id < ?))";
-    const parameters: unknown[] = [uid, uid, uid, uid];
+    // is_defined_by_me / public_count のミュート除外 / user_id / 公開判定×2
+    const parameters: unknown[] = [uid, uid, uid, uid, uid];
     if (cursor !== null) parameters.push(cursor.sortAt, cursor.sortAt, cursor.id);
     type Row = {
       id: string;
@@ -534,7 +535,10 @@ export class BrowseService {
            exists(select 1 from definitions d
             where d.word_id = w.id and d.author_id = ? and d.deleted_at is null) as is_defined_by_me,
            (select count(*) from definitions d
-            where d.word_id = w.id and d.status = 'public' and d.deleted_at is null) as public_count
+            join users author on author.id = d.author_id and author.deleted_at is null
+            where d.word_id = w.id and d.status = 'public' and d.deleted_at is null
+              and not exists(select 1 from user_mutes m
+                where m.muter_id = ? and m.muted_user_id = d.author_id)) as public_count
          from saved_words s join words w on w.id = s.word_id
          where s.user_id = ?
            and ${publiclyVisibleWordSql("?")}
