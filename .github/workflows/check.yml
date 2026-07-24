@@ -74,17 +74,34 @@ jobs:
         uses: actions/checkout@v4
 
       - name: CI Nix setup
+        id: nix
         uses: ./.github/actions/ci-nix-setup
         with:
           cache-flutter: "true"
           cache-pub: "true"
           touch-env: "true"
 
+      # exact cache miss でも restore-keys で旧 SDK が戻ることがある。
+      # stamp 一致なら nix run（flutterSrc 実現）を避け、不一致のときだけ bootstrap する。
+      - name: Bootstrap Flutter SDK
+        if: steps.nix.outputs.flutter-cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          version="$(nix eval --raw .#flutterVersion)"
+          expected="$(nix eval --raw .#flutterToolchainRevision)"
+          flutter_root=".nix/flutter/${version}"
+          stamp_file="${flutter_root}/.nix-flutter-version"
+          if [ -x "${flutter_root}/bin/flutter" ] && [ -f "$stamp_file" ] && [ "$(cat "$stamp_file")" = "$expected" ]; then
+            echo "Flutter SDK already present (${expected}); skip bootstrap"
+            exit 0
+          fi
+          nix run .#bootstrap-flutter
+
       - name: Install dependencies
-        run: nix develop --command just mobile-setup
+        run: nix develop .#ci-mobile --command just mobile-setup
 
       - name: Analyze
-        run: nix develop --command just mobile-analyze
+        run: nix develop .#ci-mobile --command just mobile-analyze
 
   mobile-test:
     needs: changes
@@ -99,17 +116,32 @@ jobs:
         uses: actions/checkout@v4
 
       - name: CI Nix setup
+        id: nix
         uses: ./.github/actions/ci-nix-setup
         with:
           cache-flutter: "true"
           cache-pub: "true"
           touch-env: "true"
 
+      - name: Bootstrap Flutter SDK
+        if: steps.nix.outputs.flutter-cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          version="$(nix eval --raw .#flutterVersion)"
+          expected="$(nix eval --raw .#flutterToolchainRevision)"
+          flutter_root=".nix/flutter/${version}"
+          stamp_file="${flutter_root}/.nix-flutter-version"
+          if [ -x "${flutter_root}/bin/flutter" ] && [ -f "$stamp_file" ] && [ "$(cat "$stamp_file")" = "$expected" ]; then
+            echo "Flutter SDK already present (${expected}); skip bootstrap"
+            exit 0
+          fi
+          nix run .#bootstrap-flutter
+
       - name: Install dependencies
-        run: nix develop --command just mobile-setup
+        run: nix develop .#ci-mobile --command just mobile-setup
 
       - name: Test
-        run: nix develop --command just mobile-test
+        run: nix develop .#ci-mobile --command just mobile-test
 
   backend-analyze:
     needs: changes
