@@ -37,38 +37,69 @@
             flutterReleases.${pkgs.stdenv.hostPlatform.system}
               or (throw "Unsupported system for Flutter ${flutterVersion}: ${pkgs.stdenv.hostPlatform.system}");
           flutterSrc = pkgs.fetchzip release;
-          mkFlutterWrapper = name: executable: pkgs.writeShellApplication {
-            inherit name;
+          resolveRepoRoot = ''
+            repo_root="$PWD"
+            maybe_root="$(command -v git >/dev/null 2>&1 && git rev-parse --show-toplevel 2>/dev/null || true)"
+            if [ -n "$maybe_root" ]; then
+              repo_root="$maybe_root"
+            fi
+          '';
+          # Bootstrap owns flutterSrc / rsync / patch. Runtime wrappers intentionally
+          # do not reference flutterSrc so CI can skip realizing the SDK tarball
+          # when .nix/flutter is restored from Actions cache.
+          bootstrapFlutter = pkgs.writeShellApplication {
+            name = "bootstrap-flutter";
             # rsync を runtimeInputs に入れると exec 先の flutter → xcodebuild にも
             # PATH が継承され、exportArchive が起動する rsync server が GNU 版に
             # 化けて `--extended-attributes` 非対応で "Copy failed" になる。
             # rsync は PATH 注入せず絶対パスで呼ぶ。
             runtimeInputs = [
               pkgs.coreutils
-              pkgs.git
               pkgs.patch
             ];
             text = ''
-              repo_root="$PWD"
-              maybe_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
-              if [ -n "$maybe_root" ]; then
-                repo_root="$maybe_root"
+              ${resolveRepoRoot}
+
+              flutter_root="''${FLUTTER_ROOT:-$repo_root/.nix/flutter/${flutterVersion}}"
+              stamp="$flutter_root/.nix-flutter-version"
+              if [ -x "$flutter_root/bin/flutter" ] && [ -f "$stamp" ] && [ "$(cat "$stamp")" = "${flutterToolchainRevision}" ]; then
+                echo "[nix] Flutter SDK already bootstrapped at $flutter_root" >&2
+                exit 0
               fi
+
+              tmp="$flutter_root.tmp"
+              rm -rf "$tmp"
+              mkdir -p "$(dirname "$tmp")"
+              ${pkgs.rsync}/bin/rsync -a --delete "${flutterSrc}/" "$tmp/"
+              chmod -R u+w "$tmp"
+              patch -d "$tmp" -p1 < ${./nix/patches/flutter-ios-15.patch}
+              patch -d "$tmp" -p1 < ${./nix/patches/flutter-ios-native-assets.patch}
+              rm -f "$tmp/bin/cache/flutter_tools.snapshot" "$tmp/bin/cache/flutter_tools.stamp"
+              printf '%s\n' "${flutterToolchainRevision}" > "$tmp/.nix-flutter-version"
+              rm -rf "$flutter_root"
+              mv "$tmp" "$flutter_root"
+              echo "[nix] Flutter SDK bootstrapped at $flutter_root" >&2
+            '';
+          };
+          mkFlutterWrapper = name: executable: pkgs.writeShellApplication {
+            inherit name;
+            # git は pkgs.git を入れずホストの git を使う（closure 肥大化を避ける）。
+            runtimeInputs = [
+              pkgs.coreutils
+            ];
+            text = ''
+              ${resolveRepoRoot}
 
               flutter_root="''${FLUTTER_ROOT:-$repo_root/.nix/flutter/${flutterVersion}}"
               stamp="$flutter_root/.nix-flutter-version"
               if [ ! -x "$flutter_root/bin/${executable}" ] || [ ! -f "$stamp" ] || [ "$(cat "$stamp")" != "${flutterToolchainRevision}" ]; then
-                tmp="$flutter_root.tmp"
-                rm -rf "$tmp"
-                mkdir -p "$(dirname "$tmp")"
-                ${pkgs.rsync}/bin/rsync -a --delete "${flutterSrc}/" "$tmp/"
-                chmod -R u+w "$tmp"
-                patch -d "$tmp" -p1 < ${./nix/patches/flutter-ios-15.patch}
-                patch -d "$tmp" -p1 < ${./nix/patches/flutter-ios-native-assets.patch}
-                rm -f "$tmp/bin/cache/flutter_tools.snapshot" "$tmp/bin/cache/flutter_tools.stamp"
-                printf '%s\n' "${flutterToolchainRevision}" > "$tmp/.nix-flutter-version"
-                rm -rf "$flutter_root"
-                mv "$tmp" "$flutter_root"
+                if command -v bootstrap-flutter >/dev/null 2>&1; then
+                  bootstrap-flutter
+                else
+                  echo "[nix] Flutter SDK is not bootstrapped at $flutter_root" >&2
+                  echo "[nix] Run: nix run .#bootstrap-flutter" >&2
+                  exit 1
+                fi
               fi
 
               export FLUTTER_ROOT="$flutter_root"
@@ -79,9 +110,16 @@
           };
           flutterTool = mkFlutterWrapper "flutter" "flutter";
           dartTool = mkFlutterWrapper "dart" "dart";
+          # check.yml mobile jobs: Flutter analyze/test only.
+          ciMobilePackages = [
+            flutterTool
+            dartTool
+            pkgs.just
+          ];
           toolPackages = [
             flutterTool
             dartTool
+            bootstrapFlutter
             pkgs.just
             pkgs.lcov
             pkgs.git
@@ -90,10 +128,11 @@
             pkgs.jq
             pkgs.ripgrep
             pkgs.openapi-generator-cli
-          ] ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.cocoapods ];
+          ]
+          ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.cocoapods ];
         in
         {
-          inherit flutterTool dartTool toolPackages;
+          inherit bootstrapFlutter flutterTool dartTool ciMobilePackages toolPackages;
         };
     in
     {
@@ -106,6 +145,7 @@
         {
           flutter = tools.flutterTool;
           dart = tools.dartTool;
+          bootstrap-flutter = tools.bootstrapFlutter;
           default = tools.flutterTool;
         }
       );
@@ -136,6 +176,15 @@
               echo "[nix] Run tasks with: just <task>" >&2
             '';
           };
+          # Mobile CI (analyze/test): no openapi-generator / bun / lcov / git closure.
+          # Pair with Actions cache of .nix/flutter and optional bootstrap-flutter on miss.
+          ci-mobile = pkgs.mkShellNoCC {
+            packages = tools.ciMobilePackages;
+            shellHook = ''
+              export PUB_CACHE="''${PUB_CACHE:-$PWD/.nix/pub-cache}"
+              echo "[nix] teigi_app ci-mobile shell ready (Flutter ${flutterVersion}, just)" >&2
+            '';
+          };
         }
       );
 
@@ -151,6 +200,10 @@
         dart = {
           type = "app";
           program = "${self.packages.${system}.dart}/bin/dart";
+        };
+        bootstrap-flutter = {
+          type = "app";
+          program = "${self.packages.${system}.bootstrap-flutter}/bin/bootstrap-flutter";
         };
       });
     };

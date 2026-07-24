@@ -15,6 +15,11 @@ inputs:
     required: false
     default: "false"
 
+outputs:
+  flutter-cache-hit:
+    description: Whether the Flutter SDK bootstrap cache was restored (exact key hit)
+    value: ${{ steps.flutter-cache.outputs.cache-hit || '' }}
+
 runs:
   using: composite
   steps:
@@ -22,6 +27,7 @@ runs:
       uses: DeterminateSystems/determinate-nix-action@v3
 
     - name: Cache Flutter SDK bootstrap
+      id: flutter-cache
       if: inputs.cache-flutter == 'true'
       uses: actions/cache@v4
       with:

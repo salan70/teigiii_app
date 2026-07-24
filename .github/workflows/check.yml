@@ -74,17 +74,23 @@ jobs:
         uses: actions/checkout@v4
 
       - name: CI Nix setup
+        id: nix
         uses: ./.github/actions/ci-nix-setup
         with:
           cache-flutter: "true"
           cache-pub: "true"
           touch-env: "true"
 
+      # Actions cache miss のときだけ flutterSrc を実現して .nix/flutter を構築する
+      - name: Bootstrap Flutter SDK
+        if: steps.nix.outputs.flutter-cache-hit != 'true'
+        run: nix run .#bootstrap-flutter
+
       - name: Install dependencies
-        run: nix develop --command just mobile-setup
+        run: nix develop .#ci-mobile --command just mobile-setup
 
       - name: Analyze
-        run: nix develop --command just mobile-analyze
+        run: nix develop .#ci-mobile --command just mobile-analyze
 
   mobile-test:
     needs: changes
@@ -99,17 +105,22 @@ jobs:
         uses: actions/checkout@v4
 
       - name: CI Nix setup
+        id: nix
         uses: ./.github/actions/ci-nix-setup
         with:
           cache-flutter: "true"
           cache-pub: "true"
           touch-env: "true"
 
+      - name: Bootstrap Flutter SDK
+        if: steps.nix.outputs.flutter-cache-hit != 'true'
+        run: nix run .#bootstrap-flutter
+
       - name: Install dependencies
-        run: nix develop --command just mobile-setup
+        run: nix develop .#ci-mobile --command just mobile-setup
 
       - name: Test
-        run: nix develop --command just mobile-test
+        run: nix develop .#ci-mobile --command just mobile-test
 
   backend-analyze:
     needs: changes
