@@ -3,6 +3,13 @@ import { describe, expect, test } from "bun:test";
 import { createApp } from "../src/app";
 import { isAllowedWebQaOrigin } from "../src/middleware/cors";
 
+function testApp() {
+  return createApp({
+    verifyAppCheck: async () => ({ appId: "test-app-id" }),
+    verifyFirebaseIdToken: async () => ({ uid: "firebase-uid" }),
+  });
+}
+
 describe("isAllowedWebQaOrigin", () => {
   test("localhost / 127.0.0.1 を許可する", () => {
     expect(isAllowedWebQaOrigin("http://localhost:3000")).toBe(true);
@@ -28,13 +35,6 @@ describe("isAllowedWebQaOrigin", () => {
 });
 
 describe("CORS middleware (createApp)", () => {
-  function testApp() {
-    return createApp({
-      verifyAppCheck: async () => ({ appId: "test-app-id" }),
-      verifyFirebaseIdToken: async () => ({ uid: "firebase-uid" }),
-    });
-  }
-
   test("許可 origin の OPTIONS preflight を App Check なしで通す", async () => {
     const response = await testApp().request("/v1/app-config", {
       method: "OPTIONS",
