@@ -136,6 +136,10 @@
         };
     in
     {
+      # CI が flutterSrc を実現せず stamp 照合できるように公開する。
+      flutterVersion = flutterVersion;
+      flutterToolchainRevision = flutterToolchainRevision;
+
       packages = forAllSystems (
         system:
         let
