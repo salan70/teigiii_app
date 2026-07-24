@@ -3,6 +3,7 @@ import { decodeOpaqueCursor, encodeOpaqueCursor } from "../lib/cursor";
 import {
   readingScriptClass,
   readingScriptClassCursorClause,
+  readingScriptClassFromSubGroup,
   readingScriptClassOrderBy,
 } from "../words/reading-script-class";
 import { accessibleWordSql, publiclyVisibleWordSql } from "../words/word-visibility";
@@ -125,12 +126,20 @@ function readingCursorBindings(cursor: ReadingCursor): unknown[] {
   return [scriptClass, scriptClass, cursor.reading, scriptClass, cursor.reading, cursor.id];
 }
 
-function encodeReadingCursor(kind: string, row: { id: string; reading: string }): string {
+function encodeReadingCursor(
+  kind: string,
+  row: { id: string; reading: string; reading_sub_group?: string },
+): string {
+  // SQL と同じ reading_sub_group 列を優先し、列欠落時のみ reading から算出する。
+  const scriptClass =
+    row.reading_sub_group !== undefined
+      ? readingScriptClassFromSubGroup(row.reading_sub_group)
+      : readingScriptClass(row.reading);
   return encodeOpaqueCursor({
     id: row.id,
     kind,
     reading: row.reading,
-    scriptClass: readingScriptClass(row.reading),
+    scriptClass,
     version: 1,
   } satisfies ReadingCursor);
 }
@@ -242,7 +251,7 @@ export class BrowseService {
     const cursorClause =
       cursor === null ? "" : `and ${readingScriptClassCursorClause()}`;
     const statement = this.env.DB.prepare(
-      `select w.id, w.word, w.reading, count(*) as public_count
+      `select w.id, w.word, w.reading, w.reading_sub_group, count(*) as public_count
        from definitions d
        join words w on w.id = d.word_id
        join users u on u.id = d.author_id and u.deleted_at is null
@@ -251,7 +260,13 @@ export class BrowseService {
        order by ${readingScriptClassOrderBy()}
        limit ?`,
     );
-    type Row = { id: string; word: string; reading: string; public_count: number };
+    type Row = {
+      id: string;
+      word: string;
+      reading: string;
+      reading_sub_group: string;
+      public_count: number;
+    };
     const rows = (
       await (
         cursor === null
@@ -445,7 +460,7 @@ export class BrowseService {
     const cursorClause =
       cursor === null ? "" : `and ${readingScriptClassCursorClause()}`;
     const statement = this.env.DB.prepare(
-      `select w.id, w.word, w.reading,
+      `select w.id, w.word, w.reading, w.reading_sub_group,
          sum(case when d.status = 'public' then 1 else 0 end) as public_count,
          sum(case when d.status = 'private' then 1 else 0 end) as private_count,
          sum(case when d.status = 'draft' then 1 else 0 end) as draft_count
@@ -458,6 +473,7 @@ export class BrowseService {
       id: string;
       word: string;
       reading: string;
+      reading_sub_group: string;
       public_count: number;
       private_count: number;
       draft_count: number;

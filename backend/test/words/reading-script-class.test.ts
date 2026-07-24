@@ -1,8 +1,10 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  kanaSubGroups,
   readingScriptClass,
   readingScriptClassFromSubGroup,
+  readingScriptClassSql,
 } from "../../src/words/reading-script-class";
 
 describe("readingScriptClassFromSubGroup", () => {
@@ -30,5 +32,21 @@ describe("readingScriptClass", () => {
     expect(readingScriptClass("Apple")).toBe(1);
     expect(readingScriptClass("123")).toBe(2);
     expect(readingScriptClass("！")).toBe(2);
+  });
+});
+
+describe("readingScriptClassSql", () => {
+  test("かな一覧は TS の kanaSubGroups と一致する", () => {
+    for (const kana of kanaSubGroups) {
+      expect(readingScriptClassSql).toContain(`'${kana}'`);
+    }
+    const inClause = readingScriptClassSql.match(
+      /w\.reading_sub_group in \(([^)]+)\)/,
+    );
+    expect(inClause).not.toBeNull();
+    const listed = inClause![1]!
+      .split(",")
+      .map((part) => part.trim().replaceAll("'", ""));
+    expect(listed).toEqual([...kanaSubGroups]);
   });
 });

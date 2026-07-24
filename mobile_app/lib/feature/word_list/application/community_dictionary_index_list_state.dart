@@ -9,6 +9,8 @@ import '../repository/fetch_word_list_repository.dart';
 part 'community_dictionary_index_list_state.g.dart';
 
 List<dynamic> buildIndexedList(List<Word> words) {
+  // サーバーは scriptClass 順で返す前提だが、セクションヘッダー挿入の堅牢性のため
+  // InitialMainGroup 順で再ソートする（クライアントとサーバーの並び定義は独立）。
   final sorted = [...words]
     ..sort((a, b) {
       final groupCompare = initialMainGroupFromReading(

@@ -5,6 +5,7 @@ import { uuidv7 } from "../lib/uuidv7";
 import {
   readingScriptClass,
   readingScriptClassCursorClause,
+  readingScriptClassFromSubGroup,
   readingScriptClassOrderBy,
 } from "./reading-script-class";
 import { readingSubGroup } from "./reading-sub-group";
@@ -449,7 +450,7 @@ export class WordService {
               id: last.id,
               kind: "words",
               reading: last.reading,
-              scriptClass: readingScriptClass(last.reading),
+              scriptClass: readingScriptClassFromSubGroup(last.reading_sub_group),
               version: 1,
             } satisfies WordListCursor)
           : null,
