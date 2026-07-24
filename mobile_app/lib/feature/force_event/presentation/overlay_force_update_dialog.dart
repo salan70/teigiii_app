@@ -59,6 +59,7 @@ class OverlayForceUpdateDialog extends ConsumerWidget {
                               inBaseRoute: false,
                               linkType: AnalyticsLinkType.forceUpdateStore,
                             ),
+                        orElse: () {},
                       );
                     },
                     text: 'アップデートする',

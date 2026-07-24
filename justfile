@@ -75,6 +75,20 @@ mobile-check-ios-flavors:
 mobile-check-ios-native-asset binary sdk:
     bash mobile_app/ios/scripts/check_native_asset_platform.sh "{{binary}}" "{{sdk}}"
 
+# --- web QA（dev 固定・本番提供外）---
+
+# Flutter Web (dev) をビルドする
+web-build:
+    bash mobile_app/scripts/build-web-dev.sh
+
+# ビルド → Cloudflare Pages へ deploy → URL/QR を表示する
+web-preview: web-build
+    bash mobile_app/scripts/deploy-web-pages.sh
+
+# ビルド → LAN 向け http.server → URL/QR を表示する
+web-serve: web-build
+    bash mobile_app/scripts/serve-web-lan.sh
+
 # --- backend（Cloudflare Workers API）---
 
 backend-setup:

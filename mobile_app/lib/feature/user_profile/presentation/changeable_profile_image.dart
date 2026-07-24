@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -80,18 +80,27 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
                   userId: userProfileForWrite.id,
                   avatarSize: avatarSize,
                 )
-              : Container(
-                  width: avatarSize.diameter,
-                  height: avatarSize.diameter,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: FileImage(
-                        File(userProfileForWrite.croppedFile!.path),
+              : FutureBuilder<Uint8List>(
+                  future: userProfileForWrite.croppedFile!.readAsBytes(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return SizedBox(
+                        width: avatarSize.diameter,
+                        height: avatarSize.diameter,
+                      );
+                    }
+                    return Container(
+                      width: avatarSize.diameter,
+                      height: avatarSize.diameter,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: MemoryImage(snapshot.data!),
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                    );
+                  },
                 ),
           Container(
             alignment: AlignmentDirectional.bottomEnd,

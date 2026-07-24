@@ -2,7 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:roggle/roggle.dart';
 
-final logger = kReleaseMode
+final logger = (!kIsWeb && kReleaseMode)
     ? Roggle.crashlytics(
         printer: CrashlyticsPrinter(
           errorLevel: Level.error, // error 以上のログを送信する

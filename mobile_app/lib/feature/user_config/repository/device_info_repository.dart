@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'device_info_repository.g.dart';
@@ -18,16 +17,23 @@ class DeviceInfoRepository {
   ///
   /// OSがiOSでもAndroidでもない場合はnullを返す
   Future<String?> fetchOsVersion() async {
-    if (Platform.isIOS) {
-      final iosInfo = await _deviceInfoPlugin.iosInfo;
-      return 'iOS ${iosInfo.systemVersion}';
-    }
-    if (Platform.isAndroid) {
-      final androidInfo = await _deviceInfoPlugin.androidInfo;
-      return 'Android ${androidInfo.version.release}';
+    if (kIsWeb) {
+      final webInfo = await _deviceInfoPlugin.webBrowserInfo;
+      return 'Web ${webInfo.browserName.name}';
     }
 
-    // iOSでもAndroidでもない場合はnullを返す
-    return null;
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        final iosInfo = await _deviceInfoPlugin.iosInfo;
+        return 'iOS ${iosInfo.systemVersion}';
+      case TargetPlatform.android:
+        final androidInfo = await _deviceInfoPlugin.androidInfo;
+        return 'Android ${androidInfo.version.release}';
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+        return null;
+    }
   }
 }

@@ -37,6 +37,7 @@ Future<void> main() async {
   final flavor = Flavor.fromString(const String.fromEnvironment('flavor'));
   await Firebase.initializeApp(options: firebaseOptionsWithFlavor(flavor));
 
+  const appCheckDebugToken = String.fromEnvironment('APP_CHECK_DEBUG_TOKEN');
   await FirebaseAppCheck.instance.activate(
     androidProvider: kReleaseMode
         ? AndroidProvider.playIntegrity
@@ -44,44 +45,51 @@ Future<void> main() async {
     appleProvider: kReleaseMode
         ? AppleProvider.deviceCheck
         : AppleProvider.debug,
+    // Web QA は登録済みデバッグトークンを固定注入する（全 origin 通過）。
+    // 未指定時は auto-generate（ブラウザ console に出力）する。
+    providerWeb: WebDebugProvider(
+      debugToken: appCheckDebugToken.isEmpty ? null : appCheckDebugToken,
+    ),
   );
 
-  // Flutterフレームワークがキャッチしたエラーを記録する
-  FlutterError.onError = (errorDetails) {
-    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-  };
-  // Flutterフレームワークでキャッチできない非同期エラーを記録する
-  PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
+  if (!kIsWeb) {
+    // Flutterフレームワークがキャッチしたエラーを記録する
+    FlutterError.onError = (errorDetails) {
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    };
+    // Flutterフレームワークでキャッチできない非同期エラーを記録する
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
 
-  await MobileAds.instance.initialize();
+    await MobileAds.instance.initialize();
 
-  // iOS 端末にてステータスバーを表示させるための設定。
-  //
-  // 参考: https://halzoblog.com/error-bug-diary/20220922-2/
-  await SystemChrome.setEnabledSystemUIMode(
-    SystemUiMode.manual,
-    overlays: SystemUiOverlay.values,
-  );
-
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]).then((_) {
-    runApp(
-      ProviderScope(
-        overrides: [flavorProvider.overrideWithValue(flavor)],
-        child: DevicePreview(
-          enabled: false,
-          builder: (context) {
-            return const MyApp();
-          },
-        ),
-      ),
+    // iOS 端末にてステータスバーを表示させるための設定。
+    //
+    // 参考: https://halzoblog.com/error-bug-diary/20220922-2/
+    await SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: SystemUiOverlay.values,
     );
-  });
+
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  runApp(
+    ProviderScope(
+      overrides: [flavorProvider.overrideWithValue(flavor)],
+      child: DevicePreview(
+        enabled: false,
+        builder: (context) {
+          return const MyApp();
+        },
+      ),
+    ),
+  );
 }
 
 class MyApp extends ConsumerStatefulWidget {

@@ -28,14 +28,26 @@ dev は `just backend-deploy-dev`、prod は `just backend-deploy-prod` で手�
 <!-- @code backend/src/auth/middleware.ts#createFirebaseAuthMiddleware -->
 ### 適用順序
 
-1. request ID を発行する
-2. App Check を検証する
-3. `GET /v1/app-config` 以外では Firebase ID トークンを検証する
-4. Zod でリクエストを検証する
-5. 認可とデータ操作を行う
-6. 統一エラーと構造化ログを確定する
+1. CORS を適用する（許可 origin の OPTIONS preflight はここで short-circuit）
+2. request ID を発行する
+3. App Check を検証する
+4. `GET /v1/app-config` 以外では Firebase ID トークンを検証する
+5. Zod でリクエストを検証する
+6. 認可とデータ操作を行う
+7. 統一エラーと構造化ログを確定する
 
 認証バイパスは local / dev / prod のいずれにも設けない。単体・結合テストは検証器を依存注入し、実通信テストは dev Firebase が発行した正規トークンを使う。
+
+### CORS（Web QA）
+
+<!-- @code backend/src/middleware/cors.ts#createCorsMiddleware -->
+ブラウザからの dev Web QA アクセスのため、App Check より前に CORS を適用する。許可 origin は次のみ。
+
+- `http://localhost:<port>` / `http://127.0.0.1:<port>`
+- LAN IP（`192.168.*` / `10.*` / `172.16-31.*`）
+- `https://*.pages.dev`
+
+それ以外の Origin には `Access-Control-Allow-Origin` を付けない。CORS はブラウザ向けの緩和であり、認証・App Check の代替ではない。
 
 <!-- @code backend/src/auth/app-check.ts#AppCheckTokenVerifier -->
 ### App Check
@@ -77,7 +89,7 @@ Firebase ID トークンの X.509 公開鍵は Google の公式 endpoint から�
 <!-- @code backend/src/app.ts#createApp -->
 ### リクエスト処理順序
 
-Hono app は request context、App Check、Firebase Auth の順に middleware を適用してから `/v1` ルートを実行する。検証済み UID と App ID はヘッダーやリクエスト body から受け取らず、middleware が設定したコンテキストだけを信頼する。
+Hono app は CORS、request context、App Check、Firebase Auth の順に middleware を適用してから `/v1` ルートを実行する。検証済み UID と App ID はヘッダーやリクエスト body から受け取らず、middleware が設定したコンテキストだけを信頼する。
 
 <!-- @code backend/src/errors.ts#ApiError -->
 ### エラー形式

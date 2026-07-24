@@ -15,6 +15,7 @@ import {
   type RequestContextVariables,
   type RequestLogEntry,
 } from "./middleware/request-context";
+import { createCorsMiddleware } from "./middleware/cors";
 import { createApiErrorHandler, handleNotFound } from "./errors";
 import { appConfigRoutes } from "./routes/app-config";
 import { definitionRoutes } from "./routes/definitions";
@@ -66,6 +67,8 @@ export function createApp({
     .route("/", searchRoutes);
 
   const honoApp = new OpenAPIHono<ServerEnvironment>();
+  // CORS は App Check より前。OPTIONS preflight を認証なしで short-circuit する。
+  honoApp.use("*", createCorsMiddleware());
   honoApp.use(
     "*",
     createRequestContextMiddleware({

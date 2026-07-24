@@ -4,8 +4,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
-import 'dart:io' as _i6;
 
+import 'package:image_picker/image_picker.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i7;
 import 'package:teigi_app/feature/user_profile/domain/user_profile.dart' as _i2;
@@ -83,7 +83,7 @@ class MockUserProfileRepository extends _i1.Mock
 /// See the documentation for Mockito's code generation for more information.
 class MockAvatarRepository extends _i1.Mock implements _i5.AvatarRepository {
   @override
-  _i4.Future<String> uploadAvatar(_i6.File? file) => (super.noSuchMethod(
+  _i4.Future<String> uploadAvatar(_i6.XFile? file) => (super.noSuchMethod(
         Invocation.method(
           #uploadAvatar,
           [file],

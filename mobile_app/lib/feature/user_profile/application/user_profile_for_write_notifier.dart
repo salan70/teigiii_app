@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -54,11 +53,17 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
   ///
   /// 画像の選択、もしくは、切り抜きがキャンセルされた場合は、
   /// state を更新せずにキャンセルした時点で処理を終える。
+  /// Web では image_cropper をスキップし、選択画像をそのまま使う。
   Future<void> pickAndCropImage(ImageSource imageSource) async {
     final pickedFile = await _pickImage(imageSource);
 
     // 画像が選択されなかった場合は処理を終える。
     if (pickedFile == null) {
+      return;
+    }
+
+    if (kIsWeb) {
+      updateCroppedFileState(CroppedFile(pickedFile.path));
       return;
     }
 
@@ -125,7 +130,9 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
 
   /// 画像をアップロードし、アバター画像の URL を返す。
   Future<String> _uploadImage() async {
-    final file = File(state.value!.croppedFile!.path);
-    return ref.read(avatarRepositoryProvider).uploadAvatar(file);
+    final croppedFile = state.value!.croppedFile!;
+    return ref
+        .read(avatarRepositoryProvider)
+        .uploadAvatar(XFile(croppedFile.path));
   }
 }
