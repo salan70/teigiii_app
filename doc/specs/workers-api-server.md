@@ -6,7 +6,8 @@ Workers API は Firebase Auth で認証された利用者に対し、D1 上の t
 
 Firebase Auth、App Check、Analytics、Crashlytics は継続利用する。Workers から Firebase Admin SDK は利用せず、公開鍵による JWT 検証だけを行う。
 
-Flutter repository の接続、Firestore / Firebase Storage の既存データ移行、prod デプロイは本仕様の実装後にそれぞれ #185、#186 で行う。
+Flutter repository の接続は #185、Firestore / Firebase Storage の既存データ移行と
+初回 prod 切替は #186 で完了している。
 
 ## 環境
 
@@ -18,7 +19,8 @@ Flutter repository の接続、Firestore / Firebase Storage の既存データ�
 
 Firebase project ID と project number は公開識別子として Wrangler vars に置く。トークン、秘密鍵、Cloudflare API token はコード、設定ファイル、ログへ保存しない。
 
-dev は `just backend-deploy-dev` で手動デプロイする。prod のデプロイと Cron 有効化は #186 の一斉切替手順だけから行い、自動デプロイ CI は導入しない。
+dev は `just backend-deploy-dev`、prod は `just backend-deploy-prod` で手動デプロイする。
+どちらも D1 migration の成功後に Worker を deploy し、自動デプロイ CI は導入しない。
 
 ## リクエスト保護
 
@@ -229,9 +231,17 @@ curl 'http://localhost:8787/__scheduled?cron=0+3+*+*+*'
 
 30日以前へ backdate した dev 専用 fixture を事前に用意し、HTTP 200、構造化ログの件数、D1 行と R2 object の削除を確認する。本番データを fixture に使わない。Wrangler 4.110 の `--remote --test-scheduled` は互換 endpoint `/__scheduled` を使う。
 
-### prod 切替前検証
+### prod デプロイ
 
-`just backend-validate-prod` で `teigiii-api-prod`、`teigiii-prod`、`teigiii-prod-avatars`、prod Firebase vars の bundle / bindings 解決を dry-run する。#186 では prod `AVATAR_BASE_URL` の `.invalid` 値を実 Worker API `/v1` URLへ置き換え、R2 public access が無効であることを確認する。同コマンドを再実行してから prod deploy と Cron Trigger 有効化を行う。Cron は Wrangler 設定を正本とし、UTC の実行時刻を切替チェックリストで確定する。
+1. `just backend-validate-prod` で `teigiii-api-prod`、`teigiii-prod`、
+   `teigiii-prod-avatars`、prod Firebase vars の bundle / bindings 解決を dry-run する。
+2. `just backend-deploy-prod` を実行する。この recipe は
+   `backend-migrate-prod` の成功後にだけ prod Worker を deploy する。
+3. `wrangler d1 migrations list DB --env prod --remote` で未適用 migration が
+   ゼロであることを確認し、prod の主要フローを smoke test する。
+
+R2 public access は有効化しない。Cron は Wrangler 設定を正本とし、UTC の実行時刻を
+変更する場合はデプロイ前に確認する。
 
 ### 使用量監視と通知
 
