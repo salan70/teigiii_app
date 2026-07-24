@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, test } from "vitest";
 import { createApp } from "../src/app";
 import { BrowseService } from "../src/browse/browse-service";
 import { encodeOpaqueCursor } from "../src/lib/cursor";
+import { readingSubGroup } from "../src/words/reading-sub-group";
 
 const authHeaders = {
   Authorization: "Bearer valid-id-token",
@@ -60,9 +61,19 @@ async function insertWord(
     `insert into words
        (id, word, reading, reading_sub_group, created_by,
         first_registered_at, first_registered_by, created_at, updated_at)
-     values (?, ?, ?, 'あ', ?, ?, ?, ?, ?)`,
+     values (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
   )
-    .bind(id, word, reading, createdBy, createdAt, createdBy, createdAt, createdAt)
+    .bind(
+      id,
+      word,
+      reading,
+      readingSubGroup(reading),
+      createdBy,
+      createdAt,
+      createdBy,
+      createdAt,
+      createdAt,
+    )
     .run();
   await env.DB.prepare(
     `insert into word_registrations (id, word_id, user_id, created_at) values (?, ?, ?, ?)`,
@@ -214,6 +225,55 @@ describe("my dictionary lists", () => {
     await expect(mutes.json()).resolves.toMatchObject({
       items: [{ id: "bob", isMutedByMe: true, name: "Bob" }],
     });
+  });
+
+  test("定義済み言葉は五十音のあとに英字が並び、scriptClass 跨ぎでページングできる", async () => {
+    await insertUser("alice");
+    await insertWord("w-kana", "あんこ", "あんこ", "alice", 10);
+    await insertWord("w-alpha", "Apple", "Apple", "alice", 20);
+    await insertWord("w-alpha2", "Banana", "Banana", "alice", 30);
+    await insertDefinition("d1", "w-kana", "alice", "public", 100);
+    await insertDefinition("d2", "w-alpha", "alice", "private", 200);
+    await insertDefinition("d3", "w-alpha2", "alice", "public", 300);
+
+    const first = await request("alice", "/v1/me/defined-words?limit=2");
+    expect(first.status).toBe(200);
+    const firstBody = await first.json<Page<{ word: { id: string } }>>();
+    expect(firstBody.items.map((item) => item.word.id)).toEqual(["w-kana", "w-alpha"]);
+    expect(firstBody.nextCursor).not.toBeNull();
+
+    const second = await request(
+      "alice",
+      `/v1/me/defined-words?limit=2&cursor=${encodeURIComponent(firstBody.nextCursor!)}`,
+    );
+    const secondBody = await second.json<Page<{ word: { id: string } }>>();
+    expect(secondBody.items.map((item) => item.word.id)).toEqual(["w-alpha2"]);
+    expect(secondBody.nextCursor).toBeNull();
+  });
+
+  test("公開辞書も五十音のあとに英字が並び、scriptClass 跨ぎでページングできる", async () => {
+    await insertUser("alice");
+    await insertUser("bob");
+    await insertWord("w-kana", "あんこ", "あんこ", "alice", 10);
+    await insertWord("w-alpha", "Apple", "Apple", "alice", 20);
+    await insertWord("w-alpha2", "Banana", "Banana", "alice", 30);
+    await insertDefinition("d1", "w-kana", "alice", "public", 100);
+    await insertDefinition("d2", "w-alpha", "alice", "public", 200);
+    await insertDefinition("d3", "w-alpha2", "alice", "public", 300);
+
+    const first = await request("bob", "/v1/users/alice/dictionary?limit=2");
+    expect(first.status).toBe(200);
+    const firstBody = await first.json<Page<{ word: { id: string } }>>();
+    expect(firstBody.items.map((item) => item.word.id)).toEqual(["w-kana", "w-alpha"]);
+    expect(firstBody.nextCursor).not.toBeNull();
+
+    const second = await request(
+      "bob",
+      `/v1/users/alice/dictionary?limit=2&cursor=${encodeURIComponent(firstBody.nextCursor!)}`,
+    );
+    const secondBody = await second.json<Page<{ word: { id: string } }>>();
+    expect(secondBody.items.map((item) => item.word.id)).toEqual(["w-alpha2"]);
+    expect(secondBody.nextCursor).toBeNull();
   });
 
   test("保存一覧の publicCount はミュートした作者と退会作者の公開定義を除外する", async () => {

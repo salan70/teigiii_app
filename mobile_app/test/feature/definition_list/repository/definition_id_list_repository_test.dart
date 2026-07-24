@@ -166,6 +166,31 @@ void main() {
     expect(result.list, ['definition-1']);
   });
 
+  test('言葉単位の自分の定義一覧は wordId と newest を指定する', () async {
+    when(
+      usersApi.v1UsersIdDefinitionsGet(
+        id: 'user-1',
+        cursor: null,
+        limit: 20,
+        wordId: 'word-1',
+        sort: 'newest',
+      ),
+    ).thenAnswer(
+      (_) async => Response(
+        data: V1UsersIdDefinitionsGet200Response(
+          items: [definition('definition-1'), definition('definition-2')],
+          nextCursor: null,
+        ),
+        requestOptions: RequestOptions(path: '/v1/users/user-1/definitions'),
+      ),
+    );
+
+    final result = await repository.fetchForUserWord('user-1', 'word-1', null);
+
+    expect(result.list, ['definition-1', 'definition-2']);
+    expect(result.hasMore, isFalse);
+  });
+
   test('DioException を ApiException に変換する', () async {
     final requestOptions = RequestOptions(path: '/v1/timeline/following');
     when(

@@ -2,6 +2,12 @@ import { ApiError } from "../errors";
 import { decodeOpaqueCursor, encodeOpaqueCursor } from "../lib/cursor";
 import { normalizeText } from "../lib/normalize";
 import { uuidv7 } from "../lib/uuidv7";
+import {
+  readingScriptClass,
+  readingScriptClassCursorClause,
+  readingScriptClassFromSubGroup,
+  readingScriptClassOrderBy,
+} from "./reading-script-class";
 import { readingSubGroup } from "./reading-sub-group";
 import { accessibleWordSql, publiclyVisibleWordSql } from "./word-visibility";
 
@@ -41,6 +47,7 @@ type WordListCursor = {
   id: string;
   kind: "words";
   reading: string;
+  scriptClass?: number;
   version: 1;
 };
 
@@ -90,7 +97,12 @@ function decodeWordListCursor(value: string): WordListCursor {
   ) {
     throw new ApiError(400, "invalid_cursor", "Invalid cursor");
   }
-  return parsed as unknown as WordListCursor;
+  const cursor = parsed as unknown as WordListCursor;
+  const scriptClass =
+    typeof parsed["scriptClass"] === "number" && Number.isInteger(parsed["scriptClass"])
+      ? (parsed["scriptClass"] as number)
+      : readingScriptClass(cursor.reading);
+  return { ...cursor, scriptClass };
 }
 
 /** zod は空白のみの入力を通すため、正規化後の空文字はここで拒否する。 */
@@ -386,8 +398,16 @@ export class WordService {
       parameters.push(uid);
     }
     if (cursor !== null) {
-      conditions.push("(w.reading > ? or (w.reading = ? and w.id > ?))");
-      parameters.push(cursor.reading, cursor.reading, cursor.id);
+      conditions.push(readingScriptClassCursorClause());
+      const scriptClass = cursor.scriptClass ?? readingScriptClass(cursor.reading);
+      parameters.push(
+        scriptClass,
+        scriptClass,
+        cursor.reading,
+        scriptClass,
+        cursor.reading,
+        cursor.id,
+      );
     }
 
     const whereClause = `where ${conditions.join(" and ")}`;
@@ -406,7 +426,7 @@ export class WordService {
              as public_definition_count
          from words w
          ${whereClause}
-         order by w.reading asc, w.id asc
+         order by ${readingScriptClassOrderBy()}
          limit ?`,
       )
         .bind(uid, ...parameters, input.limit + 1)
@@ -430,6 +450,7 @@ export class WordService {
               id: last.id,
               kind: "words",
               reading: last.reading,
+              scriptClass: readingScriptClassFromSubGroup(last.reading_sub_group),
               version: 1,
             } satisfies WordListCursor)
           : null,

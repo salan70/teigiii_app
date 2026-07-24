@@ -141,6 +141,28 @@ class DefinitionIdListRepository {
     }
   }
 
+  /// 特定ユーザーの、特定の言葉に対する定義一覧（新着順）。
+  ///
+  /// 本人閲覧時は public + private（下書きは含まない）。
+  Future<DefinitionIdListState> fetchForUserWord(
+    String targetUserId,
+    String wordId,
+    String? cursor,
+  ) async {
+    try {
+      final response = await _usersApi.v1UsersIdDefinitionsGet(
+        id: targetUserId,
+        cursor: cursor,
+        limit: fetchLimitForDefinitionList,
+        wordId: wordId,
+        sort: 'newest',
+      );
+      return _toState(response.data!);
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
+  }
+
   DefinitionIdListState _toState(V1UsersIdDefinitionsGet200Response page) =>
       DefinitionIdListState(
         list: page.items.map((item) => item.id).toList(),

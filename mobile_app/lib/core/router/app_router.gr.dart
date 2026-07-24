@@ -209,6 +209,18 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    UserWordDefinitionListRoute.name: (routeData) {
+      final args = routeData.argsAs<UserWordDefinitionListRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: UserWordDefinitionListPage(
+          key: args.key,
+          targetUserId: args.targetUserId,
+          wordId: args.wordId,
+          wordLabel: args.wordLabel,
+        ),
+      );
+    },
     WelcomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -886,6 +898,55 @@ class UserSearchResultRouteArgs {
   @override
   String toString() {
     return 'UserSearchResultRouteArgs{key: $key, searchWord: $searchWord}';
+  }
+}
+
+/// generated route for
+/// [UserWordDefinitionListPage]
+class UserWordDefinitionListRoute
+    extends PageRouteInfo<UserWordDefinitionListRouteArgs> {
+  UserWordDefinitionListRoute({
+    Key? key,
+    required String targetUserId,
+    required String wordId,
+    required String wordLabel,
+    List<PageRouteInfo>? children,
+  }) : super(
+          UserWordDefinitionListRoute.name,
+          args: UserWordDefinitionListRouteArgs(
+            key: key,
+            targetUserId: targetUserId,
+            wordId: wordId,
+            wordLabel: wordLabel,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'UserWordDefinitionListRoute';
+
+  static const PageInfo<UserWordDefinitionListRouteArgs> page =
+      PageInfo<UserWordDefinitionListRouteArgs>(name);
+}
+
+class UserWordDefinitionListRouteArgs {
+  const UserWordDefinitionListRouteArgs({
+    this.key,
+    required this.targetUserId,
+    required this.wordId,
+    required this.wordLabel,
+  });
+
+  final Key? key;
+
+  final String targetUserId;
+
+  final String wordId;
+
+  final String wordLabel;
+
+  @override
+  String toString() {
+    return 'UserWordDefinitionListRouteArgs{key: $key, targetUserId: $targetUserId, wordId: $wordId, wordLabel: $wordLabel}';
   }
 }
 

@@ -7,18 +7,31 @@ import '../../../../core/router/app_router.dart';
 import '../domain/word.dart';
 
 class WordTile extends StatelessWidget {
-  const WordTile({super.key, required this.word});
+  const WordTile({
+    super.key,
+    required this.word,
+    this.showPostedDefinitionCount = true,
+    this.onTap,
+  });
 
   final Word word;
+
+  /// false のとき「N投稿」を出さない（あなたの辞書向け）。
+  final bool showPostedDefinitionCount;
+
+  /// null のときは言葉ページ（[WordTopRoute]）へ遷移する。
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: InkWell(
-        onTap: () {
-          context.pushRoute(WordTopRoute(wordId: word.id));
-        },
+        onTap:
+            onTap ??
+            () {
+              context.pushRoute(WordTopRoute(wordId: word.id));
+            },
         child: Column(
           children: [
             Row(
@@ -45,13 +58,18 @@ class WordTile extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      '${word.postedDefinitionCount}投稿',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    if (showPostedDefinitionCount) ...[
+                      Text(
+                        '${word.postedDefinitionCount}投稿',
+                        style: Theme.of(context).textTheme.titleMedium!
+                            .copyWith(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                            ),
                       ),
-                    ),
-                    const Gap(4),
+                      const Gap(4),
+                    ],
                     Icon(
                       CupertinoIcons.chevron_forward,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,

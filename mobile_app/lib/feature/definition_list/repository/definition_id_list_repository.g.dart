@@ -13,14 +13,14 @@ String _$definitionIdListRepositoryHash() =>
 @ProviderFor(definitionIdListRepository)
 final definitionIdListRepositoryProvider =
     Provider<DefinitionIdListRepository>.internal(
-      definitionIdListRepository,
-      name: r'definitionIdListRepositoryProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$definitionIdListRepositoryHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  definitionIdListRepository,
+  name: r'definitionIdListRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$definitionIdListRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef DefinitionIdListRepositoryRef = ProviderRef<DefinitionIdListRepository>;
 // ignore_for_file: type=lint
