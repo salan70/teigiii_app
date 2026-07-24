@@ -8,7 +8,7 @@ PR #267 の加算的な D1 migration と Worker を prod へ安全な順序で�
 ## 実行手順
 
 1. `backend-deploy-prod` が `backend-migrate-prod` を先に実行することを
-   `just --dry-run` のテストで固定する。
+   `backend/test/justfile.test.ts` の Justfile 契約テストで固定する。
 2. prod migration / deploy recipe を追加し、陳腐化した
    `backend-validate-prod` の説明を更新する。
 3. backend の unit test、lint、typecheck、format check と
