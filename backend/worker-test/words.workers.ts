@@ -681,6 +681,44 @@ describe("GET /v1/words", () => {
     expect(secondBody.nextCursor).toBeNull();
   });
 
+  test("五十音のあとに英字・数字が並ぶ", async () => {
+    await createUser("alice");
+    await createWord("alice", "Apple", "Apple");
+    await createWord("alice", "あんこ", "あんこ");
+    await createWord("alice", "123", "123");
+
+    const response = await request("alice", "/v1/words?limit=10");
+    expect(response.status).toBe(200);
+    const body = await response.json<{ items: Array<{ word: string }> }>();
+    expect(body.items.map((item) => item.word)).toEqual(["あんこ", "Apple", "123"]);
+  });
+
+  test("scriptClass をまたぐ keyset pagination が正しい", async () => {
+    await createUser("alice");
+    await createWord("alice", "あんこ", "あんこ");
+    await createWord("alice", "Apple", "Apple");
+    await createWord("alice", "Banana", "Banana");
+
+    const firstPage = await request("alice", "/v1/words?limit=2");
+    const firstBody = await firstPage.json<{
+      items: Array<{ word: string }>;
+      nextCursor: string | null;
+    }>();
+    expect(firstBody.items.map((item) => item.word)).toEqual(["あんこ", "Apple"]);
+    expect(firstBody.nextCursor).not.toBeNull();
+
+    const secondPage = await request(
+      "alice",
+      `/v1/words?limit=2&cursor=${encodeURIComponent(firstBody.nextCursor!)}`,
+    );
+    const secondBody = await secondPage.json<{
+      items: Array<{ word: string }>;
+      nextCursor: string | null;
+    }>();
+    expect(secondBody.items.map((item) => item.word)).toEqual(["Banana"]);
+    expect(secondBody.nextCursor).toBeNull();
+  });
+
   test("subGroup で行を絞り込める", async () => {
     await createUser("alice");
     await createWord("alice", "あんこ", "あんこ");

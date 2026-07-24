@@ -60,6 +60,7 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 | `definition_id_list_repository.fetchForProfileCreatedAt` | `GET /v1/users/{id}/definitions` |
 | `definition_id_list_repository.fetchForLikedByUser` | `GET /v1/users/{id}/liked-definitions`（他者の公開定義 + 閲覧者自身の定義は非公開でも含む。ミュートした著者の定義は Workers 側で除外） |
 | `definition_id_list_repository.fetchForIndividualDictionary` | `GET /v1/users/{id}/definitions?subGroup=&sort=reading`（旧実装と同じ、よみ昇順） |
+| `definition_id_list_repository.fetchForUserWord` | `GET /v1/users/{id}/definitions?wordId=&sort=newest`（あなたの辞書タップ先） |
 | 各メソッドの `mutedUserIdList` 引数によるクライアント側フィルタ | **集約**: ミュート除外はサーバー側クエリで実施 |
 
 <!-- @code mobile_app/lib/feature/word/repository/word_repository.dart#WordRepository -->
