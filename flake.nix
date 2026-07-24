@@ -53,9 +53,11 @@
             # PATH が継承され、exportArchive が起動する rsync server が GNU 版に
             # 化けて `--extended-attributes` 非対応で "Copy failed" になる。
             # rsync は PATH 注入せず絶対パスで呼ぶ。
+            # gitMinimal は resolveRepoRoot（standalone `nix run`）用。
             runtimeInputs = [
               pkgs.coreutils
               pkgs.patch
+              pkgs.gitMinimal
             ];
             text = ''
               ${resolveRepoRoot}
@@ -81,39 +83,65 @@
               echo "[nix] Flutter SDK bootstrapped at $flutter_root" >&2
             '';
           };
-          mkFlutterWrapper = name: executable: pkgs.writeShellApplication {
-            inherit name;
-            # git は pkgs.git を入れずホストの git を使う（closure 肥大化を避ける）。
-            runtimeInputs = [
-              pkgs.coreutils
-            ];
-            text = ''
-              ${resolveRepoRoot}
+          # Standalone packages/apps keep gitMinimal so `PATH=/bin nix run .#flutter`
+          # still resolves the repo root and satisfies Flutter's own git calls.
+          # CI wrappers omit it and rely on the runner's ambient git to keep
+          # ci-mobile closure small.
+          mkFlutterWrapper =
+            {
+              name,
+              executable,
+              withGit ? true,
+            }:
+            pkgs.writeShellApplication {
+              inherit name;
+              runtimeInputs = [
+                pkgs.coreutils
+              ]
+              ++ lib.optionals withGit [ pkgs.gitMinimal ];
+              text = ''
+                ${resolveRepoRoot}
 
-              flutter_root="''${FLUTTER_ROOT:-$repo_root/.nix/flutter/${flutterVersion}}"
-              stamp="$flutter_root/.nix-flutter-version"
-              if [ ! -x "$flutter_root/bin/${executable}" ] || [ ! -f "$stamp" ] || [ "$(cat "$stamp")" != "${flutterToolchainRevision}" ]; then
-                if command -v bootstrap-flutter >/dev/null 2>&1; then
-                  bootstrap-flutter
-                else
-                  echo "[nix] Flutter SDK is not bootstrapped at $flutter_root" >&2
-                  echo "[nix] Run: nix run .#bootstrap-flutter" >&2
-                  exit 1
+                flutter_root="''${FLUTTER_ROOT:-$repo_root/.nix/flutter/${flutterVersion}}"
+                stamp="$flutter_root/.nix-flutter-version"
+                if [ ! -x "$flutter_root/bin/${executable}" ] || [ ! -f "$stamp" ] || [ "$(cat "$stamp")" != "${flutterToolchainRevision}" ]; then
+                  if command -v bootstrap-flutter >/dev/null 2>&1; then
+                    bootstrap-flutter
+                  else
+                    echo "[nix] Flutter SDK is not bootstrapped at $flutter_root" >&2
+                    echo "[nix] Run: nix run .#bootstrap-flutter" >&2
+                    exit 1
+                  fi
                 fi
-              fi
 
-              export FLUTTER_ROOT="$flutter_root"
-              export PUB_CACHE="''${PUB_CACHE:-$repo_root/.nix/pub-cache}"
-              mkdir -p "$PUB_CACHE"
-              exec "$flutter_root/bin/${executable}" "$@"
-            '';
+                export FLUTTER_ROOT="$flutter_root"
+                export PUB_CACHE="''${PUB_CACHE:-$repo_root/.nix/pub-cache}"
+                mkdir -p "$PUB_CACHE"
+                exec "$flutter_root/bin/${executable}" "$@"
+              '';
+            };
+          flutterTool = mkFlutterWrapper {
+            name = "flutter";
+            executable = "flutter";
           };
-          flutterTool = mkFlutterWrapper "flutter" "flutter";
-          dartTool = mkFlutterWrapper "dart" "dart";
+          dartTool = mkFlutterWrapper {
+            name = "dart";
+            executable = "dart";
+          };
+          flutterToolCi = mkFlutterWrapper {
+            name = "flutter";
+            executable = "flutter";
+            withGit = false;
+          };
+          dartToolCi = mkFlutterWrapper {
+            name = "dart";
+            executable = "dart";
+            withGit = false;
+          };
           # check.yml mobile jobs: Flutter analyze/test only.
           ciMobilePackages = [
-            flutterTool
-            dartTool
+            flutterToolCi
+            dartToolCi
             pkgs.just
           ];
           toolPackages = [
