@@ -118,6 +118,14 @@ backend-smoke-dev:
 backend-dev-remote-scheduled:
     cd backend && bunx wrangler dev --env dev --remote --test-scheduled
 
-# prod は #186 まで deploy せず、bundle と bindings の解決だけを検証する
+# prod bundle と bindings の解決を deploy せず検証する
 backend-validate-prod:
     cd backend && bunx wrangler deploy --env prod --dry-run --outdir /tmp/teigiii-api-prod-dry-run
+
+# prod D1 に未適用の migration を反映する
+backend-migrate-prod:
+    cd backend && bunx wrangler d1 migrations apply DB --env prod --remote
+
+# migration を完了してから prod Worker を手動 deploy する
+backend-deploy-prod: backend-migrate-prod
+    cd backend && bunx wrangler deploy --env prod
