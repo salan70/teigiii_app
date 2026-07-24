@@ -37,11 +37,18 @@
 - `nix develop`（default）も従来どおり成功
 - 未 bootstrap 時は `nix run .#bootstrap-flutter` を案内して exit 1
 - 既存 stamp では `bootstrap-flutter` が early-exit
+- `nix develop .#ci-mobile --command just mobile-setup` / `mobile-analyze` 成功
+
+## CI 初回観測（#274）
+
+- `Install dependencies` は ~75s → ~7s に短縮（slim shell 効果）
+- ただし exact cache miss + restore-keys 部分ヒット時に `nix run .#bootstrap-flutter` が走り、flutterSrc 実現で ~67s 残存
+- 対策: stamp 一致なら bootstrap を skip（`nix eval` のみ）するよう追従
 
 ## 完了条件
 
 - [x] Issue と Draft PR がある
-- [ ] キャッシュヒット時に `Install dependencies` が ~75s から大幅短縮される（CI で確認）
+- [ ] キャッシュヒット時（または stamp 一致の restore-keys）に bootstrap が skip され、ジョブが短縮される（CI で確認）
 - [x] ローカル `nix develop`（default）の Flutter 利用が従来どおり動く
 - [x] 無関係な `prod.xcscheme` 変更を含めない
 
