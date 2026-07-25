@@ -45,7 +45,9 @@ Future<void> main() async {
     appleProvider: kReleaseMode
         ? AppleProvider.deviceCheck
         : AppleProvider.debug,
-    // Web QA は登録済みデバッグトークンを固定注入する（全 origin 通過）。
+    // Web は QA 専用のため、kReleaseMode でも常に WebDebugProvider を使う。
+    // （本番 Web 提供はスコープ外。将来本番化するときはここで分岐を入れる。）
+    // 登録済みデバッグトークンを dart-define で固定注入する（全 origin 通過）。
     // 未指定時は auto-generate（ブラウザ console に出力）する。
     providerWeb: WebDebugProvider(
       debugToken: appCheckDebugToken.isEmpty ? null : appCheckDebugToken,

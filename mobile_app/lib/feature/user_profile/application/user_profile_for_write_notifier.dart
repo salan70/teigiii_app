@@ -41,8 +41,21 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
   void _updateAvatarUrlState(String avatarUrl) =>
       state = AsyncData(state.value!.copyWith(avatarUrl: avatarUrl));
 
-  void updateCroppedFileState(CroppedFile? croppedFile) =>
-      state = AsyncData(state.value!.copyWith(croppedFile: croppedFile));
+  /// 切り抜き画像と表示用バイト列をまとめて更新する。
+  ///
+  /// [croppedFile] が null のときは両方クリアする。
+  Future<void> updateCroppedFileState(CroppedFile? croppedFile) async {
+    if (croppedFile == null) {
+      state = AsyncData(
+        state.value!.copyWith(croppedFile: null, croppedImageBytes: null),
+      );
+      return;
+    }
+    final bytes = await croppedFile.readAsBytes();
+    state = AsyncData(
+      state.value!.copyWith(croppedFile: croppedFile, croppedImageBytes: bytes),
+    );
+  }
 
   bool canEdit() => state.value!.isValidAllFields() && isStateChanged();
 
@@ -63,7 +76,7 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
     }
 
     if (kIsWeb) {
-      updateCroppedFileState(CroppedFile(pickedFile.path));
+      await updateCroppedFileState(CroppedFile(pickedFile.path));
       return;
     }
 
@@ -73,7 +86,7 @@ class UserProfileForWriteNotifier extends _$UserProfileForWriteNotifier {
     if (croppedFile == null) {
       return;
     }
-    updateCroppedFileState(croppedFile);
+    await updateCroppedFileState(croppedFile);
   }
 
   /// 画像を選択する。

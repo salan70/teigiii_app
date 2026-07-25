@@ -33,9 +33,11 @@
   <link rel="manifest" href="manifest.json">
 
   <!--
-    Firebase App Check debug provider for Web QA.
+    Firebase App Check debug provider for Web QA (dev only).
     Default `true` auto-generates a token (printed in the browser console).
-    Build scripts may replace this with a registered fixed debug token string.
+    Build scripts may replace this in build/web/index.html with a registered
+    fixed debug token string. That token is intentionally public on the QA
+    Pages URL — see doc/plans/2026-07-25-flutter-web-qa-preview.md.
   -->
   <script>
     self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;

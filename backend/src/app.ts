@@ -31,6 +31,8 @@ export type Env = {
   DB: D1Database;
   FIREBASE_PROJECT_ID: string;
   FIREBASE_PROJECT_NUMBER: string;
+  /** set on local/dev only — enables Web QA CORS for that Pages project */
+  WEB_QA_PAGES_PROJECT?: string;
 };
 
 type ServerEnvironment = {

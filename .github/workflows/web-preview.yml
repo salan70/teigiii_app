@@ -35,7 +35,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    # secrets 未設定でも workflow を落とさず skip する（初回セットアップ猶予）
+    # WEB_PREVIEW_ENABLED が true のときだけ動く。
+    # 有効化済みなのに secrets が無い場合は設定ミスとして落とす。
     if: ${{ vars.WEB_PREVIEW_ENABLED == 'true' }}
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -100,13 +101,17 @@ jobs:
             echo "name=develop" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
       - name: Deploy to Cloudflare Pages
         id: deploy
         env:
           CLOUDFLARE_PAGES_BRANCH: ${{ steps.branch.outputs.name }}
         run: |
           set -euo pipefail
-          url="$(bash mobile_app/scripts/deploy-web-pages.sh | tail -n1)"
+          # stdout は URL 1 行のみ。スクリプトが GITHUB_OUTPUT にも書く。
+          url="$(bash mobile_app/scripts/deploy-web-pages.sh)"
           echo "url=$url" >> "$GITHUB_OUTPUT"
           echo "Preview URL: $url"
 

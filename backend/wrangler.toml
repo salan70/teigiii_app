@@ -6,6 +6,7 @@ compatibility_date = "2026-07-01"
 FIREBASE_PROJECT_ID = "everyone-teigi-dev"
 FIREBASE_PROJECT_NUMBER = "225028441501"
 AVATAR_BASE_URL = "http://localhost:8787/v1"
+WEB_QA_PAGES_PROJECT = "teigiii-web-dev"
 
 [[d1_databases]]
 binding = "DB"
@@ -24,6 +25,7 @@ name = "teigiii-api-dev"
 FIREBASE_PROJECT_ID = "everyone-teigi-dev"
 FIREBASE_PROJECT_NUMBER = "225028441501"
 AVATAR_BASE_URL = "https://teigiii-api-dev.tetsuo21ad.workers.dev/v1"
+WEB_QA_PAGES_PROJECT = "teigiii-web-dev"
 
 [[env.dev.d1_databases]]
 binding = "DB"

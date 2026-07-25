@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -74,33 +72,22 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
       child: Stack(
         alignment: AlignmentDirectional.center,
         children: [
-          userProfileForWrite.croppedFile == null
+          userProfileForWrite.croppedImageBytes == null
               ? AvatarNetworkImageWidget(
                   imageUrl: userProfileForWrite.avatarUrl,
                   userId: userProfileForWrite.id,
                   avatarSize: avatarSize,
                 )
-              : FutureBuilder<Uint8List>(
-                  future: userProfileForWrite.croppedFile!.readAsBytes(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return SizedBox(
-                        width: avatarSize.diameter,
-                        height: avatarSize.diameter,
-                      );
-                    }
-                    return Container(
-                      width: avatarSize.diameter,
-                      height: avatarSize.diameter,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: MemoryImage(snapshot.data!),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
+              : Container(
+                  width: avatarSize.diameter,
+                  height: avatarSize.diameter,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: MemoryImage(userProfileForWrite.croppedImageBytes!),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
           Container(
             alignment: AlignmentDirectional.bottomEnd,

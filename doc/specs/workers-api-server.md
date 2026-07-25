@@ -41,11 +41,16 @@ dev は `just backend-deploy-dev`、prod は `just backend-deploy-prod` で手�
 ### CORS（Web QA）
 
 <!-- @code backend/src/middleware/cors.ts#createCorsMiddleware -->
-ブラウザからの dev Web QA アクセスのため、App Check より前に CORS を適用する。許可 origin は次のみ。
+ブラウザからの **dev** Web QA アクセスのため、App Check より前に CORS を適用する。
+緩和は binding `WEB_QA_PAGES_PROJECT` が設定されている環境（local / `env.dev`）でのみ有効で、
+prod（`env.prod`）にはこの binding を置かず allowlist を空にする。
+
+有効時の許可 origin は次のみ。
 
 - `http://localhost:<port>` / `http://127.0.0.1:<port>`
 - LAN IP（`192.168.*` / `10.*` / `172.16-31.*`）
-- `https://*.pages.dev`
+- `https://<WEB_QA_PAGES_PROJECT>.pages.dev` およびそのプレビューサブドメイン
+  （例: `https://abc.teigiii-web-dev.pages.dev`）。第三者の `*.pages.dev` は許可しない。
 
 それ以外の Origin には `Access-Control-Allow-Origin` を付けない。CORS はブラウザ向けの緩和であり、認証・App Check の代替ではない。
 
