@@ -35,7 +35,7 @@ export function isAllowedWebQaOrigin(
  * Web QA 緩和は `WEB_QA_PAGES_PROJECT` が設定されている環境（local / dev）のみ有効。
  * prod では binding を置かず allowlist を空にする。
  *
- * @doc doc/specs/workers-api-server.md#リクエスト処理順序
+ * @doc doc/specs/workers-api-server.md#cors-web-qa
  */
 export function createCorsMiddleware(): MiddlewareHandler {
   return (c, next) => {

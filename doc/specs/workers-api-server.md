@@ -38,9 +38,9 @@ dev は `just backend-deploy-dev`、prod は `just backend-deploy-prod` で手�
 
 認証バイパスは local / dev / prod のいずれにも設けない。単体・結合テストは検証器を依存注入し、実通信テストは dev Firebase が発行した正規トークンを使う。
 
+<!-- @code backend/src/middleware/cors.ts#createCorsMiddleware -->
 ### CORS（Web QA）
 
-<!-- @code backend/src/middleware/cors.ts#createCorsMiddleware -->
 ブラウザからの **dev** Web QA アクセスのため、App Check より前に CORS を適用する。
 緩和は binding `WEB_QA_PAGES_PROJECT` が設定されている環境（local / `env.dev`）でのみ有効で、
 prod（`env.prod`）にはこの binding を置かず allowlist を空にする。
