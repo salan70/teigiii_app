@@ -125,8 +125,8 @@ Issue: #258（親） / 本仕様の確定: #259
 | `iconLarge` | 24 | 単独で意味を持つアイコン |
 | `avatarIcon` | 40 | プロフィール系の大アイコン |
 
-`SizedBox` による固定高（検索フィールドの 80 など 4 件）はトークンにせず、
-対応する Ds コンポーネント内部へ閉じる。
+`SizedBox` による固定高はトークンにせず、対応する Ds コンポーネント内部へ閉じる。
+検索フィールドの 80 は #280 で廃止し、`DsSearchField` の固有高さ 48 に統一した。
 
 <!-- @code mobile_app/lib/core/design_system/token/ds_elevation.dart#DsElevation -->
 ### 3.4 `DsElevation`
@@ -172,19 +172,24 @@ Issue: #258（親） / 本仕様の確定: #259
 | `changeable_profile_image.dart` | `size: 28` / `opacity 0.8` | コンポーネント内部値として閉じる |
 | `select_post_type_button.dart` | `size: 8` | 装飾ドット。コンポーネント内部値として閉じる |
 
-### #264 での判断の訂正
+### #264 での判断の訂正と #280 での統一
 
 `DsSearchField` の外枠（高さ・左右余白）は、監査時点では「コンポーネント内部へ閉じる」と
-判断していたが、**呼び出し元によって値が違う**ことがパイロット移行で判明した。
+判断していたが、**呼び出し元によって値が違う**ことがパイロット移行で判明したため、
+#264 では呼び出し側に残して例外申請した。#280 で次のとおり統一した。
 
-| 画面 | 高さ | 左右余白 |
+| 画面 | 統一前の高さ | 統一前の左右余白 |
 |---|---|---|
-| `DictionaryEveryonePage` | 80 | 40 |
-| `WordSearchResultPage` | 指定なし | 36 |
-| `UserSearchPage` | 80 | 40 |
+| `DictionaryEveryonePage` | 80（`SizedBox` で引き伸ばし） | 40 |
+| `WordSearchResultPage` | 48（固有値） | 36 |
+| `UserSearchPage` | 48（固有値） | 40 |
+| `UserSearchResultPage` | 48（固有値） | 36 |
 
-内部へ閉じると `WordSearchResultPage` の見た目が変わるため、呼び出し側に残して
-例外申請した。統一は #280 で扱う。
+- **高さは 48**（`DsSearchField` の固有値）に統一し、`SizedBox` による引き伸ばしをやめた。
+  80 に根拠がなく、1 画面だけが 32px 高かったため
+- **左右余白は 40** に統一し、`DsSearchField` 内部へ閉じた。36 と 40 の差に意図はない。
+  用途がこのコンポーネントに閉じているため `DsSpacing` には出さず、内部定数にしている
+- 呼び出し側で `SizedBox` / 左右 `Padding` を重ねない
 
 `Gap(300)`（キーボード回避）は予定どおり例外申請とし、仕組みでの置き換えを #281 で扱う。
 
