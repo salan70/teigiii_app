@@ -28,6 +28,7 @@ import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
 import 'util/constant/theme_data.dart';
 import 'util/firebase_options/firebase_options.dart';
 import 'util/logger.dart';
+import 'util/web_device_preview.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,7 @@ Future<void> main() async {
   final flavor = Flavor.fromString(const String.fromEnvironment('flavor'));
   await Firebase.initializeApp(options: firebaseOptionsWithFlavor(flavor));
 
+  const appCheckDebugToken = String.fromEnvironment('APP_CHECK_DEBUG_TOKEN');
   await FirebaseAppCheck.instance.activate(
     androidProvider: kReleaseMode
         ? AndroidProvider.playIntegrity
@@ -44,44 +46,60 @@ Future<void> main() async {
     appleProvider: kReleaseMode
         ? AppleProvider.deviceCheck
         : AppleProvider.debug,
+    // Web は QA 専用のため、kReleaseMode でも常に WebDebugProvider を使う。
+    // （本番 Web 提供はスコープ外。将来本番化するときはここで分岐を入れる。）
+    // 登録済みデバッグトークンを dart-define で固定注入する（全 origin 通過）。
+    // 未指定時は auto-generate（ブラウザ console に出力）する。
+    providerWeb: WebDebugProvider(
+      debugToken: appCheckDebugToken.isEmpty ? null : appCheckDebugToken,
+    ),
   );
 
-  // Flutterフレームワークがキャッチしたエラーを記録する
-  FlutterError.onError = (errorDetails) {
-    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-  };
-  // Flutterフレームワークでキャッチできない非同期エラーを記録する
-  PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
+  if (!kIsWeb) {
+    // Flutterフレームワークがキャッチしたエラーを記録する
+    FlutterError.onError = (errorDetails) {
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    };
+    // Flutterフレームワークでキャッチできない非同期エラーを記録する
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
 
-  await MobileAds.instance.initialize();
+    await MobileAds.instance.initialize();
 
-  // iOS 端末にてステータスバーを表示させるための設定。
-  //
-  // 参考: https://halzoblog.com/error-bug-diary/20220922-2/
-  await SystemChrome.setEnabledSystemUIMode(
-    SystemUiMode.manual,
-    overlays: SystemUiOverlay.values,
-  );
-
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]).then((_) {
-    runApp(
-      ProviderScope(
-        overrides: [flavorProvider.overrideWithValue(flavor)],
-        child: DevicePreview(
-          enabled: false,
-          builder: (context) {
-            return const MyApp();
-          },
-        ),
-      ),
+    // iOS 端末にてステータスバーを表示させるための設定。
+    //
+    // 参考: https://halzoblog.com/error-bug-diary/20220922-2/
+    await SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: SystemUiOverlay.values,
     );
-  });
+
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  final enableDevicePreview = shouldEnableWebDevicePreview(
+    isWeb: kIsWeb,
+    platform: defaultTargetPlatform,
+  );
+
+  runApp(
+    ProviderScope(
+      overrides: [flavorProvider.overrideWithValue(flavor)],
+      child: DevicePreview(
+        // PC の Web QA のみ iPhone 枠。実機ブラウザでは枠なし。
+        enabled: enableDevicePreview,
+        defaultDevice: Devices.ios.iPhone16,
+        builder: (context) {
+          return const MyApp();
+        },
+      ),
+    ),
+  );
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -114,6 +132,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+      locale: DevicePreview.locale(context),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -187,11 +206,12 @@ class _MyAppState extends ConsumerState<MyApp> {
           },
         );
 
-        return AppConfigGate(
+        final gated = AppConfigGate(
           asyncAppConfig: ref.watch(appConfigProvider),
           onRetry: () => ref.invalidate(appConfigProvider),
           child: app,
         );
+        return DevicePreview.appBuilder(context, gated);
       },
     );
   }

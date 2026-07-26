@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -47,6 +44,28 @@ class DefaultFirebaseOptions {
           'DefaultFirebaseOptions are not supported for this platform.',
         );
     }
+  }
+
+  /// Web QA 用。apiKey / appId は Firebase console で Web アプリ登録後に
+  /// `--dart-define` / `dart_defines/dev.json` で注入する。
+  static FirebaseOptions get web {
+    const apiKey = String.fromEnvironment('FIREBASE_WEB_API_KEY');
+    const appId = String.fromEnvironment('FIREBASE_WEB_APP_ID');
+    if (apiKey.isEmpty || appId.isEmpty) {
+      throw UnsupportedError(
+        'DefaultFirebaseOptions for web require FIREBASE_WEB_API_KEY and '
+        'FIREBASE_WEB_APP_ID dart-defines. Register a Web app in the '
+        'everyone-teigi-dev Firebase project and pass the values.',
+      );
+    }
+    return const FirebaseOptions(
+      apiKey: apiKey,
+      appId: appId,
+      messagingSenderId: '225028441501',
+      projectId: 'everyone-teigi-dev',
+      authDomain: 'everyone-teigi-dev.firebaseapp.com',
+      storageBucket: 'everyone-teigi-dev.appspot.com',
+    );
   }
 
   static const FirebaseOptions android = FirebaseOptions(

@@ -12,7 +12,7 @@ analyze: mobile-analyze backend-analyze
 
 format: mobile-format backend-format
 
-test: mobile-test backend-test
+test: mobile-test backend-test web-test
 
 # backend/openapi.json から Dart API クライアントを mobile_app/packages/teigiii_api に生成する
 generate-api:
@@ -74,6 +74,27 @@ mobile-check-ios-flavors:
 
 mobile-check-ios-native-asset binary sdk:
     bash mobile_app/ios/scripts/check_native_asset_platform.sh "{{binary}}" "{{sdk}}"
+
+# --- web QA（dev 固定・本番提供外）---
+
+# Pages Functions（Basic Auth）の単体テスト
+web-test:
+    bun test mobile_app/scripts/basic-auth.test.ts mobile_app/scripts/sanitize-pages-branch.test.ts
+
+# Flutter Web (dev) をビルドする
+web-build:
+    bash mobile_app/scripts/build-web-dev.sh
+
+# ビルド → Cloudflare Pages へ deploy → URL/QR を表示する
+# Cloudflare 認証は wrangler OAuth（just backend-deploy-* と同じ）。
+# FIREBASE_WEB_* / APP_CHECK_DEBUG_TOKEN はルート .env に置く（AdMob と同じ）。
+web-preview:
+    bash mobile_app/scripts/run-web-preview.sh
+
+# ビルド → LAN 向け http.server → URL/QR を表示する（Basic Auth なし）
+# Firebase / App Check を使うならルート .env にキーを置く
+web-serve: web-build
+    bash mobile_app/scripts/serve-web-lan.sh
 
 # --- backend（Cloudflare Workers API）---
 

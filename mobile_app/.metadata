@@ -1,7 +1,7 @@
 # This file tracks properties of this Flutter project.
 # Used by Flutter tool to assess capabilities and perform upgrades etc.
 #
-# This file should be version controlled.
+# This file should be version controlled and should not be manually edited.
 
 version:
   revision: c07f7888888435fd9df505aa2efc38d3cf65681b
@@ -21,6 +21,9 @@ migration:
     - platform: ios
       create_revision: c07f7888888435fd9df505aa2efc38d3cf65681b
       base_revision: c07f7888888435fd9df505aa2efc38d3cf65681b
+    - platform: web
+      create_revision: 02085feb3f5d8a8156e5e28512b9d99351d510c0
+      base_revision: 02085feb3f5d8a8156e5e28512b9d99351d510c0
 
   # User provided section
 

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -86,9 +87,14 @@ class SettingPage extends ConsumerWidget {
             SettingTileButton(
               trailingIcon: const Icon(CupertinoIcons.star),
               label: 'レビューで応援する',
-              onTap: () => ref
-                  .read(inAppReviewProvider)
-                  .openStoreListing(appStoreId: appleId),
+              onTap: () {
+                if (kIsWeb) {
+                  return;
+                }
+                ref
+                    .read(inAppReviewProvider)
+                    .openStoreListing(appStoreId: appleId);
+              },
             ),
             const Gap(32),
 

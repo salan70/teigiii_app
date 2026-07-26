@@ -15,6 +15,7 @@ import {
   type RequestContextVariables,
   type RequestLogEntry,
 } from "./middleware/request-context";
+import { createCorsMiddleware } from "./middleware/cors";
 import { createApiErrorHandler, handleNotFound } from "./errors";
 import { appConfigRoutes } from "./routes/app-config";
 import { definitionRoutes } from "./routes/definitions";
@@ -30,6 +31,8 @@ export type Env = {
   DB: D1Database;
   FIREBASE_PROJECT_ID: string;
   FIREBASE_PROJECT_NUMBER: string;
+  /** set on local/dev only — enables Web QA CORS for that Pages project */
+  WEB_QA_PAGES_PROJECT?: string;
 };
 
 type ServerEnvironment = {
@@ -66,6 +69,8 @@ export function createApp({
     .route("/", searchRoutes);
 
   const honoApp = new OpenAPIHono<ServerEnvironment>();
+  // CORS は App Check より前。OPTIONS preflight を認証なしで short-circuit する。
+  honoApp.use("*", createCorsMiddleware());
   honoApp.use(
     "*",
     createRequestContextMiddleware({

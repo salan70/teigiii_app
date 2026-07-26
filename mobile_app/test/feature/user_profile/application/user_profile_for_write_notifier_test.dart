@@ -75,9 +75,16 @@ void main() {
 
     final croppedPath = '${tempDir.path}/avatar.jpg';
     await File(croppedPath).writeAsBytes([0xFF, 0xD8, 0xFF]);
-    notifier.updateCroppedFileState(CroppedFile(croppedPath));
+    await notifier.updateCroppedFileState(CroppedFile(croppedPath));
     expect(
       container.read(userProfileForWriteNotifierProvider).value?.croppedFile,
+      isNotNull,
+    );
+    expect(
+      container
+          .read(userProfileForWriteNotifierProvider)
+          .value
+          ?.croppedImageBytes,
       isNotNull,
     );
 

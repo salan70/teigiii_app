@@ -13,6 +13,7 @@ String bannerAdUnitId(BannerAdUnitIdRef ref) {
   final platform = defaultTargetPlatform.when(
     onIOS: () => 'IOS',
     onAndroid: () => 'ANDROID',
+    orElse: () => 'ANDROID',
   );
 
   final flavor = ref.watch(flavorProvider);
