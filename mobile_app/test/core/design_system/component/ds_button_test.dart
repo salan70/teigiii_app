@@ -28,18 +28,46 @@ void main() {
       expect(button.enabled, isFalse);
     });
 
+    testWidgets('disabled は enabled と見た目が異なる', (tester) async {
+      await pumpDsWidget(
+        tester,
+        DsFilledButton.primary(onPressed: () {}, text: '保存'),
+      );
+      final enabledText = tester.widget<Text>(find.text('保存')).style?.color;
+      final enabledBackground = tester
+          .widget<TextButton>(find.byType(TextButton))
+          .style
+          ?.backgroundColor
+          ?.resolve(<WidgetState>{});
+
+      await pumpDsWidget(
+        tester,
+        const DsFilledButton.primary(onPressed: null, text: '保存'),
+      );
+      final disabledText = tester.widget<Text>(find.text('保存')).style?.color;
+      final disabledBackground = tester
+          .widget<TextButton>(find.byType(TextButton))
+          .style
+          ?.backgroundColor
+          ?.resolve(<WidgetState>{WidgetState.disabled});
+
+      expect(disabledText, isNot(enabledText));
+      expect(disabledBackground, isNot(enabledBackground));
+      expect(disabledText?.opacity, closeTo(DsOpacity.disabled, 0.01));
+    });
+
     testWidgets('primary と tertiary で背景色が変わる', (tester) async {
       final theme = buildDsThemeData(Brightness.light);
 
       await pumpDsWidget(
         tester,
-        const DsFilledButton.primary(onPressed: null, text: 'a'),
+        DsFilledButton.primary(onPressed: () {}, text: 'a'),
       );
       final primaryText = tester.widget<Text>(find.text('a'));
 
       await pumpDsWidget(
         tester,
-        const DsFilledButton.tertiary(onPressed: null, text: 'a'),
+        DsFilledButton.tertiary(onPressed: () {}, text: 'a'),
       );
       final tertiaryText = tester.widget<Text>(find.text('a'));
 
@@ -67,6 +95,29 @@ void main() {
 
       await tester.tap(find.text('閉じる'));
       expect(tapped, 1);
+    });
+
+    testWidgets('disabled は枠線と文字が薄くなる', (tester) async {
+      await pumpDsWidget(
+        tester,
+        DsOutlinedButton.primary(onPressed: () {}, text: 'キャンセル'),
+      );
+      final enabledText = tester.widget<Text>(find.text('キャンセル')).style?.color;
+
+      await pumpDsWidget(
+        tester,
+        const DsOutlinedButton.primary(onPressed: null, text: 'キャンセル'),
+      );
+      final disabledText = tester.widget<Text>(find.text('キャンセル')).style?.color;
+      final side = tester
+          .widget<TextButton>(find.byType(TextButton))
+          .style
+          ?.side
+          ?.resolve(<WidgetState>{WidgetState.disabled});
+
+      expect(disabledText, isNot(enabledText));
+      expect(disabledText?.opacity, closeTo(DsOpacity.disabled, 0.01));
+      expect(side?.color.opacity, closeTo(DsOpacity.disabled, 0.01));
     });
 
     testWidgets('背景色を持たない', (tester) async {

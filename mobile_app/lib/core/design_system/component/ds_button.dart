@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../token/ds_opacity.dart';
 import '../token/ds_radius.dart';
 import '../token/ds_spacing.dart';
 import '../token/ds_theme_context.dart';
@@ -125,11 +126,26 @@ class _DsButtonBase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // disabled は「同じ色を薄くしたもの」で表す。専用の色トークンは増やさない。
+    final isEnabled = onPressed != null;
+    Color muted(Color color) => color.withOpacity(DsOpacity.disabled);
+
+    final effectiveTextColor = isEnabled ? textColor : muted(textColor);
+    final effectiveBackground = backgroundColor == null
+        ? null
+        : (isEnabled ? backgroundColor : muted(backgroundColor!));
+    final effectiveBorder = borderColor == null
+        ? null
+        : (isEnabled ? borderColor! : muted(borderColor!));
+
     return TextButton(
       style: TextButton.styleFrom(
         shape: const RoundedRectangleBorder(borderRadius: DsRadius.pillBorder),
-        backgroundColor: backgroundColor,
-        side: borderColor == null ? null : BorderSide(color: borderColor!),
+        backgroundColor: effectiveBackground,
+        disabledBackgroundColor: effectiveBackground,
+        side: effectiveBorder == null
+            ? null
+            : BorderSide(color: effectiveBorder),
       ),
       onPressed: onPressed,
       child: Padding(
@@ -138,7 +154,9 @@ class _DsButtonBase extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: context.dsTypography.itemTitle.copyWith(color: textColor),
+          style: context.dsTypography.itemTitle.copyWith(
+            color: effectiveTextColor,
+          ),
         ),
       ),
     );

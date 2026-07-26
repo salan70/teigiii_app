@@ -17,18 +17,25 @@
   },
   "lib/core/common_widget/dialog/loading_dialog.dart": {
     "ds_hardcoded_spacing": 1,
-    "ds_hardcoded_radius": 1
+    "ds_hardcoded_radius": 1,
+    "ds_hardcoded_opacity": 3
   },
   "lib/core/common_widget/infinity_scroll_widget.dart": {
     "ds_hardcoded_spacing": 5
   },
   "lib/core/page/definition_detail_page.dart": {
-    "ds_hardcoded_spacing": 16
+    "ds_hardcoded_spacing": 16,
+    "ds_hardcoded_size": 1
   },
   "lib/core/page/definition_edit_page.dart": {
     "ds_hardcoded_spacing": 5,
     "ds_hardcoded_radius": 1,
+    "ds_hardcoded_elevation": 3,
+    "ds_hardcoded_opacity": 1,
     "ds_forbidden_widget": 1
+  },
+  "lib/core/page/definition_post_page.dart": {
+    "ds_hardcoded_elevation": 2
   },
   "lib/core/page/dictionary_everyone_page.dart": {
     "ds_hardcoded_spacing": 1
@@ -39,13 +46,21 @@
   "lib/core/page/dictionary_sub_index_page.dart": {
     "ds_hardcoded_spacing": 4
   },
+  "lib/core/page/home_page.dart": {
+    "ds_hardcoded_elevation": 1
+  },
   "lib/core/page/profile_edit_page.dart": {
     "ds_hardcoded_spacing": 7,
+    "ds_hardcoded_opacity": 1,
     "ds_forbidden_widget": 3
   },
   "lib/core/page/setting_page.dart": {
     "ds_hardcoded_spacing": 17,
+    "ds_hardcoded_size": 1,
     "ds_forbidden_widget": 1
+  },
+  "lib/core/page/user_list_following_or_follower_page.dart": {
+    "ds_hardcoded_elevation": 1
   },
   "lib/core/page/user_list_muted_page.dart": {
     "ds_hardcoded_spacing": 3
@@ -64,35 +79,47 @@
   },
   "lib/core/page/word_registration_page.dart": {
     "ds_hardcoded_spacing": 4,
+    "ds_hardcoded_elevation": 1,
+    "ds_hardcoded_opacity": 1,
     "ds_forbidden_widget": 3
   },
   "lib/core/page/word_search_result_page.dart": {
     "ds_hardcoded_spacing": 5
   },
   "lib/core/page/word_top_page.dart": {
-    "ds_hardcoded_spacing": 3
+    "ds_hardcoded_spacing": 3,
+    "ds_hardcoded_size": 1
   },
   "lib/feature/definition/presentation/definition_tile.dart": {
-    "ds_hardcoded_spacing": 10
+    "ds_hardcoded_spacing": 10,
+    "ds_hardcoded_size": 1
   },
   "lib/feature/definition/presentation/definition_tile_shimmer.dart": {
     "ds_hardcoded_spacing": 6
   },
   "lib/feature/definition/presentation/post_definition_fab.dart": {
     "ds_hardcoded_spacing": 2,
-    "ds_hardcoded_radius": 2
+    "ds_hardcoded_radius": 2,
+    "ds_hardcoded_elevation": 2,
+    "ds_hardcoded_opacity": 1
   },
   "lib/feature/definition/presentation/select_post_type_button.dart": {
-    "ds_hardcoded_spacing": 3
+    "ds_hardcoded_spacing": 3,
+    "ds_hardcoded_size": 1
   },
   "lib/feature/definition/presentation/self_definition_action_icon_button.dart": {
     "ds_hardcoded_spacing": 9,
     "ds_hardcoded_radius": 2,
+    "ds_hardcoded_elevation": 2,
     "ds_forbidden_widget": 3
+  },
+  "lib/feature/definition/presentation/write_definition_base_page.dart": {
+    "ds_hardcoded_elevation": 1
   },
   "lib/feature/definition_like/presentation/like_widget.dart": {
     "ds_hardcoded_text_style": 1,
-    "ds_hardcoded_spacing": 2
+    "ds_hardcoded_spacing": 2,
+    "ds_hardcoded_size": 1
   },
   "lib/feature/definition_list/presentation/definition_list.dart": {
     "ds_hardcoded_spacing": 1
@@ -102,11 +129,13 @@
   },
   "lib/feature/force_event/presentation/overlay_force_update_dialog.dart": {
     "ds_hardcoded_spacing": 3,
-    "ds_hardcoded_radius": 1
+    "ds_hardcoded_radius": 1,
+    "ds_hardcoded_opacity": 1
   },
   "lib/feature/force_event/presentation/overlay_in_maintenance_dialog.dart": {
     "ds_hardcoded_spacing": 4,
-    "ds_hardcoded_radius": 1
+    "ds_hardcoded_radius": 1,
+    "ds_hardcoded_opacity": 1
   },
   "lib/feature/introduction/presentation/confirm_agreement_dialog.dart": {
     "ds_hardcoded_spacing": 3
@@ -130,17 +159,23 @@
   "lib/feature/user_list/presentation/profile_list.dart": {
     "ds_hardcoded_spacing": 1
   },
+  "lib/feature/user_profile/presentation/changeable_profile_image.dart": {
+    "ds_hardcoded_size": 1,
+    "ds_hardcoded_opacity": 1
+  },
   "lib/feature/user_profile/presentation/dictionary_author_widget.dart": {
     "ds_hardcoded_spacing": 2
   },
   "lib/feature/user_profile/presentation/profile_tile.dart": {
-    "ds_hardcoded_spacing": 13
+    "ds_hardcoded_spacing": 13,
+    "ds_hardcoded_size": 1
   },
   "lib/feature/user_profile/presentation/profile_tile_shimmer.dart": {
     "ds_hardcoded_spacing": 6
   },
   "lib/feature/user_profile/presentation/profile_widget.dart": {
-    "ds_hardcoded_spacing": 10
+    "ds_hardcoded_spacing": 10,
+    "ds_hardcoded_size": 1
   },
   "lib/feature/user_profile/presentation/profile_widget_shimmer.dart": {
     "ds_hardcoded_spacing": 7
@@ -148,16 +183,20 @@
   "lib/feature/user_search/presentation/search_user_text_field.dart": {
     "ds_hardcoded_spacing": 2,
     "ds_hardcoded_radius": 1,
+    "ds_hardcoded_size": 2,
+    "ds_hardcoded_opacity": 1,
     "ds_forbidden_widget": 1
   },
   "lib/feature/word/presentation/index_tile.dart": {
-    "ds_hardcoded_spacing": 1
+    "ds_hardcoded_spacing": 1,
+    "ds_hardcoded_size": 1
   },
   "lib/feature/word/presentation/word_page_shimmer.dart": {
     "ds_hardcoded_spacing": 7
   },
   "lib/feature/word/presentation/word_tile.dart": {
-    "ds_hardcoded_spacing": 2
+    "ds_hardcoded_spacing": 2,
+    "ds_hardcoded_size": 1
   },
   "lib/feature/word/presentation/word_tile_shimmer.dart": {
     "ds_hardcoded_spacing": 2

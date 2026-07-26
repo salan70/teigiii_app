@@ -235,6 +235,8 @@ Ds コンポーネントにしない:
 - **closed variant**: 用途別の名前付きコンストラクタまたは専用型で提供する。
   任意の `style` / `color` / `padding` override を原則提供しない
 - 状態は enum または名前付きコンストラクタで表現し、bool の組み合わせで表現しない
+- **状態は見た目にも反映する**。disabled は「同じ色を [DsOpacity.disabled] で薄くしたもの」で
+  表し、専用の色トークンは増やさない。操作可否が見た目で判別できない状態を作らない
 - 必須の意味（ラベル、ハンドラ）は required 引数にする
 - 既存の `ErrorAndRetryWidget.cannotInquire` / `.canInquire`、
   `ShimmerWidget.rectangular` / `.circular` を規約のリファレンス実装とする

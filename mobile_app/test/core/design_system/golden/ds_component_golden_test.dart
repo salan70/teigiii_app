@@ -30,6 +30,10 @@ void main() {
       onPressed: () {},
       text: '運営へお問い合わせ',
     ),
+    'ds_outlined_button_disabled': const DsOutlinedButton.tertiary(
+      onPressed: null,
+      text: '運営へお問い合わせ',
+    ),
     'ds_icon_button': DsIconButton(
       icon: Icons.more_horiz,
       semanticLabel: 'この定義の操作',

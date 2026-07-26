@@ -23,6 +23,9 @@ const ruleColor = 'ds_hardcoded_color';
 const ruleTextStyle = 'ds_hardcoded_text_style';
 const ruleSpacing = 'ds_hardcoded_spacing';
 const ruleRadius = 'ds_hardcoded_radius';
+const ruleSize = 'ds_hardcoded_size';
+const ruleElevation = 'ds_hardcoded_elevation';
+const ruleOpacity = 'ds_hardcoded_opacity';
 const ruleForbiddenWidget = 'ds_forbidden_widget';
 const ruleSuppressionWithoutReason = 'ds_suppression_without_reason';
 
@@ -35,6 +38,9 @@ const _allRules = <String>[
   ruleTextStyle,
   ruleSpacing,
   ruleRadius,
+  ruleSize,
+  ruleElevation,
+  ruleOpacity,
   ruleForbiddenWidget,
   ruleSuppressionWithoutReason,
 ];
@@ -53,7 +59,10 @@ const _forbiddenWidgets = <String>{
 };
 
 /// 検査対象から除外するパス（lib/ からの相対）。
-const _excludedDirs = <String>['lib/core/design_system/', 'lib/util/'];
+///
+/// デザインシステム内部だけを除外する。`lib/util/` には UI から使う helper が
+/// あるため除外しない（除外すると規約を迂回できてしまう）。
+const _excludedDirs = <String>['lib/core/design_system/'];
 
 /// generated ファイルの拡張子。
 const _generatedSuffixes = <String>['.g.dart', '.freezed.dart', '.gr.dart'];
@@ -439,6 +448,13 @@ class _DsVisitor extends RecursiveAstVisitor<void> {
     if (name != null) {
       _check(name, node.argumentList, node.offset);
     }
+    // `colorScheme.onSurface.withOpacity(0.3)` のようにターゲットが
+    // SimpleIdentifier でない場合も検出したいので、メソッド名だけで判定する。
+    _checkDesignValues(
+      name ?? node.methodName.name,
+      node.argumentList,
+      node.offset,
+    );
     super.visitMethodInvocation(node);
   }
 
@@ -454,7 +470,9 @@ class _DsVisitor extends RecursiveAstVisitor<void> {
       type.name2.lexeme,
       if (constructorName.name != null) constructorName.name!.name,
     ];
-    _check(buffer.join('.'), node.argumentList, node.offset);
+    final joined = buffer.join('.');
+    _check(joined, node.argumentList, node.offset);
+    _checkDesignValues(joined, node.argumentList, node.offset);
     super.visitInstanceCreationExpression(node);
   }
 
@@ -464,6 +482,45 @@ class _DsVisitor extends RecursiveAstVisitor<void> {
       _add(ruleColor, node.offset, '`${node.toSource()}` ではなく Theme の色を使う');
     }
     super.visitPrefixedIdentifier(node);
+  }
+
+  /// size / elevation / opacity の直書きを判定する。
+  ///
+  /// [_check] と違い早期 return しない。同じ呼び出しが複数のルールに
+  /// 該当しうるため（`Icon(size: 24, ...)` など）。
+  void _checkDesignValues(String name, ArgumentList args, int offset) {
+    final parts = name.split('.');
+
+    // 不透明度: `withOpacity(0.4)` / `withValues(alpha: 0.4)`
+    if (parts.last == 'withOpacity') {
+      if (_hasNumericLiteral(args)) {
+        _add(ruleOpacity, offset, '`withOpacity` の数値直書きではなく DsOpacity を使う');
+      }
+    }
+    if (parts.last == 'withValues') {
+      if (_hasNumericLiteral(args, namedOnly: const {'alpha'})) {
+        _add(
+          ruleOpacity,
+          offset,
+          '`withValues(alpha:)` の数値直書きではなく DsOpacity を使う',
+        );
+      }
+    }
+
+    // 標高: どの widget でも `elevation:` は数値を直接書かせない。
+    if (_hasNumericLiteral(args, namedOnly: const {'elevation'})) {
+      _add(ruleElevation, offset, '`elevation` の数値直書きではなく DsElevation を使う');
+    }
+
+    // アイコンサイズ: `Icon(size:)` と `IconButton(iconSize:)`。
+    if (parts.contains('Icon')) {
+      if (_hasNumericLiteral(args, namedOnly: const {'size'})) {
+        _add(ruleSize, offset, '`Icon` の size 直書きではなく DsSize を使う');
+      }
+    }
+    if (_hasNumericLiteral(args, namedOnly: const {'iconSize'})) {
+      _add(ruleSize, offset, '`iconSize` の直書きではなく DsSize を使う');
+    }
   }
 
   /// コンストラクタ／ファクトリ呼び出しを判定する。
