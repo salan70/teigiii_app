@@ -32,40 +32,35 @@ class MockWriteDefinitionRepository extends _i1.Mock
     implements _i2.WriteDefinitionRepository {
   @override
   _i3.Future<String> createDefinition(
-          _i4.DefinitionForWrite? definitionForWrite) =>
+    _i4.DefinitionForWrite? definitionForWrite,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #createDefinition,
-          [definitionForWrite],
-        ),
-        returnValue: _i3.Future<String>.value(_i5.dummyValue<String>(
-          this,
-          Invocation.method(
-            #createDefinition,
-            [definitionForWrite],
-          ),
-        )),
-        returnValueForMissingStub:
-            _i3.Future<String>.value(_i5.dummyValue<String>(
-          this,
-          Invocation.method(
-            #createDefinition,
-            [definitionForWrite],
-          ),
-        )),
-      ) as _i3.Future<String>);
+            Invocation.method(#createDefinition, [definitionForWrite]),
+            returnValue: _i3.Future<String>.value(
+              _i5.dummyValue<String>(
+                this,
+                Invocation.method(#createDefinition, [definitionForWrite]),
+              ),
+            ),
+            returnValueForMissingStub: _i3.Future<String>.value(
+              _i5.dummyValue<String>(
+                this,
+                Invocation.method(#createDefinition, [definitionForWrite]),
+              ),
+            ),
+          )
+          as _i3.Future<String>);
 
   @override
   _i3.Future<void> updateDefinition(
-          _i4.DefinitionForWrite? definitionForWrite) =>
+    _i4.DefinitionForWrite? definitionForWrite,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateDefinition,
-          [definitionForWrite],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+            Invocation.method(#updateDefinition, [definitionForWrite]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
   _i3.Future<void> updatePostType({
@@ -73,26 +68,21 @@ class MockWriteDefinitionRepository extends _i1.Mock
     required bool? isPublic,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updatePostType,
-          [],
-          {
-            #definitionId: definitionId,
-            #isPublic: isPublic,
-          },
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+            Invocation.method(#updatePostType, [], {
+              #definitionId: definitionId,
+              #isPublic: isPublic,
+            }),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
   _i3.Future<void> deleteDefinition(String? definitionId) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #deleteDefinition,
-          [definitionId],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+            Invocation.method(#deleteDefinition, [definitionId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 }

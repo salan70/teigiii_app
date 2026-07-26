@@ -28,10 +28,7 @@ class _EmptyDefinitionIdList extends DefinitionIdListStateNotifier {
   }
 }
 
-Future<void> _pumpWordTop(
-  WidgetTester tester, {
-  required Word? word,
-}) async {
+Future<void> _pumpWordTop(WidgetTester tester, {required Word? word}) async {
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
@@ -53,9 +50,7 @@ Future<void> _pumpWordTop(
 }
 
 void main() {
-  testWidgets('投稿0件でも言葉ヘッダーとタブを表示し、タブ下にエンプティを出す', (
-    tester,
-  ) async {
+  testWidgets('投稿0件でも言葉ヘッダーとタブを表示し、タブ下にエンプティを出す', (tester) async {
     await _pumpWordTop(
       tester,
       word: const Word(

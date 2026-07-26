@@ -29,13 +29,8 @@ import 'package:teigi_app/util/constant/initial_main_group.dart' as _i6;
 
 class _FakeDefinitionIdListState_0 extends _i1.SmartFake
     implements _i2.DefinitionIdListState {
-  _FakeDefinitionIdListState_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeDefinitionIdListState_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [DefinitionIdListRepository].
@@ -46,52 +41,42 @@ class MockDefinitionIdListRepository extends _i1.Mock
   @override
   _i4.Future<_i2.DefinitionIdListState> fetchForHomeRecommend(String? cursor) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchForHomeRecommend,
-          [cursor],
-        ),
-        returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForHomeRecommend,
-            [cursor],
-          ),
-        )),
-        returnValueForMissingStub: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForHomeRecommend,
-            [cursor],
-          ),
-        )),
-      ) as _i4.Future<_i2.DefinitionIdListState>);
+            Invocation.method(#fetchForHomeRecommend, [cursor]),
+            returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
+              _FakeDefinitionIdListState_0(
+                this,
+                Invocation.method(#fetchForHomeRecommend, [cursor]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.DefinitionIdListState>.value(
+                  _FakeDefinitionIdListState_0(
+                    this,
+                    Invocation.method(#fetchForHomeRecommend, [cursor]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.DefinitionIdListState>);
 
   @override
   _i4.Future<_i2.DefinitionIdListState> fetchForHomeFollowing(String? cursor) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchForHomeFollowing,
-          [cursor],
-        ),
-        returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForHomeFollowing,
-            [cursor],
-          ),
-        )),
-        returnValueForMissingStub: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForHomeFollowing,
-            [cursor],
-          ),
-        )),
-      ) as _i4.Future<_i2.DefinitionIdListState>);
+            Invocation.method(#fetchForHomeFollowing, [cursor]),
+            returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
+              _FakeDefinitionIdListState_0(
+                this,
+                Invocation.method(#fetchForHomeFollowing, [cursor]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.DefinitionIdListState>.value(
+                  _FakeDefinitionIdListState_0(
+                    this,
+                    Invocation.method(#fetchForHomeFollowing, [cursor]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.DefinitionIdListState>);
 
   @override
   _i4.Future<_i2.DefinitionIdListState> fetchForWordTop(
@@ -100,39 +85,30 @@ class MockDefinitionIdListRepository extends _i1.Mock
     String? cursor,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchForWordTop,
-          [
-            orderByType,
-            wordId,
-            cursor,
-          ],
-        ),
-        returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForWordTop,
-            [
-              orderByType,
-              wordId,
-              cursor,
-            ],
-          ),
-        )),
-        returnValueForMissingStub: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForWordTop,
-            [
-              orderByType,
-              wordId,
-              cursor,
-            ],
-          ),
-        )),
-      ) as _i4.Future<_i2.DefinitionIdListState>);
+            Invocation.method(#fetchForWordTop, [orderByType, wordId, cursor]),
+            returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
+              _FakeDefinitionIdListState_0(
+                this,
+                Invocation.method(#fetchForWordTop, [
+                  orderByType,
+                  wordId,
+                  cursor,
+                ]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.DefinitionIdListState>.value(
+                  _FakeDefinitionIdListState_0(
+                    this,
+                    Invocation.method(#fetchForWordTop, [
+                      orderByType,
+                      wordId,
+                      cursor,
+                    ]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.DefinitionIdListState>);
 
   @override
   _i4.Future<_i2.DefinitionIdListState> fetchForProfileCreatedAt(
@@ -140,36 +116,31 @@ class MockDefinitionIdListRepository extends _i1.Mock
     String? cursor,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchForProfileCreatedAt,
-          [
-            targetUserId,
-            cursor,
-          ],
-        ),
-        returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForProfileCreatedAt,
-            [
+            Invocation.method(#fetchForProfileCreatedAt, [
               targetUserId,
               cursor,
-            ],
-          ),
-        )),
-        returnValueForMissingStub: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForProfileCreatedAt,
-            [
-              targetUserId,
-              cursor,
-            ],
-          ),
-        )),
-      ) as _i4.Future<_i2.DefinitionIdListState>);
+            ]),
+            returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
+              _FakeDefinitionIdListState_0(
+                this,
+                Invocation.method(#fetchForProfileCreatedAt, [
+                  targetUserId,
+                  cursor,
+                ]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.DefinitionIdListState>.value(
+                  _FakeDefinitionIdListState_0(
+                    this,
+                    Invocation.method(#fetchForProfileCreatedAt, [
+                      targetUserId,
+                      cursor,
+                    ]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.DefinitionIdListState>);
 
   @override
   _i4.Future<_i2.DefinitionIdListState> fetchForLikedByUser(
@@ -177,36 +148,25 @@ class MockDefinitionIdListRepository extends _i1.Mock
     String? cursor,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchForLikedByUser,
-          [
-            targetUserId,
-            cursor,
-          ],
-        ),
-        returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForLikedByUser,
-            [
-              targetUserId,
-              cursor,
-            ],
-          ),
-        )),
-        returnValueForMissingStub: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForLikedByUser,
-            [
-              targetUserId,
-              cursor,
-            ],
-          ),
-        )),
-      ) as _i4.Future<_i2.DefinitionIdListState>);
+            Invocation.method(#fetchForLikedByUser, [targetUserId, cursor]),
+            returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
+              _FakeDefinitionIdListState_0(
+                this,
+                Invocation.method(#fetchForLikedByUser, [targetUserId, cursor]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.DefinitionIdListState>.value(
+                  _FakeDefinitionIdListState_0(
+                    this,
+                    Invocation.method(#fetchForLikedByUser, [
+                      targetUserId,
+                      cursor,
+                    ]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.DefinitionIdListState>);
 
   @override
   _i4.Future<_i2.DefinitionIdListState> fetchForIndividualDictionary(
@@ -215,39 +175,34 @@ class MockDefinitionIdListRepository extends _i1.Mock
     String? cursor,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchForIndividualDictionary,
-          [
-            targetUserId,
-            initialSubGroup,
-            cursor,
-          ],
-        ),
-        returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForIndividualDictionary,
-            [
+            Invocation.method(#fetchForIndividualDictionary, [
               targetUserId,
               initialSubGroup,
               cursor,
-            ],
-          ),
-        )),
-        returnValueForMissingStub: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForIndividualDictionary,
-            [
-              targetUserId,
-              initialSubGroup,
-              cursor,
-            ],
-          ),
-        )),
-      ) as _i4.Future<_i2.DefinitionIdListState>);
+            ]),
+            returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
+              _FakeDefinitionIdListState_0(
+                this,
+                Invocation.method(#fetchForIndividualDictionary, [
+                  targetUserId,
+                  initialSubGroup,
+                  cursor,
+                ]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.DefinitionIdListState>.value(
+                  _FakeDefinitionIdListState_0(
+                    this,
+                    Invocation.method(#fetchForIndividualDictionary, [
+                      targetUserId,
+                      initialSubGroup,
+                      cursor,
+                    ]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.DefinitionIdListState>);
 
   @override
   _i4.Future<_i2.DefinitionIdListState> fetchForUserWord(
@@ -256,37 +211,32 @@ class MockDefinitionIdListRepository extends _i1.Mock
     String? cursor,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchForUserWord,
-          [
-            targetUserId,
-            wordId,
-            cursor,
-          ],
-        ),
-        returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForUserWord,
-            [
+            Invocation.method(#fetchForUserWord, [
               targetUserId,
               wordId,
               cursor,
-            ],
-          ),
-        )),
-        returnValueForMissingStub: _i4.Future<_i2.DefinitionIdListState>.value(
-            _FakeDefinitionIdListState_0(
-          this,
-          Invocation.method(
-            #fetchForUserWord,
-            [
-              targetUserId,
-              wordId,
-              cursor,
-            ],
-          ),
-        )),
-      ) as _i4.Future<_i2.DefinitionIdListState>);
+            ]),
+            returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
+              _FakeDefinitionIdListState_0(
+                this,
+                Invocation.method(#fetchForUserWord, [
+                  targetUserId,
+                  wordId,
+                  cursor,
+                ]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.DefinitionIdListState>.value(
+                  _FakeDefinitionIdListState_0(
+                    this,
+                    Invocation.method(#fetchForUserWord, [
+                      targetUserId,
+                      wordId,
+                      cursor,
+                    ]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.DefinitionIdListState>);
 }
