@@ -62,9 +62,6 @@
   "lib/core/page/user_list_muted_page.dart": {
     "ds_hardcoded_spacing": 3
   },
-  "lib/core/page/user_search_result_page.dart": {
-    "ds_hardcoded_spacing": 1
-  },
   "lib/core/page/welcome_page.dart": {
     "ds_hardcoded_spacing": 4
   },
@@ -175,11 +172,7 @@
     "ds_hardcoded_spacing": 7
   },
   "lib/feature/user_search/presentation/search_user_text_field.dart": {
-    "ds_hardcoded_spacing": 2,
-    "ds_hardcoded_radius": 1,
-    "ds_hardcoded_size": 2,
-    "ds_hardcoded_opacity": 1,
-    "ds_forbidden_widget": 1
+    "ds_hardcoded_opacity": 1
   },
   "lib/feature/word/presentation/index_tile.dart": {
     "ds_hardcoded_spacing": 1,
