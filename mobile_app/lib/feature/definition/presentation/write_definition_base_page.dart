@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 
 import '../../../../core/common_provider/dialog_controller.dart';
 import '../../../../core/common_widget/dialog/confirm_dialog.dart';
+import '../../../../core/design_system/design_system.dart';
 import '../application/definition_for_write_notifier.dart';
 import '../domain/definition_for_write.dart';
 import 'select_post_type_button.dart';
@@ -39,8 +40,9 @@ class WriteDefinitionBasePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(CupertinoIcons.xmark),
+        leading: DsIconButton(
+          icon: CupertinoIcons.xmark,
+          semanticLabel: '閉じる',
           onPressed: () async {
             // キーボードを閉じる
             primaryFocus?.unfocus();
@@ -69,65 +71,56 @@ class WriteDefinitionBasePage extends ConsumerWidget {
         ),
         actions: [
           Center(child: appBarActionWidget),
-          const Gap(24),
+          const Gap(DsSpacing.section),
         ],
       ),
       body: GestureDetector(
         onTap: () => primaryFocus?.unfocus(),
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: DsSpacing.screenContentInsets,
             child: ListView(
               children: [
-                const Gap(8),
-                TextFormField(
+                const Gap(DsSpacing.inline),
+                DsTextField.multiline(
+                  label: '投稿する言葉',
+                  hintText: '例: 二日目のカレー',
                   initialValue: definitionForWrite.word,
                   autofocus: autoFocusForm == WriteDefinitionFormType.word,
                   readOnly: isEditing,
                   maxLength: definitionForWrite.maxWordLength,
-                  maxLines: null,
                   textInputAction: TextInputAction.next,
                   onChanged: notifier.changeWord,
-                  style: Theme.of(context).textTheme.titleLarge,
-                  decoration: InputDecoration(
-                    hintText: '例: 二日目のカレー',
-                    labelText: '投稿する言葉',
-                    errorText: definitionForWrite.outputWordError(),
-                    border: InputBorder.none,
-                  ),
+                  errorText: definitionForWrite.outputWordError(),
+                  size: DsTextFieldSize.prominent,
                 ),
-                TextFormField(
+                DsTextField.multiline(
+                  label: '言葉のよみ',
+                  hintText: '例: ふつかめのかれー',
                   initialValue: definitionForWrite.wordReading,
                   autofocus:
                       autoFocusForm == WriteDefinitionFormType.wordReading,
                   readOnly: isEditing,
                   maxLength: definitionForWrite.maxWordReadingLength,
-                  maxLines: null,
                   textInputAction: TextInputAction.next,
                   onChanged: notifier.changeWordReading,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  decoration: InputDecoration(
-                    hintText: '例: ふつかめのかれー',
-                    labelText: '言葉のよみ',
-                    errorText: definitionForWrite.outputWordReadingError(),
-                    border: InputBorder.none,
-                  ),
+                  errorText: definitionForWrite.outputWordReadingError(),
                 ),
-                const Gap(16),
-                TextFormField(
+                const Gap(DsSpacing.item),
+                DsTextField.multiline(
+                  label: '定義',
+                  hintText: '例: 作ってから一晩経ったカレー。ばり美味い',
                   initialValue: definitionForWrite.definition,
                   autofocus:
                       autoFocusForm == WriteDefinitionFormType.definition,
                   maxLength: definitionForWrite.maxDefinitionLength,
-                  maxLines: null,
                   onChanged: notifier.changeDefinition,
-                  style: Theme.of(context).textTheme.titleLarge,
-                  decoration: const InputDecoration(
-                    hintText: '例: 作ってから一晩経ったカレー。ばり美味い',
-                    labelText: '定義',
-                    border: InputBorder.none,
-                  ),
+                  size: DsTextFieldSize.prominent,
                 ),
+                // ignore: ds_hardcoded_spacing
+                // 理由: キーボードで隠れないようにするための画面固有の下部余白。
+                // 意味を持つ余白ではないためトークン化しない。
+                // 追跡: #281
                 const Gap(300),
               ],
             ),

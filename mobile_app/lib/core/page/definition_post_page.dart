@@ -7,6 +7,7 @@ import '../../feature/definition/domain/definition_for_write.dart';
 import '../../feature/definition/presentation/write_definition_base_page.dart';
 import '../../feature/definition/util/after_post_navigation_type.dart';
 import '../../util/mixin/presentation_mixin.dart';
+import '../design_system/design_system.dart';
 import '../router/app_router.dart';
 
 /// 定義を投稿するページ
@@ -95,11 +96,11 @@ class DefinitionPostPage extends ConsumerWidget with PresentationMixin {
             child: Text(
               '投稿',
               style: canPost
-                  ? Theme.of(context).textTheme.titleLarge
-                  : Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.3),
+                  ? context.dsTypography.heading
+                  : context.dsTypography.heading.copyWith(
+                      color: context.dsColorScheme.onSurface.withOpacity(
+                        DsOpacity.disabled,
+                      ),
                     ),
             ),
           ),

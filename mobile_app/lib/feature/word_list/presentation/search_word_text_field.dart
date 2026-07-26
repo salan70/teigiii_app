@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/design_system/design_system.dart';
 import '../../../../core/router/app_router.dart';
 
-/// 言葉を検索する用の [TextField]。
+/// 言葉を検索するフィールド。
+///
+/// 見た目と入力の仕様は [DsSearchField] が持ち、ここは遷移先だけを担う。
 class SearchWordTextField extends StatefulWidget {
   const SearchWordTextField({super.key, this.defaultText});
 
@@ -17,20 +19,11 @@ class SearchWordTextField extends StatefulWidget {
 
 class _SearchWordTextFieldState extends State<SearchWordTextField> {
   late final TextEditingController controller;
-  late bool isEmpty;
 
   @override
   void initState() {
     super.initState();
     controller = TextEditingController(text: widget.defaultText);
-
-    isEmpty = controller.text.isEmpty;
-
-    controller.addListener(() {
-      setState(() {
-        isEmpty = controller.text.isEmpty;
-      });
-    });
   }
 
   @override
@@ -41,9 +34,9 @@ class _SearchWordTextFieldState extends State<SearchWordTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return DsSearchField(
       controller: controller,
-      textInputAction: TextInputAction.search,
+      hintText: '言葉を検索',
       onSubmitted: (value) {
         if (value.isEmpty) {
           return;
@@ -51,24 +44,6 @@ class _SearchWordTextFieldState extends State<SearchWordTextField> {
         controller.text = widget.defaultText ?? '';
         context.pushRoute(WordSearchResultRoute(searchWord: value));
       },
-      decoration: InputDecoration(
-        prefixIcon: const Icon(CupertinoIcons.search, size: 20),
-        prefixIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        suffixIcon: isEmpty
-            ? const SizedBox.shrink()
-            : GestureDetector(
-                onTap: controller.clear,
-                child: const Icon(CupertinoIcons.clear_thick_circled, size: 20),
-              ),
-        suffixIconColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        hintText: '言葉を検索',
-        filled: true,
-        contentPadding: EdgeInsets.zero,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(40),
-          borderSide: BorderSide.none,
-        ),
-      ),
     );
   }
 }
