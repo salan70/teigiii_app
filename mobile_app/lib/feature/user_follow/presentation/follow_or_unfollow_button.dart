@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/design_system/design_system.dart';
 import '../../../../core/common_widget/button/filled_button.dart';
 import '../../../../core/common_widget/button/outlined_button.dart';
-import '../../../../core/common_widget/shimmer_widget.dart';
 import '../../../util/mixin/presentation_mixin.dart';
 import '../application/user_follow_service.dart';
 import '../application/user_follow_state.dart';
@@ -23,13 +23,7 @@ class FollowOrUnfollowButton extends ConsumerWidget {
             ? _UnfollowButton(targetUserId: targetUserId)
             : _FollowButton(targetUserId: targetUserId);
       },
-      orElse: () => ShimmerWidget.circular(
-        width: 144,
-        height: 40,
-        shapeBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(48),
-        ),
-      ),
+      orElse: () => DsShimmer.pill(width: 144, height: 40),
     );
   }
 }

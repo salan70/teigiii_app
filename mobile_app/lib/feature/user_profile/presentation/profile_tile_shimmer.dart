@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../../core/design_system/design_system.dart';
 import '../../../../core/common_widget/shimmer_widget.dart';
 
 class ProfileTileShimmer extends StatelessWidget {
@@ -24,13 +25,7 @@ class ProfileTileShimmer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const ShimmerWidget.rectangular(width: 120, height: 24),
-                        ShimmerWidget.circular(
-                          width: 144,
-                          height: 40,
-                          shapeBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(48),
-                          ),
-                        ),
+                        DsShimmer.pill(width: 144, height: 40),
                       ],
                     ),
                     const Gap(8),

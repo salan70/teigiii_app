@@ -18,11 +18,9 @@ class WordWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final savedOverride =
-        ref.watch(wordSavedOverrideNotifierProvider(word.id));
+    final savedOverride = ref.watch(wordSavedOverrideNotifierProvider(word.id));
     final isSaved = savedOverride ?? word.isSavedByMe;
-    final inProgress =
-        ref.watch(wordSaveInProgressNotifierProvider(word.id));
+    final inProgress = ref.watch(wordSaveInProgressNotifierProvider(word.id));
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),

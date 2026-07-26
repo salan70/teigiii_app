@@ -55,21 +55,13 @@ class WordFamily extends Family<AsyncValue<Word?>> {
   /// 該当する [Word] が見つからない場合、nullを返す。
   ///
   /// Copied from [word].
-  WordProvider call(
-    String wordId,
-  ) {
-    return WordProvider(
-      wordId,
-    );
+  WordProvider call(String wordId) {
+    return WordProvider(wordId);
   }
 
   @override
-  WordProvider getProviderOverride(
-    covariant WordProvider provider,
-  ) {
-    return call(
-      provider.wordId,
-    );
+  WordProvider getProviderOverride(covariant WordProvider provider) {
+    return call(provider.wordId);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -98,21 +90,18 @@ class WordProvider extends AutoDisposeFutureProvider<Word?> {
   /// 該当する [Word] が見つからない場合、nullを返す。
   ///
   /// Copied from [word].
-  WordProvider(
-    String wordId,
-  ) : this._internal(
-          (ref) => word(
-            ref as WordRef,
-            wordId,
-          ),
-          from: wordProvider,
-          name: r'wordProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product') ? null : _$wordHash,
-          dependencies: WordFamily._dependencies,
-          allTransitiveDependencies: WordFamily._allTransitiveDependencies,
-          wordId: wordId,
-        );
+  WordProvider(String wordId)
+    : this._internal(
+        (ref) => word(ref as WordRef, wordId),
+        from: wordProvider,
+        name: r'wordProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$wordHash,
+        dependencies: WordFamily._dependencies,
+        allTransitiveDependencies: WordFamily._allTransitiveDependencies,
+        wordId: wordId,
+      );
 
   WordProvider._internal(
     super._createNotifier, {
@@ -127,9 +116,7 @@ class WordProvider extends AutoDisposeFutureProvider<Word?> {
   final String wordId;
 
   @override
-  Override overrideWith(
-    FutureOr<Word?> Function(WordRef provider) create,
-  ) {
+  Override overrideWith(FutureOr<Word?> Function(WordRef provider) create) {
     return ProviderOverride(
       origin: this,
       override: WordProvider._internal(
@@ -175,5 +162,6 @@ class _WordProviderElement extends AutoDisposeFutureProviderElement<Word?>
   @override
   String get wordId => (origin as WordProvider).wordId;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

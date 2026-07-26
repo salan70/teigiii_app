@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../../core/design_system/design_system.dart';
 import '../../../../../core/common_widget/shimmer_widget.dart';
 import '../../definition/presentation/definition_tile_shimmer.dart';
 
@@ -23,15 +24,7 @@ class WordPageShimmer extends StatelessWidget {
               const Gap(26),
               const ShimmerWidget.rectangular(width: 32, height: 16),
               const Gap(16),
-              Center(
-                child: ShimmerWidget.circular(
-                  width: 232,
-                  height: 40,
-                  shapeBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(48),
-                  ),
-                ),
-              ),
+              Center(child: DsShimmer.pill(width: 232, height: 40)),
               const Gap(32),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

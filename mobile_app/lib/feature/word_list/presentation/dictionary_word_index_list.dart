@@ -54,8 +54,9 @@ class DictionaryWordIndexList extends ConsumerWidget {
     }
 
     return InfinityScrollWidget(
-      listStateNotifierProvider:
-          userDictionaryIndexListStateNotifierProvider(userId),
+      listStateNotifierProvider: userDictionaryIndexListStateNotifierProvider(
+        userId,
+      ),
       fetchMore: ref
           .read(userDictionaryIndexListStateNotifierProvider(userId).notifier)
           .fetchMore,

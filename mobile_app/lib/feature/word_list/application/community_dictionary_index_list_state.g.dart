@@ -11,19 +11,21 @@ String _$communityDictionaryIndexListStateNotifierHash() =>
 
 /// See also [CommunityDictionaryIndexListStateNotifier].
 @ProviderFor(CommunityDictionaryIndexListStateNotifier)
-final communityDictionaryIndexListStateNotifierProvider = AsyncNotifierProvider<
-    CommunityDictionaryIndexListStateNotifier,
-    DictionaryIndexListState>.internal(
-  CommunityDictionaryIndexListStateNotifier.new,
-  name: r'communityDictionaryIndexListStateNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$communityDictionaryIndexListStateNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final communityDictionaryIndexListStateNotifierProvider =
+    AsyncNotifierProvider<
+      CommunityDictionaryIndexListStateNotifier,
+      DictionaryIndexListState
+    >.internal(
+      CommunityDictionaryIndexListStateNotifier.new,
+      name: r'communityDictionaryIndexListStateNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$communityDictionaryIndexListStateNotifierHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
-typedef _$CommunityDictionaryIndexListStateNotifier
-    = AsyncNotifier<DictionaryIndexListState>;
+typedef _$CommunityDictionaryIndexListStateNotifier =
+    AsyncNotifier<DictionaryIndexListState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

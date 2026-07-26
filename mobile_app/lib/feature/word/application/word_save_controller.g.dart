@@ -13,14 +13,14 @@ String _$wordSaveControllerHash() =>
 @ProviderFor(wordSaveController)
 final wordSaveControllerProvider =
     AutoDisposeProvider<WordSaveController>.internal(
-  wordSaveController,
-  name: r'wordSaveControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$wordSaveControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      wordSaveController,
+      name: r'wordSaveControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$wordSaveControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef WordSaveControllerRef = AutoDisposeProviderRef<WordSaveController>;
 String _$wordSavedOverrideNotifierHash() =>
@@ -51,9 +51,7 @@ abstract class _$WordSavedOverrideNotifier
     extends BuildlessAutoDisposeNotifier<bool?> {
   late final String wordId;
 
-  bool? build(
-    String wordId,
-  );
+  bool? build(String wordId);
 }
 
 /// 楽観的更新用の保存状態オーバーライド（null = API 値を使用）。
@@ -74,21 +72,15 @@ class WordSavedOverrideNotifierFamily extends Family<bool?> {
   /// 楽観的更新用の保存状態オーバーライド（null = API 値を使用）。
   ///
   /// Copied from [WordSavedOverrideNotifier].
-  WordSavedOverrideNotifierProvider call(
-    String wordId,
-  ) {
-    return WordSavedOverrideNotifierProvider(
-      wordId,
-    );
+  WordSavedOverrideNotifierProvider call(String wordId) {
+    return WordSavedOverrideNotifierProvider(wordId);
   }
 
   @override
   WordSavedOverrideNotifierProvider getProviderOverride(
     covariant WordSavedOverrideNotifierProvider provider,
   ) {
-    return call(
-      provider.wordId,
-    );
+    return call(provider.wordId);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -114,21 +106,19 @@ class WordSavedOverrideNotifierProvider
   /// 楽観的更新用の保存状態オーバーライド（null = API 値を使用）。
   ///
   /// Copied from [WordSavedOverrideNotifier].
-  WordSavedOverrideNotifierProvider(
-    String wordId,
-  ) : this._internal(
-          () => WordSavedOverrideNotifier()..wordId = wordId,
-          from: wordSavedOverrideNotifierProvider,
-          name: r'wordSavedOverrideNotifierProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$wordSavedOverrideNotifierHash,
-          dependencies: WordSavedOverrideNotifierFamily._dependencies,
-          allTransitiveDependencies:
-              WordSavedOverrideNotifierFamily._allTransitiveDependencies,
-          wordId: wordId,
-        );
+  WordSavedOverrideNotifierProvider(String wordId)
+    : this._internal(
+        () => WordSavedOverrideNotifier()..wordId = wordId,
+        from: wordSavedOverrideNotifierProvider,
+        name: r'wordSavedOverrideNotifierProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$wordSavedOverrideNotifierHash,
+        dependencies: WordSavedOverrideNotifierFamily._dependencies,
+        allTransitiveDependencies:
+            WordSavedOverrideNotifierFamily._allTransitiveDependencies,
+        wordId: wordId,
+      );
 
   WordSavedOverrideNotifierProvider._internal(
     super._createNotifier, {
@@ -143,12 +133,8 @@ class WordSavedOverrideNotifierProvider
   final String wordId;
 
   @override
-  bool? runNotifierBuild(
-    covariant WordSavedOverrideNotifier notifier,
-  ) {
-    return notifier.build(
-      wordId,
-    );
+  bool? runNotifierBuild(covariant WordSavedOverrideNotifier notifier) {
+    return notifier.build(wordId);
   }
 
   @override
@@ -169,7 +155,7 @@ class WordSavedOverrideNotifierProvider
 
   @override
   AutoDisposeNotifierProviderElement<WordSavedOverrideNotifier, bool?>
-      createElement() {
+  createElement() {
     return _WordSavedOverrideNotifierProviderElement(this);
   }
 
@@ -208,9 +194,7 @@ abstract class _$WordSaveInProgressNotifier
     extends BuildlessAutoDisposeNotifier<bool> {
   late final String wordId;
 
-  bool build(
-    String wordId,
-  );
+  bool build(String wordId);
 }
 
 /// 保存操作の進行中フラグ。
@@ -231,21 +215,15 @@ class WordSaveInProgressNotifierFamily extends Family<bool> {
   /// 保存操作の進行中フラグ。
   ///
   /// Copied from [WordSaveInProgressNotifier].
-  WordSaveInProgressNotifierProvider call(
-    String wordId,
-  ) {
-    return WordSaveInProgressNotifierProvider(
-      wordId,
-    );
+  WordSaveInProgressNotifierProvider call(String wordId) {
+    return WordSaveInProgressNotifierProvider(wordId);
   }
 
   @override
   WordSaveInProgressNotifierProvider getProviderOverride(
     covariant WordSaveInProgressNotifierProvider provider,
   ) {
-    return call(
-      provider.wordId,
-    );
+    return call(provider.wordId);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -271,21 +249,19 @@ class WordSaveInProgressNotifierProvider
   /// 保存操作の進行中フラグ。
   ///
   /// Copied from [WordSaveInProgressNotifier].
-  WordSaveInProgressNotifierProvider(
-    String wordId,
-  ) : this._internal(
-          () => WordSaveInProgressNotifier()..wordId = wordId,
-          from: wordSaveInProgressNotifierProvider,
-          name: r'wordSaveInProgressNotifierProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$wordSaveInProgressNotifierHash,
-          dependencies: WordSaveInProgressNotifierFamily._dependencies,
-          allTransitiveDependencies:
-              WordSaveInProgressNotifierFamily._allTransitiveDependencies,
-          wordId: wordId,
-        );
+  WordSaveInProgressNotifierProvider(String wordId)
+    : this._internal(
+        () => WordSaveInProgressNotifier()..wordId = wordId,
+        from: wordSaveInProgressNotifierProvider,
+        name: r'wordSaveInProgressNotifierProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$wordSaveInProgressNotifierHash,
+        dependencies: WordSaveInProgressNotifierFamily._dependencies,
+        allTransitiveDependencies:
+            WordSaveInProgressNotifierFamily._allTransitiveDependencies,
+        wordId: wordId,
+      );
 
   WordSaveInProgressNotifierProvider._internal(
     super._createNotifier, {
@@ -300,12 +276,8 @@ class WordSaveInProgressNotifierProvider
   final String wordId;
 
   @override
-  bool runNotifierBuild(
-    covariant WordSaveInProgressNotifier notifier,
-  ) {
-    return notifier.build(
-      wordId,
-    );
+  bool runNotifierBuild(covariant WordSaveInProgressNotifier notifier) {
+    return notifier.build(wordId);
   }
 
   @override
@@ -326,7 +298,7 @@ class WordSaveInProgressNotifierProvider
 
   @override
   AutoDisposeNotifierProviderElement<WordSaveInProgressNotifier, bool>
-      createElement() {
+  createElement() {
     return _WordSaveInProgressNotifierProviderElement(this);
   }
 
@@ -358,5 +330,6 @@ class _WordSaveInProgressNotifierProviderElement
   @override
   String get wordId => (origin as WordSaveInProgressNotifierProvider).wordId;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

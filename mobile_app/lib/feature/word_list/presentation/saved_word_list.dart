@@ -9,10 +9,7 @@ import '../application/saved_word_list_state.dart';
 
 /// 保存した言葉の一覧。
 class SavedWordList extends ConsumerWidget {
-  const SavedWordList({
-    super.key,
-    this.emptyWidget = const SizedBox.shrink(),
-  });
+  const SavedWordList({super.key, this.emptyWidget = const SizedBox.shrink()});
 
   final Widget? emptyWidget;
 
@@ -20,8 +17,9 @@ class SavedWordList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return InfinityScrollWidget(
       listStateNotifierProvider: savedWordListStateNotifierProvider,
-      fetchMore:
-          ref.read(savedWordListStateNotifierProvider.notifier).fetchMore,
+      fetchMore: ref
+          .read(savedWordListStateNotifierProvider.notifier)
+          .fetchMore,
       tileBuilder: (item) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: WordTile(word: item as Word),

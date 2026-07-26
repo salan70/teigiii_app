@@ -84,7 +84,9 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: MemoryImage(userProfileForWrite.croppedImageBytes!),
+                      image: MemoryImage(
+                        userProfileForWrite.croppedImageBytes!,
+                      ),
                       fit: BoxFit.cover,
                     ),
                   ),

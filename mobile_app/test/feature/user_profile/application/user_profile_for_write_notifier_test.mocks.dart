@@ -28,13 +28,8 @@ import 'package:teigi_app/feature/user_profile/repository/user_profile_repositor
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeUserProfile_0 extends _i1.SmartFake implements _i2.UserProfile {
-  _FakeUserProfile_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeUserProfile_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [UserProfileRepository].
@@ -45,37 +40,30 @@ class MockUserProfileRepository extends _i1.Mock
   @override
   _i4.Future<_i2.UserProfile> fetchUserProfile(String? userId) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchUserProfile,
-          [userId],
-        ),
-        returnValue: _i4.Future<_i2.UserProfile>.value(_FakeUserProfile_0(
-          this,
-          Invocation.method(
-            #fetchUserProfile,
-            [userId],
-          ),
-        )),
-        returnValueForMissingStub:
-            _i4.Future<_i2.UserProfile>.value(_FakeUserProfile_0(
-          this,
-          Invocation.method(
-            #fetchUserProfile,
-            [userId],
-          ),
-        )),
-      ) as _i4.Future<_i2.UserProfile>);
+            Invocation.method(#fetchUserProfile, [userId]),
+            returnValue: _i4.Future<_i2.UserProfile>.value(
+              _FakeUserProfile_0(
+                this,
+                Invocation.method(#fetchUserProfile, [userId]),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<_i2.UserProfile>.value(
+              _FakeUserProfile_0(
+                this,
+                Invocation.method(#fetchUserProfile, [userId]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.UserProfile>);
 
   @override
   _i4.Future<void> updateUserProfile(_i2.UserProfile? userProfileForWrite) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateUserProfile,
-          [userProfileForWrite],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+            Invocation.method(#updateUserProfile, [userProfileForWrite]),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
 }
 
 /// A class which mocks [AvatarRepository].
@@ -83,25 +71,21 @@ class MockUserProfileRepository extends _i1.Mock
 /// See the documentation for Mockito's code generation for more information.
 class MockAvatarRepository extends _i1.Mock implements _i5.AvatarRepository {
   @override
-  _i4.Future<String> uploadAvatar(_i6.XFile? file) => (super.noSuchMethod(
-        Invocation.method(
-          #uploadAvatar,
-          [file],
-        ),
-        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
-          this,
-          Invocation.method(
-            #uploadAvatar,
-            [file],
-          ),
-        )),
-        returnValueForMissingStub:
-            _i4.Future<String>.value(_i7.dummyValue<String>(
-          this,
-          Invocation.method(
-            #uploadAvatar,
-            [file],
-          ),
-        )),
-      ) as _i4.Future<String>);
+  _i4.Future<String> uploadAvatar(_i6.XFile? file) =>
+      (super.noSuchMethod(
+            Invocation.method(#uploadAvatar, [file]),
+            returnValue: _i4.Future<String>.value(
+              _i7.dummyValue<String>(
+                this,
+                Invocation.method(#uploadAvatar, [file]),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<String>.value(
+              _i7.dummyValue<String>(
+                this,
+                Invocation.method(#uploadAvatar, [file]),
+              ),
+            ),
+          )
+          as _i4.Future<String>);
 }

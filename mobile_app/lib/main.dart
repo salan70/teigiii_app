@@ -8,7 +8,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -21,19 +20,20 @@ import 'core/common_provider/is_loading_overlay_state.dart';
 import 'core/common_provider/key_provider.dart';
 import 'core/common_widget/dialog/loading_dialog.dart';
 import 'core/common_widget/error_and_retry_widget.dart';
+import 'core/design_system/design_system.dart';
 import 'core/router/app_router.dart';
 import 'feature/force_event/application/app_config_state.dart';
 import 'feature/force_event/presentation/app_config_gate.dart';
 import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
-import 'util/constant/theme_data.dart';
 import 'util/firebase_options/firebase_options.dart';
+import 'util/load_app_dotenv.dart';
 import 'util/logger.dart';
 import 'util/web_device_preview.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load();
+  await loadAppDotEnv();
 
   final flavor = Flavor.fromString(const String.fromEnvironment('flavor'));
   await Firebase.initializeApp(options: firebaseOptionsWithFlavor(flavor));
@@ -148,8 +148,8 @@ class _MyAppState extends ConsumerState<MyApp> {
               ),
             ],
           ),
-      theme: getThemeData(ThemeMode.light, context),
-      darkTheme: getThemeData(ThemeMode.dark, context),
+      theme: buildDsThemeData(Brightness.light),
+      darkTheme: buildDsThemeData(Brightness.dark),
       builder: (context, child) {
         // 強制アップデート関連の処理
         final asyncIsRequiredUpdate = ref.watch(isRequiredAppUpdateProvider);

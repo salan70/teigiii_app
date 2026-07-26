@@ -33,11 +33,7 @@ class _EmptyDefinitionIdList extends DefinitionIdListStateNotifier {
 class _EmptySavedWordList extends SavedWordListStateNotifier {
   @override
   FutureOr<WordListState> build() async {
-    return const WordListState(
-      list: [],
-      nextCursor: null,
-      hasMore: false,
-    );
+    return const WordListState(list: [], nextCursor: null, hasMore: false);
   }
 }
 
@@ -62,9 +58,9 @@ Future<void> _pumpProfile(
     ProviderScope(
       overrides: [
         userIdProvider.overrideWithValue(currentUserId),
-        userProfileProvider(targetUserId).overrideWith(
-          (ref) async => _profileFor(targetUserId),
-        ),
+        userProfileProvider(
+          targetUserId,
+        ).overrideWith((ref) async => _profileFor(targetUserId)),
         definitionIdListStateNotifierProvider(
           DefinitionFeedType.profileOrderByCreatedAt,
           targetUserId: targetUserId,
@@ -77,9 +73,7 @@ Future<void> _pumpProfile(
           _EmptySavedWordList.new,
         ),
       ],
-      child: MaterialApp(
-        home: ProfileTopPage(targetUserId: targetUserId),
-      ),
+      child: MaterialApp(home: ProfileTopPage(targetUserId: targetUserId)),
     ),
   );
   await tester.pumpAndSettle();
@@ -87,11 +81,7 @@ Future<void> _pumpProfile(
 
 void main() {
   testWidgets('自分のプロフィールは投稿順・いいね・保存の3タブ', (tester) async {
-    await _pumpProfile(
-      tester,
-      currentUserId: 'user-1',
-      targetUserId: 'user-1',
-    );
+    await _pumpProfile(tester, currentUserId: 'user-1', targetUserId: 'user-1');
 
     expect(find.text('投稿順'), findsOneWidget);
     expect(find.text('いいね'), findsOneWidget);

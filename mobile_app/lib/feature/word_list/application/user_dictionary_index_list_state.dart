@@ -17,8 +17,7 @@ class UserDictionaryIndexListStateNotifier
     return _fetchFirst();
   }
 
-  bool get _isMe =>
-      ref.read(userIdProvider) == targetUserId;
+  bool get _isMe => ref.read(userIdProvider) == targetUserId;
 
   Future<DictionaryIndexListState> _fetchFirst() async {
     final repo = ref.read(userDictionaryWordRepositoryProvider);

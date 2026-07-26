@@ -10,11 +10,11 @@ part 'discover_timeline_state.g.dart';
 class DiscoverTimelineStateNotifier extends _$DiscoverTimelineStateNotifier
     with FetchMoreMixin<DiscoverFeedListState> {
   @override
-  FutureOr<DiscoverFeedListState> build() async =>
-      _fetch(cursor: null);
+  FutureOr<DiscoverFeedListState> build() async => _fetch(cursor: null);
 
-  Future<DiscoverFeedListState> _fetch({required String? cursor}) =>
-      ref.read(discoverTimelineRepositoryProvider).fetchDiscoverTimeline(cursor);
+  Future<DiscoverFeedListState> _fetch({required String? cursor}) => ref
+      .read(discoverTimelineRepositoryProvider)
+      .fetchDiscoverTimeline(cursor);
 
   Future<void> fetchMore() async {
     await fetchMoreHelper(

@@ -28,34 +28,31 @@ import 'package:teigi_app/feature/user_config/repository/user_config_repository.
 class MockUserConfigRepository extends _i1.Mock
     implements _i2.UserConfigRepository {
   @override
-  _i3.Future<List<String>> fetchMutedUserIdList() => (super.noSuchMethod(
-        Invocation.method(
-          #fetchMutedUserIdList,
-          [],
-        ),
-        returnValue: _i3.Future<List<String>>.value(<String>[]),
-        returnValueForMissingStub: _i3.Future<List<String>>.value(<String>[]),
-      ) as _i3.Future<List<String>>);
+  _i3.Future<List<String>> fetchMutedUserIdList() =>
+      (super.noSuchMethod(
+            Invocation.method(#fetchMutedUserIdList, []),
+            returnValue: _i3.Future<List<String>>.value(<String>[]),
+            returnValueForMissingStub: _i3.Future<List<String>>.value(
+              <String>[],
+            ),
+          )
+          as _i3.Future<List<String>>);
 
   @override
   _i3.Future<void> appendMutedUserIdList(String? mutedUserId) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #appendMutedUserIdList,
-          [mutedUserId],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+            Invocation.method(#appendMutedUserIdList, [mutedUserId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
   _i3.Future<void> removeMutedUserIdList(String? mutedUserId) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #removeMutedUserIdList,
-          [mutedUserId],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+            Invocation.method(#removeMutedUserIdList, [mutedUserId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 }

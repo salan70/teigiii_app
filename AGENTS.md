@@ -67,6 +67,7 @@ just mobile-run-dev-profile-on <device-id>
 
 すべての依頼に対し、`.agents/skills/` に該当する skill があれば使用する。
 例外はユーザーが明示的にスキル不要と指示した場合のみ。
+`mobile_app/` の UI 実装・変更は `implementing-ui-with-design-system` を必ず使用する。
 
 ## plan ワークフロー
 
@@ -121,7 +122,7 @@ Cursor Cloud の VM 向けの非自明な注意点のみを記載する。標準
 
 ### mobile_app/.env（重要）
 - `mobile_app/.env` は `*.env` として git-ignore されるが、`pubspec.yaml` の必須アセットであり、無いと `flutter test` / `flutter build` が "No file or variants found for asset: .env" で失敗する。
-- update script が未存在時に AdMob テスト広告 ID 入りで自動生成する。CI は空ファイル（`touch mobile_app/.env`）で十分。
+- update script が未存在時に AdMob テスト広告 ID 入りで自動生成する。CI はコメント行だけの非空プレースホルダを置く（完全な空ファイルだと `dotenv.load()` が `EmptyEnvFileError` で落ちる）。
 
 ### backend（Cloudflare Workers API）
 - `just backend-dev`（= `wrangler dev`）は :8787 で起動し、D1 / R2 は Miniflare のローカルエミュレーションで自動供給される。外部 DB は不要。

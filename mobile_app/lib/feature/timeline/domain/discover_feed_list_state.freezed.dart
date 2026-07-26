@@ -12,7 +12,8 @@ part of 'discover_feed_list_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$DiscoverFeedListState {
@@ -27,16 +28,19 @@ mixin _$DiscoverFeedListState {
 
 /// @nodoc
 abstract class $DiscoverFeedListStateCopyWith<$Res> {
-  factory $DiscoverFeedListStateCopyWith(DiscoverFeedListState value,
-          $Res Function(DiscoverFeedListState) then) =
-      _$DiscoverFeedListStateCopyWithImpl<$Res, DiscoverFeedListState>;
+  factory $DiscoverFeedListStateCopyWith(
+    DiscoverFeedListState value,
+    $Res Function(DiscoverFeedListState) then,
+  ) = _$DiscoverFeedListStateCopyWithImpl<$Res, DiscoverFeedListState>;
   @useResult
   $Res call({List<dynamic> list, String? nextCursor, bool hasMore});
 }
 
 /// @nodoc
-class _$DiscoverFeedListStateCopyWithImpl<$Res,
-        $Val extends DiscoverFeedListState>
+class _$DiscoverFeedListStateCopyWithImpl<
+  $Res,
+  $Val extends DiscoverFeedListState
+>
     implements $DiscoverFeedListStateCopyWith<$Res> {
   _$DiscoverFeedListStateCopyWithImpl(this._value, this._then);
 
@@ -52,20 +56,23 @@ class _$DiscoverFeedListStateCopyWithImpl<$Res,
     Object? nextCursor = freezed,
     Object? hasMore = null,
   }) {
-    return _then(_value.copyWith(
-      list: null == list
-          ? _value.list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
-      nextCursor: freezed == nextCursor
-          ? _value.nextCursor
-          : nextCursor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      hasMore: null == hasMore
-          ? _value.hasMore
-          : hasMore // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            list: null == list
+                ? _value.list
+                : list // ignore: cast_nullable_to_non_nullable
+                      as List<dynamic>,
+            nextCursor: freezed == nextCursor
+                ? _value.nextCursor
+                : nextCursor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            hasMore: null == hasMore
+                ? _value.hasMore
+                : hasMore // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -73,9 +80,9 @@ class _$DiscoverFeedListStateCopyWithImpl<$Res,
 abstract class _$$DiscoverFeedListStateImplCopyWith<$Res>
     implements $DiscoverFeedListStateCopyWith<$Res> {
   factory _$$DiscoverFeedListStateImplCopyWith(
-          _$DiscoverFeedListStateImpl value,
-          $Res Function(_$DiscoverFeedListStateImpl) then) =
-      __$$DiscoverFeedListStateImplCopyWithImpl<$Res>;
+    _$DiscoverFeedListStateImpl value,
+    $Res Function(_$DiscoverFeedListStateImpl) then,
+  ) = __$$DiscoverFeedListStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<dynamic> list, String? nextCursor, bool hasMore});
@@ -83,12 +90,13 @@ abstract class _$$DiscoverFeedListStateImplCopyWith<$Res>
 
 /// @nodoc
 class __$$DiscoverFeedListStateImplCopyWithImpl<$Res>
-    extends _$DiscoverFeedListStateCopyWithImpl<$Res,
-        _$DiscoverFeedListStateImpl>
+    extends
+        _$DiscoverFeedListStateCopyWithImpl<$Res, _$DiscoverFeedListStateImpl>
     implements _$$DiscoverFeedListStateImplCopyWith<$Res> {
-  __$$DiscoverFeedListStateImplCopyWithImpl(_$DiscoverFeedListStateImpl _value,
-      $Res Function(_$DiscoverFeedListStateImpl) _then)
-      : super(_value, _then);
+  __$$DiscoverFeedListStateImplCopyWithImpl(
+    _$DiscoverFeedListStateImpl _value,
+    $Res Function(_$DiscoverFeedListStateImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -97,31 +105,33 @@ class __$$DiscoverFeedListStateImplCopyWithImpl<$Res>
     Object? nextCursor = freezed,
     Object? hasMore = null,
   }) {
-    return _then(_$DiscoverFeedListStateImpl(
-      list: null == list
-          ? _value._list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
-      nextCursor: freezed == nextCursor
-          ? _value.nextCursor
-          : nextCursor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      hasMore: null == hasMore
-          ? _value.hasMore
-          : hasMore // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$DiscoverFeedListStateImpl(
+        list: null == list
+            ? _value._list
+            : list // ignore: cast_nullable_to_non_nullable
+                  as List<dynamic>,
+        nextCursor: freezed == nextCursor
+            ? _value.nextCursor
+            : nextCursor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        hasMore: null == hasMore
+            ? _value.hasMore
+            : hasMore // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$DiscoverFeedListStateImpl implements _DiscoverFeedListState {
-  const _$DiscoverFeedListStateImpl(
-      {required final List<dynamic> list,
-      required this.nextCursor,
-      required this.hasMore})
-      : _list = list;
+  const _$DiscoverFeedListStateImpl({
+    required final List<dynamic> list,
+    required this.nextCursor,
+    required this.hasMore,
+  }) : _list = list;
 
   final List<dynamic> _list;
   @override
@@ -153,22 +163,30 @@ class _$DiscoverFeedListStateImpl implements _DiscoverFeedListState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_list), nextCursor, hasMore);
+  int get hashCode => Object.hash(
+    runtimeType,
+    const DeepCollectionEquality().hash(_list),
+    nextCursor,
+    hasMore,
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$DiscoverFeedListStateImplCopyWith<_$DiscoverFeedListStateImpl>
-      get copyWith => __$$DiscoverFeedListStateImplCopyWithImpl<
-          _$DiscoverFeedListStateImpl>(this, _$identity);
+  get copyWith =>
+      __$$DiscoverFeedListStateImplCopyWithImpl<_$DiscoverFeedListStateImpl>(
+        this,
+        _$identity,
+      );
 }
 
 abstract class _DiscoverFeedListState implements DiscoverFeedListState {
-  const factory _DiscoverFeedListState(
-      {required final List<dynamic> list,
-      required final String? nextCursor,
-      required final bool hasMore}) = _$DiscoverFeedListStateImpl;
+  const factory _DiscoverFeedListState({
+    required final List<dynamic> list,
+    required final String? nextCursor,
+    required final bool hasMore,
+  }) = _$DiscoverFeedListStateImpl;
 
   @override
   List<dynamic> get list;
@@ -179,5 +197,5 @@ abstract class _DiscoverFeedListState implements DiscoverFeedListState {
   @override
   @JsonKey(ignore: true)
   _$$DiscoverFeedListStateImplCopyWith<_$DiscoverFeedListStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

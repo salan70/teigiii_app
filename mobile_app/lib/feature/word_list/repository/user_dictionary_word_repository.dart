@@ -41,8 +41,9 @@ class UserDictionaryWordRepository {
                 id: item.word.id,
                 word: item.word.word,
                 reading: item.word.reading,
-                initialSubGroupLabel:
-                    InitialSubGroup.fromString(item.word.reading).label,
+                initialSubGroupLabel: InitialSubGroup.fromString(
+                  item.word.reading,
+                ).label,
                 postedDefinitionCount: item.publicCount + item.privateCount,
                 isSavedByMe: false,
               ),
@@ -75,8 +76,9 @@ class UserDictionaryWordRepository {
                 id: item.word.id,
                 word: item.word.word,
                 reading: item.word.reading,
-                initialSubGroupLabel:
-                    InitialSubGroup.fromString(item.word.reading).label,
+                initialSubGroupLabel: InitialSubGroup.fromString(
+                  item.word.reading,
+                ).label,
                 postedDefinitionCount: item.publicCount,
                 isSavedByMe: false,
               ),
@@ -105,8 +107,9 @@ class UserDictionaryWordRepository {
                 id: item.word.id,
                 word: item.word.word,
                 reading: item.word.reading,
-                initialSubGroupLabel:
-                    InitialSubGroup.fromString(item.word.reading).label,
+                initialSubGroupLabel: InitialSubGroup.fromString(
+                  item.word.reading,
+                ).label,
                 postedDefinitionCount: item.publicCount,
                 isSavedByMe: true,
               ),

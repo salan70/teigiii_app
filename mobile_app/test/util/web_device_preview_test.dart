@@ -33,10 +33,7 @@ void main() {
 
     test('Web + iOS/Android 実機ブラウザでは無効', () {
       expect(
-        shouldEnableWebDevicePreview(
-          isWeb: true,
-          platform: TargetPlatform.iOS,
-        ),
+        shouldEnableWebDevicePreview(isWeb: true, platform: TargetPlatform.iOS),
         isFalse,
       );
       expect(

@@ -1,37 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
+import '../design_system/component/ds_feedback.dart';
+
+/// 読み込み中のプレースホルダ。
+///
+/// 任意の `shapeBorder` は受け取らない。pill 型が必要なら
+/// [DsShimmer.pill] を使う。
+@Deprecated('DsShimmer を使う。全参照の移行後に削除する (#278)')
 class ShimmerWidget extends StatelessWidget {
   const ShimmerWidget.rectangular({
     super.key,
     this.width = double.infinity,
     required this.height,
-  }) : shapeBorder = const RoundedRectangleBorder(
-         borderRadius: BorderRadius.all(Radius.circular(2)),
-       );
+  }) : _isCircular = false;
 
   const ShimmerWidget.circular({
     super.key,
     required this.width,
     required this.height,
-    this.shapeBorder = const CircleBorder(),
-  });
+  }) : _isCircular = true;
 
   final double width;
   final double height;
-  final ShapeBorder shapeBorder;
+  final bool _isCircular;
 
   @override
-  Widget build(BuildContext context) => Shimmer.fromColors(
-    baseColor: Theme.of(context).colorScheme.surfaceVariant,
-    highlightColor: Theme.of(context).colorScheme.surface,
-    child: Container(
-      height: height,
-      width: width,
-      decoration: ShapeDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant,
-        shape: shapeBorder,
-      ),
-    ),
-  );
+  Widget build(BuildContext context) {
+    if (_isCircular) {
+      return DsShimmer.circular(width: width, height: height);
+    }
+    return DsShimmer.rectangular(width: width, height: height);
+  }
 }

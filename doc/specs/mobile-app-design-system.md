@@ -33,6 +33,9 @@ Issue: #258（親） / 本仕様の確定: #259
 - **デザインシステムのコードは Web セーフに保つ**（`dart:io` に依存しない）。
   Web QA 環境（#254 / #275）でカタログとパイロット画面がビルドできる状態を維持する
 
+<!-- @code mobile_app/lib/core/design_system/theme/ds_theme.dart#buildDsThemeData -->
+<!-- @code mobile_app/lib/core/design_system/token/ds_colors.dart#DsColors -->
+<!-- @code mobile_app/lib/core/design_system/token/ds_typography.dart#DsTypography -->
 ## 3. トークン taxonomy
 
 意味ベース（用途）で命名する。値ベースの名前（`gap16`、`greenPrimary`）を禁止する。
@@ -50,6 +53,7 @@ Issue: #258（親） / 本仕様の確定: #259
 以下 3.1〜3.5 が **#260 が実装する公開 API の確定リスト**。値は現行の実効値をそのまま採用し、
 見た目を変えない。写像表に無い値は 3.6 の個別判定表で扱う。
 
+<!-- @code mobile_app/lib/core/design_system/token/ds_spacing.dart#DsSpacing -->
 ### 3.1 `DsSpacing`
 
 | member | 値 | 用途 |
@@ -100,6 +104,7 @@ Issue: #258（親） / 本仕様の確定: #259
 
 `only(left: 16, right: 16)` は `symmetric(horizontal: 16)` と同義の重複値であり、写像時に集約する。
 
+<!-- @code mobile_app/lib/core/design_system/token/ds_radius.dart#DsRadius -->
 ### 3.2 `DsRadius`
 
 | member | 値 | 用途 |
@@ -110,6 +115,7 @@ Issue: #258（親） / 本仕様の確定: #259
 | `subtle` | 4 | スナックバー・ローディング表示の弱い角丸 |
 | `shimmer` | 2 | shimmer の矩形 |
 
+<!-- @code mobile_app/lib/core/design_system/token/ds_size.dart#DsSize -->
 ### 3.3 `DsSize`
 
 | member | 値 | 用途 |
@@ -122,6 +128,7 @@ Issue: #258（親） / 本仕様の確定: #259
 `SizedBox` による固定高（検索フィールドの 80 など 4 件）はトークンにせず、
 対応する Ds コンポーネント内部へ閉じる。
 
+<!-- @code mobile_app/lib/core/design_system/token/ds_elevation.dart#DsElevation -->
 ### 3.4 `DsElevation`
 
 | member | 値 | 用途 |
@@ -132,6 +139,7 @@ Issue: #258（親） / 本仕様の確定: #259
 `elevation: 3` は FAB 専用（5 章で Ds 対象外と定めた）ため、
 「現に実装で使う」基準を満たさずトークン化しない。
 
+<!-- @code mobile_app/lib/core/design_system/token/ds_opacity.dart#DsOpacity -->
 ### 3.5 `DsOpacity`
 
 | member | 値 | 用途 |
@@ -154,7 +162,7 @@ Issue: #258（親） / 本仕様の確定: #259
 | `word_registration_page.dart:200`, `write_definition_base_page.dart:131` | `Gap(300)` | 例外申請。キーボード回避の下部余白 |
 | `post_definition_fab.dart:150` ほか | `Gap(10)` / `radius 28` / `elevation 3` / `opacity 0.35` / `padding(20, 12)` | FAB は Ds 対象外。例外申請 |
 | `word_search_result_page.dart:67` | `symmetric(horizontal: 36)` | `screenContent`（24）との差分意図を確認し、無ければ集約 |
-| `dictionary_everyone_page.dart:36`, `user_search_page.dart:17` | `symmetric(horizontal: 40)` | `DsSearchField` 内部へ閉じる |
+| `dictionary_everyone_page.dart:36`, `user_search_page.dart:17` | `symmetric(horizontal: 40)` | ~~`DsSearchField` 内部へ閉じる~~ → **呼び出し側に残す**（#264 で判断を訂正。下記参照） |
 | `word_page_shimmer.dart:15` | `symmetric(horizontal: 20)` | `DsShimmer` 利用側で `screenHorizontal` へ集約 |
 | `dictionary_word_index_list.dart:111` | `symmetric(horizontal: 16, vertical: 6)` | `DsListTile` 内部へ閉じる |
 | `setting_page.dart:43` | `only(left: 24, right: 20)` | 左右非対称の意図が読めない。`screenContent` へ集約 |
@@ -163,6 +171,22 @@ Issue: #258（親） / 本仕様の確定: #259
 | `overlay_force_update_dialog.dart`, `overlay_in_maintenance_dialog.dart` | `radius 8` | `DsDialog` 移行時に `container`（16）へ統一。golden 差分を意図として説明する |
 | `changeable_profile_image.dart` | `size: 28` / `opacity 0.8` | コンポーネント内部値として閉じる |
 | `select_post_type_button.dart` | `size: 8` | 装飾ドット。コンポーネント内部値として閉じる |
+
+### #264 での判断の訂正
+
+`DsSearchField` の外枠（高さ・左右余白）は、監査時点では「コンポーネント内部へ閉じる」と
+判断していたが、**呼び出し元によって値が違う**ことがパイロット移行で判明した。
+
+| 画面 | 高さ | 左右余白 |
+|---|---|---|
+| `DictionaryEveryonePage` | 80 | 40 |
+| `WordSearchResultPage` | 指定なし | 36 |
+| `UserSearchPage` | 80 | 40 |
+
+内部へ閉じると `WordSearchResultPage` の見た目が変わるため、呼び出し側に残して
+例外申請した。統一は #280 で扱う。
+
+`Gap(300)`（キーボード回避）は予定どおり例外申請とし、仕組みでの置き換えを #281 で扱う。
 
 ### トークン追加基準
 
@@ -211,10 +235,23 @@ Ds コンポーネントにしない:
 - **closed variant**: 用途別の名前付きコンストラクタまたは専用型で提供する。
   任意の `style` / `color` / `padding` override を原則提供しない
 - 状態は enum または名前付きコンストラクタで表現し、bool の組み合わせで表現しない
+- **状態は見た目にも反映する**。disabled は「同じ色を [DsOpacity.disabled] で薄くしたもの」で
+  表し、専用の色トークンは増やさない。操作可否が見た目で判別できない状態を作らない
 - 必須の意味（ラベル、ハンドラ）は required 引数にする
 - 既存の `ErrorAndRetryWidget.cannotInquire` / `.canInquire`、
   `ShimmerWidget.rectangular` / `.circular` を規約のリファレンス実装とする
 
+<!-- @code mobile_app/lib/core/design_system/component/ds_button.dart#DsFilledButton -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_button.dart#DsOutlinedButton -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_dialog.dart#DsDialog -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_dialog.dart#DsConfirmDialog -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_feedback.dart#DsEmptyView -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_feedback.dart#DsErrorView -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_feedback.dart#DsShimmer -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_list_tile.dart#DsListTile -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_search_field.dart#DsSearchField -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_icon_button.dart#DsIconButton -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_text_field.dart#DsTextField -->
 ### 初期コンポーネント最低セット（#261）
 
 1. `DsFilledButton` / `DsOutlinedButton`
@@ -224,6 +261,13 @@ Ds コンポーネントにしない:
 5. `DsSearchField`
 6. `DsIconButton`（`self_definition_action_icon_button` / `other_user_action_icon_button` で
    サイズ・padding の直書きが重複している。監査 4.2）
+7. `DsTextField`（検索以外の汎用テキスト入力。`singleLine` / `multiline` の closed variant を持つ）
+
+`DsTextField` は #259 時点の最低セットに含めていなかったが、パイロットの
+`DefinitionPostPage` / `WriteDefinitionBasePage` が `TextFormField` を 6 箇所で使っており、
+これなしでは入力系パイロットが成立しないため #261 のスコープに含める。
+`controller` / `focusNode` / `validator` / `maxLength` は受け取るが、
+`InputDecoration` や `TextStyle` は公開 API で受け取らない。
 
 #### 初期セットに含めないものと根拠
 
@@ -248,6 +292,49 @@ Ds コンポーネントにしない:
 - 既存 UI は**変更時に**移行する。一括移行しない
 - 既存違反はベースライン化し、CI では**新規違反・違反増加を失敗**させる（#262）
 - 色の直書きは現時点で 0 件のため、ベースラインなしで即時失敗とする
+
+### 違反検出（`ds_check`）
+
+`mobile_app/tool/ds_check.dart`（analyzer の AST 走査）で検出する。CI の `mobile-analyze` job で実行する。
+
+```bash
+just mobile-ds-check              # 検査（CI と同じ）
+just mobile-ds-baseline-update    # baseline 再生成
+```
+
+| ルール ID | 対象 |
+|---|---|
+| `ds_hardcoded_color` | `Color(0x...)` / `Colors.<名前>` |
+| `ds_hardcoded_text_style` | `TextStyle(...)` の直接生成 |
+| `ds_hardcoded_spacing` | `Gap` / `EdgeInsets.*` / `SizedBox(width:, height:)` の数値リテラル |
+| `ds_hardcoded_radius` | `BorderRadius.circular` / `Radius.circular` の数値リテラル |
+| `ds_forbidden_widget` | Material のボタン・入力・`AlertDialog` / `ListTile` / `IconButton` の直接利用 |
+| `ds_suppression_without_reason` | 理由・追跡 Issue のない `// ignore:` |
+
+対象は `lib/**`。`lib/core/design_system/**`、`lib/util/**`、generated（`*.g.dart` / `*.freezed.dart` / `*.gr.dart`）は除外する。
+
+判定:
+
+- baseline（`mobile_app/tool/ds_baseline.json`、ファイル × ルールの件数）に無い違反、または件数超過で**失敗**
+- `ds_hardcoded_color` と `ds_suppression_without_reason` は baseline 対象外で**常に 0 件必須**
+- baseline を下回ったら成功するが「baseline を更新せよ」と警告する。違反を減らした PR で `just mobile-ds-baseline-update` を実行してコミットする
+
+### 既存 `core/common_widget` の扱い
+
+`core/common_widget` の共通ウィジェット（ボタン、ダイアログ、エラー表示、shimmer）は
+Ds コンポーネントの前身にあたる。**実体を `design_system/component/` へ移設し、
+旧パスは `@Deprecated` な `typedef` として残す**。
+
+- 二重実装を作らない（見た目の修正漏れを防ぐ）
+- 非パイロット画面は旧パス経由でそのまま動く（一括移行にしない）
+- `@Deprecated` のメッセージに移行先と追跡 Issue を必ず書く
+
+```dart
+@Deprecated('DsFilledButton を使う。全参照の移行後に削除する (#278)')
+typedef FilledButtonWidget = DsFilledButton;
+```
+
+旧 typedef の全廃は #278 で追跡する。
 
 ### 例外申請
 
@@ -282,14 +369,50 @@ const Gap(300),
 
 いずれも**振る舞いと意図した見た目を変えずに**移行する。
 
+## 6.5 実行方法
+
+| 目的 | コマンド | CI |
+|---|---|---|
+| 静的解析 | `just mobile-analyze` | ✓ |
+| テスト（golden 除く） | `just mobile-test` | ✓ |
+| デザインシステム違反検出 | `just mobile-ds-check` | ✓ |
+| Widgetbook の build 検証 | `just mobile-widgetbook-build` | ✓ |
+| 仕様とコードのリンク検証 | `just docbridge-check` | ✓ |
+| カタログをローカル起動 | `just mobile-widgetbook` | — |
+| golden の比較 | `just mobile-test-golden` | — |
+| golden の撮り直し | `just mobile-test-golden-update` | — |
+| 違反 baseline の再生成 | `just mobile-ds-baseline-update` | — |
+
+`just mobile-ds-baseline-update` は**違反が減ったときだけ**実行する。
+増えたときに実行して通すのは禁止。例外が必要なら 6 章の例外申請を使う。
+
 ## 7. 検証条件（後続 Issue への引き継ぎ）
 
 | Issue | 検証条件 |
 |---|---|
 | #260 トークン | light / dark 双方で全トークンが解決できる unit / widget test。`ThemeData` 構築に `BuildContext` 不要。既存テーマ値を意図せず変更していないこと |
 | #261 コンポーネント | 全公開コンポーネントに Widgetbook use case と widget test |
-| #262 CI | golden test、Flutter Accessibility Guideline 検査、違反ベースライン比較を CI で実行 |
+| #262 CI | Flutter Accessibility Guideline 検査（Ds コンポーネント）と違反ベースライン比較を CI で実行。golden は下記のとおり CI 対象外 |
 | #263 ドキュメント | 本仕様と主要コード宣言を DocBridge で双方向リンク（`just docbridge-check`） |
 | #264 パイロット | 2 系統の移行前後で golden が一致、または差分を意図として説明できること |
 
 共通: `just mobile-analyze`、`just mobile-test`、`just docbridge-check` が通ること。
+
+### golden test の位置づけ
+
+golden は**移行検証用のローカルツール**とし、**CI では実行しない**。
+
+- 開発は macOS、CI は `ubuntu-latest` であり、同一 Flutter でもラスタライズ結果が一致しない
+- CI を正本にすると、UI を変えるたびに golden 更新のための CI 往復が必要になる
+- 一方で「パイロット移行で見た目が変わっていないこと」の証明には golden が要る。
+  同一マシンで移行前後を撮り比べる用途であれば環境差の問題は発生しない
+
+運用:
+
+- golden test には `@Tags(['golden'])` を付ける
+- `just mobile-test` は `--exclude-tags golden`。CI もこれを使う
+- `just mobile-test-golden` をローカルで実行する。生成物はコミットする
+- golden を CI に常設化するかは #277 で判断する
+
+アクセシビリティ検査は **Ds コンポーネントのみ** CI 必須とする。
+既存画面へ一括適用すると初回から大量に失敗し、見た目を変えない方針とも衝突するため。

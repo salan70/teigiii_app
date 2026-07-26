@@ -27,7 +27,9 @@ void main() {
       ]);
 
       expect(
-        list.map((item) => item is String ? item : (item as Word).word).toList(),
+        list
+            .map((item) => item is String ? item : (item as Word).word)
+            .toList(),
         ['あ', 'あんこ', 'か', 'かき', 'A-Z', 'Apple', '数字・記号', '123'],
       );
     });

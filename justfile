@@ -42,9 +42,33 @@ mobile-analyze:
 mobile-format:
     cd mobile_app && dart format .
 
+# デザインシステム違反検出（新規違反・違反増加で失敗する）
+mobile-ds-check:
+    cd mobile_app && dart run tool/ds_check.dart
+
+# 違反が減ったときに baseline を再生成する
+mobile-ds-baseline-update:
+    cd mobile_app && dart run tool/ds_check.dart --update-baseline
+
+# Ds コンポーネントのカタログをローカル起動する
+mobile-widgetbook:
+    cd mobile_app && flutter run -t widgetbook/main.dart
+
+# カタログが壊れていないかを build で検証する
+mobile-widgetbook-build:
+    cd mobile_app && flutter build web -t widgetbook/main.dart --output build/widgetbook
+
+# golden はローカル限定（CI では実行しない）。移行前後の比較に使う
+mobile-test-golden:
+    cd mobile_app && TZ=Asia/Tokyo flutter test --tags golden
+
+# golden を撮り直す
+mobile-test-golden-update:
+    cd mobile_app && TZ=Asia/Tokyo flutter test --tags golden --update-goldens
+
 # 日時表示の回帰テストが UTC では検出漏れになるため Asia/Tokyo に固定する
 mobile-test:
-    cd mobile_app && TZ=Asia/Tokyo flutter test
+    cd mobile_app && TZ=Asia/Tokyo flutter test --exclude-tags golden
 
 mobile-coverage:
     cd mobile_app && flutter test --coverage

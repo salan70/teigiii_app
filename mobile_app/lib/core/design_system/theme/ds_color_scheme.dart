@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// 「いいね（♡）」アイコンの色
-const likeColor = Colors.pink;
-
 const _primaryColor = Color(0xFF0BBBA1);
 
-const lightColorScheme = ColorScheme(
+/// light テーマの基本配色。
+const dsLightColorScheme = ColorScheme(
   brightness: Brightness.light,
   primary: _primaryColor,
   onPrimary: Color(0xFFFFFFFF),
@@ -39,7 +37,8 @@ const lightColorScheme = ColorScheme(
   scrim: Color(0xFF000000),
 );
 
-const darkColorScheme = ColorScheme(
+/// dark テーマの基本配色。
+const dsDarkColorScheme = ColorScheme(
   brightness: Brightness.dark,
   primary: _primaryColor,
   onPrimary: Color(0xFF00382F),
