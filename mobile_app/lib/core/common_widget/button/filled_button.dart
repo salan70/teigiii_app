@@ -1,48 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// アプリ内で使用する Filled ボタンの基底クラス。
-class _BaseFilledButton extends StatelessWidget {
-  const _BaseFilledButton({
-    required this.onPressed,
-    required this.text,
-    required this.backgroundColor,
-    required this.textColor,
-  });
-
-  /// ボタンタップ時の処理。
-  final VoidCallback? onPressed;
-
-  /// ボタンに表示するテキスト。
-  final String text;
-
-  /// ボタンの背景色。
-  final Color backgroundColor;
-
-  /// [text] の色。
-  final Color textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(48)),
-        backgroundColor: backgroundColor,
-      ),
-      onPressed: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Text(
-          text,
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(color: textColor),
-        ),
-      ),
-    );
-  }
-}
+import '../../design_system/component/ds_button.dart';
 
 /// primary カラーで塗りつぶされたボタン。
+@Deprecated('DsFilledButton.primary を使う。全参照の移行後に削除する (#278)')
 class PrimaryFilledButton extends StatelessWidget {
   const PrimaryFilledButton({
     super.key,
@@ -58,16 +19,12 @@ class PrimaryFilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BaseFilledButton(
-      onPressed: onPressed,
-      text: text,
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      textColor: Theme.of(context).colorScheme.onPrimary,
-    );
+    return DsFilledButton.primary(onPressed: onPressed, text: text);
   }
 }
 
 /// tertiary カラーで塗りつぶされたボタン。
+@Deprecated('DsFilledButton.tertiary を使う。全参照の移行後に削除する (#278)')
 class TertiaryFilledButton extends StatelessWidget {
   const TertiaryFilledButton({
     super.key,
@@ -83,11 +40,6 @@ class TertiaryFilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BaseFilledButton(
-      onPressed: onPressed,
-      text: text,
-      backgroundColor: Theme.of(context).colorScheme.tertiary,
-      textColor: Theme.of(context).colorScheme.onTertiary,
-    );
+    return DsFilledButton.tertiary(onPressed: onPressed, text: text);
   }
 }

@@ -54,10 +54,7 @@ class WordRepository {
   /// 言葉を明示登録する。
   ///
   /// 新規作成は 201、既存言葉への登録・公開昇格は 200。いずれも [Word] を返す。
-  Future<Word> create({
-    required String word,
-    required String reading,
-  }) async {
+  Future<Word> create({required String word, required String reading}) async {
     try {
       final response = await _wordsApi.v1WordsPost(
         createWordRequest: CreateWordRequest(word: word, reading: reading),

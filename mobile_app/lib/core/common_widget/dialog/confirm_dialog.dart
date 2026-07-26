@@ -1,8 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import 'base_dialog.dart';
+import '../../design_system/component/ds_dialog.dart';
 
+/// 確認ダイアログ。
+///
+/// 閉じる操作（`context.popRoute()`）というルーティングの知識を持つため、
+/// デザインシステムではなく feature 側に置いている。
+/// 見た目と操作の仕様は [DsConfirmDialog] が持つ。
 class ConfirmDialog extends StatelessWidget {
   const ConfirmDialog({
     super.key,
@@ -14,7 +19,7 @@ class ConfirmDialog extends StatelessWidget {
   /// 本文として表示するメッセージ。
   final String confirmMessage;
 
-  /// [confirmMessage] をタップした際の処理。
+  /// 了承した際の処理。
   ///
   /// ここで指定した処理の前に、`context.popRoute()` が実行される。
   final VoidCallback onAccept;
@@ -24,35 +29,14 @@ class ConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseDialog(
-      content: Text(confirmMessage, textAlign: TextAlign.center),
-      actions: [
-        InkWell(
-          onTap: context.popRoute,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              'キャンセル',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () async {
-            await context.popRoute();
-            onAccept();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              confirmButtonText,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: Theme.of(context).colorScheme.error,
-              ),
-            ),
-          ),
-        ),
-      ],
+    return DsConfirmDialog(
+      message: confirmMessage,
+      confirmButtonText: confirmButtonText,
+      onCancel: context.popRoute,
+      onConfirm: () async {
+        await context.popRoute();
+        onAccept();
+      },
     );
   }
 }

@@ -108,9 +108,7 @@ class ProfileTopPage extends ConsumerWidget {
                 ),
                 if (isMyProfile)
                   const SavedWordList(
-                    emptyWidget: SimpleEmptyWidget(
-                      message: '保存した言葉が表示されます🐬',
-                    ),
+                    emptyWidget: SimpleEmptyWidget(message: '保存した言葉が表示されます🐬'),
                   ),
               ],
             ),

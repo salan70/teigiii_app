@@ -34,9 +34,7 @@ abstract class _$WordListStateByInitialNotifier
     extends BuildlessAsyncNotifier<WordListState> {
   late final String initial;
 
-  FutureOr<WordListState> build(
-    String initial,
-  );
+  FutureOr<WordListState> build(String initial);
 }
 
 /// See also [WordListStateByInitialNotifier].
@@ -51,21 +49,15 @@ class WordListStateByInitialNotifierFamily
   const WordListStateByInitialNotifierFamily();
 
   /// See also [WordListStateByInitialNotifier].
-  WordListStateByInitialNotifierProvider call(
-    String initial,
-  ) {
-    return WordListStateByInitialNotifierProvider(
-      initial,
-    );
+  WordListStateByInitialNotifierProvider call(String initial) {
+    return WordListStateByInitialNotifierProvider(initial);
   }
 
   @override
   WordListStateByInitialNotifierProvider getProviderOverride(
     covariant WordListStateByInitialNotifierProvider provider,
   ) {
-    return call(
-      provider.initial,
-    );
+    return call(provider.initial);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -84,24 +76,26 @@ class WordListStateByInitialNotifierFamily
 }
 
 /// See also [WordListStateByInitialNotifier].
-class WordListStateByInitialNotifierProvider extends AsyncNotifierProviderImpl<
-    WordListStateByInitialNotifier, WordListState> {
+class WordListStateByInitialNotifierProvider
+    extends
+        AsyncNotifierProviderImpl<
+          WordListStateByInitialNotifier,
+          WordListState
+        > {
   /// See also [WordListStateByInitialNotifier].
-  WordListStateByInitialNotifierProvider(
-    String initial,
-  ) : this._internal(
-          () => WordListStateByInitialNotifier()..initial = initial,
-          from: wordListStateByInitialNotifierProvider,
-          name: r'wordListStateByInitialNotifierProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$wordListStateByInitialNotifierHash,
-          dependencies: WordListStateByInitialNotifierFamily._dependencies,
-          allTransitiveDependencies:
-              WordListStateByInitialNotifierFamily._allTransitiveDependencies,
-          initial: initial,
-        );
+  WordListStateByInitialNotifierProvider(String initial)
+    : this._internal(
+        () => WordListStateByInitialNotifier()..initial = initial,
+        from: wordListStateByInitialNotifierProvider,
+        name: r'wordListStateByInitialNotifierProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$wordListStateByInitialNotifierHash,
+        dependencies: WordListStateByInitialNotifierFamily._dependencies,
+        allTransitiveDependencies:
+            WordListStateByInitialNotifierFamily._allTransitiveDependencies,
+        initial: initial,
+      );
 
   WordListStateByInitialNotifierProvider._internal(
     super._createNotifier, {
@@ -119,9 +113,7 @@ class WordListStateByInitialNotifierProvider extends AsyncNotifierProviderImpl<
   FutureOr<WordListState> runNotifierBuild(
     covariant WordListStateByInitialNotifier notifier,
   ) {
-    return notifier.build(
-      initial,
-    );
+    return notifier.build(initial);
   }
 
   @override
@@ -142,7 +134,7 @@ class WordListStateByInitialNotifierProvider extends AsyncNotifierProviderImpl<
 
   @override
   AsyncNotifierProviderElement<WordListStateByInitialNotifier, WordListState>
-      createElement() {
+  createElement() {
     return _WordListStateByInitialNotifierProviderElement(this);
   }
 
@@ -168,13 +160,18 @@ mixin WordListStateByInitialNotifierRef
 }
 
 class _WordListStateByInitialNotifierProviderElement
-    extends AsyncNotifierProviderElement<WordListStateByInitialNotifier,
-        WordListState> with WordListStateByInitialNotifierRef {
+    extends
+        AsyncNotifierProviderElement<
+          WordListStateByInitialNotifier,
+          WordListState
+        >
+    with WordListStateByInitialNotifierRef {
   _WordListStateByInitialNotifierProviderElement(super.provider);
 
   @override
   String get initial =>
       (origin as WordListStateByInitialNotifierProvider).initial;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -1,48 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// アプリ内で使用する Outlined ボタンの基底クラス。
-class _BaseOutlinedButton extends StatelessWidget {
-  const _BaseOutlinedButton({
-    required this.onPressed,
-    required this.text,
-    required this.textColor,
-    required this.borderColor,
-  });
+import '../../design_system/component/ds_button.dart';
 
-  /// ボタンタップ時の処理。
-  final VoidCallback? onPressed;
-
-  /// ボタンに表示するテキスト。
-  final String text;
-
-  /// [text] の色。
-  final Color textColor;
-
-  /// ボタンの枠線の色。
-  final Color borderColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(48)),
-        side: BorderSide(color: borderColor),
-      ),
-      onPressed: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Text(
-          text,
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(color: textColor),
-        ),
-      ),
-    );
-  }
-}
-
-/// primary カラーで塗りつぶされたボタン。
+/// primary カラーの枠線ボタン。
+@Deprecated('DsOutlinedButton.primary を使う。全参照の移行後に削除する (#278)')
 class PrimaryOutlinedButton extends StatelessWidget {
   const PrimaryOutlinedButton({
     super.key,
@@ -58,16 +19,12 @@ class PrimaryOutlinedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BaseOutlinedButton(
-      onPressed: onPressed,
-      text: text,
-      textColor: Theme.of(context).colorScheme.primary,
-      borderColor: Theme.of(context).colorScheme.primary,
-    );
+    return DsOutlinedButton.primary(onPressed: onPressed, text: text);
   }
 }
 
-/// tertiary カラーで塗りつぶされたボタン。
+/// tertiary カラーの枠線ボタン。
+@Deprecated('DsOutlinedButton.tertiary を使う。全参照の移行後に削除する (#278)')
 class TertiaryOutlinedButton extends StatelessWidget {
   const TertiaryOutlinedButton({
     super.key,
@@ -83,11 +40,6 @@ class TertiaryOutlinedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BaseOutlinedButton(
-      onPressed: onPressed,
-      text: text,
-      textColor: Theme.of(context).colorScheme.tertiary,
-      borderColor: Theme.of(context).colorScheme.tertiary,
-    );
+    return DsOutlinedButton.tertiary(onPressed: onPressed, text: text);
   }
 }

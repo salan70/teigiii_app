@@ -13,14 +13,14 @@ String _$savedWordListStateNotifierHash() =>
 @ProviderFor(SavedWordListStateNotifier)
 final savedWordListStateNotifierProvider =
     AsyncNotifierProvider<SavedWordListStateNotifier, WordListState>.internal(
-  SavedWordListStateNotifier.new,
-  name: r'savedWordListStateNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$savedWordListStateNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      SavedWordListStateNotifier.new,
+      name: r'savedWordListStateNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$savedWordListStateNotifierHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$SavedWordListStateNotifier = AsyncNotifier<WordListState>;
 // ignore_for_file: type=lint

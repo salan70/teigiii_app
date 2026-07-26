@@ -12,7 +12,8 @@ part of 'user_profile.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$UserProfile {
@@ -41,20 +42,22 @@ mixin _$UserProfile {
 /// @nodoc
 abstract class $UserProfileCopyWith<$Res> {
   factory $UserProfileCopyWith(
-          UserProfile value, $Res Function(UserProfile) then) =
-      _$UserProfileCopyWithImpl<$Res, UserProfile>;
+    UserProfile value,
+    $Res Function(UserProfile) then,
+  ) = _$UserProfileCopyWithImpl<$Res, UserProfile>;
   @useResult
-  $Res call(
-      {String id,
-      String publicId,
-      String name,
-      String bio,
-      String? avatarUrl,
-      int followingCount,
-      int followerCount,
-      bool isFollowedByMe,
-      CroppedFile? croppedFile,
-      Uint8List? croppedImageBytes});
+  $Res call({
+    String id,
+    String publicId,
+    String name,
+    String bio,
+    String? avatarUrl,
+    int followingCount,
+    int followerCount,
+    bool isFollowedByMe,
+    CroppedFile? croppedFile,
+    Uint8List? croppedImageBytes,
+  });
 }
 
 /// @nodoc
@@ -81,48 +84,51 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
     Object? croppedFile = freezed,
     Object? croppedImageBytes = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      publicId: null == publicId
-          ? _value.publicId
-          : publicId // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      bio: null == bio
-          ? _value.bio
-          : bio // ignore: cast_nullable_to_non_nullable
-              as String,
-      avatarUrl: freezed == avatarUrl
-          ? _value.avatarUrl
-          : avatarUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      followingCount: null == followingCount
-          ? _value.followingCount
-          : followingCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      followerCount: null == followerCount
-          ? _value.followerCount
-          : followerCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      isFollowedByMe: null == isFollowedByMe
-          ? _value.isFollowedByMe
-          : isFollowedByMe // ignore: cast_nullable_to_non_nullable
-              as bool,
-      croppedFile: freezed == croppedFile
-          ? _value.croppedFile
-          : croppedFile // ignore: cast_nullable_to_non_nullable
-              as CroppedFile?,
-      croppedImageBytes: freezed == croppedImageBytes
-          ? _value.croppedImageBytes
-          : croppedImageBytes // ignore: cast_nullable_to_non_nullable
-              as Uint8List?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            publicId: null == publicId
+                ? _value.publicId
+                : publicId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            bio: null == bio
+                ? _value.bio
+                : bio // ignore: cast_nullable_to_non_nullable
+                      as String,
+            avatarUrl: freezed == avatarUrl
+                ? _value.avatarUrl
+                : avatarUrl // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            followingCount: null == followingCount
+                ? _value.followingCount
+                : followingCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            followerCount: null == followerCount
+                ? _value.followerCount
+                : followerCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            isFollowedByMe: null == isFollowedByMe
+                ? _value.isFollowedByMe
+                : isFollowedByMe // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            croppedFile: freezed == croppedFile
+                ? _value.croppedFile
+                : croppedFile // ignore: cast_nullable_to_non_nullable
+                      as CroppedFile?,
+            croppedImageBytes: freezed == croppedImageBytes
+                ? _value.croppedImageBytes
+                : croppedImageBytes // ignore: cast_nullable_to_non_nullable
+                      as Uint8List?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -130,21 +136,23 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
 abstract class _$$UserProfileImplCopyWith<$Res>
     implements $UserProfileCopyWith<$Res> {
   factory _$$UserProfileImplCopyWith(
-          _$UserProfileImpl value, $Res Function(_$UserProfileImpl) then) =
-      __$$UserProfileImplCopyWithImpl<$Res>;
+    _$UserProfileImpl value,
+    $Res Function(_$UserProfileImpl) then,
+  ) = __$$UserProfileImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      String publicId,
-      String name,
-      String bio,
-      String? avatarUrl,
-      int followingCount,
-      int followerCount,
-      bool isFollowedByMe,
-      CroppedFile? croppedFile,
-      Uint8List? croppedImageBytes});
+  $Res call({
+    String id,
+    String publicId,
+    String name,
+    String bio,
+    String? avatarUrl,
+    int followingCount,
+    int followerCount,
+    bool isFollowedByMe,
+    CroppedFile? croppedFile,
+    Uint8List? croppedImageBytes,
+  });
 }
 
 /// @nodoc
@@ -152,8 +160,9 @@ class __$$UserProfileImplCopyWithImpl<$Res>
     extends _$UserProfileCopyWithImpl<$Res, _$UserProfileImpl>
     implements _$$UserProfileImplCopyWith<$Res> {
   __$$UserProfileImplCopyWithImpl(
-      _$UserProfileImpl _value, $Res Function(_$UserProfileImpl) _then)
-      : super(_value, _then);
+    _$UserProfileImpl _value,
+    $Res Function(_$UserProfileImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -169,66 +178,68 @@ class __$$UserProfileImplCopyWithImpl<$Res>
     Object? croppedFile = freezed,
     Object? croppedImageBytes = freezed,
   }) {
-    return _then(_$UserProfileImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      publicId: null == publicId
-          ? _value.publicId
-          : publicId // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      bio: null == bio
-          ? _value.bio
-          : bio // ignore: cast_nullable_to_non_nullable
-              as String,
-      avatarUrl: freezed == avatarUrl
-          ? _value.avatarUrl
-          : avatarUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      followingCount: null == followingCount
-          ? _value.followingCount
-          : followingCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      followerCount: null == followerCount
-          ? _value.followerCount
-          : followerCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      isFollowedByMe: null == isFollowedByMe
-          ? _value.isFollowedByMe
-          : isFollowedByMe // ignore: cast_nullable_to_non_nullable
-              as bool,
-      croppedFile: freezed == croppedFile
-          ? _value.croppedFile
-          : croppedFile // ignore: cast_nullable_to_non_nullable
-              as CroppedFile?,
-      croppedImageBytes: freezed == croppedImageBytes
-          ? _value.croppedImageBytes
-          : croppedImageBytes // ignore: cast_nullable_to_non_nullable
-              as Uint8List?,
-    ));
+    return _then(
+      _$UserProfileImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        publicId: null == publicId
+            ? _value.publicId
+            : publicId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        bio: null == bio
+            ? _value.bio
+            : bio // ignore: cast_nullable_to_non_nullable
+                  as String,
+        avatarUrl: freezed == avatarUrl
+            ? _value.avatarUrl
+            : avatarUrl // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        followingCount: null == followingCount
+            ? _value.followingCount
+            : followingCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        followerCount: null == followerCount
+            ? _value.followerCount
+            : followerCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        isFollowedByMe: null == isFollowedByMe
+            ? _value.isFollowedByMe
+            : isFollowedByMe // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        croppedFile: freezed == croppedFile
+            ? _value.croppedFile
+            : croppedFile // ignore: cast_nullable_to_non_nullable
+                  as CroppedFile?,
+        croppedImageBytes: freezed == croppedImageBytes
+            ? _value.croppedImageBytes
+            : croppedImageBytes // ignore: cast_nullable_to_non_nullable
+                  as Uint8List?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$UserProfileImpl extends _UserProfile {
-  const _$UserProfileImpl(
-      {required this.id,
-      required this.publicId,
-      required this.name,
-      required this.bio,
-      required this.avatarUrl,
-      required this.followingCount,
-      required this.followerCount,
-      required this.isFollowedByMe,
-      required this.croppedFile,
-      this.croppedImageBytes})
-      : super._();
+  const _$UserProfileImpl({
+    required this.id,
+    required this.publicId,
+    required this.name,
+    required this.bio,
+    required this.avatarUrl,
+    required this.followingCount,
+    required this.followerCount,
+    required this.isFollowedByMe,
+    required this.croppedFile,
+    this.croppedImageBytes,
+  }) : super._();
 
   @override
   final String id;
@@ -282,23 +293,26 @@ class _$UserProfileImpl extends _UserProfile {
                 other.isFollowedByMe == isFollowedByMe) &&
             (identical(other.croppedFile, croppedFile) ||
                 other.croppedFile == croppedFile) &&
-            const DeepCollectionEquality()
-                .equals(other.croppedImageBytes, croppedImageBytes));
+            const DeepCollectionEquality().equals(
+              other.croppedImageBytes,
+              croppedImageBytes,
+            ));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      publicId,
-      name,
-      bio,
-      avatarUrl,
-      followingCount,
-      followerCount,
-      isFollowedByMe,
-      croppedFile,
-      const DeepCollectionEquality().hash(croppedImageBytes));
+    runtimeType,
+    id,
+    publicId,
+    name,
+    bio,
+    avatarUrl,
+    followingCount,
+    followerCount,
+    isFollowedByMe,
+    croppedFile,
+    const DeepCollectionEquality().hash(croppedImageBytes),
+  );
 
   @JsonKey(ignore: true)
   @override
@@ -308,17 +322,18 @@ class _$UserProfileImpl extends _UserProfile {
 }
 
 abstract class _UserProfile extends UserProfile {
-  const factory _UserProfile(
-      {required final String id,
-      required final String publicId,
-      required final String name,
-      required final String bio,
-      required final String? avatarUrl,
-      required final int followingCount,
-      required final int followerCount,
-      required final bool isFollowedByMe,
-      required final CroppedFile? croppedFile,
-      final Uint8List? croppedImageBytes}) = _$UserProfileImpl;
+  const factory _UserProfile({
+    required final String id,
+    required final String publicId,
+    required final String name,
+    required final String bio,
+    required final String? avatarUrl,
+    required final int followingCount,
+    required final int followerCount,
+    required final bool isFollowedByMe,
+    required final CroppedFile? croppedFile,
+    final Uint8List? croppedImageBytes,
+  }) = _$UserProfileImpl;
   const _UserProfile._() : super._();
 
   @override
@@ -330,7 +345,6 @@ abstract class _UserProfile extends UserProfile {
   @override
   String get bio;
   @override
-
   /// アバター画像の URL。未設定の場合は null
   String? get avatarUrl;
   @override
@@ -340,11 +354,9 @@ abstract class _UserProfile extends UserProfile {
   @override
   bool get isFollowedByMe;
   @override
-
   /// アップロード用にユーザーが指定したファイル（画像）を保持する
   CroppedFile? get croppedFile;
   @override
-
   /// [croppedFile] のバイト列。UI 表示用に一度だけ読み込む。
   Uint8List? get croppedImageBytes;
   @override

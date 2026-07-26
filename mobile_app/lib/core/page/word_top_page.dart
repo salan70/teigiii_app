@@ -58,9 +58,7 @@ class WordTopPage extends ConsumerWidget {
           }
 
           // * 該当するWordがある場合（投稿0件も含む）
-          const emptyWidget = SimpleEmptyWidget(
-            message: '最初に定義してみませんか？',
-          );
+          const emptyWidget = SimpleEmptyWidget(message: '最初に定義してみませんか？');
 
           return Scaffold(
             body: SafeArea(

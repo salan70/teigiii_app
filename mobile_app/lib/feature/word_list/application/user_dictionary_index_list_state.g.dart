@@ -34,9 +34,7 @@ abstract class _$UserDictionaryIndexListStateNotifier
     extends BuildlessAsyncNotifier<DictionaryIndexListState> {
   late final String targetUserId;
 
-  FutureOr<DictionaryIndexListState> build(
-    String targetUserId,
-  );
+  FutureOr<DictionaryIndexListState> build(String targetUserId);
 }
 
 /// See also [UserDictionaryIndexListStateNotifier].
@@ -51,21 +49,15 @@ class UserDictionaryIndexListStateNotifierFamily
   const UserDictionaryIndexListStateNotifierFamily();
 
   /// See also [UserDictionaryIndexListStateNotifier].
-  UserDictionaryIndexListStateNotifierProvider call(
-    String targetUserId,
-  ) {
-    return UserDictionaryIndexListStateNotifierProvider(
-      targetUserId,
-    );
+  UserDictionaryIndexListStateNotifierProvider call(String targetUserId) {
+    return UserDictionaryIndexListStateNotifierProvider(targetUserId);
   }
 
   @override
   UserDictionaryIndexListStateNotifierProvider getProviderOverride(
     covariant UserDictionaryIndexListStateNotifierProvider provider,
   ) {
-    return call(
-      provider.targetUserId,
-    );
+    return call(provider.targetUserId);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -85,26 +77,26 @@ class UserDictionaryIndexListStateNotifierFamily
 
 /// See also [UserDictionaryIndexListStateNotifier].
 class UserDictionaryIndexListStateNotifierProvider
-    extends AsyncNotifierProviderImpl<UserDictionaryIndexListStateNotifier,
-        DictionaryIndexListState> {
+    extends
+        AsyncNotifierProviderImpl<
+          UserDictionaryIndexListStateNotifier,
+          DictionaryIndexListState
+        > {
   /// See also [UserDictionaryIndexListStateNotifier].
-  UserDictionaryIndexListStateNotifierProvider(
-    String targetUserId,
-  ) : this._internal(
-          () => UserDictionaryIndexListStateNotifier()
-            ..targetUserId = targetUserId,
-          from: userDictionaryIndexListStateNotifierProvider,
-          name: r'userDictionaryIndexListStateNotifierProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$userDictionaryIndexListStateNotifierHash,
-          dependencies:
-              UserDictionaryIndexListStateNotifierFamily._dependencies,
-          allTransitiveDependencies: UserDictionaryIndexListStateNotifierFamily
-              ._allTransitiveDependencies,
-          targetUserId: targetUserId,
-        );
+  UserDictionaryIndexListStateNotifierProvider(String targetUserId)
+    : this._internal(
+        () =>
+            UserDictionaryIndexListStateNotifier()..targetUserId = targetUserId,
+        from: userDictionaryIndexListStateNotifierProvider,
+        name: r'userDictionaryIndexListStateNotifierProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$userDictionaryIndexListStateNotifierHash,
+        dependencies: UserDictionaryIndexListStateNotifierFamily._dependencies,
+        allTransitiveDependencies: UserDictionaryIndexListStateNotifierFamily
+            ._allTransitiveDependencies,
+        targetUserId: targetUserId,
+      );
 
   UserDictionaryIndexListStateNotifierProvider._internal(
     super._createNotifier, {
@@ -122,14 +114,13 @@ class UserDictionaryIndexListStateNotifierProvider
   FutureOr<DictionaryIndexListState> runNotifierBuild(
     covariant UserDictionaryIndexListStateNotifier notifier,
   ) {
-    return notifier.build(
-      targetUserId,
-    );
+    return notifier.build(targetUserId);
   }
 
   @override
   Override overrideWith(
-      UserDictionaryIndexListStateNotifier Function() create) {
+    UserDictionaryIndexListStateNotifier Function() create,
+  ) {
     return ProviderOverride(
       origin: this,
       override: UserDictionaryIndexListStateNotifierProvider._internal(
@@ -145,8 +136,11 @@ class UserDictionaryIndexListStateNotifierProvider
   }
 
   @override
-  AsyncNotifierProviderElement<UserDictionaryIndexListStateNotifier,
-      DictionaryIndexListState> createElement() {
+  AsyncNotifierProviderElement<
+    UserDictionaryIndexListStateNotifier,
+    DictionaryIndexListState
+  >
+  createElement() {
     return _UserDictionaryIndexListStateNotifierProviderElement(this);
   }
 
@@ -172,13 +166,18 @@ mixin UserDictionaryIndexListStateNotifierRef
 }
 
 class _UserDictionaryIndexListStateNotifierProviderElement
-    extends AsyncNotifierProviderElement<UserDictionaryIndexListStateNotifier,
-        DictionaryIndexListState> with UserDictionaryIndexListStateNotifierRef {
+    extends
+        AsyncNotifierProviderElement<
+          UserDictionaryIndexListStateNotifier,
+          DictionaryIndexListState
+        >
+    with UserDictionaryIndexListStateNotifierRef {
   _UserDictionaryIndexListStateNotifierProviderElement(super.provider);
 
   @override
   String get targetUserId =>
       (origin as UserDictionaryIndexListStateNotifierProvider).targetUserId;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

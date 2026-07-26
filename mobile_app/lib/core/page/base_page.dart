@@ -79,8 +79,9 @@ class BasePage extends ConsumerWidget {
 
                         // globalKey はホーム（タイムライン）の PrimaryScrollController 用。
                         // 他タブでは未マウントのため currentContext が null になり得る。
-                        final scrollContext =
-                            ref.read(globalKeyProvider).currentContext;
+                        final scrollContext = ref
+                            .read(globalKeyProvider)
+                            .currentContext;
                         if (scrollContext != null) {
                           PrimaryScrollController.of(
                             scrollContext,

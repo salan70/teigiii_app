@@ -17,8 +17,9 @@ class DiscoverTimelineList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return InfinityScrollWidget(
       listStateNotifierProvider: discoverTimelineStateNotifierProvider,
-      fetchMore:
-          ref.read(discoverTimelineStateNotifierProvider.notifier).fetchMore,
+      fetchMore: ref
+          .read(discoverTimelineStateNotifierProvider.notifier)
+          .fetchMore,
       tileBuilder: (item) {
         if (item is String) {
           return DefinitionTile(definitionId: item);

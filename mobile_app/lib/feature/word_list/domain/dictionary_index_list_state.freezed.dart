@@ -12,7 +12,8 @@ part of 'dictionary_index_list_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$DictionaryIndexListState {
@@ -28,20 +29,24 @@ mixin _$DictionaryIndexListState {
 
 /// @nodoc
 abstract class $DictionaryIndexListStateCopyWith<$Res> {
-  factory $DictionaryIndexListStateCopyWith(DictionaryIndexListState value,
-          $Res Function(DictionaryIndexListState) then) =
-      _$DictionaryIndexListStateCopyWithImpl<$Res, DictionaryIndexListState>;
+  factory $DictionaryIndexListStateCopyWith(
+    DictionaryIndexListState value,
+    $Res Function(DictionaryIndexListState) then,
+  ) = _$DictionaryIndexListStateCopyWithImpl<$Res, DictionaryIndexListState>;
   @useResult
-  $Res call(
-      {List<dynamic> list,
-      List<Word> allWords,
-      String? nextCursor,
-      bool hasMore});
+  $Res call({
+    List<dynamic> list,
+    List<Word> allWords,
+    String? nextCursor,
+    bool hasMore,
+  });
 }
 
 /// @nodoc
-class _$DictionaryIndexListStateCopyWithImpl<$Res,
-        $Val extends DictionaryIndexListState>
+class _$DictionaryIndexListStateCopyWithImpl<
+  $Res,
+  $Val extends DictionaryIndexListState
+>
     implements $DictionaryIndexListStateCopyWith<$Res> {
   _$DictionaryIndexListStateCopyWithImpl(this._value, this._then);
 
@@ -58,24 +63,27 @@ class _$DictionaryIndexListStateCopyWithImpl<$Res,
     Object? nextCursor = freezed,
     Object? hasMore = null,
   }) {
-    return _then(_value.copyWith(
-      list: null == list
-          ? _value.list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
-      allWords: null == allWords
-          ? _value.allWords
-          : allWords // ignore: cast_nullable_to_non_nullable
-              as List<Word>,
-      nextCursor: freezed == nextCursor
-          ? _value.nextCursor
-          : nextCursor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      hasMore: null == hasMore
-          ? _value.hasMore
-          : hasMore // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            list: null == list
+                ? _value.list
+                : list // ignore: cast_nullable_to_non_nullable
+                      as List<dynamic>,
+            allWords: null == allWords
+                ? _value.allWords
+                : allWords // ignore: cast_nullable_to_non_nullable
+                      as List<Word>,
+            nextCursor: freezed == nextCursor
+                ? _value.nextCursor
+                : nextCursor // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            hasMore: null == hasMore
+                ? _value.hasMore
+                : hasMore // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -83,27 +91,31 @@ class _$DictionaryIndexListStateCopyWithImpl<$Res,
 abstract class _$$DictionaryIndexListStateImplCopyWith<$Res>
     implements $DictionaryIndexListStateCopyWith<$Res> {
   factory _$$DictionaryIndexListStateImplCopyWith(
-          _$DictionaryIndexListStateImpl value,
-          $Res Function(_$DictionaryIndexListStateImpl) then) =
-      __$$DictionaryIndexListStateImplCopyWithImpl<$Res>;
+    _$DictionaryIndexListStateImpl value,
+    $Res Function(_$DictionaryIndexListStateImpl) then,
+  ) = __$$DictionaryIndexListStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {List<dynamic> list,
-      List<Word> allWords,
-      String? nextCursor,
-      bool hasMore});
+  $Res call({
+    List<dynamic> list,
+    List<Word> allWords,
+    String? nextCursor,
+    bool hasMore,
+  });
 }
 
 /// @nodoc
 class __$$DictionaryIndexListStateImplCopyWithImpl<$Res>
-    extends _$DictionaryIndexListStateCopyWithImpl<$Res,
-        _$DictionaryIndexListStateImpl>
+    extends
+        _$DictionaryIndexListStateCopyWithImpl<
+          $Res,
+          _$DictionaryIndexListStateImpl
+        >
     implements _$$DictionaryIndexListStateImplCopyWith<$Res> {
   __$$DictionaryIndexListStateImplCopyWithImpl(
-      _$DictionaryIndexListStateImpl _value,
-      $Res Function(_$DictionaryIndexListStateImpl) _then)
-      : super(_value, _then);
+    _$DictionaryIndexListStateImpl _value,
+    $Res Function(_$DictionaryIndexListStateImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -113,37 +125,39 @@ class __$$DictionaryIndexListStateImplCopyWithImpl<$Res>
     Object? nextCursor = freezed,
     Object? hasMore = null,
   }) {
-    return _then(_$DictionaryIndexListStateImpl(
-      list: null == list
-          ? _value._list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
-      allWords: null == allWords
-          ? _value._allWords
-          : allWords // ignore: cast_nullable_to_non_nullable
-              as List<Word>,
-      nextCursor: freezed == nextCursor
-          ? _value.nextCursor
-          : nextCursor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      hasMore: null == hasMore
-          ? _value.hasMore
-          : hasMore // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$DictionaryIndexListStateImpl(
+        list: null == list
+            ? _value._list
+            : list // ignore: cast_nullable_to_non_nullable
+                  as List<dynamic>,
+        allWords: null == allWords
+            ? _value._allWords
+            : allWords // ignore: cast_nullable_to_non_nullable
+                  as List<Word>,
+        nextCursor: freezed == nextCursor
+            ? _value.nextCursor
+            : nextCursor // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        hasMore: null == hasMore
+            ? _value.hasMore
+            : hasMore // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$DictionaryIndexListStateImpl implements _DictionaryIndexListState {
-  const _$DictionaryIndexListStateImpl(
-      {required final List<dynamic> list,
-      required final List<Word> allWords,
-      required this.nextCursor,
-      required this.hasMore})
-      : _list = list,
-        _allWords = allWords;
+  const _$DictionaryIndexListStateImpl({
+    required final List<dynamic> list,
+    required final List<Word> allWords,
+    required this.nextCursor,
+    required this.hasMore,
+  }) : _list = list,
+       _allWords = allWords;
 
   final List<dynamic> _list;
   @override
@@ -185,26 +199,30 @@ class _$DictionaryIndexListStateImpl implements _DictionaryIndexListState {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_list),
-      const DeepCollectionEquality().hash(_allWords),
-      nextCursor,
-      hasMore);
+    runtimeType,
+    const DeepCollectionEquality().hash(_list),
+    const DeepCollectionEquality().hash(_allWords),
+    nextCursor,
+    hasMore,
+  );
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$DictionaryIndexListStateImplCopyWith<_$DictionaryIndexListStateImpl>
-      get copyWith => __$$DictionaryIndexListStateImplCopyWithImpl<
-          _$DictionaryIndexListStateImpl>(this, _$identity);
+  get copyWith =>
+      __$$DictionaryIndexListStateImplCopyWithImpl<
+        _$DictionaryIndexListStateImpl
+      >(this, _$identity);
 }
 
 abstract class _DictionaryIndexListState implements DictionaryIndexListState {
-  const factory _DictionaryIndexListState(
-      {required final List<dynamic> list,
-      required final List<Word> allWords,
-      required final String? nextCursor,
-      required final bool hasMore}) = _$DictionaryIndexListStateImpl;
+  const factory _DictionaryIndexListState({
+    required final List<dynamic> list,
+    required final List<Word> allWords,
+    required final String? nextCursor,
+    required final bool hasMore,
+  }) = _$DictionaryIndexListStateImpl;
 
   @override
   List<dynamic> get list;
@@ -217,5 +235,5 @@ abstract class _DictionaryIndexListState implements DictionaryIndexListState {
   @override
   @JsonKey(ignore: true)
   _$$DictionaryIndexListStateImplCopyWith<_$DictionaryIndexListStateImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }
