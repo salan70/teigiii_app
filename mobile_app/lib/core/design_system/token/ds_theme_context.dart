@@ -13,15 +13,11 @@ extension DsThemeContext on BuildContext {
       Theme.of(this).extension<DsColors>() ?? DsColors.standard;
 
   /// タイポグラフィの semantic token。
-  DsTypography get dsTypography {
-    final extension = Theme.of(this).extension<DsTypography>();
-    if (extension == null) {
-      // Ds のテーマを適用していない環境（テストの素の MaterialApp など）でも
-      // 落ちないよう、現在の TextTheme から写像する。
-      return DsTypography.fromTextTheme(Theme.of(this).textTheme);
-    }
-    return extension;
-  }
+  ///
+  /// `Theme.of` が geometry（フォントサイズ）を適用した後の [TextTheme] から
+  /// 写像する。[ThemeData] 構築時の値を使うとサイズが欠落する。
+  DsTypography get dsTypography =>
+      DsTypography.fromTextTheme(Theme.of(this).textTheme);
 
   /// 基本の配色。
   ColorScheme get dsColorScheme => Theme.of(this).colorScheme;

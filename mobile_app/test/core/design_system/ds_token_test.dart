@@ -81,6 +81,28 @@ void main() {
         }
       });
 
+      testWidgets('$brightness で DsTypography がフォントサイズを持つ', (tester) async {
+        late DsTypography typography;
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: buildDsThemeData(brightness),
+            home: Builder(
+              builder: (context) {
+                typography = context.dsTypography;
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        );
+
+        // ThemeData 構築時の TextTheme にはサイズが無い。`Theme.of` が
+        // 適用した geometry を反映していないと、見た目が変わる。
+        expect(typography.heading.fontSize, 20);
+        expect(typography.itemTitle.fontSize, 16);
+        expect(typography.body.fontSize, 14);
+        expect(typography.bodyEmphasis.fontSize, 18);
+      });
+
       testWidgets('$brightness で DsColors が解決できる', (tester) async {
         late DsColors colors;
         await tester.pumpWidget(
@@ -124,12 +146,12 @@ void main() {
       expect(a.lerp(b, 1).like, b.like);
     });
 
-    test('DsTypography の copyWith が指定した member だけを差し替える', () {
-      final base = DsTypography.fromTextTheme(ThemeData.light().textTheme);
-      const replaced = TextStyle(fontSize: 99);
-      final actual = base.copyWith(body: replaced);
-      expect(actual.body, replaced);
-      expect(actual.heading, base.heading);
+    test('DsTypography は同じ TextTheme から同じ値になる', () {
+      final textTheme = ThemeData.light().textTheme;
+      expect(
+        DsTypography.fromTextTheme(textTheme),
+        DsTypography.fromTextTheme(textTheme),
+      );
     });
   });
 }

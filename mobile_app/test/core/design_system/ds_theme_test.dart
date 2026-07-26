@@ -80,10 +80,8 @@ void main() {
         expect(theme.highlightColor, Colors.transparent);
       });
 
-      test('$brightness で ThemeExtension が登録されている', () {
-        final theme = buildDsThemeData(brightness);
-        expect(theme.extension<DsColors>(), isNotNull);
-        expect(theme.extension<DsTypography>(), isNotNull);
+      test('$brightness で DsColors が ThemeExtension として登録されている', () {
+        expect(buildDsThemeData(brightness).extension<DsColors>(), isNotNull);
       });
     }
   });

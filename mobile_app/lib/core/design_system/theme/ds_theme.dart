@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../token/ds_colors.dart';
 import '../token/ds_elevation.dart';
-import '../token/ds_typography.dart';
 import 'ds_color_scheme.dart';
 import 'ds_text_theme.dart';
 
@@ -58,11 +57,11 @@ ThemeData buildDsThemeData(Brightness brightness) {
     highlightColor: Colors.transparent,
   );
 
+  // DsTypography はここで登録しない。フォントサイズは `Theme.of` が
+  // locale の script category に応じて後から適用するため、
+  // 構築時の TextTheme を保持するとサイズが欠落する。
   return base.copyWith(
-    extensions: <ThemeExtension<dynamic>>[
-      DsColors.standard,
-      DsTypography.fromTextTheme(base.textTheme),
-    ],
+    extensions: <ThemeExtension<dynamic>>[DsColors.standard],
   );
 }
 

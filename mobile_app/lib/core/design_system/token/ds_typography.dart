@@ -5,9 +5,14 @@ import 'package:flutter/material.dart';
 /// 値は現行の [TextTheme] の実効値をそのまま採用し、用途を表す名前を与えている。
 /// 新しいサイズや太さを増やすためのものではない。
 ///
+/// [ThemeExtension] にはしない。[TextTheme] のフォントサイズは
+/// `Theme.of` が locale の script category に応じて後から適用するため、
+/// [ThemeData] 構築時の値を保持するとサイズが欠落する。
+/// 必ず `context.dsTypography` から解決すること。
+///
 /// @doc doc/specs/mobile-app-design-system.md#3-トークン-taxonomy
 @immutable
-class DsTypography extends ThemeExtension<DsTypography> {
+class DsTypography {
   const DsTypography({
     required this.heading,
     required this.itemTitle,
@@ -18,8 +23,6 @@ class DsTypography extends ThemeExtension<DsTypography> {
   });
 
   /// [TextTheme] から意味名へ写像する。
-  ///
-  /// [ThemeData] が構築した実効値を使うため、既存の見た目と一致する。
   factory DsTypography.fromTextTheme(TextTheme textTheme) {
     return DsTypography(
       heading: textTheme.titleLarge!,
@@ -50,36 +53,17 @@ class DsTypography extends ThemeExtension<DsTypography> {
   final TextStyle label;
 
   @override
-  DsTypography copyWith({
-    TextStyle? heading,
-    TextStyle? itemTitle,
-    TextStyle? sectionLabel,
-    TextStyle? body,
-    TextStyle? bodyEmphasis,
-    TextStyle? label,
-  }) {
-    return DsTypography(
-      heading: heading ?? this.heading,
-      itemTitle: itemTitle ?? this.itemTitle,
-      sectionLabel: sectionLabel ?? this.sectionLabel,
-      body: body ?? this.body,
-      bodyEmphasis: bodyEmphasis ?? this.bodyEmphasis,
-      label: label ?? this.label,
-    );
+  bool operator ==(Object other) {
+    return other is DsTypography &&
+        other.heading == heading &&
+        other.itemTitle == itemTitle &&
+        other.sectionLabel == sectionLabel &&
+        other.body == body &&
+        other.bodyEmphasis == bodyEmphasis &&
+        other.label == label;
   }
 
   @override
-  DsTypography lerp(ThemeExtension<DsTypography>? other, double t) {
-    if (other is! DsTypography) {
-      return this;
-    }
-    return DsTypography(
-      heading: TextStyle.lerp(heading, other.heading, t)!,
-      itemTitle: TextStyle.lerp(itemTitle, other.itemTitle, t)!,
-      sectionLabel: TextStyle.lerp(sectionLabel, other.sectionLabel, t)!,
-      body: TextStyle.lerp(body, other.body, t)!,
-      bodyEmphasis: TextStyle.lerp(bodyEmphasis, other.bodyEmphasis, t)!,
-      label: TextStyle.lerp(label, other.label, t)!,
-    );
-  }
+  int get hashCode =>
+      Object.hash(heading, itemTitle, sectionLabel, body, bodyEmphasis, label);
 }
