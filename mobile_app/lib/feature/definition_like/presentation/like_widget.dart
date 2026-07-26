@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:like_button/like_button.dart';
 
-import '../../../../util/constant/color_scheme.dart';
+import '../../../core/design_system/design_system.dart';
 import '../../../util/mixin/presentation_mixin.dart';
 import '../../definition/domain/definition.dart';
 import '../application/like_definition_service.dart';
@@ -39,7 +39,7 @@ class LikeWidget extends ConsumerWidget with PresentationMixin {
               child: Icon(
                 isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
                 color: isLiked
-                    ? likeColor
+                    ? context.dsColors.like
                     : Theme.of(context).colorScheme.outline,
                 size: 20,
               ),
@@ -52,7 +52,7 @@ class LikeWidget extends ConsumerWidget with PresentationMixin {
                     style: TextStyle(
                       fontSize: 16,
                       color: isLiked
-                          ? likeColor
+                          ? context.dsColors.like
                           : Theme.of(context).colorScheme.outline,
                     ),
                   )

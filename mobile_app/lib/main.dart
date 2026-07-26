@@ -21,11 +21,11 @@ import 'core/common_provider/is_loading_overlay_state.dart';
 import 'core/common_provider/key_provider.dart';
 import 'core/common_widget/dialog/loading_dialog.dart';
 import 'core/common_widget/error_and_retry_widget.dart';
+import 'core/design_system/design_system.dart';
 import 'core/router/app_router.dart';
 import 'feature/force_event/application/app_config_state.dart';
 import 'feature/force_event/presentation/app_config_gate.dart';
 import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
-import 'util/constant/theme_data.dart';
 import 'util/firebase_options/firebase_options.dart';
 import 'util/logger.dart';
 import 'util/web_device_preview.dart';
@@ -148,8 +148,8 @@ class _MyAppState extends ConsumerState<MyApp> {
               ),
             ],
           ),
-      theme: getThemeData(ThemeMode.light, context),
-      darkTheme: getThemeData(ThemeMode.dark, context),
+      theme: buildDsThemeData(Brightness.light),
+      darkTheme: buildDsThemeData(Brightness.dark),
       builder: (context, child) {
         // 強制アップデート関連の処理
         final asyncIsRequiredUpdate = ref.watch(isRequiredAppUpdateProvider);
