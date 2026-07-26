@@ -4,9 +4,9 @@
 // 分類作業と、後続の違反ベースライン（#262）の材料として使う。
 //
 // 使い方:
-//   dart run tool/design_system_audit/audit.dart            # サマリを表示
-//   dart run tool/design_system_audit/audit.dart --tsv      # 明細を TSV で出力
-//   dart run tool/design_system_audit/audit.dart --tsv > audit.tsv
+//   dart run tool/design_system_audit/audit.dart              # サマリを表示
+//   dart run tool/design_system_audit/audit.dart --tsv        # 明細（診断用。行番号を含む）
+//   dart run tool/design_system_audit/audit.dart --baseline   # 安定 ID 単位の件数（比較用）
 import 'dart:io';
 
 /// 抽出カテゴリと、その検出パターン。
@@ -38,10 +38,32 @@ class _Hit {
   final String path;
   final int line;
   final String snippet;
+
+  /// ベースライン比較に使う安定 ID。行番号を含めないため、
+  /// 無関係な行の挿入・削除では変化しない。
+  String get id => '$category\t$path\t${_normalize(snippet)}';
+}
+
+/// snippet を安定 ID 用に正規化する。
+///
+/// 1. 文字列リテラルを `''` へマスクする（表示文言の変更で ID を変えない）
+/// 2. 連続する空白を 1 つに畳む
+/// 3. 末尾の `,` `;` を除去する
+String _normalize(String snippet) {
+  var s = snippet
+      .replaceAll(RegExp("'(?:[^'\\\\]|\\\\.)*'"), "''")
+      .replaceAll(RegExp('"(?:[^"\\\\]|\\\\.)*"'), "''")
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim();
+  while (s.endsWith(',') || s.endsWith(';')) {
+    s = s.substring(0, s.length - 1).trimRight();
+  }
+  return s;
 }
 
 void main(List<String> args) {
   final asTsv = args.contains('--tsv');
+  final asBaseline = args.contains('--baseline');
 
   final files =
       Directory('lib')
@@ -77,6 +99,20 @@ void main(List<String> args) {
         hits.add(_Hit(entry.key, path, i + 1, line.trim()));
       }
     }
+  }
+
+  if (asBaseline) {
+    // 同一 ID は複数行に現れるため、件数付きの multiset として出力する。
+    final counts = <String, int>{};
+    for (final hit in hits) {
+      counts[hit.id] = (counts[hit.id] ?? 0) + 1;
+    }
+    final ids = counts.keys.toList()..sort();
+    stdout.writeln('category\tpath\tnormalized\tcount');
+    for (final id in ids) {
+      stdout.writeln('$id\t${counts[id]}');
+    }
+    return;
   }
 
   if (asTsv) {

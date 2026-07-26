@@ -41,11 +41,128 @@ Issue: #258（親） / 本仕様の確定: #259
 |---|---|---|---|
 | color | `ColorScheme` + `DsColors`（`ThemeExtension`） | 既存 `lightColorScheme` / `darkColorScheme` をそのまま維持。`likeColor` のような意味色のみ拡張 | 監査 3.6 |
 | typography | `TextTheme` + `DsTypography` | 現行の実効値（`titleLarge` / `titleMedium` / `bodyLarge` + Flutter デフォルト）を固定してから意味名を与える | 監査 3.6 |
-| spacing | `DsSpacing` | 4 の倍数スケール（4 / 8 / 16 / 24 / 32 / 40） | 監査 3.1 / 3.2 |
-| radius | `DsRadius` | pill（48）、container（16）、shimmer（2） | 監査 3.3 |
-| size | `DsSize` | アイコン（16 / 20 / 24）、その他の固定寸法 | 監査 3.2 |
-| elevation | `DsElevation` | none(0) / hairline(0.1) / raised(3) | 監査 3.4 |
-| opacity | `DsOpacity` | disabled 相当（0.3）など、実利用が確認できた範囲のみ | 監査 3.5 |
+| spacing | `DsSpacing` | 3.1 の公開 member | 監査 3.1 / 3.2 |
+| radius | `DsRadius` | 3.2 の公開 member | 監査 3.3 |
+| size | `DsSize` | 3.3 の公開 member | 監査 3.2 |
+| elevation | `DsElevation` | 3.4 の公開 member | 監査 3.4 |
+| opacity | `DsOpacity` | 3.5 の公開 member | 監査 3.5 |
+
+以下 3.1〜3.5 が **#260 が実装する公開 API の確定リスト**。値は現行の実効値をそのまま採用し、
+見た目を変えない。写像表に無い値は 3.6 の個別判定表で扱う。
+
+### 3.1 `DsSpacing`
+
+| member | 値 | 用途 |
+|---|---:|---|
+| `tight` | 4 | アイコンと文言など、密結合した要素の間 |
+| `inline` | 8 | 同一ブロック内で隣接する要素の間 |
+| `item` | 16 | リスト項目・フォーム部品など、独立した要素の間 |
+| `section` | 24 | セクションの間 |
+| `block` | 32 | 画面内の大きなまとまりの間 |
+| `screenEnd` | 40 | 画面末尾・空表示まわりの余白 |
+| `screenHorizontal` | 16 | 画面本文の左右 padding |
+| `screenContent` | 24 | 画面本文の内周 padding |
+| `containerContent` | 16 | カード・タイル・ダイアログの内周 padding |
+
+同じ値でも役割が違えば別 member にする（`item` と `screenHorizontal` は共に 16）。
+**写像表のキーは（構文カテゴリ, 値）の組**であり、値だけでは決まらない。
+
+#### 選択フロー
+
+1. 要素の**内側**の余白か、要素**間**の余白か
+2. 内側 — 画面本文の左右なら `screenHorizontal`、画面本文の内周なら `screenContent`、
+   カード・タイル・ダイアログの内周なら `containerContent`
+3. 間 — 結びつきが強い順に `tight` → `inline` → `item` → `section` → `block`、
+   画面末尾なら `screenEnd`
+
+#### `Gap` の写像
+
+| 現行 | member |
+|---|---|
+| `Gap(4)` | `DsSpacing.tight` |
+| `Gap(8)` | `DsSpacing.inline` |
+| `Gap(16)` | `DsSpacing.item` |
+| `Gap(24)` | `DsSpacing.section` |
+| `Gap(32)` | `DsSpacing.block` |
+| `Gap(40)` | `DsSpacing.screenEnd` |
+
+#### `EdgeInsets` の写像
+
+| 現行 | member |
+|---|---|
+| `symmetric(horizontal: 16)` / `only(left: 16, right: 16)` | `screenHorizontal` |
+| `all(16)` | `containerContent` |
+| `all(24)` / `symmetric(vertical: 24)` / `symmetric(horizontal: 24)` / `only(top: 24, left: 24, right: 24)` | `screenContent` |
+| `only(top: 16)` / `only(bottom: 16)` | `item` |
+| `only(top: 8)` / `symmetric(vertical: 8)` | `inline` |
+| `only(top: 32)` | `block` |
+| `only(top: 8, bottom: 40)` / `only(top: 40, bottom: 16)` | `inline` / `screenEnd` / `item` の組み合わせ |
+
+`only(left: 16, right: 16)` は `symmetric(horizontal: 16)` と同義の重複値であり、写像時に集約する。
+
+### 3.2 `DsRadius`
+
+| member | 値 | 用途 |
+|---|---:|---|
+| `pill` | 48 | ボタン・アバターなど pill 型の要素 |
+| `field` | 40 | 検索・入力フィールド |
+| `container` | 16 | ダイアログ・カード・メニュー |
+| `subtle` | 4 | スナックバー・ローディング表示の弱い角丸 |
+| `shimmer` | 2 | shimmer の矩形 |
+
+### 3.3 `DsSize`
+
+| member | 値 | 用途 |
+|---|---:|---|
+| `iconSmall` | 16 | 本文に添えるアイコン |
+| `iconMedium` | 20 | 標準のアクションアイコン |
+| `iconLarge` | 24 | 単独で意味を持つアイコン |
+| `avatarIcon` | 40 | プロフィール系の大アイコン |
+
+`SizedBox` による固定高（検索フィールドの 80 など 4 件）はトークンにせず、
+対応する Ds コンポーネント内部へ閉じる。
+
+### 3.4 `DsElevation`
+
+| member | 値 | 用途 |
+|---|---:|---|
+| `none` | 0 | 既定。AppBar / ダイアログ / ボタン |
+| `hairline` | 0.1 | AppBar / BottomNavigationBar の境界表現 |
+
+`elevation: 3` は FAB 専用（5 章で Ds 対象外と定めた）ため、
+「現に実装で使う」基準を満たさずトークン化しない。
+
+### 3.5 `DsOpacity`
+
+| member | 値 | 用途 |
+|---|---:|---|
+| `disabled` | 0.3 | 無効状態・オーバーレイの遮蔽 |
+
+0.4 / 0.8 は単独利用でありコンポーネント内部へ閉じる。`withOpacity(0)` は
+不透明度ではなく透明色の指定なので `Colors.transparent` を使う。
+
+### 3.6 写像表で決まらない値の個別判定
+
+以下は #260 が個別に処理する。行番号は対象コミット `5c366b7` 時点のもの。
+
+| 箇所 | 現行 | 判定 |
+|---|---|---|
+| `definition_detail_page.dart:78` | `Gap(2)` | `tight`（4）へ丸める |
+| `profile_tile.dart:107` | `Gap(20)` | `item`（16）へ丸める |
+| `word_page_shimmer.dart:23` | `Gap(26)` | `section`（24）へ丸める |
+| `setting_page.dart:158` | `Gap(72)` | 例外申請。アカウント削除ボタンを他導線から隔離する画面固有余白 |
+| `word_registration_page.dart:200`, `write_definition_base_page.dart:131` | `Gap(300)` | 例外申請。キーボード回避の下部余白 |
+| `post_definition_fab.dart:150` ほか | `Gap(10)` / `radius 28` / `elevation 3` / `opacity 0.35` / `padding(20, 12)` | FAB は Ds 対象外。例外申請 |
+| `word_search_result_page.dart:67` | `symmetric(horizontal: 36)` | `screenContent`（24）との差分意図を確認し、無ければ集約 |
+| `dictionary_everyone_page.dart:36`, `user_search_page.dart:17` | `symmetric(horizontal: 40)` | `DsSearchField` 内部へ閉じる |
+| `word_page_shimmer.dart:15` | `symmetric(horizontal: 20)` | `DsShimmer` 利用側で `screenHorizontal` へ集約 |
+| `dictionary_word_index_list.dart:111` | `symmetric(horizontal: 16, vertical: 6)` | `DsListTile` 内部へ閉じる |
+| `setting_page.dart:43` | `only(left: 24, right: 20)` | 左右非対称の意図が読めない。`screenContent` へ集約 |
+| `like_widget.dart:34` | `only(top: 4, right: 4, bottom: 4)` | タップ領域の調整。`DsIconButton` 内部へ閉じる |
+| `self_definition_action_icon_button.dart:201` | `only(top: 16, bottom: 8)` | `DsDialog` の `contentPadding` として内部へ閉じる |
+| `overlay_force_update_dialog.dart`, `overlay_in_maintenance_dialog.dart` | `radius 8` | `DsDialog` 移行時に `container`（16）へ統一。golden 差分を意図として説明する |
+| `changeable_profile_image.dart` | `size: 28` / `opacity 0.8` | コンポーネント内部値として閉じる |
+| `select_post_type_button.dart` | `size: 8` | 装飾ドット。コンポーネント内部値として閉じる |
 
 ### トークン追加基準
 
@@ -105,6 +222,15 @@ Ds コンポーネントにしない:
 3. `DsEmptyView` / `DsErrorView` / `DsShimmer`
 4. `DsListTile`
 5. `DsSearchField`
+6. `DsIconButton`（`self_definition_action_icon_button` / `other_user_action_icon_button` で
+   サイズ・padding の直書きが重複している。監査 4.2）
+
+#### 初期セットに含めないものと根拠
+
+| 対象 | 根拠 |
+|---|---|
+| FAB | 実利用は `post_definition_fab.dart` の 1 箇所のみ。定義投稿への遷移というドメイン知識と独自の展開アニメーションを持ち、「2 画面以上で同じ見た目・操作仕様」を満たさない。4 章の基準どおり feature 側の責務とし、#261 でも扱わない |
+| motion | 監査でトークン化に足る実利用が確認できなかった（3 章） |
 
 ### Widgetbook use case の最低セット
 

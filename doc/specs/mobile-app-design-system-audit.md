@@ -12,8 +12,9 @@ Issue: #259（親: #258）
 
 ```bash
 cd mobile_app
-dart run tool/design_system_audit/audit.dart          # カテゴリ別・ファイル別サマリ
-dart run tool/design_system_audit/audit.dart --tsv    # 明細（category / path / line / snippet）
+dart run tool/design_system_audit/audit.dart             # カテゴリ別・ファイル別サマリ
+dart run tool/design_system_audit/audit.dart --tsv       # 明細（診断用。行番号を含む）
+dart run tool/design_system_audit/audit.dart --baseline  # 安定 ID 単位の件数（比較用。7 章）
 ```
 
 スクリプトは正規表現ベースで、1 行 1 カテゴリにつき 1 件までを数える。
@@ -165,6 +166,10 @@ motion（アニメーション時間・カーブ）はトークン化に足る�
 3. `DsEmptyView` / `DsErrorView` / `DsShimmer`（空・エラー・読み込みの 3 ステート）
 4. `DsListTile`（4.2 のリスト行の共通形）
 5. `DsSearchField`（検索テキストフィールドの共通形）
+6. `DsIconButton`（4.2 のアイコンボタン重複の共通形）
+
+FAB は実利用が `post_definition_fab.dart` の 1 箇所のみで、遷移先と独自アニメーションを
+持つため対象外（正本仕様 5 章）。
 
 ## 5. OS 差分 / light-dark 差分
 
@@ -208,8 +213,62 @@ motion（アニメーション時間・カーブ）はトークン化に足る�
 
 ## 7. 違反ベースラインの作り方（#262 への引き継ぎ）
 
-1. 本スクリプトの `--tsv` 出力を `mobile_app/tool/design_system_audit/baseline.tsv` として固定する
-2. CI では再実行結果とベースラインを比較し、**新規違反または件数増加を失敗**とする
-3. ベースラインの更新は、既存 UI を Ds へ移行した PR でのみ許可する（件数は減る方向のみ）
-4. 色は現時点で 0 件のため、`color-literal` / `color-named` は
-   **ベースラインなしの即時失敗**ルールにできる
+### 7.1 安定 ID
+
+比較の単位は次の 3 つ組とする。
+
+```
+ID = (category, path, 正規化した snippet)
+```
+
+正規化規則（`audit.dart` の `_normalize`）:
+
+1. 文字列リテラルを `''` へマスクする（表示文言の変更で ID を変えない）
+2. 連続する空白を 1 つに畳む
+3. 末尾の `,` `;` を除去する
+
+**行番号は ID に含めない。** `--tsv` の `line` 列は人が該当箇所を開くための
+**診断専用**であり、比較には使わない。行番号を比較に含めると、既存違反より前への
+無関係な行追加だけで以降がすべて「新規」になる。
+
+### 7.2 ベースラインの形式と比較
+
+同一 ID は同一ファイル内に複数回現れるため、ベースラインは
+**ID → 件数の multiset** とする。`--baseline` がこの形式を出力する。
+
+```bash
+dart run tool/design_system_audit/audit.dart --baseline \
+  > tool/design_system_audit/baseline.tsv
+# category  path  normalized  count
+```
+
+CI の判定:
+
+| 差分 | 結果 |
+|---|---|
+| ベースラインに無い ID が出現 | **失敗** |
+| 既存 ID の count が増加 | **失敗** |
+| 既存 ID の count が減少 / ID が消滅 | 成功（ベースライン更新を促す） |
+
+件数だけの比較では「既存 1 件の削除と新規 1 件の追加」が相殺されるが、
+ID 単位で見るため相殺は起きない。
+
+### 7.3 ベースラインの更新が許される場合
+
+1. 既存 UI を Ds へ移行し、count が減る PR
+2. ファイル移動 / rename を含む PR — ID に `path` を含むため全件が新規扱いになる。
+   この場合はベースラインの再生成を許可する。ただし `path` を除いた
+   `(category, 正規化 snippet)` 別の合計 count が増えていないことを PR で確認し、
+   理由を PR 本文に記す
+
+上記以外での「count が増える方向のベースライン更新」を禁止する。
+
+`path` を ID から外せば move に強くなるが、別ファイルへのコピー&ペーストを見逃し、
+修正箇所も特定できなくなるため採用しない。AST fingerprint は #262 で
+「AST ベースの custom lint と軽量スクリプトを比較して方式を決める」ことになっており、
+本 Issue では先取りしない。
+
+### 7.4 色の扱い
+
+色は現時点で 0 件のため、`color-literal` / `color-named` は
+**ベースラインなしの即時失敗**ルールにできる。
