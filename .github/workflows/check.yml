@@ -106,6 +106,9 @@ jobs:
       - name: Design system check
         run: nix develop .#ci-mobile --command just mobile-ds-check
 
+      - name: Widgetbook build
+        run: nix develop .#ci-mobile --command just mobile-widgetbook-build
+
   mobile-test:
     needs: changes
     if: needs.changes.outputs.mobile == 'true'
