@@ -107,9 +107,7 @@ class _SearchFieldPreviewState extends State<_SearchFieldPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: DsSpacing.screenHorizontalInsets,
-      child: DsSearchField(controller: _controller, hintText: widget.hintText),
-    );
+    // 左右余白は DsSearchField が内部に持つため、ここでは重ねない（#280）。
+    return DsSearchField(controller: _controller, hintText: widget.hintText);
   }
 }

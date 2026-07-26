@@ -11,6 +11,9 @@ import '../token/ds_theme_context.dart';
 /// 入力があるときだけクリアボタンを出す挙動を内部に閉じている。
 /// 検索以外の入力には `DsTextField` を使う。
 ///
+/// 高さ（48）と左右余白（40）は内部に閉じている。呼び出し側で
+/// `SizedBox` や `Padding` を重ねない（#280）。
+///
 /// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット-261
 class DsSearchField extends StatefulWidget {
   const DsSearchField({
@@ -54,6 +57,12 @@ class DsSearchField extends StatefulWidget {
 }
 
 class _DsSearchFieldState extends State<DsSearchField> {
+  /// 検索欄を画面本文より内側へ寄せるための左右余白。
+  ///
+  /// 画面ごとに 36 / 40 と揺れていたものを 40 へ統一し、内部に閉じた（#280）。
+  /// 用途がこのコンポーネントに閉じているため `DsSpacing` には出さない。
+  static const _horizontalInset = 40.0;
+
   late bool _isEmpty;
 
   @override
@@ -83,6 +92,13 @@ class _DsSearchFieldState extends State<DsSearchField> {
   Widget build(BuildContext context) {
     final colorScheme = context.dsColorScheme;
 
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: _horizontalInset),
+      child: _buildField(colorScheme),
+    );
+  }
+
+  Widget _buildField(ColorScheme colorScheme) {
     return TextField(
       controller: widget.controller,
       focusNode: widget.focusNode,

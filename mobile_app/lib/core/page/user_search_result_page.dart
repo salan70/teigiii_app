@@ -10,6 +10,7 @@ import '../../feature/user_profile/presentation/profile_tile.dart';
 import '../../feature/user_profile/presentation/profile_tile_shimmer.dart';
 import '../../feature/user_search/application/user_search_state.dart';
 import '../../feature/user_search/presentation/search_user_text_field.dart';
+import '../design_system/design_system.dart';
 
 @RoutePage()
 class UserSearchResultPage extends ConsumerWidget {
@@ -36,8 +37,7 @@ class UserSearchResultPage extends ConsumerWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      vertical: 24,
-                      horizontal: 36,
+                      vertical: DsSpacing.section,
                     ),
                     child: SearchUserTextField(defaultText: searchWord),
                   ),

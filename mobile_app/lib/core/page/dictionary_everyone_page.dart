@@ -31,21 +31,7 @@ class DictionaryEveryonePage extends StatelessWidget {
         body: const Column(
           children: [
             Gap(DsSpacing.item),
-            // ignore: ds_hardcoded_spacing
-            // 理由: 検索欄の高さと左右余白は画面ごとに異なる（この画面は 80 / 40、
-            // word_search_result_page は高さ指定なし / 36）。DsSearchField へ
-            // 閉じ込めると他画面の見た目が変わるため、呼び出し側に残す。
-            // 追跡: #280
-            SizedBox(
-              height: 80,
-              // ignore: ds_hardcoded_spacing
-              // 理由: 上と同じ。検索欄の左右余白は画面ごとに異なる。
-              // 追跡: #280
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: SearchWordTextField(),
-              ),
-            ),
+            SearchWordTextField(),
             Expanded(child: DictionaryWordIndexList(targetUserId: null)),
           ],
         ),
