@@ -56,6 +56,9 @@ app.*.map.json
 
 **/coverage/
 
+# golden test の失敗時に生成される差分画像（再生成物）
+**/test/**/failures/
+
 *.env
 
 # Wrangler のローカルキャッシュ・state
