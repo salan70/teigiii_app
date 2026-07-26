@@ -69,21 +69,24 @@ trap 'rm -f "$out"' EXIT
 echo "Deploying to project=$project branch=$branch (from $raw_branch)" >&2
 echo "Pages Basic Auth is enforced by _worker.js (secrets on Pages project)" >&2
 
-wrangler_bin="$root/backend/node_modules/.bin/wrangler"
-if [[ ! -x "$wrangler_bin" ]]; then
-  echo "missing $wrangler_bin — run just backend-setup" >&2
-  exit 1
-fi
-
-# backend/ に cd しない（Workers 用 wrangler.toml を拾わせない）。
+# リポジトリ root で実行し、Workers 用 wrangler.toml を拾わせない。
+# ローカルで backend 依存があればその wrangler を使い、無ければ bunx（CI 向け）。
 # pipe+tee だと bun/wrangler が途中終了することがあるため、ファイルへ完全に書いてから表示する。
+wrangler_bin="$root/backend/node_modules/.bin/wrangler"
 set +e
 (
   cd "$root"
-  "$wrangler_bin" pages deploy "$web_dir" \
-    --project-name="$project" \
-    --branch="$branch" \
-    --commit-dirty=true
+  if [[ -x "$wrangler_bin" ]]; then
+    "$wrangler_bin" pages deploy "$web_dir" \
+      --project-name="$project" \
+      --branch="$branch" \
+      --commit-dirty=true
+  else
+    bunx --bun wrangler pages deploy "$web_dir" \
+      --project-name="$project" \
+      --branch="$branch" \
+      --commit-dirty=true
+  fi
 ) >"$out" 2>&1
 status=$?
 set -e
