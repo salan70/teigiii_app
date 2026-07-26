@@ -256,6 +256,32 @@ Ds コンポーネントにしない:
 - 既存違反はベースライン化し、CI では**新規違反・違反増加を失敗**させる（#262）
 - 色の直書きは現時点で 0 件のため、ベースラインなしで即時失敗とする
 
+### 違反検出（`ds_check`）
+
+`mobile_app/tool/ds_check.dart`（analyzer の AST 走査）で検出する。CI の `mobile-analyze` job で実行する。
+
+```bash
+just mobile-ds-check              # 検査（CI と同じ）
+just mobile-ds-baseline-update    # baseline 再生成
+```
+
+| ルール ID | 対象 |
+|---|---|
+| `ds_hardcoded_color` | `Color(0x...)` / `Colors.<名前>` |
+| `ds_hardcoded_text_style` | `TextStyle(...)` の直接生成 |
+| `ds_hardcoded_spacing` | `Gap` / `EdgeInsets.*` / `SizedBox(width:, height:)` の数値リテラル |
+| `ds_hardcoded_radius` | `BorderRadius.circular` / `Radius.circular` の数値リテラル |
+| `ds_forbidden_widget` | Material のボタン・入力・`AlertDialog` / `ListTile` / `IconButton` の直接利用 |
+| `ds_suppression_without_reason` | 理由・追跡 Issue のない `// ignore:` |
+
+対象は `lib/**`。`lib/core/design_system/**`、`lib/util/**`、generated（`*.g.dart` / `*.freezed.dart` / `*.gr.dart`）は除外する。
+
+判定:
+
+- baseline（`mobile_app/tool/ds_baseline.json`、ファイル × ルールの件数）に無い違反、または件数超過で**失敗**
+- `ds_hardcoded_color` と `ds_suppression_without_reason` は baseline 対象外で**常に 0 件必須**
+- baseline を下回ったら成功するが「baseline を更新せよ」と警告する。違反を減らした PR で `just mobile-ds-baseline-update` を実行してコミットする
+
 ### 既存 `core/common_widget` の扱い
 
 `core/common_widget` の共通ウィジェット（ボタン、ダイアログ、エラー表示、shimmer）は

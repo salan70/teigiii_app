@@ -103,6 +103,9 @@ jobs:
       - name: Analyze
         run: nix develop .#ci-mobile --command just mobile-analyze
 
+      - name: Design system check
+        run: nix develop .#ci-mobile --command just mobile-ds-check
+
   mobile-test:
     needs: changes
     if: needs.changes.outputs.mobile == 'true'
