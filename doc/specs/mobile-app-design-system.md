@@ -33,6 +33,9 @@ Issue: #258（親） / 本仕様の確定: #259
 - **デザインシステムのコードは Web セーフに保つ**（`dart:io` に依存しない）。
   Web QA 環境（#254 / #275）でカタログとパイロット画面がビルドできる状態を維持する
 
+<!-- @code mobile_app/lib/core/design_system/theme/ds_theme.dart#buildDsThemeData -->
+<!-- @code mobile_app/lib/core/design_system/token/ds_colors.dart#DsColors -->
+<!-- @code mobile_app/lib/core/design_system/token/ds_typography.dart#DsTypography -->
 ## 3. トークン taxonomy
 
 意味ベース（用途）で命名する。値ベースの名前（`gap16`、`greenPrimary`）を禁止する。
@@ -50,6 +53,7 @@ Issue: #258（親） / 本仕様の確定: #259
 以下 3.1〜3.5 が **#260 が実装する公開 API の確定リスト**。値は現行の実効値をそのまま採用し、
 見た目を変えない。写像表に無い値は 3.6 の個別判定表で扱う。
 
+<!-- @code mobile_app/lib/core/design_system/token/ds_spacing.dart#DsSpacing -->
 ### 3.1 `DsSpacing`
 
 | member | 値 | 用途 |
@@ -100,6 +104,7 @@ Issue: #258（親） / 本仕様の確定: #259
 
 `only(left: 16, right: 16)` は `symmetric(horizontal: 16)` と同義の重複値であり、写像時に集約する。
 
+<!-- @code mobile_app/lib/core/design_system/token/ds_radius.dart#DsRadius -->
 ### 3.2 `DsRadius`
 
 | member | 値 | 用途 |
@@ -110,6 +115,7 @@ Issue: #258（親） / 本仕様の確定: #259
 | `subtle` | 4 | スナックバー・ローディング表示の弱い角丸 |
 | `shimmer` | 2 | shimmer の矩形 |
 
+<!-- @code mobile_app/lib/core/design_system/token/ds_size.dart#DsSize -->
 ### 3.3 `DsSize`
 
 | member | 値 | 用途 |
@@ -122,6 +128,7 @@ Issue: #258（親） / 本仕様の確定: #259
 `SizedBox` による固定高（検索フィールドの 80 など 4 件）はトークンにせず、
 対応する Ds コンポーネント内部へ閉じる。
 
+<!-- @code mobile_app/lib/core/design_system/token/ds_elevation.dart#DsElevation -->
 ### 3.4 `DsElevation`
 
 | member | 値 | 用途 |
@@ -132,6 +139,7 @@ Issue: #258（親） / 本仕様の確定: #259
 `elevation: 3` は FAB 専用（5 章で Ds 対象外と定めた）ため、
 「現に実装で使う」基準を満たさずトークン化しない。
 
+<!-- @code mobile_app/lib/core/design_system/token/ds_opacity.dart#DsOpacity -->
 ### 3.5 `DsOpacity`
 
 | member | 値 | 用途 |
@@ -154,7 +162,7 @@ Issue: #258（親） / 本仕様の確定: #259
 | `word_registration_page.dart:200`, `write_definition_base_page.dart:131` | `Gap(300)` | 例外申請。キーボード回避の下部余白 |
 | `post_definition_fab.dart:150` ほか | `Gap(10)` / `radius 28` / `elevation 3` / `opacity 0.35` / `padding(20, 12)` | FAB は Ds 対象外。例外申請 |
 | `word_search_result_page.dart:67` | `symmetric(horizontal: 36)` | `screenContent`（24）との差分意図を確認し、無ければ集約 |
-| `dictionary_everyone_page.dart:36`, `user_search_page.dart:17` | `symmetric(horizontal: 40)` | `DsSearchField` 内部へ閉じる |
+| `dictionary_everyone_page.dart:36`, `user_search_page.dart:17` | `symmetric(horizontal: 40)` | ~~`DsSearchField` 内部へ閉じる~~ → **呼び出し側に残す**（#264 で判断を訂正。下記参照） |
 | `word_page_shimmer.dart:15` | `symmetric(horizontal: 20)` | `DsShimmer` 利用側で `screenHorizontal` へ集約 |
 | `dictionary_word_index_list.dart:111` | `symmetric(horizontal: 16, vertical: 6)` | `DsListTile` 内部へ閉じる |
 | `setting_page.dart:43` | `only(left: 24, right: 20)` | 左右非対称の意図が読めない。`screenContent` へ集約 |
@@ -163,6 +171,22 @@ Issue: #258（親） / 本仕様の確定: #259
 | `overlay_force_update_dialog.dart`, `overlay_in_maintenance_dialog.dart` | `radius 8` | `DsDialog` 移行時に `container`（16）へ統一。golden 差分を意図として説明する |
 | `changeable_profile_image.dart` | `size: 28` / `opacity 0.8` | コンポーネント内部値として閉じる |
 | `select_post_type_button.dart` | `size: 8` | 装飾ドット。コンポーネント内部値として閉じる |
+
+### #264 での判断の訂正
+
+`DsSearchField` の外枠（高さ・左右余白）は、監査時点では「コンポーネント内部へ閉じる」と
+判断していたが、**呼び出し元によって値が違う**ことがパイロット移行で判明した。
+
+| 画面 | 高さ | 左右余白 |
+|---|---|---|
+| `DictionaryEveryonePage` | 80 | 40 |
+| `WordSearchResultPage` | 指定なし | 36 |
+| `UserSearchPage` | 80 | 40 |
+
+内部へ閉じると `WordSearchResultPage` の見た目が変わるため、呼び出し側に残して
+例外申請した。統一は #280 で扱う。
+
+`Gap(300)`（キーボード回避）は予定どおり例外申請とし、仕組みでの置き換えを #281 で扱う。
 
 ### トークン追加基準
 
@@ -215,6 +239,17 @@ Ds コンポーネントにしない:
 - 既存の `ErrorAndRetryWidget.cannotInquire` / `.canInquire`、
   `ShimmerWidget.rectangular` / `.circular` を規約のリファレンス実装とする
 
+<!-- @code mobile_app/lib/core/design_system/component/ds_button.dart#DsFilledButton -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_button.dart#DsOutlinedButton -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_dialog.dart#DsDialog -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_dialog.dart#DsConfirmDialog -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_feedback.dart#DsEmptyView -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_feedback.dart#DsErrorView -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_feedback.dart#DsShimmer -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_list_tile.dart#DsListTile -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_search_field.dart#DsSearchField -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_icon_button.dart#DsIconButton -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_text_field.dart#DsTextField -->
 ### 初期コンポーネント最低セット（#261）
 
 1. `DsFilledButton` / `DsOutlinedButton`
@@ -331,6 +366,23 @@ const Gap(300),
 - `DefinitionPostPage` / `WriteDefinitionBasePage`
 
 いずれも**振る舞いと意図した見た目を変えずに**移行する。
+
+## 6.5 実行方法
+
+| 目的 | コマンド | CI |
+|---|---|---|
+| 静的解析 | `just mobile-analyze` | ✓ |
+| テスト（golden 除く） | `just mobile-test` | ✓ |
+| デザインシステム違反検出 | `just mobile-ds-check` | ✓ |
+| Widgetbook の build 検証 | `just mobile-widgetbook-build` | ✓ |
+| 仕様とコードのリンク検証 | `just docbridge-check` | ✓ |
+| カタログをローカル起動 | `just mobile-widgetbook` | — |
+| golden の比較 | `just mobile-test-golden` | — |
+| golden の撮り直し | `just mobile-test-golden-update` | — |
+| 違反 baseline の再生成 | `just mobile-ds-baseline-update` | — |
+
+`just mobile-ds-baseline-update` は**違反が減ったときだけ**実行する。
+増えたときに実行して通すのは禁止。例外が必要なら 6 章の例外申請を使う。
 
 ## 7. 検証条件（後続 Issue への引き継ぎ）
 

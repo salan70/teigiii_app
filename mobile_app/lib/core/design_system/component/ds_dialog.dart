@@ -9,7 +9,7 @@ import '../token/ds_theme_context.dart';
 ///
 /// 中身と操作は [content] / [actions] で渡す。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット261
+/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット-261
 class DsDialog extends StatelessWidget {
   const DsDialog({super.key, required this.content, required this.actions});
 
@@ -42,7 +42,7 @@ class DsDialog extends StatelessWidget {
 ///
 /// キャンセルと確定の 2 択だけを持つ。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット261
+/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット-261
 class DsConfirmDialog extends StatelessWidget {
   const DsConfirmDialog({
     super.key,

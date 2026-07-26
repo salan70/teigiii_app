@@ -12,7 +12,7 @@ import 'package:flutter/widgets.dart';
 /// 3. 間 — 結びつきが強い順に [tight] → [inline] → [item] → [section] →
 ///    [block]、画面末尾なら [screenEnd]
 ///
-/// @doc doc/specs/mobile-app-design-system.md#31-dsspacing
+/// @doc doc/specs/mobile-app-design-system.md#3-1-dsspacing
 abstract final class DsSpacing {
   /// アイコンと文言など、密結合した要素の間。
   static const double tight = 4;

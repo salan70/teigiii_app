@@ -1,6 +1,6 @@
 /// 標高の semantic token。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#34-dselevation
+/// @doc doc/specs/mobile-app-design-system.md#3-4-dselevation
 abstract final class DsElevation {
   /// 既定。AppBar / ダイアログ / ボタン。
   static const double none = 0;

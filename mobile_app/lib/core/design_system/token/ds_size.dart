@@ -3,7 +3,7 @@
 /// 固定高（検索フィールドの 80 など）はトークンにせず、対応する Ds
 /// コンポーネント内部へ閉じる。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#33-dssize
+/// @doc doc/specs/mobile-app-design-system.md#3-3-dssize
 abstract final class DsSize {
   /// 本文に添えるアイコン。
   static const double iconSmall = 16;

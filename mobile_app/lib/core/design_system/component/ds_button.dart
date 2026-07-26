@@ -19,7 +19,7 @@ enum DsButtonTone {
 ///
 /// [onPressed] に null を渡すと disabled になる。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット261
+/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット-261
 class DsFilledButton extends StatelessWidget {
   /// 画面の主たるアクション用。
   const DsFilledButton.primary({
@@ -65,7 +65,7 @@ class DsFilledButton extends StatelessWidget {
 ///
 /// [onPressed] に null を渡すと disabled になる。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット261
+/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット-261
 class DsOutlinedButton extends StatelessWidget {
   /// 画面の主たるアクション用。
   const DsOutlinedButton.primary({

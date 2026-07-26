@@ -11,7 +11,7 @@ import '../token/ds_theme_context.dart';
 /// 入力があるときだけクリアボタンを出す挙動を内部に閉じている。
 /// 検索以外の入力には `DsTextField` を使う。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット261
+/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット-261
 class DsSearchField extends StatefulWidget {
   const DsSearchField({
     super.key,

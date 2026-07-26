@@ -10,7 +10,7 @@ import '../token/ds_theme_context.dart';
 ///
 /// 行の意味は [label] が持ち、遷移先の知識は呼び出し側に置く。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット261
+/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット-261
 class DsListTile extends StatelessWidget {
   /// 先頭にアイコンを置く行。
   const DsListTile.withLeadingIcon({

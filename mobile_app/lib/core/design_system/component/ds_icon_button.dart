@@ -6,7 +6,7 @@ import '../token/ds_size.dart';
 ///
 /// スクリーンリーダー向けのラベルを必須にしている。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット261
+/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット-261
 class DsIconButton extends StatelessWidget {
   const DsIconButton({
     super.key,

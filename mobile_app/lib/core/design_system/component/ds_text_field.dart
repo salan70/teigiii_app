@@ -15,7 +15,7 @@ enum DsTextFieldSize {
 ///
 /// `InputDecoration` や `TextStyle` は公開 API で受け取らない。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット261
+/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット-261
 class DsTextField extends StatelessWidget {
   /// 1 行で収まることを想定した入力。
   const DsTextField.singleLine({

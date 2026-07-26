@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 
 /// 角丸の semantic token。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#32-dsradius
+/// @doc doc/specs/mobile-app-design-system.md#3-2-dsradius
 abstract final class DsRadius {
   /// ボタン・アバターなど pill 型の要素。
   static const double pill = 48;

@@ -11,7 +11,7 @@ import 'ds_button.dart';
 
 /// 空状態の表示。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット261
+/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット-261
 class DsEmptyView extends StatelessWidget {
   const DsEmptyView({super.key, required this.message});
 
@@ -39,7 +39,7 @@ class DsEmptyView extends StatelessWidget {
 ///
 /// 問い合わせ導線のようなドメイン知識は持たず、渡された操作を並べるだけ。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット261
+/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット-261
 class DsErrorView extends StatelessWidget {
   /// 本文つきのエラー表示。
   ///
@@ -144,7 +144,7 @@ class _DsCompactErrorView extends StatelessWidget {
 
 /// 読み込み中のプレースホルダ。
 ///
-/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット261
+/// @doc doc/specs/mobile-app-design-system.md#初期コンポーネント最低セット-261
 class DsShimmer extends StatelessWidget {
   /// 矩形のプレースホルダ。
   const DsShimmer.rectangular({
