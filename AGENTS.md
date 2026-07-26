@@ -67,6 +67,7 @@ just mobile-run-dev-profile-on <device-id>
 
 すべての依頼に対し、`.agents/skills/` に該当する skill があれば使用する。
 例外はユーザーが明示的にスキル不要と指示した場合のみ。
+`mobile_app/` の UI 実装・変更は `implementing-ui-with-design-system` を必ず使用する。
 
 ## plan ワークフロー
 
