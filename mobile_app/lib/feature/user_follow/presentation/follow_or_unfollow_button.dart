@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../../core/common_widget/button/filled_button.dart';
 import '../../../../core/common_widget/button/outlined_button.dart';
-import '../../../../core/common_widget/shimmer_widget.dart';
 import '../../../util/mixin/presentation_mixin.dart';
 import '../application/user_follow_service.dart';
 import '../application/user_follow_state.dart';
