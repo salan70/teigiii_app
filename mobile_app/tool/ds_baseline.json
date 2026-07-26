@@ -37,9 +37,6 @@
   "lib/core/page/definition_post_page.dart": {
     "ds_hardcoded_elevation": 2
   },
-  "lib/core/page/dictionary_everyone_page.dart": {
-    "ds_hardcoded_spacing": 1
-  },
   "lib/core/page/dictionary_individual_page.dart": {
     "ds_hardcoded_spacing": 3
   },
@@ -65,11 +62,8 @@
   "lib/core/page/user_list_muted_page.dart": {
     "ds_hardcoded_spacing": 3
   },
-  "lib/core/page/user_search_page.dart": {
-    "ds_hardcoded_spacing": 1
-  },
   "lib/core/page/user_search_result_page.dart": {
-    "ds_hardcoded_spacing": 2
+    "ds_hardcoded_spacing": 1
   },
   "lib/core/page/welcome_page.dart": {
     "ds_hardcoded_spacing": 4
@@ -84,7 +78,7 @@
     "ds_forbidden_widget": 3
   },
   "lib/core/page/word_search_result_page.dart": {
-    "ds_hardcoded_spacing": 5
+    "ds_hardcoded_spacing": 4
   },
   "lib/core/page/word_top_page.dart": {
     "ds_hardcoded_spacing": 3,
