@@ -224,6 +224,13 @@ Ds コンポーネントにしない:
 5. `DsSearchField`
 6. `DsIconButton`（`self_definition_action_icon_button` / `other_user_action_icon_button` で
    サイズ・padding の直書きが重複している。監査 4.2）
+7. `DsTextField`（検索以外の汎用テキスト入力。`singleLine` / `multiline` の closed variant を持つ）
+
+`DsTextField` は #259 時点の最低セットに含めていなかったが、パイロットの
+`DefinitionPostPage` / `WriteDefinitionBasePage` が `TextFormField` を 6 箇所で使っており、
+これなしでは入力系パイロットが成立しないため #261 のスコープに含める。
+`controller` / `focusNode` / `validator` / `maxLength` は受け取るが、
+`InputDecoration` や `TextStyle` は公開 API で受け取らない。
 
 #### 初期セットに含めないものと根拠
 
@@ -248,6 +255,23 @@ Ds コンポーネントにしない:
 - 既存 UI は**変更時に**移行する。一括移行しない
 - 既存違反はベースライン化し、CI では**新規違反・違反増加を失敗**させる（#262）
 - 色の直書きは現時点で 0 件のため、ベースラインなしで即時失敗とする
+
+### 既存 `core/common_widget` の扱い
+
+`core/common_widget` の共通ウィジェット（ボタン、ダイアログ、エラー表示、shimmer）は
+Ds コンポーネントの前身にあたる。**実体を `design_system/component/` へ移設し、
+旧パスは `@Deprecated` な `typedef` として残す**。
+
+- 二重実装を作らない（見た目の修正漏れを防ぐ）
+- 非パイロット画面は旧パス経由でそのまま動く（一括移行にしない）
+- `@Deprecated` のメッセージに移行先と追跡 Issue を必ず書く
+
+```dart
+@Deprecated('DsFilledButton を使う。全参照の移行後に削除する (#278)')
+typedef FilledButtonWidget = DsFilledButton;
+```
+
+旧 typedef の全廃は #278 で追跡する。
 
 ### 例外申請
 
@@ -288,8 +312,27 @@ const Gap(300),
 |---|---|
 | #260 トークン | light / dark 双方で全トークンが解決できる unit / widget test。`ThemeData` 構築に `BuildContext` 不要。既存テーマ値を意図せず変更していないこと |
 | #261 コンポーネント | 全公開コンポーネントに Widgetbook use case と widget test |
-| #262 CI | golden test、Flutter Accessibility Guideline 検査、違反ベースライン比較を CI で実行 |
+| #262 CI | Flutter Accessibility Guideline 検査（Ds コンポーネント）と違反ベースライン比較を CI で実行。golden は下記のとおり CI 対象外 |
 | #263 ドキュメント | 本仕様と主要コード宣言を DocBridge で双方向リンク（`just docbridge-check`） |
 | #264 パイロット | 2 系統の移行前後で golden が一致、または差分を意図として説明できること |
 
 共通: `just mobile-analyze`、`just mobile-test`、`just docbridge-check` が通ること。
+
+### golden test の位置づけ
+
+golden は**移行検証用のローカルツール**とし、**CI では実行しない**。
+
+- 開発は macOS、CI は `ubuntu-latest` であり、同一 Flutter でもラスタライズ結果が一致しない
+- CI を正本にすると、UI を変えるたびに golden 更新のための CI 往復が必要になる
+- 一方で「パイロット移行で見た目が変わっていないこと」の証明には golden が要る。
+  同一マシンで移行前後を撮り比べる用途であれば環境差の問題は発生しない
+
+運用:
+
+- golden test には `@Tags(['golden'])` を付ける
+- `just mobile-test` は `--exclude-tags golden`。CI もこれを使う
+- `just mobile-test-golden` をローカルで実行する。生成物はコミットする
+- golden を CI に常設化するかは #277 で判断する
+
+アクセシビリティ検査は **Ds コンポーネントのみ** CI 必須とする。
+既存画面へ一括適用すると初回から大量に失敗し、見た目を変えない方針とも衝突するため。
