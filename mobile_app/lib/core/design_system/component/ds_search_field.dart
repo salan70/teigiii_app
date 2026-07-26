@@ -125,6 +125,8 @@ class _DsSearchFieldState extends State<DsSearchField> {
         hintText: widget.hintText,
         filled: true,
         contentPadding: EdgeInsets.zero,
+        // maxLength 時の「0/9」カウンターは検索欄の高さ 48 を崩すため出さない。
+        counterText: '',
         border: const OutlineInputBorder(
           borderRadius: DsRadius.fieldBorder,
           borderSide: BorderSide.none,

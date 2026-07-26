@@ -53,6 +53,23 @@ void main() {
       expect(fieldSize.width, outerWidth - 40 * 2);
     });
 
+    testWidgets('maxLength を付けても高さ 48 を保つ', (tester) async {
+      final controller = TextEditingController();
+      addTearDown(controller.dispose);
+
+      await pumpDsWidget(
+        tester,
+        DsSearchField(
+          controller: controller,
+          hintText: '9桁のIDを入力',
+          maxLength: 9,
+        ),
+      );
+
+      expect(tester.getSize(find.byType(TextField)).height, 48);
+      expect(find.text('0/9'), findsNothing);
+    });
+
     testWidgets('確定すると onSubmitted が呼ばれる', (tester) async {
       final controller = TextEditingController();
       addTearDown(controller.dispose);

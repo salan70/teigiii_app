@@ -162,7 +162,7 @@ Issue: #258（親） / 本仕様の確定: #259
 | `word_registration_page.dart:200`, `write_definition_base_page.dart:131` | `Gap(300)` | 例外申請。キーボード回避の下部余白 |
 | `post_definition_fab.dart:150` ほか | `Gap(10)` / `radius 28` / `elevation 3` / `opacity 0.35` / `padding(20, 12)` | FAB は Ds 対象外。例外申請 |
 | `word_search_result_page.dart:67` | `symmetric(horizontal: 36)` | `screenContent`（24）との差分意図を確認し、無ければ集約 |
-| `dictionary_everyone_page.dart:36`, `user_search_page.dart:17` | `symmetric(horizontal: 40)` | ~~`DsSearchField` 内部へ閉じる~~ → **呼び出し側に残す**（#264 で判断を訂正。下記参照） |
+| `dictionary_everyone_page.dart:36`, `user_search_page.dart:17` | `symmetric(horizontal: 40)` | **`DsSearchField` 内部へ閉じる**（#280。#264 では呼び出し側に残したが、下記で統一） |
 | `word_page_shimmer.dart:15` | `symmetric(horizontal: 20)` | `DsShimmer` 利用側で `screenHorizontal` へ集約 |
 | `dictionary_word_index_list.dart:111` | `symmetric(horizontal: 16, vertical: 6)` | `DsListTile` 内部へ閉じる |
 | `setting_page.dart:43` | `only(left: 24, right: 20)` | 左右非対称の意図が読めない。`screenContent` へ集約 |
@@ -181,15 +181,19 @@ Issue: #258（親） / 本仕様の確定: #259
 | 画面 | 統一前の高さ | 統一前の左右余白 |
 |---|---|---|
 | `DictionaryEveryonePage` | 80（`SizedBox` で引き伸ばし） | 40 |
-| `WordSearchResultPage` | 48（固有値） | 36 |
-| `UserSearchPage` | 48（固有値） | 40 |
-| `UserSearchResultPage` | 48（固有値） | 36 |
+| `WordSearchResultPage` | 48（`DsSearchField` 固有値） | 36 |
+| `UserSearchPage` | 80（`SearchUserTextField` の `SizedBox`） | 40 |
+| `UserSearchResultPage` | 80（同上） | 16（外側。フィールド自体に左右余白なし） |
 
 - **高さは 48**（`DsSearchField` の固有値）に統一し、`SizedBox` による引き伸ばしをやめた。
-  80 に根拠がなく、1 画面だけが 32px 高かったため
-- **左右余白は 40** に統一し、`DsSearchField` 内部へ閉じた。36 と 40 の差に意図はない。
+  80 に根拠がなく、言葉検索の 1 画面とユーザー検索の 2 画面が引き伸ばされていたため
+- **左右余白は 40** に統一し、`DsSearchField` 内部へ閉じた。36 / 40 / 16 の差に意図はない。
   用途がこのコンポーネントに閉じているため `DsSpacing` には出さず、内部定数にしている
-- 呼び出し側で `SizedBox` / 左右 `Padding` を重ねない
+- `SearchUserTextField` も `DsSearchField` ベースへ移行し、ID 入力制約と
+  `KeyboardActions` はラッパー側に残した
+- `maxLength` を付けてもカウンター（`0/9`）は出さず、高さ 48 を崩さない
+- 呼び出し側で `SizedBox` / 左右 `Padding` を重ねない。結果画面の外側 16 は
+  リスト本文用であり、検索欄には掛けない（画面端から検索欄まで最終的に 40）
 
 `Gap(300)`（キーボード回避）は予定どおり例外申請とし、仕組みでの置き換えを #281 で扱う。
 
