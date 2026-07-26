@@ -8,7 +8,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -27,13 +26,14 @@ import 'feature/force_event/application/app_config_state.dart';
 import 'feature/force_event/presentation/app_config_gate.dart';
 import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
 import 'util/firebase_options/firebase_options.dart';
+import 'util/load_app_dotenv.dart';
 import 'util/logger.dart';
 import 'util/web_device_preview.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load();
+  await loadAppDotEnv();
 
   final flavor = Flavor.fromString(const String.fromEnvironment('flavor'));
   await Firebase.initializeApp(options: firebaseOptionsWithFlavor(flavor));

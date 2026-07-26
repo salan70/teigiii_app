@@ -11,7 +11,7 @@ inputs:
     required: false
     default: "false"
   touch-env:
-    description: Create empty mobile_app/.env for Flutter asset requirements
+    description: Create non-empty mobile_app/.env placeholder for Flutter asset + dotenv.load
     required: false
     default: "false"
 
@@ -48,4 +48,10 @@ runs:
     - name: Create dot env file
       if: inputs.touch-env == 'true'
       shell: bash
-      run: touch mobile_app/.env
+      # flutter_dotenv は空ファイルで EmptyEnvFileError を投げる。
+      # Web preview など実行時ロードがあるジョブではコメントだけの非空ファイルが必要。
+      run: |
+        printf '%s\n' \
+          '# CI placeholder for required Flutter asset.' \
+          '# AdMob banner IDs are unused here (web preview / analyze / test).' \
+          > mobile_app/.env
