@@ -127,7 +127,9 @@ jobs:
 
             ${url}
 
-            dev 固定の使い捨てミラーです。Web 非対応の native 機能は無効化されています。
+            - dev 固定の使い捨てミラー（実 everyone-teigi-dev / 実 D1）
+            - **Basic 認証必須**（credentials は Pages secrets。PR には書かない）
+            - Web 非対応の native 機能は無効化
             `;
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,

@@ -19,21 +19,39 @@
 
 ## 事前準備（console / secrets・コード外）
 
-- Firebase(dev) に Web アプリ登録 → `FIREBASE_WEB_API_KEY` / `FIREBASE_WEB_APP_ID`
-- App Check デバッグトークン発行・登録 → `APP_CHECK_DEBUG_TOKEN`
-- Cloudflare Pages プロジェクト作成、`CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID`
-- GitHub secrets へ上記を登録
+### backend / Cloudflare（既存と同じ）
 
-## 設計判断: App Check debug token の公開埋め込み
+- デプロイ認証は `wrangler login` の OAuth のみ。ローカルに `CLOUDFLARE_API_TOKEN` は置かない
+- Worker の公開識別子は `backend/wrangler.toml` の vars（Firebase project ID / number など）
+- Worker 用の Wrangler secret は現状なし（App Check / Auth は公開 JWKS 検証）
+- CI の Pages deploy だけ GitHub secrets の `CLOUDFLARE_API_TOKEN` / `ACCOUNT_ID` を使う
 
-`APP_CHECK_DEBUG_TOKEN` は GitHub secrets 経由でビルド成果物（`index.html` / `main.dart.js`）に焼き込まれ、
-`*.pages.dev` の公開 URL から誰でも閲覧できる。登録済み debug token は **dev** Firebase の App Check をバイパスできる。
+### Web QA 追加分（Flutter ビルド用・ルート `.env`）
 
-許容する理由:
+AdMob と同じくリポジトリ直下 `.env` に書く（gitignore）:
 
-- 対象は everyone-teigi-**dev** のみ（prod には載せない）
-- プレビューは使い捨てで、漏洩時は Firebase console から debug token を revoke して再発行できる
-- Cloudflare Access で URL 自体を絞る案は、スマホ実機での QR 即時確認を優先するため今回は採らない
+- `FIREBASE_WEB_API_KEY`
+- `FIREBASE_WEB_APP_ID`
+- `APP_CHECK_DEBUG_TOKEN`
+
+### Pages Basic Auth（Cloudflare 上の Pages secrets）
+
+- `WEB_PREVIEW_BASIC_AUTH_USER` / `WEB_PREVIEW_BASIC_AUTH_PASSWORD`
+- `--env preview` が本命（production 枠も使うなら両方）
+- パスワードは PR / README に書かない
+
+## 設計判断: Pages 専用 Basic 認証 + App Check debug token
+
+public リポでも実 `everyone-teigi-dev` / 実 D1 でフル疎通したい。匿名 Auth があるため、
+Pages URL を開ける人 = 共有 dev DB に書ける人、になる。
+
+そのため **Web QA プレビュー（Cloudflare Pages）だけ** Basic 認証を必須にする
+（`mobile_app/web/_worker.js`）。native / Workers API / prod には付けない。
+LAN の `just web-serve` も対象外（ローカルネット前提）。
+
+`APP_CHECK_DEBUG_TOKEN` は GitHub secrets 経由でビルド成果物に焼き込まれるが、
+Basic 認証の内側にしか出てこない。登録済み debug token は **dev** Firebase の App Check を
+バイパスできるため、Basic 認証のパスワード漏洩時は token も revoke / 再発行する。
 
 ## 完了条件
 
@@ -41,8 +59,9 @@
 - [x] Web 起動時に native 専用 API でクラッシュしない（コード上で無効化）
 - [x] backend CORS: OPTIONS が App Check なしで通る（dev binding 時のみ）
 - [x] CI workflow / just レシピが存在する
-- [ ] console 準備（Firebase Web アプリ / App Check debug token / CF Pages / GitHub secrets）
-- [ ] スマホ実機ブラウザで API 疎通確認
+- [ ] console 準備（Firebase Web アプリ / **App Check debug token を Web アプリに登録** / CF Pages / GitHub secrets / Pages Basic Auth secrets）
+  - `exchangeDebugToken` が 403 のときは未登録か、Web API key の HTTP referrer 制限に `*.pages.dev` が無い
+- [ ] スマホ実機ブラウザで API 疎通確認（Basic Auth 通過後）
 - [ ] PR に自動でプレビュー URL が貼られる（`WEB_PREVIEW_ENABLED=true` + secrets 後）
 
 ## 検証ログ

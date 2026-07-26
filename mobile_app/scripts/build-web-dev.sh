@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 # Flutter Web (dev) をビルドする。
-# 任意: FIREBASE_WEB_API_KEY / FIREBASE_WEB_APP_ID / APP_CHECK_DEBUG_TOKEN
+# ルート .env または環境変数:
+#   FIREBASE_WEB_API_KEY / FIREBASE_WEB_APP_ID / APP_CHECK_DEBUG_TOKEN
 #
 # 作業ツリーの web/index.html は触らない。App Check debug token は
 # ビルド成果物（build/web/index.html）へ後から注入する。
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/../.." && pwd)"
+# shellcheck source=load-root-env.sh
+source "$root/mobile_app/scripts/load-root-env.sh"
+
 cd "$root/mobile_app"
 
 extra_defines=()

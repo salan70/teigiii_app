@@ -28,6 +28,7 @@ import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
 import 'util/constant/theme_data.dart';
 import 'util/firebase_options/firebase_options.dart';
 import 'util/logger.dart';
+import 'util/web_device_preview.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -81,11 +82,18 @@ Future<void> main() async {
     ]);
   }
 
+  final enableDevicePreview = shouldEnableWebDevicePreview(
+    isWeb: kIsWeb,
+    platform: defaultTargetPlatform,
+  );
+
   runApp(
     ProviderScope(
       overrides: [flavorProvider.overrideWithValue(flavor)],
       child: DevicePreview(
-        enabled: false,
+        // PC の Web QA のみ iPhone 枠。実機ブラウザでは枠なし。
+        enabled: enableDevicePreview,
+        defaultDevice: Devices.ios.iPhone16,
         builder: (context) {
           return const MyApp();
         },
@@ -124,6 +132,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+      locale: DevicePreview.locale(context),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -197,11 +206,12 @@ class _MyAppState extends ConsumerState<MyApp> {
           },
         );
 
-        return AppConfigGate(
+        final gated = AppConfigGate(
           asyncAppConfig: ref.watch(appConfigProvider),
           onRetry: () => ref.invalidate(appConfigProvider),
           child: app,
         );
+        return DevicePreview.appBuilder(context, gated);
       },
     );
   }
