@@ -104,6 +104,11 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
+      # deploy-web-pages.sh は backend の wrangler を優先する。
+      # bunx --bun だと非 TTY で即終了することがあるため、CI では実体を入れる。
+      - name: Install wrangler (backend)
+        run: cd backend && bun install --frozen-lockfile
+
       - name: Deploy to Cloudflare Pages
         id: deploy
         env:

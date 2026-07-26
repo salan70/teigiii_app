@@ -70,19 +70,22 @@ echo "Deploying to project=$project branch=$branch (from $raw_branch)" >&2
 echo "Pages Basic Auth is enforced by _worker.js (secrets on Pages project)" >&2
 
 # リポジトリ root で実行し、Workers 用 wrangler.toml を拾わせない。
-# ローカルで backend 依存があればその wrangler を使い、無ければ bunx（CI 向け）。
-# pipe+tee だと bun/wrangler が途中終了することがあるため、ファイルへ完全に書いてから表示する。
+# ローカル / CI で backend 依存があればその wrangler を使う。
+# フォールバックの bunx は --bun を付けない（非 TTY で即終了する事例あり）。
+# pipe+tee だと途中終了することがあるため、ファイルへ完全に書いてから表示する。
 wrangler_bin="$root/backend/node_modules/.bin/wrangler"
 set +e
 (
   cd "$root"
   if [[ -x "$wrangler_bin" ]]; then
+    echo "Using $wrangler_bin" >&2
     "$wrangler_bin" pages deploy "$web_dir" \
       --project-name="$project" \
       --branch="$branch" \
       --commit-dirty=true
   else
-    bunx --bun wrangler pages deploy "$web_dir" \
+    echo "Using bunx wrangler (no --bun)" >&2
+    bunx wrangler pages deploy "$web_dir" \
       --project-name="$project" \
       --branch="$branch" \
       --commit-dirty=true
