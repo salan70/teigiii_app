@@ -1,4 +1,5 @@
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -28,6 +29,11 @@ class IntroductionService {
     await ref
         .read(analyticsServiceProvider)
         .logEvent(AnalyticsEvent.policyAgreed);
+
+    // Web QA では ATT をスキップする。
+    if (kIsWeb) {
+      return;
+    }
 
     // トラッキングダイアログを表示する。
     var status = await AppTrackingTransparency.trackingAuthorizationStatus;

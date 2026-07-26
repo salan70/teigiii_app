@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -74,7 +72,7 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
       child: Stack(
         alignment: AlignmentDirectional.center,
         children: [
-          userProfileForWrite.croppedFile == null
+          userProfileForWrite.croppedImageBytes == null
               ? AvatarNetworkImageWidget(
                   imageUrl: userProfileForWrite.avatarUrl,
                   userId: userProfileForWrite.id,
@@ -86,9 +84,7 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: FileImage(
-                        File(userProfileForWrite.croppedFile!.path),
-                      ),
+                      image: MemoryImage(userProfileForWrite.croppedImageBytes!),
                       fit: BoxFit.cover,
                     ),
                   ),

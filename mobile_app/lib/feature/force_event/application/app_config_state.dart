@@ -34,9 +34,11 @@ Future<bool> isRequiredAppUpdate(IsRequiredAppUpdateRef ref) async {
   final appConfig = await ref.watch(appConfigProvider.future);
   final currentAppVersion = await ref.watch(appVersionProvider.future);
 
+  // Web QA ではストア配信がないため強制アップデート判定をスキップする。
   final parsedRequiredVersion = defaultTargetPlatform.when(
     onIOS: () => Version.parse(appConfig.minAppVersionIos),
     onAndroid: () => Version.parse(appConfig.minAppVersionAndroid),
+    orElse: () => Version.parse('0.0.0'),
   );
 
   final isRequired = parsedRequiredVersion > Version.parse(currentAppVersion);

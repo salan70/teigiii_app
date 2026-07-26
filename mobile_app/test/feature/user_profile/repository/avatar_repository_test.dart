@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/feature/user_profile/repository/avatar_repository.dart';
@@ -49,7 +50,7 @@ void main() {
       );
 
       // * Act
-      final result = await repository.uploadAvatar(file);
+      final result = await repository.uploadAvatar(XFile(file.path));
 
       // * Assert
       expect(result, avatarUrl);

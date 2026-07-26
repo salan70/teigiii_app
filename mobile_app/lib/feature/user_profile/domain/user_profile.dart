@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image_cropper/image_cropper.dart';
 
@@ -19,6 +21,9 @@ class UserProfile with _$UserProfile {
 
     /// アップロード用にユーザーが指定したファイル（画像）を保持する
     required CroppedFile? croppedFile,
+
+    /// [croppedFile] のバイト列。UI 表示用に一度だけ読み込む。
+    Uint8List? croppedImageBytes,
   }) = _UserProfile;
   const UserProfile._();
 

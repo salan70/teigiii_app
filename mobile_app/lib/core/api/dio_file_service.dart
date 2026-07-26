@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -45,8 +43,7 @@ class DioGetResponse implements FileServiceResponse {
   Stream<List<int>> get content => _response.data!.stream;
 
   @override
-  int? get contentLength =>
-      int.tryParse(_header(HttpHeaders.contentLengthHeader) ?? '');
+  int? get contentLength => int.tryParse(_header('content-length') ?? '');
 
   @override
   int get statusCode => _response.statusCode!;
@@ -55,7 +52,7 @@ class DioGetResponse implements FileServiceResponse {
   DateTime get validTill {
     // cache-control ヘッダーがない場合は 7 日間キャッシュを有効とする
     var ageDuration = const Duration(days: 7);
-    final controlHeader = _header(HttpHeaders.cacheControlHeader);
+    final controlHeader = _header('cache-control');
     if (controlHeader != null) {
       for (final setting in controlHeader.split(',')) {
         final sanitizedSetting = setting.trim().toLowerCase();
@@ -75,16 +72,16 @@ class DioGetResponse implements FileServiceResponse {
   }
 
   @override
-  String? get eTag => _header(HttpHeaders.etagHeader);
+  String? get eTag => _header('etag');
 
   @override
   String get fileExtension {
-    final contentTypeHeader = _header(HttpHeaders.contentTypeHeader);
+    final contentTypeHeader = _header('content-type');
     if (contentTypeHeader == null) {
       return '';
     }
-    final contentType = ContentType.parse(contentTypeHeader);
-    switch ('${contentType.primaryType}/${contentType.subType}') {
+    final mime = contentTypeHeader.split(';').first.trim().toLowerCase();
+    switch (mime) {
       case 'image/jpeg':
         return '.jpg';
       case 'image/png':

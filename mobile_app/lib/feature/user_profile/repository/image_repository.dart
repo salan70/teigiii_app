@@ -39,15 +39,16 @@ class ImageRepository {
           // 動作確認した漢字、Androidでは [cropStyle] が動作してない。
           // [CropAspectRatioPreset] に丸がないため、一番差が少ない正方形を指定
           initAspectRatio: CropAspectRatioPreset.square,
+          cropStyle: CropStyle.circle,
         ),
         IOSUiSettings(
           hidesNavigationBar: true,
           aspectRatioPickerButtonHidden: true,
           doneButtonTitle: '次へ',
           cancelButtonTitle: 'キャンセル',
+          cropStyle: CropStyle.circle,
         ),
       ],
-      cropStyle: CropStyle.circle,
     );
     return croppedFile;
   }

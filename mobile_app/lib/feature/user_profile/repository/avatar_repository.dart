@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/api/api_exception.dart';
@@ -32,7 +31,7 @@ class AvatarRepository {
   ///
   /// 生成クライアントの `v1UsersMeAvatarPut` はバイナリボディを
   /// JSON エンコードしてしまうため、このエンドポイントのみ dio で直接送信する。
-  Future<String> uploadAvatar(File file) async {
+  Future<String> uploadAvatar(XFile file) async {
     try {
       final bytes = await file.readAsBytes();
       final response = await _dio.put<Map<String, dynamic>>(
