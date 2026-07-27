@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teigiii_api/teigiii_api.dart';
 
 import '../../../../core/common_widget/infinity_scroll_widget.dart';
+import '../../../feature/definition/domain/definition.dart';
 import '../../../feature/definition/presentation/definition_tile.dart';
 import '../../../feature/definition/presentation/definition_tile_shimmer.dart';
 import '../application/discover_timeline_state.dart';
@@ -21,8 +22,8 @@ class DiscoverTimelineList extends ConsumerWidget {
           .read(discoverTimelineStateNotifierProvider.notifier)
           .fetchMore,
       tileBuilder: (item) {
-        if (item is String) {
-          return DefinitionTile(definitionId: item);
+        if (item is Definition) {
+          return DefinitionTile(definitionId: item.id);
         }
         if (item is WordRegisteredActivity) {
           return WordRegisteredTile(activity: item);

@@ -66,6 +66,6 @@ class DefinitionService {
           },
         );
 
-    ref.invalidate(definitionProvider(definition.id));
+    ref.refreshDefinition(definition.id);
   }
 }

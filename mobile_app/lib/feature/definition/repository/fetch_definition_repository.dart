@@ -28,21 +28,7 @@ class FetchDefinitionRepository {
       final response = await _definitionsApi.v1DefinitionsIdGet(
         id: definitionId,
       );
-      final definition = response.data!;
-      return Definition(
-        id: definition.id,
-        wordId: definition.word.id,
-        word: definition.word.word,
-        wordReading: definition.word.reading,
-        authorId: definition.author.id,
-        authorName: definition.author.name,
-        authorImageUrl: definition.author.avatarUrl,
-        definition: definition.body,
-        isPublic: definition.status == DefinitionStatus.public,
-        likesCount: definition.likesCount,
-        isLikedByUser: definition.isLikedByMe,
-        createdAt: definition.createdAt,
-      );
+      return Definition.fromResponse(response.data!);
     } on DioException catch (exception) {
       throw ApiException.fromDioException(exception);
     }

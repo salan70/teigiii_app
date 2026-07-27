@@ -4,6 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/core/analytics/analytics_event.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
+import 'package:teigi_app/feature/definition/application/definition_seed_store.dart';
 import 'package:teigi_app/feature/definition_like/application/like_definition_service.dart';
 import 'package:teigi_app/feature/definition_like/repository/like_definition_repository.dart';
 import 'package:teigi_app/feature/definition_list/appication/definition_id_list_state.dart';
@@ -138,6 +139,22 @@ void main() {
       verify(
         mockDefinitionIdListRepository.fetchForHomeRecommend('cursor-1'),
       ).called(1);
+    });
+
+    test('いいね後、対象定義のシードが破棄される', () async {
+      // * Arrange
+      final store = container.read(definitionSeedStoreProvider)
+        ..seedAll([mockDefinition]);
+      expect(store.read(mockDefinition.id), mockDefinition);
+
+      // * Act
+      await container
+          .read(likeDefinitionServiceProvider)
+          .tapLike(mockDefinition.copyWith(isLikedByUser: false));
+
+      // * Assert
+      // シードが残っていると invalidate しても古い likesCount が返るため破棄する。
+      expect(store.read(mockDefinition.id), isNull);
     });
 
     // TODO(me): definitionProviderが再生成されているか検証するテスト書く

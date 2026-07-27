@@ -229,4 +229,40 @@ class MockDefinitionIdListRepository extends _i1.Mock
                 ),
           )
           as _i4.Future<_i2.DefinitionIdListState>);
+
+  @override
+  _i4.Future<_i2.DefinitionIdListState> fetchForUserWord(
+    String? targetUserId,
+    String? wordId,
+    String? cursor,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#fetchForUserWord, [
+              targetUserId,
+              wordId,
+              cursor,
+            ]),
+            returnValue: _i4.Future<_i2.DefinitionIdListState>.value(
+              _FakeDefinitionIdListState_0(
+                this,
+                Invocation.method(#fetchForUserWord, [
+                  targetUserId,
+                  wordId,
+                  cursor,
+                ]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.DefinitionIdListState>.value(
+                  _FakeDefinitionIdListState_0(
+                    this,
+                    Invocation.method(#fetchForUserWord, [
+                      targetUserId,
+                      wordId,
+                      cursor,
+                    ]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.DefinitionIdListState>);
 }

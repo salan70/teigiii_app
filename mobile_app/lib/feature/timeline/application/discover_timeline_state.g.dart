@@ -7,7 +7,7 @@ part of 'discover_timeline_state.dart';
 // **************************************************************************
 
 String _$discoverTimelineStateNotifierHash() =>
-    r'a2cea846f5c92793399d2ccc194651db764fa0ad';
+    r'45fac3d9a1d56ce2174b85ab2d0337a6acc28c12';
 
 /// See also [DiscoverTimelineStateNotifier].
 @ProviderFor(DiscoverTimelineStateNotifier)

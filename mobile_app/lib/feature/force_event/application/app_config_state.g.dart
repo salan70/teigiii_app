@@ -6,7 +6,7 @@ part of 'app_config_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appConfigHash() => r'3b502a13d3804001a07c6bdb48449f75446af81f';
+String _$appConfigHash() => r'b931c291b2d3a5049592923f40dc3ea7aa5a07a6';
 
 /// AppConfigを起動時に一度取得する
 ///
@@ -24,7 +24,7 @@ final appConfigProvider = FutureProvider<AppConfig>.internal(
 
 typedef AppConfigRef = FutureProviderRef<AppConfig>;
 String _$isRequiredAppUpdateHash() =>
-    r'7f2ad04708c66fe6f976de031b755c1496214061';
+    r'bfb2d0c978863a76d3c4f80d1ba1fea8234d05d6';
 
 /// アプリのアップデートが必要かどうか
 ///
