@@ -1,6 +1,6 @@
 ---
 name: syncing-ai-assets
-description: 正本ソースから AI スキル・フック・設定をプロジェクトの .claude/ に同期し、ハードコードされた値をプロジェクト固有の値に適応させる。AI アセットの同期を依頼された時に使用する。
+description: 正本ソースから Claude 用 AI アセット（スキル・フック・設定）をプロジェクトの .claude/ に同期し、ハードコードされた値をプロジェクト固有の値に適応させる。Claude 用アセットの同期を依頼された時に使用する（Codex 用 .agents/ への移植は porting-ai-assets-to-codex）。
 ---
 
 # AI アセットの同期

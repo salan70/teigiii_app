@@ -124,4 +124,4 @@ CLAUDE.md / AGENTS.md 本体の重複と完了報告フォーマットは今回�
 
 ## 完了条件
 
-#286 の受け入れ基準をすべて満たし、この plan を `doc/plans/done/` へ移動していること。
+Issue #286 の受け入れ基準をすべて満たし、この plan を `doc/plans/done/` へ移動していること。

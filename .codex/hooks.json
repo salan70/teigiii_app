@@ -17,12 +17,12 @@
           {
             "type": "command",
             "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/post-tool-use-auto-format.sh\"",
-            "timeout": 15
+            "timeout": 60
           }
         ]
       },
       {
-        "matcher": "apply_patch|Edit|MultiEdit|Write",
+        "matcher": "apply_patch",
         "hooks": [
           {
             "type": "command",

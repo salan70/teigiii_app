@@ -30,13 +30,13 @@ file_paths="$(
   PAYLOAD="$payload" bun -e '
     try {
       const payload = JSON.parse(process.env.PAYLOAD || "{}");
-      if (payload.tool_name === "apply_patch") {
+      if (payload.tool_name !== "apply_patch") {
+        console.log("");
+      } else {
         const command = payload.tool_input?.command ?? "";
         const paths = [...command.matchAll(/^\*\*\* (?:Add File|Update File|Move to): (.+)$/gm)]
           .map((m) => m[1].trim());
         console.log(paths.join("\n"));
-      } else {
-        console.log(payload.tool_input?.file_path ?? "");
       }
     } catch {
       console.log("");

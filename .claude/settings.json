@@ -11,7 +11,7 @@
           {
             "type": "command",
             "command": "bash .claude/hooks/post-tool-use-auto-format.sh",
-            "timeout": 15
+            "timeout": 60
           }
         ]
       },
