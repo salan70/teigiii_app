@@ -50,9 +50,9 @@ mobile-ds-check:
 mobile-ds-baseline-update:
     cd mobile_app && dart run tool/ds_check.dart --update-baseline
 
-# Ds コンポーネントのカタログをローカル起動する
+# Ds コンポーネントのカタログをローカル起動する（iOS ビルドは flavor / dart defines 必須）
 mobile-widgetbook:
-    cd mobile_app && flutter run -t widgetbook/main.dart
+    cd mobile_app && flutter run -t widgetbook/main.dart --flavor dev --dart-define-from-file=dart_defines/dev.json
 
 # カタログが壊れていないかを build で検証する
 mobile-widgetbook-build:
