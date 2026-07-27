@@ -7,7 +7,8 @@ import 'dart:async' as _i4;
 
 import 'package:firebase_auth/firebase_auth.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i6;
+import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i7;
 import 'package:teigi_app/feature/auth/repository/register_user_repository.dart'
     as _i3;
 import 'package:teigi_app/feature/user_config/repository/device_info_repository.dart'
@@ -91,12 +92,31 @@ class MockDeviceInfoRepository extends _i1.Mock
             returnValueForMissingStub: _i4.Future<String?>.value(),
           )
           as _i4.Future<String?>);
+
+  @override
+  _i4.Future<String> fetchDeviceModel() =>
+      (super.noSuchMethod(
+            Invocation.method(#fetchDeviceModel, []),
+            returnValue: _i4.Future<String>.value(
+              _i6.dummyValue<String>(
+                this,
+                Invocation.method(#fetchDeviceModel, []),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<String>.value(
+              _i6.dummyValue<String>(
+                this,
+                Invocation.method(#fetchDeviceModel, []),
+              ),
+            ),
+          )
+          as _i4.Future<String>);
 }
 
 /// A class which mocks [AuthRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthRepository extends _i1.Mock implements _i6.AuthRepository {
+class MockAuthRepository extends _i1.Mock implements _i7.AuthRepository {
   @override
   _i2.FirebaseAuth get firebaseAuth =>
       (super.noSuchMethod(

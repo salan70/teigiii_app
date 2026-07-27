@@ -5,6 +5,7 @@ import {
   type AuthenticationVariables,
   createAppCheckMiddleware,
   createFirebaseAuthMiddleware,
+  idTokenExemptPaths,
 } from "./auth/middleware";
 import {
   verifyAppCheckToken,
@@ -22,6 +23,7 @@ import { definitionRoutes } from "./routes/definitions";
 import { meRoutes } from "./routes/me";
 import { searchRoutes } from "./routes/search";
 import { timelineRoutes } from "./routes/timeline";
+import { telemetryRoutes } from "./routes/telemetry";
 import { createUserRoutes } from "./routes/users";
 import { wordRoutes } from "./routes/words";
 
@@ -31,6 +33,8 @@ export type Env = {
   DB: D1Database;
   FIREBASE_PROJECT_ID: string;
   FIREBASE_PROJECT_NUMBER: string;
+  /** フレーム計測テレメトリ専用の D1。アプリ本体の DB とは分離する。 */
+  TELEMETRY_DB: D1Database;
   /** set on local/dev only — enables Web QA CORS for that Pages project */
   WEB_QA_PAGES_PROJECT?: string;
 };
@@ -66,7 +70,8 @@ export function createApp({
     .route("/", wordRoutes)
     .route("/", definitionRoutes)
     .route("/", timelineRoutes)
-    .route("/", searchRoutes);
+    .route("/", searchRoutes)
+    .route("/", telemetryRoutes);
 
   const honoApp = new OpenAPIHono<ServerEnvironment>();
   // CORS は App Check より前。OPTIONS preflight を認証なしで short-circuit する。
@@ -98,7 +103,7 @@ export function createApp({
     type: "http",
     scheme: "bearer",
     bearerFormat: "JWT",
-    description: "Firebase Auth の ID トークン。GET /v1/app-config 以外の全エンドポイントで必須。",
+    description: `Firebase Auth の ID トークン。${idTokenExemptPaths.join(" / ")} 以外の全エンドポイントで必須。`,
   });
 
   honoApp.openAPIRegistry.registerComponent("securitySchemes", "appCheck", {

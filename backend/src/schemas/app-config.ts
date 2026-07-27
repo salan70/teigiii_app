@@ -7,6 +7,8 @@ export const appConfigResponseSchema = z
     minAppVersionAndroid: z.string().openapi({ example: "2.0.0" }),
     inMaintenance: z.boolean(),
     maintenanceScheduledEndTime: isoDateTime.nullable(),
+    /** フレーム計測テレメトリの kill switch。false ならクライアントは送信を止める（サーバー側でも受信を拒否する）。 */
+    perfTelemetryEnabled: z.boolean(),
     updatedAt: isoDateTime,
   })
   .openapi("AppConfigResponse");

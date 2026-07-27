@@ -2,7 +2,8 @@ import type { z } from "@hono/zod-openapi";
 import { errorResponseSchema } from "../schemas/common";
 
 /**
- * App Check は全エンドポイント必須。Firebase ID トークンは GET /v1/app-config のみ免除。
+ * App Check は全エンドポイント必須。Firebase ID トークンの免除は
+ * `src/auth/middleware.ts` の `idTokenExemptPaths` と一致させる。
  * スキーム本体は app.ts で registerComponent する。
  */
 export const appCheckOnlySecurity = [{ appCheck: [] }];

@@ -23,6 +23,13 @@ mixin _$AppConfig {
   DateTime? get maintenanceScheduledEndTime =>
       throw _privateConstructorUsedError;
 
+  /// フレーム計測テレメトリを送信してよいか。
+  ///
+  /// このフラグは通信量削減の最適化であり、即時停止の正ではない。
+  /// [appConfigProvider] は起動時に一度しか取得しないため、起動中の
+  /// セッションには反映されない。停止はサーバー側の受信 API で強制する。
+  bool get perfTelemetryEnabled => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $AppConfigCopyWith<AppConfig> get copyWith =>
       throw _privateConstructorUsedError;
@@ -38,6 +45,7 @@ abstract class $AppConfigCopyWith<$Res> {
     String minAppVersionAndroid,
     bool inMaintenance,
     DateTime? maintenanceScheduledEndTime,
+    bool perfTelemetryEnabled,
   });
 }
 
@@ -58,6 +66,7 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
     Object? minAppVersionAndroid = null,
     Object? inMaintenance = null,
     Object? maintenanceScheduledEndTime = freezed,
+    Object? perfTelemetryEnabled = null,
   }) {
     return _then(
       _value.copyWith(
@@ -77,6 +86,10 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
                 ? _value.maintenanceScheduledEndTime
                 : maintenanceScheduledEndTime // ignore: cast_nullable_to_non_nullable
                       as DateTime?,
+            perfTelemetryEnabled: null == perfTelemetryEnabled
+                ? _value.perfTelemetryEnabled
+                : perfTelemetryEnabled // ignore: cast_nullable_to_non_nullable
+                      as bool,
           )
           as $Val,
     );
@@ -97,6 +110,7 @@ abstract class _$$AppConfigImplCopyWith<$Res>
     String minAppVersionAndroid,
     bool inMaintenance,
     DateTime? maintenanceScheduledEndTime,
+    bool perfTelemetryEnabled,
   });
 }
 
@@ -116,6 +130,7 @@ class __$$AppConfigImplCopyWithImpl<$Res>
     Object? minAppVersionAndroid = null,
     Object? inMaintenance = null,
     Object? maintenanceScheduledEndTime = freezed,
+    Object? perfTelemetryEnabled = null,
   }) {
     return _then(
       _$AppConfigImpl(
@@ -135,6 +150,10 @@ class __$$AppConfigImplCopyWithImpl<$Res>
             ? _value.maintenanceScheduledEndTime
             : maintenanceScheduledEndTime // ignore: cast_nullable_to_non_nullable
                   as DateTime?,
+        perfTelemetryEnabled: null == perfTelemetryEnabled
+            ? _value.perfTelemetryEnabled
+            : perfTelemetryEnabled // ignore: cast_nullable_to_non_nullable
+                  as bool,
       ),
     );
   }
@@ -148,6 +167,7 @@ class _$AppConfigImpl extends _AppConfig {
     required this.minAppVersionAndroid,
     required this.inMaintenance,
     required this.maintenanceScheduledEndTime,
+    required this.perfTelemetryEnabled,
   }) : super._();
 
   @override
@@ -159,9 +179,17 @@ class _$AppConfigImpl extends _AppConfig {
   @override
   final DateTime? maintenanceScheduledEndTime;
 
+  /// フレーム計測テレメトリを送信してよいか。
+  ///
+  /// このフラグは通信量削減の最適化であり、即時停止の正ではない。
+  /// [appConfigProvider] は起動時に一度しか取得しないため、起動中の
+  /// セッションには反映されない。停止はサーバー側の受信 API で強制する。
+  @override
+  final bool perfTelemetryEnabled;
+
   @override
   String toString() {
-    return 'AppConfig(minAppVersionIos: $minAppVersionIos, minAppVersionAndroid: $minAppVersionAndroid, inMaintenance: $inMaintenance, maintenanceScheduledEndTime: $maintenanceScheduledEndTime)';
+    return 'AppConfig(minAppVersionIos: $minAppVersionIos, minAppVersionAndroid: $minAppVersionAndroid, inMaintenance: $inMaintenance, maintenanceScheduledEndTime: $maintenanceScheduledEndTime, perfTelemetryEnabled: $perfTelemetryEnabled)';
   }
 
   @override
@@ -180,7 +208,9 @@ class _$AppConfigImpl extends _AppConfig {
                   maintenanceScheduledEndTime,
                 ) ||
                 other.maintenanceScheduledEndTime ==
-                    maintenanceScheduledEndTime));
+                    maintenanceScheduledEndTime) &&
+            (identical(other.perfTelemetryEnabled, perfTelemetryEnabled) ||
+                other.perfTelemetryEnabled == perfTelemetryEnabled));
   }
 
   @override
@@ -190,6 +220,7 @@ class _$AppConfigImpl extends _AppConfig {
     minAppVersionAndroid,
     inMaintenance,
     maintenanceScheduledEndTime,
+    perfTelemetryEnabled,
   );
 
   @JsonKey(ignore: true)
@@ -205,6 +236,7 @@ abstract class _AppConfig extends AppConfig {
     required final String minAppVersionAndroid,
     required final bool inMaintenance,
     required final DateTime? maintenanceScheduledEndTime,
+    required final bool perfTelemetryEnabled,
   }) = _$AppConfigImpl;
   const _AppConfig._() : super._();
 
@@ -216,6 +248,13 @@ abstract class _AppConfig extends AppConfig {
   bool get inMaintenance;
   @override
   DateTime? get maintenanceScheduledEndTime;
+  @override
+  /// フレーム計測テレメトリを送信してよいか。
+  ///
+  /// このフラグは通信量削減の最適化であり、即時停止の正ではない。
+  /// [appConfigProvider] は起動時に一度しか取得しないため、起動中の
+  /// セッションには反映されない。停止はサーバー側の受信 API で強制する。
+  bool get perfTelemetryEnabled;
   @override
   @JsonKey(ignore: true)
   _$$AppConfigImplCopyWith<_$AppConfigImpl> get copyWith =>

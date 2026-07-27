@@ -29,9 +29,9 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getTimelineApi();
-final String cursor = cursor_example; // String |
-final int limit = 56; // int |
-final String type = type_example; // String |
+final String cursor = cursor_example; // String | 
+final int limit = 56; // int | 
+final String type = type_example; // String | 
 
 try {
     final response = api.v1TimelineDiscoverGet(cursor, limit, type);
@@ -45,9 +45,9 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cursor** | **String**|  | [optional]
+ **cursor** | **String**|  | [optional] 
  **limit** | **int**|  | [optional] [default to 20]
- **type** | **String**|  | [optional]
+ **type** | **String**|  | [optional] 
 
 ### Return type
 
@@ -80,8 +80,8 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getTimelineApi();
-final String cursor = cursor_example; // String |
-final int limit = 56; // int |
+final String cursor = cursor_example; // String | 
+final int limit = 56; // int | 
 
 try {
     final response = api.v1TimelineFollowingGet(cursor, limit);
@@ -95,7 +95,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cursor** | **String**|  | [optional]
+ **cursor** | **String**|  | [optional] 
  **limit** | **int**|  | [optional] [default to 20]
 
 ### Return type
@@ -112,3 +112,4 @@ Name | Type | Description  | Notes
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+

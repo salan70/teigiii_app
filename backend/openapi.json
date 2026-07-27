@@ -11,7 +11,7 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT",
-        "description": "Firebase Auth の ID トークン。GET /v1/app-config 以外の全エンドポイントで必須。"
+        "description": "Firebase Auth の ID トークン。/v1/app-config / /v1/telemetry/frames 以外の全エンドポイントで必須。"
       },
       "appCheck": {
         "type": "apiKey",
@@ -40,6 +40,9 @@
             "nullable": true,
             "format": "date-time"
           },
+          "perfTelemetryEnabled": {
+            "type": "boolean"
+          },
           "updatedAt": {
             "type": "string",
             "format": "date-time"
@@ -50,6 +53,7 @@
           "minAppVersionAndroid",
           "inMaintenance",
           "maintenanceScheduledEndTime",
+          "perfTelemetryEnabled",
           "updatedAt"
         ]
       },
@@ -620,6 +624,166 @@
           "type",
           "occurredAt",
           "word"
+        ]
+      },
+      "FrameStatsAcceptedResponse": {
+        "type": "object",
+        "properties": {
+          "accepted": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "disabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "accepted",
+          "disabled"
+        ]
+      },
+      "FrameStatsRequest": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "example": "0198f1f0-0000-7000-8000-000000000000"
+          },
+          "device": {
+            "$ref": "#/components/schemas/FrameStatsDevice"
+          },
+          "screens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FrameStatsScreen"
+            },
+            "minItems": 1,
+            "maxItems": 50
+          }
+        },
+        "required": [
+          "sessionId",
+          "device",
+          "screens"
+        ]
+      },
+      "FrameStatsDevice": {
+        "type": "object",
+        "properties": {
+          "appVersion": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32,
+            "example": "2.3.0"
+          },
+          "buildNumber": {
+            "type": "integer",
+            "minimum": 0,
+            "example": 128
+          },
+          "flavor": {
+            "type": "string",
+            "enum": [
+              "dev",
+              "prod"
+            ]
+          },
+          "platform": {
+            "type": "string",
+            "enum": [
+              "ios",
+              "android",
+              "web"
+            ]
+          },
+          "osVersion": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "example": "iOS 26.0"
+          },
+          "deviceModel": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "example": "iPhone17,1"
+          },
+          "refreshRateHz": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 480,
+            "example": 120
+          }
+        },
+        "required": [
+          "appVersion",
+          "buildNumber",
+          "flavor",
+          "platform",
+          "osVersion",
+          "deviceModel",
+          "refreshRateHz"
+        ]
+      },
+      "FrameStatsScreen": {
+        "type": "object",
+        "properties": {
+          "screenName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "example": "DiscoverTimelinePage"
+          },
+          "recordedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "frameCount": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "slowBuildCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "slowRasterCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "frozenCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sumBuildUs": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sumRasterUs": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "maxBuildUs": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "maxRasterUs": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "screenName",
+          "recordedAt",
+          "frameCount",
+          "slowBuildCount",
+          "slowRasterCount",
+          "frozenCount",
+          "sumBuildUs",
+          "sumRasterUs",
+          "maxBuildUs",
+          "maxRasterUs"
         ]
       }
     },
@@ -3443,6 +3607,62 @@
           },
           "401": {
             "description": "App Check または Firebase ID トークンが欠落・無効",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/telemetry/frames": {
+      "post": {
+        "tags": [
+          "telemetry"
+        ],
+        "summary": "フレーム計測の集計を送信",
+        "description": "セッション単位で画面ごとに集計したフレーム統計を受け取る。Firebase ID トークン不要（App Check は必須）。app_config.perfTelemetryEnabled が false のときは 1 行も保存せず accepted=0 / disabled=true を返す。",
+        "security": [
+          {
+            "appCheck": []
+          }
+        ],
+        "requestBody": {
+          "description": "セッション単位のフレーム計測集計",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FrameStatsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "受理（保存済み）または kill switch で破棄",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FrameStatsAcceptedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "リクエストボディが不正",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "App Check トークンが欠落・無効",
             "content": {
               "application/json": {
                 "schema": {

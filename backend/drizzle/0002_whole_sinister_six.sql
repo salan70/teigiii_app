@@ -1,0 +1,1 @@
+ALTER TABLE `app_config` ADD `perf_telemetry_enabled` integer DEFAULT true NOT NULL;

@@ -27,6 +27,7 @@ void main() {
             minAppVersionAndroid: '2.1.0',
             inMaintenance: true,
             maintenanceScheduledEndTime: scheduledEndTime,
+            perfTelemetryEnabled: false,
             updatedAt: updatedAt,
           ),
           requestOptions: RequestOptions(path: '/v1/app-config'),
@@ -38,6 +39,7 @@ void main() {
 
       // * Assert
       expect(appConfig.minAppVersionIos, '2.0.0');
+      expect(appConfig.perfTelemetryEnabled, isFalse);
       expect(appConfig.minAppVersionAndroid, '2.1.0');
       expect(appConfig.inMaintenance, isTrue);
       expect(appConfig.maintenanceScheduledEndTime, scheduledEndTime);

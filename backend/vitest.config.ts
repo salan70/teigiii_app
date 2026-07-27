@@ -7,6 +7,7 @@ export default defineConfig({
       miniflare: {
         bindings: {
           TEST_MIGRATIONS: await readD1Migrations("./drizzle"),
+          TEST_TELEMETRY_MIGRATIONS: await readD1Migrations("./drizzle-telemetry"),
         },
       },
       wrangler: { configPath: "./wrangler.toml" },

@@ -80,6 +80,7 @@ Class | Method | HTTP request | Description
 [*MeApi*](doc/MeApi.md) | [**v1MeSavedWordsGet**](doc/MeApi.md#v1mesavedwordsget) | **GET** /v1/me/saved-words | 保存した言葉の一覧
 [*SearchApi*](doc/SearchApi.md) | [**v1SearchUsersGet**](doc/SearchApi.md#v1searchusersget) | **GET** /v1/search/users | ユーザーを検索（表示名・ユーザー ID の部分一致）
 [*SearchApi*](doc/SearchApi.md) | [**v1SearchWordsGet**](doc/SearchApi.md#v1searchwordsget) | **GET** /v1/search/words | 言葉を検索（表記・よみの部分一致）
+[*TelemetryApi*](doc/TelemetryApi.md) | [**v1TelemetryFramesPost**](doc/TelemetryApi.md#v1telemetryframespost) | **POST** /v1/telemetry/frames | フレーム計測の集計を送信
 [*TimelineApi*](doc/TimelineApi.md) | [**v1TimelineDiscoverGet**](doc/TimelineApi.md#v1timelinediscoverget) | **GET** /v1/timeline/discover | 見つける（公開定義 + 言葉登録の混在フィード・完全な新着順）
 [*TimelineApi*](doc/TimelineApi.md) | [**v1TimelineFollowingGet**](doc/TimelineApi.md#v1timelinefollowingget) | **GET** /v1/timeline/following | フォロー中（公開定義のみ・完全な新着順）
 [*UsersApi*](doc/UsersApi.md) | [**v1AvatarsIdGet**](doc/UsersApi.md#v1avatarsidget) | **GET** /v1/avatars/{id} | 認証付きアバター画像を取得
@@ -121,6 +122,10 @@ Class | Method | HTTP request | Description
  - [DiscoverFeedItem](doc/DiscoverFeedItem.md)
  - [ErrorResponse](doc/ErrorResponse.md)
  - [ErrorResponseError](doc/ErrorResponseError.md)
+ - [FrameStatsAcceptedResponse](doc/FrameStatsAcceptedResponse.md)
+ - [FrameStatsDevice](doc/FrameStatsDevice.md)
+ - [FrameStatsRequest](doc/FrameStatsRequest.md)
+ - [FrameStatsScreen](doc/FrameStatsScreen.md)
  - [MeResponse](doc/MeResponse.md)
  - [MyDictionaryOverview](doc/MyDictionaryOverview.md)
  - [SavedWordItem](doc/SavedWordItem.md)

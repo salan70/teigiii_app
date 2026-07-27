@@ -83,4 +83,13 @@ class MockPackageInfoRepository extends _i1.Mock
             ),
           )
           as _i3.Future<String>);
+
+  @override
+  _i3.Future<int> fetchBuildNumber() =>
+      (super.noSuchMethod(
+            Invocation.method(#fetchBuildNumber, []),
+            returnValue: _i3.Future<int>.value(0),
+            returnValueForMissingStub: _i3.Future<int>.value(0),
+          )
+          as _i3.Future<int>);
 }

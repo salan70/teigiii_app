@@ -31,7 +31,7 @@ dev は `just backend-deploy-dev`、prod は `just backend-deploy-prod` で手�
 1. CORS を適用する（許可 origin の OPTIONS preflight はここで short-circuit）
 2. request ID を発行する
 3. App Check を検証する
-4. `GET /v1/app-config` 以外では Firebase ID トークンを検証する
+4. Firebase ID トークンの免除パス（`GET /v1/app-config`、`POST /v1/telemetry/frames`）以外では Firebase ID トークンを検証する
 5. Zod でリクエストを検証する
 6. 認可とデータ操作を行う
 7. 統一エラーと構造化ログを確定する
@@ -71,7 +71,7 @@ prod（`env.prod`）にはこの binding を置かず allowlist を空にする�
 <!-- @code backend/src/auth/firebase-id-token.ts#FirebaseIdTokenVerifier -->
 ### Firebase ID トークン
 
-`GET /v1/app-config` を除く全エンドポイントで `Authorization: Bearer <token>` を必須とする。以下を検証し、成功時の `sub` をリクエスト利用者の UID とする。
+免除パス（`GET /v1/app-config`、`POST /v1/telemetry/frames`）を除く全エンドポイントで `Authorization: Bearer <token>` を必須とする。免除は完全一致で判定し、`backend/src/auth/middleware.ts` の `idTokenExemptPaths` を唯一の定義とする（OpenAPI 検証も同じ一覧を参照する）。以下を検証し、成功時の `sub` をリクエスト利用者の UID とする。
 
 - 署名
 - header の `alg=RS256`、非空 `kid`
@@ -134,7 +134,7 @@ JWT、Authorization、App Check token、プロフィール内容などの個人�
 <!-- @code backend/src/config/app-config-service.ts#AppConfigService -->
 ### App config
 
-`GET /v1/app-config` は D1 の `app_config` 単一行を返す。Firebase ID トークンは不要だが App Check は必須とする。単一行がなければ500とし、暗黙の既定値では起動を続けない。
+`GET /v1/app-config` は D1 の `app_config` 単一行を返す。Firebase ID トークンは不要だが App Check は必須とする。単一行がなければ500とし、暗黙の既定値では起動を続けない。`perfTelemetryEnabled` はフレーム計測テレメトリの kill switch を兼ねる。
 
 運用時の変更は `wrangler d1 execute` で行い、管理 API は追加しない。
 
@@ -200,6 +200,26 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 - 言葉検索は公開判定を満たす言葉だけを対象に、表記・よみの部分一致を適用する。ユーザー検索は表示名・publicId の部分一致を適用する
 - リアクション数順はページ移動中の件数変動による重複・欠落を許容する
 
+<!-- @code backend/src/telemetry/frame-stats-service.ts#FrameStatsService -->
+<!-- @code backend/src/telemetry/retention.ts#runTelemetryRetention -->
+## フレーム計測テレメトリ
+
+`POST /v1/telemetry/frames` はセッション単位・画面単位に集計済みのフレーム統計を受け取り、202 で `accepted`（保存件数）と `disabled`（kill switch で破棄したか）を返す。Firebase ID トークンは不要だが App Check は必須とする。1 リクエストの `screens` は1〜50件、各カウンタは `frameCount` 以下であることを検証し、違反は400とする。
+
+保存先はアプリ本体の `DB` ではなく専用の `TELEMETRY_DB` とする。書き込み量と保持期間がアプリデータと大きく異なり、削除運用と障害影響をアプリ本体から切り離すためである。保存するのは件数・合計・最大だけとし、生フレーム、パーセンタイル、`user_id` は保存しない。`session_id` は端末のセッション単位で使い捨てる識別子で、利用者と紐づけない。1 リクエストは1バッチで書き込み、部分挿入を残さない。
+
+kill switch はクライアント任せにせずサーバー側で強制する。受信ハンドラはリクエストごとに `app_config.perf_telemetry_enabled` を読み、false なら1行も書かずに `accepted=0` / `disabled=true` を返す。`app_config` 行が存在しない場合も受信しない。`GET /v1/app-config` の `perfTelemetryEnabled` は同じ行を返すため、クライアントは送信自体を止められるが、停止の正はサーバー側の判定である。
+
+リテンションは30日で、Scheduled Handler が `scheduledTime - 30日` より古い `created_at`（サーバー受信時刻）の行を削除し、削除件数を構造化ログに記録する。クライアント指定の `recorded_at` は分析時刻として残し、保持期限の基準には使わない。物理削除とテレメトリのリテンションは独立に `waitUntil` し、一方の失敗がもう一方を止めない。
+
+| 環境 | テレメトリ D1 |
+|---|---|
+| local | `teigiii-telemetry-local` |
+| dev | `teigiii-telemetry-dev` |
+| prod | `teigiii-telemetry-prod` |
+
+migration は本体とは別系統（`backend/drizzle-telemetry`）で、`just backend-migrate-dev-telemetry` / `just backend-migrate-prod-telemetry` で適用する。`just backend-deploy-dev` / `just backend-deploy-prod` からも依存として実行する。
+
 <!-- @code backend/src/maintenance/physical-deletion.ts#runPhysicalDeletion -->
 ## 物理削除
 
@@ -224,7 +244,7 @@ Scheduled Handler は30日以前に論理削除された定義とユーザーを
 ### dev デプロイと smoke test
 
 1. 初回 deploy で確定した `teigiii-api-dev` の workers.dev URL に `/v1` を付け、`backend/wrangler.toml` の dev `AVATAR_BASE_URL` を置き換える。R2 public access は有効化しない。
-2. `just backend-deploy-dev` を実行する。このコマンドは D1 migration、`app_config` 初期行の冪等な作成、`teigiii-api-dev` の deploy を順に行う。
+2. `just backend-deploy-dev` を実行する。このコマンドは本体 D1 / テレメトリ D1 の migration、`app_config` 初期行の冪等な作成、`teigiii-api-dev` の deploy を順に行う。
 3. dev Firebase の正規トークンを shell 環境だけに設定し、次を実行する。トークンをファイル、shell history、ログへ保存しない。
 
 ```bash
@@ -253,9 +273,11 @@ curl 'http://localhost:8787/__scheduled?cron=0+3+*+*+*'
 1. `just backend-validate-prod` で `teigiii-api-prod`、`teigiii-prod`、
    `teigiii-prod-avatars`、prod Firebase vars の bundle / bindings 解決を dry-run する。
 2. `just backend-deploy-prod` を実行する。この recipe は
-   `backend-migrate-prod` の成功後にだけ prod Worker を deploy する。
-3. `wrangler d1 migrations list DB --env prod --remote` で未適用 migration が
-   ゼロであることを確認し、prod の主要フローを smoke test する。
+   `backend-migrate-prod` と `backend-migrate-prod-telemetry` の成功後にだけ
+   prod Worker を deploy する。
+3. `wrangler d1 migrations list DB --env prod --remote` と
+   `wrangler d1 migrations list TELEMETRY_DB --env prod --remote` で
+   未適用 migration がゼロであることを確認し、prod の主要フローを smoke test する。
 
 R2 public access は有効化しない。Cron は Wrangler 設定を正本とし、UTC の実行時刻を
 変更する場合はデプロイ前に確認する。

@@ -233,6 +233,10 @@ export const appConfig = sqliteTable(
     inMaintenance: integer("in_maintenance", { mode: "boolean" }).notNull().default(false),
     // メンテ中のみ設定
     maintenanceScheduledEndTime: integer("maintenance_scheduled_end_time"),
+    // フレーム計測テレメトリの kill switch。false でサーバーが受信を即時停止する。
+    perfTelemetryEnabled: integer("perf_telemetry_enabled", { mode: "boolean" })
+      .notNull()
+      .default(true),
     updatedAt: integer("updated_at").notNull(),
   },
   (table) => [check("app_config_single_row_check", sql`${table.id} = 1`)],

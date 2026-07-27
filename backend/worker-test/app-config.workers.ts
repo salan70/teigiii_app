@@ -18,8 +18,8 @@ describe("app config route", () => {
     await env.DB.prepare(
       `insert into app_config
          (id, min_app_version_ios, min_app_version_android, in_maintenance,
-          maintenance_scheduled_end_time, updated_at)
-       values (1, '2.0.0', '2.1.0', 1, ?, ?)`,
+          maintenance_scheduled_end_time, perf_telemetry_enabled, updated_at)
+       values (1, '2.0.0', '2.1.0', 1, ?, 0, ?)`,
     )
       .bind(Date.parse("2026-07-16T12:00:00.000Z"), Date.parse("2026-07-16T00:00:00.000Z"))
       .run();
@@ -36,6 +36,7 @@ describe("app config route", () => {
       maintenanceScheduledEndTime: "2026-07-16T12:00:00.000Z",
       minAppVersionAndroid: "2.1.0",
       minAppVersionIos: "2.0.0",
+      perfTelemetryEnabled: false,
       updatedAt: "2026-07-16T00:00:00.000Z",
     });
   });

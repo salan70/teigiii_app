@@ -135,9 +135,9 @@ backend-format:
 backend-test:
     cd backend && bun run test
 
-# openapi.json と Drizzle マイグレーション SQL を生成する
+# openapi.json と Drizzle マイグレーション SQL（本体・テレメトリ）を生成する
 backend-generate:
-    cd backend && bun run generate:openapi && bun run generate:migrations
+    cd backend && bun run generate:openapi && bun run generate:migrations && bun run generate:migrations:telemetry
 
 backend-dev:
     cd backend && bun run dev
@@ -146,12 +146,16 @@ backend-dev:
 backend-migrate-dev:
     cd backend && bunx wrangler d1 migrations apply DB --env dev --remote
 
+# dev テレメトリ D1 に未適用の migration を反映する
+backend-migrate-dev-telemetry:
+    cd backend && bunx wrangler d1 migrations apply TELEMETRY_DB --env dev --remote
+
 # app-config の初期行だけを冪等に作成する
 backend-seed-dev:
-    cd backend && bunx wrangler d1 execute DB --env dev --remote --command "insert into app_config (id, min_app_version_ios, min_app_version_android, in_maintenance, maintenance_scheduled_end_time, updated_at) values (1, '0.0.0', '0.0.0', 0, null, unixepoch('now') * 1000) on conflict(id) do nothing"
+    cd backend && bunx wrangler d1 execute DB --env dev --remote --command "insert into app_config (id, min_app_version_ios, min_app_version_android, in_maintenance, maintenance_scheduled_end_time, perf_telemetry_enabled, updated_at) values (1, '0.0.0', '0.0.0', 0, null, 1, unixepoch('now') * 1000) on conflict(id) do nothing"
 
-# migration と app-config 初期化を完了してから dev Worker を手動 deploy する
-backend-deploy-dev: backend-migrate-dev backend-seed-dev
+# migration（本体 + テレメトリ）と app-config 初期化を完了してから dev Worker を手動 deploy する
+backend-deploy-dev: backend-migrate-dev backend-migrate-dev-telemetry backend-seed-dev
     if rg -q 'AVATAR_BASE_URL = "https://api.dev.invalid/v1"' backend/wrangler.toml; then echo 'Replace AVATAR_BASE_URL with the deployed dev Worker URL before deploy.' >&2; exit 1; fi
     cd backend && bunx wrangler deploy --env dev
 
@@ -171,6 +175,10 @@ backend-validate-prod:
 backend-migrate-prod:
     cd backend && bunx wrangler d1 migrations apply DB --env prod --remote
 
-# migration を完了してから prod Worker を手動 deploy する
-backend-deploy-prod: backend-migrate-prod
+# prod テレメトリ D1 に未適用の migration を反映する
+backend-migrate-prod-telemetry:
+    cd backend && bunx wrangler d1 migrations apply TELEMETRY_DB --env prod --remote
+
+# migration（本体 + テレメトリ）を完了してから prod Worker を手動 deploy する
+backend-deploy-prod: backend-migrate-prod backend-migrate-prod-telemetry
     cd backend && bunx wrangler deploy --env prod

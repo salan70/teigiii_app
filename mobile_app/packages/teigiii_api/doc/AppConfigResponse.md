@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **minAppVersionAndroid** | **String** |  | 
 **inMaintenance** | **bool** |  | 
 **maintenanceScheduledEndTime** | [**DateTime**](DateTime.md) |  | 
+**perfTelemetryEnabled** | **bool** |  | 
 **updatedAt** | [**DateTime**](DateTime.md) |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

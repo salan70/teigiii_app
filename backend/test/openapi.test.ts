@@ -4,6 +4,7 @@
 import { describe, expect, test } from "bun:test";
 import { Validator } from "@seriousme/openapi-schema-validator";
 import { buildOpenApiDocument } from "../src/app";
+import { idTokenExemptPaths } from "../src/auth/middleware";
 
 /** plan（doc/plans/2026-07-15-rdb-schema-api-design.md）のエンドポイント一覧 */
 const expectedOperations = [
@@ -48,6 +49,7 @@ const expectedOperations = [
   "GET /v1/timeline/following",
   "GET /v1/search/words",
   "GET /v1/search/users",
+  "POST /v1/telemetry/frames",
 ].toSorted();
 
 describe("OpenAPI document", () => {
@@ -76,7 +78,8 @@ describe("OpenAPI document", () => {
     expect(result.valid).toBe(true);
   });
 
-  test("全オペレーションで appCheck 必須、app-config 以外は firebaseIdToken も必須", () => {
+  test("全オペレーションで appCheck 必須、免除パス以外は firebaseIdToken も必須", () => {
+    const exemptPaths = new Set<string>(idTokenExemptPaths);
     for (const [path, item] of Object.entries(document.paths ?? {})) {
       for (const [method, operation] of Object.entries(item ?? {})) {
         if (!["get", "post", "put", "patch", "delete"].includes(method)) continue;
@@ -85,7 +88,7 @@ describe("OpenAPI document", () => {
         const requiresAppCheck = (op.security ?? []).some((entry) => "appCheck" in entry);
         const requiresIdToken = (op.security ?? []).some((entry) => "firebaseIdToken" in entry);
         expect(requiresAppCheck).toBe(true);
-        if (path === "/v1/app-config") {
+        if (exemptPaths.has(path)) {
           expect(requiresIdToken).toBe(false);
         } else {
           expect(requiresIdToken).toBe(true);
