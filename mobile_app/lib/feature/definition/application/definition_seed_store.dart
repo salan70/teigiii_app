@@ -21,11 +21,25 @@ DefinitionSeedStore definitionSeedStore(DefinitionSeedStoreRef ref) =>
 class DefinitionSeedStore {
   final _seeds = <String, Definition>{};
 
+  /// 現在保持しているシードの ID 集合。
+  Set<String> get ids => _seeds.keys.toSet();
+
   /// 一覧取得で得られた定義をまとめて投入する。
   void seedAll(Iterable<Definition> definitions) {
     for (final definition in definitions) {
       _seeds[definition.id] = definition;
     }
+  }
+
+  /// フィードの世代を丸ごと置き換える。
+  ///
+  /// 既存のシードをすべて破棄したうえで [definitions] を投入する。
+  /// 戻り値は置き換え前に保持していた ID 集合。
+  Set<String> replaceAll(Iterable<Definition> definitions) {
+    final previousIds = ids;
+    _seeds.clear();
+    seedAll(definitions);
+    return previousIds;
   }
 
   /// [definitionId] のシードを返す。未投入の場合は null。

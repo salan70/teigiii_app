@@ -5,6 +5,7 @@ import 'package:teigiii_api/teigiii_api.dart';
 import '../../../core/api/api_exception.dart';
 import '../../../core/api/api_providers.dart';
 import '../domain/definition.dart';
+import 'definition_response_mapper.dart';
 
 part 'fetch_definition_repository.g.dart';
 
@@ -28,7 +29,7 @@ class FetchDefinitionRepository {
       final response = await _definitionsApi.v1DefinitionsIdGet(
         id: definitionId,
       );
-      return Definition.fromResponse(response.data!);
+      return definitionFromResponse(response.data!);
     } on DioException catch (exception) {
       throw ApiException.fromDioException(exception);
     }

@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../definition/application/definition_seed_store.dart';
+import '../../definition/application/definition_state.dart';
 import '../../definition/domain/definition.dart';
 import '../domain/discover_feed_list_state.dart';
 import '../repository/discover_timeline_repository.dart';
@@ -19,10 +20,25 @@ class DiscoverTimelineStateNotifier extends _$DiscoverTimelineStateNotifier
         .read(discoverTimelineRepositoryProvider)
         .fetchDiscoverTimeline(cursor);
 
-    // 各 tile が定義を再取得しないよう、取得済みの定義をシードとして投入する。
-    ref
-        .read(definitionSeedStoreProvider)
-        .seedAll(result.list.whereType<Definition>());
+    final definitions = result.list.whereType<Definition>().toList();
+    final store = ref.read(definitionSeedStoreProvider);
+
+    // 初回・refresh（cursor == null）はフィード世代を丸ごと置き換える。
+    // fetchMore は追記のみ。いずれの場合も seed 更新後に
+    // definitionProvider を invalidate し、購読中の tile へ反映する。
+    final idsToInvalidate = <String>{};
+    if (cursor == null) {
+      idsToInvalidate
+        ..addAll(store.replaceAll(definitions))
+        ..addAll(definitions.map((definition) => definition.id));
+    } else {
+      store.seedAll(definitions);
+      idsToInvalidate.addAll(definitions.map((definition) => definition.id));
+    }
+
+    for (final id in idsToInvalidate) {
+      ref.invalidate(definitionProvider(id));
+    }
 
     return result;
   }

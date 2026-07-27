@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:teigiii_api/teigiii_api.dart';
 
 import 'definition_for_write.dart';
 
@@ -21,25 +20,6 @@ class Definition with _$Definition {
     required bool isLikedByUser,
     required DateTime createdAt,
   }) = _Definition;
-
-  /// API の [DefinitionResponse] から [Definition] を組み立てる。
-  ///
-  /// 定義単体取得とタイムライン取得で同じマッピングを使うため、
-  /// 変換ロジックはここに集約する。
-  factory Definition.fromResponse(DefinitionResponse response) => Definition(
-    id: response.id,
-    wordId: response.word.id,
-    word: response.word.word,
-    wordReading: response.word.reading,
-    authorId: response.author.id,
-    authorName: response.author.name,
-    authorImageUrl: response.author.avatarUrl,
-    definition: response.body,
-    isPublic: response.status == DefinitionStatus.public,
-    likesCount: response.likesCount,
-    isLikedByUser: response.isLikedByMe,
-    createdAt: response.createdAt,
-  );
 
   const Definition._();
 

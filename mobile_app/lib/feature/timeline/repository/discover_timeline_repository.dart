@@ -4,7 +4,7 @@ import 'package:teigiii_api/teigiii_api.dart';
 
 import '../../../core/api/api_exception.dart';
 import '../../../core/api/api_providers.dart';
-import '../../definition/domain/definition.dart';
+import '../../definition/repository/definition_response_mapper.dart';
 import '../domain/discover_feed_list_state.dart';
 
 part 'discover_timeline_repository.g.dart';
@@ -31,7 +31,7 @@ class DiscoverTimelineRepository {
         list: page.items
             .map<dynamic>((item) {
               if (item is DiscoverFeedDefinitionItem) {
-                return Definition.fromResponse(item.activity.definition);
+                return definitionFromResponse(item.activity.definition);
               }
               if (item is DiscoverFeedWordRegisteredItem) {
                 return item.activity;

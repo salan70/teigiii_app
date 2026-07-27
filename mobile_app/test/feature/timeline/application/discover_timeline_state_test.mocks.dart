@@ -3,13 +3,19 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i6;
 
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:teigi_app/feature/definition/domain/definition.dart' as _i3;
+import 'package:teigi_app/feature/definition/repository/fetch_definition_repository.dart'
+    as _i7;
 import 'package:teigi_app/feature/timeline/domain/discover_feed_list_state.dart'
     as _i2;
 import 'package:teigi_app/feature/timeline/repository/discover_timeline_repository.dart'
-    as _i3;
+    as _i5;
+import 'package:teigi_app/feature/user_profile/domain/user_profile.dart' as _i4;
+import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart'
+    as _i8;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -26,32 +32,133 @@ import 'package:teigi_app/feature/timeline/repository/discover_timeline_reposito
 
 class _FakeDiscoverFeedListState_0 extends _i1.SmartFake
     implements _i2.DiscoverFeedListState {
-  _FakeDiscoverFeedListState_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeDiscoverFeedListState_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeDefinition_1 extends _i1.SmartFake implements _i3.Definition {
+  _FakeDefinition_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeUserProfile_2 extends _i1.SmartFake implements _i4.UserProfile {
+  _FakeUserProfile_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 /// A class which mocks [DiscoverTimelineRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDiscoverTimelineRepository extends _i1.Mock
-    implements _i3.DiscoverTimelineRepository {
+    implements _i5.DiscoverTimelineRepository {
   @override
-  _i4.Future<_i2.DiscoverFeedListState> fetchDiscoverTimeline(String? cursor) =>
+  _i6.Future<_i2.DiscoverFeedListState> fetchDiscoverTimeline(String? cursor) =>
       (super.noSuchMethod(
-            Invocation.method(#fetchDiscoverTimeline, [cursor]),
-            returnValue: _i4.Future<_i2.DiscoverFeedListState>.value(
-              _FakeDiscoverFeedListState_0(
-                this,
-                Invocation.method(#fetchDiscoverTimeline, [cursor]),
-              ),
-            ),
-            returnValueForMissingStub:
-                _i4.Future<_i2.DiscoverFeedListState>.value(
-                  _FakeDiscoverFeedListState_0(
-                    this,
-                    Invocation.method(#fetchDiscoverTimeline, [cursor]),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.DiscoverFeedListState>);
+        Invocation.method(
+          #fetchDiscoverTimeline,
+          [cursor],
+        ),
+        returnValue: _i6.Future<_i2.DiscoverFeedListState>.value(
+            _FakeDiscoverFeedListState_0(
+          this,
+          Invocation.method(
+            #fetchDiscoverTimeline,
+            [cursor],
+          ),
+        )),
+        returnValueForMissingStub: _i6.Future<_i2.DiscoverFeedListState>.value(
+            _FakeDiscoverFeedListState_0(
+          this,
+          Invocation.method(
+            #fetchDiscoverTimeline,
+            [cursor],
+          ),
+        )),
+      ) as _i6.Future<_i2.DiscoverFeedListState>);
+}
+
+/// A class which mocks [FetchDefinitionRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFetchDefinitionRepository extends _i1.Mock
+    implements _i7.FetchDefinitionRepository {
+  @override
+  _i6.Future<_i3.Definition> fetchDefinition(String? definitionId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchDefinition,
+          [definitionId],
+        ),
+        returnValue: _i6.Future<_i3.Definition>.value(_FakeDefinition_1(
+          this,
+          Invocation.method(
+            #fetchDefinition,
+            [definitionId],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i6.Future<_i3.Definition>.value(_FakeDefinition_1(
+          this,
+          Invocation.method(
+            #fetchDefinition,
+            [definitionId],
+          ),
+        )),
+      ) as _i6.Future<_i3.Definition>);
+}
+
+/// A class which mocks [UserProfileRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUserProfileRepository extends _i1.Mock
+    implements _i8.UserProfileRepository {
+  @override
+  _i6.Future<_i4.UserProfile> fetchUserProfile(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchUserProfile,
+          [userId],
+        ),
+        returnValue: _i6.Future<_i4.UserProfile>.value(_FakeUserProfile_2(
+          this,
+          Invocation.method(
+            #fetchUserProfile,
+            [userId],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i6.Future<_i4.UserProfile>.value(_FakeUserProfile_2(
+          this,
+          Invocation.method(
+            #fetchUserProfile,
+            [userId],
+          ),
+        )),
+      ) as _i6.Future<_i4.UserProfile>);
+
+  @override
+  _i6.Future<void> updateUserProfile(_i4.UserProfile? userProfileForWrite) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUserProfile,
+          [userProfileForWrite],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
 }

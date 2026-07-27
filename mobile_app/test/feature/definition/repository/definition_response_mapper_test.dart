@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:teigi_app/feature/definition/domain/definition.dart';
+import 'package:teigi_app/feature/definition/repository/definition_response_mapper.dart';
 import 'package:teigiii_api/teigiii_api.dart';
 
 void main() {
@@ -28,10 +28,10 @@ void main() {
     );
   }
 
-  group('Definition.fromResponse', () {
+  group('definitionFromResponse', () {
     test('全フィールドを DefinitionResponse からマッピングする', () {
       // * Act
-      final definition = Definition.fromResponse(
+      final definition = definitionFromResponse(
         buildResponse(status: DefinitionStatus.public),
       );
 
@@ -55,7 +55,7 @@ void main() {
 
     test('avatarUrl が null の場合 authorImageUrl も null になる', () {
       // * Act
-      final definition = Definition.fromResponse(
+      final definition = definitionFromResponse(
         buildResponse(status: DefinitionStatus.public, avatarUrl: null),
       );
 
@@ -66,19 +66,19 @@ void main() {
     test('status が public の場合のみ isPublic が true になる', () {
       // * Act & Assert
       expect(
-        Definition.fromResponse(
+        definitionFromResponse(
           buildResponse(status: DefinitionStatus.public),
         ).isPublic,
         isTrue,
       );
       expect(
-        Definition.fromResponse(
+        definitionFromResponse(
           buildResponse(status: DefinitionStatus.private),
         ).isPublic,
         isFalse,
       );
       expect(
-        Definition.fromResponse(
+        definitionFromResponse(
           buildResponse(status: DefinitionStatus.draft),
         ).isPublic,
         isFalse,
