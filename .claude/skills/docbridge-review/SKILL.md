@@ -1,6 +1,6 @@
 ---
 name: docbridge-review
-description: Review all existing DocBridge links for semantic validity. Use after adoption or periodically to find valid-but-wrong links, stale docs, excessive links, or ambiguous docs/code relationships.
+description: 既存の DocBridge リンクが意味的に妥当かレビューする。導入直後や定期的な棚卸しで、リンクは有効だが対応が誤っているもの、古い仕様、過剰なリンク、曖昧な対応関係を洗い出す時に使用する。
 ---
 
 # docbridge-review

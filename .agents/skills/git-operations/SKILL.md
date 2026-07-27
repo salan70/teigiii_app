@@ -1,7 +1,6 @@
 ---
 name: git-operations
-autoInvoke: when committing changes, creating branches, or checking for sensitive file leaks
-description: ローカル Git 操作 — ブランチ作成、ステージング、コミット、セキュリティチェック、コミットメッセージ規約
+description: ローカル Git 操作を行う。ブランチ作成、ステージング、コミット、機密ファイル混入チェック、コミットメッセージ規約の適用が必要な時に使用する。
 ---
 
 # Git 操作

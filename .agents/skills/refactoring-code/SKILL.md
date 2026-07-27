@@ -1,7 +1,6 @@
 ---
 name: refactoring-code
-autoInvoke: when the user asks to refactor, clean up, restructure, or reduce technical debt in existing code
-description: 振る舞いを保ちながらコード構造を改善する TDD ベースのリファクタリング
+description: 振る舞いを保ちながらコード構造を改善する TDD ベースのリファクタリング。「リファクタして」「整理して」「技術的負債を減らして」といった既存コードの再構成の依頼時に使用する。
 ---
 
 # コードのリファクタリング

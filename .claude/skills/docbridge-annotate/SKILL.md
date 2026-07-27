@@ -1,6 +1,6 @@
 ---
 name: docbridge-annotate
-description: Create bidirectional DocBridge links between supported code declarations and Markdown sections. Use when asked to link code to its specification, add @doc or @code annotations, annotate new code with docs, or fix DocBridge link diagnostics.
+description: コード宣言と Markdown セクションの間に DocBridge の双方向リンクを作る。コードと仕様を紐づける、@doc / @code アノテーションを追加する、新規コードに仕様リンクを付ける、リンク診断を解消する時に使用する。
 ---
 
 # docbridge-annotate

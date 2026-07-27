@@ -1,7 +1,6 @@
 ---
 name: maintaining-ai-docs
-autoInvoke: when creating, updating, or auditing AI operational documents (AGENTS.md, CLAUDE.md, SKILL.md)
-description: AI 運用ドキュメント（AGENTS.md / CLAUDE.md / SKILL.md）を最小限の差分で保守する。新規作成、更新、品質監査、ドキュメント間の不整合解消に使用
+description: AI 運用ドキュメント（AGENTS.md / CLAUDE.md / SKILL.md）を最小限の差分で保守する。これらの新規作成、更新、品質監査、ドキュメント間の不整合解消を行う時に使用する。
 ---
 
 # AI ドキュメントの保守
