@@ -39,11 +39,10 @@ database_name = "teigiii-dev"
 database_id = "3a8c086b-4704-4277-9c89-14e45fc00e92"
 migrations_dir = "drizzle"
 
-# TODO: `wrangler d1 create teigiii-telemetry-dev` を実行し、出力された UUID に database_id を差し替える
 [[env.dev.d1_databases]]
 binding = "TELEMETRY_DB"
 database_name = "teigiii-telemetry-dev"
-database_id = "REPLACE_AFTER_D1_CREATE"
+database_id = "63d633bb-edd7-4937-ac16-4e53969113bc"
 migrations_dir = "drizzle-telemetry"
 
 [[env.dev.r2_buckets]]
@@ -64,11 +63,10 @@ database_name = "teigiii-prod"
 database_id = "cf269ff5-12bd-49d6-96f4-b3bbf37371aa"
 migrations_dir = "drizzle"
 
-# TODO: `wrangler d1 create teigiii-telemetry-prod` を実行し、出力された UUID に database_id を差し替える
 [[env.prod.d1_databases]]
 binding = "TELEMETRY_DB"
 database_name = "teigiii-telemetry-prod"
-database_id = "REPLACE_AFTER_D1_CREATE"
+database_id = "b4a1399d-9bd3-4033-b180-be0d1fafd29d"
 migrations_dir = "drizzle-telemetry"
 
 [[env.prod.r2_buckets]]

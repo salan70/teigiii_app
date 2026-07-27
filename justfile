@@ -154,8 +154,8 @@ backend-migrate-dev-telemetry:
 backend-seed-dev:
     cd backend && bunx wrangler d1 execute DB --env dev --remote --command "insert into app_config (id, min_app_version_ios, min_app_version_android, in_maintenance, maintenance_scheduled_end_time, perf_telemetry_enabled, updated_at) values (1, '0.0.0', '0.0.0', 0, null, 1, unixepoch('now') * 1000) on conflict(id) do nothing"
 
-# migration と app-config 初期化を完了してから dev Worker を手動 deploy する
-backend-deploy-dev: backend-migrate-dev backend-seed-dev
+# migration（本体 + テレメトリ）と app-config 初期化を完了してから dev Worker を手動 deploy する
+backend-deploy-dev: backend-migrate-dev backend-migrate-dev-telemetry backend-seed-dev
     if rg -q 'AVATAR_BASE_URL = "https://api.dev.invalid/v1"' backend/wrangler.toml; then echo 'Replace AVATAR_BASE_URL with the deployed dev Worker URL before deploy.' >&2; exit 1; fi
     cd backend && bunx wrangler deploy --env dev
 
@@ -179,6 +179,6 @@ backend-migrate-prod:
 backend-migrate-prod-telemetry:
     cd backend && bunx wrangler d1 migrations apply TELEMETRY_DB --env prod --remote
 
-# migration を完了してから prod Worker を手動 deploy する
-backend-deploy-prod: backend-migrate-prod
+# migration（本体 + テレメトリ）を完了してから prod Worker を手動 deploy する
+backend-deploy-prod: backend-migrate-prod backend-migrate-prod-telemetry
     cd backend && bunx wrangler deploy --env prod

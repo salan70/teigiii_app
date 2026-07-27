@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:teigiii_api/teigiii_api.dart';
 
+import '../../util/logger.dart';
 import '../api/api_providers.dart';
 import 'screen_frame_stats.dart';
 
@@ -18,9 +19,13 @@ FrameStatsClient frameStatsClient(FrameStatsClientRef ref) =>
 ///
 /// @doc doc/specs/app-performance-telemetry.md#送信
 class FrameStatsClient {
-  FrameStatsClient(this._telemetryApi);
+  FrameStatsClient(
+    this._telemetryApi, {
+    void Function(String message)? logWarning,
+  }) : _logWarning = logWarning ?? logger.w;
 
   final TelemetryApi _telemetryApi;
+  final void Function(String message) _logWarning;
 
   /// 1 リクエストで送る画面数の上限（サーバー側の受け入れ上限と一致させる）。
   static const maxScreensPerRequest = 50;
@@ -33,6 +38,13 @@ class FrameStatsClient {
   }) async {
     if (stats.isEmpty) {
       return;
+    }
+
+    if (stats.length > maxScreensPerRequest) {
+      _logWarning(
+        'フレーム計測の送信画面数が上限を超えたため切り詰めます。 '
+        'count: ${stats.length}, max: $maxScreensPerRequest',
+      );
     }
 
     final screens = stats

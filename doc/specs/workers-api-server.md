@@ -218,7 +218,7 @@ kill switch はクライアント任せにせずサーバー側で強制する�
 | dev | `teigiii-telemetry-dev` |
 | prod | `teigiii-telemetry-prod` |
 
-migration は本体とは別系統（`backend/drizzle-telemetry`）で、`just backend-migrate-dev-telemetry` / `just backend-migrate-prod-telemetry` で適用する。
+migration は本体とは別系統（`backend/drizzle-telemetry`）で、`just backend-migrate-dev-telemetry` / `just backend-migrate-prod-telemetry` で適用する。`just backend-deploy-dev` / `just backend-deploy-prod` からも依存として実行する。
 
 <!-- @code backend/src/maintenance/physical-deletion.ts#runPhysicalDeletion -->
 ## 物理削除
@@ -244,7 +244,7 @@ Scheduled Handler は30日以前に論理削除された定義とユーザーを
 ### dev デプロイと smoke test
 
 1. 初回 deploy で確定した `teigiii-api-dev` の workers.dev URL に `/v1` を付け、`backend/wrangler.toml` の dev `AVATAR_BASE_URL` を置き換える。R2 public access は有効化しない。
-2. `just backend-deploy-dev` を実行する。このコマンドは D1 migration、`app_config` 初期行の冪等な作成、`teigiii-api-dev` の deploy を順に行う。
+2. `just backend-deploy-dev` を実行する。このコマンドは本体 D1 / テレメトリ D1 の migration、`app_config` 初期行の冪等な作成、`teigiii-api-dev` の deploy を順に行う。
 3. dev Firebase の正規トークンを shell 環境だけに設定し、次を実行する。トークンをファイル、shell history、ログへ保存しない。
 
 ```bash
@@ -273,9 +273,11 @@ curl 'http://localhost:8787/__scheduled?cron=0+3+*+*+*'
 1. `just backend-validate-prod` で `teigiii-api-prod`、`teigiii-prod`、
    `teigiii-prod-avatars`、prod Firebase vars の bundle / bindings 解決を dry-run する。
 2. `just backend-deploy-prod` を実行する。この recipe は
-   `backend-migrate-prod` の成功後にだけ prod Worker を deploy する。
-3. `wrangler d1 migrations list DB --env prod --remote` で未適用 migration が
-   ゼロであることを確認し、prod の主要フローを smoke test する。
+   `backend-migrate-prod` と `backend-migrate-prod-telemetry` の成功後にだけ
+   prod Worker を deploy する。
+3. `wrangler d1 migrations list DB --env prod --remote` と
+   `wrangler d1 migrations list TELEMETRY_DB --env prod --remote` で
+   未適用 migration がゼロであることを確認し、prod の主要フローを smoke test する。
 
 R2 public access は有効化しない。Cron は Wrangler 設定を正本とし、UTC の実行時刻を
 変更する場合はデプロイ前に確認する。
