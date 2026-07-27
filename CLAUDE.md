@@ -44,6 +44,18 @@ flutter config --enable-lldb-debugging
 just mobile-run-dev-profile-on <device-id>
 ```
 
+## 参照地図
+
+| ドキュメント | いつ読むか |
+| --- | --- |
+| `doc/architecture.md` | `mobile_app/` のレイヤー配置を判断する前 |
+| `doc/specs/README.md` | 仕様の一覧と位置づけを確認する（個別仕様はここから辿る） |
+| `doc/specs/mobile-app-design-system.md` | Ds コンポーネント・トークンを扱う前 |
+| `doc/specs/workers-api-server.md` | backend の API を追加・変更する前 |
+| `doc/ios-physical-device-debug.md` | iOS 実機で動作確認する前 |
+
+`mobile_app/` / `backend/` 配下の作業では、各ディレクトリの CLAUDE.md も参照する。
+
 ## iOS 実機デバッグ（要約）
 
 - iOS 26 実機の **無線 debug は LLDB 経由 JIT のため実用不可レベルに重い**（アプリ側の問題ではない）
