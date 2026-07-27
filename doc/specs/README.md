@@ -7,7 +7,7 @@
 - リンクの検証: `just docbridge-check`
 
 書き方の支援には `docbridge-annotate` スキル、既存コードとのリンク付けには
-`docbridge-link` スキルを使用する。
+`docbridge-link` スキル（Claude 側のみ）を使用する。
 
 注意: Freezed は元クラスの doc コメントを生成ファイルへ複製することがあるため、
 最初のアノテーション追加時に重複リンクの挙動を検証すること

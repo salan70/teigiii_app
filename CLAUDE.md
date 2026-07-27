@@ -62,6 +62,12 @@ just mobile-run-dev-profile-on <device-id>
 例外はユーザーが明示的にスキル不要と指示した場合のみ。
 `mobile_app/` の UI 実装・変更は `implementing-ui-with-design-system` を必ず使用する。
 
+## AI asset 運用
+
+- Claude 用 assets: `.claude/` と `CLAUDE.md` / Codex 用 assets: `.agents/` と `AGENTS.md`
+- `.agents` は `.claude` への symlink ではなく、独立した実体として管理する
+- Claude 側の skill を追加・更新したら `porting-ai-assets-to-codex` で Codex 側への反映要否を判断する。移植の管理台帳は `doc/porting-ai-assets-to-codex.md`
+
 ## plan ワークフロー
 
 - 計画は `doc/plans/YYYY-MM-DD-{slug}.md` に置く。**目的・実行手順・完了条件**を含めること（固定テンプレはなし）

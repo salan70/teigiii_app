@@ -1,42 +1,45 @@
 # Codex 向け AI asset 移植
 
-日付: 2026-07-11
-スキル: porting-ai-assets-to-codex
+スキル: porting-ai-assets-to-codex（Claude 側にのみ存在する。移植を実行するのは Claude 側のため）
 
-## 実施内容
+初版: 2026-07-11 / 最終更新: 2026-07-27（#286）
 
-`.claude/skills/`（13 スキル）と `CLAUDE.md` を元に、Codex 用アセット `.agents/skills/`（10 スキル）と `AGENTS.md` を実体ファイルとして新規作成した。symlink は不使用。
+## 位置づけ
 
-## 移植したスキル（10）
+`.claude/skills/` と `CLAUDE.md` を正本とし、Codex 用アセット `.agents/skills/` と `AGENTS.md` を実体ファイルとして管理する台帳。symlink は不使用。drift 防止は `porting-ai-assets-to-codex` を使う人手運用とする。
+
+## Codex 側に置くスキル（9）
+
+Codex で実際に使うものに限定する。Claude 側にあっても、ここに無いスキルは Codex へ移植しない。
 
 | スキル | 適応内容 |
 |---|---|
-| grilling | 変更なし（Claude 固有前提なし） |
-| collaborating-on-github | 変更なし |
-| test-driven-development | 変更なし |
-| refactoring-code | 変更なし |
-| systematic-debugging | 変更なし |
-| maintaining-ai-docs | 変更なし（CLAUDE.md への言及は文書保守対象としての記載であり実行前提ではない） |
 | git-operations | `variants/feature-branch.md` の保護ブランチ上書き参照を CLAUDE.md → AGENTS.md に変更 |
+| collaborating-on-github | 変更なし |
+| implementing-ui-with-design-system | Claude 固有ツール名（Glob / Grep）を CLI（`ls` / `rg`）に置換し、Cursor Cloud VM で Widgetbook / golden を実行できない場合の報告手順を追加 |
+| test-driven-development | 変更なし |
+| systematic-debugging | 変更なし |
 | receiving-code-review | 禁止例の「明示的な CLAUDE.md 違反」を AGENTS.md に変更 |
-| managing-agent-memory | 廃止済みスキル `wf-08-reflecting-on-sessions` への連携参照を汎用表現に変更 |
-| porting-ai-assets-to-codex | 正本 dotfiles の Codex 版（`.agents/skills/` 版）を採用し、検証コマンドのパスを本プロジェクト（`.agents` / `AGENTS.md`）に適応 |
+| refactoring-code | 変更なし |
+| docbridge-sync | 変更なし |
+| docbridge-annotate | 変更なし |
 
-## Claude 専用として除外したスキル（3）
+## Claude 側のみに置くスキル
 
-| スキル | 除外理由 |
+| スキル | 理由 |
 |---|---|
-| continuous-learning | Claude の Stop フック（`stop-instinct-collect.sh`）と `~/.claude/instincts/` に依存。Codex に同等のフック機構なし |
-| syncing-ai-assets | `.claude/` への同期専用スキル。Codex 側の同期は porting-ai-assets-to-codex が担当 |
-| dispatching-parallel-agents | `Task()`（Claude サブエージェント）前提。Codex に同等の並列サブエージェント機構なし |
+| porting-ai-assets-to-codex | 移植の実行主体が Claude 側のため |
+| syncing-ai-assets | `.claude/` への同期専用 |
+| maintaining-ai-docs | AI ドキュメント保守は Claude 側で実施する |
+| dispatching-parallel-agents | Claude のサブエージェント機構前提。Codex に同等機構なし |
+| grilling | Codex では使用実績がない |
+| docbridge-adopt / docbridge-link / docbridge-review | 導入・棚卸し系で、日常の Codex 作業では使わない |
 
 ## hooks の扱い
 
-`.claude/hooks/`（auto-format、push リマインダー、デバッグコード検出等）は変換ルールに従い Codex へ移植しない。同等の品質担保が必要な場合は手動実行:
+`.codex/hooks/` と `.codex/hooks.json` は DocBridge が生成する Codex 用フックであり、`.agents/skills/` とは別系統で管理する。`.claude/hooks/` と内容は同一で、`.codex/hooks.json` のコマンドは `git rev-parse --show-toplevel` 基準の可搬パスで記述する（#286）。
 
-- フォーマット: `fvm dart format .`
-- Lint: `fvm flutter analyze`
-- デバッグコード確認: コミット前に `print(` / `debugPrint(` の残存を目視確認
+Codex 実セッションでの発火は未検証。発火しない場合は matcher と `tool_name` の判定を Codex の実値に合わせて修正する。
 
 ## AGENTS.md の構成
 
@@ -47,8 +50,9 @@
 - 指示の優先順位の「Skill ツール経由」を「`.agents/skills/` のスキル適用」に言い換え
 - 禁止事項に「Claude 専用手順の転記禁止」を追加（正本 AGENTS.md に準拠）
 - 完了報告フォーマットの MCP 例から pencil を除外（Claude 側の設定に紐づくため）
+- Cursor Cloud VM 向けの注意点を末尾に記載
 
-## 検証結果
+## 検証
 
-- `find .agents AGENTS.md -maxdepth 4 -type l` → symlink なし
-- Claude 固有前提パターン（ask_user_input / Task tool / Claude Code / .claude/hooks）の残存は porting-ai-assets-to-codex 自身の変換ルール表のみ（正本 Codex 版と同一の設計上の記載）
+- `find .agents AGENTS.md -maxdepth 4 -type l` → symlink が無いこと
+- `rg -n '\.Codex|~/\.Codex' .agents/skills` → 機械置換由来の存在しないパス参照が無いこと

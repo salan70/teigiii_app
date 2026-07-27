@@ -55,7 +55,7 @@ just mobile-run-dev-profile-on <device-id>
 - Claude 用 assets: `.claude/` と `CLAUDE.md`
 - Codex 用 assets: `.agents/` と `AGENTS.md`
 - `.agents` は `.claude` への symlink ではなく、独立した実体として管理する
-- Claude 側に skill を追加・更新した場合は `porting-ai-assets-to-codex` を使って Codex 側への移植要否を判断する
+- `.agents/skills/` は Codex で実際に使う 9 スキルのサブセットであり、Claude 側（`.claude/skills/`）と一致しない。移植の管理台帳は `doc/porting-ai-assets-to-codex.md`
 
 ## 指示の優先順位
 
