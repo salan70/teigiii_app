@@ -22,6 +22,12 @@ final mockDefinition = Definition(
   createdAt: nowDateTime,
 );
 
+/// [mockDefinition] の ID だけ差し替えた定義を作る。
+///
+/// 一覧 state は定義本体を保持するため、テストでも ID 文字列ではなく
+/// [Definition] を並べる必要がある。
+Definition definitionOf(String id) => mockDefinition.copyWith(id: id);
+
 const mockUserProfile = UserProfile(
   id: 'userId',
   publicId: '123456789',

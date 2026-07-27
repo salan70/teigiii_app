@@ -4,23 +4,24 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/core/analytics/analytics_event.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
-import 'package:teigi_app/feature/definition_list/appication/definition_id_list_state.dart';
-import 'package:teigi_app/feature/definition_list/domain/definition_id_list_state.dart';
-import 'package:teigi_app/feature/definition_list/repository/definition_id_list_repository.dart';
+import 'package:teigi_app/feature/definition_list/appication/definition_list_state.dart';
+import 'package:teigi_app/feature/definition_list/domain/definition_list_state.dart';
+import 'package:teigi_app/feature/definition_list/repository/definition_list_repository.dart';
 import 'package:teigi_app/feature/definition_list/util/definition_feed_type.dart';
 import 'package:teigi_app/feature/user_follow/application/user_follow_service.dart';
 import 'package:teigi_app/feature/user_follow/repository/user_follow_repository.dart';
 
 import '../../../mock/fake_analytics.dart';
+import '../../../mock/mock_data.dart';
 import 'user_follow_service_test.mocks.dart';
 
 @GenerateNiceMocks([
   MockSpec<UserFollowRepository>(),
-  MockSpec<DefinitionIdListRepository>(),
+  MockSpec<DefinitionListRepository>(),
 ])
 void main() {
   final mockUserFollowRepository = MockUserFollowRepository();
-  final mockDefinitionIdListRepository = MockDefinitionIdListRepository();
+  final mockDefinitionListRepository = MockDefinitionListRepository();
   const currentUserId = 'userId';
 
   late ProviderContainer container;
@@ -34,8 +35,8 @@ void main() {
         userFollowRepositoryProvider.overrideWithValue(
           mockUserFollowRepository,
         ),
-        definitionIdListRepositoryProvider.overrideWithValue(
-          mockDefinitionIdListRepository,
+        definitionListRepositoryProvider.overrideWithValue(
+          mockDefinitionListRepository,
         ),
         ...analyticsTestOverrides(fakeAnalytics),
       ],
@@ -45,7 +46,7 @@ void main() {
 
   tearDown(() {
     reset(mockUserFollowRepository);
-    reset(mockDefinitionIdListRepository);
+    reset(mockDefinitionListRepository);
   });
 
   group('follow', () {
@@ -73,25 +74,23 @@ void main() {
     });
 
     test('無関係なおすすめフィードのページング状態を保つ', () async {
-      when(
-        mockDefinitionIdListRepository.fetchForHomeRecommend(null),
-      ).thenAnswer(
-        (_) async => const DefinitionIdListState(
-          list: ['definition-1'],
+      when(mockDefinitionListRepository.fetchForHomeRecommend(null)).thenAnswer(
+        (_) async => DefinitionListState(
+          list: [definitionOf('definition-1')],
           nextCursor: 'cursor-1',
           hasMore: true,
         ),
       );
       when(
-        mockDefinitionIdListRepository.fetchForHomeRecommend('cursor-1'),
+        mockDefinitionListRepository.fetchForHomeRecommend('cursor-1'),
       ).thenAnswer(
-        (_) async => const DefinitionIdListState(
-          list: ['definition-2'],
+        (_) async => DefinitionListState(
+          list: [definitionOf('definition-2')],
           nextCursor: null,
           hasMore: false,
         ),
       );
-      final provider = definitionIdListStateNotifierProvider(
+      final provider = definitionListStateNotifierProvider(
         DefinitionFeedType.homeRecommend,
       );
       final subscription = container.listen(
@@ -106,12 +105,15 @@ void main() {
       await container.read(userFollowServiceProvider).follow('targetUser');
       await Future<void>.delayed(Duration.zero);
 
-      expect(subscription.read().value?.list, ['definition-1', 'definition-2']);
+      expect(
+        subscription.read().value?.list.map((definition) => definition.id),
+        ['definition-1', 'definition-2'],
+      );
       verify(
-        mockDefinitionIdListRepository.fetchForHomeRecommend(null),
+        mockDefinitionListRepository.fetchForHomeRecommend(null),
       ).called(1);
       verify(
-        mockDefinitionIdListRepository.fetchForHomeRecommend('cursor-1'),
+        mockDefinitionListRepository.fetchForHomeRecommend('cursor-1'),
       ).called(1);
     });
   });

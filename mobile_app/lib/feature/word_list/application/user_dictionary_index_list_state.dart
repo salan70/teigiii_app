@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../auth/application/auth_state.dart';
+import '../domain/dictionary_index_entry.dart';
 import '../domain/dictionary_index_list_state.dart';
 import '../repository/user_dictionary_word_repository.dart';
 import 'community_dictionary_index_list_state.dart';
@@ -42,7 +43,9 @@ class UserDictionaryIndexListStateNotifier
             ? await repo.fetchMyDefinedWords(cursor)
             : await repo.fetchUserDictionary(targetUserId, cursor);
         return DictionaryIndexListState(
-          list: page.list,
+          // mergeFunction で allWords からヘッダー込みで作り直すため、
+          // ここでは平坦化しない。
+          list: page.list.map(DictionaryIndexEntry.word).toList(),
           allWords: page.list,
           nextCursor: page.nextCursor,
           hasMore: page.hasMore,

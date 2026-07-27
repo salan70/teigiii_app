@@ -15,14 +15,14 @@ class SavedWordList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return InfinityScrollWidget(
+    return InfinityScrollWidget<Word>(
       listStateNotifierProvider: savedWordListStateNotifierProvider,
       fetchMore: ref
           .read(savedWordListStateNotifierProvider.notifier)
           .fetchMore,
-      tileBuilder: (item) => Padding(
+      tileBuilder: (word) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: WordTile(word: item as Word),
+        child: WordTile(word: word),
       ),
       contentPadding: EdgeInsets.zero,
       shimmerTile: const Padding(

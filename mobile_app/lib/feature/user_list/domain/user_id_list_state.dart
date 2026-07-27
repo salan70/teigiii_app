@@ -5,7 +5,7 @@ import '../../../util/interface/list_state.dart';
 part 'user_id_list_state.freezed.dart';
 
 @freezed
-class UserIdListState with _$UserIdListState implements ListState {
+class UserIdListState with _$UserIdListState implements ListState<String> {
   const factory UserIdListState({
     required List<String> list,
     required String? nextCursor,

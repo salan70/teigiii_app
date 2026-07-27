@@ -7,7 +7,7 @@ part of 'community_dictionary_index_list_state.dart';
 // **************************************************************************
 
 String _$communityDictionaryIndexListStateNotifierHash() =>
-    r'd0edd1027893a676e3420d60dfd0f11c9625c8f2';
+    r'5def3df54e263da5cd5fadc0cbec99433c5bb4f4';
 
 /// See also [CommunityDictionaryIndexListStateNotifier].
 @ProviderFor(CommunityDictionaryIndexListStateNotifier)

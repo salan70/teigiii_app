@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$DictionaryIndexListState {
-  List<dynamic> get list => throw _privateConstructorUsedError;
+  List<DictionaryIndexEntry> get list => throw _privateConstructorUsedError;
   List<Word> get allWords => throw _privateConstructorUsedError;
   String? get nextCursor => throw _privateConstructorUsedError;
   bool get hasMore => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $DictionaryIndexListStateCopyWith<$Res> {
   ) = _$DictionaryIndexListStateCopyWithImpl<$Res, DictionaryIndexListState>;
   @useResult
   $Res call({
-    List<dynamic> list,
+    List<DictionaryIndexEntry> list,
     List<Word> allWords,
     String? nextCursor,
     bool hasMore,
@@ -68,7 +68,7 @@ class _$DictionaryIndexListStateCopyWithImpl<
             list: null == list
                 ? _value.list
                 : list // ignore: cast_nullable_to_non_nullable
-                      as List<dynamic>,
+                      as List<DictionaryIndexEntry>,
             allWords: null == allWords
                 ? _value.allWords
                 : allWords // ignore: cast_nullable_to_non_nullable
@@ -97,7 +97,7 @@ abstract class _$$DictionaryIndexListStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    List<dynamic> list,
+    List<DictionaryIndexEntry> list,
     List<Word> allWords,
     String? nextCursor,
     bool hasMore,
@@ -130,7 +130,7 @@ class __$$DictionaryIndexListStateImplCopyWithImpl<$Res>
         list: null == list
             ? _value._list
             : list // ignore: cast_nullable_to_non_nullable
-                  as List<dynamic>,
+                  as List<DictionaryIndexEntry>,
         allWords: null == allWords
             ? _value._allWords
             : allWords // ignore: cast_nullable_to_non_nullable
@@ -152,16 +152,16 @@ class __$$DictionaryIndexListStateImplCopyWithImpl<$Res>
 
 class _$DictionaryIndexListStateImpl implements _DictionaryIndexListState {
   const _$DictionaryIndexListStateImpl({
-    required final List<dynamic> list,
+    required final List<DictionaryIndexEntry> list,
     required final List<Word> allWords,
     required this.nextCursor,
     required this.hasMore,
   }) : _list = list,
        _allWords = allWords;
 
-  final List<dynamic> _list;
+  final List<DictionaryIndexEntry> _list;
   @override
-  List<dynamic> get list {
+  List<DictionaryIndexEntry> get list {
     if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
@@ -218,14 +218,14 @@ class _$DictionaryIndexListStateImpl implements _DictionaryIndexListState {
 
 abstract class _DictionaryIndexListState implements DictionaryIndexListState {
   const factory _DictionaryIndexListState({
-    required final List<dynamic> list,
+    required final List<DictionaryIndexEntry> list,
     required final List<Word> allWords,
     required final String? nextCursor,
     required final bool hasMore,
   }) = _$DictionaryIndexListStateImpl;
 
   @override
-  List<dynamic> get list;
+  List<DictionaryIndexEntry> get list;
   @override
   List<Word> get allWords;
   @override

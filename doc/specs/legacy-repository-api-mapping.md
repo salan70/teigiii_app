@@ -49,18 +49,18 @@ issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え
 | `like_definition_repository.isLikedByUser` | **埋め込み**: `DefinitionResponse.isLikedByMe` |
 | `like_definition_repository.fetchAllLikedDefinitionIdList` / `deleteLikeByDefinitionId` | **集約**: アカウント削除のクライアント側 fan-out。`DELETE /v1/users/me` に集約 |
 
-<!-- @code mobile_app/lib/feature/definition_list/repository/definition_id_list_repository.dart#DefinitionIdListRepository -->
+<!-- @code mobile_app/lib/feature/definition_list/repository/definition_list_repository.dart#DefinitionListRepository -->
 ## 定義一覧（フィード）
 
 | 旧操作 | 対応 |
 |---|---|
-| `definition_id_list_repository.fetchForHomeRecommend` | `GET /v1/timeline/discover?type=definition`。**例外**: 公開定義のみとし、自分の非公開定義は表示しない。定義だけにサーバー側で絞り込んだ1ページずつ取得する |
-| `definition_id_list_repository.fetchForHomeFollowing` | `GET /v1/timeline/following`。**例外**: フォロー中ユーザーの公開定義のみとし、自分の定義と非公開定義は表示しない |
-| `definition_id_list_repository.fetchForWordTop`（createdAt / likesCount 順） | `GET /v1/words/{id}/definitions?scope=all&sort=newest\|reactions` |
-| `definition_id_list_repository.fetchForProfileCreatedAt` | `GET /v1/users/{id}/definitions` |
-| `definition_id_list_repository.fetchForLikedByUser` | `GET /v1/users/{id}/liked-definitions`（他者の公開定義 + 閲覧者自身の定義は非公開でも含む。ミュートした著者の定義は Workers 側で除外） |
-| `definition_id_list_repository.fetchForIndividualDictionary` | `GET /v1/users/{id}/definitions?subGroup=&sort=reading`（旧実装と同じ、よみ昇順） |
-| `definition_id_list_repository.fetchForUserWord` | `GET /v1/users/{id}/definitions?wordId=&sort=newest`（あなたの辞書タップ先） |
+| `definition_list_repository.fetchForHomeRecommend` | `GET /v1/timeline/discover?type=definition`。**例外**: 公開定義のみとし、自分の非公開定義は表示しない。定義だけにサーバー側で絞り込んだ1ページずつ取得する |
+| `definition_list_repository.fetchForHomeFollowing` | `GET /v1/timeline/following`。**例外**: フォロー中ユーザーの公開定義のみとし、自分の定義と非公開定義は表示しない |
+| `definition_list_repository.fetchForWordTop`（createdAt / likesCount 順） | `GET /v1/words/{id}/definitions?scope=all&sort=newest\|reactions` |
+| `definition_list_repository.fetchForProfileCreatedAt` | `GET /v1/users/{id}/definitions` |
+| `definition_list_repository.fetchForLikedByUser` | `GET /v1/users/{id}/liked-definitions`（他者の公開定義 + 閲覧者自身の定義は非公開でも含む。ミュートした著者の定義は Workers 側で除外） |
+| `definition_list_repository.fetchForIndividualDictionary` | `GET /v1/users/{id}/definitions?subGroup=&sort=reading`（旧実装と同じ、よみ昇順） |
+| `definition_list_repository.fetchForUserWord` | `GET /v1/users/{id}/definitions?wordId=&sort=newest`（あなたの辞書タップ先） |
 | 各メソッドの `mutedUserIdList` 引数によるクライアント側フィルタ | **集約**: ミュート除外はサーバー側クエリで実施 |
 
 <!-- @code mobile_app/lib/feature/word/repository/word_repository.dart#WordRepository -->

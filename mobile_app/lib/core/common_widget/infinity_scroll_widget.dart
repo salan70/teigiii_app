@@ -11,7 +11,7 @@ import '../../feature/admob/presentation/banner_ad_widget.dart';
 import '../common_provider/key_provider.dart';
 import '../common_provider/snack_bar_controller.dart';
 
-class InfinityScrollWidget extends ConsumerStatefulWidget {
+class InfinityScrollWidget<T> extends ConsumerStatefulWidget {
   const InfinityScrollWidget({
     super.key,
     required this.listStateNotifierProvider,
@@ -26,12 +26,12 @@ class InfinityScrollWidget extends ConsumerStatefulWidget {
   });
 
   /// 扱う state ([ListState]型)を保持する Provider。
-  final AsyncNotifierProvider<dynamic, ListState> listStateNotifierProvider;
+  final AsyncNotifierProvider<dynamic, ListState<T>> listStateNotifierProvider;
 
   final VoidCallback fetchMore;
 
   /// [ListState] の中身（tile）を作成するための関数。
-  final Widget Function(dynamic item) tileBuilder;
+  final Widget Function(T item) tileBuilder;
 
   /// [tileBuilder] で作成した tile を表示する ListView の padding。
   final EdgeInsetsGeometry contentPadding;
@@ -55,11 +55,12 @@ class InfinityScrollWidget extends ConsumerStatefulWidget {
   final bool showBannerAd;
 
   @override
-  ConsumerState<InfinityScrollWidget> createState() =>
-      _InfinityScrollWidgetState();
+  ConsumerState<InfinityScrollWidget<T>> createState() =>
+      _InfinityScrollWidgetState<T>();
 }
 
-class _InfinityScrollWidgetState extends ConsumerState<InfinityScrollWidget> {
+class _InfinityScrollWidgetState<T>
+    extends ConsumerState<InfinityScrollWidget<T>> {
   /// エラーが発生してリビルドした際、スクロール位置を保持するためのキー。
   ///
   /// data / error 分岐の間で [_StateScrollBar] の Element と ScrollPosition
@@ -110,7 +111,7 @@ class _InfinityScrollWidgetState extends ConsumerState<InfinityScrollWidget> {
             }
             return false;
           },
-          child: _StateScrollBar(
+          child: _StateScrollBar<T>(
             globalKey: _scrollbarKey,
             onRefresh: onRefresh,
             asyncListState: asyncListState,
@@ -134,7 +135,7 @@ class _InfinityScrollWidgetState extends ConsumerState<InfinityScrollWidget> {
 
         // 取得済みのデータがある場合、それを表示する。
         if (asyncListState.hasValue) {
-          return _StateScrollBar(
+          return _StateScrollBar<T>(
             globalKey: _scrollbarKey,
             onRefresh: onRefresh,
             asyncListState: asyncListState,
@@ -182,7 +183,7 @@ class _InfinityScrollWidgetState extends ConsumerState<InfinityScrollWidget> {
 ///
 /// スワイプリフレッシュ, ListView, ListView の一番下に表示する Widget ([bottomWidget])
 /// を内包している。
-class _StateScrollBar extends StatelessWidget {
+class _StateScrollBar<T> extends StatelessWidget {
   const _StateScrollBar({
     required this.globalKey,
     required this.onRefresh,
@@ -196,8 +197,8 @@ class _StateScrollBar extends StatelessWidget {
 
   final GlobalKey globalKey;
   final Future<void> Function() onRefresh;
-  final AsyncValue<ListState?> asyncListState;
-  final Widget Function(dynamic item) tileBuilder;
+  final AsyncValue<ListState<T>?> asyncListState;
+  final Widget Function(T item) tileBuilder;
   final EdgeInsetsGeometry contentPadding;
   final Widget bottomWidget;
   final Widget? emptyWidget;
@@ -275,7 +276,7 @@ class _BottomWidgetWhenError extends StatelessWidget {
   /// 無限スクロールの追加読み込みでエラーが発生した場合に、
   /// 再読み込みとして行う処理のため、 fetchMore （追加読み込み）を想定している。
   final VoidCallback fetchMore;
-  final AsyncValue<ListState?> asyncListState;
+  final AsyncValue<ListState<dynamic>?> asyncListState;
 
   @override
   Widget build(BuildContext context) {

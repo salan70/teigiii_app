@@ -65,10 +65,10 @@ class WordListPage extends ConsumerWidget {
               ),
             ];
           },
-          body: InfinityScrollWidget(
+          body: InfinityScrollWidget<Word>(
             listStateNotifierProvider: wordListProvider,
             fetchMore: ref.read(wordListProvider.notifier).fetchMore,
-            tileBuilder: (item) => WordTile(word: item as Word),
+            tileBuilder: (word) => WordTile(word: word),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             shimmerTile: const WordTileShimmer(),
             shimmerTileNumber: 10,

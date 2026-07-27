@@ -15,31 +15,55 @@ DefinitionSeedStore definitionSeedStore(DefinitionSeedStoreRef ref) =>
 /// 一覧取得時にここへ投入しておき、`definitionProvider` が取得の代わりに
 /// 参照することで追加リクエストをなくす。
 ///
+/// シードはフィード単位（[feedKey]）で世代管理する。ホーム画面の
+/// おすすめタブとフォロー中タブのように複数フィードが同時に生存するため、
+/// 単一世代にすると片方の refresh がもう片方のシードを消してしまう。
+///
 /// Notifier ではなく素のクラスにしているのは、`definitionProvider` の
 /// build の同期区間から参照されるため。
 /// provider の state をその区間で変更すると Riverpod が例外を投げる。
 class DefinitionSeedStore {
   final _seeds = <String, Definition>{};
 
+  /// フィードごとに、そのフィードが参照している ID 集合。
+  final _idsByFeed = <String, Set<String>>{};
+
   /// 現在保持しているシードの ID 集合。
   Set<String> get ids => _seeds.keys.toSet();
 
-  /// 一覧取得で得られた定義をまとめて投入する。
-  void seedAll(Iterable<Definition> definitions) {
+  /// [feedKey] のフィードが参照している ID 集合。
+  Set<String> idsOf(String feedKey) => {...?_idsByFeed[feedKey]};
+
+  /// 一覧取得で得られた定義をまとめて投入する（追記）。
+  void seedAll(String feedKey, Iterable<Definition> definitions) {
+    final feedIds = _idsByFeed.putIfAbsent(feedKey, () => <String>{});
     for (final definition in definitions) {
       _seeds[definition.id] = definition;
+      feedIds.add(definition.id);
     }
   }
 
-  /// フィードの世代を丸ごと置き換える。
+  /// [feedKey] のフィードの世代を丸ごと置き換える。
   ///
-  /// 既存のシードをすべて破棄したうえで [definitions] を投入する。
-  /// 戻り値は置き換え前に保持していた ID 集合。
-  Set<String> replaceAll(Iterable<Definition> definitions) {
-    final previousIds = ids;
-    _seeds.clear();
-    seedAll(definitions);
-    return previousIds;
+  /// 戻り値は、この置き換えでシードが失われた ID 集合。
+  /// 他のフィードがまだ参照している ID はシードを残すため、戻り値に含めない。
+  /// 呼び出し側は戻り値の ID の `definitionProvider` を invalidate して、
+  /// 単体取得へ戻す必要がある。
+  Set<String> replaceAll(String feedKey, Iterable<Definition> definitions) {
+    final previousIds = idsOf(feedKey);
+    _idsByFeed[feedKey] = <String>{};
+    seedAll(feedKey, definitions);
+
+    final droppedIds = previousIds.difference(idsOf(feedKey));
+    final removedIds = <String>{};
+    for (final id in droppedIds) {
+      if (_isReferenced(id)) {
+        continue;
+      }
+      _seeds.remove(id);
+      removedIds.add(id);
+    }
+    return removedIds;
   }
 
   /// [definitionId] のシードを返す。未投入の場合は null。
@@ -49,5 +73,13 @@ class DefinitionSeedStore {
   ///
   /// シードが残っていると `definitionProvider` を invalidate しても
   /// 古い値を返してしまうため、再取得させたい場合は必ず破棄する。
-  void remove(String definitionId) => _seeds.remove(definitionId);
+  void remove(String definitionId) {
+    _seeds.remove(definitionId);
+    for (final feedIds in _idsByFeed.values) {
+      feedIds.remove(definitionId);
+    }
+  }
+
+  bool _isReferenced(String definitionId) =>
+      _idsByFeed.values.any((feedIds) => feedIds.contains(definitionId));
 }

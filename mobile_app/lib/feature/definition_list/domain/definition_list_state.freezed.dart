@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'definition_id_list_state.dart';
+part of 'definition_list_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -16,33 +16,30 @@ final _privateConstructorUsedError = UnsupportedError(
 );
 
 /// @nodoc
-mixin _$DefinitionIdListState {
-  List<String> get list => throw _privateConstructorUsedError;
+mixin _$DefinitionListState {
+  List<Definition> get list => throw _privateConstructorUsedError;
   String? get nextCursor => throw _privateConstructorUsedError;
   bool get hasMore => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $DefinitionIdListStateCopyWith<DefinitionIdListState> get copyWith =>
+  $DefinitionListStateCopyWith<DefinitionListState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $DefinitionIdListStateCopyWith<$Res> {
-  factory $DefinitionIdListStateCopyWith(
-    DefinitionIdListState value,
-    $Res Function(DefinitionIdListState) then,
-  ) = _$DefinitionIdListStateCopyWithImpl<$Res, DefinitionIdListState>;
+abstract class $DefinitionListStateCopyWith<$Res> {
+  factory $DefinitionListStateCopyWith(
+    DefinitionListState value,
+    $Res Function(DefinitionListState) then,
+  ) = _$DefinitionListStateCopyWithImpl<$Res, DefinitionListState>;
   @useResult
-  $Res call({List<String> list, String? nextCursor, bool hasMore});
+  $Res call({List<Definition> list, String? nextCursor, bool hasMore});
 }
 
 /// @nodoc
-class _$DefinitionIdListStateCopyWithImpl<
-  $Res,
-  $Val extends DefinitionIdListState
->
-    implements $DefinitionIdListStateCopyWith<$Res> {
-  _$DefinitionIdListStateCopyWithImpl(this._value, this._then);
+class _$DefinitionListStateCopyWithImpl<$Res, $Val extends DefinitionListState>
+    implements $DefinitionListStateCopyWith<$Res> {
+  _$DefinitionListStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -61,7 +58,7 @@ class _$DefinitionIdListStateCopyWithImpl<
             list: null == list
                 ? _value.list
                 : list // ignore: cast_nullable_to_non_nullable
-                      as List<String>,
+                      as List<Definition>,
             nextCursor: freezed == nextCursor
                 ? _value.nextCursor
                 : nextCursor // ignore: cast_nullable_to_non_nullable
@@ -77,25 +74,24 @@ class _$DefinitionIdListStateCopyWithImpl<
 }
 
 /// @nodoc
-abstract class _$$DefinitionIdListStateImplCopyWith<$Res>
-    implements $DefinitionIdListStateCopyWith<$Res> {
-  factory _$$DefinitionIdListStateImplCopyWith(
-    _$DefinitionIdListStateImpl value,
-    $Res Function(_$DefinitionIdListStateImpl) then,
-  ) = __$$DefinitionIdListStateImplCopyWithImpl<$Res>;
+abstract class _$$DefinitionListStateImplCopyWith<$Res>
+    implements $DefinitionListStateCopyWith<$Res> {
+  factory _$$DefinitionListStateImplCopyWith(
+    _$DefinitionListStateImpl value,
+    $Res Function(_$DefinitionListStateImpl) then,
+  ) = __$$DefinitionListStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<String> list, String? nextCursor, bool hasMore});
+  $Res call({List<Definition> list, String? nextCursor, bool hasMore});
 }
 
 /// @nodoc
-class __$$DefinitionIdListStateImplCopyWithImpl<$Res>
-    extends
-        _$DefinitionIdListStateCopyWithImpl<$Res, _$DefinitionIdListStateImpl>
-    implements _$$DefinitionIdListStateImplCopyWith<$Res> {
-  __$$DefinitionIdListStateImplCopyWithImpl(
-    _$DefinitionIdListStateImpl _value,
-    $Res Function(_$DefinitionIdListStateImpl) _then,
+class __$$DefinitionListStateImplCopyWithImpl<$Res>
+    extends _$DefinitionListStateCopyWithImpl<$Res, _$DefinitionListStateImpl>
+    implements _$$DefinitionListStateImplCopyWith<$Res> {
+  __$$DefinitionListStateImplCopyWithImpl(
+    _$DefinitionListStateImpl _value,
+    $Res Function(_$DefinitionListStateImpl) _then,
   ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -106,11 +102,11 @@ class __$$DefinitionIdListStateImplCopyWithImpl<$Res>
     Object? hasMore = null,
   }) {
     return _then(
-      _$DefinitionIdListStateImpl(
+      _$DefinitionListStateImpl(
         list: null == list
             ? _value._list
             : list // ignore: cast_nullable_to_non_nullable
-                  as List<String>,
+                  as List<Definition>,
         nextCursor: freezed == nextCursor
             ? _value.nextCursor
             : nextCursor // ignore: cast_nullable_to_non_nullable
@@ -126,16 +122,16 @@ class __$$DefinitionIdListStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DefinitionIdListStateImpl implements _DefinitionIdListState {
-  const _$DefinitionIdListStateImpl({
-    required final List<String> list,
+class _$DefinitionListStateImpl implements _DefinitionListState {
+  const _$DefinitionListStateImpl({
+    required final List<Definition> list,
     required this.nextCursor,
     required this.hasMore,
   }) : _list = list;
 
-  final List<String> _list;
+  final List<Definition> _list;
   @override
-  List<String> get list {
+  List<Definition> get list {
     if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
@@ -148,14 +144,14 @@ class _$DefinitionIdListStateImpl implements _DefinitionIdListState {
 
   @override
   String toString() {
-    return 'DefinitionIdListState(list: $list, nextCursor: $nextCursor, hasMore: $hasMore)';
+    return 'DefinitionListState(list: $list, nextCursor: $nextCursor, hasMore: $hasMore)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DefinitionIdListStateImpl &&
+            other is _$DefinitionListStateImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.nextCursor, nextCursor) ||
                 other.nextCursor == nextCursor) &&
@@ -173,29 +169,28 @@ class _$DefinitionIdListStateImpl implements _DefinitionIdListState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$DefinitionIdListStateImplCopyWith<_$DefinitionIdListStateImpl>
-  get copyWith =>
-      __$$DefinitionIdListStateImplCopyWithImpl<_$DefinitionIdListStateImpl>(
+  _$$DefinitionListStateImplCopyWith<_$DefinitionListStateImpl> get copyWith =>
+      __$$DefinitionListStateImplCopyWithImpl<_$DefinitionListStateImpl>(
         this,
         _$identity,
       );
 }
 
-abstract class _DefinitionIdListState implements DefinitionIdListState {
-  const factory _DefinitionIdListState({
-    required final List<String> list,
+abstract class _DefinitionListState implements DefinitionListState {
+  const factory _DefinitionListState({
+    required final List<Definition> list,
     required final String? nextCursor,
     required final bool hasMore,
-  }) = _$DefinitionIdListStateImpl;
+  }) = _$DefinitionListStateImpl;
 
   @override
-  List<String> get list;
+  List<Definition> get list;
   @override
   String? get nextCursor;
   @override
   bool get hasMore;
   @override
   @JsonKey(ignore: true)
-  _$$DefinitionIdListStateImplCopyWith<_$DefinitionIdListStateImpl>
-  get copyWith => throw _privateConstructorUsedError;
+  _$$DefinitionListStateImplCopyWith<_$DefinitionListStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

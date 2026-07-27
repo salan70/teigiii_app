@@ -7,9 +7,9 @@ import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition/application/definition_seed_store.dart';
 import 'package:teigi_app/feature/definition_like/application/like_definition_service.dart';
 import 'package:teigi_app/feature/definition_like/repository/like_definition_repository.dart';
-import 'package:teigi_app/feature/definition_list/appication/definition_id_list_state.dart';
-import 'package:teigi_app/feature/definition_list/domain/definition_id_list_state.dart';
-import 'package:teigi_app/feature/definition_list/repository/definition_id_list_repository.dart';
+import 'package:teigi_app/feature/definition_list/appication/definition_list_state.dart';
+import 'package:teigi_app/feature/definition_list/domain/definition_list_state.dart';
+import 'package:teigi_app/feature/definition_list/repository/definition_list_repository.dart';
 import 'package:teigi_app/feature/definition_list/util/definition_feed_type.dart';
 
 import '../../../mock/fake_analytics.dart';
@@ -18,11 +18,11 @@ import 'definition_service_test.mocks.dart';
 
 @GenerateNiceMocks([
   MockSpec<LikeDefinitionRepository>(),
-  MockSpec<DefinitionIdListRepository>(),
+  MockSpec<DefinitionListRepository>(),
 ])
 void main() {
   final mockLikeDefinitionRepository = MockLikeDefinitionRepository();
-  final mockDefinitionIdListRepository = MockDefinitionIdListRepository();
+  final mockDefinitionListRepository = MockDefinitionListRepository();
 
   late ProviderContainer container;
   late FakeAnalyticsClient fakeAnalytics;
@@ -35,8 +35,8 @@ void main() {
         likeDefinitionRepositoryProvider.overrideWithValue(
           mockLikeDefinitionRepository,
         ),
-        definitionIdListRepositoryProvider.overrideWithValue(
-          mockDefinitionIdListRepository,
+        definitionListRepositoryProvider.overrideWithValue(
+          mockDefinitionListRepository,
         ),
         ...analyticsTestOverrides(fakeAnalytics),
       ],
@@ -46,7 +46,7 @@ void main() {
 
   tearDown(() {
     reset(mockLikeDefinitionRepository);
-    reset(mockDefinitionIdListRepository);
+    reset(mockDefinitionListRepository);
   });
 
   group('tapLike()', () {
@@ -97,25 +97,23 @@ void main() {
     });
 
     test('ホームフィードのページング状態を保ったままいいねする', () async {
-      when(
-        mockDefinitionIdListRepository.fetchForHomeRecommend(null),
-      ).thenAnswer(
-        (_) async => const DefinitionIdListState(
-          list: ['definition-1'],
+      when(mockDefinitionListRepository.fetchForHomeRecommend(null)).thenAnswer(
+        (_) async => DefinitionListState(
+          list: [definitionOf('definition-1')],
           nextCursor: 'cursor-1',
           hasMore: true,
         ),
       );
       when(
-        mockDefinitionIdListRepository.fetchForHomeRecommend('cursor-1'),
+        mockDefinitionListRepository.fetchForHomeRecommend('cursor-1'),
       ).thenAnswer(
-        (_) async => const DefinitionIdListState(
-          list: ['definition-2'],
+        (_) async => DefinitionListState(
+          list: [definitionOf('definition-2')],
           nextCursor: null,
           hasMore: false,
         ),
       );
-      final provider = definitionIdListStateNotifierProvider(
+      final provider = definitionListStateNotifierProvider(
         DefinitionFeedType.homeRecommend,
       );
       final subscription = container.listen(
@@ -132,19 +130,22 @@ void main() {
           .tapLike(mockDefinition.copyWith(isLikedByUser: false));
       await Future<void>.delayed(Duration.zero);
 
-      expect(subscription.read().value?.list, ['definition-1', 'definition-2']);
+      expect(
+        subscription.read().value?.list.map((definition) => definition.id),
+        ['definition-1', 'definition-2'],
+      );
       verify(
-        mockDefinitionIdListRepository.fetchForHomeRecommend(null),
+        mockDefinitionListRepository.fetchForHomeRecommend(null),
       ).called(1);
       verify(
-        mockDefinitionIdListRepository.fetchForHomeRecommend('cursor-1'),
+        mockDefinitionListRepository.fetchForHomeRecommend('cursor-1'),
       ).called(1);
     });
 
     test('いいね後、対象定義のシードが破棄される', () async {
       // * Arrange
       final store = container.read(definitionSeedStoreProvider)
-        ..seedAll([mockDefinition]);
+        ..seedAll('test-feed', [mockDefinition]);
       expect(store.read(mockDefinition.id), mockDefinition);
 
       // * Act
