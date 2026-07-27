@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/Users/odatetsuo/Projects/Indee/teigiii_app/.codex/hooks/pre-tool-use-push-reminder.sh'",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/pre-tool-use-push-reminder.sh\"",
             "timeout": 5
           }
         ]
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/Users/odatetsuo/Projects/Indee/teigiii_app/.codex/hooks/post-tool-use-auto-format.sh'",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/post-tool-use-auto-format.sh\"",
             "timeout": 15
           }
         ]
@@ -26,7 +26,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/Users/odatetsuo/Projects/Indee/teigiii_app/.codex/hooks/post-tool-use-docbridge-context.sh'",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/post-tool-use-docbridge-context.sh\"",
             "timeout": 30
           }
         ]
@@ -37,12 +37,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/Users/odatetsuo/Projects/Indee/teigiii_app/.codex/hooks/stop-debug-code-detect.sh'",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/stop-debug-code-detect.sh\"",
             "timeout": 10
           },
           {
             "type": "command",
-            "command": "bash '/Users/odatetsuo/Projects/Indee/teigiii_app/.codex/hooks/stop-docbridge-related-gate.sh'",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/stop-docbridge-related-gate.sh\"",
             "timeout": 60
           }
         ]
