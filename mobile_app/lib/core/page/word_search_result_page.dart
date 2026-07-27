@@ -63,10 +63,7 @@ class WordSearchResultPage extends ConsumerWidget {
           body: Column(
             children: [
               const Gap(24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 36),
-                child: SearchWordTextField(defaultText: searchWord),
-              ),
+              SearchWordTextField(defaultText: searchWord),
               const Gap(32),
               Expanded(
                 child: InfinityScrollWidget(

@@ -10,6 +10,7 @@ import '../../feature/user_profile/presentation/profile_tile.dart';
 import '../../feature/user_profile/presentation/profile_tile_shimmer.dart';
 import '../../feature/user_search/application/user_search_state.dart';
 import '../../feature/user_search/presentation/search_user_text_field.dart';
+import '../design_system/design_system.dart';
 
 @RoutePage()
 class UserSearchResultPage extends ConsumerWidget {
@@ -27,21 +28,22 @@ class UserSearchResultPage extends ConsumerWidget {
       onTap: () => primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(title: const Text('ユーザーを探す')),
-        body: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: asyncUserProfileByPublicId.when(
-            data: (userId) {
-              final currentUserId = ref.watch(userIdProvider)!;
-              return ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 24,
-                      horizontal: 36,
-                    ),
-                    child: SearchUserTextField(defaultText: searchWord),
+        // 検索欄は DsSearchField が左右 40 を持つ。リスト本文だけ
+        // screenHorizontal（16）を付ける（WordSearchResultPage と同じ分離）。
+        body: asyncUserProfileByPublicId.when(
+          data: (userId) {
+            final currentUserId = ref.watch(userIdProvider)!;
+            return ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: DsSpacing.section,
                   ),
-                  userId == null
+                  child: SearchUserTextField(defaultText: searchWord),
+                ),
+                Padding(
+                  padding: DsSpacing.screenHorizontalInsets,
+                  child: userId == null
                       ? Center(
                           child: Text(
                             'ユーザーが見つかりませんでした',
@@ -54,21 +56,27 @@ class UserSearchResultPage extends ConsumerWidget {
                               ? const SizedBox.shrink()
                               : FollowOrUnfollowButton(targetUserId: userId),
                         ),
-                ],
-              );
-            },
-            loading: ProfileTileShimmer.new,
-            error: (error, stackTrace) {
-              logger.e(
-                '[$searchWord]を検索時にエラーが発生しました。'
-                'error: $error, stackTrace: $stackTrace',
-              );
-              return ErrorAndRetryWidget.cannotInquire(
+                ),
+              ],
+            );
+          },
+          loading: () => const Padding(
+            padding: DsSpacing.screenHorizontalInsets,
+            child: ProfileTileShimmer(),
+          ),
+          error: (error, stackTrace) {
+            logger.e(
+              '[$searchWord]を検索時にエラーが発生しました。'
+              'error: $error, stackTrace: $stackTrace',
+            );
+            return Padding(
+              padding: DsSpacing.screenHorizontalInsets,
+              child: ErrorAndRetryWidget.cannotInquire(
                 onRetry: () =>
                     ref.invalidate(userIdSearchByPublicIdProvider(searchWord)),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
