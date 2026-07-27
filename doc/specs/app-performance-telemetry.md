@@ -57,3 +57,14 @@ build と raster を分けて数えるのは、「Dart 側の再構築が重い�
 クライアント側の `perfTelemetryEnabled`（`GET /v1/app-config`）は**通信量削減の最適化**であり、即時停止の正ではない。`appConfigProvider` は `keepAlive` で起動時に一度しか取得しないため、フラグを false にしても起動中のセッションには反映されない。
 
 即時停止は**受信 API 側の判定**で行う（[workers-api-server.md](workers-api-server.md)）。サーバーはリクエストごとにフラグを読み、false なら 1 行も保存しない。
+
+## 分析導線
+
+ダッシュボードは作らない。蓄積データの参照は CLI のみとする。
+
+| コマンド | 用途 |
+|---|---|
+| `just perf-report [build_number]` | AI / 定型分析の主導線。画面別ジャンク率、`platform + flavor` ごとの `build_number` による最新 vs 直前比較、端末別・リフレッシュレート別内訳を JSON で返す。各集計にセッション数と `frame_count` 合計を含める |
+| `just perf-query '<SQL>'` | 手動調査用の raw SQL。AI の代表導線にはしない |
+
+どちらも prod の `TELEMETRY_DB` を対象とし、**D1 Read のみ**の `CLOUDFLARE_API_TOKEN` を必須とする。手順と指標の解釈は `.claude/skills/analyzing-app-performance/SKILL.md` を正本とする。新旧バージョンの判定は `app_version` 文字列順ではなく数値の `build_number` で行う。
