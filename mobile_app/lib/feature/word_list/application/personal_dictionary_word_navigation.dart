@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/router/app_router.dart';
-import '../../definition_list/repository/definition_id_list_repository.dart';
+import '../../definition_list/repository/definition_list_repository.dart';
 import '../../word/domain/word.dart';
 
 /// あなたの辞書の言葉タップ先を決める。
@@ -45,13 +45,13 @@ Future<void> openPersonalDictionaryWord({
       return;
     case PersonalDictionaryWordNavKind.detail:
       final page = await ref
-          .read(definitionIdListRepositoryProvider)
+          .read(definitionListRepositoryProvider)
           .fetchForUserWord(userId, word.id, null);
       if (!context.mounted || page.list.isEmpty) {
         return;
       }
       await context.pushRoute(
-        DefinitionDetailRoute(definitionId: page.list.first),
+        DefinitionDetailRoute(definitionId: page.list.first.id),
       );
   }
 }

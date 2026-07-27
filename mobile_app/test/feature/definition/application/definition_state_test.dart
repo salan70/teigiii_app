@@ -127,7 +127,9 @@ void main() {
         authorName: 'feed name',
         authorImageUrl: 'https://api.example.com/feed-avatar',
       );
-      seededContainer.read(definitionSeedStoreProvider).seedAll([seeded]);
+      seededContainer.read(definitionSeedStoreProvider).seedAll('test-feed', [
+        seeded,
+      ]);
 
       // * Act
       final actual = await seededContainer.read(
@@ -165,7 +167,7 @@ void main() {
     test('refreshDefinition 後はシードが破棄され再取得される', () async {
       // * Arrange
       final seededContainer = buildContainer();
-      seededContainer.read(definitionSeedStoreProvider).seedAll([
+      seededContainer.read(definitionSeedStoreProvider).seedAll('test-feed', [
         mockDefinition,
       ]);
       when(

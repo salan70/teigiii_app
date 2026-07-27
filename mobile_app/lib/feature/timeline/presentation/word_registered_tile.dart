@@ -1,11 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:teigiii_api/teigiii_api.dart';
-
 import '../../../../core/router/app_router.dart';
 import '../../../../util/extension/date_time_extension.dart';
 import '../../user_profile/presentation/avatar_network_image_widget.dart';
+import '../domain/registered_word_activity.dart';
 
 /// タイムラインの「言葉が登録されました🎉」タイル。
 ///
@@ -13,7 +12,7 @@ import '../../user_profile/presentation/avatar_network_image_widget.dart';
 class WordRegisteredTile extends StatelessWidget {
   const WordRegisteredTile({super.key, required this.activity});
 
-  final WordRegisteredActivity activity;
+  final RegisteredWordActivity activity;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +21,7 @@ class WordRegisteredTile extends StatelessWidget {
     final avatarDiameter = AvatarSize.medium.diameter;
 
     return InkWell(
-      onTap: () => context.pushRoute(WordTopRoute(wordId: activity.word.id)),
+      onTap: () => context.pushRoute(WordTopRoute(wordId: activity.wordId)),
       child: Column(
         children: [
           Padding(
@@ -66,13 +65,13 @@ class WordRegisteredTile extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        activity.word.word,
+                        activity.word,
                         overflow: TextOverflow.clip,
                         style: theme.textTheme.titleLarge,
                       ),
                       const Gap(8),
                       Text(
-                        activity.word.reading,
+                        activity.reading,
                         style: theme.textTheme.bodyMedium!.copyWith(
                           color: onSurfaceVariant,
                         ),

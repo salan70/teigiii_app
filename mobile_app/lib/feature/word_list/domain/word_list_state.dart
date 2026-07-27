@@ -6,7 +6,7 @@ import '../../word/domain/word.dart';
 part 'word_list_state.freezed.dart';
 
 @freezed
-class WordListState with _$WordListState implements ListState {
+class WordListState with _$WordListState implements ListState<Word> {
   const factory WordListState({
     required List<Word> list,
     required String? nextCursor,

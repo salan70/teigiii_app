@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common_widget/infinity_scroll_widget.dart';
 import '../../auth/application/auth_state.dart';
-import '../../word/domain/word.dart';
 import '../../word/presentation/word_tile.dart';
 import '../../word/presentation/word_tile_shimmer.dart';
 import '../application/community_dictionary_index_list_state.dart';
 import '../application/personal_dictionary_word_navigation.dart';
 import '../application/user_dictionary_index_list_state.dart';
+import '../domain/dictionary_index_entry.dart';
 
 /// タイムラインの contentPadding と同じ左右余白。
 const _horizontalPadding = EdgeInsets.symmetric(horizontal: 16);
@@ -35,11 +35,11 @@ class DictionaryWordIndexList extends ConsumerWidget {
       child: WordTileShimmer(),
     );
 
-    Widget tileBuilder(dynamic item) =>
-        _buildTile(context, ref, item, isMyDictionary: isMyDictionary);
+    Widget tileBuilder(DictionaryIndexEntry entry) =>
+        _buildTile(context, ref, entry, isMyDictionary: isMyDictionary);
 
     if (userId == null) {
-      return InfinityScrollWidget(
+      return InfinityScrollWidget<DictionaryIndexEntry>(
         listStateNotifierProvider:
             communityDictionaryIndexListStateNotifierProvider,
         fetchMore: ref
@@ -53,7 +53,7 @@ class DictionaryWordIndexList extends ConsumerWidget {
       );
     }
 
-    return InfinityScrollWidget(
+    return InfinityScrollWidget<DictionaryIndexEntry>(
       listStateNotifierProvider: userDictionaryIndexListStateNotifierProvider(
         userId,
       ),
@@ -71,32 +71,32 @@ class DictionaryWordIndexList extends ConsumerWidget {
   Widget _buildTile(
     BuildContext context,
     WidgetRef ref,
-    dynamic item, {
+    DictionaryIndexEntry entry, {
     required bool isMyDictionary,
   }) {
-    if (item is String) {
-      return _SectionHeader(label: item);
+    switch (entry) {
+      case DictionaryIndexSectionHeader():
+        return _SectionHeader(label: entry.label);
+      case DictionaryIndexWordEntry():
+        final word = entry.word;
+        return Padding(
+          padding: _horizontalPadding,
+          child: WordTile(
+            word: word,
+            showPostedDefinitionCount: !isMyDictionary,
+            onTap: isMyDictionary
+                ? () {
+                    openPersonalDictionaryWord(
+                      context: context,
+                      ref: ref,
+                      word: word,
+                      userId: targetUserId!,
+                    );
+                  }
+                : null,
+          ),
+        );
     }
-    if (item is Word) {
-      return Padding(
-        padding: _horizontalPadding,
-        child: WordTile(
-          word: item,
-          showPostedDefinitionCount: !isMyDictionary,
-          onTap: isMyDictionary
-              ? () {
-                  openPersonalDictionaryWord(
-                    context: context,
-                    ref: ref,
-                    word: item,
-                    userId: targetUserId!,
-                  );
-                }
-              : null,
-        ),
-      );
-    }
-    return const SizedBox.shrink();
   }
 }
 

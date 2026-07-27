@@ -32,33 +32,18 @@ import 'package:teigi_app/feature/user_profile/repository/user_profile_repositor
 
 class _FakeDiscoverFeedListState_0 extends _i1.SmartFake
     implements _i2.DiscoverFeedListState {
-  _FakeDiscoverFeedListState_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeDiscoverFeedListState_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeDefinition_1 extends _i1.SmartFake implements _i3.Definition {
-  _FakeDefinition_1(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeDefinition_1(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeUserProfile_2 extends _i1.SmartFake implements _i4.UserProfile {
-  _FakeUserProfile_2(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeUserProfile_2(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [DiscoverTimelineRepository].
@@ -69,27 +54,22 @@ class MockDiscoverTimelineRepository extends _i1.Mock
   @override
   _i6.Future<_i2.DiscoverFeedListState> fetchDiscoverTimeline(String? cursor) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchDiscoverTimeline,
-          [cursor],
-        ),
-        returnValue: _i6.Future<_i2.DiscoverFeedListState>.value(
-            _FakeDiscoverFeedListState_0(
-          this,
-          Invocation.method(
-            #fetchDiscoverTimeline,
-            [cursor],
-          ),
-        )),
-        returnValueForMissingStub: _i6.Future<_i2.DiscoverFeedListState>.value(
-            _FakeDiscoverFeedListState_0(
-          this,
-          Invocation.method(
-            #fetchDiscoverTimeline,
-            [cursor],
-          ),
-        )),
-      ) as _i6.Future<_i2.DiscoverFeedListState>);
+            Invocation.method(#fetchDiscoverTimeline, [cursor]),
+            returnValue: _i6.Future<_i2.DiscoverFeedListState>.value(
+              _FakeDiscoverFeedListState_0(
+                this,
+                Invocation.method(#fetchDiscoverTimeline, [cursor]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i6.Future<_i2.DiscoverFeedListState>.value(
+                  _FakeDiscoverFeedListState_0(
+                    this,
+                    Invocation.method(#fetchDiscoverTimeline, [cursor]),
+                  ),
+                ),
+          )
+          as _i6.Future<_i2.DiscoverFeedListState>);
 }
 
 /// A class which mocks [FetchDefinitionRepository].
@@ -100,26 +80,21 @@ class MockFetchDefinitionRepository extends _i1.Mock
   @override
   _i6.Future<_i3.Definition> fetchDefinition(String? definitionId) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchDefinition,
-          [definitionId],
-        ),
-        returnValue: _i6.Future<_i3.Definition>.value(_FakeDefinition_1(
-          this,
-          Invocation.method(
-            #fetchDefinition,
-            [definitionId],
-          ),
-        )),
-        returnValueForMissingStub:
-            _i6.Future<_i3.Definition>.value(_FakeDefinition_1(
-          this,
-          Invocation.method(
-            #fetchDefinition,
-            [definitionId],
-          ),
-        )),
-      ) as _i6.Future<_i3.Definition>);
+            Invocation.method(#fetchDefinition, [definitionId]),
+            returnValue: _i6.Future<_i3.Definition>.value(
+              _FakeDefinition_1(
+                this,
+                Invocation.method(#fetchDefinition, [definitionId]),
+              ),
+            ),
+            returnValueForMissingStub: _i6.Future<_i3.Definition>.value(
+              _FakeDefinition_1(
+                this,
+                Invocation.method(#fetchDefinition, [definitionId]),
+              ),
+            ),
+          )
+          as _i6.Future<_i3.Definition>);
 }
 
 /// A class which mocks [UserProfileRepository].
@@ -130,35 +105,28 @@ class MockUserProfileRepository extends _i1.Mock
   @override
   _i6.Future<_i4.UserProfile> fetchUserProfile(String? userId) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #fetchUserProfile,
-          [userId],
-        ),
-        returnValue: _i6.Future<_i4.UserProfile>.value(_FakeUserProfile_2(
-          this,
-          Invocation.method(
-            #fetchUserProfile,
-            [userId],
-          ),
-        )),
-        returnValueForMissingStub:
-            _i6.Future<_i4.UserProfile>.value(_FakeUserProfile_2(
-          this,
-          Invocation.method(
-            #fetchUserProfile,
-            [userId],
-          ),
-        )),
-      ) as _i6.Future<_i4.UserProfile>);
+            Invocation.method(#fetchUserProfile, [userId]),
+            returnValue: _i6.Future<_i4.UserProfile>.value(
+              _FakeUserProfile_2(
+                this,
+                Invocation.method(#fetchUserProfile, [userId]),
+              ),
+            ),
+            returnValueForMissingStub: _i6.Future<_i4.UserProfile>.value(
+              _FakeUserProfile_2(
+                this,
+                Invocation.method(#fetchUserProfile, [userId]),
+              ),
+            ),
+          )
+          as _i6.Future<_i4.UserProfile>);
 
   @override
   _i6.Future<void> updateUserProfile(_i4.UserProfile? userProfileForWrite) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateUserProfile,
-          [userProfileForWrite],
-        ),
-        returnValue: _i6.Future<void>.value(),
-        returnValueForMissingStub: _i6.Future<void>.value(),
-      ) as _i6.Future<void>);
+            Invocation.method(#updateUserProfile, [userProfileForWrite]),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
 }

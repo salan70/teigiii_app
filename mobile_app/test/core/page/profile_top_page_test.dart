@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:teigi_app/core/page/profile_top_page.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
-import 'package:teigi_app/feature/definition_list/appication/definition_id_list_state.dart';
-import 'package:teigi_app/feature/definition_list/domain/definition_id_list_state.dart';
+import 'package:teigi_app/feature/definition_list/appication/definition_list_state.dart';
+import 'package:teigi_app/feature/definition_list/domain/definition_list_state.dart';
 import 'package:teigi_app/feature/definition_list/util/definition_feed_type.dart';
 import 'package:teigi_app/feature/user_profile/application/user_profile_state.dart';
 import 'package:teigi_app/feature/user_profile/domain/user_profile.dart';
@@ -14,15 +14,15 @@ import 'package:teigi_app/feature/word_list/application/saved_word_list_state.da
 import 'package:teigi_app/feature/word_list/domain/word_list_state.dart';
 import 'package:teigi_app/util/constant/initial_main_group.dart';
 
-class _EmptyDefinitionIdList extends DefinitionIdListStateNotifier {
+class _EmptyDefinitionList extends DefinitionListStateNotifier {
   @override
-  FutureOr<DefinitionIdListState> build(
+  FutureOr<DefinitionListState> build(
     DefinitionFeedType definitionFeedType, {
     String? wordId,
     String? targetUserId,
     InitialSubGroup? initialSubGroup,
   }) async {
-    return const DefinitionIdListState(
+    return const DefinitionListState(
       list: [],
       nextCursor: null,
       hasMore: false,
@@ -61,14 +61,14 @@ Future<void> _pumpProfile(
         userProfileProvider(
           targetUserId,
         ).overrideWith((ref) async => _profileFor(targetUserId)),
-        definitionIdListStateNotifierProvider(
+        definitionListStateNotifierProvider(
           DefinitionFeedType.profileOrderByCreatedAt,
           targetUserId: targetUserId,
-        ).overrideWith(_EmptyDefinitionIdList.new),
-        definitionIdListStateNotifierProvider(
+        ).overrideWith(_EmptyDefinitionList.new),
+        definitionListStateNotifierProvider(
           DefinitionFeedType.profileLiked,
           targetUserId: targetUserId,
-        ).overrideWith(_EmptyDefinitionIdList.new),
+        ).overrideWith(_EmptyDefinitionList.new),
         savedWordListStateNotifierProvider.overrideWith(
           _EmptySavedWordList.new,
         ),

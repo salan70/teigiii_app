@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$DiscoverFeedListState {
-  List<dynamic> get list => throw _privateConstructorUsedError;
+  List<DiscoverFeedEntry> get list => throw _privateConstructorUsedError;
   String? get nextCursor => throw _privateConstructorUsedError;
   bool get hasMore => throw _privateConstructorUsedError;
 
@@ -33,7 +33,7 @@ abstract class $DiscoverFeedListStateCopyWith<$Res> {
     $Res Function(DiscoverFeedListState) then,
   ) = _$DiscoverFeedListStateCopyWithImpl<$Res, DiscoverFeedListState>;
   @useResult
-  $Res call({List<dynamic> list, String? nextCursor, bool hasMore});
+  $Res call({List<DiscoverFeedEntry> list, String? nextCursor, bool hasMore});
 }
 
 /// @nodoc
@@ -61,7 +61,7 @@ class _$DiscoverFeedListStateCopyWithImpl<
             list: null == list
                 ? _value.list
                 : list // ignore: cast_nullable_to_non_nullable
-                      as List<dynamic>,
+                      as List<DiscoverFeedEntry>,
             nextCursor: freezed == nextCursor
                 ? _value.nextCursor
                 : nextCursor // ignore: cast_nullable_to_non_nullable
@@ -85,7 +85,7 @@ abstract class _$$DiscoverFeedListStateImplCopyWith<$Res>
   ) = __$$DiscoverFeedListStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<dynamic> list, String? nextCursor, bool hasMore});
+  $Res call({List<DiscoverFeedEntry> list, String? nextCursor, bool hasMore});
 }
 
 /// @nodoc
@@ -110,7 +110,7 @@ class __$$DiscoverFeedListStateImplCopyWithImpl<$Res>
         list: null == list
             ? _value._list
             : list // ignore: cast_nullable_to_non_nullable
-                  as List<dynamic>,
+                  as List<DiscoverFeedEntry>,
         nextCursor: freezed == nextCursor
             ? _value.nextCursor
             : nextCursor // ignore: cast_nullable_to_non_nullable
@@ -128,14 +128,14 @@ class __$$DiscoverFeedListStateImplCopyWithImpl<$Res>
 
 class _$DiscoverFeedListStateImpl implements _DiscoverFeedListState {
   const _$DiscoverFeedListStateImpl({
-    required final List<dynamic> list,
+    required final List<DiscoverFeedEntry> list,
     required this.nextCursor,
     required this.hasMore,
   }) : _list = list;
 
-  final List<dynamic> _list;
+  final List<DiscoverFeedEntry> _list;
   @override
-  List<dynamic> get list {
+  List<DiscoverFeedEntry> get list {
     if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
@@ -183,13 +183,13 @@ class _$DiscoverFeedListStateImpl implements _DiscoverFeedListState {
 
 abstract class _DiscoverFeedListState implements DiscoverFeedListState {
   const factory _DiscoverFeedListState({
-    required final List<dynamic> list,
+    required final List<DiscoverFeedEntry> list,
     required final String? nextCursor,
     required final bool hasMore,
   }) = _$DiscoverFeedListStateImpl;
 
   @override
-  List<dynamic> get list;
+  List<DiscoverFeedEntry> get list;
   @override
   String? get nextCursor;
   @override

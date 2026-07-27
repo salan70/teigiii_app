@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/analytics/analytics_event.dart';
 import '../../../core/analytics/analytics_service.dart';
-import '../../definition_list/appication/definition_id_list_state.dart';
+import '../../definition_list/appication/definition_list_state.dart';
 import '../../word_list/application/word_list_state_by_initial.dart';
 import '../../word_list/application/word_list_state_by_search_word.dart';
 import '../repository/user_config_repository.dart';
@@ -53,7 +53,7 @@ class UserConfigService {
   void _invalidateMuteAwareProviders() {
     ref
       ..invalidate(mutedUserIdListProvider)
-      ..invalidate(definitionIdListStateNotifierProvider)
+      ..invalidate(definitionListStateNotifierProvider)
       ..invalidate(wordListStateByInitialNotifierProvider)
       ..invalidate(wordListStateBySearchWordNotifierProvider);
   }

@@ -38,12 +38,12 @@ class ProfileList extends ConsumerWidget {
       targetDefinitionId: targetDefinitionId,
     );
 
-    return InfinityScrollWidget(
+    return InfinityScrollWidget<String>(
       listStateNotifierProvider: userIdListProvider,
       fetchMore: ref.read(userIdListProvider.notifier).fetchMore,
       tileBuilder: (userId) {
         return ProfileTile(
-          targetUserId: userId as String,
+          targetUserId: userId,
           button: currentUserId == userId
               ? const SizedBox.shrink()
               : FollowOrUnfollowButton(targetUserId: userId),

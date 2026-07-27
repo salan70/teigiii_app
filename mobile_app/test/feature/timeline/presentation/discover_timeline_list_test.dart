@@ -10,6 +10,7 @@ import 'package:teigi_app/feature/definition/application/definition_seed_store.d
 import 'package:teigi_app/feature/definition/domain/definition.dart';
 import 'package:teigi_app/feature/definition/repository/fetch_definition_repository.dart';
 import 'package:teigi_app/feature/timeline/application/discover_timeline_state.dart';
+import 'package:teigi_app/feature/timeline/domain/discover_feed_entry.dart';
 import 'package:teigi_app/feature/timeline/domain/discover_feed_list_state.dart';
 import 'package:teigi_app/feature/timeline/presentation/discover_timeline_list.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
@@ -24,9 +25,9 @@ class _SeededDiscoverTimelineStateNotifier
 
   @override
   FutureOr<DiscoverFeedListState> build() {
-    ref.read(definitionSeedStoreProvider).seedAll(definitions);
+    ref.read(definitionSeedStoreProvider).seedAll('test-feed', definitions);
     return DiscoverFeedListState(
-      list: definitions,
+      list: definitions.map(DiscoverFeedEntry.definition).toList(),
       nextCursor: null,
       hasMore: false,
     );

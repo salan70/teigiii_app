@@ -3,12 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/core/api/api_exception.dart';
-import 'package:teigi_app/feature/definition_list/repository/definition_id_list_repository.dart';
+import 'package:teigi_app/feature/definition_list/repository/definition_list_repository.dart';
 import 'package:teigi_app/feature/definition_list/util/definition_feed_type.dart';
 import 'package:teigi_app/util/constant/initial_main_group.dart';
 import 'package:teigiii_api/teigiii_api.dart';
 
-import 'definition_id_list_repository_test.mocks.dart';
+import 'definition_list_repository_test.mocks.dart';
 
 @GenerateNiceMocks([
   MockSpec<TimelineApi>(),
@@ -19,11 +19,7 @@ void main() {
   final timelineApi = MockTimelineApi();
   final wordsApi = MockWordsApi();
   final usersApi = MockUsersApi();
-  final repository = DefinitionIdListRepository(
-    timelineApi,
-    wordsApi,
-    usersApi,
-  );
+  final repository = DefinitionListRepository(timelineApi, wordsApi, usersApi);
 
   tearDown(() {
     reset(timelineApi);
@@ -51,7 +47,7 @@ void main() {
     updatedAt: DateTime.utc(2026),
   );
 
-  test('discover は定義タイプを指定して1ページの定義 ID を返す', () async {
+  test('discover は定義タイプを指定して1ページの定義本体を返す', () async {
     when(
       timelineApi.v1TimelineDiscoverGet(
         cursor: null,
@@ -85,7 +81,7 @@ void main() {
 
     final result = await repository.fetchForHomeRecommend(null);
 
-    expect(result.list, ['definition-1']);
+    expect(result.list.map((definition) => definition.id), ['definition-1']);
     expect(result.nextCursor, 'cursor-1');
     expect(result.hasMore, isTrue);
   });
@@ -105,7 +101,7 @@ void main() {
 
     final result = await repository.fetchForHomeFollowing('before');
 
-    expect(result.list, ['definition-1']);
+    expect(result.list.map((definition) => definition.id), ['definition-1']);
     expect(result.nextCursor, 'after');
     expect(result.hasMore, isTrue);
   });
@@ -135,7 +131,7 @@ void main() {
       null,
     );
 
-    expect(result.list, ['definition-1']);
+    expect(result.list.map((definition) => definition.id), ['definition-1']);
   });
 
   test('個人辞書は読みグループと reading 順を指定する', () async {
@@ -163,7 +159,7 @@ void main() {
       null,
     );
 
-    expect(result.list, ['definition-1']);
+    expect(result.list.map((definition) => definition.id), ['definition-1']);
   });
 
   test('言葉単位の自分の定義一覧は wordId と newest を指定する', () async {
@@ -187,7 +183,10 @@ void main() {
 
     final result = await repository.fetchForUserWord('user-1', 'word-1', null);
 
-    expect(result.list, ['definition-1', 'definition-2']);
+    expect(result.list.map((definition) => definition.id), [
+      'definition-1',
+      'definition-2',
+    ]);
     expect(result.hasMore, isFalse);
   });
 

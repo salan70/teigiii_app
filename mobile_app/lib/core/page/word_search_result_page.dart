@@ -66,10 +66,10 @@ class WordSearchResultPage extends ConsumerWidget {
               SearchWordTextField(defaultText: searchWord),
               const Gap(32),
               Expanded(
-                child: InfinityScrollWidget(
+                child: InfinityScrollWidget<Word>(
                   listStateNotifierProvider: wordListProvider,
                   fetchMore: ref.read(wordListProvider.notifier).fetchMore,
-                  tileBuilder: (item) => WordTile(word: item as Word),
+                  tileBuilder: (word) => WordTile(word: word),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   shimmerTile: const WordTileShimmer(),
                   shimmerTileNumber: 2,

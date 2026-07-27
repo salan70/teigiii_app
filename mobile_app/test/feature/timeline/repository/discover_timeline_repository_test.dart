@@ -4,6 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/core/api/api_exception.dart';
 import 'package:teigi_app/feature/definition/repository/definition_response_mapper.dart';
+import 'package:teigi_app/feature/timeline/domain/discover_feed_entry.dart';
 import 'package:teigi_app/feature/timeline/repository/discover_timeline_repository.dart';
 import 'package:teigiii_api/teigiii_api.dart';
 
@@ -71,9 +72,16 @@ void main() {
       expect(state.list.length, 2);
       expect(
         state.list.first,
-        definitionFromResponse(definitionItem.activity.definition),
+        DiscoverFeedEntry.definition(
+          definitionFromResponse(definitionItem.activity.definition),
+        ),
       );
-      expect(state.list[1], wordRegisteredActivity);
+      expect(
+        state.list[1],
+        DiscoverFeedEntry.wordRegistered(
+          registeredWordActivityFromResponse(wordRegisteredActivity),
+        ),
+      );
       expect(state.nextCursor, 'cursor1');
       expect(state.hasMore, isTrue);
     });

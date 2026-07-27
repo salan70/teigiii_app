@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'definition_id_list_repository.dart';
+part of 'definition_list_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$definitionIdListRepositoryHash() =>
-    r'a918e7396ff0a140773c5a30855e3cf4b71b4377';
+String _$definitionListRepositoryHash() =>
+    r'e5eab283c8bf9f4f09412f36401e77ad57419f72';
 
-/// See also [definitionIdListRepository].
-@ProviderFor(definitionIdListRepository)
-final definitionIdListRepositoryProvider =
-    Provider<DefinitionIdListRepository>.internal(
-      definitionIdListRepository,
-      name: r'definitionIdListRepositoryProvider',
+/// See also [definitionListRepository].
+@ProviderFor(definitionListRepository)
+final definitionListRepositoryProvider =
+    Provider<DefinitionListRepository>.internal(
+      definitionListRepository,
+      name: r'definitionListRepositoryProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
-          : _$definitionIdListRepositoryHash,
+          : _$definitionListRepositoryHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef DefinitionIdListRepositoryRef = ProviderRef<DefinitionIdListRepository>;
+typedef DefinitionListRepositoryRef = ProviderRef<DefinitionListRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

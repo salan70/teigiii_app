@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:teigi_app/feature/word/domain/word.dart';
 import 'package:teigi_app/feature/word_list/application/community_dictionary_index_list_state.dart';
+import 'package:teigi_app/feature/word_list/domain/dictionary_index_entry.dart';
 
 Word _word({
   required String id,
@@ -28,7 +29,12 @@ void main() {
 
       expect(
         list
-            .map((item) => item is String ? item : (item as Word).word)
+            .map(
+              (entry) => switch (entry) {
+                DictionaryIndexSectionHeader() => entry.label,
+                DictionaryIndexWordEntry() => entry.word.word,
+              },
+            )
             .toList(),
         ['あ', 'あんこ', 'か', 'かき', 'A-Z', 'Apple', '数字・記号', '123'],
       );

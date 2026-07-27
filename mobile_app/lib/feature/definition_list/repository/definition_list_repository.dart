@@ -6,34 +6,39 @@ import '../../../core/api/api_exception.dart';
 import '../../../core/api/api_providers.dart';
 import '../../../util/constant/config_constant.dart';
 import '../../../util/constant/initial_main_group.dart';
-import '../domain/definition_id_list_state.dart';
+import '../../definition/domain/definition.dart';
+import '../../definition/repository/definition_response_mapper.dart';
+import '../domain/definition_list_state.dart';
 import '../util/definition_feed_type.dart';
 
-part 'definition_id_list_repository.g.dart';
+part 'definition_list_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-DefinitionIdListRepository definitionIdListRepository(
-  DefinitionIdListRepositoryRef ref,
+DefinitionListRepository definitionListRepository(
+  DefinitionListRepositoryRef ref,
 ) {
   final api = ref.watch(teigiiiApiProvider);
-  return DefinitionIdListRepository(
+  return DefinitionListRepository(
     api.getTimelineApi(),
     api.getWordsApi(),
     api.getUsersApi(),
   );
 }
 
-/// 定義 ID 一覧を Workers API から取得する Repository。
+/// 定義一覧を Workers API から取得する Repository。
+///
+/// 一覧 API は定義本体（DefinitionResponse）を返すため、ID へ潰さず
+/// [Definition] のまま返す。ID だけにすると各 tile が個別取得して N+1 になる。
 ///
 /// @doc doc/specs/legacy-repository-api-mapping.md#定義一覧-フィード
-class DefinitionIdListRepository {
-  DefinitionIdListRepository(this._timelineApi, this._wordsApi, this._usersApi);
+class DefinitionListRepository {
+  DefinitionListRepository(this._timelineApi, this._wordsApi, this._usersApi);
 
   final TimelineApi _timelineApi;
   final WordsApi _wordsApi;
   final UsersApi _usersApi;
 
-  Future<DefinitionIdListState> fetchForHomeRecommend(String? cursor) async {
+  Future<DefinitionListState> fetchForHomeRecommend(String? cursor) async {
     try {
       final response = await _timelineApi.v1TimelineDiscoverGet(
         cursor: cursor,
@@ -42,10 +47,10 @@ class DefinitionIdListRepository {
       );
       final page = response.data!;
 
-      return DefinitionIdListState(
+      return DefinitionListState(
         list: page.items
             .whereType<DiscoverFeedDefinitionItem>()
-            .map((item) => item.activity.definition.id)
+            .map((item) => definitionFromResponse(item.activity.definition))
             .toList(),
         nextCursor: page.nextCursor,
         hasMore: page.nextCursor != null,
@@ -55,7 +60,7 @@ class DefinitionIdListRepository {
     }
   }
 
-  Future<DefinitionIdListState> fetchForHomeFollowing(String? cursor) async {
+  Future<DefinitionListState> fetchForHomeFollowing(String? cursor) async {
     try {
       final response = await _timelineApi.v1TimelineFollowingGet(
         cursor: cursor,
@@ -67,7 +72,7 @@ class DefinitionIdListRepository {
     }
   }
 
-  Future<DefinitionIdListState> fetchForWordTop(
+  Future<DefinitionListState> fetchForWordTop(
     WordTopOrderByType orderByType,
     String wordId,
     String? cursor,
@@ -89,7 +94,7 @@ class DefinitionIdListRepository {
     }
   }
 
-  Future<DefinitionIdListState> fetchForProfileCreatedAt(
+  Future<DefinitionListState> fetchForProfileCreatedAt(
     String targetUserId,
     String? cursor,
   ) async {
@@ -106,7 +111,7 @@ class DefinitionIdListRepository {
     }
   }
 
-  Future<DefinitionIdListState> fetchForLikedByUser(
+  Future<DefinitionListState> fetchForLikedByUser(
     String targetUserId,
     String? cursor,
   ) async {
@@ -122,7 +127,7 @@ class DefinitionIdListRepository {
     }
   }
 
-  Future<DefinitionIdListState> fetchForIndividualDictionary(
+  Future<DefinitionListState> fetchForIndividualDictionary(
     String targetUserId,
     InitialSubGroup initialSubGroup,
     String? cursor,
@@ -144,7 +149,7 @@ class DefinitionIdListRepository {
   /// 特定ユーザーの、特定の言葉に対する定義一覧（新着順）。
   ///
   /// 本人閲覧時は public + private（下書きは含まない）。
-  Future<DefinitionIdListState> fetchForUserWord(
+  Future<DefinitionListState> fetchForUserWord(
     String targetUserId,
     String wordId,
     String? cursor,
@@ -163,9 +168,9 @@ class DefinitionIdListRepository {
     }
   }
 
-  DefinitionIdListState _toState(V1UsersIdDefinitionsGet200Response page) =>
-      DefinitionIdListState(
-        list: page.items.map((item) => item.id).toList(),
+  DefinitionListState _toState(V1UsersIdDefinitionsGet200Response page) =>
+      DefinitionListState(
+        list: page.items.map(definitionFromResponse).toList(),
         nextCursor: page.nextCursor,
         hasMore: page.nextCursor != null,
       );

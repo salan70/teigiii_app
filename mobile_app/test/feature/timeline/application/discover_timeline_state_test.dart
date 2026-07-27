@@ -7,10 +7,11 @@ import 'package:teigi_app/feature/definition/application/definition_state.dart';
 import 'package:teigi_app/feature/definition/domain/definition.dart';
 import 'package:teigi_app/feature/definition/repository/fetch_definition_repository.dart';
 import 'package:teigi_app/feature/timeline/application/discover_timeline_state.dart';
+import 'package:teigi_app/feature/timeline/domain/discover_feed_entry.dart';
 import 'package:teigi_app/feature/timeline/domain/discover_feed_list_state.dart';
+import 'package:teigi_app/feature/timeline/domain/registered_word_activity.dart';
 import 'package:teigi_app/feature/timeline/repository/discover_timeline_repository.dart';
 import 'package:teigi_app/feature/user_profile/repository/user_profile_repository.dart';
-import 'package:teigiii_api/teigiii_api.dart';
 
 import '../../../mock/mock_data.dart';
 import 'discover_timeline_state_test.mocks.dart';
@@ -50,14 +51,20 @@ void main() {
     reset(mockUserProfileRepository);
   });
 
-  final wordRegisteredActivity = WordRegisteredActivity(
-    type: WordRegisteredActivityTypeEnum.wordRegistered,
-    occurredAt: DateTime.utc(2026, 7, 18),
-    word: WordSummary(id: 'word2', word: '言葉', reading: 'ことば'),
+  final wordRegisteredEntry = DiscoverFeedEntry.wordRegistered(
+    RegisteredWordActivity(
+      wordId: 'word2',
+      word: '言葉',
+      reading: 'ことば',
+      occurredAt: DateTime.utc(2026, 7, 18),
+    ),
   );
 
   final firstDefinition = mockDefinition.copyWith(id: 'definition1');
   final secondDefinition = mockDefinition.copyWith(id: 'definition2');
+
+  DiscoverFeedEntry entryOf(Definition definition) =>
+      DiscoverFeedEntry.definition(definition);
 
   group('DiscoverTimelineStateNotifier', () {
     test('build 後、取得した定義がシードストアに投入される', () async {
@@ -66,7 +73,7 @@ void main() {
         mockDiscoverTimelineRepository.fetchDiscoverTimeline(null),
       ).thenAnswer(
         (_) async => DiscoverFeedListState(
-          list: [firstDefinition, wordRegisteredActivity],
+          list: [entryOf(firstDefinition), wordRegisteredEntry],
           nextCursor: 'cursor1',
           hasMore: true,
         ),
@@ -86,7 +93,7 @@ void main() {
         mockDiscoverTimelineRepository.fetchDiscoverTimeline(null),
       ).thenAnswer(
         (_) async => DiscoverFeedListState(
-          list: [firstDefinition],
+          list: [entryOf(firstDefinition)],
           nextCursor: 'cursor1',
           hasMore: true,
         ),
@@ -95,7 +102,7 @@ void main() {
         mockDiscoverTimelineRepository.fetchDiscoverTimeline('cursor1'),
       ).thenAnswer(
         (_) async => DiscoverFeedListState(
-          list: [secondDefinition, wordRegisteredActivity],
+          list: [entryOf(secondDefinition), wordRegisteredEntry],
           nextCursor: null,
           hasMore: false,
         ),
@@ -115,7 +122,7 @@ void main() {
       final state = container
           .read(discoverTimelineStateNotifierProvider)
           .value!;
-      expect(state.list.whereType<Definition>().length, 2);
+      expect(state.list.whereType<DiscoverFeedDefinitionEntry>().length, 2);
       expect(state.hasMore, isFalse);
     });
 
@@ -135,7 +142,7 @@ void main() {
         mockDiscoverTimelineRepository.fetchDiscoverTimeline(null),
       ).thenAnswer(
         (_) async => DiscoverFeedListState(
-          list: [oldDefinition],
+          list: [entryOf(oldDefinition)],
           nextCursor: null,
           hasMore: false,
         ),
@@ -151,7 +158,7 @@ void main() {
         mockDiscoverTimelineRepository.fetchDiscoverTimeline(null),
       ).thenAnswer(
         (_) async => DiscoverFeedListState(
-          list: [newDefinition],
+          list: [entryOf(newDefinition)],
           nextCursor: null,
           hasMore: false,
         ),
@@ -177,7 +184,7 @@ void main() {
         mockDiscoverTimelineRepository.fetchDiscoverTimeline(null),
       ).thenAnswer(
         (_) async => DiscoverFeedListState(
-          list: [firstDefinition, secondDefinition],
+          list: [entryOf(firstDefinition), entryOf(secondDefinition)],
           nextCursor: null,
           hasMore: false,
         ),
@@ -192,7 +199,7 @@ void main() {
         mockDiscoverTimelineRepository.fetchDiscoverTimeline(null),
       ).thenAnswer(
         (_) async => DiscoverFeedListState(
-          list: [firstDefinition],
+          list: [entryOf(firstDefinition)],
           nextCursor: null,
           hasMore: false,
         ),

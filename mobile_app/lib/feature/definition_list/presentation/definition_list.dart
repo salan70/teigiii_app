@@ -4,9 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common_widget/infinity_scroll_widget.dart';
 import '../../../util/constant/initial_main_group.dart';
+import '../../definition/domain/definition.dart';
 import '../../definition/presentation/definition_tile.dart';
 import '../../definition/presentation/definition_tile_shimmer.dart';
-import '../appication/definition_id_list_state.dart';
+import '../appication/definition_list_state.dart';
 import '../util/definition_feed_type.dart';
 
 class DefinitionList extends ConsumerWidget {
@@ -35,26 +36,26 @@ class DefinitionList extends ConsumerWidget {
   /// デフォルト値は恐らく画面を埋め尽くされるであろう数として8を設定。
   final int shimmerTileNumber;
 
-  /// スワイプリフレッシュ時、[definitionIdListStateNotifierProvider] の invalidate
+  /// スワイプリフレッシュ時、[definitionListStateNotifierProvider] の invalidate
   /// 以外に行う処理。
   ///
-  /// null の場合は、[definitionIdListStateNotifierProvider] の invalidate のみ行う。
+  /// null の場合は、[definitionListStateNotifierProvider] の invalidate のみ行う。
   final VoidCallback? additionalOnRefresh;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final definitionIdListProvider = definitionIdListStateNotifierProvider(
+    final definitionListProvider = definitionListStateNotifierProvider(
       definitionFeedType,
       wordId: wordId,
       targetUserId: targetUserId,
       initialSubGroup: initialSubGroup,
     );
 
-    return InfinityScrollWidget(
-      listStateNotifierProvider: definitionIdListProvider,
-      fetchMore: ref.read(definitionIdListProvider.notifier).fetchMore,
-      tileBuilder: (item) {
-        return DefinitionTile(definitionId: item as String);
+    return InfinityScrollWidget<Definition>(
+      listStateNotifierProvider: definitionListProvider,
+      fetchMore: ref.read(definitionListProvider.notifier).fetchMore,
+      tileBuilder: (definition) {
+        return DefinitionTile(definitionId: definition.id);
       },
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       shimmerTile: const DefinitionTileShimmer(),

@@ -8,11 +8,11 @@ import 'package:teigi_app/feature/admob/presentation/banner_ad_widget.dart';
 import 'package:teigi_app/util/interface/list_state.dart';
 
 /// テスト用の [ListState] 実装。
-class _TestListState implements ListState {
+class _TestListState implements ListState<int> {
   const _TestListState({required this.list});
 
   @override
-  final List<dynamic> list;
+  final List<int> list;
 
   // 追加読み込みの indicator を出さないことで、tile の可視件数を決定的にする。
   @override
@@ -62,11 +62,11 @@ Widget _buildTarget({
   int itemCountForShimmer = 8,
   Widget Function(Widget child)? wrapBody,
 }) {
-  final body = InfinityScrollWidget(
+  final body = InfinityScrollWidget<int>(
     listStateNotifierProvider: _testProvider,
     fetchMore: () {},
     tileBuilder: (item) {
-      builtIndexes.add(item as int);
+      builtIndexes.add(item);
       return SizedBox(height: _tileHeight, child: Text('tile-$item'));
     },
     contentPadding: EdgeInsets.zero,

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:teigiii_api/teigiii_api.dart';
 
 import '../../../../core/common_widget/infinity_scroll_widget.dart';
-import '../../../feature/definition/domain/definition.dart';
 import '../../../feature/definition/presentation/definition_tile.dart';
 import '../../../feature/definition/presentation/definition_tile_shimmer.dart';
 import '../application/discover_timeline_state.dart';
+import '../domain/discover_feed_entry.dart';
 import 'word_registered_tile.dart';
 
 class DiscoverTimelineList extends ConsumerWidget {
@@ -16,19 +15,18 @@ class DiscoverTimelineList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return InfinityScrollWidget(
+    return InfinityScrollWidget<DiscoverFeedEntry>(
       listStateNotifierProvider: discoverTimelineStateNotifierProvider,
       fetchMore: ref
           .read(discoverTimelineStateNotifierProvider.notifier)
           .fetchMore,
-      tileBuilder: (item) {
-        if (item is Definition) {
-          return DefinitionTile(definitionId: item.id);
-        }
-        if (item is WordRegisteredActivity) {
-          return WordRegisteredTile(activity: item);
-        }
-        return const SizedBox.shrink();
+      tileBuilder: (entry) => switch (entry) {
+        DiscoverFeedDefinitionEntry() => DefinitionTile(
+          definitionId: entry.definition.id,
+        ),
+        DiscoverFeedWordRegisteredEntry() => WordRegisteredTile(
+          activity: entry.activity,
+        ),
       },
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       shimmerTile: const DefinitionTileShimmer(),

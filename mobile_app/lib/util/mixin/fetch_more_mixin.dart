@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../interface/list_state.dart';
 
 /// 無限スクロールの追加ローディング用の mixin.
-mixin FetchMoreMixin<T extends ListState> {
+///
+/// [T] は [ListState] の具象型。[ListState] の要素型は呼び出し側の
+/// state 定義で明示する（raw type に戻さないこと）。
+mixin FetchMoreMixin<T extends ListState<Object?>> {
   AsyncValue<T> get state;
   set state(AsyncValue<T> value);
 

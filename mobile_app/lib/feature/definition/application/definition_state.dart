@@ -50,6 +50,38 @@ extension DefinitionRefreshOnRef on Ref {
   }
 }
 
+/// 一覧取得の結果を [definitionSeedStoreProvider] へ投入する。
+extension DefinitionSeedingOnRef on Ref {
+  /// [feedKey] のフィードとして [definitions] をシードし、
+  /// 影響を受ける [definitionProvider] を invalidate する。
+  ///
+  /// [isFirstFetch] が true（初回・refresh）のときは世代を置き換え、
+  /// フィードから消えた定義のシードを破棄して単体取得へ戻す。
+  /// false（追加読み込み）のときは追記のみ行う。
+  ///
+  /// シードを更新しただけでは購読中の [definitionProvider] は再評価されないため、
+  /// invalidate まで行って初めて tile に反映される。
+  void seedDefinitions({
+    required String feedKey,
+    required Iterable<Definition> definitions,
+    required bool isFirstFetch,
+  }) {
+    final store = read(definitionSeedStoreProvider);
+
+    final idsToInvalidate = <String>{};
+    if (isFirstFetch) {
+      idsToInvalidate.addAll(store.replaceAll(feedKey, definitions));
+    } else {
+      idsToInvalidate.addAll(store.seedAll(feedKey, definitions));
+    }
+    idsToInvalidate.addAll(definitions.map((definition) => definition.id));
+
+    for (final id in idsToInvalidate) {
+      invalidate(definitionProvider(id));
+    }
+  }
+}
+
 /// presentation 層から [definitionProvider] をリフレッシュする。
 extension DefinitionRefreshOnWidgetRef on WidgetRef {
   /// [definitionId] のシードを破棄したうえで [definitionProvider] を invalidate する。

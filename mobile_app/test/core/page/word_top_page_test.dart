@@ -5,22 +5,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:teigi_app/core/page/word_top_page.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
-import 'package:teigi_app/feature/definition_list/appication/definition_id_list_state.dart';
-import 'package:teigi_app/feature/definition_list/domain/definition_id_list_state.dart';
+import 'package:teigi_app/feature/definition_list/appication/definition_list_state.dart';
+import 'package:teigi_app/feature/definition_list/domain/definition_list_state.dart';
 import 'package:teigi_app/feature/definition_list/util/definition_feed_type.dart';
 import 'package:teigi_app/feature/word/application/word_state.dart';
 import 'package:teigi_app/feature/word/domain/word.dart';
 import 'package:teigi_app/util/constant/initial_main_group.dart';
 
-class _EmptyDefinitionIdList extends DefinitionIdListStateNotifier {
+class _EmptyDefinitionList extends DefinitionListStateNotifier {
   @override
-  FutureOr<DefinitionIdListState> build(
+  FutureOr<DefinitionListState> build(
     DefinitionFeedType definitionFeedType, {
     String? wordId,
     String? targetUserId,
     InitialSubGroup? initialSubGroup,
   }) async {
-    return const DefinitionIdListState(
+    return const DefinitionListState(
       list: [],
       nextCursor: null,
       hasMore: false,
@@ -34,14 +34,14 @@ Future<void> _pumpWordTop(WidgetTester tester, {required Word? word}) async {
       overrides: [
         userIdProvider.overrideWithValue('user-1'),
         wordProvider('word-1').overrideWith((ref) async => word),
-        definitionIdListStateNotifierProvider(
+        definitionListStateNotifierProvider(
           DefinitionFeedType.wordTopOrderByCreatedAt,
           wordId: 'word-1',
-        ).overrideWith(_EmptyDefinitionIdList.new),
-        definitionIdListStateNotifierProvider(
+        ).overrideWith(_EmptyDefinitionList.new),
+        definitionListStateNotifierProvider(
           DefinitionFeedType.wordTopOrderByLikesCount,
           wordId: 'word-1',
-        ).overrideWith(_EmptyDefinitionIdList.new),
+        ).overrideWith(_EmptyDefinitionList.new),
       ],
       child: const MaterialApp(home: WordTopPage(wordId: 'word-1')),
     ),
