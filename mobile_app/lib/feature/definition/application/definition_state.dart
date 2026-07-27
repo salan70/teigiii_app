@@ -72,7 +72,7 @@ extension DefinitionSeedingOnRef on Ref {
     if (isFirstFetch) {
       idsToInvalidate.addAll(store.replaceAll(feedKey, definitions));
     } else {
-      store.seedAll(feedKey, definitions);
+      idsToInvalidate.addAll(store.seedAll(feedKey, definitions));
     }
     idsToInvalidate.addAll(definitions.map((definition) => definition.id));
 

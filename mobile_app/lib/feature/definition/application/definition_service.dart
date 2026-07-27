@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/analytics/analytics_event.dart';
 import '../../../core/analytics/analytics_service.dart';
 import '../../definition_list/appication/definition_list_state.dart';
+import '../../timeline/application/discover_timeline_state.dart';
 import '../../word/application/word_state.dart';
 import '../../word_list/application/community_dictionary_index_list_state.dart';
 import '../../word_list/application/user_dictionary_index_list_state.dart';
@@ -42,6 +43,7 @@ class DefinitionService {
 
     ref
       ..invalidate(definitionListStateNotifierProvider)
+      ..invalidate(discoverTimelineStateNotifierProvider)
       ..invalidate(wordListStateByInitialNotifierProvider)
       ..invalidate(wordListStateBySearchWordNotifierProvider)
       ..invalidate(userDictionaryIndexListStateNotifierProvider)

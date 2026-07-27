@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../util/constant/initial_main_group.dart';
 import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../auth/application/auth_state.dart';
+import '../../definition/application/definition_seed_store.dart';
 import '../../definition/application/definition_state.dart';
 import '../domain/definition_list_state.dart';
 import '../repository/definition_list_repository.dart';
@@ -10,6 +11,11 @@ import '../util/definition_feed_type.dart';
 
 part 'definition_list_state.g.dart';
 
+/// 定義フィードの一覧 state。
+///
+/// keepAlive: ホームの TabBarView など、一時的に unwatch されても
+/// 一覧・スクロール位置を維持するため。シード参照の解放は
+/// [DefinitionSeedStore.releaseFeed]（dispose / 世代上限）で行う。
 @Riverpod(keepAlive: true)
 class DefinitionListStateNotifier extends _$DefinitionListStateNotifier
     with FetchMoreMixin<DefinitionListState> {
@@ -21,6 +27,12 @@ class DefinitionListStateNotifier extends _$DefinitionListStateNotifier
     InitialSubGroup? initialSubGroup,
   }) {
     ref.watch(userIdProvider);
+    // invalidate 時にシード参照を解放する（keepAlive でも invalidate では dispose する）。
+    // store をキャプチャする。onDispose 内で ref.read すると
+    // ProviderContainer.dispose 中に StateError になる。
+    final store = ref.read(definitionSeedStoreProvider);
+    final feedKey = _seedFeedKey;
+    ref.onDispose(() => store.releaseFeed(feedKey));
     return _fetchAndSeed(isFirstFetch: true);
   }
 

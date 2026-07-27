@@ -141,7 +141,7 @@ class _InfinityScrollWidgetState<T>
             asyncListState: asyncListState,
             tileBuilder: widget.tileBuilder,
             contentPadding: widget.contentPadding,
-            bottomWidget: _BottomWidgetWhenError(
+            bottomWidget: _BottomWidgetWhenError<T>(
               fetchMore: widget.fetchMore,
               asyncListState: asyncListState,
             ),
@@ -265,7 +265,7 @@ class _StateScrollBar<T> extends StatelessWidget {
 }
 
 /// 無限スクロールにて、エラー発生時にListの下部に表示させる Widget.
-class _BottomWidgetWhenError extends StatelessWidget {
+class _BottomWidgetWhenError<T> extends StatelessWidget {
   const _BottomWidgetWhenError({
     required this.fetchMore,
     required this.asyncListState,
@@ -276,7 +276,7 @@ class _BottomWidgetWhenError extends StatelessWidget {
   /// 無限スクロールの追加読み込みでエラーが発生した場合に、
   /// 再読み込みとして行う処理のため、 fetchMore （追加読み込み）を想定している。
   final VoidCallback fetchMore;
-  final AsyncValue<ListState<dynamic>?> asyncListState;
+  final AsyncValue<ListState<T>?> asyncListState;
 
   @override
   Widget build(BuildContext context) {

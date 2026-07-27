@@ -21,9 +21,12 @@ final bannerAdWidgetProvider = Provider<Widget>(
 ///
 /// [BannerAd] は State が保持し、`initState` で 1 度だけ生成・load して
 /// `dispose` で破棄する。build のたびに生成すると、リクエストが増え続け
-/// 破棄されない [BannerAd] が積み上がる。無限スクロールは tile が
-/// ビューポート外へ出ると破棄されるため、この Widget も再生成される。
-/// 1 インスタンス = 1 リクエスト = 1 dispose を守ること。
+/// 破棄されない [BannerAd] が積み上がる。
+///
+/// [AdWidget] は一度 dispose されると紐づく [BannerAd] を再利用できない。
+/// そのため [AutomaticKeepAliveClientMixin] でスクロールアウト後も State を
+/// 残し、往復スクロールで再 load しない。親の一覧 Widget が破棄された
+/// タイミングでまとめて dispose される。
 class BannerAdWidget extends ConsumerStatefulWidget {
   const BannerAdWidget({super.key});
 
@@ -31,13 +34,17 @@ class BannerAdWidget extends ConsumerStatefulWidget {
   ConsumerState<BannerAdWidget> createState() => _BannerAdWidgetState();
 }
 
-class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
+class _BannerAdWidgetState extends ConsumerState<BannerAdWidget>
+    with AutomaticKeepAliveClientMixin {
   BannerAd? _bannerAd;
 
   /// 読み込みが完了したかどうか。
   ///
   /// 完了前に [AdWidget] を描画すると空枠が出るため、完了後にのみ描画する。
   bool _isLoaded = false;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -87,6 +94,8 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     final bannerAd = _bannerAd;
     if (bannerAd == null || !_isLoaded) {
       // 読み込み前・読み込み失敗時。呼び出し側が高さを確保しているため、
