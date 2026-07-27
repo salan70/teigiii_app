@@ -5,24 +5,13 @@
     ]
   },
   "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/session-start.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
     "PostToolUse": [
       {
         "hooks": [
           {
             "type": "command",
             "command": "bash .claude/hooks/post-tool-use-auto-format.sh",
-            "timeout": 15
+            "timeout": 60
           }
         ]
       },
@@ -55,16 +44,6 @@
             "type": "command",
             "command": "bash .claude/hooks/stop-debug-code-detect.sh",
             "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/stop-instinct-collect.sh",
-            "timeout": 5
-          },
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/session-reflect-reminder.sh",
-            "timeout": 5
           },
           {
             "type": "command",

@@ -1,7 +1,6 @@
 ---
 name: collaborating-on-github
-autoInvoke: when working with GitHub Issues, PRs, or comments via gh CLI
-description: GitHub CLI を使った Issue、PR、進捗共有の操作 — コードレビュー対応は receiving-code-review を参照
+description: GitHub CLI で Issue・PR・コメントを操作する。Issue の作成や確認、PR の作成・更新、進捗共有を行う時に使用する（レビュー指摘への対応は receiving-code-review）。
 ---
 
 # GitHub での協業

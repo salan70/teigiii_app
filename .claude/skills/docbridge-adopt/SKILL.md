@@ -1,6 +1,6 @@
 ---
 name: docbridge-adopt
-description: Adopt DocBridge in an existing TypeScript, Swift, or Dart project. Use when asked to introduce DocBridge into a repository, choose docs/code scope, create or improve docbridge.config.json, and optionally wire simple CI or agent hooks.
+description: 既存の TypeScript / Swift / Dart プロジェクトに DocBridge を導入する。リポジトリへの導入、docs / code のスコープ選定、docbridge.config.json の作成・改善、CI やエージェントフックの設定を依頼された時に使用する。
 ---
 
 # docbridge-adopt

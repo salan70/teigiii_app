@@ -1,6 +1,6 @@
 ---
 name: porting-ai-assets-to-codex
-description: Use when creating Codex-facing AI assets from Claude-facing skills, AGENTS instructions, hooks, or template guidance
+description: Claude 向けのスキル・AGENTS 指示・フック・テンプレートから Codex 向け AI アセットを作る。Claude 側のスキルを追加・更新し、Codex 側への移植要否を判断する時に使用する。
 ---
 
 # Codex 向け AI asset 移植

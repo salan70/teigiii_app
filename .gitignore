@@ -67,8 +67,5 @@ app.*.map.json
 # Claude Code がエージェント実行用に作成する worktree
 .claude/worktrees/
 
-# エージェントのセッション横断メモリ（プライベート）
-memories/
-
 # エージェント／手動検証用のローカル成果物（スクショ等）
 .artifacts/

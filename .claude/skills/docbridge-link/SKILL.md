@@ -1,6 +1,6 @@
 ---
 name: docbridge-link
-description: Link existing Markdown specification sections to existing supported code declarations. Use for docs-first candidate discovery, section-level confirmation, and adding @doc/@code annotations to existing projects.
+description: 既存の Markdown 仕様セクションを既存のコード宣言にリンクする。仕様側を起点に候補を探し、セクション単位で確認しながら @doc / @code アノテーションを追加する時に使用する。
 ---
 
 # docbridge-link

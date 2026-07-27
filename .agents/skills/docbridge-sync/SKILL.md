@@ -1,6 +1,6 @@
 ---
 name: docbridge-sync
-description: Triage DocBridge related-gate findings — linked counterparts of changed files that were not themselves updated. Use when a Stop-hook message, CI comment, or docbridge related --gate run flags unchanged counterparts, to judge divergence with docbridge context and then update or justify each one.
+description: DocBridge の related ゲート指摘（変更ファイルのリンク先が未更新）をトリアージする。Stop フックのメッセージ、CI コメント、`docbridge related --gate` が未更新の対応物を検出した時に使用し、乖離を判断して更新または理由を記録する。
 ---
 
 # docbridge-sync

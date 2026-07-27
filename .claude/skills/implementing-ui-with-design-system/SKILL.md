@@ -1,7 +1,6 @@
 ---
 name: implementing-ui-with-design-system
-autoInvoke: when adding or changing Flutter UI in mobile_app — widgets, screens, spacing, colors, typography, or Ds components
-description: mobile_app の UI 実装をデザインシステム経由で行う。既存 Ds コンポーネントの探索から例外申請・必須検証までの判断順序を示す
+description: mobile_app の UI 実装をデザインシステム経由で行う。Flutter のウィジェット・画面・余白・色・タイポグラフィ・Ds コンポーネントを追加または変更する時に使用し、既存 Ds の探索から例外申請・必須検証までの判断順序を示す。
 ---
 
 # デザインシステムによる UI 実装
