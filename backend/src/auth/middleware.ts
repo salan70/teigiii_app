@@ -2,6 +2,14 @@ import type { Context, MiddlewareHandler } from "hono";
 import type { AppCheckIdentity } from "./app-check";
 import type { FirebaseIdentity } from "./firebase-id-token";
 
+/**
+ * Firebase ID トークンを免除するパス。完全一致で判定する（前方一致にしない）。
+ * OpenAPI の security 定義とテストもこの一覧を参照する。
+ */
+export const idTokenExemptPaths = ["/v1/app-config", "/v1/telemetry/frames"] as const;
+
+const idTokenExemptPathSet = new Set<string>(idTokenExemptPaths);
+
 export type AuthenticationVariables = {
   appId: string;
   firebaseUid: string;
@@ -54,7 +62,7 @@ export function createFirebaseAuthMiddleware({
   verify,
 }: FirebaseAuthMiddlewareOptions): MiddlewareHandler<AuthenticationEnvironment> {
   return async (context, next) => {
-    if (context.req.path === "/v1/app-config") {
+    if (idTokenExemptPathSet.has(context.req.path)) {
       await next();
       return;
     }

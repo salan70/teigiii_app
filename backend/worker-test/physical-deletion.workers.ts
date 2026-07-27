@@ -35,15 +35,17 @@ async function insertDefinition(id: string, authorId: string, deletedAt: number 
     .run();
 }
 
-async function runScheduledHandler() {
+async function runScheduledHandler(overrides: Partial<Cloudflare.Env> = {}) {
   const context = createExecutionContext();
   const scheduled = worker.scheduled as ExportedHandlerScheduledHandler<Cloudflare.Env>;
-  await scheduled(createScheduledController({ scheduledTime }), env, context);
+  await scheduled(createScheduledController({ scheduledTime }), { ...env, ...overrides }, context);
   await waitOnExecutionContext(context);
 }
 
 beforeEach(async () => {
   await applyD1Migrations(env.DB, env.TEST_MIGRATIONS);
+  await applyD1Migrations(env.TELEMETRY_DB, env.TEST_TELEMETRY_MIGRATIONS);
+  await env.TELEMETRY_DB.prepare("delete from frame_stats").run();
   await env.DB.batch([
     env.DB.prepare("delete from users"),
     env.DB.prepare("delete from words"),
@@ -177,6 +179,22 @@ describe("physical deletion scheduled handler", () => {
         users: { failure: 0, success: 1, target: 1 },
       },
     ]);
+  });
+
+  test("テレメトリのリテンションが失敗しても物理削除は実行する", async () => {
+    await insertUser("expired", cutoff, "avatars/expired");
+    await env.AVATARS.put("avatars/expired", "expired avatar");
+    const failingTelemetry = {
+      prepare: () => {
+        throw new Error("simulated telemetry failure");
+      },
+    } as unknown as D1Database;
+
+    await runScheduledHandler({ TELEMETRY_DB: failingTelemetry });
+
+    const users = await env.DB.prepare("select id from users").all<{ id: string }>();
+    expect(users.results).toEqual([]);
+    await expect(env.AVATARS.get("avatars/expired")).resolves.toBeNull();
   });
 
   test("削除完了後に再実行しても成功し、対象件数を0として記録する", async () => {

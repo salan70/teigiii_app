@@ -12,6 +12,7 @@
     "test:workers": "vitest run --config vitest.config.ts",
     "generate:openapi": "bun run scripts/generate-openapi.ts",
     "generate:migrations": "drizzle-kit generate",
+    "generate:migrations:telemetry": "drizzle-kit generate --config drizzle.telemetry.config.ts",
     "dev": "wrangler dev",
     "migration:export": "bun run scripts/migration/export.ts",
     "migration:import": "bun run scripts/migration/import.ts",
