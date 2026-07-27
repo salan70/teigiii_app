@@ -37,9 +37,16 @@ Codex で実際に使うものに限定する。Claude 側にあっても、こ�
 
 ## hooks の扱い
 
-`.codex/hooks/` と `.codex/hooks.json` は DocBridge が生成する Codex 用フックであり、`.agents/skills/` とは別系統で管理する。`.claude/hooks/` と内容は同一で、`.codex/hooks.json` のコマンドは `git rev-parse --show-toplevel` 基準の可搬パスで記述する（#286）。
+`.codex/hooks/` と `.codex/hooks.json` は DocBridge が生成する Codex 用フックであり、`.agents/skills/` とは別系統で管理する。`.codex/hooks.json` のコマンドは `git rev-parse --show-toplevel` 基準の可搬パスで記述する（#286）。
 
-Codex 実セッションでの発火は未検証。発火しない場合は matcher と `tool_name` の判定を Codex の実値に合わせて修正する。
+**Codex のツール契約は Claude Code と異なる**（codex-cli 0.144.6 の実セッションで確認）:
+
+- ファイル編集の `tool_name` は `apply_patch`。`tool_input` に `file_path` は無く、パッチ本文が `command` に入る。1 回の呼び出しで複数ファイルを含みうる
+- シェル実行の `tool_name` は `Bash`（Claude Code と同じ）
+- そのため `post-tool-use-auto-format.sh` と `post-tool-use-docbridge-context.sh` は Claude 版と内容が異なる。パッチ本文の `*** Add File:` / `*** Update File:` / `*** Move to:` から対象パスを抽出する（削除は対象外）
+- `stop-*` と `pre-tool-use-push-reminder.sh` は Claude 版と同一で動作する
+
+`.codex/hooks.json` を変更すると `~/.codex/config.toml` の hook trust が失効し、フックが黙って実行されなくなる。変更後は対話セッションで trust を承認し直すこと。
 
 ## AGENTS.md の構成
 
