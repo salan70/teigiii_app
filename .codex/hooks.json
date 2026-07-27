@@ -22,7 +22,7 @@
         ]
       },
       {
-        "matcher": "Edit|MultiEdit|Write",
+        "matcher": "apply_patch|Edit|MultiEdit|Write",
         "hooks": [
           {
             "type": "command",
