@@ -210,7 +210,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 
 kill switch はクライアント任せにせずサーバー側で強制する。受信ハンドラはリクエストごとに `app_config.perf_telemetry_enabled` を読み、false なら1行も書かずに `accepted=0` / `disabled=true` を返す。`app_config` 行が存在しない場合も受信しない。`GET /v1/app-config` の `perfTelemetryEnabled` は同じ行を返すため、クライアントは送信自体を止められるが、停止の正はサーバー側の判定である。
 
-リテンションは30日で、Scheduled Handler が `scheduledTime - 30日` より古い `recorded_at` の行を削除し、削除件数を構造化ログに記録する。物理削除とテレメトリのリテンションは独立に `waitUntil` し、一方の失敗がもう一方を止めない。
+リテンションは30日で、Scheduled Handler が `scheduledTime - 30日` より古い `created_at`（サーバー受信時刻）の行を削除し、削除件数を構造化ログに記録する。クライアント指定の `recorded_at` は分析時刻として残し、保持期限の基準には使わない。物理削除とテレメトリのリテンションは独立に `waitUntil` し、一方の失敗がもう一方を止めない。
 
 | 環境 | テレメトリ D1 |
 |---|---|

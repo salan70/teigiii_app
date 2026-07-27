@@ -15,7 +15,7 @@ export const frameStats = sqliteTable(
     id: text("id").primaryKey(),
     sessionId: text("session_id").notNull(),
     screenName: text("screen_name").notNull(),
-    // 端末側で計測区間を閉じた時刻。
+    // 端末側で計測区間を閉じた時刻（分析用）。リテンション基準には使わない。
     recordedAt: integer("recorded_at").notNull(),
     appVersion: text("app_version").notNull(),
     buildNumber: integer("build_number").notNull(),
@@ -35,8 +35,10 @@ export const frameStats = sqliteTable(
     createdAt: integer("created_at").notNull(),
   },
   (table) => [
-    // リテンション削除と期間絞り込み用。
+    // 分析の期間絞り込み用（クライアント計測時刻）。
     index("frame_stats_recorded_at_index").on(table.recordedAt),
+    // リテンション削除用（サーバー受信時刻）。
+    index("frame_stats_created_at_index").on(table.createdAt),
     // ビルド別の集計用。
     index("frame_stats_platform_flavor_build_index").on(
       table.platform,

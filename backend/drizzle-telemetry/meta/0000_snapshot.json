@@ -156,6 +156,13 @@
           ],
           "isUnique": false
         },
+        "frame_stats_created_at_index": {
+          "name": "frame_stats_created_at_index",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
         "frame_stats_platform_flavor_build_index": {
           "name": "frame_stats_platform_flavor_build_index",
           "columns": [

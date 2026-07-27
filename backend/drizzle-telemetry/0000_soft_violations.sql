@@ -22,4 +22,5 @@ CREATE TABLE `frame_stats` (
 );
 --> statement-breakpoint
 CREATE INDEX `frame_stats_recorded_at_index` ON `frame_stats` (`recorded_at`);--> statement-breakpoint
+CREATE INDEX `frame_stats_created_at_index` ON `frame_stats` (`created_at`);--> statement-breakpoint
 CREATE INDEX `frame_stats_platform_flavor_build_index` ON `frame_stats` (`platform`,`flavor`,`build_number`);

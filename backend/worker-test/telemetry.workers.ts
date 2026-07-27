@@ -215,4 +215,28 @@ describe("telemetry retention", () => {
     expect(rows.results.map(({ id }) => id)).toEqual(["boundary", "recent"]);
     expect(logs).toEqual([{ deleted: 1, event: "telemetry_retention_completed" }]);
   });
+
+  test("未来の recorded_at でも受信から30日で削除する", async () => {
+    const now = Date.parse("2026-07-16T00:00:00.000Z");
+    const cutoff = now - 30 * dayMs;
+    const futureRecordedAt = now + 90 * dayMs;
+    await env.TELEMETRY_DB.prepare(
+      `insert into frame_stats
+         (id, session_id, screen_name, recorded_at, app_version, build_number, flavor,
+          platform, os_version, device_model, refresh_rate_hz, frame_count,
+          slow_build_count, slow_raster_count, frozen_count,
+          sum_build_us, sum_raster_us, max_build_us, max_raster_us, created_at)
+       values ('future-clock', 'session', 'Screen', ?, '2.3.0', 128, 'dev', 'ios',
+               'iOS 26.0', 'iPhone17,1', 120, 100, 0, 0, 0, 0, 0, 0, 0, ?)`,
+    )
+      .bind(futureRecordedAt, cutoff - 1)
+      .run();
+
+    await runTelemetryRetention({ TELEMETRY_DB: env.TELEMETRY_DB }, now);
+
+    const rows = await env.TELEMETRY_DB.prepare("select id from frame_stats").all<{
+      id: string;
+    }>();
+    expect(rows.results).toEqual([]);
+  });
 });

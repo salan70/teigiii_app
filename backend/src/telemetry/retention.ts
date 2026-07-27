@@ -13,7 +13,8 @@ type RunTelemetryRetentionOptions = {
 
 /**
  * フレーム計測の集計を30日で削除する。
- * 期限は `now - 30日` とし、`recorded_at` が期限以上の行は残す。
+ * 期限は `now - 30日` とし、サーバー受信時刻の `created_at` が期限未満の行を削除する。
+ * クライアント指定の `recorded_at` は分析用であり、保持期限の基準に使わない。
  *
  * @doc doc/specs/workers-api-server.md#フレーム計測テレメトリ
  */
@@ -23,7 +24,7 @@ export async function runTelemetryRetention(
   { log = (entry) => console.log(JSON.stringify(entry)) }: RunTelemetryRetentionOptions = {},
 ) {
   const cutoff = now - retentionMs;
-  const result = await env.TELEMETRY_DB.prepare("delete from frame_stats where recorded_at < ?")
+  const result = await env.TELEMETRY_DB.prepare("delete from frame_stats where created_at < ?")
     .bind(cutoff)
     .run();
 

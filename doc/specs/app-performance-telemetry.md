@@ -24,10 +24,10 @@
 `FrameTiming` は生成されたフレームごとに生成順で 1 件ずつ報告されるため、序数は生成時点の区間と一致する。バッチ配信が何秒遅れても、以下のいずれでも**旧画面のフレームが新画面へ混入しない**。
 
 - 1 秒未満での連続遷移
-- `AutoTabsRouter` のタブ切替（push / pop を伴わないため `AutoRouterObserver.didChangeTabRoute` で拾う）
+- `AutoTabsRouter` のタブ切替（push / pop を伴わないため `didInitTabRoute` / `didChangeTabRoute` で拾い、nested stack の leaf route を記録する）
 - 遷移直後の background 遷移
 
-画面が一度も設定されていない間のフレーム、および区間の保持上限（64）を超えて捨てられた古い区間のフレームは計上しない。
+画面が一度も設定されていない間のフレーム、および区間の保持上限（64）を超えて捨てられた古い区間のフレームは計上しない。終了済み区間は、その区間の FrameTiming が揃う（報告済み序数が `endOrdinal` 以上になる）まで保持する。先に drain しても後から届く旧画面のフレームを欠落させない。
 
 ## ジャンク判定
 

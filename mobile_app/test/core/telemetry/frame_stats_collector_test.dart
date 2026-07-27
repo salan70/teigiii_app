@@ -11,7 +11,7 @@ FrameTiming _timing({
   Duration totalSpan = const Duration(milliseconds: 8),
 }) {
   const vsyncStart = 0;
-  final buildStart = vsyncStart;
+  const buildStart = vsyncStart;
   final buildFinish = buildStart + build.inMicroseconds;
   final rasterStart = buildFinish;
   final rasterFinish = vsyncStart + totalSpan.inMicroseconds;
@@ -117,8 +117,8 @@ void main() {
       // * Arrange
       final collector = build60Hz()..onScreenChanged('HomeRoute');
       _produce(collector, 4);
-      collector.onScreenChanged('SettingRoute');
       // 遷移直後に background。新画面のフレームは 1 枚も生成されていない。
+      collector.onScreenChanged('SettingRoute');
 
       // * Act
       // 旧画面ぶんの FrameTiming だけが遅れて届く。
@@ -129,6 +129,42 @@ void main() {
       expect(stats.length, 1);
       expect(stats.single.screenName, 'HomeRoute');
       expect(stats.single.frameCount, 4);
+    });
+
+    test('遷移後、timings 到着前の drain でも旧画面のフレームを欠落させない', () {
+      // * Arrange
+      final collector = build60Hz()..onScreenChanged('HomeRoute');
+      _produce(collector, 4);
+      collector.onScreenChanged('SettingRoute');
+
+      // * Act — timer / onPause が timings より先に drain する。
+      expect(collector.drain(), isEmpty);
+      collector.onTimings(List.generate(4, (_) => _timing()));
+
+      // * Assert
+      final stats = collector.drain();
+      expect(stats.length, 1);
+      expect(stats.single.screenName, 'HomeRoute');
+      expect(stats.single.frameCount, 4);
+    });
+
+    test('途中まで timings が届いた後の drain でも残りのフレームを欠落させない', () {
+      // * Arrange
+      final collector = build60Hz()..onScreenChanged('HomeRoute');
+      _produce(collector, 4);
+      collector
+        ..onScreenChanged('SettingRoute')
+        ..onTimings(List.generate(2, (_) => _timing()));
+
+      // * Act
+      expect(collector.drain().single.frameCount, 2);
+      collector.onTimings(List.generate(2, (_) => _timing()));
+
+      // * Assert
+      final stats = collector.drain();
+      expect(stats.length, 1);
+      expect(stats.single.screenName, 'HomeRoute');
+      expect(stats.single.frameCount, 2);
     });
 
     test('画面が未設定の間に生成されたフレームは計上しない', () {

@@ -103,7 +103,8 @@ class FrameStatsCollector {
   /// 集計結果を画面名ごとにまとめて取り出し、カウンタを 0 に戻す。
   ///
   /// 送信済みの区間を残すと二重計上になるため、取り出しと同時にリセットする。
-  /// 現在の区間は継続するため破棄しない。
+  /// 現在の区間は継続するため破棄しない。終了済みでも FrameTiming が
+  /// まだ揃っていない区間（`_reportedFrames < endOrdinal`）は保持する。
   List<ScreenFrameStats> drain() {
     final merged = <String, ScreenFrameStats>{};
     for (final segment in _segments) {
@@ -118,10 +119,15 @@ class FrameStatsCollector {
       segment.reset();
     }
 
-    // 集計を終えた過去の区間は不要。現在の区間だけ残す。
-    _segments.removeWhere(
-      (segment) => segment.endOrdinal != null && segment.frameCount == 0,
-    );
+    // 終了済みでも、未到着の FrameTiming が残る区間は保持する。
+    // 先に drain すると endOrdinal までの序数が届かず欠落する。
+    _segments.removeWhere((segment) {
+      final end = segment.endOrdinal;
+      if (end == null) {
+        return false;
+      }
+      return _reportedFrames >= end && segment.frameCount == 0;
+    });
 
     return merged.values.toList();
   }
