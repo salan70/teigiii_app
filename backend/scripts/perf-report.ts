@@ -64,7 +64,7 @@ async function main(): Promise<void> {
   const buildNumber = parseOptionalBuildNumber(Bun.argv.slice(2));
   const [byScreen, versionComparison, byDevice, byRefreshRate] = await Promise.all([
     executeTelemetrySql(buildByScreenQuery(buildNumber)).then(asAggregateRows),
-    executeTelemetrySql(buildVersionComparisonQuery()).then(asVersionPairRows),
+    executeTelemetrySql(buildVersionComparisonQuery(buildNumber)).then(asVersionPairRows),
     executeTelemetrySql(buildByDeviceQuery(buildNumber)).then(asAggregateRows),
     executeTelemetrySql(buildByRefreshRateQuery(buildNumber)).then(asAggregateRows),
   ]);

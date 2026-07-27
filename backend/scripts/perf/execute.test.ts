@@ -1,6 +1,12 @@
 import { describe, expect, test } from "bun:test";
 
-import { extractD1Rows, requireCloudflareApiToken } from "./execute";
+import {
+  assertReadOnlySql,
+  executeTelemetrySql,
+  extractD1Rows,
+  parsePerfQueryArgs,
+  requireCloudflareApiToken,
+} from "./execute";
 
 describe("requireCloudflareApiToken", () => {
   test("未設定ならエラー", () => {
@@ -35,5 +41,78 @@ describe("extractD1Rows", () => {
 
   test("不正な JSON 形状はエラー", () => {
     expect(() => extractD1Rows({ results: [] })).toThrow();
+  });
+});
+
+describe("assertReadOnlySql", () => {
+  test("SELECT / WITH を許可する", () => {
+    expect(() => assertReadOnlySql("SELECT 1")).not.toThrow();
+    expect(() => assertReadOnlySql("  with x AS (SELECT 1) SELECT * FROM x")).not.toThrow();
+  });
+
+  test("mutation を拒否する", () => {
+    expect(() => assertReadOnlySql("INSERT INTO frame_stats (id) VALUES ('x')")).toThrow(
+      /SELECT|WITH/,
+    );
+    expect(() => assertReadOnlySql("DELETE FROM frame_stats")).toThrow(/SELECT|WITH/);
+  });
+});
+
+describe("parsePerfQueryArgs", () => {
+  test("単一の SQL 引数を返す", () => {
+    expect(parsePerfQueryArgs(["SELECT 1"])).toBe("SELECT 1");
+  });
+
+  test("引数なし・複数引数はエラー", () => {
+    expect(() => parsePerfQueryArgs([])).toThrow(/Usage/);
+    expect(() => parsePerfQueryArgs(["SELECT", "1"])).toThrow(/single/);
+  });
+});
+
+describe("executeTelemetrySql", () => {
+  test("prod TELEMETRY_DB 向けの wrangler 引数と token 上書きを組み立てる", async () => {
+    let capturedArgs: string[] | undefined;
+    let capturedEnv: Record<string, string> | undefined;
+
+    const rows = await executeTelemetrySql("SELECT 1 AS n", {
+      env: {
+        CLOUDFLARE_API_TOKEN: "read-only-token",
+        PATH: "/usr/bin",
+        OTHER: undefined,
+      },
+      run: async (args, env) => {
+        capturedArgs = args;
+        capturedEnv = env;
+        return JSON.stringify([{ results: [{ n: 1 }], success: true }]);
+      },
+    });
+
+    expect(rows).toEqual([{ n: 1 }]);
+    expect(capturedArgs).toEqual([
+      "bunx",
+      "wrangler",
+      "d1",
+      "execute",
+      "TELEMETRY_DB",
+      "--env",
+      "prod",
+      "--remote",
+      "--json",
+      "--command",
+      "SELECT 1 AS n",
+    ]);
+    expect(capturedEnv).toEqual({
+      PATH: "/usr/bin",
+      CLOUDFLARE_API_TOKEN: "read-only-token",
+    });
+  });
+
+  test("stdout が JSON でない場合は先頭を含めてエラーにする", async () => {
+    await expect(
+      executeTelemetrySql("SELECT 1", {
+        env: { CLOUDFLARE_API_TOKEN: "token" },
+        run: async () => "wrangler banner\nnot-json",
+      }),
+    ).rejects.toThrow(/Failed to parse wrangler JSON[\s\S]*wrangler banner/);
   });
 });

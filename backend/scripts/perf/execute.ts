@@ -1,6 +1,7 @@
 /**
  * prod TELEMETRY_DB への read-only 実行ヘルパー。
  * mutation は Cloudflare API token の権限で拒否される前提。
+ * perf-query 側でも SELECT/WITH 以外を弾く。
  */
 
 export function requireCloudflareApiToken(
@@ -15,6 +16,27 @@ export function requireCloudflareApiToken(
   return token;
 }
 
+export function assertReadOnlySql(sql: string): void {
+  if (!/^\s*(SELECT|WITH)\b/i.test(sql)) {
+    throw new Error("Only SELECT/WITH queries are allowed via perf-query.");
+  }
+}
+
+export function parsePerfQueryArgs(args: string[]): string {
+  if (args.length === 0) {
+    throw new Error("Usage: bun run scripts/perf-query.ts '<SQL>'");
+  }
+  if (args.length !== 1) {
+    throw new Error("perf-query expects a single SQL argument.");
+  }
+  const sql = args[0]?.trim() ?? "";
+  if (!sql) {
+    throw new Error("Usage: bun run scripts/perf-query.ts '<SQL>'");
+  }
+  assertReadOnlySql(sql);
+  return sql;
+}
+
 export function extractD1Rows(parsed: unknown): Record<string, unknown>[] {
   if (!Array.isArray(parsed) || parsed.length === 0) {
     throw new Error("Unexpected wrangler d1 execute --json shape: expected non-empty array");
@@ -27,6 +49,18 @@ export function extractD1Rows(parsed: unknown): Record<string, unknown>[] {
     throw new Error("Unexpected wrangler d1 execute --json shape: results is not an array");
   }
   return first.results as Record<string, unknown>[];
+}
+
+function parseWranglerJson(stdout: string): unknown {
+  try {
+    return JSON.parse(stdout) as unknown;
+  } catch (error) {
+    const preview = stdout.slice(0, 200);
+    const reason = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to parse wrangler JSON (${reason}): ${preview}`, {
+      cause: error,
+    });
+  }
 }
 
 export async function executeTelemetrySql(
@@ -82,5 +116,5 @@ export async function executeTelemetrySql(
     },
   );
 
-  return extractD1Rows(JSON.parse(stdout) as unknown);
+  return extractD1Rows(parseWranglerJson(stdout));
 }

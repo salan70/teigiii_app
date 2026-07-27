@@ -187,20 +187,8 @@ backend-deploy-prod: backend-migrate-prod backend-migrate-prod-telemetry
 
 # 手動調査用の raw SQL。AI 主導線は perf-report を使う
 perf-query sql:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
-      echo 'CLOUDFLARE_API_TOKEN (D1 Read only) is required.' >&2
-      exit 1
-    fi
     cd backend && bun run scripts/perf-query.ts "{{sql}}"
 
 # AI 用の固定集計 JSON。任意で build_number を渡して絞り込み
 perf-report build_number="":
-    #!/usr/bin/env bash
-    set -euo pipefail
-    if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
-      echo 'CLOUDFLARE_API_TOKEN (D1 Read only) is required.' >&2
-      exit 1
-    fi
-    cd backend && bun run scripts/perf-report.ts {{build_number}}
+    cd backend && bun run scripts/perf-report.ts "{{build_number}}"

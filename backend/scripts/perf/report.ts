@@ -129,10 +129,16 @@ ORDER BY refresh_rate_hz DESC
 /**
  * platform + flavor ごとに数値 build_number で最新と直前を選び、画面別に比較する。
  * app_version の文字列順は使わない（semver 辞書順が壊れるため）。
+ *
+ * buildNumber 指定時はその値を latest に固定し、直前はそれより小さい最大値。
+ * previous_build_number は platform+flavor 単位（画面非依存）。画面未観測なら
+ * previous_* 集計は 0 / null だが previousBuildNumber 自体は残る。
+ * 行は latest 側の画面が起点。直前にあって最新で消えた画面は出ない。
  */
-export function buildVersionComparisonQuery(): string {
-  return `
-WITH ranked_builds AS (
+export function buildVersionComparisonQuery(buildNumber: number | null): string {
+  const latestBuildsCte =
+    buildNumber === null
+      ? `ranked_builds AS (
   SELECT
     platform,
     flavor,
@@ -153,7 +159,30 @@ previous_builds AS (
   SELECT platform, flavor, build_number AS previous_build_number
   FROM ranked_builds
   WHERE build_rank = 2
+)`
+      : `latest_builds AS (
+  SELECT DISTINCT
+    platform,
+    flavor,
+    ${buildNumber} AS latest_build_number
+  FROM frame_stats
+  WHERE build_number = ${buildNumber}
 ),
+previous_builds AS (
+  SELECT
+    f.platform,
+    f.flavor,
+    MAX(f.build_number) AS previous_build_number
+  FROM frame_stats f
+  INNER JOIN latest_builds lb
+    ON f.platform = lb.platform
+   AND f.flavor = lb.flavor
+  WHERE f.build_number < lb.latest_build_number
+  GROUP BY f.platform, f.flavor
+)`;
+
+  return `
+WITH ${latestBuildsCte},
 latest_stats AS (
   SELECT
     f.platform,
@@ -195,7 +224,7 @@ SELECT
   l.flavor,
   l.screen_name,
   l.latest_build_number,
-  p.previous_build_number,
+  pb.previous_build_number,
   l.session_count AS latest_session_count,
   l.frame_count AS latest_frame_count,
   l.slow_build_count AS latest_slow_build_count,
@@ -207,6 +236,9 @@ SELECT
   COALESCE(p.slow_raster_count, 0) AS previous_slow_raster_count,
   COALESCE(p.frozen_count, 0) AS previous_frozen_count
 FROM latest_stats l
+LEFT JOIN previous_builds pb
+  ON l.platform = pb.platform
+ AND l.flavor = pb.flavor
 LEFT JOIN previous_stats p
   ON l.platform = p.platform
  AND l.flavor = p.flavor

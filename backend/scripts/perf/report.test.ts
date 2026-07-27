@@ -55,13 +55,28 @@ describe("SQL builders", () => {
   });
 
   test("バージョン比較は platform + flavor ごとに build_number で最新と直前を選ぶ", () => {
-    const sql = buildVersionComparisonQuery();
+    const sql = buildVersionComparisonQuery(null);
     expect(sql).toContain("ORDER BY build_number DESC");
     expect(sql).toContain("platform");
     expect(sql).toContain("flavor");
     expect(sql).toContain("latest_build_number");
     expect(sql).toContain("previous_build_number");
     expect(sql).not.toContain("ORDER BY app_version");
+    expect(sql).toContain("DENSE_RANK()");
+  });
+
+  test("バージョン比較は指定 build_number を latest に固定する", () => {
+    const sql = buildVersionComparisonQuery(42);
+    expect(sql).toContain("42 AS latest_build_number");
+    expect(sql).toContain("f.build_number < lb.latest_build_number");
+    expect(sql).not.toContain("DENSE_RANK()");
+  });
+
+  test("バージョン比較は previous_builds を画面と独立に結合する", () => {
+    const sql = buildVersionComparisonQuery(null);
+    expect(sql).toContain("LEFT JOIN previous_builds pb");
+    expect(sql).toContain("LEFT JOIN previous_stats p");
+    expect(sql).toContain("pb.previous_build_number");
   });
 
   test("端末別・リフレッシュレート別もサンプル数を含む", () => {
@@ -132,6 +147,8 @@ describe("buildPerfReport", () => {
     },
   ];
 
+  const generatedAt = "2026-07-27T00:00:00.000Z";
+
   test("画面別ジャンク率とサンプル数を含める", () => {
     const report = buildPerfReport({
       buildNumber: null,
@@ -139,8 +156,10 @@ describe("buildPerfReport", () => {
       versionComparison: versionRows,
       byDevice: deviceRows,
       byRefreshRate: refreshRows,
+      generatedAt,
     });
 
+    expect(report.generatedAt).toBe(generatedAt);
     expect(report.buildNumberFilter).toBeNull();
     expect(report.byScreen).toEqual([
       {
@@ -169,6 +188,7 @@ describe("buildPerfReport", () => {
       versionComparison: versionRows,
       byDevice: deviceRows,
       byRefreshRate: refreshRows,
+      generatedAt,
     });
 
     expect(report.buildNumberFilter).toBe(12);
@@ -197,6 +217,48 @@ describe("buildPerfReport", () => {
     ]);
   });
 
+  test("直前ビルド番号はあるが画面未観測なら previous はゼロのまま build 番号を残す", () => {
+    const report = buildPerfReport({
+      buildNumber: 12,
+      byScreen: [],
+      versionComparison: [
+        {
+          platform: "ios",
+          flavor: "prod",
+          screen_name: "NewRoute",
+          latest_build_number: 12,
+          previous_build_number: 11,
+          latest_session_count: 3,
+          latest_frame_count: 300,
+          latest_slow_build_count: 0,
+          latest_slow_raster_count: 0,
+          latest_frozen_count: 0,
+          previous_session_count: 0,
+          previous_frame_count: 0,
+          previous_slow_build_count: 0,
+          previous_slow_raster_count: 0,
+          previous_frozen_count: 0,
+        },
+      ],
+      byDevice: [],
+      byRefreshRate: [],
+      generatedAt,
+    });
+
+    expect(report.versionComparison[0]).toMatchObject({
+      screenName: "NewRoute",
+      latestBuildNumber: 12,
+      previousBuildNumber: 11,
+      previous: {
+        sessionCount: 0,
+        frameCount: 0,
+        slowBuildRate: null,
+        slowRasterRate: null,
+        frozenRate: null,
+      },
+    });
+  });
+
   test("端末別・リフレッシュレート別の内訳を含める", () => {
     const report = buildPerfReport({
       buildNumber: null,
@@ -204,6 +266,7 @@ describe("buildPerfReport", () => {
       versionComparison: [],
       byDevice: deviceRows,
       byRefreshRate: refreshRows,
+      generatedAt,
     });
 
     expect(report.byDevice[0]).toMatchObject({

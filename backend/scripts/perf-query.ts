@@ -4,13 +4,10 @@
  * AI の主導線は just perf-report を使うこと。
  */
 
-import { executeTelemetrySql } from "./perf/execute";
+import { executeTelemetrySql, parsePerfQueryArgs } from "./perf/execute";
 
 async function main(): Promise<void> {
-  const sql = Bun.argv.slice(2).join(" ").trim();
-  if (!sql) {
-    throw new Error("Usage: bun run scripts/perf-query.ts '<SQL>'");
-  }
+  const sql = parsePerfQueryArgs(Bun.argv.slice(2));
   const rows = await executeTelemetrySql(sql);
   process.stdout.write(`${JSON.stringify(rows, null, 2)}\n`);
 }

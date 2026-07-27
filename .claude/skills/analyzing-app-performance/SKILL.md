@@ -22,15 +22,21 @@ description: 本番アプリのフレーム計測テレメトリを CLI で取�
 3. Account Resources でこのアカウントを選択
 4. 発行した値を shell だけに export する（例: `export CLOUDFLARE_API_TOKEN=...`）
 
-検証（mutation が権限エラーになること）:
+検証:
 
 ```bash
 just perf-query 'SELECT COUNT(*) AS n FROM frame_stats'
 # 成功すること
 
-just perf-query 'INSERT INTO frame_stats (id) VALUES (''x'')'
-# 権限エラーになること
+# mutation は perf-query 側で弾かれる（多層防御）
+just perf-query "INSERT INTO frame_stats (id) VALUES ('x')"
+# "Only SELECT/WITH queries are allowed" で失敗すること
+
+# トークン自体が D1 Read のみであることの確認（wrangler 直叩き）
+cd backend && bunx wrangler d1 execute TELEMETRY_DB --env prod --remote --command "INSERT INTO frame_stats (id) VALUES ('x')"
+# 権限エラーになること（構文エラーではなく permission / auth 系）
 ```
+
 
 ## コマンド
 
@@ -48,11 +54,13 @@ just perf-query 'SELECT screen_name, COUNT(*) AS n FROM frame_stats GROUP BY 1'
 | セクション | 内容 |
 |---|---|
 | `byScreen` | 画面別の slow build / slow raster / frozen 率とサンプル数 |
-| `versionComparison` | `platform + flavor` ごとの最新 vs 直前 `build_number` 比較 |
+| `versionComparison` | `platform + flavor` ごとの最新 vs 直前 `build_number` 比較（`build_number` 指定時はその値を latest に固定） |
 | `byDevice` | 端末モデル別内訳 |
 | `byRefreshRate` | リフレッシュレート別内訳 |
 
 各集計には必ず `sessionCount` と `frameCount` がある。比率だけを見て判断しない。
+
+`build_number` 無指定の `byScreen` / `byDevice` / `byRefreshRate` は、リテンション期間内の **全 build / 全 platform を混ぜた集計**になる。回帰判定には使わず、`versionComparison` か `just perf-report <build_number>` を使う。
 
 ## スキーマ（`frame_stats`）
 
@@ -97,6 +105,9 @@ Phase 0 系のリスト構造問題の再発は、主に **build 側**に出や�
 
 - 新旧は **`platform + flavor` ごとに数値 `build_number`** で決める
 - `app_version` の辞書順比較は禁止（`2.10.0 < 2.9.0` になる）
+- `just perf-report <build_number>` では、その値が latest 側に固定され、直前はそれより小さい最大値
+- `previousBuildNumber: null` は「直前ビルド自体が無い」。直前ビルドはあるが当該画面が未観測のときは `previousBuildNumber` は埋まり、`previous.frameCount === 0`
+- 行は latest 側の画面が起点。**直前にあって最新で消えた画面はレポートに出ない**（画面消失自体は別途 `perf-query` で確認）
 - 比較対象の両側に十分なサンプルがあること。片側不足なら比較を保留する
 - 端末構成比（60Hz / 120Hz）の変化だけで率が動く点に注意。厳密な回帰判定は Phase 3（層別化）の役割
 
