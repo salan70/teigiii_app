@@ -32,7 +32,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getDefinitionsApi();
-final String id = id_example; // String |
+final String id = id_example; // String | 
 
 try {
     api.v1DefinitionsIdDelete(id);
@@ -45,7 +45,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  |
+ **id** | **String**|  | 
 
 ### Return type
 
@@ -76,7 +76,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getDefinitionsApi();
-final String id = id_example; // String |
+final String id = id_example; // String | 
 
 try {
     final response = api.v1DefinitionsIdGet(id);
@@ -90,7 +90,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  |
+ **id** | **String**|  | 
 
 ### Return type
 
@@ -121,7 +121,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getDefinitionsApi();
-final String id = id_example; // String |
+final String id = id_example; // String | 
 
 try {
     api.v1DefinitionsIdLikeDelete(id);
@@ -134,7 +134,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  |
+ **id** | **String**|  | 
 
 ### Return type
 
@@ -165,7 +165,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getDefinitionsApi();
-final String id = id_example; // String |
+final String id = id_example; // String | 
 
 try {
     api.v1DefinitionsIdLikePut(id);
@@ -178,7 +178,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  |
+ **id** | **String**|  | 
 
 ### Return type
 
@@ -209,9 +209,9 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getDefinitionsApi();
-final String id = id_example; // String |
-final String cursor = cursor_example; // String |
-final int limit = 56; // int |
+final String id = id_example; // String | 
+final String cursor = cursor_example; // String | 
+final int limit = 56; // int | 
 
 try {
     final response = api.v1DefinitionsIdLikesGet(id, cursor, limit);
@@ -225,8 +225,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  |
- **cursor** | **String**|  | [optional]
+ **id** | **String**|  | 
+ **cursor** | **String**|  | [optional] 
  **limit** | **int**|  | [optional] [default to 20]
 
 ### Return type
@@ -260,7 +260,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getDefinitionsApi();
-final String id = id_example; // String |
+final String id = id_example; // String | 
 final UpdateDefinitionRequest updateDefinitionRequest = ; // UpdateDefinitionRequest | 更新内容
 
 try {
@@ -275,8 +275,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  |
- **updateDefinitionRequest** | [**UpdateDefinitionRequest**](UpdateDefinitionRequest.md)| 更新内容 | [optional]
+ **id** | **String**|  | 
+ **updateDefinitionRequest** | [**UpdateDefinitionRequest**](UpdateDefinitionRequest.md)| 更新内容 | [optional] 
 
 ### Return type
 
@@ -323,7 +323,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **createDefinitionRequest** | [**CreateDefinitionRequest**](CreateDefinitionRequest.md)| 作成内容 | [optional]
+ **createDefinitionRequest** | [**CreateDefinitionRequest**](CreateDefinitionRequest.md)| 作成内容 | [optional] 
 
 ### Return type
 

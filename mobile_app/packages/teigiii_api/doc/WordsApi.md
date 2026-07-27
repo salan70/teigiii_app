@@ -32,11 +32,11 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getWordsApi();
-final String cursor = cursor_example; // String |
-final int limit = 56; // int |
-final String subGroup = subGroup_example; // String |
-final String filter = filter_example; // String |
-final String q = q_example; // String |
+final String cursor = cursor_example; // String | 
+final int limit = 56; // int | 
+final String subGroup = subGroup_example; // String | 
+final String filter = filter_example; // String | 
+final String q = q_example; // String | 
 
 try {
     final response = api.v1WordsGet(cursor, limit, subGroup, filter, q);
@@ -50,11 +50,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **cursor** | **String**|  | [optional]
+ **cursor** | **String**|  | [optional] 
  **limit** | **int**|  | [optional] [default to 20]
- **subGroup** | **String**|  | [optional]
+ **subGroup** | **String**|  | [optional] 
  **filter** | **String**|  | [optional] [default to 'all']
- **q** | **String**|  | [optional]
+ **q** | **String**|  | [optional] 
 
 ### Return type
 
@@ -87,11 +87,11 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getWordsApi();
-final String id = id_example; // String |
-final String cursor = cursor_example; // String |
-final int limit = 56; // int |
-final String scope = scope_example; // String |
-final String sort = sort_example; // String |
+final String id = id_example; // String | 
+final String cursor = cursor_example; // String | 
+final int limit = 56; // int | 
+final String scope = scope_example; // String | 
+final String sort = sort_example; // String | 
 
 try {
     final response = api.v1WordsIdDefinitionsGet(id, cursor, limit, scope, sort);
@@ -105,8 +105,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  |
- **cursor** | **String**|  | [optional]
+ **id** | **String**|  | 
+ **cursor** | **String**|  | [optional] 
  **limit** | **int**|  | [optional] [default to 20]
  **scope** | **String**|  | [optional] [default to 'all']
  **sort** | **String**|  | [optional] [default to 'newest']
@@ -140,7 +140,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getWordsApi();
-final String id = id_example; // String |
+final String id = id_example; // String | 
 
 try {
     final response = api.v1WordsIdGet(id);
@@ -154,7 +154,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  |
+ **id** | **String**|  | 
 
 ### Return type
 
@@ -187,7 +187,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getWordsApi();
-final String id = id_example; // String |
+final String id = id_example; // String | 
 final UpdateWordRequest updateWordRequest = ; // UpdateWordRequest | 修正内容
 
 try {
@@ -202,8 +202,8 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  |
- **updateWordRequest** | [**UpdateWordRequest**](UpdateWordRequest.md)| 修正内容 | [optional]
+ **id** | **String**|  | 
+ **updateWordRequest** | [**UpdateWordRequest**](UpdateWordRequest.md)| 修正内容 | [optional] 
 
 ### Return type
 
@@ -234,7 +234,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getWordsApi();
-final String id = id_example; // String |
+final String id = id_example; // String | 
 
 try {
     api.v1WordsIdSaveDelete(id);
@@ -247,7 +247,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  |
+ **id** | **String**|  | 
 
 ### Return type
 
@@ -278,7 +278,7 @@ import 'package:teigiii_api/api.dart';
 //defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
 
 final api = TeigiiiApi().getWordsApi();
-final String id = id_example; // String |
+final String id = id_example; // String | 
 
 try {
     api.v1WordsIdSavePut(id);
@@ -291,7 +291,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **String**|  |
+ **id** | **String**|  | 
 
 ### Return type
 
@@ -338,7 +338,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **createWordRequest** | [**CreateWordRequest**](CreateWordRequest.md)| 登録内容 | [optional]
+ **createWordRequest** | [**CreateWordRequest**](CreateWordRequest.md)| 登録内容 | [optional] 
 
 ### Return type
 

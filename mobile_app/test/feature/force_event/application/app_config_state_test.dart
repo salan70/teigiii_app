@@ -36,6 +36,7 @@ void main() {
       minAppVersionAndroid: '2.1.0',
       inMaintenance: false,
       maintenanceScheduledEndTime: null,
+      perfTelemetryEnabled: true,
     );
     when(
       mockAppConfigRepository.fetchAppConfig(),

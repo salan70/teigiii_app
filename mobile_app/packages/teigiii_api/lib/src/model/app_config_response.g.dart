@@ -17,6 +17,8 @@ abstract class _$AppConfigResponseCWProxy {
     DateTime? maintenanceScheduledEndTime,
   );
 
+  AppConfigResponse perfTelemetryEnabled(bool perfTelemetryEnabled);
+
   AppConfigResponse updatedAt(DateTime updatedAt);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `AppConfigResponse(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
@@ -30,6 +32,7 @@ abstract class _$AppConfigResponseCWProxy {
     String minAppVersionAndroid,
     bool inMaintenance,
     DateTime? maintenanceScheduledEndTime,
+    bool perfTelemetryEnabled,
     DateTime updatedAt,
   });
 }
@@ -58,6 +61,10 @@ class _$AppConfigResponseCWProxyImpl implements _$AppConfigResponseCWProxy {
   ) => this(maintenanceScheduledEndTime: maintenanceScheduledEndTime);
 
   @override
+  AppConfigResponse perfTelemetryEnabled(bool perfTelemetryEnabled) =>
+      this(perfTelemetryEnabled: perfTelemetryEnabled);
+
+  @override
   AppConfigResponse updatedAt(DateTime updatedAt) => this(updatedAt: updatedAt);
 
   @override
@@ -72,6 +79,7 @@ class _$AppConfigResponseCWProxyImpl implements _$AppConfigResponseCWProxy {
     Object? minAppVersionAndroid = const $CopyWithPlaceholder(),
     Object? inMaintenance = const $CopyWithPlaceholder(),
     Object? maintenanceScheduledEndTime = const $CopyWithPlaceholder(),
+    Object? perfTelemetryEnabled = const $CopyWithPlaceholder(),
     Object? updatedAt = const $CopyWithPlaceholder(),
   }) {
     return AppConfigResponse(
@@ -92,6 +100,10 @@ class _$AppConfigResponseCWProxyImpl implements _$AppConfigResponseCWProxy {
           ? _value.maintenanceScheduledEndTime
           // ignore: cast_nullable_to_non_nullable
           : maintenanceScheduledEndTime as DateTime?,
+      perfTelemetryEnabled: perfTelemetryEnabled == const $CopyWithPlaceholder()
+          ? _value.perfTelemetryEnabled
+          // ignore: cast_nullable_to_non_nullable
+          : perfTelemetryEnabled as bool,
       updatedAt: updatedAt == const $CopyWithPlaceholder()
           ? _value.updatedAt
           // ignore: cast_nullable_to_non_nullable
@@ -121,6 +133,7 @@ AppConfigResponse _$AppConfigResponseFromJson(
       'minAppVersionAndroid',
       'inMaintenance',
       'maintenanceScheduledEndTime',
+      'perfTelemetryEnabled',
       'updatedAt',
     ],
   );
@@ -135,6 +148,10 @@ AppConfigResponse _$AppConfigResponseFromJson(
       'maintenanceScheduledEndTime',
       (v) => v == null ? null : DateTime.parse(v as String),
     ),
+    perfTelemetryEnabled: $checkedConvert(
+      'perfTelemetryEnabled',
+      (v) => v as bool,
+    ),
     updatedAt: $checkedConvert('updatedAt', (v) => DateTime.parse(v as String)),
   );
   return val;
@@ -147,5 +164,6 @@ Map<String, dynamic> _$AppConfigResponseToJson(AppConfigResponse instance) =>
       'inMaintenance': instance.inMaintenance,
       'maintenanceScheduledEndTime': instance.maintenanceScheduledEndTime
           ?.toIso8601String(),
+      'perfTelemetryEnabled': instance.perfTelemetryEnabled,
       'updatedAt': instance.updatedAt.toIso8601String(),
     };

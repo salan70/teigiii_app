@@ -12,6 +12,7 @@
 | [workers-api-server.md](workers-api-server.md) | `backend/` の API を追加・変更する前（認証・認可・可視性・状態遷移。HTTP フィールドの正本は `backend/openapi.json`） |
 | [new-ui-information-architecture.md](new-ui-information-architecture.md) | 画面の追加・遷移の変更を行う前（画面マップとナビゲーション構造） |
 | [analytics-events.md](analytics-events.md) | Analytics イベントを追加・変更する前（イベント名・パラメータ・発火タイミングの正本） |
+| [app-performance-telemetry.md](app-performance-telemetry.md) | フレーム計測テレメトリのクライアント側を変更する前（画面遷移境界の対応付け契約・ジャンク判定・送信方針） |
 
 **履歴** — 特定時点のスナップショット。現状とずれうるため、規範としては扱わない。
 

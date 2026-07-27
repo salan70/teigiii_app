@@ -1,0 +1,25 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'frame_stats_client.dart';
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+String _$frameStatsClientHash() => r'7cc043a78ad9d88b561a8e252278364744169f0f';
+
+/// See also [frameStatsClient].
+@ProviderFor(frameStatsClient)
+final frameStatsClientProvider = Provider<FrameStatsClient>.internal(
+  frameStatsClient,
+  name: r'frameStatsClientProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$frameStatsClientHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef FrameStatsClientRef = ProviderRef<FrameStatsClient>;
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

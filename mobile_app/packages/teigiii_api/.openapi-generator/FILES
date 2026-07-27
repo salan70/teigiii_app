@@ -14,11 +14,16 @@ doc/DefinitionsApi.md
 doc/DiscoverFeedItem.md
 doc/ErrorResponse.md
 doc/ErrorResponseError.md
+doc/FrameStatsAcceptedResponse.md
+doc/FrameStatsDevice.md
+doc/FrameStatsRequest.md
+doc/FrameStatsScreen.md
 doc/MeApi.md
 doc/MeResponse.md
 doc/MyDictionaryOverview.md
 doc/SavedWordItem.md
 doc/SearchApi.md
+doc/TelemetryApi.md
 doc/TimelineApi.md
 doc/UpdateDefinitionRequest.md
 doc/UpdateMeRequest.md
@@ -47,6 +52,7 @@ lib/src/api/app_config_api.dart
 lib/src/api/definitions_api.dart
 lib/src/api/me_api.dart
 lib/src/api/search_api.dart
+lib/src/api/telemetry_api.dart
 lib/src/api/timeline_api.dart
 lib/src/api/users_api.dart
 lib/src/api/words_api.dart
@@ -66,6 +72,10 @@ lib/src/model/definition_response.dart
 lib/src/model/definition_status.dart
 lib/src/model/error_response.dart
 lib/src/model/error_response_error.dart
+lib/src/model/frame_stats_accepted_response.dart
+lib/src/model/frame_stats_device.dart
+lib/src/model/frame_stats_request.dart
+lib/src/model/frame_stats_screen.dart
 lib/src/model/me_response.dart
 lib/src/model/my_dictionary_overview.dart
 lib/src/model/saved_word_item.dart
@@ -90,3 +100,8 @@ lib/src/model/word_registered_activity.dart
 lib/src/model/word_response.dart
 lib/src/model/word_summary.dart
 lib/teigiii_api.dart
+test/frame_stats_accepted_response_test.dart
+test/frame_stats_device_test.dart
+test/frame_stats_request_test.dart
+test/frame_stats_screen_test.dart
+test/telemetry_api_test.dart

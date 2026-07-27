@@ -26,6 +26,8 @@ class AppConfigResponse {
 
     required this.maintenanceScheduledEndTime,
 
+    required this.perfTelemetryEnabled,
+
     required this.updatedAt,
   });
 
@@ -45,6 +47,9 @@ class AppConfigResponse {
   )
   final DateTime? maintenanceScheduledEndTime;
 
+  @JsonKey(name: r'perfTelemetryEnabled', required: true, includeIfNull: false)
+  final bool perfTelemetryEnabled;
+
   @JsonKey(name: r'updatedAt', required: true, includeIfNull: false)
   final DateTime updatedAt;
 
@@ -56,6 +61,7 @@ class AppConfigResponse {
           other.minAppVersionAndroid == minAppVersionAndroid &&
           other.inMaintenance == inMaintenance &&
           other.maintenanceScheduledEndTime == maintenanceScheduledEndTime &&
+          other.perfTelemetryEnabled == perfTelemetryEnabled &&
           other.updatedAt == updatedAt;
 
   @override
@@ -66,6 +72,7 @@ class AppConfigResponse {
       (maintenanceScheduledEndTime == null
           ? 0
           : maintenanceScheduledEndTime.hashCode) +
+      perfTelemetryEnabled.hashCode +
       updatedAt.hashCode;
 
   factory AppConfigResponse.fromJson(Map<String, dynamic> json) =>

@@ -8,6 +8,10 @@ import 'package:teigiii_api/src/model/definition_response.dart';
 import 'package:teigiii_api/src/model/discover_feed_item.dart';
 import 'package:teigiii_api/src/model/error_response.dart';
 import 'package:teigiii_api/src/model/error_response_error.dart';
+import 'package:teigiii_api/src/model/frame_stats_accepted_response.dart';
+import 'package:teigiii_api/src/model/frame_stats_device.dart';
+import 'package:teigiii_api/src/model/frame_stats_request.dart';
+import 'package:teigiii_api/src/model/frame_stats_screen.dart';
 import 'package:teigiii_api/src/model/me_response.dart';
 import 'package:teigiii_api/src/model/my_dictionary_overview.dart';
 import 'package:teigiii_api/src/model/saved_word_item.dart';
@@ -84,6 +88,18 @@ ReturnType deserialize<ReturnType, BaseType>(
           as ReturnType;
     case 'ErrorResponseError':
       return ErrorResponseError.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'FrameStatsAcceptedResponse':
+      return FrameStatsAcceptedResponse.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'FrameStatsDevice':
+      return FrameStatsDevice.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'FrameStatsRequest':
+      return FrameStatsRequest.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'FrameStatsScreen':
+      return FrameStatsScreen.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'MeResponse':
       return MeResponse.fromJson(value as Map<String, dynamic>) as ReturnType;

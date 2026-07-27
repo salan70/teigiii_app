@@ -26,6 +26,7 @@ class AppConfigRepository {
         minAppVersionAndroid: appConfig.minAppVersionAndroid,
         inMaintenance: appConfig.inMaintenance,
         maintenanceScheduledEndTime: appConfig.maintenanceScheduledEndTime,
+        perfTelemetryEnabled: appConfig.perfTelemetryEnabled,
       );
     } on DioException catch (exception) {
       throw ApiException.fromDioException(exception);

@@ -11,16 +11,19 @@ String _$discoverTimelineStateNotifierHash() =>
 
 /// See also [DiscoverTimelineStateNotifier].
 @ProviderFor(DiscoverTimelineStateNotifier)
-final discoverTimelineStateNotifierProvider = AsyncNotifierProvider<
-    DiscoverTimelineStateNotifier, DiscoverFeedListState>.internal(
-  DiscoverTimelineStateNotifier.new,
-  name: r'discoverTimelineStateNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$discoverTimelineStateNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final discoverTimelineStateNotifierProvider =
+    AsyncNotifierProvider<
+      DiscoverTimelineStateNotifier,
+      DiscoverFeedListState
+    >.internal(
+      DiscoverTimelineStateNotifier.new,
+      name: r'discoverTimelineStateNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$discoverTimelineStateNotifierHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$DiscoverTimelineStateNotifier = AsyncNotifier<DiscoverFeedListState>;
 // ignore_for_file: type=lint

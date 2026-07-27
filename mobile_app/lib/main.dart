@@ -22,6 +22,8 @@ import 'core/common_widget/dialog/loading_dialog.dart';
 import 'core/common_widget/error_and_retry_widget.dart';
 import 'core/design_system/design_system.dart';
 import 'core/router/app_router.dart';
+import 'core/telemetry/perf_screen_observer.dart';
+import 'core/telemetry/perf_telemetry_service.dart';
 import 'feature/force_event/application/app_config_state.dart';
 import 'feature/force_event/presentation/app_config_gate.dart';
 import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
@@ -119,6 +121,8 @@ class _MyAppState extends ConsumerState<MyApp> {
       return;
     }
     _didLogAppLaunched = true;
+    // フレーム計測を開始する。計測・送信の失敗はアプリの動作へ影響させない。
+    ref.read(perfTelemetryServiceProvider).start();
     // ignore: discarded_futures
     ref
         .read(analyticsServiceProvider)
@@ -145,6 +149,9 @@ class _MyAppState extends ConsumerState<MyApp> {
             navigatorObservers: () => [
               FirebaseAnalyticsObserver(
                 analytics: ref.watch(firebaseAnalyticsProvider),
+              ),
+              PerfScreenObserver(
+                ref.read(perfTelemetryServiceProvider).handleScreenChanged,
               ),
             ],
           ),

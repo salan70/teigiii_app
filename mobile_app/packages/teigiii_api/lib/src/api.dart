@@ -11,6 +11,7 @@ import 'package:teigiii_api/src/api/app_config_api.dart';
 import 'package:teigiii_api/src/api/definitions_api.dart';
 import 'package:teigiii_api/src/api/me_api.dart';
 import 'package:teigiii_api/src/api/search_api.dart';
+import 'package:teigiii_api/src/api/telemetry_api.dart';
 import 'package:teigiii_api/src/api/timeline_api.dart';
 import 'package:teigiii_api/src/api/users_api.dart';
 import 'package:teigiii_api/src/api/words_api.dart';
@@ -160,6 +161,12 @@ class TeigiiiApi {
   /// by doing that all interceptors will not be executed
   SearchApi getSearchApi() {
     return SearchApi(dio);
+  }
+
+  /// Get TelemetryApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  TelemetryApi getTelemetryApi() {
+    return TelemetryApi(dio);
   }
 
   /// Get TimelineApi instance, base route and serializer can be overridden by a given but be careful,
