@@ -29,7 +29,7 @@ class LikeDefinitionService {
 
     final currentUserId = ref.read(userIdProvider)!;
     ref
-      ..invalidate(definitionProvider(definition.id))
+      ..refreshDefinition(definition.id)
       ..invalidate(
         definitionIdListStateNotifierProvider(
           DefinitionFeedType.profileLiked,

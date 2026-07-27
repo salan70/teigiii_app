@@ -98,7 +98,7 @@ class DefinitionForWriteNotifier extends _$DefinitionForWriteNotifier {
         );
 
     ref
-      ..invalidate(definitionProvider(definitionForWrite.id!))
+      ..refreshDefinition(definitionForWrite.id!)
       ..invalidate(definitionIdListStateNotifierProvider)
       ..invalidate(wordListStateByInitialNotifierProvider)
       ..invalidate(wordListStateBySearchWordNotifierProvider)

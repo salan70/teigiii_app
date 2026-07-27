@@ -46,7 +46,7 @@ class DefinitionDetailPage extends ConsumerWidget {
           body: EasyRefresh(
             header: const CupertinoHeader(),
             onRefresh: () async {
-              ref.invalidate(definitionProvider(definitionId));
+              ref.refreshDefinition(definitionId);
             },
             child: SingleChildScrollView(
               child: Padding(
@@ -232,7 +232,7 @@ class DefinitionDetailPage extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Center(
               child: ErrorAndRetryWidget.cannotInquire(
-                onRetry: () => ref.invalidate(definitionProvider(definitionId)),
+                onRetry: () => ref.refreshDefinition(definitionId),
               ),
             ),
           ),

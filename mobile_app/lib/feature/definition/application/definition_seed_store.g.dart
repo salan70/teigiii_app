@@ -1,27 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'banner_ad_unit_id_provider.dart';
+part of 'definition_seed_store.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bannerAdUnitIdHash() => r'fe5091a9cb915b11b07fd2d963ddd0a94c7dcf47';
+String _$definitionSeedStoreHash() =>
+    r'e38156c7a0c8321440df7d4203e1038f1947c4c6';
 
-/// flavor と platform に応じた BannerAd のId を保持する。
-///
-/// Copied from [bannerAdUnitId].
-@ProviderFor(bannerAdUnitId)
-final bannerAdUnitIdProvider = AutoDisposeProvider<String>.internal(
-  bannerAdUnitId,
-  name: r'bannerAdUnitIdProvider',
+/// See also [definitionSeedStore].
+@ProviderFor(definitionSeedStore)
+final definitionSeedStoreProvider = Provider<DefinitionSeedStore>.internal(
+  definitionSeedStore,
+  name: r'definitionSeedStoreProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$bannerAdUnitIdHash,
+      : _$definitionSeedStoreHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef BannerAdUnitIdRef = AutoDisposeProviderRef<String>;
+typedef DefinitionSeedStoreRef = ProviderRef<DefinitionSeedStore>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

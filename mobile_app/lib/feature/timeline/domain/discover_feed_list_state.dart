@@ -6,7 +6,7 @@ part 'discover_feed_list_state.freezed.dart';
 
 /// おすすめタイムライン（mixed: 定義 + 言葉登録）の一覧 state。
 ///
-/// [list] の各要素は String（定義 ID）または WordRegisteredActivity。
+/// [list] の各要素は Definition または WordRegisteredActivity。
 @freezed
 class DiscoverFeedListState with _$DiscoverFeedListState implements ListState {
   const factory DiscoverFeedListState({

@@ -11,8 +11,8 @@ import '../../feature/admob/presentation/banner_ad_widget.dart';
 import '../common_provider/key_provider.dart';
 import '../common_provider/snack_bar_controller.dart';
 
-class InfinityScrollWidget extends ConsumerWidget {
-  InfinityScrollWidget({
+class InfinityScrollWidget extends ConsumerStatefulWidget {
+  const InfinityScrollWidget({
     super.key,
     required this.listStateNotifierProvider,
     required this.fetchMore,
@@ -54,12 +54,22 @@ class InfinityScrollWidget extends ConsumerWidget {
   /// true の場合、 [tileBuilder] で作成した tile 7件ごとにバナー広告を表示させる。
   final bool showBannerAd;
 
-  final scrollController = ScrollController();
-  // エラーが発生してリビルドした際、スクロール位置を保持するためのキー。
-  final globalKey = GlobalKey();
+  @override
+  ConsumerState<InfinityScrollWidget> createState() =>
+      _InfinityScrollWidgetState();
+}
+
+class _InfinityScrollWidgetState extends ConsumerState<InfinityScrollWidget> {
+  /// エラーが発生してリビルドした際、スクロール位置を保持するためのキー。
+  ///
+  /// data / error 分岐の間で [_StateScrollBar] の Element と ScrollPosition
+  /// を保持するために使う。State のフィールドとして持つことで、
+  /// リビルドのたびに作り直されないようにしている。
+  final _scrollbarKey = GlobalKey();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final listStateNotifierProvider = widget.listStateNotifierProvider;
     final asyncListState = ref.watch(listStateNotifierProvider);
 
     Future<void> onRefresh() async {
@@ -67,7 +77,7 @@ class InfinityScrollWidget extends ConsumerWidget {
       // indicatorを表示し続けるため、取得が完了するまで待つ
       await ref.read(listStateNotifierProvider.future);
 
-      additionalOnRefresh?.call();
+      widget.additionalOnRefresh?.call();
     }
 
     // エラーが発生した場合、ログ出力とトースト表示を行う。
@@ -95,25 +105,24 @@ class InfinityScrollWidget extends ConsumerWidget {
           onNotification: (notification) {
             // 画面の一番下までスクロールしたかどうかを判定する。
             if (notification.metrics.extentAfter == 0) {
-              fetchMore();
+              widget.fetchMore();
               return true;
             }
             return false;
           },
           child: _StateScrollBar(
-            globalKey: globalKey,
-            scrollController: scrollController,
+            globalKey: _scrollbarKey,
             onRefresh: onRefresh,
             asyncListState: asyncListState,
-            tileBuilder: tileBuilder,
-            contentPadding: contentPadding,
+            tileBuilder: widget.tileBuilder,
+            contentPadding: widget.contentPadding,
             bottomWidget: listState.hasMore
                 ? const Column(
                     children: [CupertinoActivityIndicator(), Gap(40)],
                   )
                 : const SizedBox.shrink(),
-            emptyWidget: emptyWidget,
-            showBannerAd: showBannerAd,
+            emptyWidget: widget.emptyWidget,
+            showBannerAd: widget.showBannerAd,
           ),
         );
       },
@@ -126,18 +135,17 @@ class InfinityScrollWidget extends ConsumerWidget {
         // 取得済みのデータがある場合、それを表示する。
         if (asyncListState.hasValue) {
           return _StateScrollBar(
-            globalKey: globalKey,
-            scrollController: scrollController,
+            globalKey: _scrollbarKey,
             onRefresh: onRefresh,
             asyncListState: asyncListState,
-            tileBuilder: tileBuilder,
-            contentPadding: contentPadding,
+            tileBuilder: widget.tileBuilder,
+            contentPadding: widget.contentPadding,
             bottomWidget: _BottomWidgetWhenError(
-              fetchMore: fetchMore,
+              fetchMore: widget.fetchMore,
               asyncListState: asyncListState,
             ),
-            emptyWidget: emptyWidget,
-            showBannerAd: showBannerAd,
+            emptyWidget: widget.emptyWidget,
+            showBannerAd: widget.showBannerAd,
           );
         }
 
@@ -154,14 +162,14 @@ class InfinityScrollWidget extends ConsumerWidget {
       // 初回ローディング時。
       loading: () {
         return Padding(
-          padding: contentPadding,
+          padding: widget.contentPadding,
           child: ListView.builder(
-            controller: scrollController,
-            shrinkWrap: true,
+            // PrimaryScrollController への attach を避ける。
+            primary: false,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: shimmerTileNumber,
+            itemCount: widget.shimmerTileNumber,
             itemBuilder: (context, index) {
-              return shimmerTile;
+              return widget.shimmerTile;
             },
           ),
         );
@@ -177,7 +185,6 @@ class InfinityScrollWidget extends ConsumerWidget {
 class _StateScrollBar extends StatelessWidget {
   const _StateScrollBar({
     required this.globalKey,
-    required this.scrollController,
     required this.onRefresh,
     required this.asyncListState,
     required this.tileBuilder,
@@ -188,7 +195,6 @@ class _StateScrollBar extends StatelessWidget {
   });
 
   final GlobalKey globalKey;
-  final ScrollController scrollController;
   final Future<void> Function() onRefresh;
   final AsyncValue<ListState?> asyncListState;
   final Widget Function(dynamic item) tileBuilder;
@@ -201,9 +207,14 @@ class _StateScrollBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final list = asyncListState.value!.list;
+
     return Scrollbar(
       key: globalKey,
-      controller: scrollController,
+      // controller は渡さない。実際にスクロールするのは下の CustomScrollView
+      // （PrimaryScrollController 経由）であり、NestedScrollView 配下の
+      // 呼び出し元では PrimaryScrollController を使わないと SliverAppBar が
+      // 連動しないため。
       child: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -213,38 +224,34 @@ class _StateScrollBar extends StatelessWidget {
           ),
           SliverPadding(
             padding: contentPadding,
-            sliver: SliverToBoxAdapter(
-              child: asyncListState.value!.list.isEmpty
-                  // 表示件数がある程度多い状態から、0件になるような refresh を
-                  // した際のエラーを回避するために、SingleChildScrollView で囲っている。
-                  ? SingleChildScrollView(
-                      controller: scrollController,
-                      child: emptyWidget ?? const SizedBox.shrink(),
-                    )
-                  : ListView.builder(
-                      controller: scrollController,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: asyncListState.value!.list.length,
-                      itemBuilder: (context, index) {
-                        // バナー広告を表示させる場合。
-                        if (showBannerAd) {
-                          return Column(
-                            children: [
-                              // 7件ごとにバナー広告を表示させる。
-                              (index % 7 == 0 && index != 0)
-                                  ? const _BannerAdTile()
-                                  : const SizedBox.shrink(),
-                              tileBuilder(asyncListState.value!.list[index]),
-                            ],
-                          );
-                        }
+            sliver: list.isEmpty
+                ? SliverToBoxAdapter(
+                    child: emptyWidget ?? const SizedBox.shrink(),
+                  )
+                // SliverList.builder にすることで、ビューポート外の tile が
+                // 構築されない（遅延構築）状態を保つ。
+                // SliverToBoxAdapter + ListView.builder(shrinkWrap: true) に
+                // 戻すと全件が毎フレーム build / layout されるため戻さないこと。
+                : SliverList.builder(
+                    itemCount: list.length,
+                    itemBuilder: (context, index) {
+                      // バナー広告を表示させる場合。
+                      if (showBannerAd) {
+                        return Column(
+                          children: [
+                            // 7件ごとにバナー広告を表示させる。
+                            (index % 7 == 0 && index != 0)
+                                ? const _BannerAdTile()
+                                : const SizedBox.shrink(),
+                            tileBuilder(list[index]),
+                          ],
+                        );
+                      }
 
-                        // バナー広告を表示させない場合。
-                        return tileBuilder(asyncListState.value!.list[index]);
-                      },
-                    ),
-            ),
+                      // バナー広告を表示させない場合。
+                      return tileBuilder(list[index]);
+                    },
+                  ),
           ),
           SliverPadding(
             padding: const EdgeInsets.only(top: 8, bottom: 40),
@@ -306,18 +313,18 @@ class _BottomWidgetWhenError extends StatelessWidget {
 }
 
 /// 無限スクロールにて、表示させるバナー広告。
-class _BannerAdTile extends StatelessWidget {
+class _BannerAdTile extends ConsumerWidget {
   const _BannerAdTile();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Container(
           height: 64,
           width: double.infinity,
           color: Theme.of(context).colorScheme.surface,
-          child: const BannerAdWidget(),
+          child: ref.watch(bannerAdWidgetProvider),
         ),
         const Divider(),
       ],

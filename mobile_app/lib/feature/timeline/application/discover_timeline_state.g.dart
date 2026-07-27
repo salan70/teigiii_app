@@ -7,23 +7,20 @@ part of 'discover_timeline_state.dart';
 // **************************************************************************
 
 String _$discoverTimelineStateNotifierHash() =>
-    r'a2cea846f5c92793399d2ccc194651db764fa0ad';
+    r'ce9e38427769920991b442e7aa1fbc54331ab299';
 
 /// See also [DiscoverTimelineStateNotifier].
 @ProviderFor(DiscoverTimelineStateNotifier)
-final discoverTimelineStateNotifierProvider =
-    AsyncNotifierProvider<
-      DiscoverTimelineStateNotifier,
-      DiscoverFeedListState
-    >.internal(
-      DiscoverTimelineStateNotifier.new,
-      name: r'discoverTimelineStateNotifierProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$discoverTimelineStateNotifierHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+final discoverTimelineStateNotifierProvider = AsyncNotifierProvider<
+    DiscoverTimelineStateNotifier, DiscoverFeedListState>.internal(
+  DiscoverTimelineStateNotifier.new,
+  name: r'discoverTimelineStateNotifierProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$discoverTimelineStateNotifierHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef _$DiscoverTimelineStateNotifier = AsyncNotifier<DiscoverFeedListState>;
 // ignore_for_file: type=lint

@@ -6,7 +6,7 @@ part of 'definition_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$definitionHash() => r'd7a8462efae5de1fb06e3412a9ec35a1e7212194';
+String _$definitionHash() => r'694add1840cde6a49a57306fe725f86bbb96af56';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,16 +29,64 @@ class _SystemHash {
   }
 }
 
-/// See also [definition].
+/// 定義 1 件を提供する provider。
+///
+/// [definitionSeedStoreProvider] にシードがある場合は、それをそのまま返す。
+/// この経路では API 取得も [userProfileProvider] の watch も行わない。
+/// そのため、表示中に著者がプロフィール（名前・アイコン）を変更しても、
+/// リフレッシュされるまでは一覧取得時点の値を表示し続ける。
+/// N+1 リクエストの解消を優先し、この挙動は許容している。
+///
+/// この provider をリフレッシュする場合は、`ref.invalidate` を直接呼ばず
+/// 必ず `refreshDefinition` を使うこと。
+/// シードが残ったままだと invalidate しても古い値が返るため。
+///
+/// Copied from [definition].
 @ProviderFor(definition)
 const definitionProvider = DefinitionFamily();
 
-/// See also [definition].
+/// 定義 1 件を提供する provider。
+///
+/// [definitionSeedStoreProvider] にシードがある場合は、それをそのまま返す。
+/// この経路では API 取得も [userProfileProvider] の watch も行わない。
+/// そのため、表示中に著者がプロフィール（名前・アイコン）を変更しても、
+/// リフレッシュされるまでは一覧取得時点の値を表示し続ける。
+/// N+1 リクエストの解消を優先し、この挙動は許容している。
+///
+/// この provider をリフレッシュする場合は、`ref.invalidate` を直接呼ばず
+/// 必ず `refreshDefinition` を使うこと。
+/// シードが残ったままだと invalidate しても古い値が返るため。
+///
+/// Copied from [definition].
 class DefinitionFamily extends Family<AsyncValue<Definition>> {
-  /// See also [definition].
+  /// 定義 1 件を提供する provider。
+  ///
+  /// [definitionSeedStoreProvider] にシードがある場合は、それをそのまま返す。
+  /// この経路では API 取得も [userProfileProvider] の watch も行わない。
+  /// そのため、表示中に著者がプロフィール（名前・アイコン）を変更しても、
+  /// リフレッシュされるまでは一覧取得時点の値を表示し続ける。
+  /// N+1 リクエストの解消を優先し、この挙動は許容している。
+  ///
+  /// この provider をリフレッシュする場合は、`ref.invalidate` を直接呼ばず
+  /// 必ず `refreshDefinition` を使うこと。
+  /// シードが残ったままだと invalidate しても古い値が返るため。
+  ///
+  /// Copied from [definition].
   const DefinitionFamily();
 
-  /// See also [definition].
+  /// 定義 1 件を提供する provider。
+  ///
+  /// [definitionSeedStoreProvider] にシードがある場合は、それをそのまま返す。
+  /// この経路では API 取得も [userProfileProvider] の watch も行わない。
+  /// そのため、表示中に著者がプロフィール（名前・アイコン）を変更しても、
+  /// リフレッシュされるまでは一覧取得時点の値を表示し続ける。
+  /// N+1 リクエストの解消を優先し、この挙動は許容している。
+  ///
+  /// この provider をリフレッシュする場合は、`ref.invalidate` を直接呼ばず
+  /// 必ず `refreshDefinition` を使うこと。
+  /// シードが残ったままだと invalidate しても古い値が返るため。
+  ///
+  /// Copied from [definition].
   DefinitionProvider call(String definitionId) {
     return DefinitionProvider(definitionId);
   }
@@ -65,9 +113,33 @@ class DefinitionFamily extends Family<AsyncValue<Definition>> {
   String? get name => r'definitionProvider';
 }
 
-/// See also [definition].
+/// 定義 1 件を提供する provider。
+///
+/// [definitionSeedStoreProvider] にシードがある場合は、それをそのまま返す。
+/// この経路では API 取得も [userProfileProvider] の watch も行わない。
+/// そのため、表示中に著者がプロフィール（名前・アイコン）を変更しても、
+/// リフレッシュされるまでは一覧取得時点の値を表示し続ける。
+/// N+1 リクエストの解消を優先し、この挙動は許容している。
+///
+/// この provider をリフレッシュする場合は、`ref.invalidate` を直接呼ばず
+/// 必ず `refreshDefinition` を使うこと。
+/// シードが残ったままだと invalidate しても古い値が返るため。
+///
+/// Copied from [definition].
 class DefinitionProvider extends AutoDisposeFutureProvider<Definition> {
-  /// See also [definition].
+  /// 定義 1 件を提供する provider。
+  ///
+  /// [definitionSeedStoreProvider] にシードがある場合は、それをそのまま返す。
+  /// この経路では API 取得も [userProfileProvider] の watch も行わない。
+  /// そのため、表示中に著者がプロフィール（名前・アイコン）を変更しても、
+  /// リフレッシュされるまでは一覧取得時点の値を表示し続ける。
+  /// N+1 リクエストの解消を優先し、この挙動は許容している。
+  ///
+  /// この provider をリフレッシュする場合は、`ref.invalidate` を直接呼ばず
+  /// 必ず `refreshDefinition` を使うこと。
+  /// シードが残ったままだと invalidate しても古い値が返るため。
+  ///
+  /// Copied from [definition].
   DefinitionProvider(String definitionId)
     : this._internal(
         (ref) => definition(ref as DefinitionRef, definitionId),

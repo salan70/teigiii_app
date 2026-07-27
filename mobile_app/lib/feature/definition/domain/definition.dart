@@ -20,6 +20,7 @@ class Definition with _$Definition {
     required bool isLikedByUser,
     required DateTime createdAt,
   }) = _Definition;
+
   const Definition._();
 
   DefinitionForWrite toDefinitionForWrite() {

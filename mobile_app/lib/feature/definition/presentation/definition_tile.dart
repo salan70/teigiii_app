@@ -130,7 +130,7 @@ class DefinitionTile extends ConsumerWidget {
           children: [
             const Gap(16),
             SimpleErrorAndRetryWidget(
-              onRetry: () => ref.invalidate(definitionProvider(definitionId)),
+              onRetry: () => ref.refreshDefinition(definitionId),
             ),
             const Gap(16),
             const Divider(),
