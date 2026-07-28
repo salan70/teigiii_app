@@ -1,7 +1,8 @@
 /**
  * prod TELEMETRY_DB への read-only 実行ヘルパー。
- * mutation は Cloudflare API token の権限で拒否される前提。
- * perf-query 側でも SELECT/WITH 以外を弾く。
+ * mutation の実効防御は perf-query の SELECT/WITH ガード。
+ * CLOUDFLARE_API_TOKEN は D1 Read を運用前提とするが、Read でも
+ * wrangler d1 execute --remote の INSERT が SQL 実行まで到達しうる（実測）。
  */
 
 export function requireCloudflareApiToken(
@@ -51,6 +52,23 @@ export function extractD1Rows(parsed: unknown): Record<string, unknown>[] {
   return first.results as Record<string, unknown>[];
 }
 
+/** wrangler は設定 WARNING を stderr、API エラー JSON を stdout に出すことがある */
+export function formatWranglerFailure(exitCode: number, stdout: string, stderr: string): string {
+  const parts = [`wrangler d1 execute failed (exit ${exitCode}):`];
+  const err = stderr.trim();
+  const out = stdout.trim();
+  if (err) {
+    parts.push(err);
+  }
+  if (out) {
+    parts.push(out);
+  }
+  if (!err && !out) {
+    parts.push("(no output)");
+  }
+  return parts.join("\n");
+}
+
 function parseWranglerJson(stdout: string): unknown {
   try {
     return JSON.parse(stdout) as unknown;
@@ -87,7 +105,7 @@ export async function executeTelemetrySql(
         proc.exited,
       ]);
       if (exitCode !== 0) {
-        throw new Error(`wrangler d1 execute failed (exit ${exitCode}):\n${stderr || stdout}`);
+        throw new Error(formatWranglerFailure(exitCode, stdout, stderr));
       }
       return stdout;
     });

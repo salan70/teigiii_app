@@ -67,4 +67,4 @@ build と raster を分けて数えるのは、「Dart 側の再構築が重い�
 | `just perf-report [build_number]` | AI / 定型分析の主導線。画面別ジャンク率、`platform + flavor` ごとの `build_number` による最新 vs 直前比較、端末別・リフレッシュレート別内訳を JSON で返す。各集計にセッション数と `frame_count` 合計を含める |
 | `just perf-query '<SQL>'` | 手動調査用の raw SQL。AI の代表導線にはしない |
 
-どちらも prod の `TELEMETRY_DB` を対象とし、**D1 Read のみ**の `CLOUDFLARE_API_TOKEN` を必須とする。手順と指標の解釈は `.claude/skills/analyzing-app-performance/SKILL.md` を正本とする。新旧バージョンの判定は `app_version` 文字列順ではなく数値の `build_number` で行う。
+どちらも prod の `TELEMETRY_DB` を対象とし、**D1 Read のみ**の `CLOUDFLARE_API_TOKEN` を必須とする（運用上の最小権限）。ただし Cloudflare の D1 Read token は `wrangler d1 execute --remote` の mutation を権限エラーで止めないことがあり、**書き込み防止の正は `perf-query` の SELECT/WITH ガード**とする。手順と指標の解釈は `.claude/skills/analyzing-app-performance/SKILL.md` を正本とする。新旧バージョンの判定は `app_version` 文字列順ではなく数値の `build_number` で行う。

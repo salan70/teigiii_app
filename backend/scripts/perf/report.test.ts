@@ -16,6 +16,8 @@ describe("parseOptionalBuildNumber", () => {
   test("未指定は null", () => {
     expect(parseOptionalBuildNumber(undefined)).toBeNull();
     expect(parseOptionalBuildNumber([])).toBeNull();
+    // just perf-report のデフォルト build_number="" が argv に載る
+    expect(parseOptionalBuildNumber([""])).toBeNull();
   });
 
   test("正の整数を受け付ける", () => {
@@ -77,6 +79,13 @@ describe("SQL builders", () => {
     expect(sql).toContain("LEFT JOIN previous_builds pb");
     expect(sql).toContain("LEFT JOIN previous_stats p");
     expect(sql).toContain("pb.previous_build_number");
+  });
+
+  test("バージョン比較の ORDER BY は latest_stats.frame_count を参照する", () => {
+    // l.latest_frame_count は SELECT 別名であり CTE 列ではない（D1 SQLITE_ERROR 7500）
+    const sql = buildVersionComparisonQuery(null);
+    expect(sql).toContain("ORDER BY l.platform, l.flavor, l.frame_count DESC");
+    expect(sql).not.toContain("l.latest_frame_count");
   });
 
   test("端末別・リフレッシュレート別もサンプル数を含む", () => {

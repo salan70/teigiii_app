@@ -190,5 +190,5 @@ perf-query sql:
     cd backend && bun run scripts/perf-query.ts "{{sql}}"
 
 # AI 用の固定集計 JSON。任意で build_number を渡して絞り込み
-perf-report build_number="":
-    cd backend && bun run scripts/perf-report.ts "{{build_number}}"
+perf-report *build_number:
+    cd backend && bun run scripts/perf-report.ts {{build_number}}

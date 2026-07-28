@@ -14,7 +14,7 @@ Phase 1 で蓄積した `frame_stats` を、ダッシュボードなしで AI / 
 ## 完了条件
 
 - [x] `just perf-query` / `just perf-report` が定義されている
-- [x] 分析導線が D1 Read のみの token を前提にしている
+- [x] 分析導線が D1 Read のみの token を前提にしている（運用上の最小権限。mutation 拒否は CLI ガードが正で、Read token の権限エラーは完了条件にしない）
 - [x] AI 主導線が `perf-report`、raw SQL は手動調査用に分離されている
 - [x] 新旧判定が `platform + flavor` ごとの `build_number` である
 - [x] 集計にサンプル数が含まれる

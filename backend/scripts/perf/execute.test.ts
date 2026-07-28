@@ -4,6 +4,7 @@ import {
   assertReadOnlySql,
   executeTelemetrySql,
   extractD1Rows,
+  formatWranglerFailure,
   parsePerfQueryArgs,
   requireCloudflareApiToken,
 } from "./execute";
@@ -114,5 +115,22 @@ describe("executeTelemetrySql", () => {
         run: async () => "wrangler banner\nnot-json",
       }),
     ).rejects.toThrow(/Failed to parse wrangler JSON[\s\S]*wrangler banner/);
+  });
+
+  test("失敗時は stderr があっても stdout の本体エラーを落とさない", () => {
+    expect(
+      formatWranglerFailure(
+        1,
+        '{\n  "error": { "text": "Authentication error [code: 10000]" }\n}',
+        "▲ [WARNING] Processing wrangler.toml configuration:",
+      ),
+    ).toContain("Authentication error [code: 10000]");
+    expect(
+      formatWranglerFailure(
+        1,
+        '{\n  "error": { "text": "Authentication error [code: 10000]" }\n}',
+        "▲ [WARNING] Processing wrangler.toml configuration:",
+      ),
+    ).toContain("WARNING");
   });
 });

@@ -62,8 +62,12 @@ export function parseOptionalBuildNumber(args: string[] | undefined): number | n
     return null;
   }
   const raw = args[0];
-  if (raw === undefined || !/^[1-9]\d*$/.test(raw)) {
-    throw new Error(`build_number must be a positive integer, got: ${raw ?? "(empty)"}`);
+  // just のデフォルト build_number="" が argv に載る場合は未指定扱い
+  if (raw === undefined || raw === "") {
+    return null;
+  }
+  if (!/^[1-9]\d*$/.test(raw)) {
+    throw new Error(`build_number must be a positive integer, got: ${raw}`);
   }
   return Number(raw);
 }
@@ -243,7 +247,7 @@ LEFT JOIN previous_stats p
   ON l.platform = p.platform
  AND l.flavor = p.flavor
  AND l.screen_name = p.screen_name
-ORDER BY l.platform, l.flavor, l.latest_frame_count DESC
+ORDER BY l.platform, l.flavor, l.frame_count DESC
 `.trim();
 }
 

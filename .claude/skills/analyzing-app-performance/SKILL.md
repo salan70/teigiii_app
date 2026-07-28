@@ -12,7 +12,7 @@ description: 本番アプリのフレーム計測テレメトリを CLI で取�
 ## 前提
 
 1. ローカル環境に `CLOUDFLARE_API_TOKEN` を置く（リポジトリにコミットしない）
-2. トークン権限は **D1 Read のみ**（Account → D1 → Read）。Write / Edit は付けない
+2. トークン権限は **D1 Read のみ**（Account → D1 → Read）。Write / Edit は付けない（最小権限の習慣。ただし下記「実測」参照）
 3. 対象 DB は prod の `TELEMETRY_DB`（`teigiii-telemetry-prod`）
 
 発行手順（Cloudflare Dashboard）:
@@ -28,14 +28,12 @@ description: 本番アプリのフレーム計測テレメトリを CLI で取�
 just perf-query 'SELECT COUNT(*) AS n FROM frame_stats'
 # 成功すること
 
-# mutation は perf-query 側で弾かれる（多層防御）
+# mutation の実効防御は perf-query の SELECT/WITH ガード（必須）
 just perf-query "INSERT INTO frame_stats (id) VALUES ('x')"
 # "Only SELECT/WITH queries are allowed" で失敗すること
-
-# トークン自体が D1 Read のみであることの確認（wrangler 直叩き）
-cd backend && bunx wrangler d1 execute TELEMETRY_DB --env prod --remote --command "INSERT INTO frame_stats (id) VALUES ('x')"
-# 権限エラーになること（構文エラーではなく permission / auth 系）
 ```
+
+**実測（2026-07-28）:** Account / D1 / Read のみの API token でも、`wrangler d1 execute --remote` 経由の `INSERT` は権限エラーにならず SQL 実行まで到達する（制約違反などで落ちる）。したがって「Read token なら Cloudflare 側が mutation を拒否する」は完了条件にしない。分析導線の書き込み防止は **CLI ガードが正**であり、Read 指定は運用上の最小権限表明として残す。
 
 
 ## コマンド
