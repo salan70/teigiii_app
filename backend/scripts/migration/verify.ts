@@ -8,16 +8,23 @@
 // readingSubGroup / normalizeText は移行専用ロジックではなくサーバー本体の
 // 共有ロジック（独自の unit test を持つ）のため、ここでは import して使う。
 //
+// D1 は wrangler CLI（OAuth）で読むが、R2 は Cloudflare REST API を直接叩く。
+// wrangler の `r2 object get` はレスポンスの body しか返さず Content-Type を捨てるため、
+// CLI 経由では保存済みの HTTP metadata を突合できない（`head` / `info` サブコマンドも無い）。
+// REST の GET /accounts/{id}/r2/buckets/{bucket}/objects/{key} は body と metadata ヘッダーを
+// 同時に返すので、1 リクエストでバイトサイズと Content-Type の両方を検証する。
+//
 // 使い方:
+//   export CLOUDFLARE_API_TOKEN=...   # R2 Read のみの API token
+//   export CLOUDFLARE_ACCOUNT_ID=...
 //   bun run scripts/migration/verify.ts \
 //     --snapshot ./migration-snapshots/prod-2026-07-20 \
 //     --d1-database teigiii-prod \
 //     --r2-bucket teigiii-prod-avatars
 
 import { execFile } from "node:child_process";
-import { mkdtemp, readFile, stat } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { readFile, stat } from "node:fs/promises";
+import { resolve } from "node:path";
 import { parseArgs, promisify } from "node:util";
 
 import { normalizeText } from "../../src/lib/normalize";
@@ -343,6 +350,89 @@ function normalizeD1Row<T extends Record<string, unknown>>(row: Record<string, u
   return row as T;
 }
 
+// ---- R2 実オブジェクト取得・突合 ----
+
+/** 移行対象アバターは default / custom とも PNG のため、期待値は定数で固定する。 */
+const expectedAvatarContentType = "image/png";
+
+export type R2RestCredentials = { apiToken: string; accountId: string };
+
+export function requireR2RestCredentials(
+  env: Record<string, string | undefined> = process.env,
+): R2RestCredentials {
+  const apiToken = env["CLOUDFLARE_API_TOKEN"]?.trim();
+  const accountId = env["CLOUDFLARE_ACCOUNT_ID"]?.trim();
+  if (!apiToken) {
+    throw new Error(
+      "CLOUDFLARE_API_TOKEN が必要です（R2 の Read のみを持つ API token を使ってください）。R2 突合は Content-Type を読むため REST API 経由で行います。",
+    );
+  }
+  if (!accountId) {
+    throw new Error("CLOUDFLARE_ACCOUNT_ID が必要です（R2 REST API の呼び出しに使います）。");
+  }
+  return { apiToken, accountId };
+}
+
+export function buildR2ObjectUrl(accountId: string, bucket: string, key: string): string {
+  // key はパスへ生のまま埋める。wrangler の r2 object get / put も同じ実装で、
+  // import.ts は put 側を通してアップロードしているため、ここで再エンコードすると
+  // 「import が実際に書いたオブジェクト」と別のキーを参照してしまう。
+  // なお key は `avatars/{encodeURIComponent(uid)}` 形式、uid は Firebase Auth の
+  // 28 文字英数字（スナップショット 192 件全てで確認済み）で、エンコードは恒等写像。
+  return `https://api.cloudflare.com/client/v4/accounts/${accountId}/r2/buckets/${bucket}/objects/${key}`;
+}
+
+export type R2ObjectMeta = { status: number; contentType: string | null; byteLength: number };
+
+export type AvatarProblem = { uid: string; problem: string };
+
+/** 1 オブジェクト分の期待値（スナップショットのファイルサイズ + PNG）と実データを突合する。 */
+export function diffAvatarObject(
+  uid: string,
+  avatarKey: string,
+  expectedSize: number,
+  actual: R2ObjectMeta,
+): AvatarProblem[] {
+  if (actual.status !== 200) {
+    return [
+      { uid, problem: `R2 オブジェクトが取得できない（status=${actual.status}）: ${avatarKey}` },
+    ];
+  }
+  const problems: AvatarProblem[] = [];
+  if (actual.byteLength !== expectedSize) {
+    problems.push({
+      uid,
+      problem: `バイトサイズ不一致: expected=${expectedSize} actual=${actual.byteLength}`,
+    });
+  }
+  // Content-Type はパラメータ（`; charset=...`）を落とし、大文字小文字を無視して比較する。
+  const mediaType = actual.contentType?.split(";")[0]?.trim().toLowerCase();
+  if (mediaType !== expectedAvatarContentType) {
+    problems.push({
+      uid,
+      problem: `Content-Type 不一致: expected=${expectedAvatarContentType} actual=${actual.contentType ?? "(なし)"}`,
+    });
+  }
+  return problems;
+}
+
+export type R2ObjectFetcher = (key: string) => Promise<R2ObjectMeta>;
+
+function createR2ObjectFetcher(credentials: R2RestCredentials, bucket: string): R2ObjectFetcher {
+  return async (key) => {
+    const response = await fetch(buildR2ObjectUrl(credentials.accountId, bucket, key), {
+      headers: { authorization: `Bearer ${credentials.apiToken}` },
+    });
+    const body = await response.arrayBuffer();
+    if (!response.ok) return { status: response.status, contentType: null, byteLength: 0 };
+    return {
+      status: response.status,
+      contentType: response.headers.get("content-type"),
+      byteLength: body.byteLength,
+    };
+  };
+}
+
 // ---- CLI ----
 
 type Args = {
@@ -378,12 +468,10 @@ async function verifyR2Avatars(
   expected: ExpectedState,
   snapshot: Snapshot,
   snapshotDir: string,
-  bucket: string,
-  serverDir: string,
-): Promise<{ uid: string; problem: string }[]> {
+  fetchObject: R2ObjectFetcher,
+): Promise<AvatarProblem[]> {
   const manifestByUid = new Map(snapshot.avatarManifest.entries.map((e) => [e.uid, e]));
-  const problems: { uid: string; problem: string }[] = [];
-  const tmpDir = await mkdtemp(join(tmpdir(), "migration-verify-"));
+  const problems: AvatarProblem[] = [];
 
   for (const user of expected.users) {
     if (user.avatar_key === null) continue;
@@ -404,25 +492,18 @@ async function verifyR2Avatars(
       continue;
     }
 
-    const downloadPath = join(tmpDir, `${encodeURIComponent(user.id)}.bin`);
+    let actual: R2ObjectMeta;
     try {
-      await execFileAsync(
-        "./node_modules/.bin/wrangler",
-        // put と異なり get は -y を受け付けない（Unknown argument になる）
-        ["r2", "object", "get", `${bucket}/${user.avatar_key}`, "--file", downloadPath, "--remote"],
-        { cwd: serverDir, maxBuffer: 1024 * 1024 * 64 },
-      );
-    } catch {
-      problems.push({ uid: user.id, problem: `R2 オブジェクトが取得できない: ${user.avatar_key}` });
-      continue;
-    }
-    const actualSize = (await stat(downloadPath)).size;
-    if (actualSize !== expectedSize) {
+      actual = await fetchObject(user.avatar_key);
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
       problems.push({
         uid: user.id,
-        problem: `バイトサイズ不一致: expected=${expectedSize} actual=${actualSize}`,
+        problem: `R2 オブジェクトの取得に失敗: ${user.avatar_key}（${reason}）`,
       });
+      continue;
     }
+    problems.push(...diffAvatarObject(user.id, user.avatar_key, expectedSize, actual));
   }
 
   return problems;
@@ -430,6 +511,8 @@ async function verifyR2Avatars(
 
 async function main(): Promise<void> {
   const args = parseCliArgs(process.argv.slice(2));
+  // D1 の全件突合に入る前に R2 の認証不足で落としたいので、ここで fail-fast する。
+  const credentials = requireR2RestCredentials();
   const serverDir = resolve(import.meta.dirname, "../..");
   const snapshotDir = resolve(args.snapshot);
 
@@ -527,11 +610,12 @@ async function main(): Promise<void> {
     expected,
     snapshot,
     snapshotDir,
-    args.r2Bucket,
-    serverDir,
+    createR2ObjectFetcher(credentials, args.r2Bucket),
   );
   if (avatarProblems.length === 0) {
-    console.log(`  OK（${expected.users.filter((u) => u.avatar_key !== null).length} 件）`);
+    console.log(
+      `  OK（${expected.users.filter((u) => u.avatar_key !== null).length} 件: バイトサイズ + Content-Type）`,
+    );
   } else {
     hasProblem = true;
     console.log(`  NG（${avatarProblems.length} 件）`);
@@ -542,7 +626,9 @@ async function main(): Promise<void> {
     console.error("検証 NG");
     process.exitCode = 1;
   } else {
-    console.log("検証 OK: 全件突合、意図的差分の整合、R2 アバターすべて一致");
+    console.log(
+      "検証 OK: 全件突合、意図的差分の整合、R2 アバター（バイトサイズ + Content-Type）すべて一致",
+    );
   }
 }
 
