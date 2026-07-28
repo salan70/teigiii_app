@@ -1,7 +1,15 @@
 import { describe, expect, test } from "bun:test";
 
-import { diffRows, parseD1JsonOutput, reclassifyAvatarUrl, recomputeExpectedState } from "./verify";
-import type { Snapshot } from "./verify";
+import {
+  buildR2ObjectUrl,
+  diffAvatarObject,
+  diffRows,
+  parseD1JsonOutput,
+  reclassifyAvatarUrl,
+  recomputeExpectedState,
+  requireR2RestCredentials,
+} from "./verify";
+import type { R2ObjectMeta, Snapshot } from "./verify";
 
 const defaultIconUrl =
   "https://firebasestorage.googleapis.com/v0/b/everyone-teigi-prod.appspot.com/o/common%2Fdefault_icon_image%2Fghost_writer.png?alt=media&token=dummy";
@@ -184,9 +192,7 @@ describe("recomputeExpectedState", () => {
       updatedAt: 1,
     });
     snapshot.userProfiles = [makeProfile("actor"), makeProfile("target")];
-    snapshot.userFollows = [
-      { id: "f1", followerId: "target", followingId: "actor", createdAt: 5 },
-    ];
+    snapshot.userFollows = [{ id: "f1", followerId: "target", followingId: "actor", createdAt: 5 }];
 
     const state = recomputeExpectedState(snapshot, 0);
     // 反転バグがあると follower_id=target になり落ちる。
@@ -230,5 +236,100 @@ describe("diffRows", () => {
     const diff = diffRows("t", [{ id: "1", v: "a" }], [{ id: "1", v: "b" }], (r) => r.id as string);
     expect(diff.mismatched).toHaveLength(1);
     expect(diff.mismatched[0]!.key).toBe("1");
+  });
+});
+
+describe("requireR2RestCredentials", () => {
+  test("token と account id を取り出す", () => {
+    expect(
+      requireR2RestCredentials({ CLOUDFLARE_API_TOKEN: "t", CLOUDFLARE_ACCOUNT_ID: "a" }),
+    ).toEqual({ apiToken: "t", accountId: "a" });
+  });
+
+  test("空白のみは未設定として扱う", () => {
+    expect(() =>
+      requireR2RestCredentials({ CLOUDFLARE_API_TOKEN: "  ", CLOUDFLARE_ACCOUNT_ID: "a" }),
+    ).toThrow(/CLOUDFLARE_API_TOKEN/);
+  });
+
+  test("account id が無ければ fail-fast する", () => {
+    expect(() => requireR2RestCredentials({ CLOUDFLARE_API_TOKEN: "t" })).toThrow(
+      /CLOUDFLARE_ACCOUNT_ID/,
+    );
+  });
+});
+
+describe("buildR2ObjectUrl", () => {
+  test("account id / バケット / キーから REST API の URL を組み立てる", () => {
+    expect(buildR2ObjectUrl("acc", "teigiii-prod-avatars", "avatars/u1")).toBe(
+      "https://api.cloudflare.com/client/v4/accounts/acc/r2/buckets/teigiii-prod-avatars/objects/avatars/u1",
+    );
+  });
+});
+
+describe("diffAvatarObject", () => {
+  const okMeta: R2ObjectMeta = { status: 200, contentType: "image/png", byteLength: 100 };
+
+  test("サイズと Content-Type が一致すれば問題なし", () => {
+    expect(diffAvatarObject("u1", "avatars/u1", 100, okMeta)).toEqual([]);
+  });
+
+  test("取得できないオブジェクトを報告する", () => {
+    const problems = diffAvatarObject("u1", "avatars/u1", 100, {
+      status: 404,
+      contentType: null,
+      byteLength: 0,
+    });
+    expect(problems).toEqual([
+      { uid: "u1", problem: "R2 オブジェクトが取得できない（status=404）: avatars/u1" },
+    ]);
+  });
+
+  test("バイトサイズ不一致を報告する", () => {
+    const problems = diffAvatarObject("u1", "avatars/u1", 100, { ...okMeta, byteLength: 99 });
+    expect(problems).toEqual([
+      { uid: "u1", problem: "バイトサイズ不一致: expected=100 actual=99" },
+    ]);
+  });
+
+  test("Content-Type が image/png でなければ報告する", () => {
+    const problems = diffAvatarObject("u1", "avatars/u1", 100, {
+      ...okMeta,
+      contentType: "application/octet-stream",
+    });
+    expect(problems).toEqual([
+      {
+        uid: "u1",
+        problem: "Content-Type 不一致: expected=image/png actual=application/octet-stream",
+      },
+    ]);
+  });
+
+  test("Content-Type 欠落を報告する", () => {
+    const problems = diffAvatarObject("u1", "avatars/u1", 100, { ...okMeta, contentType: null });
+    expect(problems).toEqual([
+      { uid: "u1", problem: "Content-Type 不一致: expected=image/png actual=(なし)" },
+    ]);
+  });
+
+  test("Content-Type のパラメータと大文字小文字は無視する", () => {
+    expect(
+      diffAvatarObject("u1", "avatars/u1", 100, { ...okMeta, contentType: "Image/PNG" }),
+    ).toEqual([]);
+    expect(
+      diffAvatarObject("u1", "avatars/u1", 100, {
+        ...okMeta,
+        contentType: "image/png; charset=binary",
+      }),
+    ).toEqual([]);
+  });
+
+  test("サイズと Content-Type の両方が不正なら両方報告する", () => {
+    const problems = diffAvatarObject("u1", "avatars/u1", 100, {
+      status: 200,
+      contentType: "text/plain",
+      byteLength: 1,
+    });
+    expect(problems).toHaveLength(2);
   });
 });
