@@ -182,3 +182,13 @@ backend-migrate-prod-telemetry:
 # migration（本体 + テレメトリ）を完了してから prod Worker を手動 deploy する
 backend-deploy-prod: backend-migrate-prod backend-migrate-prod-telemetry
     cd backend && bunx wrangler deploy --env prod
+
+# --- perf（本番テレメトリ D1 の分析。D1 Read のみの CLOUDFLARE_API_TOKEN が必須）---
+
+# 手動調査用の raw SQL。AI 主導線は perf-report を使う
+perf-query sql:
+    cd backend && bun run scripts/perf-query.ts "{{sql}}"
+
+# AI 用の固定集計 JSON。任意で build_number を渡して絞り込み
+perf-report *build_number:
+    cd backend && bun run scripts/perf-report.ts {{build_number}}

@@ -2,7 +2,7 @@
 
 スキル: porting-ai-assets-to-codex（Claude 側にのみ存在する。移植を実行するのは Claude 側のため）
 
-初版: 2026-07-11 / 最終更新: 2026-07-27（#286）
+初版: 2026-07-11 / 最終更新: 2026-07-27（#290）
 
 ## 位置づけ
 
@@ -33,6 +33,7 @@ Codex で実際に使うものに限定する。Claude 側にあっても、こ�
 | maintaining-ai-docs | AI ドキュメント保守は Claude 側で実施する |
 | dispatching-parallel-agents | Claude のサブエージェント機構前提。Codex に同等機構なし |
 | grilling | Codex では使用実績がない |
+| analyzing-app-performance | 本番テレメトリ分析のオペレーション用。Codex 移植対象の 9 スキルに含めず Claude 側のみで運用する |
 | docbridge-adopt / docbridge-link / docbridge-review | 導入・棚卸し系で、日常の Codex 作業では使わない |
 
 ## hooks の扱い

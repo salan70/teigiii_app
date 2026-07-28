@@ -220,6 +220,8 @@ kill switch はクライアント任せにせずサーバー側で強制する�
 
 migration は本体とは別系統（`backend/drizzle-telemetry`）で、`just backend-migrate-dev-telemetry` / `just backend-migrate-prod-telemetry` で適用する。`just backend-deploy-dev` / `just backend-deploy-prod` からも依存として実行する。
 
+分析はダッシュボードを作らず、`just perf-report`（定型 JSON）と `just perf-query`（手動 raw SQL）で prod `TELEMETRY_DB` を読む。分析導線は D1 Read のみの API token（`CLOUDFLARE_API_TOKEN`）を使い、AI の主導線は `perf-report` に限定する。mutation の実効防御は `perf-query` の SELECT/WITH ガード（D1 Read が Cloudflare 側で書き込みを拒否する前提にはしない）。詳細は [app-performance-telemetry.md](app-performance-telemetry.md) の「分析導線」と `.claude/skills/analyzing-app-performance/SKILL.md`。
+
 <!-- @code backend/src/maintenance/physical-deletion.ts#runPhysicalDeletion -->
 ## 物理削除
 
