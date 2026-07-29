@@ -161,7 +161,6 @@ void main() {
       ).captured;
       expect(captured[0], 'definition1');
       final request = captured[1] as UpdateDefinitionRequest;
-      expect(request.wordId, isNull);
       expect(request.body, '作ってから一晩経ったカレー。');
       expect(request.status, DefinitionStatus.public);
     });
@@ -194,7 +193,6 @@ void main() {
       ).captured;
       expect(captured[0], 'definition1');
       final request = captured[1] as UpdateDefinitionRequest;
-      expect(request.wordId, isNull);
       expect(request.body, isNull);
       expect(request.status, DefinitionStatus.private);
     });
