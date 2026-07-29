@@ -9,7 +9,6 @@ part of 'my_dictionary_overview.dart';
 abstract class _$MyDictionaryOverviewCWProxy {
   MyDictionaryOverview definedWordCount(int definedWordCount);
 
-
   MyDictionaryOverview savedWordCount(int savedWordCount);
 
   MyDictionaryOverview recentDefinitions(
@@ -39,8 +38,6 @@ class _$MyDictionaryOverviewCWProxyImpl
   @override
   MyDictionaryOverview definedWordCount(int definedWordCount) =>
       this(definedWordCount: definedWordCount);
-
-  @override
 
   @override
   MyDictionaryOverview savedWordCount(int savedWordCount) =>

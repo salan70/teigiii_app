@@ -201,6 +201,37 @@ describe("POST /v1/definitions", () => {
       error: { code: "word_not_found" },
     });
   });
+
+  test("status: draft は 400 ZodError で拒否される", async () => {
+    await createUser("alice");
+    const word = await createWord("alice", "ことば", "ことば");
+
+    const response = await requestJson("alice", "/v1/definitions", "POST", {
+      body: "本文",
+      status: "draft",
+      wordId: word.id,
+    });
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toMatchObject({
+      success: false,
+      error: { name: "ZodError" },
+    });
+  });
+});
+
+describe("GET /v1/me/definitions", () => {
+  test("status: draft は 400 ZodError で拒否される", async () => {
+    await createUser("alice");
+
+    const response = await request("alice", "/v1/me/definitions?status=draft");
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toMatchObject({
+      success: false,
+      error: { name: "ZodError" },
+    });
+  });
 });
 
 describe("GET /v1/definitions/{id}", () => {
@@ -245,7 +276,7 @@ describe("GET /v1/definitions/{id}", () => {
 });
 
 describe("PATCH /v1/definitions/{id}", () => {
-  test("作成後の言葉変更は 400 invalid_transition", async () => {
+  test("wordId を送っても無視され言葉は変わらない", async () => {
     await createUser("alice");
     const word = await createWord("alice", "ことば", "ことば");
     const anotherWord = await createWord("alice", "いみ", "いみ");
@@ -255,10 +286,9 @@ describe("PATCH /v1/definitions/{id}", () => {
       wordId: anotherWord.id,
     });
 
-    expect(response.status).toBe(400);
-    await expect(response.json()).resolves.toMatchObject({
-      error: { code: "invalid_transition" },
-    });
+    expect(response.status).toBe(200);
+    const body = await response.json<DefinitionResponse>();
+    expect(body.word.id).toBe(word.id);
   });
 
   test("public と private は相互に切り替えられ finalizedAt は変わらない", async () => {
@@ -281,7 +311,7 @@ describe("PATCH /v1/definitions/{id}", () => {
     expect(publicBody.finalizedAt).toBe(definition.finalizedAt);
   });
 
-  test("未知の status は 400 で拒否される", async () => {
+  test("未知の status は 400 ZodError で拒否される", async () => {
     await createUser("alice");
     const word = await createWord("alice", "ことば", "ことば");
     const definition = await createDefinition("alice", word.id, "public");
@@ -291,6 +321,10 @@ describe("PATCH /v1/definitions/{id}", () => {
     });
 
     expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toMatchObject({
+      success: false,
+      error: { name: "ZodError" },
+    });
   });
 
   test("作成後 1 時間以内の本文編集は isEdited を立てる", async () => {

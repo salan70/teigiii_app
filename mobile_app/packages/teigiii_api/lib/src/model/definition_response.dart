@@ -70,11 +70,11 @@ class DefinitionResponse {
   @JsonKey(name: r'isLikedByMe', required: true, includeIfNull: false)
   final bool isLikedByMe;
 
-  @JsonKey(name: r'finalizedAt', required: true, includeIfNull: true)
-  final DateTime? finalizedAt;
+  @JsonKey(name: r'finalizedAt', required: true, includeIfNull: false)
+  final DateTime finalizedAt;
 
-  @JsonKey(name: r'editableUntil', required: true, includeIfNull: true)
-  final DateTime? editableUntil;
+  @JsonKey(name: r'editableUntil', required: true, includeIfNull: false)
+  final DateTime editableUntil;
 
   @JsonKey(name: r'createdAt', required: true, includeIfNull: false)
   final DateTime createdAt;
@@ -109,8 +109,8 @@ class DefinitionResponse {
       isEdited.hashCode +
       likesCount.hashCode +
       isLikedByMe.hashCode +
-      (finalizedAt == null ? 0 : finalizedAt.hashCode) +
-      (editableUntil == null ? 0 : editableUntil.hashCode) +
+      finalizedAt.hashCode +
+      editableUntil.hashCode +
       createdAt.hashCode +
       updatedAt.hashCode;
 

@@ -7,8 +7,6 @@ part of 'update_definition_request.dart';
 // **************************************************************************
 
 abstract class _$UpdateDefinitionRequestCWProxy {
-  UpdateDefinitionRequest wordId(String? wordId);
-
   UpdateDefinitionRequest body(String? body);
 
   UpdateDefinitionRequest status(DefinitionStatus? status);
@@ -19,11 +17,7 @@ abstract class _$UpdateDefinitionRequestCWProxy {
   /// ```dart
   /// UpdateDefinitionRequest(...).copyWith(id: 12, name: "My name")
   /// ````
-  UpdateDefinitionRequest call({
-    String? wordId,
-    String? body,
-    DefinitionStatus? status,
-  });
+  UpdateDefinitionRequest call({String? body, DefinitionStatus? status});
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfUpdateDefinitionRequest.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfUpdateDefinitionRequest.copyWith.fieldName(...)`
@@ -32,9 +26,6 @@ class _$UpdateDefinitionRequestCWProxyImpl
   const _$UpdateDefinitionRequestCWProxyImpl(this._value);
 
   final UpdateDefinitionRequest _value;
-
-  @override
-  UpdateDefinitionRequest wordId(String? wordId) => this(wordId: wordId);
 
   @override
   UpdateDefinitionRequest body(String? body) => this(body: body);
@@ -51,15 +42,10 @@ class _$UpdateDefinitionRequestCWProxyImpl
   /// UpdateDefinitionRequest(...).copyWith(id: 12, name: "My name")
   /// ````
   UpdateDefinitionRequest call({
-    Object? wordId = const $CopyWithPlaceholder(),
     Object? body = const $CopyWithPlaceholder(),
     Object? status = const $CopyWithPlaceholder(),
   }) {
     return UpdateDefinitionRequest(
-      wordId: wordId == const $CopyWithPlaceholder()
-          ? _value.wordId
-          // ignore: cast_nullable_to_non_nullable
-          : wordId as String?,
       body: body == const $CopyWithPlaceholder()
           ? _value.body
           // ignore: cast_nullable_to_non_nullable
@@ -87,7 +73,6 @@ UpdateDefinitionRequest _$UpdateDefinitionRequestFromJson(
   Map<String, dynamic> json,
 ) => $checkedCreate('UpdateDefinitionRequest', json, ($checkedConvert) {
   final val = UpdateDefinitionRequest(
-    wordId: $checkedConvert('wordId', (v) => v as String?),
     body: $checkedConvert('body', (v) => v as String?),
     status: $checkedConvert(
       'status',
@@ -100,7 +85,6 @@ UpdateDefinitionRequest _$UpdateDefinitionRequestFromJson(
 Map<String, dynamic> _$UpdateDefinitionRequestToJson(
   UpdateDefinitionRequest instance,
 ) => <String, dynamic>{
-  'wordId': ?instance.wordId,
   'body': ?instance.body,
   'status': ?_$DefinitionStatusEnumMap[instance.status],
 };

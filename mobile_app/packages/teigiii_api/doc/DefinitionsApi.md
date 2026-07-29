@@ -249,7 +249,7 @@ Name | Type | Description  | Notes
 
 本文編集・状態遷移・（下書きのみ）言葉の変更
 
-許可される遷移: public↔private。本文編集は finalized_at + 1 時間まで。作成後の wordId 変更は拒否する。
+許可される遷移: public↔private。本文編集は finalized_at + 1 時間まで。言葉の付け替えは受け付けない。
 
 ### Example
 ```dart

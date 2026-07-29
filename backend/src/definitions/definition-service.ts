@@ -66,7 +66,6 @@ export type CreateDefinitionInput = {
 export type UpdateDefinitionInput = {
   body?: string | undefined;
   status?: DefinitionStatus | undefined;
-  wordId?: string | undefined;
 };
 
 function avatarUrl(baseUrl: string, key: string | null): string | null {
@@ -250,11 +249,6 @@ export class DefinitionService {
 
       const now = Date.now();
       const nextStatus = input.status ?? row.status;
-
-      const wordChanged = input.wordId !== undefined && input.wordId !== row.word_id;
-      if (wordChanged) {
-        throw new ApiError(400, "invalid_transition", "Cannot change word after finalization");
-      }
 
       const bodyChanged = input.body !== undefined && input.body !== row.body;
       if (bodyChanged && now - row.finalized_at >= editWindowMilliseconds) {

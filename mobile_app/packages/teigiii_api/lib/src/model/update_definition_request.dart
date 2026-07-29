@@ -18,10 +18,7 @@ part 'update_definition_request.g.dart';
 )
 class UpdateDefinitionRequest {
   /// Returns a new [UpdateDefinitionRequest] instance.
-  UpdateDefinitionRequest({this.wordId, this.body, this.status});
-
-  @JsonKey(name: r'wordId', required: false, includeIfNull: false)
-  final String? wordId;
+  UpdateDefinitionRequest({this.body, this.status});
 
   @JsonKey(name: r'body', required: false, includeIfNull: false)
   final String? body;
@@ -33,12 +30,11 @@ class UpdateDefinitionRequest {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is UpdateDefinitionRequest &&
-          other.wordId == wordId &&
           other.body == body &&
           other.status == status;
 
   @override
-  int get hashCode => wordId.hashCode + body.hashCode + status.hashCode;
+  int get hashCode => body.hashCode + status.hashCode;
 
   factory UpdateDefinitionRequest.fromJson(Map<String, dynamic> json) =>
       _$UpdateDefinitionRequestFromJson(json);

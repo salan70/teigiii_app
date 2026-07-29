@@ -64,11 +64,10 @@ export const createDefinitionRequestSchema = z
 
 /**
  * 本文編集・状態遷移。
- * 許可される遷移: public↔private。作成後の wordId 変更・期限後の本文変更はサーバーで拒否する。
+ * 許可される遷移: public↔private。期限後の本文変更はサーバーで拒否する。言葉の付け替えは受け付けない。
  */
 export const updateDefinitionRequestSchema = z
   .object({
-    wordId: z.string().optional(),
     body: z.string().min(1).max(maxBodyLength).optional(),
     status: definitionStatusSchema.optional(),
   })

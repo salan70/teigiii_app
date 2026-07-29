@@ -10,18 +10,25 @@ import { join } from "node:path";
 
 const migrationsDir = new URL("../drizzle", import.meta.url).pathname;
 
-function createDb(): Database {
-  const db = new Database(":memory:");
-  db.run("PRAGMA foreign_keys = ON");
-  const files = readdirSync(migrationsDir)
+function migrationFiles(): string[] {
+  return readdirSync(migrationsDir)
     .filter((f) => f.endsWith(".sql"))
     .toSorted();
+}
+
+function applyMigrationFiles(db: Database, files: string[]): void {
   for (const file of files) {
     const sql = readFileSync(join(migrationsDir, file), "utf8");
     for (const statement of sql.split("--> statement-breakpoint")) {
       db.run(statement);
     }
   }
+}
+
+function createDb(): Database {
+  const db = new Database(":memory:");
+  db.run("PRAGMA foreign_keys = ON");
+  applyMigrationFiles(db, migrationFiles());
   return db;
 }
 
@@ -170,6 +177,71 @@ describe("migration SQL", () => {
       )
       .all();
     expect(tables).toEqual([]);
+  });
+
+  test("0003 は draft を落とし public/private と likes をトランザクション内でも保全する", () => {
+    const migrating = new Database(":memory:");
+    migrating.run("PRAGMA foreign_keys = ON");
+    const files = migrationFiles();
+    const before0003 = files.filter((f) => !f.startsWith("0003_"));
+    const only0003 = files.filter((f) => f.startsWith("0003_"));
+    applyMigrationFiles(migrating, before0003);
+
+    insertUser(migrating, "u1");
+    insertUser(migrating, "u2");
+    insertWord(migrating, "w1", "自由");
+    // 0002 までのスキーマでは draft + finalized_at NULL が合法
+    migrating.run(
+      `insert into definitions (id, word_id, author_id, body, status, finalized_at, created_at, updated_at)
+       values ('d-draft', 'w1', 'u1', '下書き', 'draft', null, ?, ?)`,
+      [now, now],
+    );
+    insertDefinition(migrating, "d-public", { wordId: "w1", authorId: "u1", status: "public" });
+    insertDefinition(migrating, "d-private", { wordId: "w1", authorId: "u1", status: "private" });
+    migrating.run(
+      "insert into likes (user_id, definition_id, created_at) values ('u2', 'd-draft', ?)",
+      [now],
+    );
+    migrating.run(
+      "insert into likes (user_id, definition_id, created_at) values ('u2', 'd-public', ?)",
+      [now],
+    );
+    migrating.run(
+      "insert into likes (user_id, definition_id, created_at) values ('u2', 'd-private', ?)",
+      [now],
+    );
+
+    // D1 / wrangler と同様に 1 ファイル分を暗黙トランザクションで適用する
+    migrating.run("BEGIN");
+    try {
+      applyMigrationFiles(migrating, only0003);
+      migrating.run("COMMIT");
+    } catch (error) {
+      migrating.run("ROLLBACK");
+      throw error;
+    }
+
+    expect(migrating.query("select count(*) as c from definitions").get()).toEqual({ c: 2 });
+    expect(
+      migrating
+        .query("select id from definitions order by id")
+        .all()
+        .map((row) => (row as { id: string }).id),
+    ).toEqual(["d-private", "d-public"]);
+    expect(migrating.query("select count(*) as c from likes").get()).toEqual({ c: 2 });
+    expect(
+      migrating
+        .query("select definition_id from likes order by definition_id")
+        .all()
+        .map((row) => (row as { definition_id: string }).definition_id),
+    ).toEqual(["d-private", "d-public"]);
+    expect(
+      migrating
+        .query<{ name: string }, []>(
+          "select name from sqlite_master where type = 'table' and name = 'definition_drafts'",
+        )
+        .all(),
+    ).toEqual([]);
   });
 
   test("自分自身へのフォローが CHECK で拒否される", () => {

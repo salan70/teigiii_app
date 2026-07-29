@@ -178,6 +178,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 - public / private は作成時に `finalized_at` を持ち、以後更新しない
 - `POST /v1/definitions` は `wordId` または `word` + `reading` のいずれか一方を受け付ける。後者ではサーバーが言葉を解決／必要時に内部作成してから定義を作成する。内部作成は明示登録にしない
 - 許可する状態遷移は public と private の相互切替だけとする。Draft（下書き）は採用しない
+- `PATCH /v1/definitions/{id}` の更新対象は本文と公開範囲のみ。言葉の付け替えは受け付けない
 - 作成後1時間を超えた本文編集を403で拒否する。公開範囲の変更では `finalized_at` を更新しない
 - 他者は public だけを閲覧でき、本人は自分の private も閲覧できる。不可視な定義は404として存在を秘匿する
 - 削除は所有者だけが実行でき、`deleted_at` を設定する

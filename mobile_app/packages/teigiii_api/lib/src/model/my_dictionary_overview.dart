@@ -20,16 +20,12 @@ class MyDictionaryOverview {
   /// Returns a new [MyDictionaryOverview] instance.
   MyDictionaryOverview({
     required this.definedWordCount,
-
-
     required this.savedWordCount,
-
     required this.recentDefinitions,
   });
 
   @JsonKey(name: r'definedWordCount', required: true, includeIfNull: false)
   final int definedWordCount;
-
 
   @JsonKey(name: r'savedWordCount', required: true, includeIfNull: false)
   final int savedWordCount;

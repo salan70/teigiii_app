@@ -539,9 +539,6 @@
       "UpdateDefinitionRequest": {
         "type": "object",
         "properties": {
-          "wordId": {
-            "type": "string"
-          },
           "body": {
             "type": "string",
             "minLength": 1,
@@ -2951,7 +2948,7 @@
             }
           },
           "404": {
-            "description": "定義が存在しない・削除済み・他者の非公開/下書き（definition_not_found）",
+            "description": "定義が存在しない・削除済み・他者の非公開（definition_not_found）",
             "content": {
               "application/json": {
                 "schema": {
@@ -2967,7 +2964,7 @@
           "definitions"
         ],
         "summary": "本文編集・公開範囲の変更",
-        "description": "許可される遷移: public↔private。本文編集は finalized_at + 1 時間まで。作成後の wordId 変更は拒否する。",
+        "description": "許可される遷移: public↔private。本文編集は finalized_at + 1 時間まで。言葉の付け替えは受け付けない。",
         "security": [
           {
             "appCheck": [],
@@ -3006,7 +3003,7 @@
             }
           },
           "400": {
-            "description": "許可されない状態遷移・確定後の言葉変更（invalid_transition）",
+            "description": "リクエスト検証エラー（未知の status など）",
             "content": {
               "application/json": {
                 "schema": {

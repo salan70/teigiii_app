@@ -23,9 +23,9 @@ abstract class _$DefinitionResponseCWProxy {
 
   DefinitionResponse isLikedByMe(bool isLikedByMe);
 
-  DefinitionResponse finalizedAt(DateTime? finalizedAt);
+  DefinitionResponse finalizedAt(DateTime finalizedAt);
 
-  DefinitionResponse editableUntil(DateTime? editableUntil);
+  DefinitionResponse editableUntil(DateTime editableUntil);
 
   DefinitionResponse createdAt(DateTime createdAt);
 
@@ -46,8 +46,8 @@ abstract class _$DefinitionResponseCWProxy {
     bool isEdited,
     int likesCount,
     bool isLikedByMe,
-    DateTime? finalizedAt,
-    DateTime? editableUntil,
+    DateTime finalizedAt,
+    DateTime editableUntil,
     DateTime createdAt,
     DateTime updatedAt,
   });
@@ -85,11 +85,11 @@ class _$DefinitionResponseCWProxyImpl implements _$DefinitionResponseCWProxy {
       this(isLikedByMe: isLikedByMe);
 
   @override
-  DefinitionResponse finalizedAt(DateTime? finalizedAt) =>
+  DefinitionResponse finalizedAt(DateTime finalizedAt) =>
       this(finalizedAt: finalizedAt);
 
   @override
-  DefinitionResponse editableUntil(DateTime? editableUntil) =>
+  DefinitionResponse editableUntil(DateTime editableUntil) =>
       this(editableUntil: editableUntil);
 
   @override
@@ -157,11 +157,11 @@ class _$DefinitionResponseCWProxyImpl implements _$DefinitionResponseCWProxy {
       finalizedAt: finalizedAt == const $CopyWithPlaceholder()
           ? _value.finalizedAt
           // ignore: cast_nullable_to_non_nullable
-          : finalizedAt as DateTime?,
+          : finalizedAt as DateTime,
       editableUntil: editableUntil == const $CopyWithPlaceholder()
           ? _value.editableUntil
           // ignore: cast_nullable_to_non_nullable
-          : editableUntil as DateTime?,
+          : editableUntil as DateTime,
       createdAt: createdAt == const $CopyWithPlaceholder()
           ? _value.createdAt
           // ignore: cast_nullable_to_non_nullable
@@ -223,13 +223,10 @@ DefinitionResponse _$DefinitionResponseFromJson(
     isEdited: $checkedConvert('isEdited', (v) => v as bool),
     likesCount: $checkedConvert('likesCount', (v) => (v as num).toInt()),
     isLikedByMe: $checkedConvert('isLikedByMe', (v) => v as bool),
-    finalizedAt: $checkedConvert(
-      'finalizedAt',
-      (v) => v == null ? null : DateTime.parse(v as String),
-    ),
+    finalizedAt: $checkedConvert('finalizedAt', (v) => DateTime.parse(v as String)),
     editableUntil: $checkedConvert(
       'editableUntil',
-      (v) => v == null ? null : DateTime.parse(v as String),
+      (v) => DateTime.parse(v as String),
     ),
     createdAt: $checkedConvert('createdAt', (v) => DateTime.parse(v as String)),
     updatedAt: $checkedConvert('updatedAt', (v) => DateTime.parse(v as String)),
@@ -247,8 +244,8 @@ Map<String, dynamic> _$DefinitionResponseToJson(DefinitionResponse instance) =>
       'isEdited': instance.isEdited,
       'likesCount': instance.likesCount,
       'isLikedByMe': instance.isLikedByMe,
-      'finalizedAt': instance.finalizedAt?.toIso8601String(),
-      'editableUntil': instance.editableUntil?.toIso8601String(),
+      'finalizedAt': instance.finalizedAt.toIso8601String(),
+      'editableUntil': instance.editableUntil.toIso8601String(),
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
     };
