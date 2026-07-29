@@ -280,12 +280,10 @@
           },
           "finalizedAt": {
             "type": "string",
-            "nullable": true,
             "format": "date-time"
           },
           "editableUntil": {
             "type": "string",
-            "nullable": true,
             "format": "date-time"
           },
           "createdAt": {
@@ -315,7 +313,6 @@
       "DefinitionStatus": {
         "type": "string",
         "enum": [
-          "draft",
           "public",
           "private"
         ]
@@ -348,9 +345,6 @@
           "definedWordCount": {
             "type": "integer"
           },
-          "draftCount": {
-            "type": "integer"
-          },
           "savedWordCount": {
             "type": "integer"
           },
@@ -363,7 +357,6 @@
         },
         "required": [
           "definedWordCount",
-          "draftCount",
           "savedWordCount",
           "recentDefinitions"
         ]
@@ -379,16 +372,12 @@
           },
           "privateCount": {
             "type": "integer"
-          },
-          "draftCount": {
-            "type": "integer"
           }
         },
         "required": [
           "word",
           "publicCount",
-          "privateCount",
-          "draftCount"
+          "privateCount"
         ]
       },
       "SavedWordItem": {
@@ -1376,7 +1365,7 @@
           "users"
         ],
         "summary": "ユーザーの定義一覧",
-        "description": "対象が本人の場合は非公開定義を含む（下書きは /me/definitions）。他者の場合は公開定義のみ。wordId・subGroup で絞り込み可能。sort=reading は言葉のよみ昇順（旧 UI の頭文字別辞書のパリティ）。",
+        "description": "対象が本人の場合は非公開定義を含む。他者の場合は公開定義のみ。wordId・subGroup で絞り込み可能。sort=reading は言葉のよみ昇順（旧 UI の頭文字別辞書のパリティ）。",
         "security": [
           {
             "appCheck": [],
@@ -2111,7 +2100,7 @@
         "tags": [
           "me"
         ],
-        "summary": "自分の定義一覧（状態で絞り込み。下書き一覧は status=draft）",
+        "summary": "自分の定義一覧（状態で絞り込み）",
         "security": [
           {
             "appCheck": [],
@@ -2142,7 +2131,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "draft",
                 "public",
                 "private"
               ]
@@ -2857,7 +2845,7 @@
         "tags": [
           "definitions"
         ],
-        "summary": "定義を作成（draft / public / private のいずれでも）",
+        "summary": "定義を作成（public / private）",
         "description": "wordId 指定、または word + reading 指定のいずれか一方を受け付ける。後者ではサーバーが言葉を解決／必要時に内部作成してから定義を作成する。内部作成は明示登録にしない。",
         "security": [
           {
@@ -2978,8 +2966,8 @@
         "tags": [
           "definitions"
         ],
-        "summary": "本文編集・状態遷移・（下書きのみ）言葉の変更",
-        "description": "許可される遷移: draft→public/private、public↔private。確定時に finalized_at を設定し、本文編集は finalized_at + 1 時間まで。確定後の wordId 変更・下書きへの巻き戻しは拒否する。",
+        "summary": "本文編集・公開範囲の変更",
+        "description": "許可される遷移: public↔private。本文編集は finalized_at + 1 時間まで。作成後の wordId 変更は拒否する。",
         "security": [
           {
             "appCheck": [],

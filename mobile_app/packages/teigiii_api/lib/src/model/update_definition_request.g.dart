@@ -106,7 +106,6 @@ Map<String, dynamic> _$UpdateDefinitionRequestToJson(
 };
 
 const _$DefinitionStatusEnumMap = {
-  DefinitionStatus.draft: 'draft',
   DefinitionStatus.public: 'public',
   DefinitionStatus.private: 'private',
 };

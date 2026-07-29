@@ -13,8 +13,6 @@ abstract class _$DefinedWordItemCWProxy {
 
   DefinedWordItem privateCount(int privateCount);
 
-  DefinedWordItem draftCount(int draftCount);
-
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `DefinedWordItem(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -25,7 +23,6 @@ abstract class _$DefinedWordItemCWProxy {
     WordSummary word,
     int publicCount,
     int privateCount,
-    int draftCount,
   });
 }
 
@@ -47,9 +44,6 @@ class _$DefinedWordItemCWProxyImpl implements _$DefinedWordItemCWProxy {
       this(privateCount: privateCount);
 
   @override
-  DefinedWordItem draftCount(int draftCount) => this(draftCount: draftCount);
-
-  @override
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `DefinedWordItem(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -60,7 +54,6 @@ class _$DefinedWordItemCWProxyImpl implements _$DefinedWordItemCWProxy {
     Object? word = const $CopyWithPlaceholder(),
     Object? publicCount = const $CopyWithPlaceholder(),
     Object? privateCount = const $CopyWithPlaceholder(),
-    Object? draftCount = const $CopyWithPlaceholder(),
   }) {
     return DefinedWordItem(
       word: word == const $CopyWithPlaceholder()
@@ -75,10 +68,6 @@ class _$DefinedWordItemCWProxyImpl implements _$DefinedWordItemCWProxy {
           ? _value.privateCount
           // ignore: cast_nullable_to_non_nullable
           : privateCount as int,
-      draftCount: draftCount == const $CopyWithPlaceholder()
-          ? _value.draftCount
-          // ignore: cast_nullable_to_non_nullable
-          : draftCount as int,
     );
   }
 }
@@ -98,7 +87,7 @@ DefinedWordItem _$DefinedWordItemFromJson(
 ) => $checkedCreate('DefinedWordItem', json, ($checkedConvert) {
   $checkKeys(
     json,
-    requiredKeys: const ['word', 'publicCount', 'privateCount', 'draftCount'],
+    requiredKeys: const ['word', 'publicCount', 'privateCount'],
   );
   final val = DefinedWordItem(
     word: $checkedConvert(
@@ -107,7 +96,6 @@ DefinedWordItem _$DefinedWordItemFromJson(
     ),
     publicCount: $checkedConvert('publicCount', (v) => (v as num).toInt()),
     privateCount: $checkedConvert('privateCount', (v) => (v as num).toInt()),
-    draftCount: $checkedConvert('draftCount', (v) => (v as num).toInt()),
   );
   return val;
 });
@@ -117,5 +105,4 @@ Map<String, dynamic> _$DefinedWordItemToJson(DefinedWordItem instance) =>
       'word': instance.word.toJson(),
       'publicCount': instance.publicCount,
       'privateCount': instance.privateCount,
-      'draftCount': instance.draftCount,
     };

@@ -9,7 +9,6 @@ part of 'my_dictionary_overview.dart';
 abstract class _$MyDictionaryOverviewCWProxy {
   MyDictionaryOverview definedWordCount(int definedWordCount);
 
-  MyDictionaryOverview draftCount(int draftCount);
 
   MyDictionaryOverview savedWordCount(int savedWordCount);
 
@@ -25,7 +24,6 @@ abstract class _$MyDictionaryOverviewCWProxy {
   /// ````
   MyDictionaryOverview call({
     int definedWordCount,
-    int draftCount,
     int savedWordCount,
     List<DefinitionResponse> recentDefinitions,
   });
@@ -43,8 +41,6 @@ class _$MyDictionaryOverviewCWProxyImpl
       this(definedWordCount: definedWordCount);
 
   @override
-  MyDictionaryOverview draftCount(int draftCount) =>
-      this(draftCount: draftCount);
 
   @override
   MyDictionaryOverview savedWordCount(int savedWordCount) =>
@@ -64,7 +60,6 @@ class _$MyDictionaryOverviewCWProxyImpl
   /// ````
   MyDictionaryOverview call({
     Object? definedWordCount = const $CopyWithPlaceholder(),
-    Object? draftCount = const $CopyWithPlaceholder(),
     Object? savedWordCount = const $CopyWithPlaceholder(),
     Object? recentDefinitions = const $CopyWithPlaceholder(),
   }) {
@@ -73,10 +68,6 @@ class _$MyDictionaryOverviewCWProxyImpl
           ? _value.definedWordCount
           // ignore: cast_nullable_to_non_nullable
           : definedWordCount as int,
-      draftCount: draftCount == const $CopyWithPlaceholder()
-          ? _value.draftCount
-          // ignore: cast_nullable_to_non_nullable
-          : draftCount as int,
       savedWordCount: savedWordCount == const $CopyWithPlaceholder()
           ? _value.savedWordCount
           // ignore: cast_nullable_to_non_nullable
@@ -107,7 +98,6 @@ MyDictionaryOverview _$MyDictionaryOverviewFromJson(
     json,
     requiredKeys: const [
       'definedWordCount',
-      'draftCount',
       'savedWordCount',
       'recentDefinitions',
     ],
@@ -117,7 +107,6 @@ MyDictionaryOverview _$MyDictionaryOverviewFromJson(
       'definedWordCount',
       (v) => (v as num).toInt(),
     ),
-    draftCount: $checkedConvert('draftCount', (v) => (v as num).toInt()),
     savedWordCount: $checkedConvert(
       'savedWordCount',
       (v) => (v as num).toInt(),
@@ -136,7 +125,6 @@ Map<String, dynamic> _$MyDictionaryOverviewToJson(
   MyDictionaryOverview instance,
 ) => <String, dynamic>{
   'definedWordCount': instance.definedWordCount,
-  'draftCount': instance.draftCount,
   'savedWordCount': instance.savedWordCount,
   'recentDefinitions': instance.recentDefinitions
       .map((e) => e.toJson())

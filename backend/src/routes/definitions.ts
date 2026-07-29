@@ -16,7 +16,7 @@ const createDefinitionRoute = createRoute({
   method: "post",
   path: "/definitions",
   tags: ["definitions"],
-  summary: "定義を作成（draft / public / private のいずれでも）",
+  summary: "定義を作成（public / private）",
   description:
     "wordId 指定、または word + reading 指定のいずれか一方を受け付ける。後者ではサーバーが言葉を解決／必要時に内部作成してから定義を作成する。内部作成は明示登録にしない。",
   security: authenticatedSecurity,
@@ -51,9 +51,9 @@ const updateDefinitionRoute = createRoute({
   method: "patch",
   path: "/definitions/{id}",
   tags: ["definitions"],
-  summary: "本文編集・状態遷移・（下書きのみ）言葉の変更",
+  summary: "本文編集・公開範囲の変更",
   description:
-    "許可される遷移: draft→public/private、public↔private。確定時に finalized_at を設定し、本文編集は finalized_at + 1 時間まで。確定後の wordId 変更・下書きへの巻き戻しは拒否する。",
+    "許可される遷移: public↔private。本文編集は finalized_at + 1 時間まで。作成後の wordId 変更は拒否する。",
   security: authenticatedSecurity,
   request: {
     params: definitionIdParams,

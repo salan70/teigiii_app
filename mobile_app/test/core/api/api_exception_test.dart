@@ -107,7 +107,7 @@ void main() {
           statusCode: 200,
           data: {'items': <Object>[]},
         ),
-        error: const FormatException('CheckedFromJsonException: draftCount'),
+        error: const FormatException('CheckedFromJsonException: privateCount'),
       ),
     );
 

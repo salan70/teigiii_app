@@ -21,7 +21,6 @@ class MyDictionaryOverview {
   MyDictionaryOverview({
     required this.definedWordCount,
 
-    required this.draftCount,
 
     required this.savedWordCount,
 
@@ -31,8 +30,6 @@ class MyDictionaryOverview {
   @JsonKey(name: r'definedWordCount', required: true, includeIfNull: false)
   final int definedWordCount;
 
-  @JsonKey(name: r'draftCount', required: true, includeIfNull: false)
-  final int draftCount;
 
   @JsonKey(name: r'savedWordCount', required: true, includeIfNull: false)
   final int savedWordCount;
@@ -45,14 +42,12 @@ class MyDictionaryOverview {
       identical(this, other) ||
       other is MyDictionaryOverview &&
           other.definedWordCount == definedWordCount &&
-          other.draftCount == draftCount &&
           other.savedWordCount == savedWordCount &&
           other.recentDefinitions == recentDefinitions;
 
   @override
   int get hashCode =>
       definedWordCount.hashCode +
-      draftCount.hashCode +
       savedWordCount.hashCode +
       recentDefinitions.hashCode;
 

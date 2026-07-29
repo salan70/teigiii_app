@@ -6,7 +6,6 @@ import { wordSummarySchema } from "./word";
 export const myDictionaryOverviewSchema = z
   .object({
     definedWordCount: z.number().int(),
-    draftCount: z.number().int(),
     savedWordCount: z.number().int(),
     recentDefinitions: z.array(definitionResponseSchema),
   })
@@ -18,7 +17,6 @@ export const definedWordItemSchema = z
     word: wordSummarySchema,
     publicCount: z.number().int(),
     privateCount: z.number().int(),
-    draftCount: z.number().int(),
   })
   .openapi("DefinedWordItem");
 

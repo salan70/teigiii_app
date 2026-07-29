@@ -49,9 +49,7 @@ function insertDefinition(
   opts: { wordId: string; authorId: string; status?: string; finalizedAt?: number | null },
 ): void {
   const status = opts.status ?? "public";
-  // 不変条件: draft は finalized_at NULL、public/private は NOT NULL
-  const finalizedAt =
-    opts.finalizedAt !== undefined ? opts.finalizedAt : status === "draft" ? null : now;
+  const finalizedAt = opts.finalizedAt !== undefined ? opts.finalizedAt : now;
   db.run(
     `insert into definitions (id, word_id, author_id, body, status, finalized_at, created_at, updated_at)
      values (?, ?, ?, '本文', ?, ?, ?, ?)`,
@@ -141,34 +139,37 @@ describe("migration SQL", () => {
     expect(() => insertWord(db, "w2", "自由")).toThrow();
   });
 
-  test("definitions.status の CHECK 制約が効く", () => {
+  test("definitions.status は public / private のみ許可する", () => {
     insertUser(db, "u1");
     insertWord(db, "w1", "自由");
     expect(() =>
       insertDefinition(db, "d1", { wordId: "w1", authorId: "u1", status: "archived" }),
     ).toThrow();
+    expect(() =>
+      insertDefinition(db, "d2", { wordId: "w1", authorId: "u1", status: "draft" }),
+    ).toThrow();
+    insertDefinition(db, "d3", { wordId: "w1", authorId: "u1", status: "public" });
+    insertDefinition(db, "d4", { wordId: "w1", authorId: "u1", status: "private" });
+    expect(db.query("select count(*) as c from definitions").get()).toEqual({ c: 2 });
   });
 
-  test("finalized_at の不変条件が CHECK で強制される", () => {
+  test("finalized_at は NOT NULL", () => {
     insertUser(db, "u1");
     insertWord(db, "w1", "自由");
-    // public なのに finalized_at が NULL → 拒否
     expect(() =>
       insertDefinition(db, "d1", { wordId: "w1", authorId: "u1", finalizedAt: null }),
     ).toThrow();
-    // draft なのに finalized_at がある → 拒否
-    expect(() =>
-      insertDefinition(db, "d2", {
-        wordId: "w1",
-        authorId: "u1",
-        status: "draft",
-        finalizedAt: now,
-      }),
-    ).toThrow();
-    // 正しい組み合わせは通る
-    insertDefinition(db, "d3", { wordId: "w1", authorId: "u1" });
-    insertDefinition(db, "d4", { wordId: "w1", authorId: "u1", status: "draft" });
-    expect(db.query("select count(*) as c from definitions").get()).toEqual({ c: 2 });
+    insertDefinition(db, "d2", { wordId: "w1", authorId: "u1" });
+    expect(db.query("select count(*) as c from definitions").get()).toEqual({ c: 1 });
+  });
+
+  test("definition_drafts テーブルは作成されない", () => {
+    const tables = db
+      .query<{ name: string }, []>(
+        "select name from sqlite_master where type = 'table' and name = 'definition_drafts'",
+      )
+      .all();
+    expect(tables).toEqual([]);
   });
 
   test("自分自身へのフォローが CHECK で拒否される", () => {

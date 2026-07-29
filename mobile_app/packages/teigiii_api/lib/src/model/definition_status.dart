@@ -6,8 +6,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
 enum DefinitionStatus {
-  @JsonValue(r'draft')
-  draft(r'draft'),
   @JsonValue(r'public')
   public(r'public'),
   @JsonValue(r'private')

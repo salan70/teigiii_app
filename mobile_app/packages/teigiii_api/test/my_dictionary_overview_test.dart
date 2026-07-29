@@ -12,11 +12,6 @@ void main() {
       // TODO
     });
 
-    // int draftCount
-    test('to test the property `draftCount`', () async {
-      // TODO
-    });
-
     // int savedWordCount
     test('to test the property `savedWordCount`', () async {
       // TODO

@@ -86,7 +86,7 @@ async function insertDefinition(
   id: string,
   wordId: string,
   authorId: string,
-  status: "draft" | "public" | "private",
+  status: "public" | "private",
   timestamp: number,
 ) {
   await env.DB.prepare(
@@ -94,16 +94,7 @@ async function insertDefinition(
        (id, word_id, author_id, body, status, finalized_at, is_edited, created_at, updated_at)
      values (?, ?, ?, ?, ?, ?, 0, ?, ?)`,
   )
-    .bind(
-      id,
-      wordId,
-      authorId,
-      `${id} body`,
-      status,
-      status === "draft" ? null : timestamp,
-      timestamp,
-      timestamp,
-    )
+    .bind(id, wordId, authorId, `${id} body`, status, timestamp, timestamp, timestamp)
     .run();
 }
 
@@ -125,7 +116,6 @@ describe("dictionary and definition lists", () => {
     await insertDefinition("public-1", "w1", "alice", "public", 100);
     await insertDefinition("public-2", "w1", "alice", "public", 200);
     await insertDefinition("private", "w2", "alice", "private", 300);
-    await insertDefinition("draft", "w2", "alice", "draft", 400);
 
     const dictionary = await request("bob", "/v1/users/alice/dictionary");
     expect(dictionary.status).toBe(200);
@@ -190,7 +180,7 @@ describe("my dictionary lists", () => {
     await insertWord("w2", "夜", "よる", "bob", 20);
     await insertDefinition("public", "w1", "alice", "public", 100);
     await insertDefinition("private", "w1", "alice", "private", 200);
-    await insertDefinition("draft", "w2", "alice", "draft", 300);
+    await insertDefinition("private-w2", "w2", "alice", "private", 300);
     await env.DB.batch([
       env.DB.prepare("insert into saved_words values ('alice', 'w1', 400)"),
       env.DB.prepare("insert into user_mutes values ('alice', 'bob', 500)"),
@@ -200,21 +190,22 @@ describe("my dictionary lists", () => {
     expect(overview.status).toBe(200);
     await expect(overview.json()).resolves.toMatchObject({
       definedWordCount: 2,
-      draftCount: 1,
       savedWordCount: 1,
-      recentDefinitions: [{ id: "draft" }, { id: "private" }, { id: "public" }],
+      recentDefinitions: [{ id: "private-w2" }, { id: "private" }, { id: "public" }],
     });
 
     const definedWords = await request("alice", "/v1/me/defined-words");
     await expect(definedWords.json()).resolves.toMatchObject({
       items: [
-        { draftCount: 0, privateCount: 1, publicCount: 1, word: { id: "w1" } },
-        { draftCount: 1, privateCount: 0, publicCount: 0, word: { id: "w2" } },
+        { privateCount: 1, publicCount: 1, word: { id: "w1" } },
+        { privateCount: 1, publicCount: 0, word: { id: "w2" } },
       ],
     });
 
-    const drafts = await request("alice", "/v1/me/definitions?status=draft");
-    await expect(drafts.json()).resolves.toMatchObject({ items: [{ id: "draft" }] });
+    const privates = await request("alice", "/v1/me/definitions?status=private");
+    await expect(privates.json()).resolves.toMatchObject({
+      items: [{ id: "private-w2" }, { id: "private" }],
+    });
 
     const saved = await request("alice", "/v1/me/saved-words");
     await expect(saved.json()).resolves.toMatchObject({

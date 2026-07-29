@@ -254,7 +254,6 @@ Map<String, dynamic> _$DefinitionResponseToJson(DefinitionResponse instance) =>
     };
 
 const _$DefinitionStatusEnumMap = {
-  DefinitionStatus.draft: 'draft',
   DefinitionStatus.public: 'public',
   DefinitionStatus.private: 'private',
 };

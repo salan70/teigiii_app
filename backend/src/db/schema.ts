@@ -96,15 +96,17 @@ export const wordRegistrations = sqliteTable(
 );
 
 /**
- * 定義は独立した投稿（同一ユーザー・同一言葉に複数可）。下書きも状態の 1 つとして持つ。
+ * 定義は独立した確定済み投稿（同一ユーザー・同一言葉に複数可）。
+ * Draft（下書き）は採用しない。#248 の definition_drafts も本リポジトリでは持たない。
  *
+ * @doc doc/specs/workers-api-server.md#定義
  * @doc doc/specs/new-ui-information-architecture.md#8-定義
  */
 export const definitions = sqliteTable(
   "definitions",
   {
     id: text("id").primaryKey(),
-    // 確定後は変更不可・下書き中は変更可（アプリ層で検証）
+    // 作成後は変更不可（アプリ層で検証）
     wordId: text("word_id")
       .notNull()
       .references(() => words.id),
@@ -113,9 +115,9 @@ export const definitions = sqliteTable(
       .references(() => users.id, { onDelete: "cascade" }),
     body: text("body").notNull(),
     status: text("status").notNull(),
-    // 初めて public/private で確定した時刻。編集期限 = finalized_at + 1h はサーバーで毎回計算する。
-    finalizedAt: integer("finalized_at"),
-    // 確定後に本文を編集した場合のみ true。下書き中の編集・公開/非公開切り替えでは立てない。
+    // 作成（確定）時刻。編集期限 = finalized_at + 1h はサーバーで毎回計算する。
+    finalizedAt: integer("finalized_at").notNull(),
+    // 作成後に本文を編集した場合のみ true。公開/非公開切り替えでは立てない。
     isEdited: integer("is_edited", { mode: "boolean" }).notNull().default(false),
     // 論理削除（30 日保持）
     deletedAt: integer("deleted_at"),
@@ -123,12 +125,7 @@ export const definitions = sqliteTable(
     updatedAt: integer("updated_at").notNull(),
   },
   (table) => [
-    check("definitions_status_check", sql`${table.status} in ('draft', 'public', 'private')`),
-    // 確定状態と finalized_at の不変条件: draft は NULL、public/private は NOT NULL
-    check(
-      "definitions_finalized_at_check",
-      sql`(${table.status} = 'draft') = (${table.finalizedAt} is null)`,
-    ),
+    check("definitions_status_check", sql`${table.status} in ('public', 'private')`),
     // タイムライン（見つける / フォロー中）
     index("definitions_timeline_idx")
       .on(table.status, sql`${table.finalizedAt} desc`, table.id)
@@ -137,7 +134,7 @@ export const definitions = sqliteTable(
     index("definitions_word_idx")
       .on(table.wordId, table.status, sql`${table.finalizedAt} desc`)
       .where(sql`${table.deletedAt} is null`),
-    // 自分の定義・下書き一覧
+    // 自分の定義一覧
     index("definitions_author_idx")
       .on(table.authorId, table.status, sql`${table.updatedAt} desc`)
       .where(sql`${table.deletedAt} is null`),

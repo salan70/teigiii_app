@@ -22,6 +22,13 @@
       "when": 1785136382046,
       "tag": "0002_whole_sinister_six",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1785320719404,
+      "tag": "0003_eminent_klaw",
+      "breakpoints": true
     }
   ]
 }

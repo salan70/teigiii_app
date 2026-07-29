@@ -43,14 +43,14 @@ void main() {
 
     // 本文編集・状態遷移・（下書きのみ）言葉の変更
     //
-    // 許可される遷移: draft→public/private、public↔private。確定時に finalized_at を設定し、本文編集は finalized_at + 1 時間まで。確定後の wordId 変更・下書きへの巻き戻しは拒否する。
+    // 許可される遷移: public↔private。本文編集は finalized_at + 1 時間まで。作成後の wordId 変更は拒否する。
     //
     //Future<DefinitionResponse> v1DefinitionsIdPatch(String id, { UpdateDefinitionRequest updateDefinitionRequest }) async
     test('test v1DefinitionsIdPatch', () async {
       // TODO
     });
 
-    // 定義を作成（draft / public / private のいずれでも）
+    // 定義を作成（public / private）
     //
     //Future<DefinitionResponse> v1DefinitionsPost({ CreateDefinitionRequest createDefinitionRequest }) async
     test('test v1DefinitionsPost', () async {

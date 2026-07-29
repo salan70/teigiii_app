@@ -72,9 +72,9 @@ Class | Method | HTTP request | Description
 [*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdLikePut**](doc/DefinitionsApi.md#v1definitionsidlikeput) | **PUT** /v1/definitions/{id}/like | いいね
 [*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdLikesGet**](doc/DefinitionsApi.md#v1definitionsidlikesget) | **GET** /v1/definitions/{id}/likes | いいねしたユーザー一覧
 [*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdPatch**](doc/DefinitionsApi.md#v1definitionsidpatch) | **PATCH** /v1/definitions/{id} | 本文編集・状態遷移・（下書きのみ）言葉の変更
-[*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsPost**](doc/DefinitionsApi.md#v1definitionspost) | **POST** /v1/definitions | 定義を作成（draft / public / private のいずれでも）
+[*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsPost**](doc/DefinitionsApi.md#v1definitionspost) | **POST** /v1/definitions | 定義を作成（public / private）
 [*MeApi*](doc/MeApi.md) | [**v1MeDefinedWordsGet**](doc/MeApi.md#v1medefinedwordsget) | **GET** /v1/me/defined-words | 定義済みの言葉一覧（言葉単位 + 状態別件数）
-[*MeApi*](doc/MeApi.md) | [**v1MeDefinitionsGet**](doc/MeApi.md#v1medefinitionsget) | **GET** /v1/me/definitions | 自分の定義一覧（状態で絞り込み。下書き一覧は status&#x3D;draft）
+[*MeApi*](doc/MeApi.md) | [**v1MeDefinitionsGet**](doc/MeApi.md#v1medefinitionsget) | **GET** /v1/me/definitions | 自分の定義一覧（状態で絞り込み。状態で絞り込み）
 [*MeApi*](doc/MeApi.md) | [**v1MeDictionaryOverviewGet**](doc/MeApi.md#v1medictionaryoverviewget) | **GET** /v1/me/dictionary/overview | あなたの辞書の概要（各件数 + 最近の定義）
 [*MeApi*](doc/MeApi.md) | [**v1MeMutesGet**](doc/MeApi.md#v1memutesget) | **GET** /v1/me/mutes | ミュート中のユーザー一覧
 [*MeApi*](doc/MeApi.md) | [**v1MeSavedWordsGet**](doc/MeApi.md#v1mesavedwordsget) | **GET** /v1/me/saved-words | 保存した言葉の一覧

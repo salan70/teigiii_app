@@ -13,7 +13,7 @@ void main() {
       // TODO
     });
 
-    // 自分の定義一覧（状態で絞り込み。下書き一覧は status=draft）
+    // 自分の定義一覧（状態で絞り込み）
     //
     //Future<V1UsersIdDefinitionsGet200Response> v1MeDefinitionsGet({ String cursor, int limit, String status }) async
     test('test v1MeDefinitionsGet', () async {
