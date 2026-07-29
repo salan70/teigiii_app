@@ -9,7 +9,6 @@ import 'package:teigiii_api/api.dart';
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **definedWordCount** | **int** |  | 
-**draftCount** | **int** |  | 
 **savedWordCount** | **int** |  | 
 **recentDefinitions** | [**List&lt;DefinitionResponse&gt;**](DefinitionResponse.md) |  | 
 

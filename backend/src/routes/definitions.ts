@@ -16,7 +16,7 @@ const createDefinitionRoute = createRoute({
   method: "post",
   path: "/definitions",
   tags: ["definitions"],
-  summary: "定義を作成（draft / public / private のいずれでも）",
+  summary: "定義を作成（public / private）",
   description:
     "wordId 指定、または word + reading 指定のいずれか一方を受け付ける。後者ではサーバーが言葉を解決／必要時に内部作成してから定義を作成する。内部作成は明示登録にしない。",
   security: authenticatedSecurity,
@@ -42,7 +42,7 @@ const getDefinitionRoute = createRoute({
   request: { params: definitionIdParams },
   responses: {
     200: jsonContent(definitionResponseSchema, "定義"),
-    404: errorContent("定義が存在しない・削除済み・他者の非公開/下書き（definition_not_found）"),
+    404: errorContent("定義が存在しない・削除済み・他者の非公開（definition_not_found）"),
     ...authErrorResponses,
   },
 });
@@ -51,9 +51,9 @@ const updateDefinitionRoute = createRoute({
   method: "patch",
   path: "/definitions/{id}",
   tags: ["definitions"],
-  summary: "本文編集・状態遷移・（下書きのみ）言葉の変更",
+  summary: "本文編集・公開範囲の変更",
   description:
-    "許可される遷移: draft→public/private、public↔private。確定時に finalized_at を設定し、本文編集は finalized_at + 1 時間まで。確定後の wordId 変更・下書きへの巻き戻しは拒否する。",
+    "許可される遷移: public↔private。本文編集は finalized_at + 1 時間まで。言葉の付け替えは受け付けない。",
   security: authenticatedSecurity,
   request: {
     params: definitionIdParams,
@@ -61,7 +61,7 @@ const updateDefinitionRoute = createRoute({
   },
   responses: {
     200: jsonContent(definitionResponseSchema, "更新後の定義"),
-    400: errorContent("許可されない状態遷移・確定後の言葉変更（invalid_transition）"),
+    400: errorContent("リクエスト検証エラー（未知の status など）"),
     403: errorContent("編集期限切れ（edit_window_expired）・本人以外（forbidden）"),
     404: errorContent("定義が存在しない（definition_not_found）"),
     ...authErrorResponses,

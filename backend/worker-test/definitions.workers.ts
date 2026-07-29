@@ -15,12 +15,12 @@ type DefinitionResponse = {
   word: { id: string; word: string; reading: string };
   author: { id: string; publicId: string; name: string; avatarUrl: string | null };
   body: string;
-  status: "draft" | "public" | "private";
+  status: "public" | "private";
   isEdited: boolean;
   likesCount: number;
   isLikedByMe: boolean;
-  finalizedAt: string | null;
-  editableUntil: string | null;
+  finalizedAt: string;
+  editableUntil: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -66,7 +66,7 @@ async function createWord(uid: string, word: string, reading: string) {
 async function createDefinition(
   uid: string,
   wordId: string,
-  status: "draft" | "public" | "private",
+  status: "public" | "private",
   body = "定義本文",
 ) {
   const response = await requestJson(uid, "/v1/definitions", "POST", { body, status, wordId });
@@ -155,22 +155,22 @@ describe("POST /v1/definitions", () => {
     expect(body.word).toMatchObject({ id: existing.id, reading: "きそんご", word: "既存語" });
   });
 
-  test("draft は finalizedAt / editableUntil なしで作成される", async () => {
+  test("private も finalizedAt と editableUntil を持つ", async () => {
     await createUser("alice");
     const word = await createWord("alice", "ことば", "ことば");
 
-    const definition = await createDefinition("alice", word.id, "draft");
+    const definition = await createDefinition("alice", word.id, "private");
 
     expect(definition).toMatchObject({
       body: "定義本文",
-      editableUntil: null,
-      finalizedAt: null,
       isEdited: false,
       isLikedByMe: false,
       likesCount: 0,
-      status: "draft",
+      status: "private",
       word: { id: word.id, word: "ことば" },
     });
+    expect(definition.finalizedAt).not.toBeNull();
+    expect(definition.editableUntil).not.toBeNull();
     expect(definition.author).toMatchObject({ id: "alice", name: "alice" });
   });
 
@@ -192,7 +192,7 @@ describe("POST /v1/definitions", () => {
 
     const response = await requestJson("alice", "/v1/definitions", "POST", {
       body: "本文",
-      status: "draft",
+      status: "public",
       wordId: "missing-word",
     });
 
@@ -201,36 +201,64 @@ describe("POST /v1/definitions", () => {
       error: { code: "word_not_found" },
     });
   });
+
+  test("status: draft は 400 ZodError で拒否される", async () => {
+    await createUser("alice");
+    const word = await createWord("alice", "ことば", "ことば");
+
+    const response = await requestJson("alice", "/v1/definitions", "POST", {
+      body: "本文",
+      status: "draft",
+      wordId: word.id,
+    });
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toMatchObject({
+      success: false,
+      error: { name: "ZodError" },
+    });
+  });
+});
+
+describe("GET /v1/me/definitions", () => {
+  test("status: draft は 400 ZodError で拒否される", async () => {
+    await createUser("alice");
+
+    const response = await request("alice", "/v1/me/definitions?status=draft");
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toMatchObject({
+      success: false,
+      error: { name: "ZodError" },
+    });
+  });
 });
 
 describe("GET /v1/definitions/{id}", () => {
-  test("本人は draft / private を取得でき、他者の public も取得できる", async () => {
+  test("本人は private を取得でき、他者の public も取得できる", async () => {
     await createUser("alice");
     await createUser("bob");
     const word = await createWord("alice", "ことば", "ことば");
-    const draft = await createDefinition("alice", word.id, "draft");
+    const privateDefinition = await createDefinition("alice", word.id, "private");
     const publicDefinition = await createDefinition("alice", word.id, "public");
 
-    const ownDraft = await request("alice", `/v1/definitions/${draft.id}`);
+    const ownPrivate = await request("alice", `/v1/definitions/${privateDefinition.id}`);
     const othersPublic = await request("bob", `/v1/definitions/${publicDefinition.id}`);
 
-    expect(ownDraft.status).toBe(200);
+    expect(ownPrivate.status).toBe(200);
     expect(othersPublic.status).toBe(200);
   });
 
-  test("他者の draft / private は 404 で存在を秘匿する", async () => {
+  test("他者の private は 404 で存在を秘匿する", async () => {
     await createUser("alice");
     await createUser("bob");
     const word = await createWord("alice", "ことば", "ことば");
-    const draft = await createDefinition("alice", word.id, "draft");
     const privateDefinition = await createDefinition("alice", word.id, "private");
 
-    const draftResponse = await request("bob", `/v1/definitions/${draft.id}`);
     const privateResponse = await request("bob", `/v1/definitions/${privateDefinition.id}`);
 
-    expect(draftResponse.status).toBe(404);
     expect(privateResponse.status).toBe(404);
-    await expect(draftResponse.json()).resolves.toMatchObject({
+    await expect(privateResponse.json()).resolves.toMatchObject({
       error: { code: "definition_not_found" },
     });
   });
@@ -248,39 +276,7 @@ describe("GET /v1/definitions/{id}", () => {
 });
 
 describe("PATCH /v1/definitions/{id}", () => {
-  test("draft から public へ確定すると finalizedAt が設定され isEdited は立たない", async () => {
-    await createUser("alice");
-    const word = await createWord("alice", "ことば", "ことば");
-    const draft = await createDefinition("alice", word.id, "draft");
-
-    const response = await requestJson("alice", `/v1/definitions/${draft.id}`, "PATCH", {
-      body: "推敲した本文",
-      status: "public",
-    });
-
-    expect(response.status).toBe(200);
-    const body = await response.json<DefinitionResponse>();
-    expect(body).toMatchObject({ body: "推敲した本文", isEdited: false, status: "public" });
-    expect(body.finalizedAt).not.toBeNull();
-  });
-
-  test("下書き中は言葉を変更できる", async () => {
-    await createUser("alice");
-    const word = await createWord("alice", "ことば", "ことば");
-    const anotherWord = await createWord("alice", "いみ", "いみ");
-    const draft = await createDefinition("alice", word.id, "draft");
-
-    const response = await requestJson("alice", `/v1/definitions/${draft.id}`, "PATCH", {
-      wordId: anotherWord.id,
-    });
-
-    expect(response.status).toBe(200);
-    await expect(response.json()).resolves.toMatchObject({
-      word: { id: anotherWord.id, word: "いみ" },
-    });
-  });
-
-  test("確定後の言葉変更は 400 invalid_transition", async () => {
+  test("wordId を送っても無視され言葉は変わらない", async () => {
     await createUser("alice");
     const word = await createWord("alice", "ことば", "ことば");
     const anotherWord = await createWord("alice", "いみ", "いみ");
@@ -290,10 +286,9 @@ describe("PATCH /v1/definitions/{id}", () => {
       wordId: anotherWord.id,
     });
 
-    expect(response.status).toBe(400);
-    await expect(response.json()).resolves.toMatchObject({
-      error: { code: "invalid_transition" },
-    });
+    expect(response.status).toBe(200);
+    const body = await response.json<DefinitionResponse>();
+    expect(body.word.id).toBe(word.id);
   });
 
   test("public と private は相互に切り替えられ finalizedAt は変わらない", async () => {
@@ -316,7 +311,7 @@ describe("PATCH /v1/definitions/{id}", () => {
     expect(publicBody.finalizedAt).toBe(definition.finalizedAt);
   });
 
-  test("確定後に draft へ戻すのは 400 invalid_transition", async () => {
+  test("未知の status は 400 ZodError で拒否される", async () => {
     await createUser("alice");
     const word = await createWord("alice", "ことば", "ことば");
     const definition = await createDefinition("alice", word.id, "public");
@@ -327,11 +322,12 @@ describe("PATCH /v1/definitions/{id}", () => {
 
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toMatchObject({
-      error: { code: "invalid_transition" },
+      success: false,
+      error: { name: "ZodError" },
     });
   });
 
-  test("確定後 1 時間以内の本文編集は isEdited を立てる", async () => {
+  test("作成後 1 時間以内の本文編集は isEdited を立てる", async () => {
     await createUser("alice");
     const word = await createWord("alice", "ことば", "ことば");
     const definition = await createDefinition("alice", word.id, "public");
@@ -347,7 +343,7 @@ describe("PATCH /v1/definitions/{id}", () => {
     });
   });
 
-  test("確定後 1 時間を超えた本文編集は 403 edit_window_expired", async () => {
+  test("作成後 1 時間を超えた本文編集は 403 edit_window_expired", async () => {
     await createUser("alice");
     const word = await createWord("alice", "ことば", "ことば");
     const definition = await createDefinition("alice", word.id, "public");
@@ -363,7 +359,7 @@ describe("PATCH /v1/definitions/{id}", () => {
     });
   });
 
-  test("確定後 1 時間を超えても公開範囲は切り替えられる", async () => {
+  test("作成後 1 時間を超えても公開範囲は切り替えられる", async () => {
     await createUser("alice");
     const word = await createWord("alice", "ことば", "ことば");
     const definition = await createDefinition("alice", word.id, "public");
@@ -376,11 +372,11 @@ describe("PATCH /v1/definitions/{id}", () => {
     expect(response.status).toBe(200);
   });
 
-  test("並行する確定処理と競合しても draft へ巻き戻らない", async () => {
+  test("並行する公開範囲変更と競合しても楽観ロックで再評価する", async () => {
     await createUser("alice");
     const word = await createWord("alice", "ことば", "ことば");
-    const draft = await createDefinition("alice", word.id, "draft");
-    // 本文編集 PATCH の読み取りと UPDATE の間に、別リクエストによる確定（draft→public）を割り込ませる
+    const definition = await createDefinition("alice", word.id, "public");
+    // 本文編集 PATCH の読み取りと UPDATE の間に、別リクエストによる private 化を割り込ませる
     let intercepted = false;
     const racingDatabase = {
       prepare(query: string) {
@@ -394,9 +390,9 @@ describe("PATCH /v1/definitions/{id}", () => {
               run: async () => {
                 const now = Date.now();
                 await env.DB.prepare(
-                  "update definitions set status = 'public', finalized_at = ?, updated_at = ? where id = ?",
+                  "update definitions set status = 'private', updated_at = ? where id = ?",
                 )
-                  .bind(now, now + 1, draft.id)
+                  .bind(now + 1, definition.id)
                   .run();
                 return bound.run();
               },
@@ -407,7 +403,7 @@ describe("PATCH /v1/definitions/{id}", () => {
     } as unknown as D1Database;
 
     const response = await testApp("alice").request(
-      `/v1/definitions/${draft.id}`,
+      `/v1/definitions/${definition.id}`,
       {
         body: JSON.stringify({ body: "競合する本文編集" }),
         headers: { ...authHeaders, "Content-Type": "application/json" },
@@ -418,13 +414,12 @@ describe("PATCH /v1/definitions/{id}", () => {
 
     expect(response.status).toBe(200);
     const body = await response.json<DefinitionResponse>();
-    expect(body.status).toBe("public");
-    expect(body.finalizedAt).not.toBeNull();
-    const row = await env.DB.prepare("select status, finalized_at from definitions where id = ?")
-      .bind(draft.id)
-      .first<{ status: string; finalized_at: number | null }>();
-    expect(row!.status).toBe("public");
-    expect(row!.finalized_at).not.toBeNull();
+    expect(body.body).toBe("競合する本文編集");
+    expect(body.status).toBe("private");
+    const row = await env.DB.prepare("select status, body from definitions where id = ?")
+      .bind(definition.id)
+      .first<{ status: string; body: string }>();
+    expect(row).toEqual({ status: "private", body: "競合する本文編集" });
   });
 
   test("他者の public 定義の編集は 403 forbidden", async () => {
@@ -485,11 +480,11 @@ describe("DELETE /v1/definitions/{id}", () => {
     expect(response.status).toBe(403);
   });
 
-  test("他者の draft 定義の削除は 404 で存在を秘匿する", async () => {
+  test("他者の private 定義の削除は 404 で存在を秘匿する", async () => {
     await createUser("alice");
     await createUser("bob");
     const word = await createWord("alice", "ことば", "ことば");
-    const definition = await createDefinition("alice", word.id, "draft");
+    const definition = await createDefinition("alice", word.id, "private");
 
     const response = await request("bob", `/v1/definitions/${definition.id}`, {
       method: "DELETE",
@@ -570,29 +565,28 @@ describe("PUT / DELETE /v1/definitions/{id}/like", () => {
     expect(row!.count).toBe(0);
   });
 
-  test("自分の draft にもいいねできる", async () => {
+  test("自分の private にもいいねできる", async () => {
     await createUser("alice");
     const word = await createWord("alice", "ことば", "ことば");
-    const draft = await createDefinition("alice", word.id, "draft");
+    const privateDefinition = await createDefinition("alice", word.id, "private");
 
-    const response = await request("alice", `/v1/definitions/${draft.id}/like`, { method: "PUT" });
+    const response = await request("alice", `/v1/definitions/${privateDefinition.id}/like`, {
+      method: "PUT",
+    });
 
     expect(response.status).toBe(204);
   });
 
-  test("他者の draft / private へのいいねは 404 で存在を秘匿する", async () => {
+  test("他者の private へのいいねは 404 で存在を秘匿する", async () => {
     await createUser("alice");
     await createUser("bob");
     const word = await createWord("alice", "ことば", "ことば");
-    const draft = await createDefinition("alice", word.id, "draft");
     const privateDefinition = await createDefinition("alice", word.id, "private");
 
-    const draftLike = await request("bob", `/v1/definitions/${draft.id}/like`, { method: "PUT" });
     const privateLike = await request("bob", `/v1/definitions/${privateDefinition.id}/like`, {
       method: "PUT",
     });
 
-    expect(draftLike.status).toBe(404);
     expect(privateLike.status).toBe(404);
   });
 });

@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**v1MeDefinedWordsGet**](MeApi.md#v1medefinedwordsget) | **GET** /v1/me/defined-words | 定義済みの言葉一覧（言葉単位 + 状態別件数）
-[**v1MeDefinitionsGet**](MeApi.md#v1medefinitionsget) | **GET** /v1/me/definitions | 自分の定義一覧（状態で絞り込み。下書き一覧は status&#x3D;draft）
+[**v1MeDefinitionsGet**](MeApi.md#v1medefinitionsget) | **GET** /v1/me/definitions | 自分の定義一覧（状態で絞り込み。状態で絞り込み）
 [**v1MeDictionaryOverviewGet**](MeApi.md#v1medictionaryoverviewget) | **GET** /v1/me/dictionary/overview | あなたの辞書の概要（各件数 + 最近の定義）
 [**v1MeMutesGet**](MeApi.md#v1memutesget) | **GET** /v1/me/mutes | ミュート中のユーザー一覧
 [**v1MeSavedWordsGet**](MeApi.md#v1mesavedwordsget) | **GET** /v1/me/saved-words | 保存した言葉の一覧
@@ -66,7 +66,7 @@ Name | Type | Description  | Notes
 # **v1MeDefinitionsGet**
 > V1UsersIdDefinitionsGet200Response v1MeDefinitionsGet(cursor, limit, status)
 
-自分の定義一覧（状態で絞り込み。下書き一覧は status=draft）
+自分の定義一覧（状態で絞り込み。状態で絞り込み）
 
 ### Example
 ```dart

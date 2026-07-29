@@ -21,10 +21,5 @@ void main() {
     test('to test the property `privateCount`', () async {
       // TODO
     });
-
-    // int draftCount
-    test('to test the property `draftCount`', () async {
-      // TODO
-    });
   });
 }

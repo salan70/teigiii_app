@@ -15,7 +15,7 @@ type BrowseBindings = {
   DB: D1Database;
 };
 
-type DefinitionStatus = "draft" | "public" | "private";
+type DefinitionStatus = "public" | "private";
 
 type DefinitionListRow = {
   id: string;
@@ -28,7 +28,7 @@ type DefinitionListRow = {
   author_avatar_key: string | null;
   body: string;
   status: DefinitionStatus;
-  finalized_at: number | null;
+  finalized_at: number;
   is_edited: number;
   created_at: number;
   updated_at: number;
@@ -162,8 +162,7 @@ function definitionColumns(): string {
 }
 
 function toDefinition(row: DefinitionListRow, baseUrl: string) {
-  const editableUntil =
-    row.finalized_at === null ? null : row.finalized_at + editWindowMilliseconds;
+  const editableUntil = row.finalized_at + editWindowMilliseconds;
   return {
     author: {
       avatarUrl: avatarUrl(baseUrl, row.author_avatar_key),
@@ -173,8 +172,8 @@ function toDefinition(row: DefinitionListRow, baseUrl: string) {
     },
     body: row.body,
     createdAt: new Date(row.created_at).toISOString(),
-    editableUntil: editableUntil === null ? null : new Date(editableUntil).toISOString(),
-    finalizedAt: row.finalized_at === null ? null : new Date(row.finalized_at).toISOString(),
+    editableUntil: new Date(editableUntil).toISOString(),
+    finalizedAt: new Date(row.finalized_at).toISOString(),
     id: row.id,
     isEdited: row.is_edited !== 0,
     isLikedByMe: row.is_liked_by_me !== 0,
@@ -248,8 +247,7 @@ export class BrowseService {
     await requireUser(this.env.DB, userId);
     const cursor =
       cursorValue === undefined ? null : decodeReadingCursor(cursorValue, "user_dictionary");
-    const cursorClause =
-      cursor === null ? "" : `and ${readingScriptClassCursorClause()}`;
+    const cursorClause = cursor === null ? "" : `and ${readingScriptClassCursorClause()}`;
     const statement = this.env.DB.prepare(
       `select w.id, w.word, w.reading, w.reading_sub_group, count(*) as public_count
        from definitions d
@@ -424,7 +422,6 @@ export class BrowseService {
     const counts = await this.env.DB.prepare(
       `select
          count(distinct d.word_id) as defined_word_count,
-         sum(case when d.status = 'draft' then 1 else 0 end) as draft_count,
          (select count(*) from saved_words s
           join words w on w.id = s.word_id
           where s.user_id = ? and ${publiclyVisibleWordSql("?")}) as saved_word_count
@@ -432,7 +429,7 @@ export class BrowseService {
        where d.author_id = ? and d.deleted_at is null`,
     )
       .bind(uid, uid, uid, uid)
-      .first<{ defined_word_count: number; draft_count: number; saved_word_count: number }>();
+      .first<{ defined_word_count: number; saved_word_count: number }>();
     const rows = (
       await this.env.DB.prepare(
         `select ${definitionColumns()}
@@ -448,7 +445,6 @@ export class BrowseService {
     ).results;
     return {
       definedWordCount: counts?.defined_word_count ?? 0,
-      draftCount: counts?.draft_count ?? 0,
       recentDefinitions: rows.map((row) => toDefinition(row, this.env.AVATAR_BASE_URL)),
       savedWordCount: counts?.saved_word_count ?? 0,
     };
@@ -457,13 +453,11 @@ export class BrowseService {
   async listDefinedWords(uid: string, limit: number, cursorValue?: string) {
     const cursor =
       cursorValue === undefined ? null : decodeReadingCursor(cursorValue, "defined_words");
-    const cursorClause =
-      cursor === null ? "" : `and ${readingScriptClassCursorClause()}`;
+    const cursorClause = cursor === null ? "" : `and ${readingScriptClassCursorClause()}`;
     const statement = this.env.DB.prepare(
       `select w.id, w.word, w.reading, w.reading_sub_group,
          sum(case when d.status = 'public' then 1 else 0 end) as public_count,
-         sum(case when d.status = 'private' then 1 else 0 end) as private_count,
-         sum(case when d.status = 'draft' then 1 else 0 end) as draft_count
+         sum(case when d.status = 'private' then 1 else 0 end) as private_count
        from definitions d join words w on w.id = d.word_id
        where d.author_id = ? and d.deleted_at is null ${cursorClause}
        group by w.id, w.word, w.reading, w.reading_sub_group
@@ -476,7 +470,6 @@ export class BrowseService {
       reading_sub_group: string;
       public_count: number;
       private_count: number;
-      draft_count: number;
     };
     const rows = (
       await (
@@ -489,7 +482,6 @@ export class BrowseService {
       rows,
       limit,
       (row) => ({
-        draftCount: Number(row.draft_count ?? 0),
         privateCount: Number(row.private_count ?? 0),
         publicCount: Number(row.public_count ?? 0),
         word: { id: row.id, reading: row.reading, word: row.word },

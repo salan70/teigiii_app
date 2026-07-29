@@ -8,11 +8,6 @@ void main() {
   // TODO add properties to the entity
 
   group(UpdateDefinitionRequest, () {
-    // String wordId
-    test('to test the property `wordId`', () async {
-      // TODO
-    });
-
     // String body
     test('to test the property `body`', () async {
       // TODO

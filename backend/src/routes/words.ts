@@ -103,7 +103,7 @@ const listWordDefinitionsRoute = createRoute({
   tags: ["words"],
   summary: "言葉ページの定義一覧",
   description:
-    "scope=mine は自分の定義（下書き含む）、scope=others は他者の公開定義のみ、scope=all は自分 + 他者の公開定義の混在（旧 UI の言葉トップのパリティ）。sort=reactions はいいね数順。",
+    "scope=mine は自分の定義、scope=others は他者の公開定義のみ、scope=all は自分 + 他者の公開定義の混在（旧 UI の言葉トップのパリティ）。sort=reactions はいいね数順。",
   security: authenticatedSecurity,
   request: {
     params: wordIdParams,

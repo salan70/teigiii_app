@@ -77,12 +77,6 @@ void main() {
         ).isPublic,
         isFalse,
       );
-      expect(
-        definitionFromResponse(
-          buildResponse(status: DefinitionStatus.draft),
-        ).isPublic,
-        isFalse,
-      );
     });
   });
 }

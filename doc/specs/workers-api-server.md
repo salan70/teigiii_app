@@ -172,13 +172,15 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 - 一覧は reading の文字種クラス（五十音 → 英字 → 数字・記号）と reading、id の安定順とし、指定された行、定義有無、検索語を適用する
 
 <!-- @code backend/src/definitions/definition-service.ts#DefinitionService -->
+<!-- @code backend/src/db/schema.ts#definitions -->
 ### 定義
 
-- draft は `finalized_at=null`、public / private は初回確定時の `finalized_at` を持つ
+- public / private は作成時に `finalized_at` を持ち、以後更新しない
 - `POST /v1/definitions` は `wordId` または `word` + `reading` のいずれか一方を受け付ける。後者ではサーバーが言葉を解決／必要時に内部作成してから定義を作成する。内部作成は明示登録にしない
-- 許可する状態遷移は draft から public / private、public と private の相互切替だけとし、draft へ戻さない
-- 確定後1時間を超えた本文編集を403で拒否する。公開範囲の変更では `finalized_at` を更新しない
-- 他者は public だけを閲覧でき、本人は自分の draft / private も閲覧できる。不可視な定義は404として存在を秘匿する
+- 許可する状態遷移は public と private の相互切替だけとする。Draft（下書き）は採用しない
+- `PATCH /v1/definitions/{id}` の更新対象は本文と公開範囲のみ。言葉の付け替えは受け付けない
+- 作成後1時間を超えた本文編集を403で拒否する。公開範囲の変更では `finalized_at` を更新しない
+- 他者は public だけを閲覧でき、本人は自分の private も閲覧できる。不可視な定義は404として存在を秘匿する
 - 削除は所有者だけが実行でき、`deleted_at` を設定する
 - いいね対象は他者が閲覧可能な public 定義と、自分が閲覧可能な自分の定義に限定する
 
@@ -186,7 +188,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 ### 辞書と一覧
 
 - 公開辞書は対象ユーザーの public 定義だけを言葉単位にまとめる
-- 本人向け辞書は draft / private を含め、endpoint ごとの status 条件を適用する
+- 本人向け辞書は private を含め、endpoint ごとの status 条件を適用する
 - 合成 DTO の likesCount、followingCount、followerCount は有効な行だけを集計する
 - `isLikedByMe`、`isFollowedByMe`、`isMutedByMe` は認証 UID を基準に算出する
 
