@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/design_system/design_system.dart';
-import '../../../../core/common_widget/button/filled_button.dart';
-import '../../../../core/common_widget/button/outlined_button.dart';
 import '../../../util/mixin/presentation_mixin.dart';
 import '../application/user_follow_service.dart';
 import '../application/user_follow_state.dart';
@@ -35,7 +33,7 @@ class _FollowButton extends ConsumerWidget with PresentationMixin {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PrimaryFilledButton(
+    return DsFilledButton.primary(
       text: 'フォローする',
       onPressed: () async {
         await executeWithOverlayLoading(
@@ -56,7 +54,7 @@ class _UnfollowButton extends ConsumerWidget with PresentationMixin {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PrimaryOutlinedButton(
+    return DsOutlinedButton.primary(
       text: 'フォロー解除',
       onPressed: () async {
         await executeWithOverlayLoading(

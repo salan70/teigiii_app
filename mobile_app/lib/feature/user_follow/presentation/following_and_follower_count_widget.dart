@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/common_widget/shimmer_widget.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/logger.dart';
+import '../../../core/design_system/design_system.dart';
 import '../../../core/page/user_list_following_or_follower_page.dart';
 import '../application/user_follow_state.dart';
 
@@ -76,13 +76,13 @@ class FollowingAndFollowerCountWidget extends ConsumerWidget {
       loading: () => const Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ShimmerWidget.rectangular(width: 16, height: 24),
+          DsShimmer.rectangular(width: 16, height: 24),
           Gap(8),
-          ShimmerWidget.rectangular(width: 48, height: 16),
+          DsShimmer.rectangular(width: 48, height: 16),
           Gap(16),
-          ShimmerWidget.rectangular(width: 16, height: 24),
+          DsShimmer.rectangular(width: 16, height: 24),
           Gap(8),
-          ShimmerWidget.rectangular(width: 48, height: 16),
+          DsShimmer.rectangular(width: 48, height: 16),
         ],
       ),
       error: (error, stackTrace) {

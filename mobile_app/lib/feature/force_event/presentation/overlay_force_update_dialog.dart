@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 
 import '../../../core/analytics/analytics_event.dart';
 import '../../../core/common_provider/launch_url_controller.dart';
-import '../../../core/common_widget/button/filled_button.dart';
+import '../../../core/design_system/design_system.dart';
 import '../../../util/constant/url.dart';
 import '../../../util/extension/target_platform_extension.dart';
 
@@ -41,7 +41,7 @@ class OverlayForceUpdateDialog extends ConsumerWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const Gap(16),
-                  PrimaryFilledButton(
+                  DsFilledButton.primary(
                     onPressed: () {
                       // platform に応じたURLを開く。
                       defaultTargetPlatform.when(

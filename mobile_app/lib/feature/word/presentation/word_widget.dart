@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../core/common_widget/button/filled_button.dart';
 import '../../../../../core/router/app_router.dart';
+import '../../../core/design_system/design_system.dart';
 import '../../auth/application/auth_state.dart';
 import '../../definition/domain/definition_for_write.dart';
 import '../../definition/presentation/write_definition_base_page.dart';
@@ -71,7 +71,7 @@ class WordWidget extends ConsumerWidget {
           ),
           const Gap(8),
           Center(
-            child: PrimaryFilledButton(
+            child: DsFilledButton.primary(
               onPressed: () {
                 context.pushRoute(
                   DefinitionPostRoute(

@@ -13,8 +13,8 @@ import '../../feature/word_list/presentation/saved_word_list.dart';
 import '../../util/extension/scroll_controller_extension.dart';
 import '../../util/logger.dart';
 import '../common_widget/button/to_search_user_button.dart';
-import '../common_widget/simple_empty_widget.dart';
 import '../common_widget/stickey_tab_bar_deligate.dart';
+import '../design_system/design_system.dart';
 
 @RoutePage()
 class ProfileTopPage extends ConsumerWidget {
@@ -95,20 +95,20 @@ class ProfileTopPage extends ConsumerWidget {
                   definitionFeedType:
                       DefinitionFeedType.profileOrderByCreatedAt,
                   targetUserId: targetUserId,
-                  emptyWidget: SimpleEmptyWidget(
+                  emptyWidget: DsEmptyView(
                     message: isMyProfile ? '🙃んせまりあは稿投だま' : '投稿がありません。',
                   ),
                 ),
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.profileLiked,
                   targetUserId: targetUserId,
-                  emptyWidget: SimpleEmptyWidget(
+                  emptyWidget: DsEmptyView(
                     message: isMyProfile ? 'いいねした投稿が表示されます💖' : 'いいねした投稿がありません',
                   ),
                 ),
                 if (isMyProfile)
                   const SavedWordList(
-                    emptyWidget: SimpleEmptyWidget(message: '保存した言葉が表示されます🐬'),
+                    emptyWidget: DsEmptyView(message: '保存した言葉が表示されます🐬'),
                   ),
               ],
             ),

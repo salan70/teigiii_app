@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import '../../../core/common_provider/dialog_controller.dart';
-import '../../../core/common_widget/button/filled_button.dart';
 import '../../../core/common_widget/dialog/confirm_dialog.dart';
+import '../../../core/design_system/design_system.dart';
 import '../../../core/router/app_router.dart';
 import '../../../util/mixin/presentation_mixin.dart';
 import '../../auth/application/auth_service.dart';
@@ -34,7 +34,7 @@ class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
                       textAlign: TextAlign.center,
                     ),
                     const Gap(8),
-                    PrimaryFilledButton(
+                    DsFilledButton.primary(
                       onPressed: () async =>
                           context.navigateTo(const BaseRoute()),
                       text: '新規作成',

@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common_widget/button/to_search_user_button.dart';
-import '../../../../core/common_widget/simple_empty_widget.dart';
 import '../../../../core/common_widget/stickey_tab_bar_deligate.dart';
 import '../../../../util/extension/scroll_controller_extension.dart';
 import '../../feature/auth/application/auth_state.dart';
 import '../../feature/user_list/presentation/profile_list.dart';
 import '../../feature/user_list/util/user_list_type.dart';
 import '../../feature/user_profile/application/user_profile_state.dart';
+import '../design_system/design_system.dart';
 
 @RoutePage()
 class UserListFollowingOrFollowerPage extends ConsumerWidget {
@@ -89,9 +89,7 @@ class UserListFollowingOrFollowerPage extends ConsumerWidget {
                   userListType: UserListType.following,
                   targetUserId: targetUserId,
                   targetDefinitionId: null,
-                  emptyWidget: const SimpleEmptyWidget(
-                    message: 'フォロー中のユーザーがいません🌱',
-                  ),
+                  emptyWidget: const DsEmptyView(message: 'フォロー中のユーザーがいません🌱'),
                   additionalOnRefresh: () =>
                       ref.invalidate(userProfileProvider(targetUserId)),
                 ),
@@ -99,7 +97,7 @@ class UserListFollowingOrFollowerPage extends ConsumerWidget {
                   userListType: UserListType.follower,
                   targetUserId: targetUserId,
                   targetDefinitionId: null,
-                  emptyWidget: const SimpleEmptyWidget(message: 'フォロワーがいません🌴'),
+                  emptyWidget: const DsEmptyView(message: 'フォロワーがいません🌴'),
                   additionalOnRefresh: () =>
                       ref.invalidate(userProfileProvider(targetUserId)),
                 ),

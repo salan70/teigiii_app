@@ -10,8 +10,8 @@ import '../../util/extension/scroll_controller_extension.dart';
 import '../common_provider/key_provider.dart';
 import '../common_widget/button/to_profile_button.dart';
 import '../common_widget/button/to_setting_button.dart';
-import '../common_widget/simple_empty_widget.dart';
 import '../common_widget/stickey_tab_bar_deligate.dart';
+import '../design_system/design_system.dart';
 
 @RoutePage()
 class HomeRouterPage extends AutoRouter {
@@ -65,13 +65,11 @@ class HomePage extends ConsumerWidget {
             body: const TabBarView(
               children: <Widget>[
                 DiscoverTimelineList(
-                  emptyWidget: SimpleEmptyWidget(message: 'おすすめの投稿がありません...'),
+                  emptyWidget: DsEmptyView(message: 'おすすめの投稿がありません...'),
                 ),
                 DefinitionList(
                   definitionFeedType: DefinitionFeedType.homeFollowing,
-                  emptyWidget: SimpleEmptyWidget(
-                    message: 'フォローしたユーザーの投稿が表示されます🏄‍♂',
-                  ),
+                  emptyWidget: DsEmptyView(message: 'フォローしたユーザーの投稿が表示されます🏄‍♂'),
                 ),
               ],
             ),
