@@ -42,11 +42,11 @@ function insertUser(db: Database, id: string): void {
   );
 }
 
-function insertWord(db: Database, id: string, word: string): void {
+function insertWord(db: Database, id: string, word: string, reading = "よみ"): void {
   db.run(
     `insert into words (id, word, reading, reading_sub_group, created_at, updated_at)
-     values (?, ?, 'よみ', 'あ', ?, ?)`,
-    [id, word, now, now],
+     values (?, ?, ?, 'あ', ?, ?)`,
+    [id, word, reading, now, now],
   );
 }
 
@@ -141,9 +141,15 @@ describe("migration SQL", () => {
     });
   });
 
-  test("words.word の UNIQUE 制約が効く", () => {
+  test("words の (word, reading) の UNIQUE 制約が効く", () => {
     insertWord(db, "w1", "自由");
     expect(() => insertWord(db, "w2", "自由")).toThrow();
+  });
+
+  test("words は同表記でもよみが異なれば別行として登録できる", () => {
+    insertWord(db, "w1", "金星", "きんせい");
+    insertWord(db, "w2", "金星", "きんぼし");
+    expect(db.query("select count(*) as c from words where word = '金星'").get()).toEqual({ c: 2 });
   });
 
   test("definitions.status は public / private のみ許可する", () => {

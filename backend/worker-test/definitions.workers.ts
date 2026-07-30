@@ -140,19 +140,35 @@ describe("POST /v1/definitions", () => {
     expect(listBody.items.map((item) => item.id)).toContain(body.word.id);
   });
 
-  test("既存言葉への word + reading は既存の読みを採用する", async () => {
+  test("(表記, よみ) が一致する既存言葉には既存の言葉を使う", async () => {
     await createUser("alice");
     const existing = await createWord("alice", "既存語", "きそんご");
 
     const response = await requestJson("alice", "/v1/definitions", "POST", {
       body: "定義",
-      reading: "ちがうよみ",
+      reading: " きそんご ",
       status: "public",
-      word: "既存語",
+      word: " 既存語 ",
     });
     expect(response.status).toBe(201);
     const body = await response.json<DefinitionResponse>();
     expect(body.word).toMatchObject({ id: existing.id, reading: "きそんご", word: "既存語" });
+  });
+
+  test("表記が同じでよみが異なる場合は別の言葉を内部作成する", async () => {
+    await createUser("alice");
+    const existing = await createWord("alice", "金星", "きんせい");
+
+    const response = await requestJson("alice", "/v1/definitions", "POST", {
+      body: "定義",
+      reading: "きんぼし",
+      status: "public",
+      word: "金星",
+    });
+    expect(response.status).toBe(201);
+    const body = await response.json<DefinitionResponse>();
+    expect(body.word).toMatchObject({ reading: "きんぼし", word: "金星" });
+    expect(body.word.id).not.toBe(existing.id);
   });
 
   test("private も finalizedAt と editableUntil を持つ", async () => {

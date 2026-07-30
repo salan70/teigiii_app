@@ -183,12 +183,12 @@ describe("POST /v1/words", () => {
     expect(response.status).toBe(404);
   });
 
-  test("正規化後に同一表記が存在する場合は 200 で明示登録し既存の言葉を返す", async () => {
+  test("正規化後に同一の (表記, よみ) が存在する場合は 200 で明示登録し既存の言葉を返す", async () => {
     await createUser("alice");
     const first = await createWord("alice", "りんご", "りんご");
 
     const response = await requestJson("alice", "/v1/words", "POST", {
-      reading: "べつのよみ",
+      reading: " りんご ",
       word: "  りんご ",
     });
 
@@ -198,6 +198,30 @@ describe("POST /v1/words", () => {
       reading: "りんご",
       word: "りんご",
     });
+  });
+
+  test("表記が同じでよみが異なる場合は 201 で別の言葉として登録する", async () => {
+    await createUser("alice");
+    const first = await createWord("alice", "金星", "きんせい");
+
+    const response = await requestJson("alice", "/v1/words", "POST", {
+      reading: "きんぼし",
+      word: "金星",
+    });
+
+    expect(response.status).toBe(201);
+    const created = await response.json<{ id: string; reading: string; word: string }>();
+    expect(created).toMatchObject({ reading: "きんぼし", word: "金星" });
+    expect(created.id).not.toBe(first.id);
+
+    // 双方とも公開経路に出て、よみで見分けられる
+    const list = await request("alice", "/v1/words?limit=20");
+    const items = (await list.json<{ items: { id: string; reading: string; word: string }[] }>())
+      .items;
+    expect(items.filter((item) => item.word === "金星").map((item) => item.reading)).toEqual([
+      "きんせい",
+      "きんぼし",
+    ]);
   });
 
   test("隠れた既存言葉を初めて明示登録すると 200 で公開昇格する", async () => {
@@ -223,7 +247,7 @@ describe("POST /v1/words", () => {
     expect((await request("bob", "/v1/words/hidden-word")).status).toBe(404);
 
     const response = await requestJson("bob", "/v1/words", "POST", {
-      reading: "べつのよみ",
+      reading: "かくれ",
       word: "隠れ語",
     });
     expect(response.status).toBe(200);
@@ -562,13 +586,48 @@ describe("PATCH /v1/words/{id}", () => {
     expect(response.status).toBe(200);
   });
 
-  test("修正後の表記が既存の言葉と重複する場合は 409 で既存の言葉を返す", async () => {
+  test("修正後の (表記, よみ) が既存の言葉と重複する場合は 409 で既存の言葉を返す", async () => {
     await createUser("alice");
     const existing = await createWord("alice", "りんご", "りんご");
     const word = await createWord("alice", "みかん", "みかん");
 
     const response = await requestJson("alice", `/v1/words/${word.id}`, "PATCH", {
+      reading: " りんご ",
       word: " りんご ",
+    });
+
+    expect(response.status).toBe(409);
+    await expect(response.json()).resolves.toMatchObject({
+      error: { code: "word_already_exists" },
+      existingWord: { id: existing.id },
+    });
+  });
+
+  test("修正後の表記が既存と同じでもよみが異なれば 200 で別の言葉になる", async () => {
+    await createUser("alice");
+    await createWord("alice", "金星", "きんせい");
+    const word = await createWord("alice", "みかん", "みかん");
+
+    const response = await requestJson("alice", `/v1/words/${word.id}`, "PATCH", {
+      reading: "きんぼし",
+      word: "金星",
+    });
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toMatchObject({
+      id: word.id,
+      reading: "きんぼし",
+      word: "金星",
+    });
+  });
+
+  test("よみだけを既存の言葉と同じにする修正も 409", async () => {
+    await createUser("alice");
+    const existing = await createWord("alice", "金星", "きんせい");
+    const word = await createWord("alice", "金星", "きんぼし");
+
+    const response = await requestJson("alice", `/v1/words/${word.id}`, "PATCH", {
+      reading: "きんせい",
     });
 
     expect(response.status).toBe(409);

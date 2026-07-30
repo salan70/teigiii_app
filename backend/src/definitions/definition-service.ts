@@ -208,7 +208,7 @@ export class DefinitionService {
     if (reading === "") throw new ApiError(400, "invalid_request", "reading must not be empty");
 
     const wordService = new WordService(this.env);
-    const existingWordId = await wordService.findIdByNormalizedWord(word);
+    const existingWordId = await wordService.findIdByNormalizedWord(word, reading);
     if (existingWordId !== null) {
       await insertDefinition(existingWordId).run();
       return this.#getDetail(uid, id);
@@ -228,7 +228,7 @@ export class DefinitionService {
         insertDefinition(wordId),
       ]);
     } catch (error) {
-      const racedWordId = await wordService.findIdByNormalizedWord(word);
+      const racedWordId = await wordService.findIdByNormalizedWord(word, reading);
       if (racedWordId === null) throw error;
       await insertDefinition(racedWordId).run();
     }

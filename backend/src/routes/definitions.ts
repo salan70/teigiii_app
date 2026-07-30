@@ -18,7 +18,7 @@ const createDefinitionRoute = createRoute({
   tags: ["definitions"],
   summary: "定義を作成（public / private）",
   description:
-    "wordId 指定、または word + reading 指定のいずれか一方を受け付ける。後者ではサーバーが言葉を解決／必要時に内部作成してから定義を作成する。内部作成は明示登録にしない。",
+    "wordId 指定、または word + reading 指定のいずれか一方を受け付ける。後者ではサーバーが (表記, よみ) 完全一致で言葉を解決／必要時に内部作成してから定義を作成する。内部作成は明示登録にしない。",
   security: authenticatedSecurity,
   request: {
     body: jsonContent(createDefinitionRequestSchema, "作成内容"),

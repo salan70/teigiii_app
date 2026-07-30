@@ -79,7 +79,7 @@ export type WordResponse = {
   word: string;
 };
 
-/** 修正時に同一表記が存在した場合の 409。既存の言葉を添えて返す。 */
+/** 修正時に同一の (表記, よみ) が存在した場合の 409。既存の言葉を添えて返す。 */
 export class WordConflictError extends ApiError {
   constructor(readonly existingWord: { id: string; word: string; reading: string }) {
     super(409, "word_already_exists", "Word already exists");
@@ -144,13 +144,14 @@ function toWordResponse(row: WordDetailRow, uid: string, now: number): WordRespo
 export class WordService {
   constructor(private readonly env: WordBindings) {}
 
-  async #findByWord(word: string): Promise<WordRow | null> {
+  /** 言葉の同一性は (表記, よみ) の完全一致。同表記異読は別の言葉として扱う。 */
+  async #findByWordAndReading(word: string, reading: string): Promise<WordRow | null> {
     return this.env.DB.prepare(
       `select id, word, reading, reading_sub_group, created_by,
               first_registered_at, first_registered_by, created_at
-       from words where word = ?`,
+       from words where word = ? and reading = ?`,
     )
-      .bind(word)
+      .bind(word, reading)
       .first<WordRow>();
   }
 
@@ -207,8 +208,8 @@ export class WordService {
     if (row === null) throw new ApiError(404, "word_not_found", "Word not found");
   }
 
-  async #throwIfWordTaken(word: string): Promise<void> {
-    const existing = await this.#findByWord(word);
+  async #throwIfWordTaken(word: string, reading: string): Promise<void> {
+    const existing = await this.#findByWordAndReading(word, reading);
     if (existing !== null) {
       throw new WordConflictError({
         id: existing.id,
@@ -264,7 +265,7 @@ export class WordService {
     const reading = requireNonEmpty(normalizeText(input.reading), "reading");
     const now = Date.now();
 
-    const existing = await this.#findByWord(word);
+    const existing = await this.#findByWordAndReading(word, reading);
     if (existing !== null) {
       await this.#ensureRegistration(uid, existing.id, now);
       return { created: false, word: await this.get(uid, existing.id) };
@@ -286,7 +287,7 @@ export class WordService {
       ]);
     } catch (error) {
       // UNIQUE 競合（同時登録）は既存行への明示登録へフォールバックする
-      const raced = await this.#findByWord(word);
+      const raced = await this.#findByWordAndReading(word, reading);
       if (raced === null) throw error;
       await this.#ensureRegistration(uid, raced.id, now);
       return { created: false, word: await this.get(uid, raced.id) };
@@ -296,10 +297,11 @@ export class WordService {
 
   /**
    * 定義作成時の言葉解決（検索のみ）。明示登録は行わない。
-   * 表記が同じ既存言葉があればその ID を返し、読みは既存を採用する。
+   * (表記, よみ) が一致する既存言葉があればその ID を返す。
+   * 表記だけ一致してよみが異なる言葉は別の言葉として扱い、ここでは解決しない。
    */
-  async findIdByNormalizedWord(word: string): Promise<string | null> {
-    const existing = await this.#findByWord(word);
+  async findIdByNormalizedWord(word: string, reading: string): Promise<string | null> {
+    const existing = await this.#findByWordAndReading(word, reading);
     return existing?.id ?? null;
   }
 
@@ -320,7 +322,8 @@ export class WordService {
       input.reading === undefined
         ? detail.reading
         : requireNonEmpty(normalizeText(input.reading), "reading");
-    if (word !== detail.word) await this.#throwIfWordTaken(word);
+    if (word !== detail.word || reading !== detail.reading)
+      await this.#throwIfWordTaken(word, reading);
 
     const now = Date.now();
     let result: D1Response;
@@ -354,7 +357,8 @@ export class WordService {
         .run();
     } catch (error) {
       // UNIQUE 競合（同時登録）だけを 409 に変換し、それ以外は再送出する
-      if (word !== detail.word) await this.#throwIfWordTaken(word);
+      if (word !== detail.word || reading !== detail.reading)
+        await this.#throwIfWordTaken(word, reading);
       throw error;
     }
     if (result.meta.changes === 0) {
