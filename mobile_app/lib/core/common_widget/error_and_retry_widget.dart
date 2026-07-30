@@ -63,16 +63,3 @@ class ErrorAndRetryWidget extends ConsumerWidget {
     );
   }
 }
-
-/// [ErrorAndRetryWidget] の簡易版。
-@Deprecated('DsErrorView.compact を使う。全参照の移行後に削除する (#278)')
-class SimpleErrorAndRetryWidget extends StatelessWidget {
-  const SimpleErrorAndRetryWidget({super.key, required this.onRetry});
-
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    return DsErrorView.compact(onRetry: onRetry);
-  }
-}
