@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import '../../../core/common_provider/launch_url_controller.dart';
-import '../../../core/common_widget/button/filled_button.dart';
+import '../../../core/design_system/design_system.dart';
 import '../../../util/constant/url.dart';
 import '../../../util/extension/date_time_extension.dart';
 import '../domain/app_maintenance.dart';
@@ -53,7 +53,7 @@ class OverlayInMaintenanceDialog extends ConsumerWidget {
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const Gap(16),
-                  PrimaryFilledButton(
+                  DsFilledButton.primary(
                     onPressed: () => ref
                         .read(launchUrlControllerProvider)
                         .launchURL(

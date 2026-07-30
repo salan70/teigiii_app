@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/common_widget/dialog/base_dialog.dart';
+import '../../../core/design_system/design_system.dart';
 import '../../../core/router/app_router.dart';
 import '../application/introduction_service.dart';
 
@@ -11,7 +11,7 @@ class ConfirmAgreementDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return BaseDialog(
+    return DsDialog(
       content: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: Text('利用規約とプライバシーポリシーに\n同意しますか？', textAlign: TextAlign.center),

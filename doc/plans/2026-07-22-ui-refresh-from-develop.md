@@ -99,7 +99,7 @@ Close コメント共通テンプレ:
 
 ## #248 のコード扱い
 
-原則コピペしない。参考にするのは連続リスト見出し・discover mixed・save/register の API 呼び出し方のみ。UI は develop の `WordTile` / `SearchWordTextField` / `SimpleEmptyWidget` / `InfinityScrollWidget` 上で書く。
+原則コピペしない。参考にするのは連続リスト見出し・discover mixed・save/register の API 呼び出し方のみ。UI は develop の `WordTile` / `SearchWordTextField` / `DsEmptyView` / `InfinityScrollWidget` 上で書く。
 
 ## 仕様改正（実装前）
 

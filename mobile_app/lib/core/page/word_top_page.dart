@@ -13,8 +13,8 @@ import '../../feature/word/presentation/word_widget.dart';
 import '../../util/extension/scroll_controller_extension.dart';
 import '../../util/logger.dart';
 import '../common_widget/error_and_retry_widget.dart';
-import '../common_widget/simple_empty_widget.dart';
 import '../common_widget/stickey_tab_bar_deligate.dart';
+import '../design_system/design_system.dart';
 
 @RoutePage()
 class WordTopPage extends ConsumerWidget {
@@ -58,7 +58,7 @@ class WordTopPage extends ConsumerWidget {
           }
 
           // * 該当するWordがある場合（投稿0件も含む）
-          const emptyWidget = SimpleEmptyWidget(message: '最初に定義してみませんか？');
+          const emptyWidget = DsEmptyView(message: '最初に定義してみませんか？');
 
           return Scaffold(
             body: SafeArea(

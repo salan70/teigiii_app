@@ -12,9 +12,8 @@ import '../../feature/word/presentation/word_tile_shimmer.dart';
 import '../../feature/word_list/application/word_list_state_by_search_word.dart';
 import '../../feature/word_list/presentation/search_word_text_field.dart';
 import '../../util/extension/scroll_controller_extension.dart';
-import '../common_widget/button/filled_button.dart';
 import '../common_widget/infinity_scroll_widget.dart';
-import '../common_widget/simple_empty_widget.dart';
+import '../design_system/design_system.dart';
 import '../router/app_router.dart';
 
 @RoutePage()
@@ -75,11 +74,9 @@ class WordSearchResultPage extends ConsumerWidget {
                   shimmerTileNumber: 2,
                   emptyWidget: Column(
                     children: [
-                      SimpleEmptyWidget(
-                        message: generateEmptyMessage(searchWord),
-                      ),
+                      DsEmptyView(message: generateEmptyMessage(searchWord)),
                       const Gap(24),
-                      PrimaryFilledButton(
+                      DsFilledButton.primary(
                         onPressed: () => context.pushRoute(
                           WordRegistrationRoute(initialWord: searchWord),
                         ),

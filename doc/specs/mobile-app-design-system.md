@@ -248,7 +248,7 @@ Ds コンポーネントにしない:
   表し、専用の色トークンは増やさない。操作可否が見た目で判別できない状態を作らない
 - 必須の意味（ラベル、ハンドラ）は required 引数にする
 - 既存の `ErrorAndRetryWidget.cannotInquire` / `.canInquire`、
-  `ShimmerWidget.rectangular` / `.circular` を規約のリファレンス実装とする
+  `DsShimmer.rectangular` / `.circular` を規約のリファレンス実装とする
 
 <!-- @code mobile_app/lib/core/design_system/component/ds_button.dart#DsFilledButton -->
 <!-- @code mobile_app/lib/core/design_system/component/ds_button.dart#DsOutlinedButton -->
@@ -331,19 +331,17 @@ just mobile-ds-baseline-update    # baseline 再生成
 ### 既存 `core/common_widget` の扱い
 
 `core/common_widget` の共通ウィジェット（ボタン、ダイアログ、エラー表示、shimmer）は
-Ds コンポーネントの前身にあたる。**実体を `design_system/component/` へ移設し、
-旧パスは `@Deprecated` な `typedef` として残す**。
+Ds コンポーネントの前身にあたる。実体は `design_system/component/` へ移設済みで、
+移行期に残していた `@Deprecated` な旧パスは #278 で全廃した。
 
-- 二重実装を作らない（見た目の修正漏れを防ぐ）
-- 非パイロット画面は旧パス経由でそのまま動く（一括移行にしない）
-- `@Deprecated` のメッセージに移行先と追跡 Issue を必ず書く
+`core/common_widget` に残すと決めたのは、遷移先やドメイン知識・状態管理への依存を持つ
+ウィジェット（`ErrorAndRetryWidget`、`ConfirmDialog`、`InfinityScrollWidget`、
+`ToProfileButton` / `ToSettingButton` / `ToSearchUserButton`）。判断基準は
+「コンポーネント化する / しないの判断基準」に従う。
 
-```dart
-@Deprecated('DsFilledButton を使う。全参照の移行後に削除する (#278)')
-typedef FilledButtonWidget = DsFilledButton;
-```
-
-旧 typedef の全廃は #278 で追跡する。
+置き場が未整理のウィジェット（`OverlayLoadingWidget`、`AdaptiveOverflowText`、
+`StickyTabBarDelegate`、`buildCustomRefreshIndicator`）は #304 で DS 化の可否と
+置き場を決める。
 
 ### 例外申請
 

@@ -7,7 +7,7 @@ import '../../feature/introduction/presentation/confirm_agreement_dialog.dart';
 import '../../util/constant/url.dart';
 import '../common_provider/dialog_controller.dart';
 import '../common_provider/launch_url_controller.dart';
-import '../common_widget/button/filled_button.dart';
+import '../design_system/design_system.dart';
 
 @RoutePage()
 class WelcomePage extends ConsumerWidget {
@@ -42,7 +42,7 @@ class WelcomePage extends ConsumerWidget {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const Gap(24),
-              PrimaryFilledButton(
+              DsFilledButton.primary(
                 onPressed: () {
                   ref
                       .read(dialogControllerProvider)

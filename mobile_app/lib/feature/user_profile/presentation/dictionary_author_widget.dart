@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../core/common_widget/error_and_retry_widget.dart';
+import '../../../../core/design_system/design_system.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../util/logger.dart';
 import '../application/user_profile_state.dart';
@@ -61,7 +61,7 @@ class DictionaryAuthorWidget extends ConsumerWidget {
           'error: $error, stackTrace: $stackTrace',
         );
         return Center(
-          child: SimpleErrorAndRetryWidget(
+          child: DsErrorView.compact(
             onRetry: () => ref.invalidate(userProfileProvider(targetUserId)),
           ),
         );

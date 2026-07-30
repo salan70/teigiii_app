@@ -2,10 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common_widget/simple_empty_widget.dart';
 import '../../../../util/extension/scroll_controller_extension.dart';
 import '../../feature/user_list/presentation/profile_list.dart';
 import '../../feature/user_list/util/user_list_type.dart';
+import '../design_system/design_system.dart';
 
 @RoutePage()
 class UserListLikedPage extends ConsumerWidget {
@@ -39,7 +39,7 @@ class UserListLikedPage extends ConsumerWidget {
             targetUserId: null,
             targetDefinitionId: definitionId,
             // いいねが0件の場合、[LikeUserPage] には遷移しない想定だが念のため設定しておく
-            emptyWidget: const SimpleEmptyWidget(message: 'まだいいね！されていません'),
+            emptyWidget: const DsEmptyView(message: 'まだいいね！されていません'),
           ),
         ),
       ),

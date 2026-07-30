@@ -16,7 +16,7 @@ import '../../feature/user_profile/presentation/avatar_network_image_widget.dart
 import '../../util/extension/date_time_extension.dart';
 import '../../util/logger.dart';
 import '../common_widget/error_and_retry_widget.dart';
-import '../common_widget/shimmer_widget.dart';
+import '../design_system/design_system.dart';
 import '../router/app_router.dart';
 
 @RoutePage()
@@ -254,21 +254,21 @@ class _DefinitionDetailPageShimmer extends StatelessWidget {
         children: [
           Row(
             children: [
-              ShimmerWidget.circular(width: 48, height: 48),
+              DsShimmer.circular(width: 48, height: 48),
               Gap(16),
-              ShimmerWidget.rectangular(height: 16, width: 120),
+              DsShimmer.rectangular(height: 16, width: 120),
             ],
           ),
           Gap(16),
-          ShimmerWidget.rectangular(height: 32, width: 300),
+          DsShimmer.rectangular(height: 32, width: 300),
           Gap(16),
-          ShimmerWidget.rectangular(height: 120),
+          DsShimmer.rectangular(height: 120),
           Gap(16),
-          ShimmerWidget.rectangular(height: 16, width: 120),
+          DsShimmer.rectangular(height: 16, width: 120),
           Gap(4),
-          ShimmerWidget.rectangular(height: 16, width: 120),
+          DsShimmer.rectangular(height: 16, width: 120),
           Gap(8),
-          ShimmerWidget.rectangular(height: 20, width: 48),
+          DsShimmer.rectangular(height: 20, width: 48),
         ],
       ),
     );

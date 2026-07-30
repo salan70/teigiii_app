@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_providers.dart';
-import '../../../core/common_widget/shimmer_widget.dart';
+import '../../../core/design_system/design_system.dart';
 import '../util/default_avatar.dart';
 
 class AvatarNetworkImageWidget extends ConsumerWidget {
@@ -49,7 +49,7 @@ class AvatarNetworkImageWidget extends ConsumerWidget {
           image: DecorationImage(image: imageProvider),
         ),
       ),
-      placeholder: (context, url) => ShimmerWidget.circular(
+      placeholder: (context, url) => DsShimmer.circular(
         width: avatarSize.diameter,
         height: avatarSize.diameter,
       ),
