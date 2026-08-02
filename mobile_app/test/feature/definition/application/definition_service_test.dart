@@ -7,7 +7,7 @@ import 'package:teigi_app/feature/auth/application/auth_state.dart';
 import 'package:teigi_app/feature/definition/application/definition_seed_store.dart';
 import 'package:teigi_app/feature/definition_like/application/like_definition_service.dart';
 import 'package:teigi_app/feature/definition_like/repository/like_definition_repository.dart';
-import 'package:teigi_app/feature/definition_list/appication/definition_list_state.dart';
+import 'package:teigi_app/feature/definition_list/application/definition_list_state.dart';
 import 'package:teigi_app/feature/definition_list/domain/definition_list_state.dart';
 import 'package:teigi_app/feature/definition_list/repository/definition_list_repository.dart';
 import 'package:teigi_app/feature/definition_list/util/definition_feed_type.dart';

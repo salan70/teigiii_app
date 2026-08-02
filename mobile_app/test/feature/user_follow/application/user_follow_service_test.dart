@@ -4,7 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:teigi_app/core/analytics/analytics_event.dart';
 import 'package:teigi_app/feature/auth/application/auth_state.dart';
-import 'package:teigi_app/feature/definition_list/appication/definition_list_state.dart';
+import 'package:teigi_app/feature/definition_list/application/definition_list_state.dart';
 import 'package:teigi_app/feature/definition_list/domain/definition_list_state.dart';
 import 'package:teigi_app/feature/definition_list/repository/definition_list_repository.dart';
 import 'package:teigi_app/feature/definition_list/util/definition_feed_type.dart';

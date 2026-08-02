@@ -34,11 +34,6 @@ abstract final class DsRadius {
     Radius.circular(container),
   );
 
-  /// [subtle] の [BorderRadius]。
-  static const BorderRadius subtleBorder = BorderRadius.all(
-    Radius.circular(subtle),
-  );
-
   /// [shimmer] の [BorderRadius]。
   static const BorderRadius shimmerBorder = BorderRadius.all(
     Radius.circular(shimmer),

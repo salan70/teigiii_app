@@ -7,7 +7,7 @@ import '../../../util/constant/initial_main_group.dart';
 import '../../definition/domain/definition.dart';
 import '../../definition/presentation/definition_tile.dart';
 import '../../definition/presentation/definition_tile_shimmer.dart';
-import '../appication/definition_list_state.dart';
+import '../application/definition_list_state.dart';
 import '../util/definition_feed_type.dart';
 
 class DefinitionList extends ConsumerWidget {
