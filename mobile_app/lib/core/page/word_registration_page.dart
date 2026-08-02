@@ -232,26 +232,6 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
             padding: DsSpacing.screenContentInsets,
             child: ListView(
               children: [
-                // チップの有無で入力欄がずれないよう、非表示でも領域を確保する。
-                // チップ自身が最小タップ領域を内側に持つため、前後に余白は足さない。
-                Visibility(
-                  visible: existingWordId != null,
-                  maintainSize: true,
-                  maintainAnimation: true,
-                  maintainState: true,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: DsChip.navigable(
-                      label: 'この言葉は登録済みです',
-                      // 非表示のときはタップが届かない（maintainInteractivity）。
-                      onTap: () {
-                        if (existingWordId != null) {
-                          unawaited(_openWordPage(existingWordId));
-                        }
-                      },
-                    ),
-                  ),
-                ),
                 DsTextField.multiline(
                   controller: _wordController,
                   autofocus: widget.initialWord == null,
@@ -273,6 +253,27 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
                   label: '言葉のよみ',
                   hintText: '例: ふつかめのかれー',
                   errorText: draft.outputWordReadingError(),
+                ),
+                // 入力を終えた位置に出す。有無で下の余白がずれないよう、
+                // 非表示でも領域を確保する。チップ自身が最小タップ領域を
+                // 内側に持つため、前後に余白は足さない。
+                Visibility(
+                  visible: existingWordId != null,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: DsChip.navigable(
+                      label: 'この言葉は登録済みです',
+                      // 非表示のときはタップが届かない（maintainInteractivity）。
+                      onTap: () {
+                        if (existingWordId != null) {
+                          unawaited(_openWordPage(existingWordId));
+                        }
+                      },
+                    ),
+                  ),
                 ),
                 // ignore: ds_hardcoded_spacing
                 // 理由: キーボードで隠れないようにするための画面固有の下部余白。

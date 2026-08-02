@@ -127,11 +127,27 @@ void main() {
 
   testWidgets('チップの有無で入力欄の位置がずれない', (tester) async {
     await pumpPage(tester, existingWordId: 'word-1');
-    final beforeTop = tester.getTopLeft(find.byType(DsTextField).first).dy;
+    final before = tester
+        .getTopLeft(find.byType(DsTextField).last)
+        .dy;
 
     await enterWordAndReading(tester);
 
     expect(chipVisibility(tester).visible, isTrue);
-    expect(tester.getTopLeft(find.byType(DsTextField).first).dy, beforeTop);
+    expect(tester.getTopLeft(find.byType(DsTextField).last).dy, before);
+  });
+
+  testWidgets('チップはよみ欄の下に置く', (tester) async {
+    await pumpPage(tester, existingWordId: 'word-1');
+
+    await enterWordAndReading(tester);
+
+    final readingBottom = tester
+        .getBottomLeft(find.byType(DsTextField).last)
+        .dy;
+    expect(
+      tester.getTopLeft(find.byType(DsChip)).dy,
+      greaterThanOrEqualTo(readingBottom),
+    );
   });
 }
