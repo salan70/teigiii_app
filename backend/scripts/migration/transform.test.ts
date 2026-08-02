@@ -53,7 +53,7 @@ describe("transformWords", () => {
     expect(result.rows[0]).toMatchObject({ id: "w2", word: "同じ", created_at: 10 });
     expect([...result.wordIdRemap.entries()]).toEqual([["w1", "w2"]]);
     expect(result.mergedGroups).toEqual([
-      { normalizedWord: "同じ", canonicalId: "w2", mergedIds: ["w1"] },
+      { normalizedWord: "同じ", normalizedReading: "おなじ", canonicalId: "w2", mergedIds: ["w1"] },
     ]);
   });
 
@@ -73,6 +73,41 @@ describe("transformWords", () => {
     expect(result.rows).toHaveLength(1);
     expect(result.rows[0]).toMatchObject({ id: "w1", word: "がっこう" });
     expect([...result.wordIdRemap.entries()]).toEqual([["w2", "w1"]]);
+  });
+
+  test("表記が同じでもよみが異なれば別の言葉として残す", () => {
+    const words: WordRecord[] = [
+      { id: "w1", word: "金星", createdAt: 1, updatedAt: 1, reading: "きんせい" },
+      { id: "w2", word: "金星", createdAt: 2, updatedAt: 2, reading: "きんぼし" },
+    ];
+    const result = transformWords(words);
+    expect(result.rows).toHaveLength(2);
+    expect(result.rows.map((row) => [row.id, row.word, row.reading])).toEqual([
+      ["w1", "金星", "きんせい"],
+      ["w2", "金星", "きんぼし"],
+    ]);
+    // 片方に寄せない = 定義の付け替えも起きない
+    expect(result.wordIdRemap.size).toBe(0);
+    expect(result.mergedGroups).toEqual([]);
+  });
+
+  test("表記もよみも正規化後に同一なら従来どおりマージする", () => {
+    const words: WordRecord[] = [
+      { id: "w1", word: "金星", createdAt: 2, updatedAt: 2, reading: " きんせい " },
+      { id: "w2", word: " 金星 ", createdAt: 1, updatedAt: 1, reading: "きんせい" },
+    ];
+    const result = transformWords(words);
+    expect(result.rows).toHaveLength(1);
+    expect(result.rows[0]).toMatchObject({ id: "w2", word: "金星" });
+    expect([...result.wordIdRemap.entries()]).toEqual([["w1", "w2"]]);
+    expect(result.mergedGroups).toEqual([
+      {
+        normalizedWord: "金星",
+        normalizedReading: "きんせい",
+        canonicalId: "w2",
+        mergedIds: ["w1"],
+      },
+    ]);
   });
 
   test("createdAt が同値なら id 昇順で決定的に正を選ぶ", () => {
@@ -299,9 +334,7 @@ describe("transformFollows", () => {
   test("旧フィールドの向きを D1 の follower_id=する側 / following_id=される側 へ入れ替える", () => {
     const result = transformFollows([oldFollow], new Set([actor, target]));
     // 反転バグがあると follower_id=target になり、このアサーションが落ちる。
-    expect(result.rows).toEqual([
-      { follower_id: actor, following_id: target, created_at: 5 },
-    ]);
+    expect(result.rows).toEqual([{ follower_id: actor, following_id: target, created_at: 5 }]);
   });
 
   test("フォローする側（旧 followingId）が孤児なら drop する", () => {
@@ -399,7 +432,14 @@ describe("buildMigrationReport", () => {
       droppedLikes: [],
       droppedFollows: [],
       droppedUserMutes: [],
-      mergedWordGroups: [{ normalizedWord: "同じ", canonicalId: "w2", mergedIds: ["w1"] }],
+      mergedWordGroups: [
+        {
+          normalizedWord: "同じ",
+          normalizedReading: "おなじ",
+          canonicalId: "w2",
+          mergedIds: ["w1"],
+        },
+      ],
       avatarClassifications: new Map([
         ["u1", { type: "default", slug: "ghost_writer", objectPath: "x" } as const],
         ["u2", { type: "custom", objectPath: "y" } as const],
@@ -414,7 +454,7 @@ describe("buildMigrationReport", () => {
     expect(report.defaultedMissingUserConfigs).toEqual([{ userId: "u1" }]);
     expect(report.avatarClassificationCounts).toEqual({ default: 1, custom: 1 });
     expect(report.mergedWordDuplicates).toEqual([
-      { normalizedWord: "同じ", canonicalId: "w2", mergedIds: ["w1"] },
+      { normalizedWord: "同じ", normalizedReading: "おなじ", canonicalId: "w2", mergedIds: ["w1"] },
     ]);
   });
 });

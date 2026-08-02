@@ -23,7 +23,10 @@ export function formatMigrationReportSummary(report: MigrationReport): string {
   lines.push(`  - UserConfigs 欠損補完: ${report.defaultedMissingUserConfigs.length} 件`);
   lines.push(
     `  - word 重複マージ: ${report.mergedWordDuplicates.length} 組（${report.mergedWordDuplicates
-      .map((g) => `"${g.normalizedWord}" ${g.mergedIds.join(",")}->${g.canonicalId}`)
+      .map(
+        (g) =>
+          `"${g.normalizedWord}"（${g.normalizedReading}） ${g.mergedIds.join(",")}->${g.canonicalId}`,
+      )
       .join("; ")}）`,
   );
   lines.push(
