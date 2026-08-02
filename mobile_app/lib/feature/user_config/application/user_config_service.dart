@@ -4,7 +4,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/analytics/analytics_event.dart';
 import '../../../core/analytics/analytics_service.dart';
 import '../../definition_list/application/definition_list_state.dart';
-import '../../word_list/application/word_list_state_by_initial.dart';
 import '../../word_list/application/word_list_state_by_search_word.dart';
 import '../repository/user_config_repository.dart';
 import 'user_config_state.dart';
@@ -54,7 +53,6 @@ class UserConfigService {
     ref
       ..invalidate(mutedUserIdListProvider)
       ..invalidate(definitionListStateNotifierProvider)
-      ..invalidate(wordListStateByInitialNotifierProvider)
       ..invalidate(wordListStateBySearchWordNotifierProvider);
   }
 }

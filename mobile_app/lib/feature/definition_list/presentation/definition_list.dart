@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common_widget/infinity_scroll_widget.dart';
-import '../../../util/constant/initial_main_group.dart';
 import '../../definition/domain/definition.dart';
 import '../../definition/presentation/definition_tile.dart';
 import '../../definition/presentation/definition_tile_shimmer.dart';
@@ -17,7 +16,6 @@ class DefinitionList extends ConsumerWidget {
     required this.emptyWidget,
     this.wordId,
     this.targetUserId,
-    this.initialSubGroup,
     this.shimmerTileNumber = 8,
     this.additionalOnRefresh,
   });
@@ -29,7 +27,6 @@ class DefinitionList extends ConsumerWidget {
 
   final String? wordId;
   final String? targetUserId;
-  final InitialSubGroup? initialSubGroup;
 
   /// ローディング時に何タイル分の shimmer を表示させるか。
   ///
@@ -48,7 +45,6 @@ class DefinitionList extends ConsumerWidget {
       definitionFeedType,
       wordId: wordId,
       targetUserId: targetUserId,
-      initialSubGroup: initialSubGroup,
     );
 
     return InfinityScrollWidget<Definition>(

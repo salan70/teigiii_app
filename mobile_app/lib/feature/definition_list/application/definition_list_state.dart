@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../util/constant/initial_main_group.dart';
 import '../../../util/mixin/fetch_more_mixin.dart';
 import '../../auth/application/auth_state.dart';
 import '../../definition/application/definition_seed_store.dart';
@@ -24,7 +23,6 @@ class DefinitionListStateNotifier extends _$DefinitionListStateNotifier
     DefinitionFeedType definitionFeedType, {
     String? wordId,
     String? targetUserId,
-    InitialSubGroup? initialSubGroup,
   }) {
     ref.watch(userIdProvider);
     // invalidate 時にシード参照を解放する（keepAlive でも invalidate では dispose する）。
@@ -38,8 +36,7 @@ class DefinitionListStateNotifier extends _$DefinitionListStateNotifier
 
   /// シードの世代キー。family の引数ごとに別フィードとして扱う。
   String get _seedFeedKey =>
-      'definitionList:${definitionFeedType.name}:$wordId:$targetUserId:'
-      '${initialSubGroup?.name}';
+      'definitionList:${definitionFeedType.name}:$wordId:$targetUserId';
 
   /// 一覧を取得し、含まれる定義を definitionSeedStore へ投入する。
   ///
@@ -109,22 +106,6 @@ class DefinitionListStateNotifier extends _$DefinitionListStateNotifier
         .fetchForLikedByUser(id, _cursor(isFirstFetch));
   }
 
-  Future<DefinitionListState> _fetchForIndividualDictionary({
-    required bool isFirstFetch,
-  }) {
-    final userId = targetUserId;
-    final subGroup = initialSubGroup;
-    if (userId == null) {
-      throw ArgumentError('targetUserIdがnullです');
-    }
-    if (subGroup == null) {
-      throw ArgumentError('initialSubGroupがnullです');
-    }
-    return ref
-        .read(definitionListRepositoryProvider)
-        .fetchForIndividualDictionary(userId, subGroup, _cursor(isFirstFetch));
-  }
-
   Future<DefinitionListState> _fetchForUserWord({required bool isFirstFetch}) {
     final userId = targetUserId;
     final id = wordId;
@@ -171,8 +152,6 @@ class DefinitionListStateNotifier extends _$DefinitionListStateNotifier
         return _fetchForProfileCreatedAt(isFirstFetch: isFirstFetch);
       case DefinitionFeedType.profileLiked:
         return _fetchForProfileLiked(isFirstFetch: isFirstFetch);
-      case DefinitionFeedType.individualIndex:
-        return _fetchForIndividualDictionary(isFirstFetch: isFirstFetch);
       case DefinitionFeedType.userWordDefinitions:
         return _fetchForUserWord(isFirstFetch: isFirstFetch);
     }
