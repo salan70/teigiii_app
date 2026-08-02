@@ -44,6 +44,11 @@ void main() {
     );
   }
 
+  /// チップの表示状態。非表示でも領域は確保されるため [Visibility] を見る。
+  Visibility chipVisibility(WidgetTester tester) => tester.widget<Visibility>(
+    find.ancestor(of: find.byType(DsChip), matching: find.byType(Visibility)),
+  );
+
   /// 表記とよみを入力し、既存語チェックが走るまで待つ。
   Future<void> enterWordAndReading(WidgetTester tester) async {
     final fields = find.byType(TextFormField);
@@ -54,7 +59,7 @@ void main() {
   }
 
   VoidCallback? registerButtonCallback(WidgetTester tester) =>
-      tester.widget<DsFilledButton>(find.byType(DsFilledButton)).onPressed;
+      tester.widget<DsAppBarAction>(find.byType(DsAppBarAction)).onPressed;
 
   testWidgets('initialWord があるとき表記欄にプリフィルする', (tester) async {
     await pumpPage(tester, initialWord: '余白');
@@ -102,11 +107,11 @@ void main() {
   testWidgets('公開済みの既存語を検出するとチップを出して登録を止める', (tester) async {
     await pumpPage(tester, existingWordId: 'word-1');
 
-    expect(find.byType(DsChip), findsNothing);
+    expect(chipVisibility(tester).visible, isFalse);
 
     await enterWordAndReading(tester);
 
-    expect(find.byType(DsChip), findsOneWidget);
+    expect(chipVisibility(tester).visible, isTrue);
     expect(find.text('この言葉は登録済みです'), findsOneWidget);
     expect(registerButtonCallback(tester), isNull);
   });
@@ -116,7 +121,17 @@ void main() {
 
     await enterWordAndReading(tester);
 
-    expect(find.byType(DsChip), findsNothing);
+    expect(chipVisibility(tester).visible, isFalse);
     expect(registerButtonCallback(tester), isNotNull);
+  });
+
+  testWidgets('チップの有無で入力欄の位置がずれない', (tester) async {
+    await pumpPage(tester, existingWordId: 'word-1');
+    final beforeTop = tester.getTopLeft(find.byType(DsTextField).first).dy;
+
+    await enterWordAndReading(tester);
+
+    expect(chipVisibility(tester).visible, isTrue);
+    expect(tester.getTopLeft(find.byType(DsTextField).first).dy, beforeTop);
   });
 }

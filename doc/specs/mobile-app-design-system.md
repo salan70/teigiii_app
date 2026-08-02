@@ -261,7 +261,6 @@ Ds コンポーネントにしない:
 <!-- @code mobile_app/lib/core/design_system/component/ds_search_field.dart#DsSearchField -->
 <!-- @code mobile_app/lib/core/design_system/component/ds_icon_button.dart#DsIconButton -->
 <!-- @code mobile_app/lib/core/design_system/component/ds_text_field.dart#DsTextField -->
-<!-- @code mobile_app/lib/core/design_system/component/ds_chip.dart#DsChip -->
 ### 初期コンポーネント最低セット（#261）
 
 1. `DsFilledButton` / `DsOutlinedButton`
@@ -279,11 +278,14 @@ Ds コンポーネントにしない:
 `controller` / `focusNode` / `validator` / `maxLength` は受け取るが、
 `InputDecoration` や `TextStyle` は公開 API で受け取らない。
 
+<!-- @code mobile_app/lib/core/design_system/component/ds_chip.dart#DsChip -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_app_bar_action.dart#DsAppBarAction -->
 #### 初期セット以降の追加
 
 | コンポーネント | 追加した Issue | 根拠 |
 |---|---|---|
-| `DsChip`（`navigable`） | #306 | 入力内容に対する気づきを遷移導線つきで示す帯。タップ領域・コントラスト・セマンティクスのアクセシビリティ要件を持ち、4 章の「状態・アクセシビリティ要件を伴う」基準を満たす。遷移先の知識と寄せは呼び出し側に置く |
+| `DsChip`（`navigable`） | #306 | 入力内容に対する気づきを遷移導線つきで示す帯。タップ領域・コントラスト・セマンティクスのアクセシビリティ要件を持ち、4 章の「状態・アクセシビリティ要件を伴う」基準を満たす。遷移先の知識と寄せは呼び出し側に置く。塗りは本文サイズの小さな帯にとどめ、タップ領域だけ高さ 48 を内部で確保する |
+| `DsAppBarAction` | #306 | AppBar 右側のテキスト確定操作。`WordRegistrationPage` / `DefinitionPostPage` / `WriteDefinitionBasePage` が同じ見た目・操作仕様を `InkWell` + `withOpacity` の直書きで重複させていた。disabled は同じ色を [DsOpacity.disabled] で薄くして表す。見た目を変えないため文字高のまま見せ、タップ領域だけ高さ 48 を内部で確保する |
 
 #### 初期セットに含めないものと根拠
 

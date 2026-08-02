@@ -217,13 +217,12 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
         ),
         title: const Text('言葉を登録'),
         actions: [
-          DsFilledButton.primary(
-            text: '登録',
+          DsAppBarAction(
+            label: '登録',
             onPressed: canRegister
                 ? () => unawaited(_submit(existingWordId))
                 : null,
           ),
-          const Gap(DsSpacing.screenHorizontal),
         ],
       ),
       body: GestureDetector(
@@ -234,16 +233,26 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
             child: ListView(
               children: [
                 const Gap(DsSpacing.inline),
-                if (existingWordId != null) ...[
-                  Align(
+                // チップの有無で入力欄がずれないよう、非表示でも領域を確保する。
+                Visibility(
+                  visible: existingWordId != null,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: Align(
                     alignment: Alignment.centerLeft,
                     child: DsChip.navigable(
                       label: 'この言葉は登録済みです',
-                      onTap: () => unawaited(_openWordPage(existingWordId)),
+                      // 非表示のときはタップが届かない（maintainInteractivity）。
+                      onTap: () {
+                        if (existingWordId != null) {
+                          unawaited(_openWordPage(existingWordId));
+                        }
+                      },
                     ),
                   ),
-                  const Gap(DsSpacing.item),
-                ],
+                ),
+                const Gap(DsSpacing.item),
                 DsTextField.multiline(
                   controller: _wordController,
                   autofocus: widget.initialWord == null,
