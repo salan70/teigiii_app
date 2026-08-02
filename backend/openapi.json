@@ -2329,7 +2329,7 @@
           "words"
         ],
         "summary": "言葉を明示登録する",
-        "description": "表記はサーバーで前後トリム + NFC 正規化してから完全一致で解決する。新規作成は 201、既存言葉への明示登録・公開昇格は 200。読みが異なっても既存の読みを採用し、重複する言葉は作らない。",
+        "description": "表記とよみはサーバーで前後トリム + NFC 正規化してから (表記, よみ) の完全一致で解決する。新規作成は 201、既存言葉への明示登録・公開昇格は 200。表記が同じでもよみが異なれば別の言葉として新規作成する。",
         "security": [
           {
             "appCheck": [],
@@ -2620,7 +2620,7 @@
             }
           },
           "409": {
-            "description": "修正後の表記が登録済み（word_already_exists）",
+            "description": "修正後の (表記, よみ) が登録済み（word_already_exists）",
             "content": {
               "application/json": {
                 "schema": {
@@ -2638,7 +2638,7 @@
           "words"
         ],
         "summary": "言葉ページの定義一覧",
-        "description": "scope=mine は自分の定義（下書き含む）、scope=others は他者の公開定義のみ、scope=all は自分 + 他者の公開定義の混在（旧 UI の言葉トップのパリティ）。sort=reactions はいいね数順。",
+        "description": "scope=mine は自分の定義、scope=others は他者の公開定義のみ、scope=all は自分 + 他者の公開定義の混在（旧 UI の言葉トップのパリティ）。sort=reactions はいいね数順。",
         "security": [
           {
             "appCheck": [],
@@ -2843,7 +2843,7 @@
           "definitions"
         ],
         "summary": "定義を作成（public / private）",
-        "description": "wordId 指定、または word + reading 指定のいずれか一方を受け付ける。後者ではサーバーが言葉を解決／必要時に内部作成してから定義を作成する。内部作成は明示登録にしない。",
+        "description": "wordId 指定、または word + reading 指定のいずれか一方を受け付ける。後者ではサーバーが (表記, よみ) 完全一致で言葉を解決／必要時に内部作成してから定義を作成する。内部作成は明示登録にしない。",
         "security": [
           {
             "appCheck": [],

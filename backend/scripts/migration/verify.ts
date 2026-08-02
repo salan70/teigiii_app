@@ -129,19 +129,20 @@ export function recomputeExpectedState(
   snapshot: Snapshot,
   migrationTimestamp: number,
 ): ExpectedState {
-  // 重複 word（正規化後に同一）は createdAt 最古（同値なら id 昇順）を正としてマージする。
+  // 重複 word（正規化後に (表記, よみ) が同一）は createdAt 最古（同値なら id 昇順）を
+  // 正としてマージする。words の UNIQUE と同じ粒度で束ねないと同表記異読が消える。
   // transform.ts と同じポリシーだが、決定事項 5 に従いここで独立に再実装する。
   const wordGroups = new Map<string, WordRecord[]>();
   for (const word of snapshot.words) {
-    const normalizedWord = normalizeText(word.word);
-    const group = wordGroups.get(normalizedWord) ?? [];
+    const key = JSON.stringify([normalizeText(word.word), normalizeText(word.reading)]);
+    const group = wordGroups.get(key) ?? [];
     group.push(word);
-    wordGroups.set(normalizedWord, group);
+    wordGroups.set(key, group);
   }
   const words: WordRow[] = [];
   const wordIdRemap = new Map<string, string>();
   let mergedWordGroupCount = 0;
-  for (const [normalizedWord, group] of wordGroups) {
+  for (const group of wordGroups.values()) {
     // タイブレークはロケール非依存のコードポイント順（localeCompare は環境依存）
     const sorted = group.toSorted(
       (a, b) => a.createdAt - b.createdAt || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
@@ -150,7 +151,7 @@ export function recomputeExpectedState(
     if (canonical === undefined) continue;
     words.push({
       id: canonical.id,
-      word: normalizedWord,
+      word: normalizeText(canonical.word),
       reading: canonical.reading,
       reading_sub_group: readingSubGroup(canonical.reading),
       created_by: null,

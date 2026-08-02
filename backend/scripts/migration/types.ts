@@ -168,8 +168,10 @@ export type MigrationReport = {
   mergedWordDuplicates: WordMergeGroup[];
 };
 
+/** マージ対象は (表記, よみ) が同一の語。表記だけでは同表記異読を識別できない。 */
 export type WordMergeGroup = {
   normalizedWord: string;
+  normalizedReading: string;
   canonicalId: string;
   mergedIds: string[];
 };

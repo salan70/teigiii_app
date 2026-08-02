@@ -36,7 +36,8 @@ export const users = sqliteTable(
 
 /**
  * 言葉はユーザー削除不可のグローバル資産のため deleted_at を持たない。
- * word の一意性は完全一致（前後トリム + NFC 正規化をサーバーで適用してから保存）。
+ * 一意性は (word, reading) の完全一致（前後トリム + NFC 正規化をサーバーで適用してから保存）。
+ * 同表記異読（金星＝きんせい／きんぼし）は別の言葉として扱う。
  *
  * 公開経路への露出は「明示登録」または「公開定義」で判定する。
  * created_by は行の作成者（内部作成含む）。first_registered_* は最初の明示登録のみ。
@@ -65,7 +66,7 @@ export const words = sqliteTable(
     updatedAt: integer("updated_at").notNull(),
   },
   (table) => [
-    uniqueIndex("words_word_unique").on(table.word),
+    uniqueIndex("words_word_reading_unique").on(table.word, table.reading),
     index("words_reading_order_idx").on(table.readingSubGroup, table.reading, table.id),
     // 「見つける」フィードの言葉登録アクティビティ用（最初の明示登録時のみ）
     index("words_first_registered_at_idx").on(sql`${table.firstRegisteredAt} desc`, table.id),

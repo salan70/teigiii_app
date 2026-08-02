@@ -21,7 +21,7 @@ const createWordRoute = createRoute({
   tags: ["words"],
   summary: "言葉を明示登録する",
   description:
-    "表記はサーバーで前後トリム + NFC 正規化してから完全一致で解決する。新規作成は 201、既存言葉への明示登録・公開昇格は 200。読みが異なっても既存の読みを採用し、重複する言葉は作らない。",
+    "表記とよみはサーバーで前後トリム + NFC 正規化してから (表記, よみ) の完全一致で解決する。新規作成は 201、既存言葉への明示登録・公開昇格は 200。表記が同じでもよみが異なれば別の言葉として新規作成する。",
   security: authenticatedSecurity,
   request: {
     body: jsonContent(createWordRequestSchema, "登録内容"),
@@ -91,7 +91,7 @@ const updateWordRoute = createRoute({
     ),
     409: {
       content: { "application/json": { schema: wordConflictResponseSchema } },
-      description: "修正後の表記が登録済み（word_already_exists）",
+      description: "修正後の (表記, よみ) が登録済み（word_already_exists）",
     },
     ...authErrorResponses,
   },
@@ -153,7 +153,7 @@ type WordRouteEnvironment = {
   Variables: AuthenticationVariables;
 };
 
-/** 修正時の表記重複は 409 と既存の言葉で返す（レスポンス形状が通常のエラーと異なる）。 */
+/** 修正時の (表記, よみ) 重複は 409 と既存の言葉で返す（レスポンス形状が通常のエラーと異なる）。 */
 function wordConflictResponse(error: WordConflictError) {
   return {
     error: { code: error.code, message: error.message },

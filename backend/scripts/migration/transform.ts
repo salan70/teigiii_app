@@ -38,30 +38,41 @@ export type TransformWordsResult = {
 };
 
 /**
- * Words → words。trim + NFC 正規化後に同一になる語は createdAt 最古
+ * 言葉の同一性キー。区切り文字の混入で別語が衝突しないよう JSON 表現を使う。
+ */
+function wordIdentityKey(word: WordRecord): string {
+  return JSON.stringify([normalizeText(word.word), normalizeText(word.reading)]);
+}
+
+/**
+ * Words → words。trim + NFC 正規化後に (表記, よみ) が同一になる語は createdAt 最古
  * （同値なら id 昇順）を正として自動マージし、消えた ID の付け替え表を返す。
  * 旧 Firestore に一意性制約がなく完全同一文字列の重複ドキュメントが実在する
  * （リハーサルで 7 組確認）ため、fail-fast ではなくマージで対処する。
+ *
+ * 言葉の同一性は words の UNIQUE と同じ (表記, よみ) とする。表記だけで束ねると
+ * 同表記異読（金星＝きんせい／きんぼし）の片方を捨てて定義を付け替えてしまう。
  */
 export function transformWords(words: readonly WordRecord[]): TransformWordsResult {
   const groups = new Map<string, WordRecord[]>();
   for (const word of words) {
-    const normalizedWord = normalizeText(word.word);
-    const group = groups.get(normalizedWord) ?? [];
+    const key = wordIdentityKey(word);
+    const group = groups.get(key) ?? [];
     group.push(word);
-    groups.set(normalizedWord, group);
+    groups.set(key, group);
   }
 
   const rows: WordRow[] = [];
   const wordIdRemap = new Map<string, string>();
   const mergedGroups: WordMergeGroup[] = [];
 
-  for (const [normalizedWord, group] of groups) {
+  for (const group of groups.values()) {
     // タイブレークはロケール非依存のコードポイント順（localeCompare は環境依存）
     const [canonical, ...merged] = group.toSorted(
       (a, b) => a.createdAt - b.createdAt || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
     );
     if (canonical === undefined) continue;
+    const normalizedWord = normalizeText(canonical.word);
     rows.push({
       id: canonical.id,
       word: normalizedWord,
@@ -75,6 +86,7 @@ export function transformWords(words: readonly WordRecord[]): TransformWordsResu
       for (const word of merged) wordIdRemap.set(word.id, canonical.id);
       mergedGroups.push({
         normalizedWord,
+        normalizedReading: normalizeText(canonical.reading),
         canonicalId: canonical.id,
         mergedIds: merged.map((w) => w.id),
       });

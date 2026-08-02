@@ -91,6 +91,45 @@ describe("recomputeExpectedState", () => {
     expect(state.mergedWordGroupCount).toBe(1);
   });
 
+  test("表記が同じでもよみが異なれば別の言葉として残し定義を付け替えない", () => {
+    const snapshot = emptySnapshot();
+    snapshot.words = [
+      { id: "w1", word: "金星", reading: "きんせい", createdAt: 1, updatedAt: 1 },
+      { id: "w2", word: "金星", reading: "きんぼし", createdAt: 2, updatedAt: 2 },
+    ];
+    snapshot.userProfiles = [
+      {
+        id: "u1",
+        publicId: "000000001",
+        name: "太郎",
+        bio: "",
+        profileImageUrl: defaultIconUrl,
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    ];
+    snapshot.definitions = [
+      {
+        id: "d1",
+        wordId: "w2",
+        authorId: "u1",
+        definition: "本文",
+        isPublic: true,
+        isEdited: false,
+        createdAt: 1,
+        updatedAt: 1,
+      },
+    ];
+    const state = recomputeExpectedState(snapshot, 0);
+    expect(state.words).toHaveLength(2);
+    expect(state.words.map((row) => [row.id, row.word, row.reading])).toEqual([
+      ["w1", "金星", "きんせい"],
+      ["w2", "金星", "きんぼし"],
+    ]);
+    expect(state.definitions[0]).toMatchObject({ id: "d1", word_id: "w2" });
+    expect(state.mergedWordGroupCount).toBe(0);
+  });
+
   test("id のタイブレークはロケール非依存のコードポイント順で行う", () => {
     const snapshot = emptySnapshot();
     snapshot.words = [
