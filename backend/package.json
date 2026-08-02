@@ -14,9 +14,6 @@
     "generate:migrations": "drizzle-kit generate",
     "generate:migrations:telemetry": "drizzle-kit generate --config drizzle.telemetry.config.ts",
     "dev": "wrangler dev",
-    "migration:export": "bun run scripts/migration/export.ts",
-    "migration:import": "bun run scripts/migration/import.ts",
-    "migration:verify": "bun run scripts/migration/verify.ts",
     "perf:query": "bun run scripts/perf-query.ts",
     "perf:report": "bun run scripts/perf-report.ts"
   },
@@ -33,7 +30,6 @@
     "@seriousme/openapi-schema-validator": "^2.9.0",
     "@types/bun": "^1.3.14",
     "drizzle-kit": "^0.31.10",
-    "firebase-admin": "^14.2.0",
     "oxfmt": "^0.59.0",
     "oxlint": "^1.74.0",
     "typescript": "^7.0.2",

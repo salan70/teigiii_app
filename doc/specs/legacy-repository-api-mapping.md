@@ -2,6 +2,8 @@
 
 issue #183 の成果物。フェーズ 4（Flutter repository 層の繋ぎ替え）の台帳として、旧 UI の全 repository 操作に新 API の対応先（または例外方針）を記録する。
 
+Firestore → D1 の一斉切替完了（#186）により台帳としての役割は終了している。これは当時の判断を遡るために保存する履歴資料であり、現行規範ではない。
+
 - API 定義の正本: `backend/openapi.json`（`backend/src/routes/` から生成）
 - 設計判断: `doc/plans/done/2026-07-15-rdb-schema-api-design.md`
 
