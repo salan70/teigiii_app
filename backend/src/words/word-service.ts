@@ -69,6 +69,21 @@ export type ListWordsInput = {
   subGroup?: string | undefined;
 };
 
+/**
+ * 明示登録の結果種別。
+ *
+ * - `created`: 言葉を新規作成した
+ * - `promoted`: 既存の言葉だが、この登録の前は閲覧者にとって公開経路に出ていなかった
+ * - `alreadyPublic`: 既存の言葉で、この登録の前から公開経路に出ていた
+ */
+export type WordRegistrationResult = "alreadyPublic" | "created" | "promoted";
+
+export type WordSummaryResponse = {
+  id: string;
+  reading: string;
+  word: string;
+};
+
 export type WordResponse = {
   id: string;
   isEditableByMe: boolean;
@@ -219,6 +234,17 @@ export class WordService {
     }
   }
 
+  /** 閲覧者にとって公開経路に出ている言葉かどうか。ミュートを含めて判定する。 */
+  async #isPubliclyVisible(uid: string, wordId: string): Promise<boolean> {
+    const row = await this.env.DB.prepare(
+      `select w.id from words w
+       where w.id = ? and ${publiclyVisibleWordSql("?")}`,
+    )
+      .bind(wordId, uid, uid)
+      .first();
+    return row !== null;
+  }
+
   async #ensureRegistration(uid: string, wordId: string, now: number): Promise<void> {
     await this.env.DB.prepare(
       `update words
@@ -253,13 +279,31 @@ export class WordService {
   }
 
   /**
+   * 既存の言葉への明示登録。登録前の公開状態から結果種別を決める。
+   * 「公開されていたか」はミュートを含む閲覧者基準で判定する。
+   */
+  async #registerExisting(
+    uid: string,
+    wordId: string,
+    now: number,
+  ): Promise<{ result: WordRegistrationResult; word: WordResponse }> {
+    const wasPubliclyVisible = await this.#isPubliclyVisible(uid, wordId);
+    await this.#ensureRegistration(uid, wordId, now);
+    return {
+      result: wasPubliclyVisible ? "alreadyPublic" : "promoted",
+      word: await this.get(uid, wordId),
+    };
+  }
+
+  /**
    * 言葉単体の明示登録。
-   * 新規作成は created=true（201）、既存への登録・昇格は created=false（200）。
+   * 新規作成は 201（result=created）、既存への登録・昇格は 200
+   * （result=promoted / alreadyPublic）。
    */
   async create(
     uid: string,
     input: CreateWordInput,
-  ): Promise<{ created: boolean; word: WordResponse }> {
+  ): Promise<{ result: WordRegistrationResult; word: WordResponse }> {
     await this.#requireActiveUser(uid);
     const word = requireNonEmpty(normalizeText(input.word), "word");
     const reading = requireNonEmpty(normalizeText(input.reading), "reading");
@@ -267,8 +311,7 @@ export class WordService {
 
     const existing = await this.#findByWordAndReading(word, reading);
     if (existing !== null) {
-      await this.#ensureRegistration(uid, existing.id, now);
-      return { created: false, word: await this.get(uid, existing.id) };
+      return this.#registerExisting(uid, existing.id, now);
     }
 
     const id = uuidv7();
@@ -289,10 +332,28 @@ export class WordService {
       // UNIQUE 競合（同時登録）は既存行への明示登録へフォールバックする
       const raced = await this.#findByWordAndReading(word, reading);
       if (raced === null) throw error;
-      await this.#ensureRegistration(uid, raced.id, now);
-      return { created: false, word: await this.get(uid, raced.id) };
+      return this.#registerExisting(uid, raced.id, now);
     }
-    return { created: true, word: await this.get(uid, id) };
+    return { result: "created", word: await this.get(uid, id) };
+  }
+
+  /**
+   * 登録前の既存語チェック。
+   * (表記, よみ) の完全一致で、閲覧者にとって公開されている言葉だけを返す。
+   * 非公開の言葉は、存在そのものを秘匿するため null を返す。
+   */
+  async lookupPublic(uid: string, input: CreateWordInput): Promise<WordSummaryResponse | null> {
+    const word = requireNonEmpty(normalizeText(input.word), "word");
+    const reading = requireNonEmpty(normalizeText(input.reading), "reading");
+    const row = await this.env.DB.prepare(
+      `select w.id, w.word, w.reading
+       from words w
+       where w.word = ? and w.reading = ?
+         and ${publiclyVisibleWordSql("?")}`,
+    )
+      .bind(word, reading, uid, uid)
+      .first<{ id: string; reading: string; word: string }>();
+    return row === null ? null : { id: row.id, reading: row.reading, word: row.word };
   }
 
   /**

@@ -133,6 +133,7 @@ describe("POST /v1/words", () => {
       publicDefinitionCount: number;
       isSavedByMe: boolean;
       isEditableByMe: boolean;
+      registrationResult: string;
     }>();
     expect(body).toMatchObject({
       isEditableByMe: true,
@@ -140,6 +141,7 @@ describe("POST /v1/words", () => {
       publicDefinitionCount: 0,
       reading: "ガラス",
       readingSubGroup: "か",
+      registrationResult: "created",
       word: "がらす",
     });
     expect(body.id).toMatch(uuidPattern);
@@ -196,6 +198,7 @@ describe("POST /v1/words", () => {
     await expect(response.json()).resolves.toMatchObject({
       id: first.id,
       reading: "りんご",
+      registrationResult: "alreadyPublic",
       word: "りんご",
     });
   });
@@ -254,6 +257,7 @@ describe("POST /v1/words", () => {
     await expect(response.json()).resolves.toMatchObject({
       id: "hidden-word",
       reading: "かくれ",
+      registrationResult: "promoted",
       word: "隠れ語",
     });
     expect((await request("bob", "/v1/words/hidden-word")).status).toBe(200);
@@ -361,6 +365,86 @@ describe("POST /v1/words", () => {
     ).resolves.toMatchObject({
       isEditableByMe: false,
     });
+  });
+});
+
+describe("GET /v1/words/lookup", () => {
+  async function lookup(uid: string, word: string, reading: string) {
+    const query = new URLSearchParams({ reading, word });
+    const response = await request(uid, `/v1/words/lookup?${query.toString()}`);
+    expect(response.status).toBe(200);
+    return response.json<{ word: { id: string; word: string; reading: string } | null }>();
+  }
+
+  test("公開されている言葉は (表記, よみ) の完全一致で返す", async () => {
+    await createUser("alice");
+    const created = await createWord("alice", "りんご", "りんご");
+
+    await expect(lookup("alice", "りんご", "りんご")).resolves.toEqual({
+      word: { id: created.id, reading: "りんご", word: "りんご" },
+    });
+  });
+
+  test("表記とよみは前後トリム + NFC 正規化してから照合する", async () => {
+    await createUser("alice");
+    const decomposedGa = `か${String.fromCharCode(0x3099)}`;
+    const created = await createWord("alice", "がらす", "ガラス");
+
+    await expect(lookup("alice", ` ${decomposedGa}らす `, " ガラス ")).resolves.toEqual({
+      word: { id: created.id, reading: "ガラス", word: "がらす" },
+    });
+  });
+
+  test("表記が一致してもよみが異なれば null", async () => {
+    await createUser("alice");
+    await createWord("alice", "金星", "きんせい");
+
+    await expect(lookup("alice", "金星", "きんぼし")).resolves.toEqual({ word: null });
+  });
+
+  test("公開されていない言葉は存在を秘匿して null", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    await insertWordRow({
+      createdAt: Date.now(),
+      createdBy: "alice",
+      firstRegisteredAt: null,
+      firstRegisteredBy: null,
+      id: "hidden-word",
+      reading: "かくれ",
+      readingSubGroup: "か",
+      word: "隠れ語",
+    });
+
+    await expect(lookup("bob", "隠れ語", "かくれ")).resolves.toEqual({ word: null });
+  });
+
+  test("ミュートした登録者の言葉は null（公開経路の判定と揃える）", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    await createWord("bob", "ばななの皮", "ばななのかわ");
+    await env.DB.prepare("insert into user_mutes values ('alice', 'bob', 1)").run();
+
+    await expect(lookup("alice", "ばななの皮", "ばななのかわ")).resolves.toEqual({ word: null });
+  });
+
+  test("空白のみの表記・よみは 400 invalid_request", async () => {
+    await createUser("alice");
+
+    const response = await request("alice", "/v1/words/lookup?word=%20&reading=%20");
+
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toMatchObject({
+      error: { code: "invalid_request" },
+    });
+  });
+
+  test("word / reading が欠けている場合は 400", async () => {
+    await createUser("alice");
+
+    expect(
+      (await request("alice", "/v1/words/lookup?word=%E3%82%8A%E3%82%93%E3%81%94")).status,
+    ).toBe(400);
   });
 });
 

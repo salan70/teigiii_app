@@ -5,9 +5,13 @@ import { paginatedSchema, paginationQuerySchema } from "../schemas/common";
 import { definitionResponseSchema } from "../schemas/definition";
 import {
   createWordRequestSchema,
+  createWordResponseSchema,
+  maxReadingLength,
+  maxWordLength,
   updateWordRequestSchema,
   wordConflictResponseSchema,
   wordListItemSchema,
+  wordLookupResponseSchema,
   wordResponseSchema,
 } from "../schemas/word";
 import { WordConflictError, WordService } from "../words/word-service";
@@ -27,9 +31,29 @@ const createWordRoute = createRoute({
     body: jsonContent(createWordRequestSchema, "登録内容"),
   },
   responses: {
-    201: jsonContent(wordResponseSchema, "新規に作成・明示登録された言葉"),
-    200: jsonContent(wordResponseSchema, "既存言葉への明示登録（公開昇格・再登録を含む）"),
+    201: jsonContent(createWordResponseSchema, "新規に作成・明示登録された言葉"),
+    200: jsonContent(createWordResponseSchema, "既存言葉への明示登録（公開昇格・再登録を含む）"),
     404: errorContent("未登録・削除済みユーザー（user_not_found）"),
+    ...authErrorResponses,
+  },
+});
+
+const lookupWordRoute = createRoute({
+  method: "get",
+  path: "/words/lookup",
+  tags: ["words"],
+  summary: "登録前の既存語チェック",
+  description:
+    "表記とよみをサーバーで前後トリム + NFC 正規化し、(表記, よみ) の完全一致で解決する。閲覧者にとって公開されている言葉だけを返し、非公開の言葉は存在を秘匿して null を返す。よみの文字種は検証しない（一致しなければ null になる）。",
+  security: authenticatedSecurity,
+  request: {
+    query: z.object({
+      word: z.string().min(1).max(maxWordLength),
+      reading: z.string().min(1).max(maxReadingLength),
+    }),
+  },
+  responses: {
+    200: jsonContent(wordLookupResponseSchema, "公開されている一致した言葉。なければ null"),
     ...authErrorResponses,
   },
 });
@@ -167,7 +191,16 @@ export const wordRoutes = new OpenAPIHono<WordRouteEnvironment>()
       context.get("firebaseUid"),
       context.req.valid("json"),
     );
-    return context.json(result.word, result.created ? 201 : 200);
+    const body = { ...result.word, registrationResult: result.result };
+    return context.json(body, result.result === "created" ? 201 : 200);
+  })
+  // `/words/{id}` より先に登録して、静的セグメントとして解決させる。
+  .openapi(lookupWordRoute, async (context) => {
+    const word = await new WordService(context.env).lookupPublic(
+      context.get("firebaseUid"),
+      context.req.valid("query"),
+    );
+    return context.json({ word }, 200);
   })
   .openapi(listWordsRoute, async (context) => {
     const result = await new WordService(context.env).list(

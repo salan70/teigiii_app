@@ -261,6 +261,7 @@ Ds コンポーネントにしない:
 <!-- @code mobile_app/lib/core/design_system/component/ds_search_field.dart#DsSearchField -->
 <!-- @code mobile_app/lib/core/design_system/component/ds_icon_button.dart#DsIconButton -->
 <!-- @code mobile_app/lib/core/design_system/component/ds_text_field.dart#DsTextField -->
+<!-- @code mobile_app/lib/core/design_system/component/ds_chip.dart#DsChip -->
 ### 初期コンポーネント最低セット（#261）
 
 1. `DsFilledButton` / `DsOutlinedButton`
@@ -277,6 +278,12 @@ Ds コンポーネントにしない:
 これなしでは入力系パイロットが成立しないため #261 のスコープに含める。
 `controller` / `focusNode` / `validator` / `maxLength` は受け取るが、
 `InputDecoration` や `TextStyle` は公開 API で受け取らない。
+
+#### 初期セット以降の追加
+
+| コンポーネント | 追加した Issue | 根拠 |
+|---|---|---|
+| `DsChip`（`navigable`） | #306 | 入力内容に対する気づきを遷移導線つきで示す帯。タップ領域・コントラスト・セマンティクスのアクセシビリティ要件を持ち、4 章の「状態・アクセシビリティ要件を伴う」基準を満たす。遷移先の知識と寄せは呼び出し側に置く |
 
 #### 初期セットに含めないものと根拠
 

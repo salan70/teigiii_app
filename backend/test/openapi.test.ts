@@ -33,6 +33,8 @@ const expectedOperations = [
   "GET /v1/me/saved-words",
   "POST /v1/words",
   "GET /v1/words",
+  // #306 で追加。plan は doc/plans/2026-07-30-word-registration-existing-word-ux.md
+  "GET /v1/words/lookup",
   "GET /v1/words/{id}",
   "PATCH /v1/words/{id}",
   "GET /v1/words/{id}/definitions",

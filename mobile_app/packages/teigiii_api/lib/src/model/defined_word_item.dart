@@ -20,7 +20,9 @@ class DefinedWordItem {
   /// Returns a new [DefinedWordItem] instance.
   DefinedWordItem({
     required this.word,
+
     required this.publicCount,
+
     required this.privateCount,
   });
 

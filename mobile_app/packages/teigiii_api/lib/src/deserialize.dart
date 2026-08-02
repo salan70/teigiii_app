@@ -2,6 +2,7 @@ import 'package:teigiii_api/src/model/app_config_response.dart';
 import 'package:teigiii_api/src/model/create_definition_request.dart';
 import 'package:teigiii_api/src/model/create_user_request.dart';
 import 'package:teigiii_api/src/model/create_word_request.dart';
+import 'package:teigiii_api/src/model/create_word_response.dart';
 import 'package:teigiii_api/src/model/defined_word_item.dart';
 import 'package:teigiii_api/src/model/definition_activity.dart';
 import 'package:teigiii_api/src/model/definition_response.dart';
@@ -32,6 +33,7 @@ import 'package:teigiii_api/src/model/v1_users_me_avatar_put200_response.dart';
 import 'package:teigiii_api/src/model/v1_words_get200_response.dart';
 import 'package:teigiii_api/src/model/word_conflict_response.dart';
 import 'package:teigiii_api/src/model/word_list_item.dart';
+import 'package:teigiii_api/src/model/word_lookup_response.dart';
 import 'package:teigiii_api/src/model/word_registered_activity.dart';
 import 'package:teigiii_api/src/model/word_response.dart';
 import 'package:teigiii_api/src/model/word_summary.dart';
@@ -69,6 +71,9 @@ ReturnType deserialize<ReturnType, BaseType>(
           as ReturnType;
     case 'CreateWordRequest':
       return CreateWordRequest.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'CreateWordResponse':
+      return CreateWordResponse.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'DefinedWordItem':
       return DefinedWordItem.fromJson(value as Map<String, dynamic>)
@@ -170,9 +175,13 @@ ReturnType deserialize<ReturnType, BaseType>(
           as ReturnType;
     case 'WordListItem':
       return WordListItem.fromJson(value as Map<String, dynamic>) as ReturnType;
+    case 'WordLookupResponse':
+      return WordLookupResponse.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
     case 'WordRegisteredActivity':
       return WordRegisteredActivity.fromJson(value as Map<String, dynamic>)
           as ReturnType;
+    case 'WordRegistrationResult':
     case 'WordResponse':
       return WordResponse.fromJson(value as Map<String, dynamic>) as ReturnType;
     case 'WordSummary':

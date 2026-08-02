@@ -7,9 +7,14 @@ part of 'discover_timeline_state.dart';
 // **************************************************************************
 
 String _$discoverTimelineStateNotifierHash() =>
-    r'9c66bedf05e7d4ff76cf9fbfff18bcf0f077a469';
+    r'ccd24d8b7566882716fc5eb327754cd411e04ab0';
 
-/// See also [DiscoverTimelineStateNotifier].
+/// おすすめタイムラインの一覧 state。
+///
+/// keepAlive: ホームタブの往復で一覧を維持する。シード参照の解放は
+/// dispose 時の [DefinitionSeedStore.releaseFeed] と世代上限で行う。
+///
+/// Copied from [DiscoverTimelineStateNotifier].
 @ProviderFor(DiscoverTimelineStateNotifier)
 final discoverTimelineStateNotifierProvider =
     AsyncNotifierProvider<

@@ -4,30 +4,32 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
-import 'dart:typed_data' as _i13;
+import 'dart:typed_data' as _i15;
 
 import 'package:dio/dio.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:teigiii_api/src/api/timeline_api.dart' as _i3;
-import 'package:teigiii_api/src/api/users_api.dart' as _i12;
+import 'package:teigiii_api/src/api/users_api.dart' as _i14;
 import 'package:teigiii_api/src/api/words_api.dart' as _i7;
-import 'package:teigiii_api/src/model/create_user_request.dart' as _i20;
-import 'package:teigiii_api/src/model/create_word_request.dart' as _i11;
-import 'package:teigiii_api/src/model/me_response.dart' as _i18;
-import 'package:teigiii_api/src/model/update_me_request.dart' as _i19;
+import 'package:teigiii_api/src/model/create_user_request.dart' as _i22;
+import 'package:teigiii_api/src/model/create_word_request.dart' as _i13;
+import 'package:teigiii_api/src/model/create_word_response.dart' as _i12;
+import 'package:teigiii_api/src/model/me_response.dart' as _i20;
+import 'package:teigiii_api/src/model/update_me_request.dart' as _i21;
 import 'package:teigiii_api/src/model/update_word_request.dart' as _i10;
-import 'package:teigiii_api/src/model/user_response.dart' as _i16;
+import 'package:teigiii_api/src/model/user_response.dart' as _i18;
 import 'package:teigiii_api/src/model/v1_timeline_discover_get200_response.dart'
     as _i5;
 import 'package:teigiii_api/src/model/v1_users_id_definitions_get200_response.dart'
     as _i6;
 import 'package:teigiii_api/src/model/v1_users_id_dictionary_get200_response.dart'
-    as _i14;
+    as _i16;
 import 'package:teigiii_api/src/model/v1_users_id_followers_get200_response.dart'
-    as _i15;
-import 'package:teigiii_api/src/model/v1_users_me_avatar_put200_response.dart'
     as _i17;
+import 'package:teigiii_api/src/model/v1_users_me_avatar_put200_response.dart'
+    as _i19;
 import 'package:teigiii_api/src/model/v1_words_get200_response.dart' as _i8;
+import 'package:teigiii_api/src/model/word_lookup_response.dart' as _i11;
 import 'package:teigiii_api/src/model/word_response.dart' as _i9;
 
 // ignore_for_file: type=lint
@@ -539,8 +541,65 @@ class MockWordsApi extends _i1.Mock implements _i7.WordsApi {
           as _i4.Future<_i2.Response<void>>);
 
   @override
-  _i4.Future<_i2.Response<_i9.WordResponse>> v1WordsPost({
-    _i11.CreateWordRequest? createWordRequest,
+  _i4.Future<_i2.Response<_i11.WordLookupResponse>> v1WordsLookupGet({
+    required String? word,
+    required String? reading,
+    _i2.CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    _i2.ValidateStatus? validateStatus,
+    _i2.ProgressCallback? onSendProgress,
+    _i2.ProgressCallback? onReceiveProgress,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#v1WordsLookupGet, [], {
+              #word: word,
+              #reading: reading,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            }),
+            returnValue:
+                _i4.Future<_i2.Response<_i11.WordLookupResponse>>.value(
+                  _FakeResponse_0<_i11.WordLookupResponse>(
+                    this,
+                    Invocation.method(#v1WordsLookupGet, [], {
+                      #word: word,
+                      #reading: reading,
+                      #cancelToken: cancelToken,
+                      #headers: headers,
+                      #extra: extra,
+                      #validateStatus: validateStatus,
+                      #onSendProgress: onSendProgress,
+                      #onReceiveProgress: onReceiveProgress,
+                    }),
+                  ),
+                ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.Response<_i11.WordLookupResponse>>.value(
+                  _FakeResponse_0<_i11.WordLookupResponse>(
+                    this,
+                    Invocation.method(#v1WordsLookupGet, [], {
+                      #word: word,
+                      #reading: reading,
+                      #cancelToken: cancelToken,
+                      #headers: headers,
+                      #extra: extra,
+                      #validateStatus: validateStatus,
+                      #onSendProgress: onSendProgress,
+                      #onReceiveProgress: onReceiveProgress,
+                    }),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Response<_i11.WordLookupResponse>>);
+
+  @override
+  _i4.Future<_i2.Response<_i12.CreateWordResponse>> v1WordsPost({
+    _i13.CreateWordRequest? createWordRequest,
     _i2.CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -558,23 +617,24 @@ class MockWordsApi extends _i1.Mock implements _i7.WordsApi {
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
             }),
-            returnValue: _i4.Future<_i2.Response<_i9.WordResponse>>.value(
-              _FakeResponse_0<_i9.WordResponse>(
-                this,
-                Invocation.method(#v1WordsPost, [], {
-                  #createWordRequest: createWordRequest,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
+            returnValue:
+                _i4.Future<_i2.Response<_i12.CreateWordResponse>>.value(
+                  _FakeResponse_0<_i12.CreateWordResponse>(
+                    this,
+                    Invocation.method(#v1WordsPost, [], {
+                      #createWordRequest: createWordRequest,
+                      #cancelToken: cancelToken,
+                      #headers: headers,
+                      #extra: extra,
+                      #validateStatus: validateStatus,
+                      #onSendProgress: onSendProgress,
+                      #onReceiveProgress: onReceiveProgress,
+                    }),
+                  ),
+                ),
             returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i9.WordResponse>>.value(
-                  _FakeResponse_0<_i9.WordResponse>(
+                _i4.Future<_i2.Response<_i12.CreateWordResponse>>.value(
+                  _FakeResponse_0<_i12.CreateWordResponse>(
                     this,
                     Invocation.method(#v1WordsPost, [], {
                       #createWordRequest: createWordRequest,
@@ -588,15 +648,15 @@ class MockWordsApi extends _i1.Mock implements _i7.WordsApi {
                   ),
                 ),
           )
-          as _i4.Future<_i2.Response<_i9.WordResponse>>);
+          as _i4.Future<_i2.Response<_i12.CreateWordResponse>>);
 }
 
 /// A class which mocks [UsersApi].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
+class MockUsersApi extends _i1.Mock implements _i14.UsersApi {
   @override
-  _i4.Future<_i2.Response<_i13.Uint8List>> v1AvatarsIdGet({
+  _i4.Future<_i2.Response<_i15.Uint8List>> v1AvatarsIdGet({
     required String? id,
     _i2.CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -615,8 +675,8 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
             }),
-            returnValue: _i4.Future<_i2.Response<_i13.Uint8List>>.value(
-              _FakeResponse_0<_i13.Uint8List>(
+            returnValue: _i4.Future<_i2.Response<_i15.Uint8List>>.value(
+              _FakeResponse_0<_i15.Uint8List>(
                 this,
                 Invocation.method(#v1AvatarsIdGet, [], {
                   #id: id,
@@ -630,8 +690,8 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
               ),
             ),
             returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i13.Uint8List>>.value(
-                  _FakeResponse_0<_i13.Uint8List>(
+                _i4.Future<_i2.Response<_i15.Uint8List>>.value(
+                  _FakeResponse_0<_i15.Uint8List>(
                     this,
                     Invocation.method(#v1AvatarsIdGet, [], {
                       #id: id,
@@ -645,7 +705,7 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                   ),
                 ),
           )
-          as _i4.Future<_i2.Response<_i13.Uint8List>>);
+          as _i4.Future<_i2.Response<_i15.Uint8List>>);
 
   @override
   _i4.Future<_i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>
@@ -726,7 +786,7 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
           as _i4.Future<_i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>);
 
   @override
-  _i4.Future<_i2.Response<_i14.V1UsersIdDictionaryGet200Response>>
+  _i4.Future<_i2.Response<_i16.V1UsersIdDictionaryGet200Response>>
   v1UsersIdDictionaryGet({
     required String? id,
     String? cursor,
@@ -752,9 +812,9 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
             }),
             returnValue:
                 _i4.Future<
-                  _i2.Response<_i14.V1UsersIdDictionaryGet200Response>
+                  _i2.Response<_i16.V1UsersIdDictionaryGet200Response>
                 >.value(
-                  _FakeResponse_0<_i14.V1UsersIdDictionaryGet200Response>(
+                  _FakeResponse_0<_i16.V1UsersIdDictionaryGet200Response>(
                     this,
                     Invocation.method(#v1UsersIdDictionaryGet, [], {
                       #id: id,
@@ -771,9 +831,9 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                 ),
             returnValueForMissingStub:
                 _i4.Future<
-                  _i2.Response<_i14.V1UsersIdDictionaryGet200Response>
+                  _i2.Response<_i16.V1UsersIdDictionaryGet200Response>
                 >.value(
-                  _FakeResponse_0<_i14.V1UsersIdDictionaryGet200Response>(
+                  _FakeResponse_0<_i16.V1UsersIdDictionaryGet200Response>(
                     this,
                     Invocation.method(#v1UsersIdDictionaryGet, [], {
                       #id: id,
@@ -789,7 +849,7 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                   ),
                 ),
           )
-          as _i4.Future<_i2.Response<_i14.V1UsersIdDictionaryGet200Response>>);
+          as _i4.Future<_i2.Response<_i16.V1UsersIdDictionaryGet200Response>>);
 
   @override
   _i4.Future<_i2.Response<void>> v1UsersIdFollowDelete({
@@ -894,7 +954,7 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
           as _i4.Future<_i2.Response<void>>);
 
   @override
-  _i4.Future<_i2.Response<_i15.V1UsersIdFollowersGet200Response>>
+  _i4.Future<_i2.Response<_i17.V1UsersIdFollowersGet200Response>>
   v1UsersIdFollowersGet({
     required String? id,
     String? cursor,
@@ -920,9 +980,9 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
             }),
             returnValue:
                 _i4.Future<
-                  _i2.Response<_i15.V1UsersIdFollowersGet200Response>
+                  _i2.Response<_i17.V1UsersIdFollowersGet200Response>
                 >.value(
-                  _FakeResponse_0<_i15.V1UsersIdFollowersGet200Response>(
+                  _FakeResponse_0<_i17.V1UsersIdFollowersGet200Response>(
                     this,
                     Invocation.method(#v1UsersIdFollowersGet, [], {
                       #id: id,
@@ -939,9 +999,9 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                 ),
             returnValueForMissingStub:
                 _i4.Future<
-                  _i2.Response<_i15.V1UsersIdFollowersGet200Response>
+                  _i2.Response<_i17.V1UsersIdFollowersGet200Response>
                 >.value(
-                  _FakeResponse_0<_i15.V1UsersIdFollowersGet200Response>(
+                  _FakeResponse_0<_i17.V1UsersIdFollowersGet200Response>(
                     this,
                     Invocation.method(#v1UsersIdFollowersGet, [], {
                       #id: id,
@@ -957,10 +1017,10 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                   ),
                 ),
           )
-          as _i4.Future<_i2.Response<_i15.V1UsersIdFollowersGet200Response>>);
+          as _i4.Future<_i2.Response<_i17.V1UsersIdFollowersGet200Response>>);
 
   @override
-  _i4.Future<_i2.Response<_i15.V1UsersIdFollowersGet200Response>>
+  _i4.Future<_i2.Response<_i17.V1UsersIdFollowersGet200Response>>
   v1UsersIdFollowingGet({
     required String? id,
     String? cursor,
@@ -986,9 +1046,9 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
             }),
             returnValue:
                 _i4.Future<
-                  _i2.Response<_i15.V1UsersIdFollowersGet200Response>
+                  _i2.Response<_i17.V1UsersIdFollowersGet200Response>
                 >.value(
-                  _FakeResponse_0<_i15.V1UsersIdFollowersGet200Response>(
+                  _FakeResponse_0<_i17.V1UsersIdFollowersGet200Response>(
                     this,
                     Invocation.method(#v1UsersIdFollowingGet, [], {
                       #id: id,
@@ -1005,9 +1065,9 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                 ),
             returnValueForMissingStub:
                 _i4.Future<
-                  _i2.Response<_i15.V1UsersIdFollowersGet200Response>
+                  _i2.Response<_i17.V1UsersIdFollowersGet200Response>
                 >.value(
-                  _FakeResponse_0<_i15.V1UsersIdFollowersGet200Response>(
+                  _FakeResponse_0<_i17.V1UsersIdFollowersGet200Response>(
                     this,
                     Invocation.method(#v1UsersIdFollowingGet, [], {
                       #id: id,
@@ -1023,10 +1083,10 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                   ),
                 ),
           )
-          as _i4.Future<_i2.Response<_i15.V1UsersIdFollowersGet200Response>>);
+          as _i4.Future<_i2.Response<_i17.V1UsersIdFollowersGet200Response>>);
 
   @override
-  _i4.Future<_i2.Response<_i16.UserResponse>> v1UsersIdGet({
+  _i4.Future<_i2.Response<_i18.UserResponse>> v1UsersIdGet({
     required String? id,
     _i2.CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -1045,8 +1105,8 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
             }),
-            returnValue: _i4.Future<_i2.Response<_i16.UserResponse>>.value(
-              _FakeResponse_0<_i16.UserResponse>(
+            returnValue: _i4.Future<_i2.Response<_i18.UserResponse>>.value(
+              _FakeResponse_0<_i18.UserResponse>(
                 this,
                 Invocation.method(#v1UsersIdGet, [], {
                   #id: id,
@@ -1060,8 +1120,8 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
               ),
             ),
             returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i16.UserResponse>>.value(
-                  _FakeResponse_0<_i16.UserResponse>(
+                _i4.Future<_i2.Response<_i18.UserResponse>>.value(
+                  _FakeResponse_0<_i18.UserResponse>(
                     this,
                     Invocation.method(#v1UsersIdGet, [], {
                       #id: id,
@@ -1075,7 +1135,7 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                   ),
                 ),
           )
-          as _i4.Future<_i2.Response<_i16.UserResponse>>);
+          as _i4.Future<_i2.Response<_i18.UserResponse>>);
 
   @override
   _i4.Future<_i2.Response<_i6.V1UsersIdDefinitionsGet200Response>>
@@ -1293,7 +1353,7 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
           as _i4.Future<_i2.Response<void>>);
 
   @override
-  _i4.Future<_i2.Response<_i17.V1UsersMeAvatarPut200Response>>
+  _i4.Future<_i2.Response<_i19.V1UsersMeAvatarPut200Response>>
   v1UsersMeAvatarPut({
     _i2.MultipartFile? body,
     _i2.CancelToken? cancelToken,
@@ -1315,9 +1375,9 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
             }),
             returnValue:
                 _i4.Future<
-                  _i2.Response<_i17.V1UsersMeAvatarPut200Response>
+                  _i2.Response<_i19.V1UsersMeAvatarPut200Response>
                 >.value(
-                  _FakeResponse_0<_i17.V1UsersMeAvatarPut200Response>(
+                  _FakeResponse_0<_i19.V1UsersMeAvatarPut200Response>(
                     this,
                     Invocation.method(#v1UsersMeAvatarPut, [], {
                       #body: body,
@@ -1332,9 +1392,9 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                 ),
             returnValueForMissingStub:
                 _i4.Future<
-                  _i2.Response<_i17.V1UsersMeAvatarPut200Response>
+                  _i2.Response<_i19.V1UsersMeAvatarPut200Response>
                 >.value(
-                  _FakeResponse_0<_i17.V1UsersMeAvatarPut200Response>(
+                  _FakeResponse_0<_i19.V1UsersMeAvatarPut200Response>(
                     this,
                     Invocation.method(#v1UsersMeAvatarPut, [], {
                       #body: body,
@@ -1348,7 +1408,7 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                   ),
                 ),
           )
-          as _i4.Future<_i2.Response<_i17.V1UsersMeAvatarPut200Response>>);
+          as _i4.Future<_i2.Response<_i19.V1UsersMeAvatarPut200Response>>);
 
   @override
   _i4.Future<_i2.Response<void>> v1UsersMeDelete({
@@ -1398,7 +1458,7 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
           as _i4.Future<_i2.Response<void>>);
 
   @override
-  _i4.Future<_i2.Response<_i18.MeResponse>> v1UsersMeGet({
+  _i4.Future<_i2.Response<_i20.MeResponse>> v1UsersMeGet({
     _i2.CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -1415,8 +1475,8 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
             }),
-            returnValue: _i4.Future<_i2.Response<_i18.MeResponse>>.value(
-              _FakeResponse_0<_i18.MeResponse>(
+            returnValue: _i4.Future<_i2.Response<_i20.MeResponse>>.value(
+              _FakeResponse_0<_i20.MeResponse>(
                 this,
                 Invocation.method(#v1UsersMeGet, [], {
                   #cancelToken: cancelToken,
@@ -1429,8 +1489,8 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
               ),
             ),
             returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i18.MeResponse>>.value(
-                  _FakeResponse_0<_i18.MeResponse>(
+                _i4.Future<_i2.Response<_i20.MeResponse>>.value(
+                  _FakeResponse_0<_i20.MeResponse>(
                     this,
                     Invocation.method(#v1UsersMeGet, [], {
                       #cancelToken: cancelToken,
@@ -1443,11 +1503,11 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                   ),
                 ),
           )
-          as _i4.Future<_i2.Response<_i18.MeResponse>>);
+          as _i4.Future<_i2.Response<_i20.MeResponse>>);
 
   @override
-  _i4.Future<_i2.Response<_i18.MeResponse>> v1UsersMePatch({
-    _i19.UpdateMeRequest? updateMeRequest,
+  _i4.Future<_i2.Response<_i20.MeResponse>> v1UsersMePatch({
+    _i21.UpdateMeRequest? updateMeRequest,
     _i2.CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -1465,8 +1525,8 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
             }),
-            returnValue: _i4.Future<_i2.Response<_i18.MeResponse>>.value(
-              _FakeResponse_0<_i18.MeResponse>(
+            returnValue: _i4.Future<_i2.Response<_i20.MeResponse>>.value(
+              _FakeResponse_0<_i20.MeResponse>(
                 this,
                 Invocation.method(#v1UsersMePatch, [], {
                   #updateMeRequest: updateMeRequest,
@@ -1480,8 +1540,8 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
               ),
             ),
             returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i18.MeResponse>>.value(
-                  _FakeResponse_0<_i18.MeResponse>(
+                _i4.Future<_i2.Response<_i20.MeResponse>>.value(
+                  _FakeResponse_0<_i20.MeResponse>(
                     this,
                     Invocation.method(#v1UsersMePatch, [], {
                       #updateMeRequest: updateMeRequest,
@@ -1495,11 +1555,11 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                   ),
                 ),
           )
-          as _i4.Future<_i2.Response<_i18.MeResponse>>);
+          as _i4.Future<_i2.Response<_i20.MeResponse>>);
 
   @override
-  _i4.Future<_i2.Response<_i18.MeResponse>> v1UsersPost({
-    _i20.CreateUserRequest? createUserRequest,
+  _i4.Future<_i2.Response<_i20.MeResponse>> v1UsersPost({
+    _i22.CreateUserRequest? createUserRequest,
     _i2.CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -1517,8 +1577,8 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
             }),
-            returnValue: _i4.Future<_i2.Response<_i18.MeResponse>>.value(
-              _FakeResponse_0<_i18.MeResponse>(
+            returnValue: _i4.Future<_i2.Response<_i20.MeResponse>>.value(
+              _FakeResponse_0<_i20.MeResponse>(
                 this,
                 Invocation.method(#v1UsersPost, [], {
                   #createUserRequest: createUserRequest,
@@ -1532,8 +1592,8 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
               ),
             ),
             returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i18.MeResponse>>.value(
-                  _FakeResponse_0<_i18.MeResponse>(
+                _i4.Future<_i2.Response<_i20.MeResponse>>.value(
+                  _FakeResponse_0<_i20.MeResponse>(
                     this,
                     Invocation.method(#v1UsersPost, [], {
                       #createUserRequest: createUserRequest,
@@ -1547,5 +1607,5 @@ class MockUsersApi extends _i1.Mock implements _i12.UsersApi {
                   ),
                 ),
           )
-          as _i4.Future<_i2.Response<_i18.MeResponse>>);
+          as _i4.Future<_i2.Response<_i20.MeResponse>>);
 }

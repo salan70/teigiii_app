@@ -20,7 +20,9 @@ class MyDictionaryOverview {
   /// Returns a new [MyDictionaryOverview] instance.
   MyDictionaryOverview({
     required this.definedWordCount,
+
     required this.savedWordCount,
+
     required this.recentDefinitions,
   });
 

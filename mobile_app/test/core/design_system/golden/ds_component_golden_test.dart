@@ -44,6 +44,10 @@ void main() {
       leadingIcon: Icons.volume_off,
       onTap: () {},
     ),
+    'ds_chip_navigable': DsChip.navigable(
+      label: 'この言葉は登録済みです',
+      onTap: () {},
+    ),
     'ds_empty_view': const DsEmptyView(message: 'まだ定義がありません。'),
     'ds_error_view_compact': DsErrorView.compact(onRetry: () {}),
     'ds_text_field': const DsTextField.singleLine(

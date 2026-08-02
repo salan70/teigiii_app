@@ -5,6 +5,7 @@
 library;
 
 export 'component/ds_button.dart';
+export 'component/ds_chip.dart';
 export 'component/ds_dialog.dart';
 export 'component/ds_feedback.dart';
 export 'component/ds_icon_button.dart';

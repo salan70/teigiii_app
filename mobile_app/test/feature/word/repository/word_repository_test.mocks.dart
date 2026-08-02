@@ -8,11 +8,13 @@ import 'dart:async' as _i4;
 import 'package:dio/dio.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:teigiii_api/src/api/words_api.dart' as _i3;
-import 'package:teigiii_api/src/model/create_word_request.dart' as _i9;
+import 'package:teigiii_api/src/model/create_word_request.dart' as _i11;
+import 'package:teigiii_api/src/model/create_word_response.dart' as _i10;
 import 'package:teigiii_api/src/model/update_word_request.dart' as _i8;
 import 'package:teigiii_api/src/model/v1_users_id_definitions_get200_response.dart'
     as _i6;
 import 'package:teigiii_api/src/model/v1_words_get200_response.dart' as _i5;
+import 'package:teigiii_api/src/model/word_lookup_response.dart' as _i9;
 import 'package:teigiii_api/src/model/word_response.dart' as _i7;
 
 // ignore_for_file: type=lint
@@ -391,8 +393,64 @@ class MockWordsApi extends _i1.Mock implements _i3.WordsApi {
           as _i4.Future<_i2.Response<void>>);
 
   @override
-  _i4.Future<_i2.Response<_i7.WordResponse>> v1WordsPost({
-    _i9.CreateWordRequest? createWordRequest,
+  _i4.Future<_i2.Response<_i9.WordLookupResponse>> v1WordsLookupGet({
+    required String? word,
+    required String? reading,
+    _i2.CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    _i2.ValidateStatus? validateStatus,
+    _i2.ProgressCallback? onSendProgress,
+    _i2.ProgressCallback? onReceiveProgress,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#v1WordsLookupGet, [], {
+              #word: word,
+              #reading: reading,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            }),
+            returnValue: _i4.Future<_i2.Response<_i9.WordLookupResponse>>.value(
+              _FakeResponse_0<_i9.WordLookupResponse>(
+                this,
+                Invocation.method(#v1WordsLookupGet, [], {
+                  #word: word,
+                  #reading: reading,
+                  #cancelToken: cancelToken,
+                  #headers: headers,
+                  #extra: extra,
+                  #validateStatus: validateStatus,
+                  #onSendProgress: onSendProgress,
+                  #onReceiveProgress: onReceiveProgress,
+                }),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.Response<_i9.WordLookupResponse>>.value(
+                  _FakeResponse_0<_i9.WordLookupResponse>(
+                    this,
+                    Invocation.method(#v1WordsLookupGet, [], {
+                      #word: word,
+                      #reading: reading,
+                      #cancelToken: cancelToken,
+                      #headers: headers,
+                      #extra: extra,
+                      #validateStatus: validateStatus,
+                      #onSendProgress: onSendProgress,
+                      #onReceiveProgress: onReceiveProgress,
+                    }),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Response<_i9.WordLookupResponse>>);
+
+  @override
+  _i4.Future<_i2.Response<_i10.CreateWordResponse>> v1WordsPost({
+    _i11.CreateWordRequest? createWordRequest,
     _i2.CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -410,23 +468,24 @@ class MockWordsApi extends _i1.Mock implements _i3.WordsApi {
               #onSendProgress: onSendProgress,
               #onReceiveProgress: onReceiveProgress,
             }),
-            returnValue: _i4.Future<_i2.Response<_i7.WordResponse>>.value(
-              _FakeResponse_0<_i7.WordResponse>(
-                this,
-                Invocation.method(#v1WordsPost, [], {
-                  #createWordRequest: createWordRequest,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                }),
-              ),
-            ),
+            returnValue:
+                _i4.Future<_i2.Response<_i10.CreateWordResponse>>.value(
+                  _FakeResponse_0<_i10.CreateWordResponse>(
+                    this,
+                    Invocation.method(#v1WordsPost, [], {
+                      #createWordRequest: createWordRequest,
+                      #cancelToken: cancelToken,
+                      #headers: headers,
+                      #extra: extra,
+                      #validateStatus: validateStatus,
+                      #onSendProgress: onSendProgress,
+                      #onReceiveProgress: onReceiveProgress,
+                    }),
+                  ),
+                ),
             returnValueForMissingStub:
-                _i4.Future<_i2.Response<_i7.WordResponse>>.value(
-                  _FakeResponse_0<_i7.WordResponse>(
+                _i4.Future<_i2.Response<_i10.CreateWordResponse>>.value(
+                  _FakeResponse_0<_i10.CreateWordResponse>(
                     this,
                     Invocation.method(#v1WordsPost, [], {
                       #createWordRequest: createWordRequest,
@@ -440,5 +499,5 @@ class MockWordsApi extends _i1.Mock implements _i3.WordsApi {
                   ),
                 ),
           )
-          as _i4.Future<_i2.Response<_i7.WordResponse>>);
+          as _i4.Future<_i2.Response<_i10.CreateWordResponse>>);
 }

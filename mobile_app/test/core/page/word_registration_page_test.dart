@@ -2,18 +2,59 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:teigi_app/core/design_system/design_system.dart';
 import 'package:teigi_app/core/page/word_registration_page.dart';
+import 'package:teigi_app/feature/word/repository/word_repository.dart';
+
+/// 既存語チェックの結果だけを差し替えるリポジトリ。
+class _FakeWordRepository implements WordRepository {
+  _FakeWordRepository({this.existingWordId});
+
+  /// [findPublicWordId] が返す言葉の ID。
+  final String? existingWordId;
+
+  @override
+  Future<String?> findPublicWordId({
+    required String word,
+    required String reading,
+  }) async => existingWordId;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw UnimplementedError(invocation.memberName.toString());
+}
 
 void main() {
-  Future<void> pumpPage(WidgetTester tester, {String? initialWord}) async {
+  Future<void> pumpPage(
+    WidgetTester tester, {
+    String? initialWord,
+    String? existingWordId,
+  }) async {
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [
+          wordRepositoryProvider.overrideWithValue(
+            _FakeWordRepository(existingWordId: existingWordId),
+          ),
+        ],
         child: MaterialApp(
           home: WordRegistrationPage(initialWord: initialWord),
         ),
       ),
     );
   }
+
+  /// 表記とよみを入力し、既存語チェックが走るまで待つ。
+  Future<void> enterWordAndReading(WidgetTester tester) async {
+    final fields = find.byType(TextFormField);
+    await tester.enterText(fields.first, '余白');
+    await tester.enterText(fields.last, 'よはく');
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump();
+  }
+
+  VoidCallback? registerButtonCallback(WidgetTester tester) =>
+      tester.widget<DsFilledButton>(find.byType(DsFilledButton)).onPressed;
 
   testWidgets('initialWord があるとき表記欄にプリフィルする', (tester) async {
     await pumpPage(tester, initialWord: '余白');
@@ -43,7 +84,7 @@ void main() {
     // 定義追加と同系統のラベル・ボーダーなし
     expect(find.text('登録する言葉'), findsOneWidget);
     expect(find.text('言葉のよみ'), findsOneWidget);
-    expect(find.byType(TextFormField), findsNWidgets(2));
+    expect(find.byType(DsTextField), findsNWidgets(2));
 
     // 完了後ダイアログ用の文言は置かない（トースト＋pop）
     expect(find.text('続けて定義を書く'), findsNothing);
@@ -56,5 +97,26 @@ void main() {
     for (final decorator in decorators.take(2)) {
       expect(decorator.decoration.border, InputBorder.none);
     }
+  });
+
+  testWidgets('公開済みの既存語を検出するとチップを出して登録を止める', (tester) async {
+    await pumpPage(tester, existingWordId: 'word-1');
+
+    expect(find.byType(DsChip), findsNothing);
+
+    await enterWordAndReading(tester);
+
+    expect(find.byType(DsChip), findsOneWidget);
+    expect(find.text('この言葉は登録済みです'), findsOneWidget);
+    expect(registerButtonCallback(tester), isNull);
+  });
+
+  testWidgets('既存語が無ければチップを出さず登録できる', (tester) async {
+    await pumpPage(tester);
+
+    await enterWordAndReading(tester);
+
+    expect(find.byType(DsChip), findsNothing);
+    expect(registerButtonCallback(tester), isNotNull);
   });
 }

@@ -19,11 +19,7 @@ abstract class _$DefinedWordItemCWProxy {
   /// ```dart
   /// DefinedWordItem(...).copyWith(id: 12, name: "My name")
   /// ````
-  DefinedWordItem call({
-    WordSummary word,
-    int publicCount,
-    int privateCount,
-  });
+  DefinedWordItem call({WordSummary word, int publicCount, int privateCount});
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfDefinedWordItem.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfDefinedWordItem.copyWith.fieldName(...)`
@@ -85,10 +81,7 @@ extension $DefinedWordItemCopyWith on DefinedWordItem {
 DefinedWordItem _$DefinedWordItemFromJson(
   Map<String, dynamic> json,
 ) => $checkedCreate('DefinedWordItem', json, ($checkedConvert) {
-  $checkKeys(
-    json,
-    requiredKeys: const ['word', 'publicCount', 'privateCount'],
-  );
+  $checkKeys(json, requiredKeys: const ['word', 'publicCount', 'privateCount']);
   final val = DefinedWordItem(
     word: $checkedConvert(
       'word',

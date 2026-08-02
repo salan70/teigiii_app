@@ -6,6 +6,7 @@ doc/AppConfigResponse.md
 doc/CreateDefinitionRequest.md
 doc/CreateUserRequest.md
 doc/CreateWordRequest.md
+doc/CreateWordResponse.md
 doc/DefinedWordItem.md
 doc/DefinitionActivity.md
 doc/DefinitionResponse.md
@@ -43,7 +44,9 @@ doc/V1UsersMeAvatarPut200Response.md
 doc/V1WordsGet200Response.md
 doc/WordConflictResponse.md
 doc/WordListItem.md
+doc/WordLookupResponse.md
 doc/WordRegisteredActivity.md
+doc/WordRegistrationResult.md
 doc/WordResponse.md
 doc/WordSummary.md
 doc/WordsApi.md
@@ -66,6 +69,7 @@ lib/src/model/app_config_response.dart
 lib/src/model/create_definition_request.dart
 lib/src/model/create_user_request.dart
 lib/src/model/create_word_request.dart
+lib/src/model/create_word_response.dart
 lib/src/model/defined_word_item.dart
 lib/src/model/definition_activity.dart
 lib/src/model/definition_response.dart
@@ -96,12 +100,12 @@ lib/src/model/v1_users_me_avatar_put200_response.dart
 lib/src/model/v1_words_get200_response.dart
 lib/src/model/word_conflict_response.dart
 lib/src/model/word_list_item.dart
+lib/src/model/word_lookup_response.dart
 lib/src/model/word_registered_activity.dart
+lib/src/model/word_registration_result.dart
 lib/src/model/word_response.dart
 lib/src/model/word_summary.dart
 lib/teigiii_api.dart
-test/frame_stats_accepted_response_test.dart
-test/frame_stats_device_test.dart
-test/frame_stats_request_test.dart
-test/frame_stats_screen_test.dart
-test/telemetry_api_test.dart
+test/create_word_response_test.dart
+test/word_lookup_response_test.dart
+test/word_registration_result_test.dart
