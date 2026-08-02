@@ -82,10 +82,10 @@
 
 ## 完了条件
 
-- [ ] 表記とよみを入力し、公開済みの同一言葉が存在するとき、登録ボタンを押す前にチップが表示され、登録ボタンが disable になる
-- [ ] チップをタップすると該当の言葉ページが push され、戻ると入力内容が保持されている
-- [ ] 非公開の既存語ではチップが出ず、登録すると公開昇格して「登録しました！」が出る
-- [ ] 競合等で `alreadyPublic` が返った場合、既存語である旨と言葉ページ導線が表示される
-- [ ] `word_registration_page.dart` に生の `TextFormField` / `InkWell` / `withOpacity` が残っていない
-- [ ] `just mobile-generate` / `just mobile-analyze` / `just mobile-test` / `just mobile-ds-check` /
+- [x] 表記とよみを入力し、公開済みの同一言葉が存在するとき、登録ボタンを押す前にチップが表示され、登録ボタンが disable になる
+- [x] チップをタップすると該当の言葉ページが push され、戻ると入力内容が保持されている
+- [x] 非公開の既存語ではチップが出ず、登録すると公開昇格して「登録しました！」が出る
+- [x] 競合等で `alreadyPublic` が返った場合、既存語である旨と言葉ページ導線が表示される
+- [x] `word_registration_page.dart` に生の `TextFormField` / `InkWell` / `withOpacity` が残っていない
+- [x] `just mobile-generate` / `just mobile-analyze` / `just mobile-test` / `just mobile-ds-check` /
       `just mobile-test-golden` / `just test` / `just docbridge-check` が通る
