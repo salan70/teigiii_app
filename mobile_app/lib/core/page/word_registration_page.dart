@@ -232,8 +232,8 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
             padding: DsSpacing.screenContentInsets,
             child: ListView(
               children: [
-                const Gap(DsSpacing.inline),
                 // チップの有無で入力欄がずれないよう、非表示でも領域を確保する。
+                // チップ自身が最小タップ領域を内側に持つため、前後に余白は足さない。
                 Visibility(
                   visible: existingWordId != null,
                   maintainSize: true,
@@ -252,7 +252,6 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
                     ),
                   ),
                 ),
-                const Gap(DsSpacing.item),
                 DsTextField.multiline(
                   controller: _wordController,
                   autofocus: widget.initialWord == null,
