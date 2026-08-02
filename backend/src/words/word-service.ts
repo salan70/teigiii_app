@@ -73,8 +73,8 @@ export type ListWordsInput = {
  * 明示登録の結果種別。
  *
  * - `created`: 言葉を新規作成した
- * - `promoted`: 既存の言葉だが、この登録の前は閲覧者にとって公開経路に出ていなかった
- * - `alreadyPublic`: 既存の言葉で、この登録の前から公開経路に出ていた
+ * - `promoted`: 既存の言葉に対し、最初の明示登録をこのリクエストが行った
+ * - `alreadyPublic`: 既存の言葉で、この登録の前から明示登録されていた
  */
 export type WordRegistrationResult = "alreadyPublic" | "created" | "promoted";
 
@@ -234,25 +234,22 @@ export class WordService {
     }
   }
 
-  /** 閲覧者にとって公開経路に出ている言葉かどうか。ミュートを含めて判定する。 */
-  async #isPubliclyVisible(uid: string, wordId: string): Promise<boolean> {
-    const row = await this.env.DB.prepare(
-      `select w.id from words w
-       where w.id = ? and ${publiclyVisibleWordSql("?")}`,
-    )
-      .bind(wordId, uid, uid)
-      .first();
-    return row !== null;
-  }
-
-  async #ensureRegistration(uid: string, wordId: string, now: number): Promise<void> {
-    await this.env.DB.prepare(
+  /**
+   * 明示登録を記録し、最初の明示登録を**このリクエストが**行ったかどうかを返す。
+   *
+   * 判定を UPDATE の結果から取るため、事前に状態を読む必要がない。
+   * 同時に 2 リクエストが来ても first_registered_at を設定できるのは片方だけであり、
+   * 「公開経路に出す変化を起こしたのはどちらか」が原子的に決まる。
+   */
+  async #ensureRegistration(uid: string, wordId: string, now: number): Promise<boolean> {
+    const updated = await this.env.DB.prepare(
       `update words
        set first_registered_at = ?, first_registered_by = ?, updated_at = ?
        where id = ? and first_registered_at is null`,
     )
       .bind(now, uid, now, wordId)
       .run();
+    const isFirstRegistration = updated.meta.changes > 0;
 
     try {
       await this.env.DB.prepare(
@@ -273,24 +270,27 @@ export class WordService {
       )
         .bind(wordId, uid)
         .first();
-      if (existing !== null) return;
+      if (existing !== null) return isFirstRegistration;
       throw error;
     }
+    return isFirstRegistration;
   }
 
   /**
-   * 既存の言葉への明示登録。登録前の公開状態から結果種別を決める。
-   * 「公開されていたか」はミュートを含む閲覧者基準で判定する。
+   * 既存の言葉への明示登録。
+   *
+   * 最初の明示登録をこのリクエストが行ったなら promoted、既に誰かが明示登録済みなら
+   * alreadyPublic。公開定義だけで見えていた言葉（first_registered_at が null）への
+   * 登録は言葉登録 activity を新たに生むため、promoted に分類する。
    */
   async #registerExisting(
     uid: string,
     wordId: string,
     now: number,
   ): Promise<{ result: WordRegistrationResult; word: WordResponse }> {
-    const wasPubliclyVisible = await this.#isPubliclyVisible(uid, wordId);
-    await this.#ensureRegistration(uid, wordId, now);
+    const isFirstRegistration = await this.#ensureRegistration(uid, wordId, now);
     return {
-      result: wasPubliclyVisible ? "alreadyPublic" : "promoted",
+      result: isFirstRegistration ? "promoted" : "alreadyPublic",
       word: await this.get(uid, wordId),
     };
   }
@@ -339,8 +339,13 @@ export class WordService {
 
   /**
    * 登録前の既存語チェック。
-   * (表記, よみ) の完全一致で、閲覧者にとって公開されている言葉だけを返す。
-   * 非公開の言葉は、存在そのものを秘匿するため null を返す。
+   *
+   * (表記, よみ) の完全一致で、閲覧者にとって公開されており、かつ**明示登録済み**の
+   * 言葉だけを返す。非公開の言葉は存在そのものを秘匿するため null を返す。
+   *
+   * 公開定義だけで見えている言葉（first_registered_at が null）は返さない。
+   * その言葉への登録は言葉登録 activity を新たに生む観測可能な操作であり、
+   * 「登録済み」として登録を止めるのは誤り。
    */
   async lookupPublic(uid: string, input: CreateWordInput): Promise<WordSummaryResponse | null> {
     const word = requireNonEmpty(normalizeText(input.word), "word");
@@ -349,6 +354,7 @@ export class WordService {
       `select w.id, w.word, w.reading
        from words w
        where w.word = ? and w.reading = ?
+         and w.first_registered_at is not null
          and ${publiclyVisibleWordSql("?")}`,
     )
       .bind(word, reading, uid, uid)

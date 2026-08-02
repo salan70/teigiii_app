@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,16 +10,24 @@ import 'package:teigi_app/feature/word/repository/word_repository.dart';
 
 /// 既存語チェックの結果だけを差し替えるリポジトリ。
 class _FakeWordRepository implements WordRepository {
-  _FakeWordRepository({this.existingWordId});
+  _FakeWordRepository({this.existingWordId, this.completer});
 
   /// [findPublicWordId] が返す言葉の ID。
   final String? existingWordId;
+
+  /// 完了をテスト側で制御したい場合に渡す。
+  final Completer<void>? completer;
 
   @override
   Future<String?> findPublicWordId({
     required String word,
     required String reading,
-  }) async => existingWordId;
+  }) async {
+    if (completer != null) {
+      await completer!.future;
+    }
+    return existingWordId;
+  }
 
   @override
   dynamic noSuchMethod(Invocation invocation) =>
@@ -29,12 +39,16 @@ void main() {
     WidgetTester tester, {
     String? initialWord,
     String? existingWordId,
+    Completer<void>? completer,
   }) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           wordRepositoryProvider.overrideWithValue(
-            _FakeWordRepository(existingWordId: existingWordId),
+            _FakeWordRepository(
+              existingWordId: existingWordId,
+              completer: completer,
+            ),
           ),
         ],
         child: MaterialApp(
@@ -149,5 +163,47 @@ void main() {
       tester.getTopLeft(find.byType(DsChip)).dy,
       greaterThanOrEqualTo(readingBottom),
     );
+  });
+
+  testWidgets('既存語チェックが返るまで登録できない', (tester) async {
+    final completer = Completer<void>();
+    await pumpPage(tester, existingWordId: 'word-1', completer: completer);
+
+    final fields = find.byType(TextFormField);
+    await tester.enterText(fields.first, '余白');
+    await tester.enterText(fields.last, 'よはく');
+
+    // debounce 待ちの間は前の入力の結果しかない
+    expect(registerButtonCallback(tester), isNull);
+
+    await tester.pump(const Duration(milliseconds: 500));
+    // 問い合わせ中も結果が無いので登録させない
+    expect(registerButtonCallback(tester), isNull);
+
+    completer.complete();
+    await tester.pump();
+    await tester.pump();
+
+    // 既存語が見つかったので、結果が出ても登録は不可のまま
+    expect(chipVisibility(tester).visible, isTrue);
+    expect(registerButtonCallback(tester), isNull);
+  });
+
+  testWidgets('既存語チェックが返り、該当なしなら登録できる', (tester) async {
+    final completer = Completer<void>();
+    await pumpPage(tester, completer: completer);
+
+    final fields = find.byType(TextFormField);
+    await tester.enterText(fields.first, '余白');
+    await tester.enterText(fields.last, 'よはく');
+    await tester.pump(const Duration(milliseconds: 500));
+
+    expect(registerButtonCallback(tester), isNull);
+
+    completer.complete();
+    await tester.pump();
+    await tester.pump();
+
+    expect(registerButtonCallback(tester), isNotNull);
   });
 }

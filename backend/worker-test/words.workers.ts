@@ -227,6 +227,67 @@ describe("POST /v1/words", () => {
     ]);
   });
 
+  test("公開定義だけで見えている言葉への登録は promoted（言葉登録が新たに載る）", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    await insertWordRow({
+      createdAt: Date.now() - 1000,
+      createdBy: "alice",
+      firstRegisteredAt: null,
+      firstRegisteredBy: null,
+      id: "definition-only",
+      reading: "ていぎだけ",
+      readingSubGroup: "た",
+      word: "定義だけ語",
+    });
+    await insertPublicDefinitionRow("public-def", "definition-only", "alice");
+
+    // 公開定義があるので bob からも見えるが、明示登録はまだ無い
+    expect((await request("bob", "/v1/words/definition-only")).status).toBe(200);
+    const beforeTimeline = await request("bob", "/v1/timeline/discover?type=wordRegistered");
+    expect((await beforeTimeline.json<{ items: unknown[] }>()).items).toHaveLength(0);
+
+    const response = await requestJson("bob", "/v1/words", "POST", {
+      reading: "ていぎだけ",
+      word: "定義だけ語",
+    });
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toMatchObject({
+      id: "definition-only",
+      registrationResult: "promoted",
+    });
+    const afterTimeline = await request("bob", "/v1/timeline/discover?type=wordRegistered");
+    expect((await afterTimeline.json<{ items: { wordId: string }[] }>()).items).toHaveLength(1);
+  });
+
+  test("同時に 2 リクエストが来ても promoted は 1 回だけ", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    await insertWordRow({
+      createdAt: Date.now() - 1000,
+      createdBy: "alice",
+      firstRegisteredAt: null,
+      firstRegisteredBy: null,
+      id: "raced-word",
+      reading: "きょうそう",
+      readingSubGroup: "か",
+      word: "競争語",
+    });
+
+    const body = { reading: "きょうそう", word: "競争語" };
+    const [first, second] = await Promise.all([
+      requestJson("alice", "/v1/words", "POST", body),
+      requestJson("bob", "/v1/words", "POST", body),
+    ]);
+
+    const results = [
+      (await first.json<{ registrationResult: string }>()).registrationResult,
+      (await second.json<{ registrationResult: string }>()).registrationResult,
+    ].toSorted();
+    expect(results).toEqual(["alreadyPublic", "promoted"]);
+  });
+
   test("隠れた既存言葉を初めて明示登録すると 200 で公開昇格する", async () => {
     await createUser("alice");
     await createUser("bob");
@@ -400,6 +461,26 @@ describe("GET /v1/words/lookup", () => {
     await createWord("alice", "金星", "きんせい");
 
     await expect(lookup("alice", "金星", "きんぼし")).resolves.toEqual({ word: null });
+  });
+
+  test("公開定義だけで見えている言葉（明示登録なし）は null", async () => {
+    await createUser("alice");
+    await createUser("bob");
+    await insertWordRow({
+      createdAt: Date.now(),
+      createdBy: "alice",
+      firstRegisteredAt: null,
+      firstRegisteredBy: null,
+      id: "definition-only",
+      reading: "ていぎだけ",
+      readingSubGroup: "た",
+      word: "定義だけ語",
+    });
+    await insertPublicDefinitionRow("public-def", "definition-only", "alice");
+
+    // 直接取得はできるが、登録を止める対象ではない
+    expect((await request("bob", "/v1/words/definition-only")).status).toBe(200);
+    await expect(lookup("bob", "定義だけ語", "ていぎだけ")).resolves.toEqual({ word: null });
   });
 
   test("公開されていない言葉は存在を秘匿して null", async () => {

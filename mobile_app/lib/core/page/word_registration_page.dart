@@ -85,19 +85,23 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
         _readingController.text.isNotEmpty;
   }
 
+  /// 現在の入力に対応する既存語チェックのキー。
+  ///
+  /// 形式が不正な入力は問い合わせない（サーバーが 400 を返すため）。
+  ({String reading, String word}) get _currentLookupKey => _isInputValid
+      ? (
+          reading: _readingController.text.trim(),
+          word: _wordController.text.trim(),
+        )
+      : (reading: '', word: '');
+
   /// 入力を反映し、間を置いてから既存語チェックの対象を更新する。
   void _handleInputChanged() {
     setState(() {});
 
     _lookupTimer?.cancel();
     _lookupTimer = Timer(_lookupDebounce, () {
-      // 形式が不正な入力は問い合わせない（サーバーが 400 を返すため）。
-      final key = _isInputValid
-          ? (
-              reading: _readingController.text.trim(),
-              word: _wordController.text.trim(),
-            )
-          : (reading: '', word: '');
+      final key = _currentLookupKey;
       if (!mounted || key == _lookupKey) {
         return;
       }
@@ -126,8 +130,8 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
         );
   }
 
-  Future<void> _submit(String? existingWordId) async {
-    if (!_isInputValid || existingWordId != null) {
+  Future<void> _submit({required bool canRegister}) async {
+    if (!canRegister) {
       return;
     }
 
@@ -205,7 +209,13 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
       AsyncData(:final value) => value,
       _ => null,
     };
-    final canRegister = _isInputValid && existingWordId == null;
+    // 現在の入力に対する結果が出るまでは登録させない。
+    // debounce 待ちの間は前の入力の結果しかなく、通信中は結果自体がない。
+    // 失敗（AsyncError）は fail-open とし、登録を妨げない。
+    final isLookupSettled =
+        _lookupKey == _currentLookupKey &&
+        asyncExistingWordId is! AsyncLoading;
+    final canRegister = _isInputValid && isLookupSettled && existingWordId == null;
 
     return Scaffold(
       appBar: AppBar(
@@ -220,7 +230,7 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
           DsAppBarAction(
             label: '登録',
             onPressed: canRegister
-                ? () => unawaited(_submit(existingWordId))
+                ? () => unawaited(_submit(canRegister: canRegister))
                 : null,
           ),
         ],
@@ -249,7 +259,7 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
                   maxLength: draft.maxWordReadingLength,
                   textInputAction: TextInputAction.done,
                   onChanged: (_) => _handleInputChanged(),
-                  onSubmitted: (_) => _submit(existingWordId),
+                  onSubmitted: (_) => _submit(canRegister: canRegister),
                   label: '言葉のよみ',
                   hintText: '例: ふつかめのかれー',
                   errorText: draft.outputWordReadingError(),

@@ -41,8 +41,8 @@ export const wordResponseSchema = wordSummarySchema
  * 明示登録の結果種別。
  *
  * - `created`: 言葉を新規作成した
- * - `promoted`: 既存の言葉だが、この登録の前は閲覧者にとって公開経路に出ていなかった
- * - `alreadyPublic`: 既存の言葉で、この登録の前から公開経路に出ていた
+ * - `promoted`: 既存の言葉に対し、最初の明示登録をこのリクエストが行った
+ * - `alreadyPublic`: 既存の言葉で、この登録の前から明示登録されていた
  */
 export const wordRegistrationResultSchema = z
   .enum(["created", "promoted", "alreadyPublic"])
