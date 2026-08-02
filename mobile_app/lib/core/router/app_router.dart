@@ -75,6 +75,29 @@ class AppRouter extends _$AppRouter {
     AdaptiveRoute(path: 'user_search_result', page: UserSearchResultRoute.page),
   ];
 
+  /// 全画面モーダルの上に積むためのルート。[commonRouteList] と同じ画面を root にも置く。
+  ///
+  /// `/word_registration` などのモーダルは root 直下にあり、タブ配下の nested router を
+  /// 持たない。これがないとモーダル上からの push が破棄済みの nested router に落ち、
+  /// 白画面になる（#306）。
+  final List<AdaptiveRoute> modalStackRouteList = [
+    AdaptiveRoute(
+      path: '/modal/definition_detail',
+      page: DefinitionDetailRoute.page,
+    ),
+    AdaptiveRoute(path: '/modal/user_list_liked', page: UserListLikedRoute.page),
+    AdaptiveRoute(path: '/modal/word_top', page: WordTopRoute.page),
+    AdaptiveRoute(path: '/modal/profile_top', page: ProfileTopRoute.page),
+    AdaptiveRoute(
+      path: '/modal/user_list_following_or_follower',
+      page: UserListFollowingOrFollowerRoute.page,
+    ),
+    AdaptiveRoute(
+      path: '/modal/user_word_definition_list',
+      page: UserWordDefinitionListRoute.page,
+    ),
+  ];
+
   @override
   List<AdaptiveRoute> get routes => [
     AdaptiveRoute(path: '/welcome', page: WelcomeRoute.page),
@@ -157,5 +180,6 @@ class AppRouter extends _$AppRouter {
       page: SignInFailureRoute.page,
       fullscreenDialog: true,
     ),
+    ...modalStackRouteList,
   ];
 }

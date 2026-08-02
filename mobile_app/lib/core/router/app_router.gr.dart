@@ -113,8 +113,8 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     IndividualDictionaryDefinitionListRoute.name: (routeData) {
-      final args = routeData
-          .argsAs<IndividualDictionaryDefinitionListRouteArgs>();
+      final args =
+          routeData.argsAs<IndividualDictionaryDefinitionListRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: IndividualDictionaryDefinitionListPage(
@@ -132,8 +132,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     ProfileEditRoute.name: (routeData) {
       final args = routeData.argsAs<ProfileEditRouteArgs>(
-        orElse: () => const ProfileEditRouteArgs(),
-      );
+          orElse: () => const ProfileEditRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: ProfileEditPage(key: args.key),
@@ -143,7 +142,10 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<ProfileTopRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ProfileTopPage(key: args.key, targetUserId: args.targetUserId),
+        child: ProfileTopPage(
+          key: args.key,
+          targetUserId: args.targetUserId,
+        ),
       );
     },
     SettingRoute.name: (routeData) {
@@ -201,7 +203,10 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<UserSearchResultRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: UserSearchResultPage(key: args.key, searchWord: args.searchWord),
+        child: UserSearchResultPage(
+          key: args.key,
+          searchWord: args.searchWord,
+        ),
       );
     },
     UserWordDefinitionListRoute.name: (routeData) {
@@ -234,8 +239,7 @@ abstract class _$AppRouter extends RootStackRouter {
     },
     WordRegistrationRoute.name: (routeData) {
       final args = routeData.argsAs<WordRegistrationRouteArgs>(
-        orElse: () => const WordRegistrationRouteArgs(),
-      );
+          orElse: () => const WordRegistrationRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: WordRegistrationPage(
@@ -248,14 +252,20 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<WordSearchResultRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: WordSearchResultPage(key: args.key, searchWord: args.searchWord),
+        child: WordSearchResultPage(
+          key: args.key,
+          searchWord: args.searchWord,
+        ),
       );
     },
     WordTopRoute.name: (routeData) {
       final args = routeData.argsAs<WordTopRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: WordTopPage(key: args.key, wordId: args.wordId),
+        child: WordTopPage(
+          key: args.key,
+          wordId: args.wordId,
+        ),
       );
     },
   };
@@ -265,7 +275,10 @@ abstract class _$AppRouter extends RootStackRouter {
 /// [BasePage]
 class BaseRoute extends PageRouteInfo<void> {
   const BaseRoute({List<PageRouteInfo>? children})
-    : super(BaseRoute.name, initialChildren: children);
+      : super(
+          BaseRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'BaseRoute';
 
@@ -276,7 +289,10 @@ class BaseRoute extends PageRouteInfo<void> {
 /// [BaseRouterPage]
 class BaseRouterRoute extends PageRouteInfo<void> {
   const BaseRouterRoute({List<PageRouteInfo>? children})
-    : super(BaseRouterRoute.name, initialChildren: children);
+      : super(
+          BaseRouterRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'BaseRouterRoute';
 
@@ -291,10 +307,13 @@ class DefinitionDetailRoute extends PageRouteInfo<DefinitionDetailRouteArgs> {
     required String definitionId,
     List<PageRouteInfo>? children,
   }) : super(
-         DefinitionDetailRoute.name,
-         args: DefinitionDetailRouteArgs(key: key, definitionId: definitionId),
-         initialChildren: children,
-       );
+          DefinitionDetailRoute.name,
+          args: DefinitionDetailRouteArgs(
+            key: key,
+            definitionId: definitionId,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'DefinitionDetailRoute';
 
@@ -303,7 +322,10 @@ class DefinitionDetailRoute extends PageRouteInfo<DefinitionDetailRouteArgs> {
 }
 
 class DefinitionDetailRouteArgs {
-  const DefinitionDetailRouteArgs({this.key, required this.definitionId});
+  const DefinitionDetailRouteArgs({
+    this.key,
+    required this.definitionId,
+  });
 
   final Key? key;
 
@@ -323,13 +345,13 @@ class DefinitionEditRoute extends PageRouteInfo<DefinitionEditRouteArgs> {
     required Definition initialDefinition,
     List<PageRouteInfo>? children,
   }) : super(
-         DefinitionEditRoute.name,
-         args: DefinitionEditRouteArgs(
-           key: key,
-           initialDefinition: initialDefinition,
-         ),
-         initialChildren: children,
-       );
+          DefinitionEditRoute.name,
+          args: DefinitionEditRouteArgs(
+            key: key,
+            initialDefinition: initialDefinition,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'DefinitionEditRoute';
 
@@ -338,7 +360,10 @@ class DefinitionEditRoute extends PageRouteInfo<DefinitionEditRouteArgs> {
 }
 
 class DefinitionEditRouteArgs {
-  const DefinitionEditRouteArgs({this.key, required this.initialDefinition});
+  const DefinitionEditRouteArgs({
+    this.key,
+    required this.initialDefinition,
+  });
 
   final Key? key;
 
@@ -360,15 +385,15 @@ class DefinitionPostRoute extends PageRouteInfo<DefinitionPostRouteArgs> {
     AfterPostNavigationType afterPostNavigation = AfterPostNavigationType.pop,
     List<PageRouteInfo>? children,
   }) : super(
-         DefinitionPostRoute.name,
-         args: DefinitionPostRouteArgs(
-           key: key,
-           initialDefinitionForWrite: initialDefinitionForWrite,
-           autoFocusForm: autoFocusForm,
-           afterPostNavigation: afterPostNavigation,
-         ),
-         initialChildren: children,
-       );
+          DefinitionPostRoute.name,
+          args: DefinitionPostRouteArgs(
+            key: key,
+            initialDefinitionForWrite: initialDefinitionForWrite,
+            autoFocusForm: autoFocusForm,
+            afterPostNavigation: afterPostNavigation,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'DefinitionPostRoute';
 
@@ -402,7 +427,10 @@ class DefinitionPostRouteArgs {
 /// [DictionaryEveryonePage]
 class DictionaryEveryoneRoute extends PageRouteInfo<void> {
   const DictionaryEveryoneRoute({List<PageRouteInfo>? children})
-    : super(DictionaryEveryoneRoute.name, initialChildren: children);
+      : super(
+          DictionaryEveryoneRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'DictionaryEveryoneRoute';
 
@@ -413,7 +441,10 @@ class DictionaryEveryoneRoute extends PageRouteInfo<void> {
 /// [DictionaryEveryoneRouterPage]
 class DictionaryEveryoneRouterRoute extends PageRouteInfo<void> {
   const DictionaryEveryoneRouterRoute({List<PageRouteInfo>? children})
-    : super(DictionaryEveryoneRouterRoute.name, initialChildren: children);
+      : super(
+          DictionaryEveryoneRouterRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'DictionaryEveryoneRouterRoute';
 
@@ -430,14 +461,14 @@ class DictionaryIndividualRoute
     bool isTopRoute = false,
     List<PageRouteInfo>? children,
   }) : super(
-         DictionaryIndividualRoute.name,
-         args: DictionaryIndividualRouteArgs(
-           key: key,
-           targetUserId: targetUserId,
-           isTopRoute: isTopRoute,
-         ),
-         initialChildren: children,
-       );
+          DictionaryIndividualRoute.name,
+          args: DictionaryIndividualRouteArgs(
+            key: key,
+            targetUserId: targetUserId,
+            isTopRoute: isTopRoute,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'DictionaryIndividualRoute';
 
@@ -468,7 +499,10 @@ class DictionaryIndividualRouteArgs {
 /// [DictionaryIndividualRouterPage]
 class DictionaryIndividualRouterRoute extends PageRouteInfo<void> {
   const DictionaryIndividualRouterRoute({List<PageRouteInfo>? children})
-    : super(DictionaryIndividualRouterRoute.name, initialChildren: children);
+      : super(
+          DictionaryIndividualRouterRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'DictionaryIndividualRouterRoute';
 
@@ -486,15 +520,15 @@ class DictionarySubIndexRoute
     required String? targetUserId,
     List<PageRouteInfo>? children,
   }) : super(
-         DictionarySubIndexRoute.name,
-         args: DictionarySubIndexRouteArgs(
-           key: key,
-           selectedInitialMainGroup: selectedInitialMainGroup,
-           dictionaryPageType: dictionaryPageType,
-           targetUserId: targetUserId,
-         ),
-         initialChildren: children,
-       );
+          DictionarySubIndexRoute.name,
+          args: DictionarySubIndexRouteArgs(
+            key: key,
+            selectedInitialMainGroup: selectedInitialMainGroup,
+            dictionaryPageType: dictionaryPageType,
+            targetUserId: targetUserId,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'DictionarySubIndexRoute';
 
@@ -528,7 +562,10 @@ class DictionarySubIndexRouteArgs {
 /// [HomePage]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
-    : super(HomeRoute.name, initialChildren: children);
+      : super(
+          HomeRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'HomeRoute';
 
@@ -539,7 +576,10 @@ class HomeRoute extends PageRouteInfo<void> {
 /// [HomeRouterPage]
 class HomeRouterRoute extends PageRouteInfo<void> {
   const HomeRouterRoute({List<PageRouteInfo>? children})
-    : super(HomeRouterRoute.name, initialChildren: children);
+      : super(
+          HomeRouterRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'HomeRouterRoute';
 
@@ -556,14 +596,14 @@ class IndividualDictionaryDefinitionListRoute
     required InitialSubGroup initialSubGroup,
     List<PageRouteInfo>? children,
   }) : super(
-         IndividualDictionaryDefinitionListRoute.name,
-         args: IndividualDictionaryDefinitionListRouteArgs(
-           key: key,
-           targetUserId: targetUserId,
-           initialSubGroup: initialSubGroup,
-         ),
-         initialChildren: children,
-       );
+          IndividualDictionaryDefinitionListRoute.name,
+          args: IndividualDictionaryDefinitionListRouteArgs(
+            key: key,
+            targetUserId: targetUserId,
+            initialSubGroup: initialSubGroup,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'IndividualDictionaryDefinitionListRoute';
 
@@ -594,7 +634,10 @@ class IndividualDictionaryDefinitionListRouteArgs {
 /// [MyLicensePage]
 class MyLicenseRoute extends PageRouteInfo<void> {
   const MyLicenseRoute({List<PageRouteInfo>? children})
-    : super(MyLicenseRoute.name, initialChildren: children);
+      : super(
+          MyLicenseRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'MyLicenseRoute';
 
@@ -604,12 +647,14 @@ class MyLicenseRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [ProfileEditPage]
 class ProfileEditRoute extends PageRouteInfo<ProfileEditRouteArgs> {
-  ProfileEditRoute({Key? key, List<PageRouteInfo>? children})
-    : super(
-        ProfileEditRoute.name,
-        args: ProfileEditRouteArgs(key: key),
-        initialChildren: children,
-      );
+  ProfileEditRoute({
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ProfileEditRoute.name,
+          args: ProfileEditRouteArgs(key: key),
+          initialChildren: children,
+        );
 
   static const String name = 'ProfileEditRoute';
 
@@ -636,10 +681,13 @@ class ProfileTopRoute extends PageRouteInfo<ProfileTopRouteArgs> {
     required String targetUserId,
     List<PageRouteInfo>? children,
   }) : super(
-         ProfileTopRoute.name,
-         args: ProfileTopRouteArgs(key: key, targetUserId: targetUserId),
-         initialChildren: children,
-       );
+          ProfileTopRoute.name,
+          args: ProfileTopRouteArgs(
+            key: key,
+            targetUserId: targetUserId,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'ProfileTopRoute';
 
@@ -648,7 +696,10 @@ class ProfileTopRoute extends PageRouteInfo<ProfileTopRouteArgs> {
 }
 
 class ProfileTopRouteArgs {
-  const ProfileTopRouteArgs({this.key, required this.targetUserId});
+  const ProfileTopRouteArgs({
+    this.key,
+    required this.targetUserId,
+  });
 
   final Key? key;
 
@@ -664,7 +715,10 @@ class ProfileTopRouteArgs {
 /// [SettingPage]
 class SettingRoute extends PageRouteInfo<void> {
   const SettingRoute({List<PageRouteInfo>? children})
-    : super(SettingRoute.name, initialChildren: children);
+      : super(
+          SettingRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'SettingRoute';
 
@@ -675,7 +729,10 @@ class SettingRoute extends PageRouteInfo<void> {
 /// [SettingRouterPage]
 class SettingRouterRoute extends PageRouteInfo<void> {
   const SettingRouterRoute({List<PageRouteInfo>? children})
-    : super(SettingRouterRoute.name, initialChildren: children);
+      : super(
+          SettingRouterRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'SettingRouterRoute';
 
@@ -686,7 +743,10 @@ class SettingRouterRoute extends PageRouteInfo<void> {
 /// [SignInFailurePage]
 class SignInFailureRoute extends PageRouteInfo<void> {
   const SignInFailureRoute({List<PageRouteInfo>? children})
-    : super(SignInFailureRoute.name, initialChildren: children);
+      : super(
+          SignInFailureRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'SignInFailureRoute';
 
@@ -703,14 +763,14 @@ class UserListFollowingOrFollowerRoute
     required String targetUserId,
     List<PageRouteInfo>? children,
   }) : super(
-         UserListFollowingOrFollowerRoute.name,
-         args: UserListFollowingOrFollowerRouteArgs(
-           key: key,
-           initialTab: initialTab,
-           targetUserId: targetUserId,
-         ),
-         initialChildren: children,
-       );
+          UserListFollowingOrFollowerRoute.name,
+          args: UserListFollowingOrFollowerRouteArgs(
+            key: key,
+            initialTab: initialTab,
+            targetUserId: targetUserId,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'UserListFollowingOrFollowerRoute';
 
@@ -745,10 +805,13 @@ class UserListLikedRoute extends PageRouteInfo<UserListLikedRouteArgs> {
     required String definitionId,
     List<PageRouteInfo>? children,
   }) : super(
-         UserListLikedRoute.name,
-         args: UserListLikedRouteArgs(key: key, definitionId: definitionId),
-         initialChildren: children,
-       );
+          UserListLikedRoute.name,
+          args: UserListLikedRouteArgs(
+            key: key,
+            definitionId: definitionId,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'UserListLikedRoute';
 
@@ -757,7 +820,10 @@ class UserListLikedRoute extends PageRouteInfo<UserListLikedRouteArgs> {
 }
 
 class UserListLikedRouteArgs {
-  const UserListLikedRouteArgs({this.key, required this.definitionId});
+  const UserListLikedRouteArgs({
+    this.key,
+    required this.definitionId,
+  });
 
   final Key? key;
 
@@ -773,7 +839,10 @@ class UserListLikedRouteArgs {
 /// [UserListMutedPage]
 class UserListMutedRoute extends PageRouteInfo<void> {
   const UserListMutedRoute({List<PageRouteInfo>? children})
-    : super(UserListMutedRoute.name, initialChildren: children);
+      : super(
+          UserListMutedRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'UserListMutedRoute';
 
@@ -784,7 +853,10 @@ class UserListMutedRoute extends PageRouteInfo<void> {
 /// [UserSearchPage]
 class UserSearchRoute extends PageRouteInfo<void> {
   const UserSearchRoute({List<PageRouteInfo>? children})
-    : super(UserSearchRoute.name, initialChildren: children);
+      : super(
+          UserSearchRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'UserSearchRoute';
 
@@ -799,10 +871,13 @@ class UserSearchResultRoute extends PageRouteInfo<UserSearchResultRouteArgs> {
     required String searchWord,
     List<PageRouteInfo>? children,
   }) : super(
-         UserSearchResultRoute.name,
-         args: UserSearchResultRouteArgs(key: key, searchWord: searchWord),
-         initialChildren: children,
-       );
+          UserSearchResultRoute.name,
+          args: UserSearchResultRouteArgs(
+            key: key,
+            searchWord: searchWord,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'UserSearchResultRoute';
 
@@ -811,7 +886,10 @@ class UserSearchResultRoute extends PageRouteInfo<UserSearchResultRouteArgs> {
 }
 
 class UserSearchResultRouteArgs {
-  const UserSearchResultRouteArgs({this.key, required this.searchWord});
+  const UserSearchResultRouteArgs({
+    this.key,
+    required this.searchWord,
+  });
 
   final Key? key;
 
@@ -834,15 +912,15 @@ class UserWordDefinitionListRoute
     required String wordLabel,
     List<PageRouteInfo>? children,
   }) : super(
-         UserWordDefinitionListRoute.name,
-         args: UserWordDefinitionListRouteArgs(
-           key: key,
-           targetUserId: targetUserId,
-           wordId: wordId,
-           wordLabel: wordLabel,
-         ),
-         initialChildren: children,
-       );
+          UserWordDefinitionListRoute.name,
+          args: UserWordDefinitionListRouteArgs(
+            key: key,
+            targetUserId: targetUserId,
+            wordId: wordId,
+            wordLabel: wordLabel,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'UserWordDefinitionListRoute';
 
@@ -876,7 +954,10 @@ class UserWordDefinitionListRouteArgs {
 /// [WelcomePage]
 class WelcomeRoute extends PageRouteInfo<void> {
   const WelcomeRoute({List<PageRouteInfo>? children})
-    : super(WelcomeRoute.name, initialChildren: children);
+      : super(
+          WelcomeRoute.name,
+          initialChildren: children,
+        );
 
   static const String name = 'WelcomeRoute';
 
@@ -891,23 +972,25 @@ class WordListRoute extends PageRouteInfo<WordListRouteArgs> {
     required InitialSubGroup selectedInitialSubGroup,
     List<PageRouteInfo>? children,
   }) : super(
-         WordListRoute.name,
-         args: WordListRouteArgs(
-           key: key,
-           selectedInitialSubGroup: selectedInitialSubGroup,
-         ),
-         initialChildren: children,
-       );
+          WordListRoute.name,
+          args: WordListRouteArgs(
+            key: key,
+            selectedInitialSubGroup: selectedInitialSubGroup,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'WordListRoute';
 
-  static const PageInfo<WordListRouteArgs> page = PageInfo<WordListRouteArgs>(
-    name,
-  );
+  static const PageInfo<WordListRouteArgs> page =
+      PageInfo<WordListRouteArgs>(name);
 }
 
 class WordListRouteArgs {
-  const WordListRouteArgs({this.key, required this.selectedInitialSubGroup});
+  const WordListRouteArgs({
+    this.key,
+    required this.selectedInitialSubGroup,
+  });
 
   final Key? key;
 
@@ -927,10 +1010,13 @@ class WordRegistrationRoute extends PageRouteInfo<WordRegistrationRouteArgs> {
     String? initialWord,
     List<PageRouteInfo>? children,
   }) : super(
-         WordRegistrationRoute.name,
-         args: WordRegistrationRouteArgs(key: key, initialWord: initialWord),
-         initialChildren: children,
-       );
+          WordRegistrationRoute.name,
+          args: WordRegistrationRouteArgs(
+            key: key,
+            initialWord: initialWord,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'WordRegistrationRoute';
 
@@ -939,7 +1025,10 @@ class WordRegistrationRoute extends PageRouteInfo<WordRegistrationRouteArgs> {
 }
 
 class WordRegistrationRouteArgs {
-  const WordRegistrationRouteArgs({this.key, this.initialWord});
+  const WordRegistrationRouteArgs({
+    this.key,
+    this.initialWord,
+  });
 
   final Key? key;
 
@@ -959,10 +1048,13 @@ class WordSearchResultRoute extends PageRouteInfo<WordSearchResultRouteArgs> {
     required String searchWord,
     List<PageRouteInfo>? children,
   }) : super(
-         WordSearchResultRoute.name,
-         args: WordSearchResultRouteArgs(key: key, searchWord: searchWord),
-         initialChildren: children,
-       );
+          WordSearchResultRoute.name,
+          args: WordSearchResultRouteArgs(
+            key: key,
+            searchWord: searchWord,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'WordSearchResultRoute';
 
@@ -971,7 +1063,10 @@ class WordSearchResultRoute extends PageRouteInfo<WordSearchResultRouteArgs> {
 }
 
 class WordSearchResultRouteArgs {
-  const WordSearchResultRouteArgs({this.key, required this.searchWord});
+  const WordSearchResultRouteArgs({
+    this.key,
+    required this.searchWord,
+  });
 
   final Key? key;
 
@@ -991,20 +1086,25 @@ class WordTopRoute extends PageRouteInfo<WordTopRouteArgs> {
     required String wordId,
     List<PageRouteInfo>? children,
   }) : super(
-         WordTopRoute.name,
-         args: WordTopRouteArgs(key: key, wordId: wordId),
-         initialChildren: children,
-       );
+          WordTopRoute.name,
+          args: WordTopRouteArgs(
+            key: key,
+            wordId: wordId,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'WordTopRoute';
 
-  static const PageInfo<WordTopRouteArgs> page = PageInfo<WordTopRouteArgs>(
-    name,
-  );
+  static const PageInfo<WordTopRouteArgs> page =
+      PageInfo<WordTopRouteArgs>(name);
 }
 
 class WordTopRouteArgs {
-  const WordTopRouteArgs({this.key, required this.wordId});
+  const WordTopRouteArgs({
+    this.key,
+    required this.wordId,
+  });
 
   final Key? key;
 
