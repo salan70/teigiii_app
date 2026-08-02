@@ -26,13 +26,8 @@ import 'package:teigiii_api/src/model/frame_stats_request.dart' as _i6;
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
-  _FakeResponse_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeResponse_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [TelemetryApi].
@@ -41,7 +36,7 @@ class _FakeResponse_0<T> extends _i1.SmartFake implements _i2.Response<T> {
 class MockTelemetryApi extends _i1.Mock implements _i3.TelemetryApi {
   @override
   _i4.Future<_i2.Response<_i5.FrameStatsAcceptedResponse>>
-      v1TelemetryFramesPost({
+  v1TelemetryFramesPost({
     _i6.FrameStatsRequest? frameStatsRequest,
     _i2.CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -50,55 +45,46 @@ class MockTelemetryApi extends _i1.Mock implements _i3.TelemetryApi {
     _i2.ProgressCallback? onSendProgress,
     _i2.ProgressCallback? onReceiveProgress,
   }) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #v1TelemetryFramesPost,
-              [],
-              {
-                #frameStatsRequest: frameStatsRequest,
-                #cancelToken: cancelToken,
-                #headers: headers,
-                #extra: extra,
-                #validateStatus: validateStatus,
-                #onSendProgress: onSendProgress,
-                #onReceiveProgress: onReceiveProgress,
-              },
-            ),
+      (super.noSuchMethod(
+            Invocation.method(#v1TelemetryFramesPost, [], {
+              #frameStatsRequest: frameStatsRequest,
+              #cancelToken: cancelToken,
+              #headers: headers,
+              #extra: extra,
+              #validateStatus: validateStatus,
+              #onSendProgress: onSendProgress,
+              #onReceiveProgress: onReceiveProgress,
+            }),
             returnValue:
                 _i4.Future<_i2.Response<_i5.FrameStatsAcceptedResponse>>.value(
-                    _FakeResponse_0<_i5.FrameStatsAcceptedResponse>(
-              this,
-              Invocation.method(
-                #v1TelemetryFramesPost,
-                [],
-                {
-                  #frameStatsRequest: frameStatsRequest,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                },
-              ),
-            )),
+                  _FakeResponse_0<_i5.FrameStatsAcceptedResponse>(
+                    this,
+                    Invocation.method(#v1TelemetryFramesPost, [], {
+                      #frameStatsRequest: frameStatsRequest,
+                      #cancelToken: cancelToken,
+                      #headers: headers,
+                      #extra: extra,
+                      #validateStatus: validateStatus,
+                      #onSendProgress: onSendProgress,
+                      #onReceiveProgress: onReceiveProgress,
+                    }),
+                  ),
+                ),
             returnValueForMissingStub:
                 _i4.Future<_i2.Response<_i5.FrameStatsAcceptedResponse>>.value(
-                    _FakeResponse_0<_i5.FrameStatsAcceptedResponse>(
-              this,
-              Invocation.method(
-                #v1TelemetryFramesPost,
-                [],
-                {
-                  #frameStatsRequest: frameStatsRequest,
-                  #cancelToken: cancelToken,
-                  #headers: headers,
-                  #extra: extra,
-                  #validateStatus: validateStatus,
-                  #onSendProgress: onSendProgress,
-                  #onReceiveProgress: onReceiveProgress,
-                },
-              ),
-            )),
-          ) as _i4.Future<_i2.Response<_i5.FrameStatsAcceptedResponse>>);
+                  _FakeResponse_0<_i5.FrameStatsAcceptedResponse>(
+                    this,
+                    Invocation.method(#v1TelemetryFramesPost, [], {
+                      #frameStatsRequest: frameStatsRequest,
+                      #cancelToken: cancelToken,
+                      #headers: headers,
+                      #extra: extra,
+                      #validateStatus: validateStatus,
+                      #onSendProgress: onSendProgress,
+                      #onReceiveProgress: onReceiveProgress,
+                    }),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Response<_i5.FrameStatsAcceptedResponse>>);
 }

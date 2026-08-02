@@ -37,6 +37,31 @@ export const wordResponseSchema = wordSummarySchema
   })
   .openapi("WordResponse");
 
+/**
+ * 明示登録の結果種別。
+ *
+ * - `created`: 言葉を新規作成した
+ * - `promoted`: 既存の言葉に対し、最初の明示登録をこのリクエストが行った
+ * - `alreadyPublic`: 既存の言葉で、この登録の前から明示登録されていた
+ */
+export const wordRegistrationResultSchema = z
+  .enum(["created", "promoted", "alreadyPublic"])
+  .openapi("WordRegistrationResult");
+
+/** `POST /v1/words` のレスポンス。言葉に加えて登録結果の種別を返す。 */
+export const createWordResponseSchema = wordResponseSchema
+  .extend({
+    registrationResult: wordRegistrationResultSchema,
+  })
+  .openapi("CreateWordResponse");
+
+/** `GET /v1/words/lookup` のレスポンス。公開されている言葉がなければ null。 */
+export const wordLookupResponseSchema = z
+  .object({
+    word: wordSummarySchema.nullable(),
+  })
+  .openapi("WordLookupResponse");
+
 export const createWordRequestSchema = z
   .object({
     word: z.string().min(1).max(maxWordLength),

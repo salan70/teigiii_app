@@ -109,7 +109,7 @@ class UsersApi {
   }
 
   /// ユーザーの定義一覧
-  /// 対象が本人の場合は非公開定義を含む（下書きは /me/definitions）。他者の場合は公開定義のみ。wordId・subGroup で絞り込み可能。sort&#x3D;reading は言葉のよみ昇順（旧 UI の頭文字別辞書のパリティ）。
+  /// 対象が本人の場合は非公開定義を含む。他者の場合は公開定義のみ。wordId・subGroup で絞り込み可能。sort&#x3D;reading は言葉のよみ昇順（旧 UI の頭文字別辞書のパリティ）。
   ///
   /// Parameters:
   /// * [id]

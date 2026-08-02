@@ -10,11 +10,13 @@ import 'package:teigiii_api/src/deserialize.dart';
 import 'package:dio/dio.dart';
 
 import 'package:teigiii_api/src/model/create_word_request.dart';
+import 'package:teigiii_api/src/model/create_word_response.dart';
 import 'package:teigiii_api/src/model/error_response.dart';
 import 'package:teigiii_api/src/model/update_word_request.dart';
 import 'package:teigiii_api/src/model/v1_users_id_definitions_get200_response.dart';
 import 'package:teigiii_api/src/model/v1_words_get200_response.dart';
 import 'package:teigiii_api/src/model/word_conflict_response.dart';
+import 'package:teigiii_api/src/model/word_lookup_response.dart';
 import 'package:teigiii_api/src/model/word_response.dart';
 
 class WordsApi {
@@ -123,7 +125,7 @@ class WordsApi {
   }
 
   /// 言葉ページの定義一覧
-  /// scope&#x3D;mine は自分の定義（下書き含む）、scope&#x3D;others は他者の公開定義のみ、scope&#x3D;all は自分 + 他者の公開定義の混在（旧 UI の言葉トップのパリティ）。sort&#x3D;reactions はいいね数順。
+  /// scope&#x3D;mine は自分の定義、scope&#x3D;others は他者の公開定義のみ、scope&#x3D;all は自分 + 他者の公開定義の混在（旧 UI の言葉トップのパリティ）。sort&#x3D;reactions はいいね数順。
   ///
   /// Parameters:
   /// * [id]
@@ -534,8 +536,99 @@ class WordsApi {
     return _response;
   }
 
+  /// 登録前の既存語チェック
+  /// 表記とよみをサーバーで前後トリム + NFC 正規化し、(表記, よみ) の完全一致で解決する。閲覧者にとって公開されている言葉だけを返し、非公開の言葉は存在を秘匿して null を返す。よみの文字種は検証しない（一致しなければ null になる）。
+  ///
+  /// Parameters:
+  /// * [word]
+  /// * [reading]
+  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
+  /// * [headers] - Can be used to add additional headers to the request
+  /// * [extras] - Can be used to add flags to the request
+  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
+  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
+  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
+  ///
+  /// Returns a [Future] containing a [Response] with a [WordLookupResponse] as data
+  /// Throws [DioException] if API call or serialization fails
+  Future<Response<WordLookupResponse>> v1WordsLookupGet({
+    required String word,
+    required String reading,
+    CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    ValidateStatus? validateStatus,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final _path = r'/v1/words/lookup';
+    final _options = Options(
+      method: r'GET',
+      headers: <String, dynamic>{...?headers},
+      extra: <String, dynamic>{
+        'secure': <Map<String, String>>[
+          {'type': 'http', 'scheme': 'bearer', 'name': 'firebaseIdToken'},
+          {
+            'type': 'apiKey',
+            'name': 'appCheck',
+            'keyName': 'X-Firebase-AppCheck',
+            'where': 'header',
+          },
+        ],
+        ...?extra,
+      },
+      validateStatus: validateStatus,
+    );
+
+    final _queryParameters = <String, dynamic>{
+      r'word': word,
+      r'reading': reading,
+    };
+
+    final _response = await _dio.request<Object>(
+      _path,
+      options: _options,
+      queryParameters: _queryParameters,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+
+    WordLookupResponse? _responseData;
+
+    try {
+      final rawData = _response.data;
+      _responseData = rawData == null
+          ? null
+          : deserialize<WordLookupResponse, WordLookupResponse>(
+              rawData,
+              'WordLookupResponse',
+              growable: true,
+            );
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<WordLookupResponse>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
+  }
+
   /// 言葉を明示登録する
-  /// 表記はサーバーで前後トリム + NFC 正規化してから完全一致で解決する。新規作成は 201、既存言葉への明示登録・公開昇格は 200。読みが異なっても既存の読みを採用し、重複する言葉は作らない。
+  /// 表記とよみはサーバーで前後トリム + NFC 正規化してから (表記, よみ) の完全一致で解決する。新規作成は 201、既存言葉への明示登録・公開昇格は 200。表記が同じでもよみが異なれば別の言葉として新規作成する。
   ///
   /// Parameters:
   /// * [createWordRequest] - 登録内容
@@ -546,9 +639,9 @@ class WordsApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future] containing a [Response] with a [WordResponse] as data
+  /// Returns a [Future] containing a [Response] with a [CreateWordResponse] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<WordResponse>> v1WordsPost({
+  Future<Response<CreateWordResponse>> v1WordsPost({
     CreateWordRequest? createWordRequest,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -599,15 +692,15 @@ class WordsApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    WordResponse? _responseData;
+    CreateWordResponse? _responseData;
 
     try {
       final rawData = _response.data;
       _responseData = rawData == null
           ? null
-          : deserialize<WordResponse, WordResponse>(
+          : deserialize<CreateWordResponse, CreateWordResponse>(
               rawData,
-              'WordResponse',
+              'CreateWordResponse',
               growable: true,
             );
     } catch (error, stackTrace) {
@@ -620,7 +713,7 @@ class WordsApi {
       );
     }
 
-    return Response<WordResponse>(
+    return Response<CreateWordResponse>(
       data: _responseData,
       headers: _response.headers,
       isRedirect: _response.isRedirect,

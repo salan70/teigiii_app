@@ -68,12 +68,6 @@
   "lib/core/page/word_list_page.dart": {
     "ds_hardcoded_spacing": 1
   },
-  "lib/core/page/word_registration_page.dart": {
-    "ds_hardcoded_spacing": 4,
-    "ds_hardcoded_elevation": 1,
-    "ds_hardcoded_opacity": 1,
-    "ds_forbidden_widget": 3
-  },
   "lib/core/page/word_search_result_page.dart": {
     "ds_hardcoded_spacing": 4
   },

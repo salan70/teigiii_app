@@ -15,6 +15,7 @@ Method | HTTP request | Description
 [**v1WordsIdPatch**](WordsApi.md#v1wordsidpatch) | **PATCH** /v1/words/{id} | 作成者修正（表記・よみ）
 [**v1WordsIdSaveDelete**](WordsApi.md#v1wordsidsavedelete) | **DELETE** /v1/words/{id}/save | 言葉の保存を解除
 [**v1WordsIdSavePut**](WordsApi.md#v1wordsidsaveput) | **PUT** /v1/words/{id}/save | 言葉を保存
+[**v1WordsLookupGet**](WordsApi.md#v1wordslookupget) | **GET** /v1/words/lookup | 登録前の既存語チェック
 [**v1WordsPost**](WordsApi.md#v1wordspost) | **POST** /v1/words | 言葉を明示登録する
 
 
@@ -76,7 +77,7 @@ Name | Type | Description  | Notes
 
 言葉ページの定義一覧
 
-scope=mine は自分の定義（下書き含む）、scope=others は他者の公開定義のみ、scope=all は自分 + 他者の公開定義の混在（旧 UI の言葉トップのパリティ）。sort=reactions はいいね数順。
+scope=mine は自分の定義、scope=others は他者の公開定義のみ、scope=all は自分 + 他者の公開定義の混在（旧 UI の言葉トップのパリティ）。sort=reactions はいいね数順。
 
 ### Example
 ```dart
@@ -308,12 +309,61 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **v1WordsLookupGet**
+> WordLookupResponse v1WordsLookupGet(word, reading)
+
+登録前の既存語チェック
+
+表記とよみをサーバーで前後トリム + NFC 正規化し、(表記, よみ) の完全一致で解決する。閲覧者にとって公開されている言葉だけを返し、非公開の言葉は存在を秘匿して null を返す。よみの文字種は検証しない（一致しなければ null になる）。
+
+### Example
+```dart
+import 'package:teigiii_api/api.dart';
+// TODO Configure API key authorization: appCheck
+//defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKey = 'YOUR_API_KEY';
+// uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+//defaultApiClient.getAuthentication<ApiKeyAuth>('appCheck').apiKeyPrefix = 'Bearer';
+
+final api = TeigiiiApi().getWordsApi();
+final String word = word_example; // String | 
+final String reading = reading_example; // String | 
+
+try {
+    final response = api.v1WordsLookupGet(word, reading);
+    print(response);
+} on DioException catch (e) {
+    print('Exception when calling WordsApi->v1WordsLookupGet: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **word** | **String**|  | 
+ **reading** | **String**|  | 
+
+### Return type
+
+[**WordLookupResponse**](WordLookupResponse.md)
+
+### Authorization
+
+[firebaseIdToken](../README.md#firebaseIdToken), [appCheck](../README.md#appCheck)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **v1WordsPost**
-> WordResponse v1WordsPost(createWordRequest)
+> CreateWordResponse v1WordsPost(createWordRequest)
 
 言葉を明示登録する
 
-表記はサーバーで前後トリム + NFC 正規化してから完全一致で解決する。新規作成は 201、既存言葉への明示登録・公開昇格は 200。読みが異なっても既存の読みを採用し、重複する言葉は作らない。
+表記とよみはサーバーで前後トリム + NFC 正規化してから (表記, よみ) の完全一致で解決する。新規作成は 201、既存言葉への明示登録・公開昇格は 200。表記が同じでもよみが異なれば別の言葉として新規作成する。
 
 ### Example
 ```dart
@@ -342,7 +392,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**WordResponse**](WordResponse.md)
+[**CreateWordResponse**](CreateWordResponse.md)
 
 ### Authorization
 

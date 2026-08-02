@@ -27,13 +27,23 @@ import 'package:teigi_app/feature/user_profile/repository/user_profile_repositor
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeDefinition_0 extends _i1.SmartFake implements _i2.Definition {
-  _FakeDefinition_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeDefinition_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 class _FakeUserProfile_1 extends _i1.SmartFake implements _i3.UserProfile {
-  _FakeUserProfile_1(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeUserProfile_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 /// A class which mocks [FetchDefinitionRepository].
@@ -44,21 +54,26 @@ class MockFetchDefinitionRepository extends _i1.Mock
   @override
   _i5.Future<_i2.Definition> fetchDefinition(String? definitionId) =>
       (super.noSuchMethod(
-            Invocation.method(#fetchDefinition, [definitionId]),
-            returnValue: _i5.Future<_i2.Definition>.value(
-              _FakeDefinition_0(
-                this,
-                Invocation.method(#fetchDefinition, [definitionId]),
-              ),
-            ),
-            returnValueForMissingStub: _i5.Future<_i2.Definition>.value(
-              _FakeDefinition_0(
-                this,
-                Invocation.method(#fetchDefinition, [definitionId]),
-              ),
-            ),
-          )
-          as _i5.Future<_i2.Definition>);
+        Invocation.method(
+          #fetchDefinition,
+          [definitionId],
+        ),
+        returnValue: _i5.Future<_i2.Definition>.value(_FakeDefinition_0(
+          this,
+          Invocation.method(
+            #fetchDefinition,
+            [definitionId],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i5.Future<_i2.Definition>.value(_FakeDefinition_0(
+          this,
+          Invocation.method(
+            #fetchDefinition,
+            [definitionId],
+          ),
+        )),
+      ) as _i5.Future<_i2.Definition>);
 }
 
 /// A class which mocks [UserProfileRepository].
@@ -69,28 +84,35 @@ class MockUserProfileRepository extends _i1.Mock
   @override
   _i5.Future<_i3.UserProfile> fetchUserProfile(String? userId) =>
       (super.noSuchMethod(
-            Invocation.method(#fetchUserProfile, [userId]),
-            returnValue: _i5.Future<_i3.UserProfile>.value(
-              _FakeUserProfile_1(
-                this,
-                Invocation.method(#fetchUserProfile, [userId]),
-              ),
-            ),
-            returnValueForMissingStub: _i5.Future<_i3.UserProfile>.value(
-              _FakeUserProfile_1(
-                this,
-                Invocation.method(#fetchUserProfile, [userId]),
-              ),
-            ),
-          )
-          as _i5.Future<_i3.UserProfile>);
+        Invocation.method(
+          #fetchUserProfile,
+          [userId],
+        ),
+        returnValue: _i5.Future<_i3.UserProfile>.value(_FakeUserProfile_1(
+          this,
+          Invocation.method(
+            #fetchUserProfile,
+            [userId],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i5.Future<_i3.UserProfile>.value(_FakeUserProfile_1(
+          this,
+          Invocation.method(
+            #fetchUserProfile,
+            [userId],
+          ),
+        )),
+      ) as _i5.Future<_i3.UserProfile>);
 
   @override
   _i5.Future<void> updateUserProfile(_i3.UserProfile? userProfileForWrite) =>
       (super.noSuchMethod(
-            Invocation.method(#updateUserProfile, [userProfileForWrite]),
-            returnValue: _i5.Future<void>.value(),
-            returnValueForMissingStub: _i5.Future<void>.value(),
-          )
-          as _i5.Future<void>);
+        Invocation.method(
+          #updateUserProfile,
+          [userProfileForWrite],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }

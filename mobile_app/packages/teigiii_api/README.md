@@ -71,10 +71,10 @@ Class | Method | HTTP request | Description
 [*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdLikeDelete**](doc/DefinitionsApi.md#v1definitionsidlikedelete) | **DELETE** /v1/definitions/{id}/like | いいね解除
 [*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdLikePut**](doc/DefinitionsApi.md#v1definitionsidlikeput) | **PUT** /v1/definitions/{id}/like | いいね
 [*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdLikesGet**](doc/DefinitionsApi.md#v1definitionsidlikesget) | **GET** /v1/definitions/{id}/likes | いいねしたユーザー一覧
-[*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdPatch**](doc/DefinitionsApi.md#v1definitionsidpatch) | **PATCH** /v1/definitions/{id} | 本文編集・状態遷移・（下書きのみ）言葉の変更
+[*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsIdPatch**](doc/DefinitionsApi.md#v1definitionsidpatch) | **PATCH** /v1/definitions/{id} | 本文編集・公開範囲の変更
 [*DefinitionsApi*](doc/DefinitionsApi.md) | [**v1DefinitionsPost**](doc/DefinitionsApi.md#v1definitionspost) | **POST** /v1/definitions | 定義を作成（public / private）
 [*MeApi*](doc/MeApi.md) | [**v1MeDefinedWordsGet**](doc/MeApi.md#v1medefinedwordsget) | **GET** /v1/me/defined-words | 定義済みの言葉一覧（言葉単位 + 状態別件数）
-[*MeApi*](doc/MeApi.md) | [**v1MeDefinitionsGet**](doc/MeApi.md#v1medefinitionsget) | **GET** /v1/me/definitions | 自分の定義一覧（状態で絞り込み。状態で絞り込み）
+[*MeApi*](doc/MeApi.md) | [**v1MeDefinitionsGet**](doc/MeApi.md#v1medefinitionsget) | **GET** /v1/me/definitions | 自分の定義一覧（状態で絞り込み）
 [*MeApi*](doc/MeApi.md) | [**v1MeDictionaryOverviewGet**](doc/MeApi.md#v1medictionaryoverviewget) | **GET** /v1/me/dictionary/overview | あなたの辞書の概要（各件数 + 最近の定義）
 [*MeApi*](doc/MeApi.md) | [**v1MeMutesGet**](doc/MeApi.md#v1memutesget) | **GET** /v1/me/mutes | ミュート中のユーザー一覧
 [*MeApi*](doc/MeApi.md) | [**v1MeSavedWordsGet**](doc/MeApi.md#v1mesavedwordsget) | **GET** /v1/me/saved-words | 保存した言葉の一覧
@@ -106,6 +106,7 @@ Class | Method | HTTP request | Description
 [*WordsApi*](doc/WordsApi.md) | [**v1WordsIdPatch**](doc/WordsApi.md#v1wordsidpatch) | **PATCH** /v1/words/{id} | 作成者修正（表記・よみ）
 [*WordsApi*](doc/WordsApi.md) | [**v1WordsIdSaveDelete**](doc/WordsApi.md#v1wordsidsavedelete) | **DELETE** /v1/words/{id}/save | 言葉の保存を解除
 [*WordsApi*](doc/WordsApi.md) | [**v1WordsIdSavePut**](doc/WordsApi.md#v1wordsidsaveput) | **PUT** /v1/words/{id}/save | 言葉を保存
+[*WordsApi*](doc/WordsApi.md) | [**v1WordsLookupGet**](doc/WordsApi.md#v1wordslookupget) | **GET** /v1/words/lookup | 登録前の既存語チェック
 [*WordsApi*](doc/WordsApi.md) | [**v1WordsPost**](doc/WordsApi.md#v1wordspost) | **POST** /v1/words | 言葉を明示登録する
 
 
@@ -115,6 +116,7 @@ Class | Method | HTTP request | Description
  - [CreateDefinitionRequest](doc/CreateDefinitionRequest.md)
  - [CreateUserRequest](doc/CreateUserRequest.md)
  - [CreateWordRequest](doc/CreateWordRequest.md)
+ - [CreateWordResponse](doc/CreateWordResponse.md)
  - [DefinedWordItem](doc/DefinedWordItem.md)
  - [DefinitionActivity](doc/DefinitionActivity.md)
  - [DefinitionResponse](doc/DefinitionResponse.md)
@@ -146,7 +148,9 @@ Class | Method | HTTP request | Description
  - [V1WordsGet200Response](doc/V1WordsGet200Response.md)
  - [WordConflictResponse](doc/WordConflictResponse.md)
  - [WordListItem](doc/WordListItem.md)
+ - [WordLookupResponse](doc/WordLookupResponse.md)
  - [WordRegisteredActivity](doc/WordRegisteredActivity.md)
+ - [WordRegistrationResult](doc/WordRegistrationResult.md)
  - [WordResponse](doc/WordResponse.md)
  - [WordSummary](doc/WordSummary.md)
 

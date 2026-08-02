@@ -13,14 +13,14 @@ String _$introductionServiceHash() =>
 @ProviderFor(introductionService)
 final introductionServiceProvider =
     AutoDisposeProvider<IntroductionService>.internal(
-      introductionService,
-      name: r'introductionServiceProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$introductionServiceHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  introductionService,
+  name: r'introductionServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$introductionServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef IntroductionServiceRef = AutoDisposeProviderRef<IntroductionService>;
 // ignore_for_file: type=lint

@@ -223,7 +223,10 @@ DefinitionResponse _$DefinitionResponseFromJson(
     isEdited: $checkedConvert('isEdited', (v) => v as bool),
     likesCount: $checkedConvert('likesCount', (v) => (v as num).toInt()),
     isLikedByMe: $checkedConvert('isLikedByMe', (v) => v as bool),
-    finalizedAt: $checkedConvert('finalizedAt', (v) => DateTime.parse(v as String)),
+    finalizedAt: $checkedConvert(
+      'finalizedAt',
+      (v) => DateTime.parse(v as String),
+    ),
     editableUntil: $checkedConvert(
       'editableUntil',
       (v) => DateTime.parse(v as String),

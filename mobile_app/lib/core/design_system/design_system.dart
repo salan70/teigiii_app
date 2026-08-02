@@ -4,7 +4,9 @@
 /// 仕様の正本は `doc/specs/mobile-app-design-system.md`。
 library;
 
+export 'component/ds_app_bar_action.dart';
 export 'component/ds_button.dart';
+export 'component/ds_chip.dart';
 export 'component/ds_dialog.dart';
 export 'component/ds_feedback.dart';
 export 'component/ds_icon_button.dart';

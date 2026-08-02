@@ -5,6 +5,7 @@ import 'package:teigiii_api/teigiii_api.dart';
 import '../../../core/api/api_exception.dart';
 import '../../../core/api/api_providers.dart';
 import '../domain/word.dart';
+import '../domain/word_registration.dart';
 
 part 'word_repository.g.dart';
 
@@ -53,17 +54,59 @@ class WordRepository {
 
   /// 言葉を明示登録する。
   ///
-  /// 新規作成は 201、既存言葉への登録・公開昇格は 200。いずれも [Word] を返す。
-  Future<Word> create({required String word, required String reading}) async {
+  /// 登録した [Word] と、その登録が何をもたらしたかを表す
+  /// [WordRegistrationOutcome] を返す。
+  Future<WordRegistration> create({
+    required String word,
+    required String reading,
+  }) async {
     try {
       final response = await _wordsApi.v1WordsPost(
         createWordRequest: CreateWordRequest(word: word, reading: reading),
       );
-      return _wordFromResponse(response.data!);
+      final data = response.data!;
+      return WordRegistration(
+        word: Word(
+          id: data.id,
+          word: data.word,
+          reading: data.reading,
+          initialSubGroupLabel: data.readingSubGroup,
+          postedDefinitionCount: data.publicDefinitionCount,
+          isSavedByMe: data.isSavedByMe,
+        ),
+        outcome: _outcomeFromResponse(data.registrationResult),
+      );
     } on DioException catch (exception) {
       throw ApiException.fromDioException(exception);
     }
   }
+
+  /// 登録前の既存語チェック。
+  ///
+  /// (表記, よみ) が完全一致し、かつ公開されている言葉の ID を返す。
+  /// 該当がない場合は null を返す。非公開の言葉は存在を秘匿するため null になる。
+  Future<String?> findPublicWordId({
+    required String word,
+    required String reading,
+  }) async {
+    try {
+      final response = await _wordsApi.v1WordsLookupGet(
+        word: word,
+        reading: reading,
+      );
+      return response.data!.word?.id;
+    } on DioException catch (exception) {
+      throw ApiException.fromDioException(exception);
+    }
+  }
+
+  WordRegistrationOutcome _outcomeFromResponse(WordRegistrationResult result) =>
+      switch (result) {
+        WordRegistrationResult.created => WordRegistrationOutcome.created,
+        WordRegistrationResult.promoted => WordRegistrationOutcome.promoted,
+        WordRegistrationResult.alreadyPublic =>
+          WordRegistrationOutcome.alreadyPublic,
+      };
 
   Word _wordFromResponse(WordResponse r) => Word(
     id: r.id,

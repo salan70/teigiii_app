@@ -29,6 +29,8 @@ void main() {
       leadingIcon: Icons.volume_off,
       onTap: () {},
     ),
+    'DsChip.navigable': DsChip.navigable(label: 'この言葉は登録済みです', onTap: () {}),
+    'DsAppBarAction': DsAppBarAction(label: '登録', onPressed: () {}),
   };
 
   /// テキストを持つコンポーネント。コントラストの検査対象。
@@ -52,6 +54,8 @@ void main() {
       leadingIcon: Icons.volume_off,
       onTap: () {},
     ),
+    'DsChip.navigable': DsChip.navigable(label: 'この言葉は登録済みです', onTap: () {}),
+    'DsAppBarAction': DsAppBarAction(label: '登録', onPressed: () {}),
     'DsEmptyView': const DsEmptyView(message: 'まだ定義がありません'),
     'DsErrorView.compact': DsErrorView.compact(onRetry: () {}),
     'DsTextField': const DsTextField.singleLine(

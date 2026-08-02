@@ -6,7 +6,8 @@
 import 'dart:async' as _i4;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:teigi_app/feature/word/domain/word.dart' as _i2;
+import 'package:teigi_app/feature/word/domain/word.dart' as _i5;
+import 'package:teigi_app/feature/word/domain/word_registration.dart' as _i2;
 import 'package:teigi_app/feature/word/repository/word_repository.dart' as _i3;
 
 // ignore_for_file: type=lint
@@ -22,8 +23,9 @@ import 'package:teigi_app/feature/word/repository/word_repository.dart' as _i3;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeWord_0 extends _i1.SmartFake implements _i2.Word {
-  _FakeWord_0(Object parent, Invocation parentInvocation)
+class _FakeWordRegistration_0 extends _i1.SmartFake
+    implements _i2.WordRegistration {
+  _FakeWordRegistration_0(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -32,13 +34,13 @@ class _FakeWord_0 extends _i1.SmartFake implements _i2.Word {
 /// See the documentation for Mockito's code generation for more information.
 class MockWordRepository extends _i1.Mock implements _i3.WordRepository {
   @override
-  _i4.Future<_i2.Word?> fetchWordById(String? wordId) =>
+  _i4.Future<_i5.Word?> fetchWordById(String? wordId) =>
       (super.noSuchMethod(
             Invocation.method(#fetchWordById, [wordId]),
-            returnValue: _i4.Future<_i2.Word?>.value(),
-            returnValueForMissingStub: _i4.Future<_i2.Word?>.value(),
+            returnValue: _i4.Future<_i5.Word?>.value(),
+            returnValueForMissingStub: _i4.Future<_i5.Word?>.value(),
           )
-          as _i4.Future<_i2.Word?>);
+          as _i4.Future<_i5.Word?>);
 
   @override
   _i4.Future<void> save(String? wordId) =>
@@ -59,14 +61,14 @@ class MockWordRepository extends _i1.Mock implements _i3.WordRepository {
           as _i4.Future<void>);
 
   @override
-  _i4.Future<_i2.Word> create({
+  _i4.Future<_i2.WordRegistration> create({
     required String? word,
     required String? reading,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#create, [], {#word: word, #reading: reading}),
-            returnValue: _i4.Future<_i2.Word>.value(
-              _FakeWord_0(
+            returnValue: _i4.Future<_i2.WordRegistration>.value(
+              _FakeWordRegistration_0(
                 this,
                 Invocation.method(#create, [], {
                   #word: word,
@@ -74,8 +76,8 @@ class MockWordRepository extends _i1.Mock implements _i3.WordRepository {
                 }),
               ),
             ),
-            returnValueForMissingStub: _i4.Future<_i2.Word>.value(
-              _FakeWord_0(
+            returnValueForMissingStub: _i4.Future<_i2.WordRegistration>.value(
+              _FakeWordRegistration_0(
                 this,
                 Invocation.method(#create, [], {
                   #word: word,
@@ -84,5 +86,20 @@ class MockWordRepository extends _i1.Mock implements _i3.WordRepository {
               ),
             ),
           )
-          as _i4.Future<_i2.Word>);
+          as _i4.Future<_i2.WordRegistration>);
+
+  @override
+  _i4.Future<String?> findPublicWordId({
+    required String? word,
+    required String? reading,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#findPublicWordId, [], {
+              #word: word,
+              #reading: reading,
+            }),
+            returnValue: _i4.Future<String?>.value(),
+            returnValueForMissingStub: _i4.Future<String?>.value(),
+          )
+          as _i4.Future<String?>);
 }

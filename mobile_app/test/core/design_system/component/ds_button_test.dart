@@ -130,4 +130,31 @@ void main() {
       expect(button.style?.backgroundColor?.resolve(<WidgetState>{}), isNull);
     });
   });
+
+  group('DsAppBarAction', () {
+    testWidgets('ラベルを表示し、タップで onPressed が呼ばれる', (tester) async {
+      var tappedCount = 0;
+
+      await pumpDsWidget(
+        tester,
+        DsAppBarAction(label: '登録', onPressed: () => tappedCount++),
+      );
+      await tester.tap(find.text('登録'));
+
+      expect(tappedCount, 1);
+    });
+
+    testWidgets('onPressed が null なら操作できず薄く表示する', (tester) async {
+      await pumpDsWidget(
+        tester,
+        const DsAppBarAction(label: '登録', onPressed: null),
+      );
+
+      final inkWell = tester.widget<InkWell>(find.byType(InkWell));
+      expect(inkWell.onTap, isNull);
+
+      final text = tester.widget<Text>(find.text('登録'));
+      expect(text.style?.color?.opacity, closeTo(DsOpacity.disabled, 0.01));
+    });
+  });
 }

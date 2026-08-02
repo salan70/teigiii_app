@@ -399,6 +399,32 @@
           "publicCount"
         ]
       },
+      "CreateWordResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/WordResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "registrationResult": {
+                "$ref": "#/components/schemas/WordRegistrationResult"
+              }
+            },
+            "required": [
+              "registrationResult"
+            ]
+          }
+        ]
+      },
+      "WordRegistrationResult": {
+        "type": "string",
+        "enum": [
+          "created",
+          "promoted",
+          "alreadyPublic"
+        ]
+      },
       "WordResponse": {
         "allOf": [
           {
@@ -447,6 +473,24 @@
         "required": [
           "word",
           "reading"
+        ]
+      },
+      "WordLookupResponse": {
+        "type": "object",
+        "properties": {
+          "word": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WordSummary"
+              },
+              {
+                "nullable": true
+              }
+            ]
+          }
+        },
+        "required": [
+          "word"
         ]
       },
       "WordListItem": {
@@ -2352,7 +2396,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WordResponse"
+                  "$ref": "#/components/schemas/CreateWordResponse"
                 }
               }
             }
@@ -2362,7 +2406,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WordResponse"
+                  "$ref": "#/components/schemas/CreateWordResponse"
                 }
               }
             }
@@ -2474,6 +2518,65 @@
                     "items",
                     "nextCursor"
                   ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "App Check または Firebase ID トークンが欠落・無効",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/words/lookup": {
+      "get": {
+        "tags": [
+          "words"
+        ],
+        "summary": "登録前の既存語チェック",
+        "description": "表記とよみをサーバーで前後トリム + NFC 正規化し、(表記, よみ) の完全一致で解決する。閲覧者にとって公開されており、かつ明示登録済みの言葉だけを返す。非公開の言葉と、公開定義だけで見えている未登録の言葉は null を返す。よみの文字種は検証しない（一致しなければ null になる）。",
+        "security": [
+          {
+            "appCheck": [],
+            "firebaseIdToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 30
+            },
+            "required": true,
+            "name": "word",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 50
+            },
+            "required": true,
+            "name": "reading",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "公開されている一致した言葉。なければ null",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WordLookupResponse"
                 }
               }
             }

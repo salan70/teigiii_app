@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,13 +7,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import '../../feature/definition/domain/definition_for_write.dart';
-import '../../feature/timeline/application/discover_timeline_state.dart';
-import '../../feature/word/repository/word_repository.dart';
-import '../../feature/word_list/application/community_dictionary_index_list_state.dart';
-import '../../feature/word_list/application/word_list_state_by_search_word.dart';
+import '../../feature/word/application/existing_public_word_state.dart';
+import '../../feature/word/application/word_registration_controller.dart';
+import '../../feature/word/domain/word_registration.dart';
+import '../../feature/word/presentation/already_registered_word_dialog.dart';
 import '../../util/mixin/presentation_mixin.dart';
 import '../common_provider/dialog_controller.dart';
+import '../common_provider/key_provider.dart';
+import '../common_provider/snack_bar_controller.dart';
 import '../common_widget/dialog/confirm_dialog.dart';
+import '../design_system/design_system.dart';
 import '../router/app_router.dart';
 
 @RoutePage()
@@ -28,8 +33,18 @@ class WordRegistrationPage extends ConsumerStatefulWidget {
 
 class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
     with PresentationMixin {
+  /// 入力が止まったとみなすまでの待ち時間。
+  ///
+  /// 1 文字ごとに既存語チェックを投げないための間引き。
+  static const _lookupDebounce = Duration(milliseconds: 400);
+
   late final TextEditingController _wordController;
   late final TextEditingController _readingController;
+
+  Timer? _lookupTimer;
+
+  /// 既存語チェックに使う (表記, よみ)。入力が止まってから更新する。
+  ({String reading, String word}) _lookupKey = (reading: '', word: '');
 
   @override
   void initState() {
@@ -40,6 +55,7 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
 
   @override
   void dispose() {
+    _lookupTimer?.cancel();
     _wordController.dispose();
     _readingController.dispose();
     super.dispose();
@@ -54,7 +70,8 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
     definition: '',
   );
 
-  bool get _canRegister {
+  /// 入力そのものが登録可能な形式かどうか。既存語かどうかは含まない。
+  bool get _isInputValid {
     final draft = _draft;
     return draft.outputWordError() == null &&
         draft.word.isNotEmpty &&
@@ -66,6 +83,32 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
     final initialWord = widget.initialWord ?? '';
     return _wordController.text != initialWord ||
         _readingController.text.isNotEmpty;
+  }
+
+  /// 現在の入力に対応する既存語チェックのキー。
+  ///
+  /// 形式が不正な入力は問い合わせない（サーバーが 400 を返すため）。
+  ({String reading, String word}) get _currentLookupKey => _isInputValid
+      ? (
+          reading: _readingController.text.trim(),
+          word: _wordController.text.trim(),
+        )
+      : (reading: '', word: '');
+
+  /// 入力を反映し、間を置いてから既存語チェックの対象を更新する。
+  void _handleInputChanged() {
+    setState(() {});
+
+    _lookupTimer?.cancel();
+    _lookupTimer = Timer(_lookupDebounce, () {
+      final key = _currentLookupKey;
+      if (!mounted || key == _lookupKey) {
+        return;
+      }
+      setState(() {
+        _lookupKey = key;
+      });
+    });
   }
 
   Future<void> _close() async {
@@ -87,116 +130,165 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
         );
   }
 
-  Future<void> _submit() async {
-    if (!_canRegister) {
+  Future<void> _submit({required bool canRegister}) async {
+    if (!canRegister) {
       return;
     }
 
     primaryFocus?.unfocus();
 
-    // TODO(me): フラグを使わないようにしたい。
-    var isActionCompleted = false;
+    WordRegistration? registration;
     await executeWithOverlayLoading(
       ref,
       action: () async {
-        await ref
-            .read(wordRepositoryProvider)
-            .create(
+        registration = await ref
+            .read(wordRegistrationControllerProvider)
+            .register(
               word: _wordController.text.trim(),
               reading: _readingController.text.trim(),
             );
-        isActionCompleted = true;
       },
       errorToastMessage: '登録できませんでした。もう一度お試しください。',
-      successToastMessage: '登録しました！',
       inBaseRouteBeforeAction: false,
     );
 
-    if (!isActionCompleted) {
+    final result = registration;
+    if (result == null) {
       return;
     }
 
-    // pop すると ref が破棄され、`executeWithOverlayLoading` 内で
-    // ローディング終了ができなくなる。
-    // そのため、`executeWithOverlayLoading` 完了後に画面遷移を行っている。
+    switch (result.outcome) {
+      case WordRegistrationOutcome.created:
+      case WordRegistrationOutcome.promoted:
+        // pop すると ref が破棄され、`executeWithOverlayLoading` 内で
+        // ローディング終了ができなくなる。
+        // そのため、`executeWithOverlayLoading` 完了後に画面遷移を行っている。
+        ref
+            .read(snackBarControllerProvider)
+            .showSuccessSnackBar('登録しました！', ScaffoldMessengerType.baseRoute);
+        await ref.read(appRouterProvider).pop();
+      case WordRegistrationOutcome.alreadyPublic:
+        // 見え方は何も変わっていないため、成功として伝えない。
+        // チップの表示条件と実態を合わせるため、既存語チェックをやり直す。
+        ref.invalidate(
+          existingPublicWordIdProvider(
+            word: _lookupKey.word,
+            reading: _lookupKey.reading,
+          ),
+        );
+        _showAlreadyRegisteredDialog(result.word.id);
+    }
+  }
+
+  void _showAlreadyRegisteredDialog(String wordId) {
     ref
-      ..invalidate(communityDictionaryIndexListStateNotifierProvider)
-      ..invalidate(discoverTimelineStateNotifierProvider)
-      ..invalidate(wordListStateBySearchWordNotifierProvider);
-    await ref.read(appRouterProvider).pop();
+        .read(dialogControllerProvider)
+        .show(
+          AlreadyRegisteredWordDialog(
+            onViewWord: () => unawaited(_openWordPage(wordId)),
+          ),
+        );
+  }
+
+  Future<void> _openWordPage(String wordId) async {
+    // 閉じずに push する。閉じると `_close()` の確認ダイアログが毎回挟まる。
+    await context.pushRoute(WordTopRoute(wordId: wordId));
   }
 
   @override
   Widget build(BuildContext context) {
     final draft = _draft;
-    final canRegister = _canRegister;
+    final asyncExistingWordId = ref.watch(
+      existingPublicWordIdProvider(
+        word: _lookupKey.word,
+        reading: _lookupKey.reading,
+      ),
+    );
+    // 検索に失敗したときは登録を妨げない（チップを出さない）。
+    final existingWordId = switch (asyncExistingWordId) {
+      AsyncData(:final value) => value,
+      _ => null,
+    };
+    // 現在の入力に対する結果が出るまでは登録させない。
+    // debounce 待ちの間は前の入力の結果しかなく、通信中は結果自体がない。
+    // 失敗（AsyncError）は fail-open とし、登録を妨げない。
+    final isLookupSettled =
+        _lookupKey == _currentLookupKey &&
+        asyncExistingWordId is! AsyncLoading;
+    final canRegister = _isInputValid && isLookupSettled && existingWordId == null;
 
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(CupertinoIcons.xmark),
-          onPressed: _close,
+        elevation: DsElevation.none,
+        leading: DsIconButton(
+          icon: CupertinoIcons.xmark,
+          semanticLabel: '閉じる',
+          onPressed: () => unawaited(_close()),
         ),
         title: const Text('言葉を登録'),
         actions: [
-          Center(
-            child: InkWell(
-              onTap: canRegister ? _submit : null,
-              child: Text(
-                '登録',
-                style: canRegister
-                    ? Theme.of(context).textTheme.titleLarge
-                    : Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withOpacity(0.3),
-                      ),
-              ),
-            ),
+          DsAppBarAction(
+            label: '登録',
+            onPressed: canRegister
+                ? () => unawaited(_submit(canRegister: canRegister))
+                : null,
           ),
-          const Gap(24),
         ],
       ),
       body: GestureDetector(
         onTap: () => primaryFocus?.unfocus(),
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: DsSpacing.screenContentInsets,
             child: ListView(
               children: [
-                const Gap(8),
-                TextFormField(
+                DsTextField.multiline(
                   controller: _wordController,
                   autofocus: widget.initialWord == null,
                   maxLength: draft.maxWordLength,
-                  maxLines: null,
                   textInputAction: TextInputAction.next,
-                  onChanged: (_) => setState(() {}),
-                  style: Theme.of(context).textTheme.titleLarge,
-                  decoration: InputDecoration(
-                    hintText: '例: 二日目のカレー',
-                    labelText: '登録する言葉',
-                    errorText: draft.outputWordError(),
-                    border: InputBorder.none,
-                  ),
+                  onChanged: (_) => _handleInputChanged(),
+                  size: DsTextFieldSize.prominent,
+                  label: '登録する言葉',
+                  hintText: '例: 二日目のカレー',
+                  errorText: draft.outputWordError(),
                 ),
-                TextFormField(
+                DsTextField.multiline(
                   controller: _readingController,
                   autofocus: widget.initialWord != null,
                   maxLength: draft.maxWordReadingLength,
-                  maxLines: null,
                   textInputAction: TextInputAction.done,
-                  onChanged: (_) => setState(() {}),
-                  onFieldSubmitted: (_) => _submit(),
-                  style: Theme.of(context).textTheme.titleMedium,
-                  decoration: InputDecoration(
-                    hintText: '例: ふつかめのかれー',
-                    labelText: '言葉のよみ',
-                    errorText: draft.outputWordReadingError(),
-                    border: InputBorder.none,
+                  onChanged: (_) => _handleInputChanged(),
+                  onSubmitted: (_) => _submit(canRegister: canRegister),
+                  label: '言葉のよみ',
+                  hintText: '例: ふつかめのかれー',
+                  errorText: draft.outputWordReadingError(),
+                ),
+                // 入力を終えた位置に出す。有無で下の余白がずれないよう、
+                // 非表示でも領域を確保する。チップ自身が最小タップ領域を
+                // 内側に持つため、前後に余白は足さない。
+                Visibility(
+                  visible: existingWordId != null,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: DsChip.navigable(
+                      label: 'この言葉は登録済みです',
+                      // 非表示のときはタップが届かない（maintainInteractivity）。
+                      onTap: () {
+                        if (existingWordId != null) {
+                          unawaited(_openWordPage(existingWordId));
+                        }
+                      },
+                    ),
                   ),
                 ),
+                // ignore: ds_hardcoded_spacing
+                // 理由: キーボードで隠れないようにするための画面固有の下部余白。
+                // 意味を持つ余白ではないためトークン化しない。
+                // 追跡: #281
                 const Gap(300),
               ],
             ),

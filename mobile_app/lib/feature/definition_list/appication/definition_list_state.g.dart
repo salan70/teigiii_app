@@ -7,7 +7,7 @@ part of 'definition_list_state.dart';
 // **************************************************************************
 
 String _$definitionListStateNotifierHash() =>
-    r'db04eee695d378dc13d4c33a2ab9d3bdbee274cf';
+    r'9b6929e91c571b8ec4a4f0e61f3596141200a79f';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -45,17 +45,41 @@ abstract class _$DefinitionListStateNotifier
   });
 }
 
-/// See also [DefinitionListStateNotifier].
+/// 定義フィードの一覧 state。
+///
+/// keepAlive: ホームの TabBarView など、一時的に unwatch されても
+/// 一覧・スクロール位置を維持するため。シード参照の解放は
+/// [DefinitionSeedStore.releaseFeed]（dispose / 世代上限）で行う。
+///
+/// Copied from [DefinitionListStateNotifier].
 @ProviderFor(DefinitionListStateNotifier)
 const definitionListStateNotifierProvider = DefinitionListStateNotifierFamily();
 
-/// See also [DefinitionListStateNotifier].
+/// 定義フィードの一覧 state。
+///
+/// keepAlive: ホームの TabBarView など、一時的に unwatch されても
+/// 一覧・スクロール位置を維持するため。シード参照の解放は
+/// [DefinitionSeedStore.releaseFeed]（dispose / 世代上限）で行う。
+///
+/// Copied from [DefinitionListStateNotifier].
 class DefinitionListStateNotifierFamily
     extends Family<AsyncValue<DefinitionListState>> {
-  /// See also [DefinitionListStateNotifier].
+  /// 定義フィードの一覧 state。
+  ///
+  /// keepAlive: ホームの TabBarView など、一時的に unwatch されても
+  /// 一覧・スクロール位置を維持するため。シード参照の解放は
+  /// [DefinitionSeedStore.releaseFeed]（dispose / 世代上限）で行う。
+  ///
+  /// Copied from [DefinitionListStateNotifier].
   const DefinitionListStateNotifierFamily();
 
-  /// See also [DefinitionListStateNotifier].
+  /// 定義フィードの一覧 state。
+  ///
+  /// keepAlive: ホームの TabBarView など、一時的に unwatch されても
+  /// 一覧・スクロール位置を維持するため。シード参照の解放は
+  /// [DefinitionSeedStore.releaseFeed]（dispose / 世代上限）で行う。
+  ///
+  /// Copied from [DefinitionListStateNotifier].
   DefinitionListStateNotifierProvider call(
     DefinitionFeedType definitionFeedType, {
     String? wordId,
@@ -97,14 +121,26 @@ class DefinitionListStateNotifierFamily
   String? get name => r'definitionListStateNotifierProvider';
 }
 
-/// See also [DefinitionListStateNotifier].
+/// 定義フィードの一覧 state。
+///
+/// keepAlive: ホームの TabBarView など、一時的に unwatch されても
+/// 一覧・スクロール位置を維持するため。シード参照の解放は
+/// [DefinitionSeedStore.releaseFeed]（dispose / 世代上限）で行う。
+///
+/// Copied from [DefinitionListStateNotifier].
 class DefinitionListStateNotifierProvider
     extends
         AsyncNotifierProviderImpl<
           DefinitionListStateNotifier,
           DefinitionListState
         > {
-  /// See also [DefinitionListStateNotifier].
+  /// 定義フィードの一覧 state。
+  ///
+  /// keepAlive: ホームの TabBarView など、一時的に unwatch されても
+  /// 一覧・スクロール位置を維持するため。シード参照の解放は
+  /// [DefinitionSeedStore.releaseFeed]（dispose / 世代上限）で行う。
+  ///
+  /// Copied from [DefinitionListStateNotifier].
   DefinitionListStateNotifierProvider(
     DefinitionFeedType definitionFeedType, {
     String? wordId,
