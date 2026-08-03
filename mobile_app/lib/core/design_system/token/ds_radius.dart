@@ -2,6 +2,9 @@ import 'package:flutter/widgets.dart';
 
 /// 角丸の semantic token。
 ///
+/// member は spec 3.2 の表が正本のため、未使用でも維持する。
+/// 派生の `*Border` は spec 非掲載のユーティリティのため、実利用があるものだけ定義する。
+///
 /// @doc doc/specs/mobile-app-design-system.md#3-2-dsradius
 abstract final class DsRadius {
   /// ボタン・アバターなど pill 型の要素。
