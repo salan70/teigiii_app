@@ -138,11 +138,16 @@
             executable = "dart";
             withGit = false;
           };
-          # check.yml mobile jobs: Flutter analyze/test only.
+          # ci.yml mobile jobs: Flutter analyze/test only.
           ciMobilePackages = [
             flutterToolCi
             dartToolCi
             pkgs.just
+          ];
+          # ci.yml deploy-dev job: justfile 経由で wrangler を叩くだけ。Flutter は不要。
+          ciBackendPackages = [
+            pkgs.just
+            pkgs.bun
           ];
           toolPackages = [
             flutterTool
@@ -161,7 +166,14 @@
           ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.cocoapods ];
         in
         {
-          inherit bootstrapFlutter flutterTool dartTool ciMobilePackages toolPackages;
+          inherit
+            bootstrapFlutter
+            flutterTool
+            dartTool
+            ciMobilePackages
+            ciBackendPackages
+            toolPackages
+            ;
         };
     in
     {
@@ -216,6 +228,13 @@
             shellHook = ''
               export PUB_CACHE="''${PUB_CACHE:-$PWD/.nix/pub-cache}"
               echo "[nix] teigi_app ci-mobile shell ready (Flutter ${flutterVersion}, just)" >&2
+            '';
+          };
+          # Backend CI (dev deploy): justfile 経由で wrangler を叩くための最小 closure。
+          ci-backend = pkgs.mkShellNoCC {
+            packages = tools.ciBackendPackages;
+            shellHook = ''
+              echo "[nix] teigi_app ci-backend shell ready (just, bun)" >&2
             '';
           };
         }
