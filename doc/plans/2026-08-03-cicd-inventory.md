@@ -124,6 +124,26 @@ GitHub に置く必要が生じ、攻撃面が増える。手数も増える。�
 - [ ] `tagging-when-merged.yml` の `actions/checkout@v3` → `@v4`
 - [ ] `deliver.yml` の `IOS_CERTIFICATE_P12_P12_PASSWORD` を `IOS_CERTIFICATE_P12_PASSWORD` に修正
 - [ ] `bunx docbridge@0.5.2` のバージョン重複（3 箇所）を 1 箇所に集約するか、許容を明記
+- [ ] `web-preview.yml` の `concurrency.group` の冗長プレフィックスを外す
+      （`ci.yml` / `docbridge.yml` と揃える）
+
+### 9. 実行頻度の低いワークフローの closure 削減
+
+- [ ] `deliver.yml` を `ci-nix-setup` + 新設 `ci-deliver` devShell に切り替える
+  - default shell は openapi-generator-cli（JRE 込みで 151MB）/ lcov / bun / ripgrep /
+    qrencode まで実体化するが、iOS リリースビルドで使うのは Flutter / just / git /
+    jq / curl / CocoaPods だけ。macos runner は課金 10 倍なので削る価値が大きい
+  - iOS ネイティブビルドのため、default と同じ darwin 向け環境調整
+    （`SDKROOT` 等の unset、`CC` / `CXX` を xcrun から設定）を `ci-deliver` にも入れる
+  - git は CocoaPods の spec repo 取得に必要なため落とさない
+  - **Flutter SDK はキャッシュしない。** macos はキャッシュキーが Linux と別のため
+    ~1.7GB を新規消費し、repo 上限 10GB の LRU で高頻度な PR CI 側の Linux キャッシュを
+    追い出しうる。deliver はタグ push 時のみで 7 日失効に引っかかりやすく、
+    macos runner での 1.7GB 転送自体も高くつく。pub のみキャッシュする
+- [ ] `bump-pull-request.yml` の `just setup` を `just mobile-setup` に変える
+  - `cider` を動かすのに backend の bun install は不要
+  - こちらは ubuntu runner なので `flutter-Linux-*` キャッシュを ci.yml と共有でき、
+    新規のキャッシュ枠を消費しない。`cache-flutter` は有効にする
 
 ## 意図的に採用しなかったもの
 
@@ -156,3 +176,5 @@ GitHub に置く必要が生じ、攻撃面が増える。手数も増える。�
 - [ ] prod の migration が `backend-deploy-prod` から独立して実行できる
 - [ ] 未参照 secrets が GitHub から消えている（`ANDROID_KEY_JKS_BASE64` は原本確認後）
 - [ ] Flutter bootstrap のコピペが 3 箇所から 1 箇所になっている
+- [ ] `deliver.yml` が `workflow_dispatch`（`upload: false`）で成功し、IPA が生成される
+      — タグ push でしか走らないため、merge 前にこの経路で検証する

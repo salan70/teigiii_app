@@ -29,11 +29,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Nix
-        uses: DeterminateSystems/determinate-nix-action@v3
+      # 必要なのは cider（mobile_app の dev_dependency）を動かす Dart だけ。
+      # `just setup` は backend の bun install まで含むため使わない。
+      - name: CI Nix setup
+        uses: ./.github/actions/ci-nix-setup
+        with:
+          cache-flutter: "true"
+          cache-pub: "true"
 
       - name: Install dependencies
-        run: nix develop --command just setup
+        run: nix develop .#ci-mobile --command just mobile-setup
 
       - name: Init git config
         run: |
@@ -42,8 +47,8 @@ jobs:
 
       - name: Bump version
         run: |
-          nix develop --command bash -c 'cd mobile_app && dart run cider bump "${{ github.event.inputs.bump }}" --bump-build'
-          echo "BUMP_VERSION=$(nix develop --command bash -c 'cd mobile_app && dart run cider version')" >> "$GITHUB_ENV"
+          nix develop .#ci-mobile --command bash -c 'cd mobile_app && dart run cider bump "${{ github.event.inputs.bump }}" --bump-build'
+          echo "BUMP_VERSION=$(nix develop .#ci-mobile --command bash -c 'cd mobile_app && dart run cider version')" >> "$GITHUB_ENV"
 
       - name: Commit pubspec.yaml
         run: |
