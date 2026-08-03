@@ -31,7 +31,7 @@
 - Flutter にあった全かな・英字・数字・記号の分類ケースを backend の正本テストへ移した。
 - `mobile-generate` は成功したが generator 版差による Issue 外の生成差分が出たため、対象 API model 以外は保持しなかった。
 - `just backend-analyze`、`just backend-generate`、`just mobile-analyze`、`just mobile-test`、`just mobile-generate`、`just mobile-test-golden`、`just docbridge-check` は成功した。
-- `just backend-test` は変更前後とも migration test 13 件だけ失敗する。原因は `backend/drizzle/0003_eminent_klaw.sql` の CHECK 制約がリネーム前テーブル名 `__new_definitions.status` を修飾していることで、修飾を外した非永続の診断実行では全 migration の適用に成功した。Issue #312 の変更とは独立しているため本 plan では変更しない。
+- ローカル Nix の `just backend-test` は変更前後とも migration test 13 件だけ失敗する。原因は `backend/drizzle/0003_eminent_klaw.sql` の CHECK 制約がリネーム前テーブル名 `__new_definitions.status` を修飾していることで、修飾を外した非永続の診断実行では全 migration の適用に成功した。Issue #312 の変更とは独立した Bun/SQLite 環境差で、PR #318 の backend-test CI は成功したため本 plan では変更しない。
 
 ## 振り返りと改善提案
 
