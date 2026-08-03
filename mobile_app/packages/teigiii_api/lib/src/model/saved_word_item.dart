@@ -21,6 +21,8 @@ class SavedWordItem {
   SavedWordItem({
     required this.word,
 
+    required this.readingSubGroup,
+
     required this.isDefinedByMe,
 
     required this.publicCount,
@@ -28,6 +30,9 @@ class SavedWordItem {
 
   @JsonKey(name: r'word', required: true, includeIfNull: false)
   final WordSummary word;
+
+  @JsonKey(name: r'readingSubGroup', required: true, includeIfNull: false)
+  final String readingSubGroup;
 
   @JsonKey(name: r'isDefinedByMe', required: true, includeIfNull: false)
   final bool isDefinedByMe;
@@ -40,12 +45,16 @@ class SavedWordItem {
       identical(this, other) ||
       other is SavedWordItem &&
           other.word == word &&
+          other.readingSubGroup == readingSubGroup &&
           other.isDefinedByMe == isDefinedByMe &&
           other.publicCount == publicCount;
 
   @override
   int get hashCode =>
-      word.hashCode + isDefinedByMe.hashCode + publicCount.hashCode;
+      word.hashCode +
+      readingSubGroup.hashCode +
+      isDefinedByMe.hashCode +
+      publicCount.hashCode;
 
   factory SavedWordItem.fromJson(Map<String, dynamic> json) =>
       _$SavedWordItemFromJson(json);

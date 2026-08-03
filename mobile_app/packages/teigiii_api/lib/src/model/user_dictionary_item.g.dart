@@ -9,6 +9,8 @@ part of 'user_dictionary_item.dart';
 abstract class _$UserDictionaryItemCWProxy {
   UserDictionaryItem word(WordSummary word);
 
+  UserDictionaryItem readingSubGroup(String readingSubGroup);
+
   UserDictionaryItem publicCount(int publicCount);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `UserDictionaryItem(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
@@ -17,7 +19,11 @@ abstract class _$UserDictionaryItemCWProxy {
   /// ```dart
   /// UserDictionaryItem(...).copyWith(id: 12, name: "My name")
   /// ````
-  UserDictionaryItem call({WordSummary word, int publicCount});
+  UserDictionaryItem call({
+    WordSummary word,
+    String readingSubGroup,
+    int publicCount,
+  });
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfUserDictionaryItem.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfUserDictionaryItem.copyWith.fieldName(...)`
@@ -28,6 +34,10 @@ class _$UserDictionaryItemCWProxyImpl implements _$UserDictionaryItemCWProxy {
 
   @override
   UserDictionaryItem word(WordSummary word) => this(word: word);
+
+  @override
+  UserDictionaryItem readingSubGroup(String readingSubGroup) =>
+      this(readingSubGroup: readingSubGroup);
 
   @override
   UserDictionaryItem publicCount(int publicCount) =>
@@ -42,6 +52,7 @@ class _$UserDictionaryItemCWProxyImpl implements _$UserDictionaryItemCWProxy {
   /// ````
   UserDictionaryItem call({
     Object? word = const $CopyWithPlaceholder(),
+    Object? readingSubGroup = const $CopyWithPlaceholder(),
     Object? publicCount = const $CopyWithPlaceholder(),
   }) {
     return UserDictionaryItem(
@@ -49,6 +60,10 @@ class _$UserDictionaryItemCWProxyImpl implements _$UserDictionaryItemCWProxy {
           ? _value.word
           // ignore: cast_nullable_to_non_nullable
           : word as WordSummary,
+      readingSubGroup: readingSubGroup == const $CopyWithPlaceholder()
+          ? _value.readingSubGroup
+          // ignore: cast_nullable_to_non_nullable
+          : readingSubGroup as String,
       publicCount: publicCount == const $CopyWithPlaceholder()
           ? _value.publicCount
           // ignore: cast_nullable_to_non_nullable
@@ -70,12 +85,16 @@ extension $UserDictionaryItemCopyWith on UserDictionaryItem {
 
 UserDictionaryItem _$UserDictionaryItemFromJson(Map<String, dynamic> json) =>
     $checkedCreate('UserDictionaryItem', json, ($checkedConvert) {
-      $checkKeys(json, requiredKeys: const ['word', 'publicCount']);
+      $checkKeys(
+        json,
+        requiredKeys: const ['word', 'readingSubGroup', 'publicCount'],
+      );
       final val = UserDictionaryItem(
         word: $checkedConvert(
           'word',
           (v) => WordSummary.fromJson(v as Map<String, dynamic>),
         ),
+        readingSubGroup: $checkedConvert('readingSubGroup', (v) => v as String),
         publicCount: $checkedConvert('publicCount', (v) => (v as num).toInt()),
       );
       return val;
@@ -84,5 +103,6 @@ UserDictionaryItem _$UserDictionaryItemFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$UserDictionaryItemToJson(UserDictionaryItem instance) =>
     <String, dynamic>{
       'word': instance.word.toJson(),
+      'readingSubGroup': instance.readingSubGroup,
       'publicCount': instance.publicCount,
     };

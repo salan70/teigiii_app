@@ -9,6 +9,8 @@ part of 'defined_word_item.dart';
 abstract class _$DefinedWordItemCWProxy {
   DefinedWordItem word(WordSummary word);
 
+  DefinedWordItem readingSubGroup(String readingSubGroup);
+
   DefinedWordItem publicCount(int publicCount);
 
   DefinedWordItem privateCount(int privateCount);
@@ -19,7 +21,12 @@ abstract class _$DefinedWordItemCWProxy {
   /// ```dart
   /// DefinedWordItem(...).copyWith(id: 12, name: "My name")
   /// ````
-  DefinedWordItem call({WordSummary word, int publicCount, int privateCount});
+  DefinedWordItem call({
+    WordSummary word,
+    String readingSubGroup,
+    int publicCount,
+    int privateCount,
+  });
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfDefinedWordItem.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfDefinedWordItem.copyWith.fieldName(...)`
@@ -30,6 +37,10 @@ class _$DefinedWordItemCWProxyImpl implements _$DefinedWordItemCWProxy {
 
   @override
   DefinedWordItem word(WordSummary word) => this(word: word);
+
+  @override
+  DefinedWordItem readingSubGroup(String readingSubGroup) =>
+      this(readingSubGroup: readingSubGroup);
 
   @override
   DefinedWordItem publicCount(int publicCount) =>
@@ -48,6 +59,7 @@ class _$DefinedWordItemCWProxyImpl implements _$DefinedWordItemCWProxy {
   /// ````
   DefinedWordItem call({
     Object? word = const $CopyWithPlaceholder(),
+    Object? readingSubGroup = const $CopyWithPlaceholder(),
     Object? publicCount = const $CopyWithPlaceholder(),
     Object? privateCount = const $CopyWithPlaceholder(),
   }) {
@@ -56,6 +68,10 @@ class _$DefinedWordItemCWProxyImpl implements _$DefinedWordItemCWProxy {
           ? _value.word
           // ignore: cast_nullable_to_non_nullable
           : word as WordSummary,
+      readingSubGroup: readingSubGroup == const $CopyWithPlaceholder()
+          ? _value.readingSubGroup
+          // ignore: cast_nullable_to_non_nullable
+          : readingSubGroup as String,
       publicCount: publicCount == const $CopyWithPlaceholder()
           ? _value.publicCount
           // ignore: cast_nullable_to_non_nullable
@@ -78,24 +94,36 @@ extension $DefinedWordItemCopyWith on DefinedWordItem {
 // JsonSerializableGenerator
 // **************************************************************************
 
-DefinedWordItem _$DefinedWordItemFromJson(
-  Map<String, dynamic> json,
-) => $checkedCreate('DefinedWordItem', json, ($checkedConvert) {
-  $checkKeys(json, requiredKeys: const ['word', 'publicCount', 'privateCount']);
-  final val = DefinedWordItem(
-    word: $checkedConvert(
-      'word',
-      (v) => WordSummary.fromJson(v as Map<String, dynamic>),
-    ),
-    publicCount: $checkedConvert('publicCount', (v) => (v as num).toInt()),
-    privateCount: $checkedConvert('privateCount', (v) => (v as num).toInt()),
-  );
-  return val;
-});
+DefinedWordItem _$DefinedWordItemFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('DefinedWordItem', json, ($checkedConvert) {
+      $checkKeys(
+        json,
+        requiredKeys: const [
+          'word',
+          'readingSubGroup',
+          'publicCount',
+          'privateCount',
+        ],
+      );
+      final val = DefinedWordItem(
+        word: $checkedConvert(
+          'word',
+          (v) => WordSummary.fromJson(v as Map<String, dynamic>),
+        ),
+        readingSubGroup: $checkedConvert('readingSubGroup', (v) => v as String),
+        publicCount: $checkedConvert('publicCount', (v) => (v as num).toInt()),
+        privateCount: $checkedConvert(
+          'privateCount',
+          (v) => (v as num).toInt(),
+        ),
+      );
+      return val;
+    });
 
 Map<String, dynamic> _$DefinedWordItemToJson(DefinedWordItem instance) =>
     <String, dynamic>{
       'word': instance.word.toJson(),
+      'readingSubGroup': instance.readingSubGroup,
       'publicCount': instance.publicCount,
       'privateCount': instance.privateCount,
     };

@@ -5,7 +5,6 @@ import 'package:teigiii_api/teigiii_api.dart';
 import '../../../core/api/api_exception.dart';
 import '../../../core/api/api_providers.dart';
 import '../../../util/constant/config_constant.dart';
-import '../../../util/constant/initial_main_group.dart';
 import '../../word/domain/word.dart';
 import '../domain/word_list_state.dart';
 
@@ -41,9 +40,7 @@ class UserDictionaryWordRepository {
                 id: item.word.id,
                 word: item.word.word,
                 reading: item.word.reading,
-                initialSubGroupLabel: InitialSubGroup.fromString(
-                  item.word.reading,
-                ).label,
+                initialSubGroupLabel: item.readingSubGroup,
                 postedDefinitionCount: item.publicCount + item.privateCount,
                 isSavedByMe: false,
               ),
@@ -76,9 +73,7 @@ class UserDictionaryWordRepository {
                 id: item.word.id,
                 word: item.word.word,
                 reading: item.word.reading,
-                initialSubGroupLabel: InitialSubGroup.fromString(
-                  item.word.reading,
-                ).label,
+                initialSubGroupLabel: item.readingSubGroup,
                 postedDefinitionCount: item.publicCount,
                 isSavedByMe: false,
               ),
@@ -107,9 +102,7 @@ class UserDictionaryWordRepository {
                 id: item.word.id,
                 word: item.word.word,
                 reading: item.word.reading,
-                initialSubGroupLabel: InitialSubGroup.fromString(
-                  item.word.reading,
-                ).label,
+                initialSubGroupLabel: item.readingSubGroup,
                 postedDefinitionCount: item.publicCount,
                 isSavedByMe: true,
               ),

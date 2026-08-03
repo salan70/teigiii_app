@@ -9,6 +9,8 @@ part of 'saved_word_item.dart';
 abstract class _$SavedWordItemCWProxy {
   SavedWordItem word(WordSummary word);
 
+  SavedWordItem readingSubGroup(String readingSubGroup);
+
   SavedWordItem isDefinedByMe(bool isDefinedByMe);
 
   SavedWordItem publicCount(int publicCount);
@@ -19,7 +21,12 @@ abstract class _$SavedWordItemCWProxy {
   /// ```dart
   /// SavedWordItem(...).copyWith(id: 12, name: "My name")
   /// ````
-  SavedWordItem call({WordSummary word, bool isDefinedByMe, int publicCount});
+  SavedWordItem call({
+    WordSummary word,
+    String readingSubGroup,
+    bool isDefinedByMe,
+    int publicCount,
+  });
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfSavedWordItem.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfSavedWordItem.copyWith.fieldName(...)`
@@ -30,6 +37,10 @@ class _$SavedWordItemCWProxyImpl implements _$SavedWordItemCWProxy {
 
   @override
   SavedWordItem word(WordSummary word) => this(word: word);
+
+  @override
+  SavedWordItem readingSubGroup(String readingSubGroup) =>
+      this(readingSubGroup: readingSubGroup);
 
   @override
   SavedWordItem isDefinedByMe(bool isDefinedByMe) =>
@@ -47,6 +58,7 @@ class _$SavedWordItemCWProxyImpl implements _$SavedWordItemCWProxy {
   /// ````
   SavedWordItem call({
     Object? word = const $CopyWithPlaceholder(),
+    Object? readingSubGroup = const $CopyWithPlaceholder(),
     Object? isDefinedByMe = const $CopyWithPlaceholder(),
     Object? publicCount = const $CopyWithPlaceholder(),
   }) {
@@ -55,6 +67,10 @@ class _$SavedWordItemCWProxyImpl implements _$SavedWordItemCWProxy {
           ? _value.word
           // ignore: cast_nullable_to_non_nullable
           : word as WordSummary,
+      readingSubGroup: readingSubGroup == const $CopyWithPlaceholder()
+          ? _value.readingSubGroup
+          // ignore: cast_nullable_to_non_nullable
+          : readingSubGroup as String,
       isDefinedByMe: isDefinedByMe == const $CopyWithPlaceholder()
           ? _value.isDefinedByMe
           // ignore: cast_nullable_to_non_nullable
@@ -81,13 +97,19 @@ SavedWordItem _$SavedWordItemFromJson(Map<String, dynamic> json) =>
     $checkedCreate('SavedWordItem', json, ($checkedConvert) {
       $checkKeys(
         json,
-        requiredKeys: const ['word', 'isDefinedByMe', 'publicCount'],
+        requiredKeys: const [
+          'word',
+          'readingSubGroup',
+          'isDefinedByMe',
+          'publicCount',
+        ],
       );
       final val = SavedWordItem(
         word: $checkedConvert(
           'word',
           (v) => WordSummary.fromJson(v as Map<String, dynamic>),
         ),
+        readingSubGroup: $checkedConvert('readingSubGroup', (v) => v as String),
         isDefinedByMe: $checkedConvert('isDefinedByMe', (v) => v as bool),
         publicCount: $checkedConvert('publicCount', (v) => (v as num).toInt()),
       );
@@ -97,6 +119,7 @@ SavedWordItem _$SavedWordItemFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$SavedWordItemToJson(SavedWordItem instance) =>
     <String, dynamic>{
       'word': instance.word.toJson(),
+      'readingSubGroup': instance.readingSubGroup,
       'isDefinedByMe': instance.isDefinedByMe,
       'publicCount': instance.publicCount,
     };

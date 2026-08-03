@@ -192,6 +192,9 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 
 - 公開辞書は対象ユーザーの public 定義だけを言葉単位にまとめる
 - 本人向け辞書は private を含め、endpoint ごとの status 条件を適用する
+- みんなの辞書、公開辞書、本人の定義済み言葉、保存した言葉は、サーバーが正規化済み reading から算出した `readingSubGroup` を返す。分類規則の正本はサーバーとし、クライアントは再計算しない
+- 辞書の索引一覧は reading の文字種クラス（五十音 → 英字 → 数字・記号）、reading、id の安定順で返す。クライアントは受信順を維持し、`readingSubGroup` からセクション見出しだけを導く
+- 保存した言葉はセクションを持たない一覧として保存日時、id の降順で返す
 - 合成 DTO の likesCount、followingCount、followerCount は有効な行だけを集計する
 - `isLikedByMe`、`isFollowedByMe`、`isMutedByMe` は認証 UID を基準に算出する
 

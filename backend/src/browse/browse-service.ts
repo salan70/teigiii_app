@@ -277,6 +277,7 @@ export class BrowseService {
       limit,
       (row) => ({
         publicCount: Number(row.public_count ?? 0),
+        readingSubGroup: row.reading_sub_group,
         word: { id: row.id, reading: row.reading, word: row.word },
       }),
       (row) => encodeReadingCursor("user_dictionary", row),
@@ -484,6 +485,7 @@ export class BrowseService {
       (row) => ({
         privateCount: Number(row.private_count ?? 0),
         publicCount: Number(row.public_count ?? 0),
+        readingSubGroup: row.reading_sub_group,
         word: { id: row.id, reading: row.reading, word: row.word },
       }),
       (row) => encodeReadingCursor("defined_words", row),
@@ -548,13 +550,14 @@ export class BrowseService {
       id: string;
       word: string;
       reading: string;
+      reading_sub_group: string;
       is_defined_by_me: number;
       public_count: number;
       saved_at: number;
     };
     const rows = (
       await this.env.DB.prepare(
-        `select w.id, w.word, w.reading, s.created_at as saved_at,
+        `select w.id, w.word, w.reading, w.reading_sub_group, s.created_at as saved_at,
            exists(select 1 from definitions d
             where d.word_id = w.id and d.author_id = ? and d.deleted_at is null) as is_defined_by_me,
            (select count(*) from definitions d
@@ -577,6 +580,7 @@ export class BrowseService {
       (row) => ({
         isDefinedByMe: row.is_defined_by_me !== 0,
         publicCount: Number(row.public_count ?? 0),
+        readingSubGroup: row.reading_sub_group,
         word: { id: row.id, reading: row.reading, word: row.word },
       }),
       (row) =>

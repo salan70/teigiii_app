@@ -18,10 +18,19 @@ part 'user_dictionary_item.g.dart';
 )
 class UserDictionaryItem {
   /// Returns a new [UserDictionaryItem] instance.
-  UserDictionaryItem({required this.word, required this.publicCount});
+  UserDictionaryItem({
+    required this.word,
+
+    required this.readingSubGroup,
+
+    required this.publicCount,
+  });
 
   @JsonKey(name: r'word', required: true, includeIfNull: false)
   final WordSummary word;
+
+  @JsonKey(name: r'readingSubGroup', required: true, includeIfNull: false)
+  final String readingSubGroup;
 
   @JsonKey(name: r'publicCount', required: true, includeIfNull: false)
   final int publicCount;
@@ -31,10 +40,12 @@ class UserDictionaryItem {
       identical(this, other) ||
       other is UserDictionaryItem &&
           other.word == word &&
+          other.readingSubGroup == readingSubGroup &&
           other.publicCount == publicCount;
 
   @override
-  int get hashCode => word.hashCode + publicCount.hashCode;
+  int get hashCode =>
+      word.hashCode + readingSubGroup.hashCode + publicCount.hashCode;
 
   factory UserDictionaryItem.fromJson(Map<String, dynamic> json) =>
       _$UserDictionaryItemFromJson(json);
