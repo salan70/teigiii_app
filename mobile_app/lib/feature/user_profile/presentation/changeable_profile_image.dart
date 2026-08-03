@@ -100,7 +100,9 @@ class ChangeableProfileImage extends ConsumerWidget with PresentationMixin {
             child: Icon(
               CupertinoIcons.camera_fill,
               size: 28,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.8),
             ),
           ),
         ],

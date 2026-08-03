@@ -88,7 +88,7 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
                         : Theme.of(context).textTheme.titleLarge!.copyWith(
                             color: Theme.of(
                               context,
-                            ).colorScheme.onSurface.withOpacity(0.3),
+                            ).colorScheme.onSurface.withValues(alpha: 0.3),
                           ),
                   ),
                 ),

@@ -98,8 +98,8 @@ class DefinitionPostPage extends ConsumerWidget with PresentationMixin {
               style: canPost
                   ? context.dsTypography.heading
                   : context.dsTypography.heading.copyWith(
-                      color: context.dsColorScheme.onSurface.withOpacity(
-                        DsOpacity.disabled,
+                      color: context.dsColorScheme.onSurface.withValues(
+                        alpha: DsOpacity.disabled,
                       ),
                     ),
             ),

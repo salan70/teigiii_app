@@ -24,4 +24,37 @@ void main() {
     expect(find.textContaining('終了予定は未定です。'), findsOneWidget);
     expect(find.textContaining('null'), findsNothing);
   });
+
+  testWidgets('システムの戻る操作では閉じない', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: ElevatedButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const OverlayInMaintenanceDialog(
+                      appMaintenance: AppMaintenance(
+                        inMaintenance: true,
+                        scheduledEndTime: null,
+                      ),
+                    ),
+                  ),
+                ),
+                child: const Text('メンテナンス表示'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('メンテナンス表示'));
+    await tester.pumpAndSettle();
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('現在メンテナンス中です'), findsOneWidget);
+  });
 }

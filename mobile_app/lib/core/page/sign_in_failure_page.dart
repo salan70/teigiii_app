@@ -12,8 +12,8 @@ class SignInFailurePage extends ConsumerWidget with PresentationMixin {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,

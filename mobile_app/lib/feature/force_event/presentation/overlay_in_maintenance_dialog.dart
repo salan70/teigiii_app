@@ -21,12 +21,12 @@ class OverlayInMaintenanceDialog extends ConsumerWidget {
     final scheduledEndTime =
         appMaintenance.scheduledEndTime?.toDisplayFormat() ?? '未定';
 
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Container(
         height: double.infinity,
         width: double.infinity,
-        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
         child: Center(
           child: DecoratedBox(
             decoration: BoxDecoration(
