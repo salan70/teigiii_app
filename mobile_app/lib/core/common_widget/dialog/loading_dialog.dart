@@ -9,16 +9,18 @@ class OverlayLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Container(
         height: double.infinity,
         width: double.infinity,
-        color: Theme.of(context).colorScheme.surface.withOpacity(0),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
         child: Center(
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Padding(
@@ -30,7 +32,7 @@ class OverlayLoadingWidget extends StatelessWidget {
                     radius: 16,
                     color: Theme.of(
                       context,
-                    ).colorScheme.surface.withOpacity(0.3),
+                    ).colorScheme.surface.withValues(alpha: 0.3),
                   ),
                 ],
               ),

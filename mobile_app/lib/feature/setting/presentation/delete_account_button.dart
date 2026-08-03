@@ -19,8 +19,8 @@ class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
       ref
           .read(dialogControllerProvider)
           .show(
-            WillPopScope(
-              onWillPop: () async => false,
+            PopScope(
+              canPop: false,
               child: AlertDialog(
                 title: const Text('削除が完了しました。', textAlign: TextAlign.center),
                 content: Column(

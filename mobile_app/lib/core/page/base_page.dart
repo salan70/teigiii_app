@@ -39,8 +39,8 @@ class BasePage extends ConsumerWidget {
             ],
             builder: (context, child) {
               final tabsRouter = context.tabsRouter;
-              return WillPopScope(
-                onWillPop: () async => false,
+              return PopScope(
+                canPop: false,
                 child: Scaffold(
                   body: ScaffoldMessenger(
                     key: ref.watch(

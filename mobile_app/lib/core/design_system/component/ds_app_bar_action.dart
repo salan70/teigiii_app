@@ -46,8 +46,8 @@ class DsAppBarAction extends StatelessWidget {
             label,
             style: onPressed == null
                 ? style.copyWith(
-                    color: colorScheme.onSurface.withOpacity(
-                      DsOpacity.disabled,
+                    color: colorScheme.onSurface.withValues(
+                      alpha: DsOpacity.disabled,
                     ),
                   )
                 : style,

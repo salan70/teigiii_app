@@ -128,7 +128,7 @@ class _DsButtonBase extends StatelessWidget {
   Widget build(BuildContext context) {
     // disabled は「同じ色を薄くしたもの」で表す。専用の色トークンは増やさない。
     final isEnabled = onPressed != null;
-    Color muted(Color color) => color.withOpacity(DsOpacity.disabled);
+    Color muted(Color color) => color.withValues(alpha: DsOpacity.disabled);
 
     final effectiveTextColor = isEnabled ? textColor : muted(textColor);
     final effectiveBackground = backgroundColor == null
