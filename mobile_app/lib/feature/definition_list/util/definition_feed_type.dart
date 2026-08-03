@@ -17,9 +17,6 @@ enum DefinitionFeedType {
   /// プロフィール画面: いいね数順タブ
   profileLiked,
 
-  /// ユーザー毎の辞書 -> InitialSubGroup毎の定義一覧 画面
-  individualIndex,
-
   /// あなたの辞書: 特定の言葉に対する自分の定義一覧（新着順）
   userWordDefinitions,
 }

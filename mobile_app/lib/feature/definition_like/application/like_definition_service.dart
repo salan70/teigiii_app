@@ -6,7 +6,7 @@ import '../../../core/analytics/analytics_service.dart';
 import '../../auth/application/auth_state.dart';
 import '../../definition/application/definition_state.dart';
 import '../../definition/domain/definition.dart';
-import '../../definition_list/appication/definition_list_state.dart';
+import '../../definition_list/application/definition_list_state.dart';
 import '../../definition_list/util/definition_feed_type.dart';
 import '../../user_list/application/user_id_list_state_notifier.dart';
 import '../../user_list/util/user_list_type.dart';

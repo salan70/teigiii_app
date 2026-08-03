@@ -5,7 +5,6 @@ import 'package:teigiii_api/teigiii_api.dart';
 import '../../../core/api/api_exception.dart';
 import '../../../core/api/api_providers.dart';
 import '../../../util/constant/config_constant.dart';
-import '../../../util/constant/initial_main_group.dart';
 import '../../definition/domain/definition.dart';
 import '../../definition/repository/definition_response_mapper.dart';
 import '../domain/definition_list_state.dart';
@@ -120,25 +119,6 @@ class DefinitionListRepository {
         id: targetUserId,
         cursor: cursor,
         limit: fetchLimitForDefinitionList,
-      );
-      return _toState(response.data!);
-    } on DioException catch (exception) {
-      throw ApiException.fromDioException(exception);
-    }
-  }
-
-  Future<DefinitionListState> fetchForIndividualDictionary(
-    String targetUserId,
-    InitialSubGroup initialSubGroup,
-    String? cursor,
-  ) async {
-    try {
-      final response = await _usersApi.v1UsersIdDefinitionsGet(
-        id: targetUserId,
-        cursor: cursor,
-        limit: fetchLimitForDefinitionList,
-        subGroup: initialSubGroup.label,
-        sort: 'reading',
       );
       return _toState(response.data!);
     } on DioException catch (exception) {

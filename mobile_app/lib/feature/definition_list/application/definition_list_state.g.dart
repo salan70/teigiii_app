@@ -7,7 +7,7 @@ part of 'definition_list_state.dart';
 // **************************************************************************
 
 String _$definitionListStateNotifierHash() =>
-    r'9b6929e91c571b8ec4a4f0e61f3596141200a79f';
+    r'20be3cd16b41e0a4b4e0a26a550ce82ecd286f86';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -35,13 +35,11 @@ abstract class _$DefinitionListStateNotifier
   late final DefinitionFeedType definitionFeedType;
   late final String? wordId;
   late final String? targetUserId;
-  late final InitialSubGroup? initialSubGroup;
 
   FutureOr<DefinitionListState> build(
     DefinitionFeedType definitionFeedType, {
     String? wordId,
     String? targetUserId,
-    InitialSubGroup? initialSubGroup,
   });
 }
 
@@ -84,13 +82,11 @@ class DefinitionListStateNotifierFamily
     DefinitionFeedType definitionFeedType, {
     String? wordId,
     String? targetUserId,
-    InitialSubGroup? initialSubGroup,
   }) {
     return DefinitionListStateNotifierProvider(
       definitionFeedType,
       wordId: wordId,
       targetUserId: targetUserId,
-      initialSubGroup: initialSubGroup,
     );
   }
 
@@ -102,7 +98,6 @@ class DefinitionListStateNotifierFamily
       provider.definitionFeedType,
       wordId: provider.wordId,
       targetUserId: provider.targetUserId,
-      initialSubGroup: provider.initialSubGroup,
     );
   }
 
@@ -128,12 +123,8 @@ class DefinitionListStateNotifierFamily
 /// [DefinitionSeedStore.releaseFeed]（dispose / 世代上限）で行う。
 ///
 /// Copied from [DefinitionListStateNotifier].
-class DefinitionListStateNotifierProvider
-    extends
-        AsyncNotifierProviderImpl<
-          DefinitionListStateNotifier,
-          DefinitionListState
-        > {
+class DefinitionListStateNotifierProvider extends AsyncNotifierProviderImpl<
+    DefinitionListStateNotifier, DefinitionListState> {
   /// 定義フィードの一覧 state。
   ///
   /// keepAlive: ホームの TabBarView など、一時的に unwatch されても
@@ -145,26 +136,24 @@ class DefinitionListStateNotifierProvider
     DefinitionFeedType definitionFeedType, {
     String? wordId,
     String? targetUserId,
-    InitialSubGroup? initialSubGroup,
   }) : this._internal(
-         () => DefinitionListStateNotifier()
-           ..definitionFeedType = definitionFeedType
-           ..wordId = wordId
-           ..targetUserId = targetUserId
-           ..initialSubGroup = initialSubGroup,
-         from: definitionListStateNotifierProvider,
-         name: r'definitionListStateNotifierProvider',
-         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-             ? null
-             : _$definitionListStateNotifierHash,
-         dependencies: DefinitionListStateNotifierFamily._dependencies,
-         allTransitiveDependencies:
-             DefinitionListStateNotifierFamily._allTransitiveDependencies,
-         definitionFeedType: definitionFeedType,
-         wordId: wordId,
-         targetUserId: targetUserId,
-         initialSubGroup: initialSubGroup,
-       );
+          () => DefinitionListStateNotifier()
+            ..definitionFeedType = definitionFeedType
+            ..wordId = wordId
+            ..targetUserId = targetUserId,
+          from: definitionListStateNotifierProvider,
+          name: r'definitionListStateNotifierProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$definitionListStateNotifierHash,
+          dependencies: DefinitionListStateNotifierFamily._dependencies,
+          allTransitiveDependencies:
+              DefinitionListStateNotifierFamily._allTransitiveDependencies,
+          definitionFeedType: definitionFeedType,
+          wordId: wordId,
+          targetUserId: targetUserId,
+        );
 
   DefinitionListStateNotifierProvider._internal(
     super._createNotifier, {
@@ -176,13 +165,11 @@ class DefinitionListStateNotifierProvider
     required this.definitionFeedType,
     required this.wordId,
     required this.targetUserId,
-    required this.initialSubGroup,
   }) : super.internal();
 
   final DefinitionFeedType definitionFeedType;
   final String? wordId;
   final String? targetUserId;
-  final InitialSubGroup? initialSubGroup;
 
   @override
   FutureOr<DefinitionListState> runNotifierBuild(
@@ -192,7 +179,6 @@ class DefinitionListStateNotifierProvider
       definitionFeedType,
       wordId: wordId,
       targetUserId: targetUserId,
-      initialSubGroup: initialSubGroup,
     );
   }
 
@@ -204,8 +190,7 @@ class DefinitionListStateNotifierProvider
         () => create()
           ..definitionFeedType = definitionFeedType
           ..wordId = wordId
-          ..targetUserId = targetUserId
-          ..initialSubGroup = initialSubGroup,
+          ..targetUserId = targetUserId,
         from: from,
         name: null,
         dependencies: null,
@@ -214,14 +199,13 @@ class DefinitionListStateNotifierProvider
         definitionFeedType: definitionFeedType,
         wordId: wordId,
         targetUserId: targetUserId,
-        initialSubGroup: initialSubGroup,
       ),
     );
   }
 
   @override
   AsyncNotifierProviderElement<DefinitionListStateNotifier, DefinitionListState>
-  createElement() {
+      createElement() {
     return _DefinitionListStateNotifierProviderElement(this);
   }
 
@@ -230,8 +214,7 @@ class DefinitionListStateNotifierProvider
     return other is DefinitionListStateNotifierProvider &&
         other.definitionFeedType == definitionFeedType &&
         other.wordId == wordId &&
-        other.targetUserId == targetUserId &&
-        other.initialSubGroup == initialSubGroup;
+        other.targetUserId == targetUserId;
   }
 
   @override
@@ -240,7 +223,6 @@ class DefinitionListStateNotifierProvider
     hash = _SystemHash.combine(hash, definitionFeedType.hashCode);
     hash = _SystemHash.combine(hash, wordId.hashCode);
     hash = _SystemHash.combine(hash, targetUserId.hashCode);
-    hash = _SystemHash.combine(hash, initialSubGroup.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -256,18 +238,11 @@ mixin DefinitionListStateNotifierRef
 
   /// The parameter `targetUserId` of this provider.
   String? get targetUserId;
-
-  /// The parameter `initialSubGroup` of this provider.
-  InitialSubGroup? get initialSubGroup;
 }
 
 class _DefinitionListStateNotifierProviderElement
-    extends
-        AsyncNotifierProviderElement<
-          DefinitionListStateNotifier,
-          DefinitionListState
-        >
-    with DefinitionListStateNotifierRef {
+    extends AsyncNotifierProviderElement<DefinitionListStateNotifier,
+        DefinitionListState> with DefinitionListStateNotifierRef {
   _DefinitionListStateNotifierProviderElement(super.provider);
 
   @override
@@ -278,10 +253,6 @@ class _DefinitionListStateNotifierProviderElement
   @override
   String? get targetUserId =>
       (origin as DefinitionListStateNotifierProvider).targetUserId;
-  @override
-  InitialSubGroup? get initialSubGroup =>
-      (origin as DefinitionListStateNotifierProvider).initialSubGroup;
 }
-
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

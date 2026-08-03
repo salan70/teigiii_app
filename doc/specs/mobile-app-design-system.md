@@ -115,6 +115,8 @@ Issue: #258（親） / 本仕様の確定: #259
 | `subtle` | 4 | スナックバー・ローディング表示の弱い角丸 |
 | `shimmer` | 2 | shimmer の矩形 |
 
+上表が member の正本であり、参照がなくなっても維持する。実装側にある `pillBorder` などの `BorderRadius` 派生は `Radius.circular` を書く手間を省くためのユーティリティで、member ではないため表に載せない。派生は実利用があるものだけ定義する。
+
 <!-- @code mobile_app/lib/core/design_system/token/ds_size.dart#DsSize -->
 ### 3.3 `DsSize`
 

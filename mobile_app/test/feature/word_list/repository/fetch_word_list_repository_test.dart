@@ -28,17 +28,15 @@ void main() {
     publicDefinitionCount: 0,
   );
 
-  test('行別一覧は定義0件の言葉も Word に変換する', () async {
-    when(
-      wordsApi.v1WordsGet(cursor: null, limit: 20, subGroup: 'や'),
-    ).thenAnswer(
+  test('みんなの辞書一覧は定義0件の言葉も Word に変換する', () async {
+    when(wordsApi.v1WordsGet(cursor: null, limit: 20)).thenAnswer(
       (_) async => Response(
         data: V1WordsGet200Response(items: [item], nextCursor: 'next'),
         requestOptions: RequestOptions(path: '/v1/words'),
       ),
     );
 
-    final result = await repository.fetchWordListStateByInitial('や', null);
+    final result = await repository.fetchCommunityWordList(null);
 
     expect(result.list, const [
       Word(
@@ -75,11 +73,11 @@ void main() {
   test('DioException を ApiException に変換する', () async {
     final requestOptions = RequestOptions(path: '/v1/words');
     when(
-      wordsApi.v1WordsGet(cursor: null, limit: 20, subGroup: 'や'),
+      wordsApi.v1WordsGet(cursor: null, limit: 20),
     ).thenThrow(DioException(requestOptions: requestOptions));
 
     expect(
-      () => repository.fetchWordListStateByInitial('や', null),
+      () => repository.fetchCommunityWordList(null),
       throwsA(isA<ApiException>()),
     );
   });

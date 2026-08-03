@@ -7,16 +7,12 @@ import '../../feature/definition/domain/definition.dart';
 import '../../feature/definition/domain/definition_for_write.dart';
 import '../../feature/definition/presentation/write_definition_base_page.dart';
 import '../../feature/definition/util/after_post_navigation_type.dart';
-import '../../feature/definition_list/presentation/individual_dictionary_definition_list.dart';
-import '../../feature/word/util/dictionary_page_type.dart';
-import '../../util/constant/initial_main_group.dart';
 import '../page/base_page.dart';
 import '../page/definition_detail_page.dart';
 import '../page/definition_edit_page.dart';
 import '../page/definition_post_page.dart';
 import '../page/dictionary_everyone_page.dart';
 import '../page/dictionary_individual_page.dart';
-import '../page/dictionary_sub_index_page.dart';
 import '../page/home_page.dart';
 import '../page/license_page.dart';
 import '../page/profile_edit_page.dart';
@@ -30,7 +26,6 @@ import '../page/user_search_page.dart';
 import '../page/user_search_result_page.dart';
 import '../page/user_word_definition_list_page.dart';
 import '../page/welcome_page.dart';
-import '../page/word_list_page.dart';
 import '../page/word_registration_page.dart';
 import '../page/word_search_result_page.dart';
 import '../page/word_top_page.dart';
@@ -62,14 +57,6 @@ class AppRouter extends _$AppRouter {
     AdaptiveRoute(
       path: 'user_list_following_or_follower',
       page: UserListFollowingOrFollowerRoute.page,
-    ),
-    AdaptiveRoute(
-      path: 'dictionary_sub_index',
-      page: DictionarySubIndexRoute.page,
-    ),
-    AdaptiveRoute(
-      path: 'individual_dictionary_definition_list',
-      page: IndividualDictionaryDefinitionListRoute.page,
     ),
     AdaptiveRoute(path: 'user_search', page: UserSearchRoute.page),
     AdaptiveRoute(path: 'user_search_result', page: UserSearchResultRoute.page),
@@ -131,7 +118,6 @@ class AppRouter extends _$AppRouter {
           page: DictionaryEveryoneRouterRoute.page,
           children: [
             AdaptiveRoute(initial: true, page: DictionaryEveryoneRoute.page),
-            AdaptiveRoute(path: 'word_list', page: WordListRoute.page),
             AdaptiveRoute(
               path: 'word_search_result',
               page: WordSearchResultRoute.page,

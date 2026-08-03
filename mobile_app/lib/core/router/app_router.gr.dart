@@ -88,18 +88,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const DictionaryIndividualRouterPage(),
       );
     },
-    DictionarySubIndexRoute.name: (routeData) {
-      final args = routeData.argsAs<DictionarySubIndexRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: DictionarySubIndexPage(
-          key: args.key,
-          selectedInitialMainGroup: args.selectedInitialMainGroup,
-          dictionaryPageType: args.dictionaryPageType,
-          targetUserId: args.targetUserId,
-        ),
-      );
-    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -110,18 +98,6 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const HomeRouterPage(),
-      );
-    },
-    IndividualDictionaryDefinitionListRoute.name: (routeData) {
-      final args =
-          routeData.argsAs<IndividualDictionaryDefinitionListRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: IndividualDictionaryDefinitionListPage(
-          key: args.key,
-          targetUserId: args.targetUserId,
-          initialSubGroup: args.initialSubGroup,
-        ),
       );
     },
     MyLicenseRoute.name: (routeData) {
@@ -225,16 +201,6 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const WelcomePage(),
-      );
-    },
-    WordListRoute.name: (routeData) {
-      final args = routeData.argsAs<WordListRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WordListPage(
-          key: args.key,
-          selectedInitialSubGroup: args.selectedInitialSubGroup,
-        ),
       );
     },
     WordRegistrationRoute.name: (routeData) {
@@ -510,55 +476,6 @@ class DictionaryIndividualRouterRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [DictionarySubIndexPage]
-class DictionarySubIndexRoute
-    extends PageRouteInfo<DictionarySubIndexRouteArgs> {
-  DictionarySubIndexRoute({
-    Key? key,
-    required InitialMainGroup selectedInitialMainGroup,
-    required DictionaryPageType dictionaryPageType,
-    required String? targetUserId,
-    List<PageRouteInfo>? children,
-  }) : super(
-          DictionarySubIndexRoute.name,
-          args: DictionarySubIndexRouteArgs(
-            key: key,
-            selectedInitialMainGroup: selectedInitialMainGroup,
-            dictionaryPageType: dictionaryPageType,
-            targetUserId: targetUserId,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'DictionarySubIndexRoute';
-
-  static const PageInfo<DictionarySubIndexRouteArgs> page =
-      PageInfo<DictionarySubIndexRouteArgs>(name);
-}
-
-class DictionarySubIndexRouteArgs {
-  const DictionarySubIndexRouteArgs({
-    this.key,
-    required this.selectedInitialMainGroup,
-    required this.dictionaryPageType,
-    required this.targetUserId,
-  });
-
-  final Key? key;
-
-  final InitialMainGroup selectedInitialMainGroup;
-
-  final DictionaryPageType dictionaryPageType;
-
-  final String? targetUserId;
-
-  @override
-  String toString() {
-    return 'DictionarySubIndexRouteArgs{key: $key, selectedInitialMainGroup: $selectedInitialMainGroup, dictionaryPageType: $dictionaryPageType, targetUserId: $targetUserId}';
-  }
-}
-
-/// generated route for
 /// [HomePage]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
@@ -584,50 +501,6 @@ class HomeRouterRoute extends PageRouteInfo<void> {
   static const String name = 'HomeRouterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [IndividualDictionaryDefinitionListPage]
-class IndividualDictionaryDefinitionListRoute
-    extends PageRouteInfo<IndividualDictionaryDefinitionListRouteArgs> {
-  IndividualDictionaryDefinitionListRoute({
-    Key? key,
-    required String targetUserId,
-    required InitialSubGroup initialSubGroup,
-    List<PageRouteInfo>? children,
-  }) : super(
-          IndividualDictionaryDefinitionListRoute.name,
-          args: IndividualDictionaryDefinitionListRouteArgs(
-            key: key,
-            targetUserId: targetUserId,
-            initialSubGroup: initialSubGroup,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'IndividualDictionaryDefinitionListRoute';
-
-  static const PageInfo<IndividualDictionaryDefinitionListRouteArgs> page =
-      PageInfo<IndividualDictionaryDefinitionListRouteArgs>(name);
-}
-
-class IndividualDictionaryDefinitionListRouteArgs {
-  const IndividualDictionaryDefinitionListRouteArgs({
-    this.key,
-    required this.targetUserId,
-    required this.initialSubGroup,
-  });
-
-  final Key? key;
-
-  final String targetUserId;
-
-  final InitialSubGroup initialSubGroup;
-
-  @override
-  String toString() {
-    return 'IndividualDictionaryDefinitionListRouteArgs{key: $key, targetUserId: $targetUserId, initialSubGroup: $initialSubGroup}';
-  }
 }
 
 /// generated route for
@@ -962,44 +835,6 @@ class WelcomeRoute extends PageRouteInfo<void> {
   static const String name = 'WelcomeRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [WordListPage]
-class WordListRoute extends PageRouteInfo<WordListRouteArgs> {
-  WordListRoute({
-    Key? key,
-    required InitialSubGroup selectedInitialSubGroup,
-    List<PageRouteInfo>? children,
-  }) : super(
-          WordListRoute.name,
-          args: WordListRouteArgs(
-            key: key,
-            selectedInitialSubGroup: selectedInitialSubGroup,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'WordListRoute';
-
-  static const PageInfo<WordListRouteArgs> page =
-      PageInfo<WordListRouteArgs>(name);
-}
-
-class WordListRouteArgs {
-  const WordListRouteArgs({
-    this.key,
-    required this.selectedInitialSubGroup,
-  });
-
-  final Key? key;
-
-  final InitialSubGroup selectedInitialSubGroup;
-
-  @override
-  String toString() {
-    return 'WordListRouteArgs{key: $key, selectedInitialSubGroup: $selectedInitialSubGroup}';
-  }
 }
 
 /// generated route for

@@ -40,9 +40,6 @@
   "lib/core/page/dictionary_individual_page.dart": {
     "ds_hardcoded_spacing": 3
   },
-  "lib/core/page/dictionary_sub_index_page.dart": {
-    "ds_hardcoded_spacing": 4
-  },
   "lib/core/page/home_page.dart": {
     "ds_hardcoded_elevation": 1
   },
@@ -64,9 +61,6 @@
   },
   "lib/core/page/welcome_page.dart": {
     "ds_hardcoded_spacing": 4
-  },
-  "lib/core/page/word_list_page.dart": {
-    "ds_hardcoded_spacing": 1
   },
   "lib/core/page/word_search_result_page.dart": {
     "ds_hardcoded_spacing": 4
@@ -108,9 +102,6 @@
   },
   "lib/feature/definition_list/presentation/definition_list.dart": {
     "ds_hardcoded_spacing": 1
-  },
-  "lib/feature/definition_list/presentation/individual_dictionary_definition_list.dart": {
-    "ds_hardcoded_spacing": 2
   },
   "lib/feature/force_event/presentation/overlay_force_update_dialog.dart": {
     "ds_hardcoded_spacing": 3,
@@ -167,10 +158,6 @@
   },
   "lib/feature/user_search/presentation/search_user_text_field.dart": {
     "ds_hardcoded_opacity": 1
-  },
-  "lib/feature/word/presentation/index_tile.dart": {
-    "ds_hardcoded_spacing": 1,
-    "ds_hardcoded_size": 1
   },
   "lib/feature/word/presentation/word_page_shimmer.dart": {
     "ds_hardcoded_spacing": 7

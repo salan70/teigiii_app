@@ -1,1 +1,0 @@
-enum DictionaryPageType { individual, everyone }

@@ -5,7 +5,6 @@ import 'package:mockito/mockito.dart';
 import 'package:teigi_app/core/api/api_exception.dart';
 import 'package:teigi_app/feature/definition_list/repository/definition_list_repository.dart';
 import 'package:teigi_app/feature/definition_list/util/definition_feed_type.dart';
-import 'package:teigi_app/util/constant/initial_main_group.dart';
 import 'package:teigiii_api/teigiii_api.dart';
 
 import 'definition_list_repository_test.mocks.dart';
@@ -128,34 +127,6 @@ void main() {
     final result = await repository.fetchForWordTop(
       WordTopOrderByType.likesCount,
       'word-1',
-      null,
-    );
-
-    expect(result.list.map((definition) => definition.id), ['definition-1']);
-  });
-
-  test('個人辞書は読みグループと reading 順を指定する', () async {
-    when(
-      usersApi.v1UsersIdDefinitionsGet(
-        id: 'user-1',
-        cursor: null,
-        limit: 20,
-        subGroup: InitialSubGroup.a.label,
-        sort: 'reading',
-      ),
-    ).thenAnswer(
-      (_) async => Response(
-        data: V1UsersIdDefinitionsGet200Response(
-          items: [definition('definition-1')],
-          nextCursor: null,
-        ),
-        requestOptions: RequestOptions(path: '/v1/users/user-1/definitions'),
-      ),
-    );
-
-    final result = await repository.fetchForIndividualDictionary(
-      'user-1',
-      InitialSubGroup.a,
       null,
     );
 
