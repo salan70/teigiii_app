@@ -267,7 +267,7 @@ describe("my dictionary lists", () => {
     expect(secondBody.nextCursor).toBeNull();
   });
 
-  test("保存一覧も五十音のあとに英字・数字が並び、scriptClass 跨ぎでページングできる", async () => {
+  test("保存一覧は保存日時の新しい順を維持してページングできる", async () => {
     await insertUser("alice");
     await insertWord("w-kana", "あんこ", "あんこ", "alice", 10);
     await insertWord("w-alpha", "Apple", "Apple", "alice", 20);
@@ -282,7 +282,7 @@ describe("my dictionary lists", () => {
     expect(first.status).toBe(200);
     const firstBody = await first.json<Page<{ readingSubGroup: string; word: { id: string } }>>();
     expect(firstBody.items).toMatchObject([
-      { readingSubGroup: "あ", word: { id: "w-kana" } },
+      { readingSubGroup: "数字", word: { id: "w-number" } },
       { readingSubGroup: "A", word: { id: "w-alpha" } },
     ]);
     expect(firstBody.nextCursor).not.toBeNull();
@@ -292,7 +292,7 @@ describe("my dictionary lists", () => {
       `/v1/me/saved-words?limit=2&cursor=${encodeURIComponent(firstBody.nextCursor!)}`,
     );
     const secondBody = await second.json<Page<{ readingSubGroup: string; word: { id: string } }>>();
-    expect(secondBody.items).toMatchObject([{ readingSubGroup: "数字", word: { id: "w-number" } }]);
+    expect(secondBody.items).toMatchObject([{ readingSubGroup: "あ", word: { id: "w-kana" } }]);
     expect(secondBody.nextCursor).toBeNull();
   });
 

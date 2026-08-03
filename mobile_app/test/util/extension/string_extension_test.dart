@@ -13,5 +13,13 @@ void main() {
     test('先頭の空白はそのままにする', () {
       expect('  Hello World'.trimEnd(), '  Hello World');
     });
+
+    test('空文字列の場合は空文字列のままにする', () {
+      expect(''.trimEnd(), '');
+    });
+
+    test('文字列に空白がない場合はそのままにする', () {
+      expect('HelloWorld'.trimEnd(), 'HelloWorld');
+    });
   });
 }

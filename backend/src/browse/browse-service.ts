@@ -540,10 +540,12 @@ export class BrowseService {
 
   async listSavedWords(uid: string, limit: number, cursorValue?: string) {
     const cursor =
-      cursorValue === undefined ? null : decodeReadingCursor(cursorValue, "saved_words");
-    const cursorClause = cursor === null ? "" : `and ${readingScriptClassCursorClause()}`;
+      cursorValue === undefined ? null : decodeDescendingCursor(cursorValue, "saved_words");
+    const cursorClause =
+      cursor === null ? "" : "and (s.created_at < ? or (s.created_at = ? and w.id < ?))";
     // is_defined_by_me / public_count のミュート除外 / user_id / 公開判定×2
     const parameters: unknown[] = [uid, uid, uid, uid, uid];
+    if (cursor !== null) parameters.push(cursor.sortAt, cursor.sortAt, cursor.id);
     type Row = {
       id: string;
       word: string;
@@ -551,10 +553,11 @@ export class BrowseService {
       reading_sub_group: string;
       is_defined_by_me: number;
       public_count: number;
+      saved_at: number;
     };
     const rows = (
       await this.env.DB.prepare(
-        `select w.id, w.word, w.reading, w.reading_sub_group,
+        `select w.id, w.word, w.reading, w.reading_sub_group, s.created_at as saved_at,
            exists(select 1 from definitions d
             where d.word_id = w.id and d.author_id = ? and d.deleted_at is null) as is_defined_by_me,
            (select count(*) from definitions d
@@ -566,9 +569,9 @@ export class BrowseService {
          where s.user_id = ?
            and ${publiclyVisibleWordSql("?")}
            ${cursorClause}
-         order by ${readingScriptClassOrderBy()} limit ?`,
+         order by s.created_at desc, w.id desc limit ?`,
       )
-        .bind(...parameters, ...(cursor === null ? [] : readingCursorBindings(cursor)), limit + 1)
+        .bind(...parameters, limit + 1)
         .all<Row>()
     ).results;
     return page(
@@ -580,7 +583,13 @@ export class BrowseService {
         readingSubGroup: row.reading_sub_group,
         word: { id: row.id, reading: row.reading, word: row.word },
       }),
-      (row) => encodeReadingCursor("saved_words", row),
+      (row) =>
+        encodeOpaqueCursor({
+          id: row.id,
+          kind: "saved_words",
+          sortAt: row.saved_at,
+          version: 1,
+        } satisfies DescendingCursor),
     );
   }
 
