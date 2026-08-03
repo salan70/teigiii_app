@@ -123,8 +123,12 @@ class DefinitionListStateNotifierFamily
 /// [DefinitionSeedStore.releaseFeed]（dispose / 世代上限）で行う。
 ///
 /// Copied from [DefinitionListStateNotifier].
-class DefinitionListStateNotifierProvider extends AsyncNotifierProviderImpl<
-    DefinitionListStateNotifier, DefinitionListState> {
+class DefinitionListStateNotifierProvider
+    extends
+        AsyncNotifierProviderImpl<
+          DefinitionListStateNotifier,
+          DefinitionListState
+        > {
   /// 定義フィードの一覧 state。
   ///
   /// keepAlive: ホームの TabBarView など、一時的に unwatch されても
@@ -137,23 +141,22 @@ class DefinitionListStateNotifierProvider extends AsyncNotifierProviderImpl<
     String? wordId,
     String? targetUserId,
   }) : this._internal(
-          () => DefinitionListStateNotifier()
-            ..definitionFeedType = definitionFeedType
-            ..wordId = wordId
-            ..targetUserId = targetUserId,
-          from: definitionListStateNotifierProvider,
-          name: r'definitionListStateNotifierProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$definitionListStateNotifierHash,
-          dependencies: DefinitionListStateNotifierFamily._dependencies,
-          allTransitiveDependencies:
-              DefinitionListStateNotifierFamily._allTransitiveDependencies,
-          definitionFeedType: definitionFeedType,
-          wordId: wordId,
-          targetUserId: targetUserId,
-        );
+         () => DefinitionListStateNotifier()
+           ..definitionFeedType = definitionFeedType
+           ..wordId = wordId
+           ..targetUserId = targetUserId,
+         from: definitionListStateNotifierProvider,
+         name: r'definitionListStateNotifierProvider',
+         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+             ? null
+             : _$definitionListStateNotifierHash,
+         dependencies: DefinitionListStateNotifierFamily._dependencies,
+         allTransitiveDependencies:
+             DefinitionListStateNotifierFamily._allTransitiveDependencies,
+         definitionFeedType: definitionFeedType,
+         wordId: wordId,
+         targetUserId: targetUserId,
+       );
 
   DefinitionListStateNotifierProvider._internal(
     super._createNotifier, {
@@ -205,7 +208,7 @@ class DefinitionListStateNotifierProvider extends AsyncNotifierProviderImpl<
 
   @override
   AsyncNotifierProviderElement<DefinitionListStateNotifier, DefinitionListState>
-      createElement() {
+  createElement() {
     return _DefinitionListStateNotifierProviderElement(this);
   }
 
@@ -241,8 +244,12 @@ mixin DefinitionListStateNotifierRef
 }
 
 class _DefinitionListStateNotifierProviderElement
-    extends AsyncNotifierProviderElement<DefinitionListStateNotifier,
-        DefinitionListState> with DefinitionListStateNotifierRef {
+    extends
+        AsyncNotifierProviderElement<
+          DefinitionListStateNotifier,
+          DefinitionListState
+        >
+    with DefinitionListStateNotifierRef {
   _DefinitionListStateNotifierProviderElement(super.provider);
 
   @override
@@ -254,5 +261,6 @@ class _DefinitionListStateNotifierProviderElement
   String? get targetUserId =>
       (origin as DefinitionListStateNotifierProvider).targetUserId;
 }
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

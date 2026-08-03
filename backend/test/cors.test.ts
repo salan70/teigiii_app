@@ -16,9 +16,7 @@ function testApp() {
 describe("isAllowedWebQaOrigin", () => {
   test("pagesProject 未設定ではすべて拒否する", () => {
     expect(isAllowedWebQaOrigin("http://localhost:3000", undefined)).toBe(false);
-    expect(isAllowedWebQaOrigin("https://teigiii-web-dev.pages.dev", undefined)).toBe(
-      false,
-    );
+    expect(isAllowedWebQaOrigin("https://teigiii-web-dev.pages.dev", undefined)).toBe(false);
   });
 
   test("localhost / 127.0.0.1 を許可する", () => {
@@ -27,23 +25,17 @@ describe("isAllowedWebQaOrigin", () => {
   });
 
   test("LAN IP を許可する", () => {
-    expect(isAllowedWebQaOrigin("http://192.168.1.10:5173", "teigiii-web-dev")).toBe(
-      true,
-    );
+    expect(isAllowedWebQaOrigin("http://192.168.1.10:5173", "teigiii-web-dev")).toBe(true);
     expect(isAllowedWebQaOrigin("http://10.0.0.5:3000", "teigiii-web-dev")).toBe(true);
     expect(isAllowedWebQaOrigin("http://172.16.0.2:4173", "teigiii-web-dev")).toBe(true);
   });
 
   test("自プロジェクトの *.pages.dev だけ許可する", () => {
-    expect(isAllowedWebQaOrigin("https://teigiii-web-dev.pages.dev", "teigiii-web-dev")).toBe(
-      true,
-    );
+    expect(isAllowedWebQaOrigin("https://teigiii-web-dev.pages.dev", "teigiii-web-dev")).toBe(true);
     expect(
       isAllowedWebQaOrigin("https://abc123.teigiii-web-dev.pages.dev", "teigiii-web-dev"),
     ).toBe(true);
-    expect(isAllowedWebQaOrigin("https://other-project.pages.dev", "teigiii-web-dev")).toBe(
-      false,
-    );
+    expect(isAllowedWebQaOrigin("https://other-project.pages.dev", "teigiii-web-dev")).toBe(false);
     expect(isAllowedWebQaOrigin("https://evil.pages.dev", "teigiii-web-dev")).toBe(false);
   });
 
