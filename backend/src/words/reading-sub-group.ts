@@ -1,5 +1,4 @@
-// 旧 Flutter 実装（lib/util/constant/initial_main_group.dart の InitialSubGroup.fromString）と
-// 同じ分類規則。words.reading_sub_group に保存するラベルを算出する。
+// words.reading_sub_group に保存する読み分類ラベルの正本。
 
 /** 濁音・半濁音・小書き・歴史的仮名遣いを清音ラベルへ寄せる対応。清音・を・ん は自分自身。 */
 const kanaConversions: ReadonlyArray<readonly [source: string, label: string]> = [

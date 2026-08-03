@@ -120,7 +120,7 @@ describe("dictionary and definition lists", () => {
     const dictionary = await request("bob", "/v1/users/alice/dictionary");
     expect(dictionary.status).toBe(200);
     await expect(dictionary.json()).resolves.toMatchObject({
-      items: [{ publicCount: 2, word: { id: "w1" } }],
+      items: [{ publicCount: 2, readingSubGroup: "あ", word: { id: "w1" } }],
       nextCursor: null,
     });
 
@@ -197,8 +197,8 @@ describe("my dictionary lists", () => {
     const definedWords = await request("alice", "/v1/me/defined-words");
     await expect(definedWords.json()).resolves.toMatchObject({
       items: [
-        { privateCount: 1, publicCount: 1, word: { id: "w1" } },
-        { privateCount: 1, publicCount: 0, word: { id: "w2" } },
+        { privateCount: 1, publicCount: 1, readingSubGroup: "あ", word: { id: "w1" } },
+        { privateCount: 1, publicCount: 0, readingSubGroup: "よ", word: { id: "w2" } },
       ],
     });
 
@@ -209,7 +209,7 @@ describe("my dictionary lists", () => {
 
     const saved = await request("alice", "/v1/me/saved-words");
     await expect(saved.json()).resolves.toMatchObject({
-      items: [{ isDefinedByMe: true, publicCount: 1, word: { id: "w1" } }],
+      items: [{ isDefinedByMe: true, publicCount: 1, readingSubGroup: "あ", word: { id: "w1" } }],
     });
 
     const mutes = await request("alice", "/v1/me/mutes");
@@ -264,6 +264,35 @@ describe("my dictionary lists", () => {
     );
     const secondBody = await second.json<Page<{ word: { id: string } }>>();
     expect(secondBody.items.map((item) => item.word.id)).toEqual(["w-alpha2"]);
+    expect(secondBody.nextCursor).toBeNull();
+  });
+
+  test("保存一覧も五十音のあとに英字・数字が並び、scriptClass 跨ぎでページングできる", async () => {
+    await insertUser("alice");
+    await insertWord("w-kana", "あんこ", "あんこ", "alice", 10);
+    await insertWord("w-alpha", "Apple", "Apple", "alice", 20);
+    await insertWord("w-number", "123", "123", "alice", 30);
+    await env.DB.batch([
+      env.DB.prepare("insert into saved_words values ('alice', 'w-kana', 100)"),
+      env.DB.prepare("insert into saved_words values ('alice', 'w-alpha', 200)"),
+      env.DB.prepare("insert into saved_words values ('alice', 'w-number', 300)"),
+    ]);
+
+    const first = await request("alice", "/v1/me/saved-words?limit=2");
+    expect(first.status).toBe(200);
+    const firstBody = await first.json<Page<{ readingSubGroup: string; word: { id: string } }>>();
+    expect(firstBody.items).toMatchObject([
+      { readingSubGroup: "あ", word: { id: "w-kana" } },
+      { readingSubGroup: "A", word: { id: "w-alpha" } },
+    ]);
+    expect(firstBody.nextCursor).not.toBeNull();
+
+    const second = await request(
+      "alice",
+      `/v1/me/saved-words?limit=2&cursor=${encodeURIComponent(firstBody.nextCursor!)}`,
+    );
+    const secondBody = await second.json<Page<{ readingSubGroup: string; word: { id: string } }>>();
+    expect(secondBody.items).toMatchObject([{ readingSubGroup: "数字", word: { id: "w-number" } }]);
     expect(secondBody.nextCursor).toBeNull();
   });
 

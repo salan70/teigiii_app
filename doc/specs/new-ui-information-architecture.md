@@ -198,6 +198,8 @@ issue #182 の成果物。Cloudflare 移行戦略（`doc/plans/2026-07-12-cloudf
 
 ### 5.1 並び順
 
+分類規則と並び順の正本はサーバーとする。サーバーは正規化済み reading から `readingSubGroup` を算出し、文字種クラス（五十音 → 英字 → 数字・記号）、reading、id の安定順で返す。クライアントは受信順を再ソートせず、`readingSubGroup` とメイングループの対応表からセクション見出しを挿入する。
+
 ```text
 あ
 ├─ 愛

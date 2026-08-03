@@ -223,12 +223,16 @@
           "word": {
             "$ref": "#/components/schemas/WordSummary"
           },
+          "readingSubGroup": {
+            "type": "string"
+          },
           "publicCount": {
             "type": "integer"
           }
         },
         "required": [
           "word",
+          "readingSubGroup",
           "publicCount"
         ]
       },
@@ -367,6 +371,9 @@
           "word": {
             "$ref": "#/components/schemas/WordSummary"
           },
+          "readingSubGroup": {
+            "type": "string"
+          },
           "publicCount": {
             "type": "integer"
           },
@@ -376,6 +383,7 @@
         },
         "required": [
           "word",
+          "readingSubGroup",
           "publicCount",
           "privateCount"
         ]
@@ -386,6 +394,9 @@
           "word": {
             "$ref": "#/components/schemas/WordSummary"
           },
+          "readingSubGroup": {
+            "type": "string"
+          },
           "isDefinedByMe": {
             "type": "boolean"
           },
@@ -395,6 +406,7 @@
         },
         "required": [
           "word",
+          "readingSubGroup",
           "isDefinedByMe",
           "publicCount"
         ]

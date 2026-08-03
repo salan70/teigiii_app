@@ -27,6 +27,43 @@ describe("normalizeText", () => {
 });
 
 describe("readingSubGroup", () => {
+  test("全てのかなを清音のサブグループへ分類する", () => {
+    const hiragana =
+      "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん" +
+      "がぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ" +
+      "ぁぃぅぇぉっゃゅょゔわゐゑを";
+    const katakana =
+      "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン" +
+      "ガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ" +
+      "ァィゥェォッャュョヴヷヸヹヺ";
+    const expected =
+      "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん" +
+      "かきくけこさしすせそたちつてとはひふへほはひふへほ" +
+      "あいうえおつやゆようわいえを";
+
+    expect([...hiragana].map(readingSubGroup).join("")).toBe(expected);
+    expect([...katakana].map(readingSubGroup).join("")).toBe(expected);
+  });
+
+  test("全ての英字と数字を分類する", () => {
+    const lowercase = "abcdefghijklmnopqrstuvwxyz";
+    const uppercase = lowercase.toUpperCase();
+
+    expect([...lowercase].map(readingSubGroup).join("")).toBe(uppercase);
+    expect([...uppercase].map(readingSubGroup).join("")).toBe(uppercase);
+    expect([..."0123456789"].map(readingSubGroup)).toEqual(Array(10).fill("数字"));
+  });
+
+  test("許可する全ての基本記号を記号へ分類する", () => {
+    const symbols = "!#$%&()*+,-./:;<=>?@[]^_`{|}~（）「」『』ー";
+
+    expect([...symbols].map(readingSubGroup)).toEqual(Array([...symbols].length).fill("記号"));
+  });
+
+  test("半角カナ・全角英数・絵文字はその他へ分類する", () => {
+    expect([..."｡｢｣､･ｰ２Ａｱ😆"].map(readingSubGroup)).toEqual(Array(10).fill("その他"));
+  });
+
   test("ひらがな清音は先頭文字をそのまま返す", () => {
     expect(readingSubGroup("あんこ")).toBe("あ");
     expect(readingSubGroup("ん")).toBe("ん");

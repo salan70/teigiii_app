@@ -15,6 +15,7 @@ export const myDictionaryOverviewSchema = z
 export const definedWordItemSchema = z
   .object({
     word: wordSummarySchema,
+    readingSubGroup: z.string(),
     publicCount: z.number().int(),
     privateCount: z.number().int(),
   })
@@ -24,6 +25,7 @@ export const definedWordItemSchema = z
 export const userDictionaryItemSchema = z
   .object({
     word: wordSummarySchema,
+    readingSubGroup: z.string(),
     publicCount: z.number().int(),
   })
   .openapi("UserDictionaryItem");
@@ -32,6 +34,7 @@ export const userDictionaryItemSchema = z
 export const savedWordItemSchema = z
   .object({
     word: wordSummarySchema,
+    readingSubGroup: z.string(),
     isDefinedByMe: z.boolean(),
     publicCount: z.number().int(),
   })
