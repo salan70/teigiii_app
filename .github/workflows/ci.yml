@@ -6,15 +6,16 @@ name: ci
 # mobile 系の検証を develop push で再実行しないのは、merge 戦略が merge commit のみで、
 # pull_request イベントが base 最新との統合結果を既に検証しているため。
 
+# paths-ignore は使わない。ci-passed が develop の required status check であり、
+# path filter で workflow ごと起動しないと check run が生成されず Pending のまま残って
+# merge できなくなる。docs-only の develop push でも同じ理由で ci-passed が存在せず、
+# backend-guard-prod が prod deploy を拒否してしまう。
+# 起動は常に行い、実行するジョブの取捨は changes gate に任せる。
 on:
   push:
     branches:
       - develop
-    paths-ignore:
-      - '**.md'
   pull_request:
-    paths-ignore:
-      - '**.md'
   workflow_dispatch:
 
 concurrency:
@@ -31,6 +32,7 @@ jobs:
     outputs:
       mobile: ${{ steps.gates.outputs.mobile }}
       backend: ${{ steps.gates.outputs.backend }}
+      code: ${{ steps.filter.outputs.code }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -56,16 +58,27 @@ jobs:
               - 'justfile'
               - '.github/workflows/ci.yml'
               - '.github/actions/**'
+            # Markdown 以外の変更が 1 つでもあるか。docs-only の判定に使う。
+            code:
+              - '**'
+              - '!**/*.md'
+              - '!*.md'
 
-      # フィルタ外の変更で workflow が起動した場合は両方走らせる（黙って skip しない）
       - name: Resolve job gates
         id: gates
         run: |
           mobile="${{ steps.filter.outputs.mobile }}"
           backend="${{ steps.filter.outputs.backend }}"
+          code="${{ steps.filter.outputs.code }}"
           if [ "$mobile" != "true" ] && [ "$backend" != "true" ]; then
-            mobile=true
-            backend=true
+            if [ "$code" = "true" ]; then
+              # 認識できない非 Markdown の変更。黙って skip せず両方走らせる。
+              mobile=true
+              backend=true
+            fi
+            # Markdown のみの変更は両方 false のまま。
+            # ジョブは全て skip されるが workflow 自体は起動しており、
+            # ci-passed は skipped を許容して success になる。
           fi
           echo "mobile=$mobile" >> "$GITHUB_OUTPUT"
           echo "backend=$backend" >> "$GITHUB_OUTPUT"

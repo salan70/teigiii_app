@@ -19,8 +19,21 @@ Flutter repository の接続は #185、Firestore / Firebase Storage の既存デ
 
 Firebase project ID と project number は公開識別子として Wrangler vars に置く。トークン、秘密鍵、Cloudflare API token はコード、設定ファイル、ログへ保存しない。
 
-dev は `just backend-deploy-dev`、prod は `just backend-deploy-prod` で手動デプロイする。
-どちらも D1 migration の成功後に Worker を deploy し、自動デプロイ CI は導入しない。
+dev は develop への push で CI から自動デプロイする（`ci.yml` の `deploy-dev` ジョブが
+`backend-analyze` / `backend-test` の成功後に `just backend-deploy-dev` を実行する）。
+dev Worker が develop と一致していることは web preview の前提条件であり、手動デプロイで
+漂流させない。dev の D1 migration は deploy と同じ recipe で一括適用する。
+
+prod は CI からデプロイせず、`just backend-deploy-prod` でローカルから手動デプロイする。
+prod 全権の Cloudflare API token を GitHub に置かないため。作業ツリーの内容がそのまま
+prod に出る事故は `backend-guard-prod`（作業ツリー clean / `origin/develop` と一致 /
+その commit の `ci-passed` が green）で防ぐ。
+
+**prod の D1 migration は deploy の依存に含めない。** deploy は `wrangler rollback` で
+可逆だが migration は forward-only で不可逆であり、さらに正しい順序が migration の性質で
+反転する（additive なら migrate → deploy、destructive なら deploy → migrate）。
+`backend-migrate-prod` / `backend-migrate-prod-telemetry` は個別に実行し、順序は
+その migration の性質に応じて判断する。
 
 ## リクエスト保護
 
@@ -226,7 +239,7 @@ kill switch はクライアント任せにせずサーバー側で強制する�
 | dev | `teigiii-telemetry-dev` |
 | prod | `teigiii-telemetry-prod` |
 
-migration は本体とは別系統（`backend/drizzle-telemetry`）で、`just backend-migrate-dev-telemetry` / `just backend-migrate-prod-telemetry` で適用する。`just backend-deploy-dev` / `just backend-deploy-prod` からも依存として実行する。
+migration は本体とは別系統（`backend/drizzle-telemetry`）で、`just backend-migrate-dev-telemetry` / `just backend-migrate-prod-telemetry` で適用する。dev は `just backend-deploy-dev` からも依存として実行するが、**prod は `just backend-deploy-prod` の依存に含めない**（「環境」節の理由による）。prod では `just backend-migrate-prod-telemetry` を個別に実行する。
 
 分析はダッシュボードを作らず、`just perf-report`（定型 JSON）と `just perf-query`（手動 raw SQL）で prod `TELEMETRY_DB` を読む。分析導線は D1 Read のみの API token（`CLOUDFLARE_API_TOKEN`）を使い、AI の主導線は `perf-report` に限定する。mutation の実効防御は `perf-query` の SELECT/WITH ガード（D1 Read が Cloudflare 側で書き込みを拒否する前提にはしない）。詳細は [app-performance-telemetry.md](app-performance-telemetry.md) の「分析導線」と `.claude/skills/analyzing-app-performance/SKILL.md`。
 
@@ -282,12 +295,20 @@ curl 'http://localhost:8787/__scheduled?cron=0+3+*+*+*'
 
 1. `just backend-validate-prod` で `teigiii-api-prod`、`teigiii-prod`、
    `teigiii-prod-avatars`、prod Firebase vars の bundle / bindings 解決を dry-run する。
-2. `just backend-deploy-prod` を実行する。この recipe は
-   `backend-migrate-prod` と `backend-migrate-prod-telemetry` の成功後にだけ
-   prod Worker を deploy する。
-3. `wrangler d1 migrations list DB --env prod --remote` と
-   `wrangler d1 migrations list TELEMETRY_DB --env prod --remote` で
-   未適用 migration がゼロであることを確認し、prod の主要フローを smoke test する。
+2. 未適用の migration があるかを
+   `wrangler d1 migrations list DB --env prod --remote` と
+   `wrangler d1 migrations list TELEMETRY_DB --env prod --remote` で確認する。
+3. 未適用の migration がある場合、その性質に応じて順序を決めて実行する。
+   **`just backend-deploy-prod` は migration を実行しない。**
+   - additive（列・テーブルの追加）: `just backend-migrate-prod` /
+     `just backend-migrate-prod-telemetry` を先に実行してから 4 へ進む
+   - destructive（列の削除・リネーム。drizzle-kit が table recreate を吐く）:
+     先に 4 で新コードを deploy し、その後に migration を実行する
+4. `just backend-deploy-prod` を実行する。この recipe は `backend-guard-prod`
+   （作業ツリー clean / `origin/develop` と一致 / その commit の `ci-passed` が green）
+   を通過した場合にだけ prod Worker を deploy する。
+5. 手順 2 のコマンドで未適用 migration がゼロであることを再確認し、
+   prod の主要フローを smoke test する。
 
 R2 public access は有効化しない。Cron は Wrangler 設定を正本とし、UTC の実行時刻を
 変更する場合はデプロイ前に確認する。

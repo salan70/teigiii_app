@@ -1,7 +1,7 @@
 name: docbridge
 
-# ci.yml は paths-ignore で md 変更をスキップするため、
-# 仕様書とコードのリンク検証は本ワークフローで全 PR に対して行う。
+# 仕様書とコードのリンク検証は、ci.yml の changes gate とは独立に全 PR で行う
+# （ci.yml は Markdown のみの変更では全ジョブを skip するため）。
 on:
   push:
     branches:
