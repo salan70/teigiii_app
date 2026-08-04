@@ -72,7 +72,10 @@ class AppRouter extends _$AppRouter {
       path: '/modal/definition_detail',
       page: DefinitionDetailRoute.page,
     ),
-    AdaptiveRoute(path: '/modal/user_list_liked', page: UserListLikedRoute.page),
+    AdaptiveRoute(
+      path: '/modal/user_list_liked',
+      page: UserListLikedRoute.page,
+    ),
     AdaptiveRoute(path: '/modal/word_top', page: WordTopRoute.page),
     AdaptiveRoute(path: '/modal/profile_top', page: ProfileTopRoute.page),
     AdaptiveRoute(

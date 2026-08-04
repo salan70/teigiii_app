@@ -138,12 +138,30 @@
             executable = "dart";
             withGit = false;
           };
-          # check.yml mobile jobs: Flutter analyze/test only.
+          # ci.yml mobile jobs: Flutter analyze/test only.
           ciMobilePackages = [
             flutterToolCi
             dartToolCi
             pkgs.just
           ];
+          # ci.yml deploy-dev job: justfile 経由で wrangler を叩くだけ。Flutter は不要。
+          ciBackendPackages = [
+            pkgs.just
+            pkgs.bun
+          ];
+          # deliver.yml: iOS の署名済みビルドに必要なものだけ。
+          # macos runner は課金 10 倍なので、openapi-generator-cli（JDK 込み）や
+          # lcov / bun / ripgrep / qrencode といった未使用の closure を持ち込まない。
+          # git は CocoaPods の spec repo 取得に必要なため落とさない。
+          ciDeliverPackages = [
+            flutterTool
+            bootstrapFlutter
+            pkgs.just
+            pkgs.git
+            pkgs.curl
+            pkgs.jq
+          ]
+          ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.cocoapods ];
           toolPackages = [
             flutterTool
             dartTool
@@ -161,7 +179,15 @@
           ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.cocoapods ];
         in
         {
-          inherit bootstrapFlutter flutterTool dartTool ciMobilePackages toolPackages;
+          inherit
+            bootstrapFlutter
+            flutterTool
+            dartTool
+            ciMobilePackages
+            ciBackendPackages
+            ciDeliverPackages
+            toolPackages
+            ;
         };
     in
     {
@@ -216,6 +242,31 @@
             shellHook = ''
               export PUB_CACHE="''${PUB_CACHE:-$PWD/.nix/pub-cache}"
               echo "[nix] teigi_app ci-mobile shell ready (Flutter ${flutterVersion}, just)" >&2
+            '';
+          };
+          # Deliver CI (iOS release build): default shell から未使用の closure を落とした版。
+          # iOS ネイティブビルドのため、default と同じ darwin 向け環境調整が必要。
+          ci-deliver = pkgs.mkShellNoCC {
+            packages = tools.ciDeliverPackages;
+            shellHook = ''
+              export PUB_CACHE="''${PUB_CACHE:-$PWD/.nix/pub-cache}"
+              ${lib.optionalString pkgs.stdenv.isDarwin ''
+                unset SDKROOT
+                unset NIX_CFLAGS_COMPILE
+                unset NIX_LDFLAGS
+                if command -v xcrun >/dev/null 2>&1; then
+                  export CC="$(xcrun --find clang)"
+                  export CXX="$(xcrun --find clang++)"
+                fi
+              ''}
+              echo "[nix] teigi_app ci-deliver shell ready (Flutter ${flutterVersion}, just)" >&2
+            '';
+          };
+          # Backend CI (dev deploy): justfile 経由で wrangler を叩くための最小 closure。
+          ci-backend = pkgs.mkShellNoCC {
+            packages = tools.ciBackendPackages;
+            shellHook = ''
+              echo "[nix] teigi_app ci-backend shell ready (just, bun)" >&2
             '';
           };
         }

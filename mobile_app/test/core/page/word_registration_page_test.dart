@@ -141,9 +141,7 @@ void main() {
 
   testWidgets('チップの有無で入力欄の位置がずれない', (tester) async {
     await pumpPage(tester, existingWordId: 'word-1');
-    final before = tester
-        .getTopLeft(find.byType(DsTextField).last)
-        .dy;
+    final before = tester.getTopLeft(find.byType(DsTextField).last).dy;
 
     await enterWordAndReading(tester);
 

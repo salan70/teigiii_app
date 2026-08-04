@@ -1,18 +1,9 @@
 name: web-preview
 
+# PR 限定。develop push では常設プレビューを作らない
+# （常設 URL が必要になったら Pages の production branch として設定する）。
 on:
   pull_request:
-    paths:
-      - 'mobile_app/**'
-      - 'flake.nix'
-      - 'flake.lock'
-      - 'nix/**'
-      - 'justfile'
-      - '.github/workflows/web-preview.yml'
-      - '.github/actions/**'
-  push:
-    branches:
-      - develop
     paths:
       - 'mobile_app/**'
       - 'flake.nix'
@@ -24,7 +15,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: web-preview-${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -64,26 +55,11 @@ jobs:
           fi
 
       - name: CI Nix setup
-        id: nix
         uses: ./.github/actions/ci-nix-setup
         with:
           cache-flutter: "true"
           cache-pub: "true"
           touch-env: "true"
-
-      - name: Bootstrap Flutter SDK
-        if: steps.nix.outputs.flutter-cache-hit != 'true'
-        run: |
-          set -euo pipefail
-          version="$(nix eval --raw .#flutterVersion)"
-          expected="$(nix eval --raw .#flutterToolchainRevision)"
-          flutter_root=".nix/flutter/${version}"
-          stamp_file="${flutter_root}/.nix-flutter-version"
-          if [ -x "${flutter_root}/bin/flutter" ] && [ -f "$stamp_file" ] && [ "$(cat "$stamp_file")" = "$expected" ]; then
-            echo "Flutter SDK already present (${expected}); skip bootstrap"
-            exit 0
-          fi
-          nix run .#bootstrap-flutter
 
       - name: Install dependencies
         run: nix develop .#ci-mobile --command just mobile-setup
@@ -133,6 +109,10 @@ jobs:
             ${url}
 
             - dev 固定の使い捨てミラー（実 everyone-teigi-dev / 実 D1）
+            - **backend はこの PR の内容ではない。** 叩く先は共有の dev Worker
+              （\`teigiii-api-dev\`）で、中身は develop の backend。
+              backend の変更を確認したい場合は develop に merge するか、
+              手元で \`just backend-deploy-dev\` を実行すること
             - **Basic 認証必須**（credentials は Pages secrets。PR には書かない）
             - Web 非対応の native 機能は無効化
             `;

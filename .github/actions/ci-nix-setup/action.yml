@@ -15,11 +15,6 @@ inputs:
     required: false
     default: "false"
 
-outputs:
-  flutter-cache-hit:
-    description: Whether the Flutter SDK bootstrap cache was restored (exact key hit)
-    value: ${{ steps.flutter-cache.outputs.cache-hit || '' }}
-
 runs:
   using: composite
   steps:
@@ -44,6 +39,23 @@ runs:
         key: pub-${{ runner.os }}-${{ hashFiles('mobile_app/pubspec.lock') }}
         restore-keys: |
           pub-${{ runner.os }}-
+
+    # exact cache miss でも restore-keys で旧 SDK が戻ることがある。
+    # stamp 一致なら nix run（flutterSrc 実現）を避け、不一致のときだけ bootstrap する。
+    - name: Bootstrap Flutter SDK
+      if: inputs.cache-flutter == 'true' && steps.flutter-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        set -euo pipefail
+        version="$(nix eval --raw .#flutterVersion)"
+        expected="$(nix eval --raw .#flutterToolchainRevision)"
+        flutter_root=".nix/flutter/${version}"
+        stamp_file="${flutter_root}/.nix-flutter-version"
+        if [ -x "${flutter_root}/bin/flutter" ] && [ -f "$stamp_file" ] && [ "$(cat "$stamp_file")" = "$expected" ]; then
+          echo "Flutter SDK already present (${expected}); skip bootstrap"
+          exit 0
+        fi
+        nix run .#bootstrap-flutter
 
     - name: Create dot env file
       if: inputs.touch-env == 'true'

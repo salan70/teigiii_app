@@ -1,7 +1,7 @@
 name: docbridge
 
-# check.yml は paths-ignore で md 変更をスキップするため、
-# 仕様書とコードのリンク検証は本ワークフローで全 PR に対して行う。
+# 仕様書とコードのリンク検証は、ci.yml の changes gate とは独立に全 PR で行う
+# （ci.yml は Markdown のみの変更では全ジョブを skip するため）。
 on:
   push:
     branches:
@@ -10,33 +10,22 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: docbridge-${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
   contents: read
 
+env:
+  DOCBRIDGE_VERSION: '0.5.2'
+
 jobs:
+  # check（リンク切れ検証）は fail させる。
+  # related-gate は informational で、fail させず sticky コメントで報告し、
+  # マージ判断はレビュアーに委ねる。両者は同じ checkout / bun setup を共有する。
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-
-      - name: DocBridge check
-        run: bunx docbridge@0.5.2 check
-
-  # informational: 違反があってもワークフローは fail させず、
-  # sticky コメントで報告してマージ判断はレビュアーに委ねる。
-  related-gate-report:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    continue-on-error: true
     permissions:
       contents: read
       pull-requests: write
@@ -47,7 +36,13 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
+      - name: DocBridge check
+        run: bunx "docbridge@${DOCBRIDGE_VERSION}" check
+
+      # check が落ちても related-gate のレポートは出す（always）。
       - name: Run related-gate over the PR change set
+        if: always() && github.event_name == 'pull_request'
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
@@ -55,7 +50,7 @@ jobs:
           gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files" --paginate \
             -q '.[].filename' > changed-files.txt
           gate_status=0
-          bunx docbridge@0.5.2 related --stdin --gate \
+          bunx "docbridge@${DOCBRIDGE_VERSION}" related --stdin --gate \
             < changed-files.txt > gate-output.txt 2> gate-error.txt \
             || gate_status=$?
           cat gate-error.txt >&2
@@ -67,6 +62,8 @@ jobs:
           cat gate-output.txt
 
       - name: Create or update the sticky PR comment
+        if: always() && github.event_name == 'pull_request'
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}

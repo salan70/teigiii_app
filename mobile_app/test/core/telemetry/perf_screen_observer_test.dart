@@ -8,83 +8,69 @@ import 'package:teigi_app/core/telemetry/perf_screen_observer.dart';
 class _TabsTestRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
+    AutoRoute(
+      path: '/',
+      page: const PageInfo('TabsHostRoute'),
+      children: [
         AutoRoute(
-          path: '/',
-          page: const PageInfo('TabsHostRoute'),
+          path: 'home',
+          page: const PageInfo('HomeRouterRoute'),
+          initial: true,
           children: [
             AutoRoute(
-              path: 'home',
-              page: const PageInfo('HomeRouterRoute'),
+              path: '',
+              page: const PageInfo('HomeRoute'),
               initial: true,
-              children: [
-                AutoRoute(
-                  path: '',
-                  page: const PageInfo('HomeRoute'),
-                  initial: true,
-                ),
-                AutoRoute(
-                  path: 'detail',
-                  page: const PageInfo('HomeDetailRoute'),
-                ),
-              ],
             ),
+            AutoRoute(path: 'detail', page: const PageInfo('HomeDetailRoute')),
+          ],
+        ),
+        AutoRoute(
+          path: 'dict',
+          page: const PageInfo('DictionaryEveryoneRouterRoute'),
+          children: [
             AutoRoute(
-              path: 'dict',
-              page: const PageInfo('DictionaryEveryoneRouterRoute'),
-              children: [
-                AutoRoute(
-                  path: '',
-                  page: const PageInfo('DictionaryEveryoneRoute'),
-                  initial: true,
-                ),
-              ],
+              path: '',
+              page: const PageInfo('DictionaryEveryoneRoute'),
+              initial: true,
             ),
           ],
         ),
-      ];
+      ],
+    ),
+  ];
 
   @override
   Map<String, PageFactory> get pagesMap => {
-        'TabsHostRoute': (data) => AutoRoutePage(
-              routeData: data,
-              child: const AutoTabsRouter(
-                routes: [
-                  _HomeRouterRoute(),
-                  _DictionaryEveryoneRouterRoute(),
-                ],
-              ),
-            ),
-        'HomeRouterRoute': (data) => AutoRoutePage(
-              routeData: data,
-              child: const AutoRouter(),
-            ),
-        'HomeRoute': (data) => AutoRoutePage(
-              routeData: data,
-              child: const Text('HomeRoute'),
-            ),
-        'HomeDetailRoute': (data) => AutoRoutePage(
-              routeData: data,
-              child: const Text('HomeDetailRoute'),
-            ),
-        'DictionaryEveryoneRouterRoute': (data) => AutoRoutePage(
-              routeData: data,
-              child: const AutoRouter(),
-            ),
-        'DictionaryEveryoneRoute': (data) => AutoRoutePage(
-              routeData: data,
-              child: const Text('DictionaryEveryoneRoute'),
-            ),
-      };
+    'TabsHostRoute': (data) => AutoRoutePage(
+      routeData: data,
+      child: const AutoTabsRouter(
+        routes: [_HomeRouterRoute(), _DictionaryEveryoneRouterRoute()],
+      ),
+    ),
+    'HomeRouterRoute': (data) =>
+        AutoRoutePage(routeData: data, child: const AutoRouter()),
+    'HomeRoute': (data) =>
+        AutoRoutePage(routeData: data, child: const Text('HomeRoute')),
+    'HomeDetailRoute': (data) =>
+        AutoRoutePage(routeData: data, child: const Text('HomeDetailRoute')),
+    'DictionaryEveryoneRouterRoute': (data) =>
+        AutoRoutePage(routeData: data, child: const AutoRouter()),
+    'DictionaryEveryoneRoute': (data) => AutoRoutePage(
+      routeData: data,
+      child: const Text('DictionaryEveryoneRoute'),
+    ),
+  };
 }
 
 class _HomeRouterRoute extends PageRouteInfo<void> {
   const _HomeRouterRoute({List<PageRouteInfo>? children})
-      : super('HomeRouterRoute', initialChildren: children);
+    : super('HomeRouterRoute', initialChildren: children);
 }
 
 class _DictionaryEveryoneRouterRoute extends PageRouteInfo<void> {
   const _DictionaryEveryoneRouterRoute({List<PageRouteInfo>? children})
-      : super('DictionaryEveryoneRouterRoute', initialChildren: children);
+    : super('DictionaryEveryoneRouterRoute', initialChildren: children);
 }
 
 class _HomeDetailRoute extends PageRouteInfo<void> {
@@ -100,9 +86,7 @@ Future<void> _pumpFrames(WidgetTester tester) async {
 void main() {
   tearDown(PerfScreenObserver.sharedMemory.reset);
 
-  testWidgets('タブ切替では wrapper ではなく active leaf route を通知する', (
-    tester,
-  ) async {
+  testWidgets('タブ切替では wrapper ではなく active leaf route を通知する', (tester) async {
     // * Arrange
     final screens = <String>[];
     final router = _TabsTestRouter();
@@ -118,9 +102,7 @@ void main() {
 
     final tabsRouter = router.innerRouterOf<TabsRouter>('TabsHostRoute');
     expect(tabsRouter, isNotNull);
-    final homeStack = tabsRouter!.innerRouterOf<StackRouter>(
-      'HomeRouterRoute',
-    );
+    final homeStack = tabsRouter!.innerRouterOf<StackRouter>('HomeRouterRoute');
     expect(homeStack, isNotNull);
     screens.clear();
 

@@ -15,10 +15,7 @@ function escapeRegExp(value: string): string {
  *
  * `pagesProject` が未設定（prod 等）のときはすべて拒否する。
  */
-export function isAllowedWebQaOrigin(
-  origin: string,
-  pagesProject: string | undefined,
-): boolean {
+export function isAllowedWebQaOrigin(origin: string, pagesProject: string | undefined): boolean {
   if (!origin || !pagesProject) return false;
   if (LOCALHOST_ORIGIN.test(origin) || LAN_ORIGIN.test(origin)) return true;
 
@@ -43,8 +40,7 @@ export function createCorsMiddleware(): MiddlewareHandler {
       ?.WEB_QA_PAGES_PROJECT;
 
     return cors({
-      origin: (origin) =>
-        isAllowedWebQaOrigin(origin, pagesProject) ? origin : null,
+      origin: (origin) => (isAllowedWebQaOrigin(origin, pagesProject) ? origin : null),
       allowHeaders: [
         "Authorization",
         "Content-Type",

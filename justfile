@@ -12,6 +12,9 @@ analyze: mobile-analyze backend-analyze
 
 format: mobile-format backend-format
 
+# 整形せずに違反の有無だけを判定する（CI と同じ判定）
+format-check: mobile-format-check backend-format-check
+
 test: mobile-test backend-test web-test
 
 # backend/openapi.json から Dart API クライアントを mobile_app/packages/teigiii_api に生成する
@@ -33,14 +36,21 @@ mobile-setup:
 mobile-clean:
     cd mobile_app && flutter clean
 
+# build_runner の出力は dart format 済みではないため、生成後に必ず整形する
+# （これがないと mobile-format-check が生成物で落ちる）
 mobile-generate:
     cd mobile_app && dart run build_runner build --delete-conflicting-outputs
+    cd mobile_app && dart format .
 
 mobile-analyze:
     cd mobile_app && flutter analyze --no-fatal-infos
 
 mobile-format:
     cd mobile_app && dart format .
+
+# 整形せずに違反の有無だけを判定する（CI 用）
+mobile-format-check:
+    cd mobile_app && dart format --set-exit-if-changed --output=none .
 
 # デザインシステム違反検出（新規違反・違反増加で失敗する）
 mobile-ds-check:
@@ -132,6 +142,10 @@ backend-analyze:
 backend-format:
     cd backend && bun run format
 
+# 整形せずに違反の有無だけを判定する（CI 用）
+backend-format-check:
+    cd backend && bun run format:check
+
 backend-test:
     cd backend && bun run test
 
@@ -154,9 +168,10 @@ backend-migrate-dev-telemetry:
 backend-seed-dev:
     cd backend && bunx wrangler d1 execute DB --env dev --remote --command "insert into app_config (id, min_app_version_ios, min_app_version_android, in_maintenance, maintenance_scheduled_end_time, perf_telemetry_enabled, updated_at) values (1, '0.0.0', '0.0.0', 0, null, 1, unixepoch('now') * 1000) on conflict(id) do nothing"
 
-# migration（本体 + テレメトリ）と app-config 初期化を完了してから dev Worker を手動 deploy する
+# AVATAR_BASE_URL のプレースホルダ検査は、deploy 直前ではなく PR 時点で落とすべきなので
+# ci.yml の backend-analyze へ移設した。
+# migration（本体 + テレメトリ）と app-config 初期化を完了してから dev Worker を deploy する（ci.yml からも実行される）
 backend-deploy-dev: backend-migrate-dev backend-migrate-dev-telemetry backend-seed-dev
-    if rg -q 'AVATAR_BASE_URL = "https://api.dev.invalid/v1"' backend/wrangler.toml; then echo 'Replace AVATAR_BASE_URL with the deployed dev Worker URL before deploy.' >&2; exit 1; fi
     cd backend && bunx wrangler deploy --env dev
 
 # 正規の Firebase ID token / App Check token を使って dev Worker を smoke test する
@@ -179,8 +194,39 @@ backend-migrate-prod:
 backend-migrate-prod-telemetry:
     cd backend && bunx wrangler d1 migrations apply TELEMETRY_DB --env prod --remote
 
-# migration（本体 + テレメトリ）を完了してから prod Worker を手動 deploy する
-backend-deploy-prod: backend-migrate-prod backend-migrate-prod-telemetry
+# prod は CI からではなくローカルから deploy する運用のため、
+# 「作業ツリーの中身がそのまま prod に出る」事故をここで防ぐ。
+# prod deploy の事前条件を検査する（作業ツリー clean / origin/develop と一致 / CI green）
+backend-guard-prod:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if ! git diff --quiet || ! git diff --cached --quiet; then
+      echo 'Working tree is dirty. Commit or stash before deploying to prod.' >&2
+      exit 1
+    fi
+    git fetch --quiet origin develop
+    head_sha="$(git rev-parse HEAD)"
+    if [ "$head_sha" != "$(git rev-parse origin/develop)" ]; then
+      echo 'HEAD does not match origin/develop. Deploy prod only from the merged develop.' >&2
+      exit 1
+    fi
+    conclusions="$(gh api "repos/{owner}/{repo}/commits/${head_sha}/check-runs" \
+      --jq '.check_runs[] | select(.name == "ci-passed") | .conclusion')"
+    if [ -z "$conclusions" ]; then
+      echo "No ci-passed check run found for ${head_sha}." >&2
+      exit 1
+    fi
+    if grep -qv '^success$' <<<"$conclusions"; then
+      echo "ci-passed is not green for ${head_sha}: ${conclusions}" >&2
+      exit 1
+    fi
+    echo "Guard passed for ${head_sha}."
+
+# migration は意図的に依存に含めない。deploy は wrangler rollback で可逆だが
+# migration は forward-only で不可逆であり、さらに正しい順序が migration の性質で反転する
+# （additive なら migrate → deploy、destructive なら deploy → migrate）。
+# prod Worker を手動 deploy する（migration が必要なら backend-migrate-prod* を個別に実行する）
+backend-deploy-prod: backend-guard-prod
     cd backend && bunx wrangler deploy --env prod
 
 # --- perf（本番テレメトリ D1 の分析。D1 Read のみの CLOUDFLARE_API_TOKEN が必須）---

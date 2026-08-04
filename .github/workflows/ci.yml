@@ -1,0 +1,268 @@
+name: ci
+
+# 役割分担:
+#   - pull_request … 検証（mobile / backend の analyze・test）
+#   - develop push … dev deploy パイプライン（backend の検証 → dev Worker 更新）
+# mobile 系の検証を develop push で再実行しないのは、merge 戦略が merge commit のみで、
+# pull_request イベントが base 最新との統合結果を既に検証しているため。
+
+# paths-ignore は使わない。ci-passed が develop の required status check であり、
+# path filter で workflow ごと起動しないと check run が生成されず Pending のまま残って
+# merge できなくなる。docs-only の develop push でも同じ理由で ci-passed が存在せず、
+# backend-guard-prod が prod deploy を拒否してしまう。
+# 起動は常に行い、実行するジョブの取捨は changes gate に任せる。
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      mobile: ${{ steps.gates.outputs.mobile }}
+      backend: ${{ steps.gates.outputs.backend }}
+      code: ${{ steps.filter.outputs.code }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect path changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            mobile:
+              - 'mobile_app/**'
+              - 'flake.nix'
+              - 'flake.lock'
+              - 'nix/**'
+              - 'justfile'
+              - '.github/workflows/ci.yml'
+              - '.github/actions/**'
+            backend:
+              - 'backend/**'
+              - 'flake.nix'
+              - 'flake.lock'
+              - 'nix/**'
+              - 'justfile'
+              - '.github/workflows/ci.yml'
+              - '.github/actions/**'
+
+      # Markdown 以外の変更が 1 つでもあるかを判定する。
+      # predicate-quantifier は step 単位の設定で、既定の `some` だと除外パターンが
+      # 効かない（全ての .md が `**` に一致して true になる）ため `every` を使う。
+      # ただし `every` は mobile / backend のような「複数の候補パスのいずれか」型の
+      # フィルタを常に false にしてしまうので、step を分ける必要がある。
+      - name: Detect non-Markdown changes
+        id: code-filter
+        uses: dorny/paths-filter@v3
+        with:
+          predicate-quantifier: 'every'
+          filters: |
+            code:
+              - '**'
+              - '!**/*.md'
+              - '!*.md'
+
+      - name: Resolve job gates
+        id: gates
+        run: |
+          mobile="${{ steps.filter.outputs.mobile }}"
+          backend="${{ steps.filter.outputs.backend }}"
+          code="${{ steps.code-filter.outputs.code }}"
+          if [ "$code" != "true" ]; then
+            # Markdown のみの変更。mobile_app/ 配下の .md も含めて全ジョブを skip する
+            # （Flutter の assets に .md は含まれないため、ビルドに影響しない）。
+            # workflow 自体は起動しており、ci-passed は skipped を許容して success になる。
+            # 仕様とコードのリンク検証は docbridge.yml が全 PR で実施する。
+            mobile=false
+            backend=false
+          elif [ "$mobile" != "true" ] && [ "$backend" != "true" ]; then
+            # 認識できない非 Markdown の変更。黙って skip せず両方走らせる。
+            mobile=true
+            backend=true
+          fi
+          echo "mobile=$mobile" >> "$GITHUB_OUTPUT"
+          echo "backend=$backend" >> "$GITHUB_OUTPUT"
+
+  mobile-analyze:
+    needs: changes
+    if: needs.changes.outputs.mobile == 'true' && github.event_name != 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: CI Nix setup
+        uses: ./.github/actions/ci-nix-setup
+        with:
+          cache-flutter: "true"
+          cache-pub: "true"
+          touch-env: "true"
+
+      - name: Install dependencies
+        run: nix develop .#ci-mobile --command just mobile-setup
+
+      - name: Format check
+        run: nix develop .#ci-mobile --command just mobile-format-check
+
+      - name: Analyze
+        run: nix develop .#ci-mobile --command just mobile-analyze
+
+      - name: Design system check
+        run: nix develop .#ci-mobile --command just mobile-ds-check
+
+      - name: Widgetbook build
+        run: nix develop .#ci-mobile --command just mobile-widgetbook-build
+
+  mobile-test:
+    needs: changes
+    if: needs.changes.outputs.mobile == 'true' && github.event_name != 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # toDisplayFormat の UTC→ローカル変換漏れを検出するため非 UTC に固定
+      TZ: Asia/Tokyo
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: CI Nix setup
+        uses: ./.github/actions/ci-nix-setup
+        with:
+          cache-flutter: "true"
+          cache-pub: "true"
+          touch-env: "true"
+
+      - name: Install dependencies
+        run: nix develop .#ci-mobile --command just mobile-setup
+
+      - name: Test
+        run: nix develop .#ci-mobile --command just mobile-test
+
+  backend-analyze:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: CI Bun setup
+        uses: ./.github/actions/ci-bun-setup
+
+      - name: Install dependencies
+        run: cd backend && bun install --frozen-lockfile
+
+      - name: Analyze
+        run: cd backend && bun run lint && bun run typecheck && bun run format:check
+
+      # prod の bundle と bindings 解決を deploy せずに検証する。
+      # 設定ミスを prod deploy 時ではなく PR 時点で落とすため。
+      - name: Validate prod bindings
+        run: cd backend && bunx wrangler deploy --env prod --dry-run --outdir "$RUNNER_TEMP/teigiii-api-prod-dry-run"
+
+      # wrangler.toml のプレースホルダが残ったまま merge されるのを防ぐ
+      - name: Check dev AVATAR_BASE_URL placeholder
+        run: |
+          if grep -q 'AVATAR_BASE_URL = "https://api.dev.invalid/v1"' backend/wrangler.toml; then
+            echo 'Replace AVATAR_BASE_URL with the deployed dev Worker URL.' >&2
+            exit 1
+          fi
+
+  backend-test:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: CI Bun setup
+        uses: ./.github/actions/ci-bun-setup
+
+      - name: Install dependencies
+        run: cd backend && bun install --frozen-lockfile
+
+      - name: Test
+        run: cd backend && bun run test
+
+  # develop の required status check にはこのジョブ 1 つだけを登録する。
+  # 個別ジョブを required にすると、changes gate で skip されたジョブが
+  # 「未完了」扱いになり merge が永久にブロックされるため。
+  ci-passed:
+    needs: [changes, mobile-analyze, mobile-test, backend-analyze, backend-test]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify no job failed
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          set -euo pipefail
+          echo "needs results: $RESULTS"
+          for result in $RESULTS; do
+            # skipped は changes gate / event gate による正常な除外なので許容する
+            case "$result" in
+              success | skipped) ;;
+              *)
+                echo "A required job did not succeed: $result" >&2
+                exit 1
+                ;;
+            esac
+          done
+
+  # dev Worker を develop と一致させ続ける。mobile PR の web preview は
+  # 「PR のフロント × develop の backend」を検証する前提で成立しており、
+  # dev Worker が手動 deploy で漂流すると preview が正体不明の backend を相手にする。
+  deploy-dev:
+    needs: [backend-analyze, backend-test]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_DEV }}
+      # wrangler.toml に account_id が無いため明示する（token が複数アカウントに
+      # アクセスできる場合、指定がないと wrangler が対話を求めて CI で失敗する）。
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Require Cloudflare secrets
+        run: |
+          set -euo pipefail
+          missing=()
+          [ -n "${CLOUDFLARE_API_TOKEN:-}" ] || missing+=("CLOUDFLARE_API_TOKEN_DEV")
+          [ -n "${CLOUDFLARE_ACCOUNT_ID:-}" ] || missing+=("CLOUDFLARE_ACCOUNT_ID")
+          if ((${#missing[@]} > 0)); then
+            echo "Missing required secrets: ${missing[*]}" >&2
+            exit 1
+          fi
+
+      - name: CI Nix setup
+        uses: ./.github/actions/ci-nix-setup
+
+      - name: Install dependencies
+        run: nix develop .#ci-backend --command just backend-setup
+
+      # migration（本体 + テレメトリ）と app-config 初期化を含む。
+      # dev D1 のデータは QA 用で保全対象ではなく、destructive migration を
+      # dev で先に流すこと自体が prod 前のリハーサルになる。
+      - name: Deploy dev Worker
+        run: nix develop .#ci-backend --command just backend-deploy-dev

@@ -40,13 +40,9 @@ describe("readingScriptClassSql", () => {
     for (const kana of kanaSubGroups) {
       expect(readingScriptClassSql).toContain(`'${kana}'`);
     }
-    const inClause = readingScriptClassSql.match(
-      /w\.reading_sub_group in \(([^)]+)\)/,
-    );
+    const inClause = readingScriptClassSql.match(/w\.reading_sub_group in \(([^)]+)\)/);
     expect(inClause).not.toBeNull();
-    const listed = inClause![1]!
-      .split(",")
-      .map((part) => part.trim().replaceAll("'", ""));
+    const listed = inClause![1]!.split(",").map((part) => part.trim().replaceAll("'", ""));
     expect(listed).toEqual([...kanaSubGroups]);
   });
 });

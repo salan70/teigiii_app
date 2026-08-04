@@ -29,10 +29,8 @@ class PerfScreenRouteMemory {
 /// 反映しないため、push / pop / replace で見た leaf をタブごとに記憶し、
 /// 切替時はそれを通知する。記憶は [memory] でインスタンス間共有する。
 class PerfScreenObserver extends AutoRouterObserver {
-  PerfScreenObserver(
-    this.onScreenChanged, {
-    PerfScreenRouteMemory? memory,
-  }) : memory = memory ?? sharedMemory;
+  PerfScreenObserver(this.onScreenChanged, {PerfScreenRouteMemory? memory})
+    : memory = memory ?? sharedMemory;
 
   /// アプリ全体で共有するデフォルト記憶。
   @visibleForTesting

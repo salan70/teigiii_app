@@ -213,9 +213,9 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
     // debounce 待ちの間は前の入力の結果しかなく、通信中は結果自体がない。
     // 失敗（AsyncError）は fail-open とし、登録を妨げない。
     final isLookupSettled =
-        _lookupKey == _currentLookupKey &&
-        asyncExistingWordId is! AsyncLoading;
-    final canRegister = _isInputValid && isLookupSettled && existingWordId == null;
+        _lookupKey == _currentLookupKey && asyncExistingWordId is! AsyncLoading;
+    final canRegister =
+        _isInputValid && isLookupSettled && existingWordId == null;
 
     return Scaffold(
       appBar: AppBar(

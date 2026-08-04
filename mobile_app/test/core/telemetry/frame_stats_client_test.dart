@@ -38,22 +38,20 @@ void main() {
     );
   });
 
-  FrameStatsClient buildClient() => FrameStatsClient(
-        telemetryApi,
-        logWarning: warnings.add,
-      );
+  FrameStatsClient buildClient() =>
+      FrameStatsClient(telemetryApi, logWarning: warnings.add);
 
   ScreenFrameStats screen(String name) => ScreenFrameStats(
-        screenName: name,
-        frameCount: 1,
-        slowBuildCount: 0,
-        slowRasterCount: 0,
-        frozenCount: 0,
-        sumBuildUs: 1000,
-        sumRasterUs: 1000,
-        maxBuildUs: 1000,
-        maxRasterUs: 1000,
-      );
+    screenName: name,
+    frameCount: 1,
+    slowBuildCount: 0,
+    slowRasterCount: 0,
+    frozenCount: 0,
+    sumBuildUs: 1000,
+    sumRasterUs: 1000,
+    maxBuildUs: 1000,
+    maxRasterUs: 1000,
+  );
 
   test('screens が上限を超えると切り詰めて警告する', () async {
     final stats = List.generate(
@@ -68,11 +66,13 @@ void main() {
       recordedAt: DateTime.utc(2026, 7, 27),
     );
 
-    final captured = verify(
-      telemetryApi.v1TelemetryFramesPost(
-        frameStatsRequest: captureAnyNamed('frameStatsRequest'),
-      ),
-    ).captured.single as FrameStatsRequest;
+    final captured =
+        verify(
+              telemetryApi.v1TelemetryFramesPost(
+                frameStatsRequest: captureAnyNamed('frameStatsRequest'),
+              ),
+            ).captured.single
+            as FrameStatsRequest;
 
     expect(captured.screens, hasLength(FrameStatsClient.maxScreensPerRequest));
     expect(warnings, hasLength(1));
