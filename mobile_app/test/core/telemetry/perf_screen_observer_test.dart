@@ -10,28 +10,45 @@ class _TabsTestRouter extends RootStackRouter {
   List<AutoRoute> get routes => [
     AutoRoute(
       path: '/',
-      page: const PageInfo('TabsHostRoute'),
+      page: PageInfo(
+        'TabsHostRoute',
+        builder: (_) => const AutoTabsRouter(
+          routes: [_HomeRouterRoute(), _DictionaryEveryoneRouterRoute()],
+        ),
+      ),
       children: [
         AutoRoute(
           path: 'home',
-          page: const PageInfo('HomeRouterRoute'),
+          page: const PageInfo.emptyShell('HomeRouterRoute'),
           initial: true,
           children: [
             AutoRoute(
               path: '',
-              page: const PageInfo('HomeRoute'),
+              page: PageInfo(
+                'HomeRoute',
+                builder: (_) => const Text('HomeRoute'),
+              ),
               initial: true,
             ),
-            AutoRoute(path: 'detail', page: const PageInfo('HomeDetailRoute')),
+            AutoRoute(
+              path: 'detail',
+              page: PageInfo(
+                'HomeDetailRoute',
+                builder: (_) => const Text('HomeDetailRoute'),
+              ),
+            ),
           ],
         ),
         AutoRoute(
           path: 'dict',
-          page: const PageInfo('DictionaryEveryoneRouterRoute'),
+          page: const PageInfo.emptyShell('DictionaryEveryoneRouterRoute'),
           children: [
             AutoRoute(
               path: '',
-              page: const PageInfo('DictionaryEveryoneRoute'),
+              page: PageInfo(
+                'DictionaryEveryoneRoute',
+                builder: (_) => const Text('DictionaryEveryoneRoute'),
+              ),
               initial: true,
             ),
           ],
@@ -39,28 +56,6 @@ class _TabsTestRouter extends RootStackRouter {
       ],
     ),
   ];
-
-  @override
-  Map<String, PageFactory> get pagesMap => {
-    'TabsHostRoute': (data) => AutoRoutePage(
-      routeData: data,
-      child: const AutoTabsRouter(
-        routes: [_HomeRouterRoute(), _DictionaryEveryoneRouterRoute()],
-      ),
-    ),
-    'HomeRouterRoute': (data) =>
-        AutoRoutePage(routeData: data, child: const AutoRouter()),
-    'HomeRoute': (data) =>
-        AutoRoutePage(routeData: data, child: const Text('HomeRoute')),
-    'HomeDetailRoute': (data) =>
-        AutoRoutePage(routeData: data, child: const Text('HomeDetailRoute')),
-    'DictionaryEveryoneRouterRoute': (data) =>
-        AutoRoutePage(routeData: data, child: const AutoRouter()),
-    'DictionaryEveryoneRoute': (data) => AutoRoutePage(
-      routeData: data,
-      child: const Text('DictionaryEveryoneRoute'),
-    ),
-  };
 }
 
 class _HomeRouterRoute extends PageRouteInfo<void> {

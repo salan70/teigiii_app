@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
 
   app_tracking_transparency: ^2.0.4
-  auto_route: ^7.8.3
+  auto_route: ^9.3.0
   cached_network_image: ^3.3.0
   collection: ^1.17.2
   cupertino_icons: ^1.0.2
@@ -60,19 +60,22 @@ dev_dependencies:
     sdk: flutter
     
   # tool/ds_check.dart が AST 走査に使う（custom_lint plugin は作らない方針。#262）
-  analyzer: ^6.4.1
-  auto_route_generator: ^7.3.1
-  build_runner: ^2.4.6
+  # analyzer 7.4.1–7.5.x: dart_style 3 / freezed 2.5.8 / mockito 5.4.6 と整合。
+  # 7.6+ は analyzer_plugin 0.12（custom_lint 0.7.3）とビルドが壊れるため上限を切る（#315）
+  # riverpod_generator 2.6.5 は freezed_annotation ^3 を要求するため 2.6.4 に固定する
+  analyzer: '>=7.4.1 <7.6.0'
+  auto_route_generator: ^9.3.1
+  build_runner: ^2.5.4
   cider: ^0.2.4
-  custom_lint: ^0.5.3
+  custom_lint: '>=0.7.1 <0.7.5'
   flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.0
   flutter_native_splash: ^2.1.3+1
-  freezed: ^2.4.1
-  mockito: ^5.4.2
+  freezed: ^2.5.8
+  mockito: ^5.4.6
   pedantic_mono: ^1.24.0+1
-  riverpod_generator: ^2.3.3
-  riverpod_lint: ^2.1.1
+  riverpod_generator: 2.6.4
+  riverpod_lint: 2.6.4
   widgetbook: ^3.23.0
 
 flutter:
@@ -111,3 +114,8 @@ flutter_native_splash:
     image: 'assets/images/splash/splash.png'
     icon_background_color_dark: '#000000'
     image_dark: 'assets/images/splash/splash_dark.png'
+
+dependency_overrides:
+  # riverpod_analyzer_utils → custom_lint_core が analyzer_plugin ^0.12 を引き、
+  # analyzer 7.5+ とビルドが壊れる。0.13.1 で Element2 API に合わせる（#315）
+  analyzer_plugin: 0.13.1

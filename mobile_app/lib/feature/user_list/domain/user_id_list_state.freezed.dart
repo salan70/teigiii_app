@@ -21,7 +21,9 @@ mixin _$UserIdListState {
   String? get nextCursor => throw _privateConstructorUsedError;
   bool get hasMore => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserIdListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserIdListStateCopyWith<UserIdListState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -46,6 +48,8 @@ class _$UserIdListStateCopyWithImpl<$Res, $Val extends UserIdListState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserIdListState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -94,6 +98,8 @@ class __$$UserIdListStateImplCopyWithImpl<$Res>
     $Res Function(_$UserIdListStateImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of UserIdListState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -166,7 +172,9 @@ class _$UserIdListStateImpl implements _UserIdListState {
     hasMore,
   );
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserIdListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserIdListStateImplCopyWith<_$UserIdListStateImpl> get copyWith =>
@@ -189,8 +197,11 @@ abstract class _UserIdListState implements UserIdListState {
   String? get nextCursor;
   @override
   bool get hasMore;
+
+  /// Create a copy of UserIdListState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserIdListStateImplCopyWith<_$UserIdListStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

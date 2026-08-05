@@ -69,6 +69,9 @@ class _$DiscoverFeedEntryCopyWithImpl<$Res, $Val extends DiscoverFeedEntry>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of DiscoverFeedEntry
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -93,6 +96,8 @@ class __$$DiscoverFeedDefinitionEntryImplCopyWithImpl<$Res>
     $Res Function(_$DiscoverFeedDefinitionEntryImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of DiscoverFeedEntry
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({Object? definition = null}) {
@@ -106,6 +111,8 @@ class __$$DiscoverFeedDefinitionEntryImplCopyWithImpl<$Res>
     );
   }
 
+  /// Create a copy of DiscoverFeedEntry
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $DefinitionCopyWith<$Res> get definition {
@@ -140,7 +147,9 @@ class _$DiscoverFeedDefinitionEntryImpl implements DiscoverFeedDefinitionEntry {
   @override
   int get hashCode => Object.hash(runtimeType, definition);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DiscoverFeedEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DiscoverFeedDefinitionEntryImplCopyWith<_$DiscoverFeedDefinitionEntryImpl>
@@ -218,7 +227,10 @@ abstract class DiscoverFeedDefinitionEntry implements DiscoverFeedEntry {
       _$DiscoverFeedDefinitionEntryImpl;
 
   Definition get definition;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DiscoverFeedEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DiscoverFeedDefinitionEntryImplCopyWith<_$DiscoverFeedDefinitionEntryImpl>
   get copyWith => throw _privateConstructorUsedError;
 }
@@ -248,6 +260,8 @@ class __$$DiscoverFeedWordRegisteredEntryImplCopyWithImpl<$Res>
     $Res Function(_$DiscoverFeedWordRegisteredEntryImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of DiscoverFeedEntry
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({Object? activity = null}) {
@@ -261,6 +275,8 @@ class __$$DiscoverFeedWordRegisteredEntryImplCopyWithImpl<$Res>
     );
   }
 
+  /// Create a copy of DiscoverFeedEntry
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $RegisteredWordActivityCopyWith<$Res> get activity {
@@ -296,7 +312,9 @@ class _$DiscoverFeedWordRegisteredEntryImpl
   @override
   int get hashCode => Object.hash(runtimeType, activity);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DiscoverFeedEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DiscoverFeedWordRegisteredEntryImplCopyWith<
@@ -377,7 +395,10 @@ abstract class DiscoverFeedWordRegisteredEntry implements DiscoverFeedEntry {
   ) = _$DiscoverFeedWordRegisteredEntryImpl;
 
   RegisteredWordActivity get activity;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DiscoverFeedEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DiscoverFeedWordRegisteredEntryImplCopyWith<
     _$DiscoverFeedWordRegisteredEntryImpl
   >

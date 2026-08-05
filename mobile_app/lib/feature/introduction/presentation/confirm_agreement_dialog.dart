@@ -18,7 +18,7 @@ class ConfirmAgreementDialog extends ConsumerWidget {
       ),
       actions: [
         InkWell(
-          onTap: context.popRoute,
+          onTap: context.maybePop,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(

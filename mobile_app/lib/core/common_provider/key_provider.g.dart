@@ -20,6 +20,8 @@ final globalKeyProvider = AutoDisposeProvider<GlobalKey>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GlobalKeyRef = AutoDisposeProviderRef<GlobalKey>;
 String _$scaffoldMessengerKeyHash() =>
     r'70d707a46145cc33fd390fc8b81001defdec29ed';
@@ -151,6 +153,8 @@ class ScaffoldMessengerKeyProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin ScaffoldMessengerKeyRef
     on AutoDisposeProviderRef<GlobalKey<ScaffoldMessengerState>> {
   /// The parameter `type` of this provider.
@@ -168,4 +172,4 @@ class _ScaffoldMessengerKeyProviderElement
 }
 
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

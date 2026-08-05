@@ -25,7 +25,9 @@ mixin _$DefinitionForWrite {
   bool get isPublic => throw _privateConstructorUsedError;
   String get definition => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DefinitionForWrite
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DefinitionForWriteCopyWith<DefinitionForWrite> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -57,6 +59,8 @@ class _$DefinitionForWriteCopyWithImpl<$Res, $Val extends DefinitionForWrite>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DefinitionForWrite
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -127,6 +131,8 @@ class __$$DefinitionForWriteImplCopyWithImpl<$Res>
     $Res Function(_$DefinitionForWriteImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of DefinitionForWrite
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -227,7 +233,9 @@ class _$DefinitionForWriteImpl extends _DefinitionForWrite {
     definition,
   );
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DefinitionForWrite
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DefinitionForWriteImplCopyWith<_$DefinitionForWriteImpl> get copyWith =>
@@ -248,8 +256,8 @@ abstract class _DefinitionForWrite extends DefinitionForWrite {
   }) = _$DefinitionForWriteImpl;
   const _DefinitionForWrite._() : super._();
 
-  @override
   /// 更新時のみ使用する。新規投稿時はnull
+  @override
   String? get id;
   @override
   String get authorId;
@@ -261,8 +269,11 @@ abstract class _DefinitionForWrite extends DefinitionForWrite {
   bool get isPublic;
   @override
   String get definition;
+
+  /// Create a copy of DefinitionForWrite
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DefinitionForWriteImplCopyWith<_$DefinitionForWriteImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

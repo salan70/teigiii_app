@@ -20,7 +20,9 @@ mixin _$WordRegistration {
   Word get word => throw _privateConstructorUsedError;
   WordRegistrationOutcome get outcome => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WordRegistration
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $WordRegistrationCopyWith<WordRegistration> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -47,6 +49,8 @@ class _$WordRegistrationCopyWithImpl<$Res, $Val extends WordRegistration>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of WordRegistration
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({Object? word = null, Object? outcome = null}) {
@@ -65,6 +69,8 @@ class _$WordRegistrationCopyWithImpl<$Res, $Val extends WordRegistration>
     );
   }
 
+  /// Create a copy of WordRegistration
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $WordCopyWith<$Res> get word {
@@ -98,6 +104,8 @@ class __$$WordRegistrationImplCopyWithImpl<$Res>
     $Res Function(_$WordRegistrationImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of WordRegistration
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({Object? word = null, Object? outcome = null}) {
@@ -143,7 +151,9 @@ class _$WordRegistrationImpl implements _WordRegistration {
   @override
   int get hashCode => Object.hash(runtimeType, word, outcome);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WordRegistration
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WordRegistrationImplCopyWith<_$WordRegistrationImpl> get copyWith =>
@@ -163,8 +173,11 @@ abstract class _WordRegistration implements WordRegistration {
   Word get word;
   @override
   WordRegistrationOutcome get outcome;
+
+  /// Create a copy of WordRegistration
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WordRegistrationImplCopyWith<_$WordRegistrationImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

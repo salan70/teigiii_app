@@ -20,7 +20,9 @@ mixin _$AppMaintenance {
   bool get inMaintenance => throw _privateConstructorUsedError;
   DateTime? get scheduledEndTime => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AppMaintenance
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AppMaintenanceCopyWith<AppMaintenance> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -45,6 +47,8 @@ class _$AppMaintenanceCopyWithImpl<$Res, $Val extends AppMaintenance>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AppMaintenance
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -88,6 +92,8 @@ class __$$AppMaintenanceImplCopyWithImpl<$Res>
     $Res Function(_$AppMaintenanceImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of AppMaintenance
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -141,7 +147,9 @@ class _$AppMaintenanceImpl implements _AppMaintenance {
   @override
   int get hashCode => Object.hash(runtimeType, inMaintenance, scheduledEndTime);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AppMaintenance
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AppMaintenanceImplCopyWith<_$AppMaintenanceImpl> get copyWith =>
@@ -161,8 +169,11 @@ abstract class _AppMaintenance implements AppMaintenance {
   bool get inMaintenance;
   @override
   DateTime? get scheduledEndTime;
+
+  /// Create a copy of AppMaintenance
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppMaintenanceImplCopyWith<_$AppMaintenanceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

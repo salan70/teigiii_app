@@ -30,7 +30,9 @@ mixin _$Definition {
   bool get isLikedByUser => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Definition
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DefinitionCopyWith<Definition> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -68,6 +70,8 @@ class _$DefinitionCopyWithImpl<$Res, $Val extends Definition>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Definition
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -174,6 +178,8 @@ class __$$DefinitionImplCopyWithImpl<$Res>
     $Res Function(_$DefinitionImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of Definition
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -338,7 +344,9 @@ class _$DefinitionImpl extends _Definition {
     createdAt,
   );
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Definition
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DefinitionImplCopyWith<_$DefinitionImpl> get copyWith =>
@@ -386,8 +394,11 @@ abstract class _Definition extends Definition {
   bool get isLikedByUser;
   @override
   DateTime get createdAt;
+
+  /// Create a copy of Definition
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DefinitionImplCopyWith<_$DefinitionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

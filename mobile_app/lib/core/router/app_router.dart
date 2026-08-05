@@ -40,26 +40,35 @@ Raw<AppRouter> appRouter(AppRouterRef ref) => AppRouter(ref);
 
 // TODO(me): 一部Routeのpathにidを含める
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
-class AppRouter extends _$AppRouter {
+class AppRouter extends RootStackRouter {
   AppRouter(this.ref);
 
   final Ref ref;
 
-  final List<AdaptiveRoute> commonRouteList = [
-    AdaptiveRoute(path: 'definition_detail', page: DefinitionDetailRoute.page),
-    AdaptiveRoute(path: 'user_list_liked', page: UserListLikedRoute.page),
-    AdaptiveRoute(path: 'word_top', page: WordTopRoute.page),
-    AdaptiveRoute(
+  final List<AutoRoute> commonRouteList = [
+    AdaptiveRoute<dynamic>(
+      path: 'definition_detail',
+      page: DefinitionDetailRoute.page,
+    ),
+    AdaptiveRoute<dynamic>(
+      path: 'user_list_liked',
+      page: UserListLikedRoute.page,
+    ),
+    AdaptiveRoute<dynamic>(path: 'word_top', page: WordTopRoute.page),
+    AdaptiveRoute<dynamic>(
       path: 'user_word_definition_list',
       page: UserWordDefinitionListRoute.page,
     ),
-    AdaptiveRoute(path: 'profile_top', page: ProfileTopRoute.page),
-    AdaptiveRoute(
+    AdaptiveRoute<dynamic>(path: 'profile_top', page: ProfileTopRoute.page),
+    AdaptiveRoute<dynamic>(
       path: 'user_list_following_or_follower',
       page: UserListFollowingOrFollowerRoute.page,
     ),
-    AdaptiveRoute(path: 'user_search', page: UserSearchRoute.page),
-    AdaptiveRoute(path: 'user_search_result', page: UserSearchResultRoute.page),
+    AdaptiveRoute<dynamic>(path: 'user_search', page: UserSearchRoute.page),
+    AdaptiveRoute<dynamic>(
+      path: 'user_search_result',
+      page: UserSearchResultRoute.page,
+    ),
   ];
 
   /// 全画面モーダルの上に積むためのルート。[commonRouteList] と同じ画面を root にも置く。
@@ -67,65 +76,74 @@ class AppRouter extends _$AppRouter {
   /// `/word_registration` などのモーダルは root 直下にあり、タブ配下の nested router を
   /// 持たない。これがないとモーダル上からの push が破棄済みの nested router に落ち、
   /// 白画面になる（#306）。
-  final List<AdaptiveRoute> modalStackRouteList = [
-    AdaptiveRoute(
+  final List<AutoRoute> modalStackRouteList = [
+    AdaptiveRoute<dynamic>(
       path: '/modal/definition_detail',
       page: DefinitionDetailRoute.page,
     ),
-    AdaptiveRoute(
+    AdaptiveRoute<dynamic>(
       path: '/modal/user_list_liked',
       page: UserListLikedRoute.page,
     ),
-    AdaptiveRoute(path: '/modal/word_top', page: WordTopRoute.page),
-    AdaptiveRoute(path: '/modal/profile_top', page: ProfileTopRoute.page),
-    AdaptiveRoute(
+    AdaptiveRoute<dynamic>(path: '/modal/word_top', page: WordTopRoute.page),
+    AdaptiveRoute<dynamic>(
+      path: '/modal/profile_top',
+      page: ProfileTopRoute.page,
+    ),
+    AdaptiveRoute<dynamic>(
       path: '/modal/user_list_following_or_follower',
       page: UserListFollowingOrFollowerRoute.page,
     ),
-    AdaptiveRoute(
+    AdaptiveRoute<dynamic>(
       path: '/modal/user_word_definition_list',
       page: UserWordDefinitionListRoute.page,
     ),
   ];
 
   @override
-  List<AdaptiveRoute> get routes => [
-    AdaptiveRoute(path: '/welcome', page: WelcomeRoute.page),
-    AdaptiveRoute(
+  List<AutoRoute> get routes => [
+    AdaptiveRoute<dynamic>(path: '/welcome', page: WelcomeRoute.page),
+    AdaptiveRoute<dynamic>(
       path: '/',
       page: BaseRoute.page,
       guards: [ref.read(firstLaunchGuardProvider), ref.read(authGuardProvider)],
       children: [
-        AdaptiveRoute(
+        AdaptiveRoute<dynamic>(
           path: 'home',
           page: HomeRouterRoute.page,
           children: [
-            AdaptiveRoute(initial: true, page: HomeRoute.page),
-            AdaptiveRoute(
+            AdaptiveRoute<dynamic>(initial: true, page: HomeRoute.page),
+            AdaptiveRoute<dynamic>(
               path: 'dictionary_individual',
               page: DictionaryIndividualRoute.page,
             ),
             ...commonRouteList,
           ],
         ),
-        AdaptiveRoute(
+        AdaptiveRoute<dynamic>(
           path: 'dictionary_individual',
           page: DictionaryIndividualRouterRoute.page,
           children: [
-            AdaptiveRoute(initial: true, page: DictionaryIndividualRoute.page),
+            AdaptiveRoute<dynamic>(
+              initial: true,
+              page: DictionaryIndividualRoute.page,
+            ),
             ...commonRouteList,
           ],
         ),
-        AdaptiveRoute(
+        AdaptiveRoute<dynamic>(
           path: 'dictionary_everyone',
           page: DictionaryEveryoneRouterRoute.page,
           children: [
-            AdaptiveRoute(initial: true, page: DictionaryEveryoneRoute.page),
-            AdaptiveRoute(
+            AdaptiveRoute<dynamic>(
+              initial: true,
+              page: DictionaryEveryoneRoute.page,
+            ),
+            AdaptiveRoute<dynamic>(
               path: 'word_search_result',
               page: WordSearchResultRoute.page,
             ),
-            AdaptiveRoute(
+            AdaptiveRoute<dynamic>(
               path: 'dictionary_individual',
               page: DictionaryIndividualRoute.page,
             ),
@@ -134,37 +152,40 @@ class AppRouter extends _$AppRouter {
         ),
       ],
     ),
-    AdaptiveRoute(
+    AdaptiveRoute<dynamic>(
       path: '/setting',
       page: SettingRouterRoute.page,
       fullscreenDialog: true,
       children: [
-        AdaptiveRoute(initial: true, page: SettingRoute.page),
-        AdaptiveRoute(path: 'license', page: MyLicenseRoute.page),
-        AdaptiveRoute(path: 'user_list_muted', page: UserListMutedRoute.page),
+        AdaptiveRoute<dynamic>(initial: true, page: SettingRoute.page),
+        AdaptiveRoute<dynamic>(path: 'license', page: MyLicenseRoute.page),
+        AdaptiveRoute<dynamic>(
+          path: 'user_list_muted',
+          page: UserListMutedRoute.page,
+        ),
       ],
     ),
-    AdaptiveRoute(
+    AdaptiveRoute<dynamic>(
       path: '/definition_post',
       page: DefinitionPostRoute.page,
       fullscreenDialog: true,
     ),
-    AdaptiveRoute(
+    AdaptiveRoute<dynamic>(
       path: '/word_registration',
       page: WordRegistrationRoute.page,
       fullscreenDialog: true,
     ),
-    AdaptiveRoute(
+    AdaptiveRoute<dynamic>(
       path: '/definition_edit',
       page: DefinitionEditRoute.page,
       fullscreenDialog: true,
     ),
-    AdaptiveRoute(
+    AdaptiveRoute<dynamic>(
       path: '/profile_edit',
       page: ProfileEditRoute.page,
       fullscreenDialog: true,
     ),
-    AdaptiveRoute(
+    AdaptiveRoute<dynamic>(
       path: '/sign_in_failure',
       page: SignInFailureRoute.page,
       fullscreenDialog: true,

@@ -49,7 +49,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
 
             if (!notifier.isChanged()) {
               // 初期表示時から入力内容に変更がない場合、確認ダイアログを表示せずに画面を閉じる
-              await context.popRoute();
+              await context.maybePop();
               return;
             }
 
@@ -59,7 +59,7 @@ class WriteDefinitionBasePage extends ConsumerWidget {
                 .show(
                   ConfirmDialog(
                     confirmMessage: '入力した内容は保存されません。\nよろしいですか？',
-                    onAccept: context.popRoute,
+                    onAccept: context.maybePop,
                     confirmButtonText: 'OK',
                   ),
                 );
