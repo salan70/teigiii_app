@@ -36,8 +36,10 @@ mobile-setup:
 mobile-clean:
     cd mobile_app && flutter clean
 
-# build_runner の出力は dart format 済みではないため、生成後に必ず整形する
-# （これがないと mobile-format-check が生成物で落ちる）
+# build_runner は transitive の dart_style 2.x（旧スタイル）で出力する。
+# SDK の dart format（tall style）を正とし、生成後に必ず整形する（#315 / #320）。
+# 生成物を format 対象から除外しない。除外すると format-check が生成物の崩れを見逃す。
+# dart_style 3.x への依存更新は別途（Issue #315 の案 A）。
 mobile-generate:
     cd mobile_app && dart run build_runner build --delete-conflicting-outputs
     cd mobile_app && dart format .
@@ -45,10 +47,11 @@ mobile-generate:
 mobile-analyze:
     cd mobile_app && flutter analyze --no-fatal-infos
 
+# 生成物を含む mobile_app 全体を SDK の dart format で揃える（#315: 除外しない）
 mobile-format:
     cd mobile_app && dart format .
 
-# 整形せずに違反の有無だけを判定する（CI 用）
+# 整形せずに違反の有無だけを判定する（CI 用。生成物も対象）
 mobile-format-check:
     cd mobile_app && dart format --set-exit-if-changed --output=none .
 
