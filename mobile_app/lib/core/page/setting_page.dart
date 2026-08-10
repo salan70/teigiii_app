@@ -35,7 +35,7 @@ class SettingPage extends ConsumerWidget {
           IconButton(
             icon: const Icon(CupertinoIcons.xmark),
             onPressed: () async {
-              await context.popRoute();
+              await context.maybePop();
             },
           ),
         ],

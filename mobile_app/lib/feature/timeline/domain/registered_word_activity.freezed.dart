@@ -22,7 +22,9 @@ mixin _$RegisteredWordActivity {
   String get reading => throw _privateConstructorUsedError;
   DateTime get occurredAt => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RegisteredWordActivity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $RegisteredWordActivityCopyWith<RegisteredWordActivity> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +52,8 @@ class _$RegisteredWordActivityCopyWithImpl<
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of RegisteredWordActivity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -104,6 +108,8 @@ class __$$RegisteredWordActivityImplCopyWithImpl<$Res>
     $Res Function(_$RegisteredWordActivityImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of RegisteredWordActivity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -175,7 +181,9 @@ class _$RegisteredWordActivityImpl implements _RegisteredWordActivity {
   int get hashCode =>
       Object.hash(runtimeType, wordId, word, reading, occurredAt);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RegisteredWordActivity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$RegisteredWordActivityImplCopyWith<_$RegisteredWordActivityImpl>
@@ -202,8 +210,11 @@ abstract class _RegisteredWordActivity implements RegisteredWordActivity {
   String get reading;
   @override
   DateTime get occurredAt;
+
+  /// Create a copy of RegisteredWordActivity
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RegisteredWordActivityImplCopyWith<_$RegisteredWordActivityImpl>
   get copyWith => throw _privateConstructorUsedError;
 }

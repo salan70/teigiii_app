@@ -79,7 +79,7 @@ class DefinitionPostPage extends ConsumerWidget with PresentationMixin {
                     // そのため、`executeWithOverlayLoading` 完了後に画面遷移を行っている。
 
                     // [afterPostNavigation] に応じて画面遷移する。
-                    await ref.read(appRouterProvider).pop();
+                    await ref.read(appRouterProvider).maybePop();
                     switch (afterPostNavigation) {
                       case AfterPostNavigationType.pop:
                         break;

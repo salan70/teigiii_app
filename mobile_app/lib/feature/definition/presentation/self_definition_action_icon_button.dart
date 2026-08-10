@@ -83,7 +83,7 @@ class SelfDefinitionActionIconButton extends ConsumerWidget
                           if (!context.mounted) {
                             return;
                           }
-                          await context.popRoute();
+                          await context.maybePop();
                         },
                         successToastMessage: '削除しました。',
                       );
@@ -147,7 +147,7 @@ class _CannotEditAlertDialog extends StatelessWidget {
       actionsPadding: const EdgeInsets.only(bottom: 16),
       actions: [
         InkWell(
-          onTap: context.popRoute,
+          onTap: context.maybePop,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
@@ -159,7 +159,7 @@ class _CannotEditAlertDialog extends StatelessWidget {
         InkWell(
           onTap: () {
             context
-              ..popRoute()
+              ..maybePop()
               ..pushRoute(
                 DefinitionPostRoute(
                   initialDefinitionForWrite: definition.toDefinitionForWrite(),
@@ -213,7 +213,7 @@ class _ChangePostTypeConfirmDialog extends ConsumerWidget
       actionsPadding: const EdgeInsets.only(bottom: 16),
       actions: [
         InkWell(
-          onTap: context.popRoute,
+          onTap: context.maybePop,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text('しない', style: Theme.of(context).textTheme.titleMedium),
@@ -231,7 +231,7 @@ class _ChangePostTypeConfirmDialog extends ConsumerWidget
                 await ref
                     .read(definitionServiceProvider)
                     .updatePostType(definition);
-                await ref.read(appRouterProvider).pop();
+                await ref.read(appRouterProvider).maybePop();
               },
               successToastMessage: afterUpdatePostType.completeChangeMessage,
             );

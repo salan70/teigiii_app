@@ -22,6 +22,8 @@ final wordSaveControllerProvider =
       allTransitiveDependencies: null,
     );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef WordSaveControllerRef = AutoDisposeProviderRef<WordSaveController>;
 String _$wordSavedOverrideNotifierHash() =>
     r'6ba9417f4c5c9329b3237cc55ddb842faf232703';
@@ -173,6 +175,8 @@ class WordSavedOverrideNotifierProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin WordSavedOverrideNotifierRef on AutoDisposeNotifierProviderRef<bool?> {
   /// The parameter `wordId` of this provider.
   String get wordId;
@@ -317,6 +321,8 @@ class WordSaveInProgressNotifierProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin WordSaveInProgressNotifierRef on AutoDisposeNotifierProviderRef<bool> {
   /// The parameter `wordId` of this provider.
   String get wordId;
@@ -332,4 +338,4 @@ class _WordSaveInProgressNotifierProviderElement
 }
 
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

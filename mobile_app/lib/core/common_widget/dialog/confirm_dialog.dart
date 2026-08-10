@@ -5,7 +5,7 @@ import '../../design_system/component/ds_dialog.dart';
 
 /// 確認ダイアログ。
 ///
-/// 閉じる操作（`context.popRoute()`）というルーティングの知識を持つため、
+/// 閉じる操作（`context.maybePop()`）というルーティングの知識を持つため、
 /// デザインシステムではなく feature 側に置いている。
 /// 見た目と操作の仕様は [DsConfirmDialog] が持つ。
 class ConfirmDialog extends StatelessWidget {
@@ -21,7 +21,7 @@ class ConfirmDialog extends StatelessWidget {
 
   /// 了承した際の処理。
   ///
-  /// ここで指定した処理の前に、`context.popRoute()` が実行される。
+  /// ここで指定した処理の前に、`context.maybePop()` が実行される。
   final VoidCallback onAccept;
 
   /// 了承する旨のボタンのテキスト。
@@ -32,9 +32,9 @@ class ConfirmDialog extends StatelessWidget {
     return DsConfirmDialog(
       message: confirmMessage,
       confirmButtonText: confirmButtonText,
-      onCancel: context.popRoute,
+      onCancel: context.maybePop,
       onConfirm: () async {
-        await context.popRoute();
+        await context.maybePop();
         onAccept();
       },
     );

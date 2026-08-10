@@ -30,7 +30,9 @@ mixin _$AppConfig {
   /// セッションには反映されない。停止はサーバー側の受信 API で強制する。
   bool get perfTelemetryEnabled => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AppConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AppConfigCopyWith<AppConfig> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -59,6 +61,8 @@ class _$AppConfigCopyWithImpl<$Res, $Val extends AppConfig>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AppConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -123,6 +127,8 @@ class __$$AppConfigImplCopyWithImpl<$Res>
     $Res Function(_$AppConfigImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of AppConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -223,7 +229,9 @@ class _$AppConfigImpl extends _AppConfig {
     perfTelemetryEnabled,
   );
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AppConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AppConfigImplCopyWith<_$AppConfigImpl> get copyWith =>
@@ -248,15 +256,19 @@ abstract class _AppConfig extends AppConfig {
   bool get inMaintenance;
   @override
   DateTime? get maintenanceScheduledEndTime;
-  @override
+
   /// フレーム計測テレメトリを送信してよいか。
   ///
   /// このフラグは通信量削減の最適化であり、即時停止の正ではない。
   /// [appConfigProvider] は起動時に一度しか取得しないため、起動中の
   /// セッションには反映されない。停止はサーバー側の受信 API で強制する。
-  bool get perfTelemetryEnabled;
   @override
-  @JsonKey(ignore: true)
+  bool get perfTelemetryEnabled;
+
+  /// Create a copy of AppConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppConfigImplCopyWith<_$AppConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

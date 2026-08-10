@@ -21,7 +21,9 @@ mixin _$FollowCount {
   int get followerCount => throw _privateConstructorUsedError;
   int get followingCount => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FollowCount
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FollowCountCopyWith<FollowCount> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -46,6 +48,8 @@ class _$FollowCountCopyWithImpl<$Res, $Val extends FollowCount>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FollowCount
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -94,6 +98,8 @@ class __$$FollowCountImplCopyWithImpl<$Res>
     $Res Function(_$FollowCountImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of FollowCount
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -157,7 +163,9 @@ class _$FollowCountImpl implements _FollowCount {
   int get hashCode =>
       Object.hash(runtimeType, userId, followerCount, followingCount);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FollowCount
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FollowCountImplCopyWith<_$FollowCountImpl> get copyWith =>
@@ -177,8 +185,11 @@ abstract class _FollowCount implements FollowCount {
   int get followerCount;
   @override
   int get followingCount;
+
+  /// Create a copy of FollowCount
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FollowCountImplCopyWith<_$FollowCountImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

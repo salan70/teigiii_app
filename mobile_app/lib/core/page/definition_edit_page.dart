@@ -44,7 +44,7 @@ class DefinitionEditPage extends ConsumerWidget with PresentationMixin {
                         ref,
                         action: () async {
                           await notifier.edit();
-                          await ref.read(appRouterProvider).pop();
+                          await ref.read(appRouterProvider).maybePop();
                         },
                         errorToastMessage: '保存できませんでした。もう一度お試しください。',
                         successToastMessage: '保存しました！',
@@ -139,7 +139,7 @@ class _AlertCannotEditDialog extends ConsumerWidget {
       actionsPadding: const EdgeInsets.only(bottom: 16),
       actions: [
         InkWell(
-          onTap: context.popRoute,
+          onTap: context.maybePop,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
@@ -150,7 +150,7 @@ class _AlertCannotEditDialog extends ConsumerWidget {
         ),
         InkWell(
           onTap: () async {
-            await context.popRoute();
+            await context.maybePop();
             onPost();
           },
           child: Padding(

@@ -20,6 +20,8 @@ final apiDioProvider = Provider<Dio>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef ApiDioRef = ProviderRef<Dio>;
 String _$teigiiiApiHash() => r'1b7e3f6807212be14632a166eaee63aaffaac7d2';
 
@@ -35,6 +37,8 @@ final teigiiiApiProvider = Provider<TeigiiiApi>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef TeigiiiApiRef = ProviderRef<TeigiiiApi>;
 String _$avatarCacheManagerHash() =>
     r'f7585b17106c81c6f90b61b29790ebf935336dbf';
@@ -53,6 +57,8 @@ final avatarCacheManagerProvider = Provider<CacheManager>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef AvatarCacheManagerRef = ProviderRef<CacheManager>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -71,6 +71,9 @@ class _$DictionaryIndexEntryCopyWithImpl<
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of DictionaryIndexEntry
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -96,6 +99,8 @@ class __$$DictionaryIndexSectionHeaderImplCopyWithImpl<$Res>
     $Res Function(_$DictionaryIndexSectionHeaderImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of DictionaryIndexEntry
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({Object? label = null}) {
@@ -135,7 +140,9 @@ class _$DictionaryIndexSectionHeaderImpl
   @override
   int get hashCode => Object.hash(runtimeType, label);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DictionaryIndexEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DictionaryIndexSectionHeaderImplCopyWith<
@@ -214,7 +221,10 @@ abstract class DictionaryIndexSectionHeader implements DictionaryIndexEntry {
       _$DictionaryIndexSectionHeaderImpl;
 
   String get label;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DictionaryIndexEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DictionaryIndexSectionHeaderImplCopyWith<
     _$DictionaryIndexSectionHeaderImpl
   >
@@ -243,6 +253,8 @@ class __$$DictionaryIndexWordEntryImplCopyWithImpl<$Res>
     $Res Function(_$DictionaryIndexWordEntryImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of DictionaryIndexEntry
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({Object? word = null}) {
@@ -256,6 +268,8 @@ class __$$DictionaryIndexWordEntryImplCopyWithImpl<$Res>
     );
   }
 
+  /// Create a copy of DictionaryIndexEntry
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $WordCopyWith<$Res> get word {
@@ -289,7 +303,9 @@ class _$DictionaryIndexWordEntryImpl implements DictionaryIndexWordEntry {
   @override
   int get hashCode => Object.hash(runtimeType, word);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DictionaryIndexEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DictionaryIndexWordEntryImplCopyWith<_$DictionaryIndexWordEntryImpl>
@@ -366,7 +382,10 @@ abstract class DictionaryIndexWordEntry implements DictionaryIndexEntry {
       _$DictionaryIndexWordEntryImpl;
 
   Word get word;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DictionaryIndexEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DictionaryIndexWordEntryImplCopyWith<_$DictionaryIndexWordEntryImpl>
   get copyWith => throw _privateConstructorUsedError;
 }

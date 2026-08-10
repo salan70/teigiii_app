@@ -42,7 +42,7 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
 
                 // 初期表示時から入力内容に変更がない場合、確認ダイアログを表示せずに画面を閉じる。
                 if (!notifier.isStateChanged()) {
-                  await context.popRoute();
+                  await context.maybePop();
                   return;
                 }
 
@@ -73,7 +73,7 @@ class ProfileEditPage extends ConsumerWidget with PresentationMixin {
                             ref,
                             action: () async {
                               await notifier.edit();
-                              await ref.read(appRouterProvider).pop();
+                              await ref.read(appRouterProvider).maybePop();
                             },
                             successToastMessage: '保存しました！',
                             errorToastMessage: '保存できませんでした。もう一度お試しください。',

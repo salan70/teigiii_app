@@ -21,7 +21,9 @@ mixin _$WordListState {
   String? get nextCursor => throw _privateConstructorUsedError;
   bool get hasMore => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WordListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $WordListStateCopyWith<WordListState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -46,6 +48,8 @@ class _$WordListStateCopyWithImpl<$Res, $Val extends WordListState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of WordListState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -94,6 +98,8 @@ class __$$WordListStateImplCopyWithImpl<$Res>
     $Res Function(_$WordListStateImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of WordListState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -166,7 +172,9 @@ class _$WordListStateImpl implements _WordListState {
     hasMore,
   );
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WordListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WordListStateImplCopyWith<_$WordListStateImpl> get copyWith =>
@@ -186,8 +194,11 @@ abstract class _WordListState implements WordListState {
   String? get nextCursor;
   @override
   bool get hasMore;
+
+  /// Create a copy of WordListState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WordListStateImplCopyWith<_$WordListStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

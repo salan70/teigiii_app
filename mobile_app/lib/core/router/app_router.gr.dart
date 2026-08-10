@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -9,224 +10,6 @@
 
 part of 'app_router.dart';
 
-abstract class _$AppRouter extends RootStackRouter {
-  // ignore: unused_element
-  _$AppRouter({super.navigatorKey});
-
-  @override
-  final Map<String, PageFactory> pagesMap = {
-    BaseRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const BasePage(),
-      );
-    },
-    BaseRouterRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const BaseRouterPage(),
-      );
-    },
-    DefinitionDetailRoute.name: (routeData) {
-      final args = routeData.argsAs<DefinitionDetailRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: DefinitionDetailPage(
-          key: args.key,
-          definitionId: args.definitionId,
-        ),
-      );
-    },
-    DefinitionEditRoute.name: (routeData) {
-      final args = routeData.argsAs<DefinitionEditRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: DefinitionEditPage(
-          key: args.key,
-          initialDefinition: args.initialDefinition,
-        ),
-      );
-    },
-    DefinitionPostRoute.name: (routeData) {
-      final args = routeData.argsAs<DefinitionPostRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: DefinitionPostPage(
-          key: args.key,
-          initialDefinitionForWrite: args.initialDefinitionForWrite,
-          autoFocusForm: args.autoFocusForm,
-          afterPostNavigation: args.afterPostNavigation,
-        ),
-      );
-    },
-    DictionaryEveryoneRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const DictionaryEveryonePage(),
-      );
-    },
-    DictionaryEveryoneRouterRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const DictionaryEveryoneRouterPage(),
-      );
-    },
-    DictionaryIndividualRoute.name: (routeData) {
-      final args = routeData.argsAs<DictionaryIndividualRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: DictionaryIndividualPage(
-          key: args.key,
-          targetUserId: args.targetUserId,
-          isTopRoute: args.isTopRoute,
-        ),
-      );
-    },
-    DictionaryIndividualRouterRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const DictionaryIndividualRouterPage(),
-      );
-    },
-    HomeRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const HomePage(),
-      );
-    },
-    HomeRouterRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const HomeRouterPage(),
-      );
-    },
-    MyLicenseRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const MyLicensePage(),
-      );
-    },
-    ProfileEditRoute.name: (routeData) {
-      final args = routeData.argsAs<ProfileEditRouteArgs>(
-        orElse: () => const ProfileEditRouteArgs(),
-      );
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ProfileEditPage(key: args.key),
-      );
-    },
-    ProfileTopRoute.name: (routeData) {
-      final args = routeData.argsAs<ProfileTopRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ProfileTopPage(key: args.key, targetUserId: args.targetUserId),
-      );
-    },
-    SettingRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SettingPage(),
-      );
-    },
-    SettingRouterRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SettingRouterPage(),
-      );
-    },
-    SignInFailureRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const SignInFailurePage(),
-      );
-    },
-    UserListFollowingOrFollowerRoute.name: (routeData) {
-      final args = routeData.argsAs<UserListFollowingOrFollowerRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: UserListFollowingOrFollowerPage(
-          key: args.key,
-          initialTab: args.initialTab,
-          targetUserId: args.targetUserId,
-        ),
-      );
-    },
-    UserListLikedRoute.name: (routeData) {
-      final args = routeData.argsAs<UserListLikedRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: UserListLikedPage(
-          key: args.key,
-          definitionId: args.definitionId,
-        ),
-      );
-    },
-    UserListMutedRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const UserListMutedPage(),
-      );
-    },
-    UserSearchRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const UserSearchPage(),
-      );
-    },
-    UserSearchResultRoute.name: (routeData) {
-      final args = routeData.argsAs<UserSearchResultRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: UserSearchResultPage(key: args.key, searchWord: args.searchWord),
-      );
-    },
-    UserWordDefinitionListRoute.name: (routeData) {
-      final args = routeData.argsAs<UserWordDefinitionListRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: UserWordDefinitionListPage(
-          key: args.key,
-          targetUserId: args.targetUserId,
-          wordId: args.wordId,
-          wordLabel: args.wordLabel,
-        ),
-      );
-    },
-    WelcomeRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const WelcomePage(),
-      );
-    },
-    WordRegistrationRoute.name: (routeData) {
-      final args = routeData.argsAs<WordRegistrationRouteArgs>(
-        orElse: () => const WordRegistrationRouteArgs(),
-      );
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WordRegistrationPage(
-          key: args.key,
-          initialWord: args.initialWord,
-        ),
-      );
-    },
-    WordSearchResultRoute.name: (routeData) {
-      final args = routeData.argsAs<WordSearchResultRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WordSearchResultPage(key: args.key, searchWord: args.searchWord),
-      );
-    },
-    WordTopRoute.name: (routeData) {
-      final args = routeData.argsAs<WordTopRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: WordTopPage(key: args.key, wordId: args.wordId),
-      );
-    },
-  };
-}
-
 /// generated route for
 /// [BasePage]
 class BaseRoute extends PageRouteInfo<void> {
@@ -235,7 +18,12 @@ class BaseRoute extends PageRouteInfo<void> {
 
   static const String name = 'BaseRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const BasePage();
+    },
+  );
 }
 
 /// generated route for
@@ -246,7 +34,12 @@ class BaseRouterRoute extends PageRouteInfo<void> {
 
   static const String name = 'BaseRouterRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const BaseRouterPage();
+    },
+  );
 }
 
 /// generated route for
@@ -264,8 +57,16 @@ class DefinitionDetailRoute extends PageRouteInfo<DefinitionDetailRouteArgs> {
 
   static const String name = 'DefinitionDetailRoute';
 
-  static const PageInfo<DefinitionDetailRouteArgs> page =
-      PageInfo<DefinitionDetailRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DefinitionDetailRouteArgs>();
+      return DefinitionDetailPage(
+        key: args.key,
+        definitionId: args.definitionId,
+      );
+    },
+  );
 }
 
 class DefinitionDetailRouteArgs {
@@ -299,8 +100,16 @@ class DefinitionEditRoute extends PageRouteInfo<DefinitionEditRouteArgs> {
 
   static const String name = 'DefinitionEditRoute';
 
-  static const PageInfo<DefinitionEditRouteArgs> page =
-      PageInfo<DefinitionEditRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DefinitionEditRouteArgs>();
+      return DefinitionEditPage(
+        key: args.key,
+        initialDefinition: args.initialDefinition,
+      );
+    },
+  );
 }
 
 class DefinitionEditRouteArgs {
@@ -338,8 +147,18 @@ class DefinitionPostRoute extends PageRouteInfo<DefinitionPostRouteArgs> {
 
   static const String name = 'DefinitionPostRoute';
 
-  static const PageInfo<DefinitionPostRouteArgs> page =
-      PageInfo<DefinitionPostRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DefinitionPostRouteArgs>();
+      return DefinitionPostPage(
+        key: args.key,
+        initialDefinitionForWrite: args.initialDefinitionForWrite,
+        autoFocusForm: args.autoFocusForm,
+        afterPostNavigation: args.afterPostNavigation,
+      );
+    },
+  );
 }
 
 class DefinitionPostRouteArgs {
@@ -372,7 +191,12 @@ class DictionaryEveryoneRoute extends PageRouteInfo<void> {
 
   static const String name = 'DictionaryEveryoneRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const DictionaryEveryonePage();
+    },
+  );
 }
 
 /// generated route for
@@ -383,7 +207,12 @@ class DictionaryEveryoneRouterRoute extends PageRouteInfo<void> {
 
   static const String name = 'DictionaryEveryoneRouterRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const DictionaryEveryoneRouterPage();
+    },
+  );
 }
 
 /// generated route for
@@ -407,8 +236,17 @@ class DictionaryIndividualRoute
 
   static const String name = 'DictionaryIndividualRoute';
 
-  static const PageInfo<DictionaryIndividualRouteArgs> page =
-      PageInfo<DictionaryIndividualRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DictionaryIndividualRouteArgs>();
+      return DictionaryIndividualPage(
+        key: args.key,
+        targetUserId: args.targetUserId,
+        isTopRoute: args.isTopRoute,
+      );
+    },
+  );
 }
 
 class DictionaryIndividualRouteArgs {
@@ -438,7 +276,12 @@ class DictionaryIndividualRouterRoute extends PageRouteInfo<void> {
 
   static const String name = 'DictionaryIndividualRouterRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const DictionaryIndividualRouterPage();
+    },
+  );
 }
 
 /// generated route for
@@ -449,7 +292,12 @@ class HomeRoute extends PageRouteInfo<void> {
 
   static const String name = 'HomeRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HomePage();
+    },
+  );
 }
 
 /// generated route for
@@ -460,7 +308,12 @@ class HomeRouterRoute extends PageRouteInfo<void> {
 
   static const String name = 'HomeRouterRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HomeRouterPage();
+    },
+  );
 }
 
 /// generated route for
@@ -471,7 +324,12 @@ class MyLicenseRoute extends PageRouteInfo<void> {
 
   static const String name = 'MyLicenseRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MyLicensePage();
+    },
+  );
 }
 
 /// generated route for
@@ -486,8 +344,15 @@ class ProfileEditRoute extends PageRouteInfo<ProfileEditRouteArgs> {
 
   static const String name = 'ProfileEditRoute';
 
-  static const PageInfo<ProfileEditRouteArgs> page =
-      PageInfo<ProfileEditRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ProfileEditRouteArgs>(
+        orElse: () => const ProfileEditRouteArgs(),
+      );
+      return ProfileEditPage(key: args.key);
+    },
+  );
 }
 
 class ProfileEditRouteArgs {
@@ -516,8 +381,13 @@ class ProfileTopRoute extends PageRouteInfo<ProfileTopRouteArgs> {
 
   static const String name = 'ProfileTopRoute';
 
-  static const PageInfo<ProfileTopRouteArgs> page =
-      PageInfo<ProfileTopRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ProfileTopRouteArgs>();
+      return ProfileTopPage(key: args.key, targetUserId: args.targetUserId);
+    },
+  );
 }
 
 class ProfileTopRouteArgs {
@@ -541,7 +411,12 @@ class SettingRoute extends PageRouteInfo<void> {
 
   static const String name = 'SettingRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SettingPage();
+    },
+  );
 }
 
 /// generated route for
@@ -552,7 +427,12 @@ class SettingRouterRoute extends PageRouteInfo<void> {
 
   static const String name = 'SettingRouterRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SettingRouterPage();
+    },
+  );
 }
 
 /// generated route for
@@ -563,7 +443,12 @@ class SignInFailureRoute extends PageRouteInfo<void> {
 
   static const String name = 'SignInFailureRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SignInFailurePage();
+    },
+  );
 }
 
 /// generated route for
@@ -587,8 +472,17 @@ class UserListFollowingOrFollowerRoute
 
   static const String name = 'UserListFollowingOrFollowerRoute';
 
-  static const PageInfo<UserListFollowingOrFollowerRouteArgs> page =
-      PageInfo<UserListFollowingOrFollowerRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserListFollowingOrFollowerRouteArgs>();
+      return UserListFollowingOrFollowerPage(
+        key: args.key,
+        initialTab: args.initialTab,
+        targetUserId: args.targetUserId,
+      );
+    },
+  );
 }
 
 class UserListFollowingOrFollowerRouteArgs {
@@ -625,8 +519,13 @@ class UserListLikedRoute extends PageRouteInfo<UserListLikedRouteArgs> {
 
   static const String name = 'UserListLikedRoute';
 
-  static const PageInfo<UserListLikedRouteArgs> page =
-      PageInfo<UserListLikedRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserListLikedRouteArgs>();
+      return UserListLikedPage(key: args.key, definitionId: args.definitionId);
+    },
+  );
 }
 
 class UserListLikedRouteArgs {
@@ -650,7 +549,12 @@ class UserListMutedRoute extends PageRouteInfo<void> {
 
   static const String name = 'UserListMutedRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const UserListMutedPage();
+    },
+  );
 }
 
 /// generated route for
@@ -661,7 +565,12 @@ class UserSearchRoute extends PageRouteInfo<void> {
 
   static const String name = 'UserSearchRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const UserSearchPage();
+    },
+  );
 }
 
 /// generated route for
@@ -679,8 +588,13 @@ class UserSearchResultRoute extends PageRouteInfo<UserSearchResultRouteArgs> {
 
   static const String name = 'UserSearchResultRoute';
 
-  static const PageInfo<UserSearchResultRouteArgs> page =
-      PageInfo<UserSearchResultRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserSearchResultRouteArgs>();
+      return UserSearchResultPage(key: args.key, searchWord: args.searchWord);
+    },
+  );
 }
 
 class UserSearchResultRouteArgs {
@@ -719,8 +633,18 @@ class UserWordDefinitionListRoute
 
   static const String name = 'UserWordDefinitionListRoute';
 
-  static const PageInfo<UserWordDefinitionListRouteArgs> page =
-      PageInfo<UserWordDefinitionListRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UserWordDefinitionListRouteArgs>();
+      return UserWordDefinitionListPage(
+        key: args.key,
+        targetUserId: args.targetUserId,
+        wordId: args.wordId,
+        wordLabel: args.wordLabel,
+      );
+    },
+  );
 }
 
 class UserWordDefinitionListRouteArgs {
@@ -753,7 +677,12 @@ class WelcomeRoute extends PageRouteInfo<void> {
 
   static const String name = 'WelcomeRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const WelcomePage();
+    },
+  );
 }
 
 /// generated route for
@@ -771,8 +700,15 @@ class WordRegistrationRoute extends PageRouteInfo<WordRegistrationRouteArgs> {
 
   static const String name = 'WordRegistrationRoute';
 
-  static const PageInfo<WordRegistrationRouteArgs> page =
-      PageInfo<WordRegistrationRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<WordRegistrationRouteArgs>(
+        orElse: () => const WordRegistrationRouteArgs(),
+      );
+      return WordRegistrationPage(key: args.key, initialWord: args.initialWord);
+    },
+  );
 }
 
 class WordRegistrationRouteArgs {
@@ -803,8 +739,13 @@ class WordSearchResultRoute extends PageRouteInfo<WordSearchResultRouteArgs> {
 
   static const String name = 'WordSearchResultRoute';
 
-  static const PageInfo<WordSearchResultRouteArgs> page =
-      PageInfo<WordSearchResultRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<WordSearchResultRouteArgs>();
+      return WordSearchResultPage(key: args.key, searchWord: args.searchWord);
+    },
+  );
 }
 
 class WordSearchResultRouteArgs {
@@ -835,8 +776,12 @@ class WordTopRoute extends PageRouteInfo<WordTopRouteArgs> {
 
   static const String name = 'WordTopRoute';
 
-  static const PageInfo<WordTopRouteArgs> page = PageInfo<WordTopRouteArgs>(
+  static PageInfo page = PageInfo(
     name,
+    builder: (data) {
+      final args = data.argsAs<WordTopRouteArgs>();
+      return WordTopPage(key: args.key, wordId: args.wordId);
+    },
   );
 }
 

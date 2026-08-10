@@ -22,6 +22,8 @@ final appConfigProvider = FutureProvider<AppConfig>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef AppConfigRef = FutureProviderRef<AppConfig>;
 String _$isRequiredAppUpdateHash() =>
     r'bfb2d0c978863a76d3c4f80d1ba1fea8234d05d6';
@@ -40,6 +42,8 @@ final isRequiredAppUpdateProvider = FutureProvider<bool>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef IsRequiredAppUpdateRef = FutureProviderRef<bool>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

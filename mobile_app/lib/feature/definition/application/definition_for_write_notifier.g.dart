@@ -7,7 +7,7 @@ part of 'definition_for_write_notifier.dart';
 // **************************************************************************
 
 String _$definitionForWriteNotifierHash() =>
-    r'8bedfa7806dec8f96615a2955d48c88f3b9440fa';
+    r'447d9ab6f3ec70169a4e8cd063bce16c3f69261a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -177,6 +177,8 @@ class DefinitionForWriteNotifierProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin DefinitionForWriteNotifierRef
     on AutoDisposeAsyncNotifierProviderRef<DefinitionForWrite> {
   /// The parameter `definitionForWrite` of this provider.
@@ -198,4 +200,4 @@ class _DefinitionForWriteNotifierProviderElement
 }
 
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

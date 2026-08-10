@@ -34,7 +34,9 @@ mixin _$UserProfile {
   /// [croppedFile] のバイト列。UI 表示用に一度だけ読み込む。
   Uint8List? get croppedImageBytes => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserProfile
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserProfileCopyWith<UserProfile> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -70,6 +72,8 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserProfile
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -164,6 +168,8 @@ class __$$UserProfileImplCopyWithImpl<$Res>
     $Res Function(_$UserProfileImpl) _then,
   ) : super(_value, _then);
 
+  /// Create a copy of UserProfile
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -314,7 +320,9 @@ class _$UserProfileImpl extends _UserProfile {
     const DeepCollectionEquality().hash(croppedImageBytes),
   );
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserProfile
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserProfileImplCopyWith<_$UserProfileImpl> get copyWith =>
@@ -344,8 +352,9 @@ abstract class _UserProfile extends UserProfile {
   String get name;
   @override
   String get bio;
-  @override
+
   /// アバター画像の URL。未設定の場合は null
+  @override
   String? get avatarUrl;
   @override
   int get followingCount;
@@ -353,14 +362,19 @@ abstract class _UserProfile extends UserProfile {
   int get followerCount;
   @override
   bool get isFollowedByMe;
-  @override
+
   /// アップロード用にユーザーが指定したファイル（画像）を保持する
+  @override
   CroppedFile? get croppedFile;
-  @override
+
   /// [croppedFile] のバイト列。UI 表示用に一度だけ読み込む。
-  Uint8List? get croppedImageBytes;
   @override
-  @JsonKey(ignore: true)
+  Uint8List? get croppedImageBytes;
+
+  /// Create a copy of UserProfile
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserProfileImplCopyWith<_$UserProfileImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

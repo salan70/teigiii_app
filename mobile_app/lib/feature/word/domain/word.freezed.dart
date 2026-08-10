@@ -24,7 +24,9 @@ mixin _$Word {
   int get postedDefinitionCount => throw _privateConstructorUsedError;
   bool get isSavedByMe => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Word
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $WordCopyWith<Word> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -53,6 +55,8 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Word
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -120,6 +124,8 @@ class __$$WordImplCopyWithImpl<$Res>
   __$$WordImplCopyWithImpl(_$WordImpl _value, $Res Function(_$WordImpl) _then)
     : super(_value, _then);
 
+  /// Create a copy of Word
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -219,7 +225,9 @@ class _$WordImpl implements _Word {
     isSavedByMe,
   );
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Word
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WordImplCopyWith<_$WordImpl> get copyWith =>
@@ -248,8 +256,11 @@ abstract class _Word implements Word {
   int get postedDefinitionCount;
   @override
   bool get isSavedByMe;
+
+  /// Create a copy of Word
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WordImplCopyWith<_$WordImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

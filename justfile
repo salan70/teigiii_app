@@ -36,8 +36,8 @@ mobile-setup:
 mobile-clean:
     cd mobile_app && flutter clean
 
-# build_runner の出力は dart format 済みではないため、生成後に必ず整形する
-# （これがないと mobile-format-check が生成物で落ちる）
+# build_runner / freezed 等は dart_style 3.x を使う（#315 案 A）。
+# SDK の dart format とスタイルを揃え、生成後整形は保険として残す。
 mobile-generate:
     cd mobile_app && dart run build_runner build --delete-conflicting-outputs
     cd mobile_app && dart format .

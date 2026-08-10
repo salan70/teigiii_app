@@ -115,7 +115,7 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
     primaryFocus?.unfocus();
 
     if (!_isChanged) {
-      await context.popRoute();
+      await context.maybePop();
       return;
     }
 
@@ -124,7 +124,7 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
         .show(
           ConfirmDialog(
             confirmMessage: '入力した内容は保存されません。\nよろしいですか？',
-            onAccept: context.popRoute,
+            onAccept: context.maybePop,
             confirmButtonText: 'OK',
           ),
         );
@@ -166,7 +166,7 @@ class _WordRegistrationPageState extends ConsumerState<WordRegistrationPage>
         ref
             .read(snackBarControllerProvider)
             .showSuccessSnackBar('登録しました！', ScaffoldMessengerType.baseRoute);
-        await ref.read(appRouterProvider).pop();
+        await ref.read(appRouterProvider).maybePop();
       case WordRegistrationOutcome.alreadyPublic:
         // 見え方は何も変わっていないため、成功として伝えない。
         // チップの表示条件と実態を合わせるため、既存語チェックをやり直す。
