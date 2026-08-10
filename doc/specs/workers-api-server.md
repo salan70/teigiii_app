@@ -334,15 +334,22 @@ required から消えたプロパティの有無で行う。破壊的な削除�
 
 #### バックアップと復旧（D1 Time Travel）
 
-migration は forward-only で、途中失敗時の戻し手段は D1 Time Travel だけ。destructive な
-migration は table recreate になり、D1 は暗黙トランザクション内で `PRAGMA foreign_keys=OFF` が
-効かないため、cascade 参照している行（`likes` → `definitions`）まで巻き込む。
+migration は forward-only で down migration を持たない。戻し手段は D1 Time Travel だけだが、
+**Time Travel restore は失敗時の通常対応ではない。** 対応は失敗の種類で分かれる。
 
 1. migration の直前に `just backend-bookmark-prod` を実行し、出力された bookmark を控える
    （Issue / PR に貼る。控えを取らないまま migration を流さない）
-2. 失敗したら `just backend-restore-prod <bookmark>` で復元する。prod への破壊的操作なので
-   recipe は明示的な確認入力を求める。復元後の書き込みは失われるため、復元判断は速やかに行う
-3. 復元したら `just backend-drift-check` で migration の適用状態を確認してから再実行する
+2. **`wrangler d1 migrations apply` がエラーを返した場合**: その migration はロールバックされて
+   未適用のまま残り、それ以前に成功した migration は適用済みのまま残る。`just backend-drift-check`
+   で `d1_migrations` の適用状態を確認し、migration SQL を修正して再実行する。ここで restore しない
+   （同じ状態へ戻すために bookmark 以降の書き込みを失うだけになる）
+3. **migration が成功した後に、意味的に誤った状態やデータ欠損が判明した場合**: `just backend-restore-prod <bookmark>`
+   で復元する。destructive な migration は table recreate になり、D1 は暗黙トランザクション内で
+   `PRAGMA foreign_keys=OFF` が効かないため、cascade 参照している行（`likes` → `definitions`）を
+   退避・復元する構成に依存する。ここが誤っていると **成功したまま行が失われる**ので、この経路が
+   restore の主な用途になる。restore は破壊的な上書きで bookmark 以降の書き込みを失うため、
+   recipe は明示的な確認入力を求める。判断は速やかに行う
+4. 復元したら `just backend-drift-check` で適用状態を確認してから再実行する
 
 #### prod app_config の運用
 

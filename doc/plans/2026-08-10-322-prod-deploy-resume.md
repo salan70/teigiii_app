@@ -72,5 +72,11 @@ v1.2.1+11 タグの `backend/openapi.json` と現行 develop の差分を突き�
 ## スコープ外（merge 後に別途実施）
 
 - prod の migrate / deploy / smoke test
-- dev Worker のドリフト解消（本 PR が `backend/**` を触るため、develop への merge で CI の `deploy-dev` が走り自動解消する）
+- dev Worker のドリフト解消。**merge では解消しない。** `ci.yml` の `deploy-dev` は secret
+  `CLOUDFLARE_API_TOKEN_DEV` を要求するが未登録で（登録済みは perf 分析用の D1 Read 専用
+  `CLOUDFLARE_API_TOKEN` のみ）、develop の最新 run も `Missing required secrets` で失敗している。
+  `ci-passed` の `needs` に含まれないため無言で赤いままだった。dev deploy 用の token を発行して
+  登録するか、`just backend-deploy-dev` を手動実行するまで解消しない
 - 互換シムの撤去（`min_app_version_*` 引き上げ後に別 Issue）
+
+#322 の完了条件は prod / dev への実操作を含むため、この PR の merge では閉じない。
