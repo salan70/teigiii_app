@@ -9,6 +9,9 @@
 #   2. prod D1 / prod テレメトリ D1 の未適用 migration
 #
 # 実行には wrangler の OAuth ログイン（just backend-deploy-prod と同じ）が必要。
+#
+# 終了コード: 0 = 一致 / 1 = 乖離あり / 2 = 検査自体が失敗（認証切れ・API 障害など）。
+# 「乖離」と「検査不能」を混同すると、通知を見た側が prod の状態を誤って安心するため分ける。
 set -euo pipefail
 
 cd "$(dirname "$0")/../.."
@@ -18,10 +21,27 @@ develop_sha="$(git rev-parse origin/develop)"
 
 cd backend
 
-version_id="$(bunx wrangler deployments status --env prod --json 2>/dev/null |
-  jq -er '.versions[0].version_id')"
-deployed_sha="$(bunx wrangler versions view "$version_id" --env prod --json 2>/dev/null |
-  jq -r '.resources.bindings[] | select(.name == "DEPLOYED_SHA") | .text')"
+stderr_file="$(mktemp)"
+trap 'rm -f "$stderr_file"' EXIT
+
+# wrangler の stderr は握り潰さない。認証切れや API 障害を「原因不明の非 0 終了」にすると、
+# 乖離しているのか検査できていないのかを実行者が区別できなくなる。
+# exit を効かせるため、この関数はサブシェル（コマンド置換）の中から呼ばない。
+fail() {
+  printf 'drift-check could not run: %s\n' "$1" >&2
+  cat "$stderr_file" >&2
+  exit 2
+}
+
+status_json="$(bunx wrangler deployments status --env prod --json 2>"$stderr_file")" ||
+  fail 'wrangler deployments status --env prod'
+version_id="$(jq -er '.versions[0].version_id' <<<"$status_json")" ||
+  fail 'no version id in deployments status output'
+
+version_json="$(bunx wrangler versions view "$version_id" --env prod --json 2>"$stderr_file")" ||
+  fail "wrangler versions view ${version_id} --env prod"
+deployed_sha="$(jq -r '.resources.bindings[] | select(.name == "DEPLOYED_SHA") | .text' \
+  <<<"$version_json")" || fail 'could not read DEPLOYED_SHA from version bindings'
 
 drifted=0
 
@@ -41,7 +61,8 @@ fi
 
 for binding in DB TELEMETRY_DB; do
   printf '\n--- %s の未適用 migration ---\n' "$binding"
-  migrations="$(bunx wrangler d1 migrations list "$binding" --env prod --remote 2>/dev/null)"
+  migrations="$(bunx wrangler d1 migrations list "$binding" --env prod --remote 2>"$stderr_file")" ||
+    fail "wrangler d1 migrations list ${binding} --env prod --remote"
   printf '%s\n' "$migrations"
   if ! grep -q 'No migrations to apply' <<<"$migrations"; then
     drifted=1

@@ -49,8 +49,8 @@ backend-migrate-prod-telemetry:
     expect(guard).toContain("ci-passed");
   });
 
-  // Time Travel は destructive migration が失敗したときの唯一の戻し手段。
-  // 復元は prod への破壊的操作なので、明示確認なしに実行できてはならない。
+  // commit 済みの migration が壊れた状態を作った場合の唯一の戻し手段。
+  // 復元は prod への破壊的な上書きなので、明示確認なしに実行できてはならない。
   test("time travel recipes exist and restore asks for confirmation", () => {
     expect(justfile).toContain("wrangler d1 time-travel info DB --env prod");
     const restore = justfile.slice(
@@ -69,6 +69,22 @@ backend-migrate-prod-telemetry:
     );
     expect(inspect).toContain("select * from app_config");
     expect(inspect).not.toMatch(/insert|update|delete/i);
+  });
+
+  // min_app_version_* はアプリが Version.parse に直接渡す（app_config_state.dart）。
+  // 壊れた値を prod に書くと全クライアントが起動時に例外で固まり、行を直すまで復帰しない。
+  // 検証は remote への最初の書き込みより前に置く。
+  test("min app version update validates before writing to prod", () => {
+    const recipe = justfile.slice(
+      justfile.indexOf("\nbackend-set-min-app-version-prod "),
+      justfile.indexOf("\n# prod が origin/develop から乖離"),
+    );
+    const validation = recipe.indexOf("^[0-9]+\\.[0-9]+\\.[0-9]+$");
+    expect(validation).toBeGreaterThan(-1);
+    expect(validation).toBeLessThan(recipe.indexOf("wrangler d1 execute"));
+    // 文字列補間だとクオートを含む値が SQL 自体を書き換えられる
+    expect(recipe).not.toContain("{{ios}}");
+    expect(recipe).not.toContain("{{android}}");
   });
 
   test("prod drift check does not write to prod", () => {
