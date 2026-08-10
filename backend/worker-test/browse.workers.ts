@@ -190,6 +190,8 @@ describe("my dictionary lists", () => {
     expect(overview.status).toBe(200);
     await expect(overview.json()).resolves.toMatchObject({
       definedWordCount: 2,
+      // v1.2.1 互換シム（compat/draft-count-shim.ts）。契約には無いが wire には常に出る
+      draftCount: 0,
       savedWordCount: 1,
       recentDefinitions: [{ id: "private-w2" }, { id: "private" }, { id: "public" }],
     });
@@ -197,8 +199,20 @@ describe("my dictionary lists", () => {
     const definedWords = await request("alice", "/v1/me/defined-words");
     await expect(definedWords.json()).resolves.toMatchObject({
       items: [
-        { privateCount: 1, publicCount: 1, readingSubGroup: "あ", word: { id: "w1" } },
-        { privateCount: 1, publicCount: 0, readingSubGroup: "よ", word: { id: "w2" } },
+        {
+          draftCount: 0,
+          privateCount: 1,
+          publicCount: 1,
+          readingSubGroup: "あ",
+          word: { id: "w1" },
+        },
+        {
+          draftCount: 0,
+          privateCount: 1,
+          publicCount: 0,
+          readingSubGroup: "よ",
+          word: { id: "w2" },
+        },
       ],
     });
 
