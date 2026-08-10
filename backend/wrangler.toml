@@ -56,6 +56,10 @@ name = "teigiii-api-prod"
 FIREBASE_PROJECT_ID = "everyone-teigi-prod"
 FIREBASE_PROJECT_NUMBER = "713374936833"
 AVATAR_BASE_URL = "https://teigiii-api-prod.tetsuo21ad.workers.dev/v1"
+# prod では Web QA の CORS 緩和を無効化する（空文字は未設定と同じく全 origin 拒否）。
+# 未定義のままにすると wrangler が「top-level の vars が継承されない」警告を毎回出し、
+# 本当の設定ミスがノイズに埋もれるため、意図を値として明示する。
+WEB_QA_PAGES_PROJECT = ""
 
 [[env.prod.d1_databases]]
 binding = "DB"

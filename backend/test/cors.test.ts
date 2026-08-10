@@ -4,7 +4,8 @@ import { createApp } from "../src/app";
 import { isAllowedWebQaOrigin } from "../src/middleware/cors";
 
 const WEB_QA_ENV = { WEB_QA_PAGES_PROJECT: "teigiii-web-dev" };
-const PROD_ENV = {};
+// prod の wrangler.toml は WEB_QA_PAGES_PROJECT を空文字で明示する（#322）
+const PROD_ENV = { WEB_QA_PAGES_PROJECT: "" };
 
 function testApp() {
   return createApp({
@@ -17,6 +18,13 @@ describe("isAllowedWebQaOrigin", () => {
   test("pagesProject 未設定ではすべて拒否する", () => {
     expect(isAllowedWebQaOrigin("http://localhost:3000", undefined)).toBe(false);
     expect(isAllowedWebQaOrigin("https://teigiii-web-dev.pages.dev", undefined)).toBe(false);
+  });
+
+  // prod は wrangler の vars 継承警告を消すために空文字を明示している（#322）。
+  // 空文字が「未設定」と同じ扱いでなくなると、prod の CORS が無言で緩む。
+  test("pagesProject が空文字（prod の明示的な無効化）でもすべて拒否する", () => {
+    expect(isAllowedWebQaOrigin("http://localhost:3000", "")).toBe(false);
+    expect(isAllowedWebQaOrigin("https://teigiii-web-dev.pages.dev", "")).toBe(false);
   });
 
   test("localhost / 127.0.0.1 を許可する", () => {
