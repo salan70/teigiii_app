@@ -21,10 +21,16 @@ backend-migrate-prod-telemetry:
   // さらに正しい順序が migration の性質で反転する（additive なら migrate → deploy、
   // destructive なら deploy → migrate）ため、束ねると後者が扱えなくなる。
   test("deploy does not implicitly run migrations", () => {
-    expect(justfile).toContain(`
-backend-deploy-prod: backend-guard-prod
-    cd backend && bunx wrangler deploy --env prod
-`);
+    expect(justfile).toMatch(
+      /^backend-deploy-prod: backend-guard-prod\n {4}cd backend && bunx wrangler deploy --env prod\b/m,
+    );
+    const deploy = justfile.slice(justfile.indexOf("\nbackend-deploy-prod:"));
+    expect(deploy.split("\n")[2]).not.toContain("migrations apply");
+  });
+
+  // prod に出ている commit を特定できないと、deploy し忘れをドリフト検査が検知できない。
+  test("deploy stamps the deployed commit for drift detection", () => {
+    expect(justfile).toContain('--var DEPLOYED_SHA:"$(git rev-parse HEAD)"');
   });
 
   // prod はローカルから deploy するため、作業ツリーの中身がそのまま prod に出る事故を
@@ -41,5 +47,33 @@ backend-deploy-prod: backend-guard-prod
     expect(guard).toContain("git diff --quiet");
     expect(guard).toContain("git rev-parse origin/develop");
     expect(guard).toContain("ci-passed");
+  });
+
+  // Time Travel は destructive migration が失敗したときの唯一の戻し手段。
+  // 復元は prod への破壊的操作なので、明示確認なしに実行できてはならない。
+  test("time travel recipes exist and restore asks for confirmation", () => {
+    expect(justfile).toContain("wrangler d1 time-travel info DB --env prod");
+    const restore = justfile.slice(
+      justfile.indexOf("\nbackend-restore-prod "),
+      justfile.indexOf("\n# prod の app_config を表示する"),
+    );
+    expect(restore).toContain("read -r -p");
+    expect(restore).toContain("wrangler d1 time-travel restore DB --env prod");
+  });
+
+  // app_config の確認は読み取りのみに保つ。参照のつもりで prod を書き換える事故を防ぐ。
+  test("prod app_config inspection stays read-only", () => {
+    const inspect = justfile.slice(
+      justfile.indexOf("\nbackend-app-config-prod:"),
+      justfile.indexOf("\n# prod app-config の初期行"),
+    );
+    expect(inspect).toContain("select * from app_config");
+    expect(inspect).not.toMatch(/insert|update|delete/i);
+  });
+
+  test("prod drift check does not write to prod", () => {
+    expect(justfile).toMatch(/^backend-drift-check:\n {4}backend\/scripts\/drift-check\.sh$/m);
+    const script = readFileSync(resolve(repositoryRoot, "backend/scripts/drift-check.sh"), "utf8");
+    expect(script).not.toMatch(/wrangler (deploy\b|d1 execute|d1 migrations apply)/);
   });
 });
