@@ -296,6 +296,10 @@ curl 'http://localhost:8787/__scheduled?cron=0+3+*+*+*'
 
 ### prod デプロイ
 
+recipe は `nix develop` の中で実行する。wrangler は `node_modules/.bin/wrangler` の
+shebang 経由で node に起動されるため Node.js 22 以上を要求し、shell 外の node バージョンに
+依存すると手順の途中で止まる。node は `flake.nix` で固定している。
+
 1. `just backend-drift-check` で prod と `origin/develop` の乖離（未 deploy の commit /
    未適用 migration）を洗い出す。
 2. `just backend-validate-prod` で `teigiii-api-prod`、`teigiii-prod`、

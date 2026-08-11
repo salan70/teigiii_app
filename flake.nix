@@ -145,9 +145,12 @@
             pkgs.just
           ];
           # ci.yml deploy-dev job: justfile 経由で wrangler を叩くだけ。Flutter は不要。
+          # nodejs は wrangler の実行に要る（下記 toolPackages のコメント参照）。
+          # runner の preinstall node に依存すると、runner image 更新で無言で壊れる。
           ciBackendPackages = [
             pkgs.just
             pkgs.bun
+            pkgs.nodejs_22
           ];
           # deliver.yml: iOS の署名済みビルドに必要なものだけ。
           # macos runner は課金 10 倍なので、openapi-generator-cli（JDK 込み）や
@@ -170,6 +173,10 @@
             pkgs.lcov
             pkgs.git
             pkgs.bun
+            # wrangler は node_modules/.bin/wrangler の shebang（#!/usr/bin/env node）経由で
+            # 起動するため bun ではなく node で動き、Node.js 22 以上を要求する。
+            # ここで固定しないと prod デプロイ手順が各人の node バージョン任せになる。
+            pkgs.nodejs_22
             pkgs.curl
             pkgs.jq
             pkgs.ripgrep
