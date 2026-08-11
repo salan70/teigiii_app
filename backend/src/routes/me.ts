@@ -1,6 +1,7 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
 import type { AuthenticationVariables } from "../auth/middleware";
 import { BrowseService } from "../browse/browse-service";
+import { withDraftCount, withDraftCountItems } from "../compat/draft-count-shim";
 import { paginatedSchema, paginationQuerySchema } from "../schemas/common";
 import { definitionResponseSchema } from "../schemas/definition";
 import {
@@ -87,7 +88,8 @@ type MeRouteEnvironment = {
 export const meRoutes = new OpenAPIHono<MeRouteEnvironment>()
   .openapi(getOverviewRoute, async (context) => {
     const result = await new BrowseService(context.env).getMyOverview(context.get("firebaseUid"));
-    return context.json(result, 200);
+    // v1.2.1 互換シム。撤去条件は compat/draft-count-shim.ts を参照
+    return context.json(withDraftCount(result), 200);
   })
   .openapi(getDefinedWordsRoute, async (context) => {
     const query = context.req.valid("query");
@@ -96,7 +98,8 @@ export const meRoutes = new OpenAPIHono<MeRouteEnvironment>()
       query.limit,
       query.cursor,
     );
-    return context.json(result, 200);
+    // v1.2.1 互換シム。撤去条件は compat/draft-count-shim.ts を参照
+    return context.json(withDraftCountItems(result), 200);
   })
   .openapi(getMyDefinitionsRoute, async (context) => {
     const query = context.req.valid("query");

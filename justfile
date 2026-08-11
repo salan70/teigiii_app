@@ -194,6 +194,63 @@ backend-migrate-prod:
 backend-migrate-prod-telemetry:
     cd backend && bunx wrangler d1 migrations apply TELEMETRY_DB --env prod --remote
 
+# migration が commit された後に意味的な壊れ（table recreate + cascade で行が消える等）が
+# 判明した場合、戻し手段は Time Travel だけになる。適用前に必ず bookmark を控える。
+# なお apply がエラーを返した場合はその migration 自体が未適用のまま残るため、
+# その経路の通常対応は restore ではなく修正して再実行（doc/specs/workers-api-server.md）。
+# prod D1 の現在の Time Travel bookmark を表示する（migration の直前に実行して控える）
+backend-bookmark-prod:
+    cd backend && bunx wrangler d1 time-travel info DB --env prod
+
+# prod D1 を bookmark 時点へ復元する（commit 済みの migration が壊れた状態を作った場合の復旧用）。
+# 引数は positional-arguments で受ける。文字列補間だとクオートを含む値がコマンドを書き換えるため。
+[positional-arguments]
+backend-restore-prod bookmark:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "prod D1 (teigiii-prod) を bookmark $1 時点へ復元します。"
+    echo "この操作以降に書き込まれた prod データは失われます。"
+    read -r -p "続行するには 'restore prod' と入力: " confirmation
+    if [ "$confirmation" != 'restore prod' ]; then
+      echo 'Aborted.' >&2
+      exit 1
+    fi
+    cd backend && bunx wrangler d1 time-travel restore DB --env prod --bookmark "$1"
+
+# prod の app_config を表示する（読み取りのみ）
+backend-app-config-prod:
+    cd backend && bunx wrangler d1 execute DB --env prod --remote --command "select * from app_config"
+
+# prod app-config の初期行だけを冪等に作成する（既に行があれば no-op）
+backend-seed-prod:
+    cd backend && bunx wrangler d1 execute DB --env prod --remote --command "insert into app_config (id, min_app_version_ios, min_app_version_android, in_maintenance, maintenance_scheduled_end_time, perf_telemetry_enabled, updated_at) values (1, '0.0.0', '0.0.0', 0, null, 1, unixepoch('now') * 1000) on conflict(id) do nothing"
+
+# 値の検証は remote への最初の書き込みより前に行う。アプリは min_app_version_* を
+# Version.parse に直接渡す（app_config_state.dart）ため、壊れた値を書くと全クライアントが
+# 起動時に例外で retry 画面から復帰できなくなり、prod の行を直すまで回復しない。
+# 引数は positional-arguments で受ける。文字列補間だとクオートを含む値が SQL を書き換えるため。
+# prod の強制アップデート下限を更新する。更新前後の行を表示し、値の変化を記録に残せるようにする
+[positional-arguments]
+backend-set-min-app-version-prod ios android:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    for value in "$1" "$2"; do
+      if [[ ! "$value" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        echo "Invalid version '${value}'. Use x.y.z (digits only)." >&2
+        exit 1
+      fi
+    done
+    cd backend
+    echo '--- before ---'
+    bunx wrangler d1 execute DB --env prod --remote --command "select min_app_version_ios, min_app_version_android, updated_at from app_config"
+    bunx wrangler d1 execute DB --env prod --remote --command "update app_config set min_app_version_ios = '$1', min_app_version_android = '$2', updated_at = unixepoch('now') * 1000 where id = 1"
+    echo '--- after ---'
+    bunx wrangler d1 execute DB --env prod --remote --command "select min_app_version_ios, min_app_version_android, updated_at from app_config"
+
+# prod が origin/develop から乖離していないかを検査する（prod へは書き込まない）
+backend-drift-check:
+    backend/scripts/drift-check.sh
+
 # prod は CI からではなくローカルから deploy する運用のため、
 # 「作業ツリーの中身がそのまま prod に出る」事故をここで防ぐ。
 # prod deploy の事前条件を検査する（作業ツリー clean / origin/develop と一致 / CI green）
@@ -225,9 +282,11 @@ backend-guard-prod:
 # migration は意図的に依存に含めない。deploy は wrangler rollback で可逆だが
 # migration は forward-only で不可逆であり、さらに正しい順序が migration の性質で反転する
 # （additive なら migrate → deploy、destructive なら deploy → migrate）。
+# DEPLOYED_SHA は backend-drift-check が「prod に出ている commit」を特定するためのスタンプ。
+# guard が HEAD == origin/develop を保証済みなので、この値はそのまま prod の実体を指す。
 # prod Worker を手動 deploy する（migration が必要なら backend-migrate-prod* を個別に実行する）
 backend-deploy-prod: backend-guard-prod
-    cd backend && bunx wrangler deploy --env prod
+    cd backend && bunx wrangler deploy --env prod --var DEPLOYED_SHA:"$(git rev-parse HEAD)"
 
 # --- perf（本番テレメトリ D1 の分析。D1 Read のみの CLOUDFLARE_API_TOKEN が必須）---
 

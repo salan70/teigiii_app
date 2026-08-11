@@ -33,7 +33,8 @@ prod に出る事故は `backend-guard-prod`（作業ツリー clean / `origin/d
 可逆だが migration は forward-only で不可逆であり、さらに正しい順序が migration の性質で
 反転する（additive なら migrate → deploy、destructive なら deploy → migrate）。
 `backend-migrate-prod` / `backend-migrate-prod-telemetry` は個別に実行し、順序は
-その migration の性質に応じて判断する。
+その migration の性質に応じて判断する。migration の性質とは別に、Worker deploy が
+**配信済みアプリを壊さないか**も判断軸になる（「prod デプロイ」節を参照）。
 
 ## リクエスト保護
 
@@ -56,7 +57,9 @@ prod に出る事故は `backend-guard-prod`（作業ツリー clean / `origin/d
 
 ブラウザからの **dev** Web QA アクセスのため、App Check より前に CORS を適用する。
 緩和は binding `WEB_QA_PAGES_PROJECT` が設定されている環境（local / `env.dev`）でのみ有効で、
-prod（`env.prod`）にはこの binding を置かず allowlist を空にする。
+prod（`env.prod`）では空文字を明示して allowlist を空にする。空文字は未設定と同じく全 origin 拒否だが、
+未定義のままだと wrangler が「top-level の vars が継承されない」警告を prod 系コマンドで毎回出し、
+本当の設定ミスがノイズに埋もれるため、無効化の意図を値として置く。
 
 有効時の許可 origin は次のみ。
 
@@ -293,25 +296,79 @@ curl 'http://localhost:8787/__scheduled?cron=0+3+*+*+*'
 
 ### prod デプロイ
 
-1. `just backend-validate-prod` で `teigiii-api-prod`、`teigiii-prod`、
+1. `just backend-drift-check` で prod と `origin/develop` の乖離（未 deploy の commit /
+   未適用 migration）を洗い出す。
+2. `just backend-validate-prod` で `teigiii-api-prod`、`teigiii-prod`、
    `teigiii-prod-avatars`、prod Firebase vars の bundle / bindings 解決を dry-run する。
-2. 未適用の migration があるかを
-   `wrangler d1 migrations list DB --env prod --remote` と
-   `wrangler d1 migrations list TELEMETRY_DB --env prod --remote` で確認する。
-3. 未適用の migration がある場合、その性質に応じて順序を決めて実行する。
+3. **配信済みアプリとの後方互換**を確認する（後述）。壊す変更があれば互換シムを先に入れる。
+4. 未適用の migration がある場合、その性質に応じて順序を決めて実行する。
    **`just backend-deploy-prod` は migration を実行しない。**
+   - 実行前に `just backend-bookmark-prod` で Time Travel bookmark を控える（後述）
    - additive（列・テーブルの追加）: `just backend-migrate-prod` /
-     `just backend-migrate-prod-telemetry` を先に実行してから 4 へ進む
+     `just backend-migrate-prod-telemetry` を先に実行してから 5 へ進む
    - destructive（列の削除・リネーム。drizzle-kit が table recreate を吐く）:
-     先に 4 で新コードを deploy し、その後に migration を実行する
-4. `just backend-deploy-prod` を実行する。この recipe は `backend-guard-prod`
+     先に 5 で新コードを deploy し、その後に migration を実行する
+5. `just backend-deploy-prod` を実行する。この recipe は `backend-guard-prod`
    （作業ツリー clean / `origin/develop` と一致 / その commit の `ci-passed` が green）
-   を通過した場合にだけ prod Worker を deploy する。
-5. 手順 2 のコマンドで未適用 migration がゼロであることを再確認し、
-   prod の主要フローを smoke test する。
+   を通過した場合にだけ prod Worker を deploy し、その commit を `DEPLOYED_SHA` として打つ。
+6. `just backend-drift-check` が green になることを確認し、prod の主要フローを smoke test する。
 
 R2 public access は有効化しない。Cron は Wrangler 設定を正本とし、UTC の実行時刻を
 変更する場合はデプロイ前に確認する。
+
+<!-- @code backend/src/compat/draft-count-shim.ts#withDraftCount -->
+#### 配信済みアプリとの後方互換
+
+migration の additive / destructive とは別軸の判断で、**Worker deploy によるレスポンス形状の変更**が
+ストアで配信済みのアプリを壊さないかを見る。生成クライアント（dart-dio + json_serializable）は
+`$checkKeys(requiredKeys:)` で必須キーの存在だけを検査し、未知キーは無視する。したがって:
+
+- レスポンスのプロパティ追加・新規エンドポイント追加は安全
+- リクエストのプロパティ削除は安全（zod は非 strict で未知キーを strip する）
+- **レスポンスの必須プロパティ削除は破壊的**。配信済みアプリの当該画面が parse エラーで落ちる
+
+判定は、配信済みバージョンの tag（例 `v1.2.1+11`）の `backend/openapi.json` と現行の差分を取り、
+required から消えたプロパティの有無で行う。破壊的な削除がある場合は、契約（OpenAPI）へ戻さず
+配信レスポンスにだけ定数を足す**互換シム**を入れてから deploy する（`backend/src/compat/`）。
+シムは `min_app_version_ios` / `min_app_version_android` を該当バージョンより上へ引き上げた後に撤去する。
+
+#### バックアップと復旧（D1 Time Travel）
+
+migration は forward-only で down migration を持たない。戻し手段は D1 Time Travel だけだが、
+**Time Travel restore は失敗時の通常対応ではない。** 対応は失敗の種類で分かれる。
+
+1. migration の直前に `just backend-bookmark-prod` を実行し、出力された bookmark を控える
+   （Issue / PR に貼る。控えを取らないまま migration を流さない）
+2. **`wrangler d1 migrations apply` がエラーを返した場合**: その migration はロールバックされて
+   未適用のまま残り、それ以前に成功した migration は適用済みのまま残る。`just backend-drift-check`
+   で `d1_migrations` の適用状態を確認し、migration SQL を修正して再実行する。ここで restore しない
+   （同じ状態へ戻すために bookmark 以降の書き込みを失うだけになる）
+3. **migration が成功した後に、意味的に誤った状態やデータ欠損が判明した場合**: `just backend-restore-prod <bookmark>`
+   で復元する。destructive な migration は table recreate になり、D1 は暗黙トランザクション内で
+   `PRAGMA foreign_keys=OFF` が効かないため、cascade 参照している行（`likes` → `definitions`）を
+   退避・復元する構成に依存する。ここが誤っていると **成功したまま行が失われる**ので、この経路が
+   restore の主な用途になる。restore は破壊的な上書きで bookmark 以降の書き込みを失うため、
+   recipe は明示的な確認入力を求める。判断は速やかに行う
+4. 復元したら `just backend-drift-check` で適用状態を確認してから再実行する
+
+#### prod app_config の運用
+
+- 確認: `just backend-app-config-prod`（読み取りのみ）
+- 初期行の作成: `just backend-seed-prod`（冪等。既存行があれば no-op）
+- 強制アップデート下限の更新: `just backend-set-min-app-version-prod <ios> <android>`。
+  更新前後の行を表示するので、値の変化を Issue / PR に記録する
+
+#### ドリフト検知
+
+prod は手動 deploy のため「deploy し忘れ」「migration の適用し忘れ」を誰も検知しない。
+`just backend-drift-check` は prod へ書き込まずに次を照合し、乖離があれば非 0 で終了する。
+
+- prod Worker の `DEPLOYED_SHA`（deploy 時に `backend-deploy-prod` が打つ）と `origin/develop`
+- prod `DB` / prod `TELEMETRY_DB` の未適用 migration
+
+定期実行して能動的に通知する導線は、**#291 のリリース回帰検知 Cron に相乗りさせる**方針とする。
+単独の Cron を先に建てると `scheduled` handler の `controller.cron` dispatch 設計を #291 側で
+やり直すことになるため、それまでは prod deploy 手順と手動実行で担保する。
 
 ### 使用量監視と通知
 
