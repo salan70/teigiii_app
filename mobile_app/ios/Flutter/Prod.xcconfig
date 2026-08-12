@@ -4,6 +4,10 @@ appName=Teigiii
 appIdSuffix=
 apiBaseUrl=https:/$()/teigiii-api-prod.tetsuo21ad.workers.dev
 
+// Firebase Console で発行した prod 用 iOS OAuth クライアント情報へ置き換える。
+GOOGLE_IOS_CLIENT_ID=REPLACE_WITH_PROD_IOS_CLIENT_ID
+GOOGLE_IOS_REVERSED_CLIENT_ID=REPLACE_WITH_PROD_REVERSED_CLIENT_ID
+CODE_SIGN_ENTITLEMENTS=Runner/Runner.entitlements
 CODE_SIGN_IDENTITY=Apple Development
 CODE_SIGN_IDENTITY[sdk=iphoneos*]=iPhone Distribution
 CODE_SIGN_STYLE=Manual

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -140,9 +141,45 @@ class AuthService {
         ' error:$e, stackTrace:$s',
       );
     }
-    await ref.read(authRepositoryProvider).deleteUser();
+    final authRepository = ref.read(authRepositoryProvider);
+    try {
+      await authRepository.deleteUser();
+    } on FirebaseAuthException catch (e) {
+      if (e.code != 'requires-recent-login') {
+        rethrow;
+      }
+      await authRepository.reauthenticateWithLinkedProvider();
+      await authRepository.deleteUser();
+    }
     final analytics = ref.read(analyticsServiceProvider);
     await analytics.logEvent(AnalyticsEvent.accountDeleted);
     await analytics.setUserId(null);
+  }
+
+  /// 別の既存アカウントへ切り替えるため、現在のアカウントを破棄する。
+  ///
+  /// サーバーユーザーを先に削除し、Firebase Auth の匿名ユーザー削除に失敗しても
+  /// credential による切り替えを続行できるようにする。
+  Future<void> deleteUserForAccountSwitch() async {
+    try {
+      await ref.read(registerUserRepositoryProvider).deleteUser();
+    } on ApiException catch (e, s) {
+      if (e.statusCode != 404 && e.statusCode != 401) {
+        rethrow;
+      }
+      logger.w(
+        'サーバーユーザーは既に削除済みとみなしてアカウント切り替えを続行します。'
+        ' error:$e, stackTrace:$s',
+      );
+    }
+
+    try {
+      await ref.read(authRepositoryProvider).deleteUser();
+    } on Exception catch (e, s) {
+      logger.w(
+        'Firebase Auth の旧ユーザー削除に失敗しましたが、アカウント切り替えを続行します。'
+        ' error:$e, stackTrace:$s',
+      );
+    }
   }
 }

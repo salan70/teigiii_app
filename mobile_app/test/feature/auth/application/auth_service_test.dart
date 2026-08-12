@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -380,6 +381,49 @@ void main() {
       // * Act & Assert
       await expectLater(authService.deleteUser(), throwsA(isA<ApiException>()));
       verifyNever(mockAuthRepository.deleteUser());
+    });
+
+    test('Firebase Auth 削除が requires-recent-login の場合は再認証して再試行する', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      updateContainersOverride(isSignedIn: true);
+      var deleteAttempt = 0;
+      when(mockAuthRepository.deleteUser()).thenAnswer((_) async {
+        deleteAttempt++;
+        if (deleteAttempt == 1) {
+          throw FirebaseAuthException(code: 'requires-recent-login');
+        }
+      });
+      when(
+        mockAuthRepository.reauthenticateWithLinkedProvider(),
+      ).thenAnswer((_) async {});
+
+      // * Act
+      await authService.deleteUser();
+
+      // * Assert
+      verifyInOrder([
+        mockRegisterUserRepository.deleteUser(),
+        mockAuthRepository.deleteUser(),
+        mockAuthRepository.reauthenticateWithLinkedProvider(),
+        mockAuthRepository.deleteUser(),
+      ]);
+    });
+
+    test('アカウント切り替え時は Firebase Auth 削除に失敗しても処理を継続する', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      updateContainersOverride(isSignedIn: true);
+      when(
+        mockAuthRepository.deleteUser(),
+      ).thenThrow(FirebaseAuthException(code: 'requires-recent-login'));
+
+      // * Act
+      await authService.deleteUserForAccountSwitch();
+
+      // * Assert
+      verify(mockRegisterUserRepository.deleteUser()).called(1);
+      verify(mockAuthRepository.deleteUser()).called(1);
     });
   });
 }
