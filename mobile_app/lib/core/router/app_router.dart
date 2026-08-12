@@ -7,6 +7,7 @@ import '../../feature/definition/domain/definition.dart';
 import '../../feature/definition/domain/definition_for_write.dart';
 import '../../feature/definition/presentation/write_definition_base_page.dart';
 import '../../feature/definition/util/after_post_navigation_type.dart';
+import '../page/account_link_page.dart';
 import '../page/base_page.dart';
 import '../page/definition_detail_page.dart';
 import '../page/definition_edit_page.dart';
@@ -162,6 +163,10 @@ class AppRouter extends RootStackRouter {
         AdaptiveRoute<dynamic>(
           path: 'user_list_muted',
           page: UserListMutedRoute.page,
+        ),
+        AdaptiveRoute<dynamic>(
+          path: 'account_link',
+          page: AccountLinkRoute.page,
         ),
       ],
     ),

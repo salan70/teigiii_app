@@ -48,11 +48,12 @@ class DsListTile extends StatelessWidget {
               const Gap(DsSpacing.inline),
             ],
             Expanded(child: Text(label, style: context.dsTypography.heading)),
-            Icon(
-              CupertinoIcons.chevron_forward,
-              size: DsSize.iconMedium,
-              color: colorScheme.onSurfaceVariant,
-            ),
+            if (onTap != null)
+              Icon(
+                CupertinoIcons.chevron_forward,
+                size: DsSize.iconMedium,
+                color: colorScheme.onSurfaceVariant,
+              ),
           ],
         ),
       ),

@@ -14,6 +14,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'core/analytics/analytics_event.dart';
 import 'core/analytics/analytics_service.dart';
+import 'core/common_provider/app_scope_reset.dart';
 import 'core/common_provider/firebase_providers.dart';
 import 'core/common_provider/flavor_state.dart';
 import 'core/common_provider/is_loading_overlay_state.dart';
@@ -90,18 +91,68 @@ Future<void> main() async {
   );
 
   runApp(
-    ProviderScope(
-      overrides: [flavorProvider.overrideWithValue(flavor)],
-      child: DevicePreview(
-        // PC の Web QA のみ iPhone 枠。実機ブラウザでは枠なし。
-        enabled: enableDevicePreview,
-        defaultDevice: Devices.ios.iPhone16,
-        builder: (context) {
-          return const MyApp();
-        },
-      ),
+    AppRoot(
+      flavor: flavor,
+      enableDevicePreview: enableDevicePreview,
+      scopeResetController: AppScopeResetController(),
     ),
   );
+}
+
+class AppRoot extends StatefulWidget {
+  const AppRoot({
+    super.key,
+    required this.flavor,
+    required this.enableDevicePreview,
+    required this.scopeResetController,
+  });
+
+  final Flavor flavor;
+  final bool enableDevicePreview;
+  final AppScopeResetController scopeResetController;
+
+  @override
+  State<AppRoot> createState() => _AppRootState();
+}
+
+class _AppRootState extends State<AppRoot> {
+  var _scopeVersion = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.scopeResetController.onReset = _resetProviderScope;
+  }
+
+  void _resetProviderScope() {
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _scopeVersion++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DevicePreview(
+      // PC の Web QA のみ iPhone 枠。実機ブラウザでは枠なし。
+      enabled: widget.enableDevicePreview,
+      defaultDevice: Devices.ios.iPhone16,
+      builder: (context) {
+        return ProviderScope(
+          key: ValueKey(_scopeVersion),
+          overrides: [
+            flavorProvider.overrideWithValue(widget.flavor),
+            appScopeResetControllerProvider.overrideWithValue(
+              widget.scopeResetController,
+            ),
+          ],
+          child: const MyApp(),
+        );
+      },
+    );
+  }
 }
 
 class MyApp extends ConsumerStatefulWidget {
