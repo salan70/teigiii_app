@@ -1,12 +1,14 @@
 # Codex 向け AI asset 移植
 
-スキル: porting-ai-assets-to-codex（Claude 側にのみ存在する。移植を実行するのは Claude 側のため）
+スキル: なし（`porting-ai-assets-to-codex` は #332 で廃止した。正本から当該スキルが削除されたため）
 
-初版: 2026-07-11 / 最終更新: 2026-07-27（#290）
+本ドキュメントは Codex 用アセットの台帳として維持する。移植の判断と実行は本ドキュメントを手順書として人手で行う。
+
+初版: 2026-07-11 / 最終更新: 2026-09-15（#332）
 
 ## 位置づけ
 
-`.claude/skills/` と `CLAUDE.md` を正本とし、Codex 用アセット `.agents/skills/` と `AGENTS.md` を実体ファイルとして管理する台帳。symlink は不使用。drift 防止は `porting-ai-assets-to-codex` を使う人手運用とする。
+`.claude/skills/` と `CLAUDE.md` を正本とし、Codex 用アセット `.agents/skills/` と `AGENTS.md` を実体ファイルとして管理する台帳。symlink は不使用。drift 防止は本ドキュメントに従う人手運用とする。
 
 ## Codex 側に置くスキル（9）
 

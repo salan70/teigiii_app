@@ -78,7 +78,8 @@ just mobile-run-dev-profile-on <device-id>
 
 - Claude 用 assets: `.claude/` と `CLAUDE.md` / Codex 用 assets: `.agents/` と `AGENTS.md`
 - `.agents` は `.claude` への symlink ではなく、独立した実体として管理する
-- Claude 側の skill を追加・更新したら `porting-ai-assets-to-codex` で Codex 側への反映要否を判断する。移植の管理台帳は `doc/porting-ai-assets-to-codex.md`
+- Claude 側の skill を追加・更新したら、Codex 側への反映要否を判断する。移植の管理台帳は `doc/porting-ai-assets-to-codex.md`
+- Claude 用 skill の正本は `~/Projects/tool/dotfiles/ai-assets/` にあり、同期は `syncing-ai-assets` で行う
 
 ## plan ワークフロー
 
@@ -99,25 +100,22 @@ just mobile-run-dev-profile-on <device-id>
 - 依頼スコープ外の「ついでに改善」を禁止する。
 - 将来の仮想要件に備えたコードを禁止する。
 
-## 完了報告フォーマット（必須）
+## Git 運用
 
-**すべての作業完了時**、以下のフォーマットで報告すること:
+- **1 Issue = 1 ブランチ = 1 PR** の原則を守る
+- すべての作業は Issue を起点として開始する。Issue なしでの直接コミットは原則禁止
+- PR 本文に `closes #<issue-number>` を含めて Issue を自動クローズする
+- ベースブランチは `develop`。保護ブランチは `main` / `develop`
 
-```markdown
-## 作業完了報告
+## 完了条件
 
-### 実施内容
-- {作業内容を箇条書き}
+実装依頼では、依頼範囲の変更と関連検証まで続けます。
+将来の変更で参照する設計判断は、必要に応じて `doc/` の設計文書または plan へ残します。
+適用、merge、未依頼の外部操作は自動実行しません。
 
-### 変更ファイル
-- {主要な変更ファイル}
+## 文章規範
 
-### 使用したツール
-**Skills**: {使用したスキル名。なければ「なし」}
-**MCP**: {使用した MCP サーバー名。なければ「なし」}
-
-### 次のアクション
-- {コミット要否、確認依頼など}
-```
-
-**MCP サーバー例**: github, mobile-mcp, pencil
+- 結論と必要な行動を先に書き、前置き、賛辞、定型の報告枠を使わない。
+- 承認依頼、失敗、未完了、破壊的操作の予告は必ず明示する。
+- 静的な Markdown は 1 文 1 行で書く。Issue、PR、コメント、回答は段落内で改行しない。
+- 文章の基準と推敲手順は `concise-writing` に従う。
