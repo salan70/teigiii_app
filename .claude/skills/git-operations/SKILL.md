@@ -1,47 +1,28 @@
 ---
 name: git-operations
-description: ローカル Git の stage、commit、branch、履歴統合など、リポジトリを変更するときに使う。
+description: ローカル Git の stage、commit、ブランチ変更、履歴統合に使う。
 ---
 
-# Git操作
+# Git 操作
 
-プロジェクト固有ルールを先に確認し、無関係なdirty workを保持する。
+プロジェクト固有ルールを優先し、無関係な dirty work を保持する。
 
-<!-- BRANCH_STRATEGY_START -->
-## 作業の開始
+## ブランチ戦略
 
-実装や修正を始める前に:
+プロジェクトの `AGENTS.md` や Git 運用文書に従う。
+規約がなければ main への直接コミットを許可し、feature branch は任意とする。
+保護ブランチが規約にあれば、commit 前に作業ブランチを作って変更を引き継ぐ。
 
-1. ベースブランチ（`main`、`develop` など）をプロジェクトルール、PR 情報、またはユーザー確認から特定する — 推測しない。
-2. ベースブランチを同期する（**必須**）:
-   ```bash
-   git switch <base-branch>
-   git pull --ff-only origin <base-branch>
-   ```
-3. 作業ブランチを作成する（**必須**）。ブランチ名は下記「ブランチ」セクションの命名規則に従う。
+## Stage・commit
 
-## 保護ブランチガード
+- `git status --short` と差分で対象を確認し、`git add <明示パス>` で stage する。
+  `git add .` はユーザーが明示した場合だけ使う。
+- commit 前に `git diff --cached --check` と `--name-only` で、秘密情報やローカル生成物の混入を確認する。
+  `.env*`、`*.pem`、`*.key`、`id_rsa*`、`*credentials*`、`service-account*.json` などは名前だけで断定せず、実データなら unstage して報告する。
+- 関連検証が未実施なら実行する。
+  同じ変更に対して成功済みなら、再実行は追加の変更や懸念がある場合に限る。
+- commit やブランチ命名時は [コミットとブランチのルール](references/commit-and-branch-rules.md) を参照する。
+- pre-commit 失敗時は原因を修正して再 stage する。
+  `--no-verify` は明示承認がある場合だけ使う。
 
-コミット時に現在のブランチが保護ブランチ（main, master, develop）の場合:
-
-1. ユーザーに確認せず、自動で作業ブランチを作成する
-2. ブランチ名はコミット内容から自動生成する（命名規則に従う）
-3. 作成したブランチに切り替えてからコミットする
-4. 「保護ブランチ `<branch>` のため、`<new-branch>` を作成しました」と報告する
-
-保護ブランチのデフォルトリストは `main, master, develop`。プロジェクトの CLAUDE.md で上書き可能。
-<!-- BRANCH_STRATEGY_END -->
-
-## ステージングと検証
-
-1. `git status --short`と`git diff`で対象を確定する。
-2. `git add <明示パス>`で関連ファイルだけをstageする。`git add .`はユーザーが明示した場合だけ使う。
-3. commit 前は[安全チェックリスト](references/safety-checklist.md)を実行する。
-4. 変更範囲に対応するプロジェクト指定の検証を実行する。
-5. `git diff --cached --check`を実行する。
-
-## コミット
-
-- 規約: [コミットとブランチのルール](references/commit-and-branch-rules.md)
-- pre-commit失敗時は原因を修正して再stageする。`--no-verify`は明示承認がある場合だけ使う。
-- 完了時にcommit hash、変更ファイル、検証結果、push有無を報告する。
+commit した場合は hash と push の有無を伝える。

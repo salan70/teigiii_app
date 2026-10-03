@@ -1,32 +1,32 @@
 ---
 name: collaborating-on-github
-description: gh CLIでIssue、PR、レビューコメント、review thread、CIを操作するときに使う。
+description: gh CLI で Issue・PR・レビュー・CI を確認、更新するときに使う。
 ---
 
-# GitHubでの協業
+# GitHub での協業
 
-GitHub操作は`gh`、ローカル操作は`git`を使う。文面はプロジェクト慣例がなければ日本語にする。
+GitHub 操作は `gh`、ローカル操作は `git` を使う。
+文面はプロジェクト慣例がなければ日本語にする。
+投稿、状態変更、push、Resolve、merge は依頼範囲に含まれる場合だけ行う。
+merge にはユーザーの明示承認が必要。
 
-## 対象の確定
+## 対象とレビュー
 
-- bare numberはremoteのIssueとPRを照合して種別を確定する。
-- PR作業では`gh pr view <number> --json baseRefName,headRefName,headRefOid,state,isDraft`で現在のheadを確認する。
-- 読み取り、修正、返信、Resolveは同じheadを対象にする。headが変わった場合は再取得する。
+- 番号だけが指定された場合は、remote の Issue と PR を照合して種別を確定する。
+- PR 作業では `gh pr view <number> --json baseRefName,headRefName,headRefOid,state,isDraft` で対象を確認する。
+- レビュー対応では REST comments と GraphQL `reviewThreads` の両方を取得する。
+- 読み取り、修正、返信、Resolve の対象 head を揃える。
+  head が変わったら差分とレビューを再確認する。
+- 修正が必要な thread は、検証した変更を commit・push してから返信・Resolve する。
+  完了判断には最新の未解決 thread、CI、review decision、merge state、PR body を使う。
 
-## PR
+## PR・Issue の更新
 
-- 新規 PR は作業と検証が未完なら Draft とする。
-- 完了していればプロジェクト慣例に従う。
-- review対応ではREST commentsとGraphQL `reviewThreads`の両方を取得する。
-- 修正が必要なら、検証、commit、pushの後に返信・Resolveする。
-- 完了前に未解決thread、CI、review decision、merge state、PR bodyを再取得する。
-- mergeはユーザーの明示承認がある場合だけ行う。
+- 新規 PR は作業と検証が未完なら Draft とし、完了済みならプロジェクト慣例に従う。
+- 進捗共有を依頼された場合は、状態変更、blocker、仕様変更、レビュー完了を簡潔に記録する。
+  短い内部作業の逐次コメントは投稿しない。
+- 本文は先頭段落に結論を書き、テンプレートの見出しは変えない。
+  レビューへの返信は対応内容と未対応の理由だけを書く。
+- sub-issue や review thread の操作時は [非自明な gh コマンド](references/gh-commands.md) を参照する。
 
-## Issueと進捗共有
-
-- Issueの状態変更、blocker、仕様変更、レビュー完了はGitHubへ簡潔に記録する。
-- Issue、PR 本文、コメントの文面は `concise-writing` の基準に従う。段落内で改行せず、段落単位で書く。
-- 短い内部作業の逐次コメントは投稿しない。
-- sub-issueやreview threadのGraphQL操作は[非自明なghコマンド](references/gh-commands.md)を使う。
-
-外部操作が失敗した場合は、失敗内容、未完了の操作、再開条件をユーザーへ報告する。
+外部操作が失敗した場合は、未完了の操作と再開条件を伝える。
