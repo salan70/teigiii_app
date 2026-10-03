@@ -80,6 +80,8 @@ just mobile-run-dev-profile-on <device-id>
 - 指示の正本はこのファイル。Skill は `.claude/skills/` に置き、Codex と Cursor は `.agents/skills -> ../.claude/skills` で同じものを読む
 - 共通 Skill（`git-operations`、`collaborating-on-github`、`verifying-environment`）の正本は dotfiles の `ai-assets/skills/` で、dotfiles の `infra/ai/sync-ai-assets.sh` で上書き配備する。直接編集しない
 - 共通の指示に Claude 専用のツール名を書かない
+- エージェント向けの hook は置かない。共通の検査は `.githooks/pre-commit`（DocBridge のリンク検査、対応先とデバッグコードの報告）と CI が担う。clone 後に `just install-git-hooks` を 1 回実行する
+- `docbridge` Skill は DocBridge が管理する。版を上げたら `bunx docbridge@<版> upgrade --force` で入れ替える
 
 ## plan ワークフロー
 

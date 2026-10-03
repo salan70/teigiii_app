@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Claude Code と Codex の hook を廃止し、全員と全ツールに効く Git の pre-commit に寄せた。
+# 整形と analyze は `just format` と CI が担い、ここでは速い検査だけを行う。
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel)"
+
+run_just() {
+  if [[ -n "${IN_NIX_SHELL:-}" ]]; then
+    just "$@"
+  else
+    nix develop -c just "$@"
+  fi
+}
+
+# リンクの妥当性は commit を止める。
+run_just docbridge-check
+
+# 対応先の更新漏れは報告だけ。判断は PR で行う。
+run_just docbridge-related-staged
+
+# ステージした追加行に残るデバッグコードを報告する（commit は止めない）。
+found=$(git diff --cached -U0 --diff-filter=AM -- '*.dart' '*.ts' '*.tsx' '*.js' |
+  grep -nE '^\+.*(debugPrint\(|console\.(log|debug)|debugger|TODO: remove|FIXME: debug)' || true)
+if [[ -n "$found" ]]; then
+  printf '[デバッグコード検出] ステージした変更にデバッグコードが残っています:\n%s\n' "$found" >&2
+fi

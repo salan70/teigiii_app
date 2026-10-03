@@ -4,55 +4,5 @@
       "mcp__pencil"
     ]
   },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/post-tool-use-auto-format.sh",
-            "timeout": 60
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|MultiEdit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/post-tool-use-docbridge-context.sh",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/pre-tool-use-push-reminder.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/stop-debug-code-detect.sh",
-            "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/stop-docbridge-related-gate.sh",
-            "timeout": 60
-          }
-        ]
-      }
-    ]
-  },
   "theme": "dark-ansi"
 }
