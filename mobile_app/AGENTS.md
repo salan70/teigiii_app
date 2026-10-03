@@ -21,4 +21,5 @@ Flutter アプリ（teigi_app）の作業ガイド。ルートの `AGENTS.md` �
 | 見た目が変わる変更 | `just mobile-test-golden` |
 | 仕様（`doc/specs/`）と紐づくコードの変更 | `just docbridge-check` |
 
+実機での確認手順は `doc/ios-physical-device-debug.md` を参照する。
 Cloud VM では Widgetbook の目視確認と golden の生成を実行できない。実行できない場合は未実施であることと、ローカルで必要な確認内容を報告する。

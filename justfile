@@ -23,8 +23,19 @@ generate-api:
       --additional-properties=pubName=teigiii_api,serializationLibrary=json_serializable
     cd mobile_app/packages/teigiii_api && dart pub get && dart run build_runner build --delete-conflicting-outputs && dart format .
 
+# DocBridge の版は .github/workflows/docbridge.yml の DOCBRIDGE_VERSION と揃える。
+docbridge := "bunx docbridge@0.13.0"
+
 docbridge-check:
-    bunx docbridge@0.5.2 check
+    {{docbridge}} check
+
+# ステージした変更の未ステージの対応先を報告する。報告だけで、commit は止めない。
+docbridge-related-staged:
+    git diff --cached --name-only | {{docbridge}} related --stdin --gate || true
+
+# .githooks/pre-commit を有効にする。clone 後に 1 回実行する。
+install-git-hooks:
+    git config core.hooksPath .githooks
 
 # --- mobile（Flutter アプリ）---
 

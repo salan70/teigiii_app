@@ -1,6 +1,7 @@
 # AGENTS.md
 
-このファイルは Codex がこのリポジトリで作業する際のガイダンスを提供します。
+このファイルは Claude Code / Codex / Cursor がこのリポジトリで作業する際のガイダンスを提供します。
+`CLAUDE.md` は置きません。
 
 ## プロジェクト概要
 
@@ -62,24 +63,25 @@ just mobile-run-dev-profile-on <device-id>
 - 実機 debug には `flutter config --enable-lldb-debugging` が必須
 - 使い分け: シミュレータ debug / 実機 `--profile` / 実機 debug は USB。手順は `doc/ios-physical-device-debug.md`
 
-## AI asset 運用
-
-- Claude 用 assets: `.claude/` と `CLAUDE.md`
-- Codex 用 assets: `.agents/` と `AGENTS.md`
-- `.agents` は `.claude` への symlink ではなく、独立した実体として管理する
-- `.agents/skills/` は Codex で実際に使う 9 スキルのサブセットであり、Claude 側（`.claude/skills/`）と一致しない。移植の管理台帳は `doc/porting-ai-assets-to-codex.md`
-
 ## 指示の優先順位
 
 1. **ユーザーの指示**（最優先） — 会話内での直接的な指示
-2. **Skills** — `.agents/skills/` のスキルを適用する場合
+2. **Skills** — `.claude/skills/` のスキルを適用する場合
 3. **AGENTS.md のデフォルト**（最低） — このファイルに記載されたルール
 
 ## ワークフロー
 
-すべての依頼に対し、`.agents/skills/` に該当する skill があれば使用する。
+すべての依頼に対し、該当する skill があれば使用する。
 例外はユーザーが明示的にスキル不要と指示した場合のみ。
 `mobile_app/` の UI 実装・変更は `implementing-ui-with-design-system` を必ず使用する。
+
+## AI asset 運用
+
+- 指示の正本はこのファイル。Skill は `.claude/skills/` に置き、Codex と Cursor は `.agents/skills -> ../.claude/skills` で同じものを読む
+- 共通 Skill（`git-operations`、`collaborating-on-github`、`verifying-environment`）の正本は dotfiles の `ai-assets/skills/` で、dotfiles の `infra/ai/sync-ai-assets.sh` で上書き配備する。直接編集しない
+- 共通の指示に Claude 専用のツール名を書かない
+- エージェント向けの hook は置かない。共通の検査は `.githooks/pre-commit`（DocBridge のリンク検査、対応先とデバッグコードの報告）と CI が担う。clone 後に `just install-git-hooks` を 1 回実行する
+- `docbridge` Skill は DocBridge が管理する。版を上げたら `bunx docbridge@<版> upgrade --force` で入れ替える
 
 ## plan ワークフロー
 
@@ -99,30 +101,26 @@ just mobile-run-dev-profile-on <device-id>
 - プロジェクトの AGENTS.md や Skills で定義済みの手順をここに複製することを禁止する。スキルの内容を AGENTS.md に転記せず、スキル名で参照すること。
 - 依頼スコープ外の「ついでに改善」を禁止する。
 - 将来の仮想要件に備えたコードを禁止する。
-- Claude 専用の手順を Codex 用 asset にそのまま転記することを禁止する。
 
-## 完了報告フォーマット（必須）
+## Git 運用
 
-**すべての作業完了時**、以下のフォーマットで報告すること:
+- **1 Issue = 1 ブランチ = 1 PR** の原則を守る
+- すべての作業は Issue を起点として開始する。Issue なしでの直接コミットは原則禁止
+- PR 本文に `closes #<issue-number>` を含めて Issue を自動クローズする
+- ベースブランチは `develop`。保護ブランチは `main` / `develop`
 
-```markdown
-## 作業完了報告
+## 完了条件
 
-### 実施内容
-- {作業内容を箇条書き}
+実装依頼では、依頼範囲の変更と関連検証まで続けます。
+将来の変更で参照する設計判断は、必要に応じて `doc/` の設計文書または plan へ残します。
+適用、merge、未依頼の外部操作は自動実行しません。
 
-### 変更ファイル
-- {主要な変更ファイル}
+## 文章規範
 
-### 使用したツール
-**Skills**: {使用したスキル名。なければ「なし」}
-**MCP**: {使用した MCP サーバー名。なければ「なし」}
-
-### 次のアクション
-- {コミット要否、確認依頼など}
-```
-
-**MCP サーバー例**: github, mobile-mcp
+- 結論と必要な行動を先に書き、前置き、賛辞、定型の報告枠を使わない。
+- 承認依頼、失敗、未完了、破壊的操作の予告は必ず明示する。
+- 静的な Markdown は 1 文 1 行で書く。Issue、PR、コメント、回答は段落内で改行しない。
+- 日本語と英数字やインラインコードの間には半角スペースを入れる。全角括弧の内外には入れない。
 
 ## Cursor Cloud specific instructions
 

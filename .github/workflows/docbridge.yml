@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 env:
-  DOCBRIDGE_VERSION: '0.5.2'
+  DOCBRIDGE_VERSION: '0.13.0'
 
 jobs:
   # check（リンク切れ検証）は fail させる。
