@@ -1,26 +1,21 @@
 ---
 name: verifying-environment
-description: PATH、バージョン、キャッシュ、ピン留め環境の差によって検証が再現しないときに使う。
+description: 検証失敗に PATH・バージョン・キャッシュ・ピン留め環境の差が疑われるときに使う。
 ---
 
 # 環境検証
 
-環境差が疑われる証拠を集め、コードの失敗と区別する。
+失敗したコマンドと実行場所を起点に、環境差とコードの失敗を切り分ける。
+検証が成功している作業では追加の環境調査をしない。
 
-## 診断
+## 確認する証拠
 
-1. 失敗したコマンド、エラー、実行場所を記録する。
-2. `flake.nix`、mise、devbox、package manager の marker を確認する。
-3. 関連ツールの path と version を host とピン留め環境で比較する。
-4. 固有 cache、重複 process、worktree で欠落した設定を確認する。
-5. ピン留め環境で同じコマンドを再実行する。
+- `flake.nix`、mise、devbox、package manager などが定義する検証環境。
+- 関連ツールの path と version の host・ピン留め環境での差。
+- エラーに関係する cache、重複 process、worktree で欠落した設定。
 
-`flake.nix`があるのにツールが global PATH へ解決される場合は環境差を疑う。
-`nix develop -c <command>`の結果と比較する。
+`flake.nix` がある場合は `nix develop -c <command>` の結果と比較する。
+ピン留め環境でも再現することを、既存の失敗と判断する前提にする。
+cache は再生成可能と確認できる場合だけ削除する。
 
-## 境界
-
-- cache は再生成可能と確認できる場合だけ消す。
-- ピン留め環境でも再現した場合だけ pre-existing 候補とする。
-- path、version、コマンド、エラーを報告する。
-- 検証が成功している作業では追加の環境調査をしない。
+原因を裏付ける path、version、コマンド、エラーを報告する。
