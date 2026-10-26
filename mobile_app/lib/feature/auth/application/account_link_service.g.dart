@@ -7,7 +7,7 @@ part of 'account_link_service.dart';
 // **************************************************************************
 
 String _$accountLinkServiceHash() =>
-    r'37823e5f2b41168dcffd6275a113fb2a05cfce97';
+    r'3fcdadcac91a63a541292e93c9f9a120c2892326';
 
 /// See also [accountLinkService].
 @ProviderFor(accountLinkService)

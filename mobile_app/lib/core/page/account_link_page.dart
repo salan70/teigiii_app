@@ -7,7 +7,7 @@ import 'package:gap/gap.dart';
 import '../../feature/auth/application/account_link_service.dart';
 import '../../feature/auth/application/auth_state.dart';
 import '../../feature/auth/domain/auth_provider_type.dart';
-import '../../feature/auth/repository/account_data_repository.dart';
+import '../../feature/auth/presentation/confirm_account_discard.dart';
 import '../../util/mixin/presentation_mixin.dart';
 import '../design_system/design_system.dart';
 
@@ -31,31 +31,14 @@ class _AccountLinkPageState extends ConsumerState<AccountLinkPage>
             .read(accountLinkServiceProvider)
             .link(
               provider,
-              confirmDiscard: _confirmDiscard,
+              confirmDiscard: (data) => confirmAccountDiscard(context, data),
               onCredentialFallback: _showCredentialFallback,
             );
       },
     );
-  }
-
-  Future<bool> _confirmDiscard(AccountDataSnapshot data) async {
-    final editedProfileMessage = data.hasEditedProfile
-        ? '\nプロフィール設定も削除されます。'
-        : '';
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => DsConfirmDialog(
-        message:
-            'この端末のデータが削除されます。\n'
-            '定義 ${data.definedWordCount} 件、保存した言葉 ${data.savedWordCount} 件、'
-            'フォロー ${data.followingCount} 件$editedProfileMessage\n'
-            '削除してアカウントを切り替えますか？',
-        confirmButtonText: '削除して切り替える',
-        onCancel: () => Navigator.of(dialogContext).pop(false),
-        onConfirm: () => Navigator.of(dialogContext).pop(true),
-      ),
-    );
-    return result ?? false;
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<AuthProviderType?> _showCredentialFallback() async {
@@ -72,6 +55,10 @@ class _AccountLinkPageState extends ConsumerState<AccountLinkPage>
           ),
         ),
         actions: [
+          DsOutlinedButton.tertiary(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            text: 'キャンセル',
+          ),
           DsOutlinedButton.tertiary(
             onPressed: () =>
                 Navigator.of(dialogContext).pop(AuthProviderType.apple),
@@ -102,6 +89,7 @@ class _AccountLinkPageState extends ConsumerState<AccountLinkPage>
   Widget build(BuildContext context) {
     final isAnonymous = ref.watch(isAnonymousProvider);
     final providers = ref.watch(linkedAuthProvidersProvider);
+    final service = ref.watch(accountLinkServiceProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -119,6 +107,27 @@ class _AccountLinkPageState extends ConsumerState<AccountLinkPage>
           horizontal: DsSpacing.screenContent,
         ),
         children: [
+          if (service.hasPendingCleanup) ...[
+            const Gap(DsSpacing.section),
+            Text(const AccountCleanupPendingException().toString()),
+            const Gap(DsSpacing.inline),
+            DsFilledButton.primary(
+              text: '元の匿名アカウントの削除を再試行',
+              onPressed: () async {
+                await executeWithOverlayLoading(
+                  ref,
+                  inBaseRouteBeforeAction: false,
+                  inBaseRouteAfterAction: false,
+                  errorToastMessage: const AccountCleanupPendingException()
+                      .toString(),
+                  action: service.retryPendingCleanup,
+                );
+                if (mounted) {
+                  setState(() {});
+                }
+              },
+            ),
+          ],
           const Gap(DsSpacing.section),
           Text(
             isAnonymous ? 'アカウントを保護する' : '連携済みのアカウント',

@@ -8,6 +8,8 @@ import 'dart:async' as _i4;
 import 'package:firebase_auth/firebase_auth.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:teigi_app/feature/auth/domain/account_cleanup_state.dart'
+    as _i8;
 import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i7;
 import 'package:teigi_app/feature/auth/repository/register_user_repository.dart'
     as _i3;
@@ -141,6 +143,68 @@ class MockAuthRepository extends _i1.Mock implements _i7.AuthRepository {
             returnValueForMissingStub: _i4.Stream<_i2.User?>.empty(),
           )
           as _i4.Stream<_i2.User?>);
+
+  @override
+  set serverDeletedUserId(String? value) => super.noSuchMethod(
+    Invocation.setter(#serverDeletedUserId, value),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  set pendingAnonymousCleanup(_i8.CapturedAnonymousAccount? value) =>
+      super.noSuchMethod(
+        Invocation.setter(#pendingAnonymousCleanup, value),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i4.Future<_i8.CapturedAnonymousAccount?> captureAnonymousAccount() =>
+      (super.noSuchMethod(
+            Invocation.method(#captureAnonymousAccount, []),
+            returnValue: _i4.Future<_i8.CapturedAnonymousAccount?>.value(),
+            returnValueForMissingStub:
+                _i4.Future<_i8.CapturedAnonymousAccount?>.value(),
+          )
+          as _i4.Future<_i8.CapturedAnonymousAccount?>);
+
+  @override
+  _i4.Future<void> deleteCapturedAnonymousAccount(
+    _i8.CapturedAnonymousAccount? account,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteCapturedAnonymousAccount, [account]),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
+
+  @override
+  _i4.Future<String> prepareAccountDeletion() =>
+      (super.noSuchMethod(
+            Invocation.method(#prepareAccountDeletion, []),
+            returnValue: _i4.Future<String>.value(
+              _i6.dummyValue<String>(
+                this,
+                Invocation.method(#prepareAccountDeletion, []),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<String>.value(
+              _i6.dummyValue<String>(
+                this,
+                Invocation.method(#prepareAccountDeletion, []),
+              ),
+            ),
+          )
+          as _i4.Future<String>);
+
+  @override
+  _i4.Future<void> deletePreparedUser(String? uid) =>
+      (super.noSuchMethod(
+            Invocation.method(#deletePreparedUser, [uid]),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
 
   @override
   _i4.Future<void> signInAnonymously() =>

@@ -8,6 +8,9 @@ import '../../../core/api/api_providers.dart';
 import '../../../core/common_provider/firebase_providers.dart';
 import '../../user_profile/domain/user_profile.dart';
 import '../../user_profile/repository/user_profile_repository.dart';
+import '../domain/account_data_snapshot.dart';
+
+export '../domain/account_data_snapshot.dart';
 
 part 'account_data_repository.g.dart';
 
@@ -62,24 +65,4 @@ class AccountDataRepository {
       throw ApiException.fromDioException(exception);
     }
   }
-}
-
-class AccountDataSnapshot {
-  const AccountDataSnapshot({
-    required this.definedWordCount,
-    required this.savedWordCount,
-    required this.followingCount,
-    required this.hasEditedProfile,
-  });
-
-  final int definedWordCount;
-  final int savedWordCount;
-  final int followingCount;
-  final bool hasEditedProfile;
-
-  bool get hasData =>
-      definedWordCount > 0 ||
-      savedWordCount > 0 ||
-      followingCount > 0 ||
-      hasEditedProfile;
 }

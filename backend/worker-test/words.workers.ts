@@ -14,7 +14,7 @@ function testApp(uid: string) {
   return createApp({
     logRequest: () => {},
     verifyAppCheck: async () => ({ appId: "test-app-id" }),
-    verifyFirebaseIdToken: async () => ({ uid }),
+    verifyFirebaseIdToken: async () => ({ uid, signInProvider: "anonymous" }),
   });
 }
 

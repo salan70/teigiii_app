@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 
 import '../../feature/auth/application/account_link_service.dart';
 import '../../feature/auth/domain/auth_provider_type.dart';
+import '../../feature/auth/presentation/confirm_account_discard.dart';
 import '../../feature/introduction/presentation/confirm_agreement_dialog.dart';
 import '../../util/constant/url.dart';
 import '../../util/mixin/presentation_mixin.dart';
@@ -23,7 +24,15 @@ class WelcomePage extends ConsumerWidget with PresentationMixin {
         ref,
         inBaseRouteBeforeAction: false,
         inBaseRouteAfterAction: false,
-        action: () => ref.read(accountLinkServiceProvider).signIn(provider),
+        errorToastMessage:
+            '復元を完了できませんでした。サインイン後に元の匿名アカウントの削除が'
+            '中断した場合は、アプリを閉じず「アカウント連携」画面で削除を再試行してください。',
+        action: () => ref
+            .read(accountLinkServiceProvider)
+            .signIn(
+              provider,
+              confirmDiscard: (data) => confirmAccountDiscard(context, data),
+            ),
       );
     }
 

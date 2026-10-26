@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -123,63 +122,18 @@ class AuthService {
   ///
   /// 関連データの削除はサーバー側（`DELETE /v1/users/me`）に集約されている。
   ///
-  /// サーバー削除が成功した後に Firebase Auth 削除が失敗すると、再試行時に
-  /// サーバー削除が「既に削除済み」で 404/401 を返し、Firebase Auth を削除
-  /// できないまま詰まる。そのため既に削除済みのレスポンスは成功とみなし、
-  /// Firebase Auth 削除まで確実に到達させる。
+  /// サーバー削除の成功を同じ UID に限って保持し、Firebase 削除を再試行する。
   Future<void> deleteUser() async {
-    try {
-      await ref.read(registerUserRepositoryProvider).deleteUser();
-    } on ApiException catch (e, s) {
-      // 論理削除済みユーザーの再削除は 404/401 になる。サーバー側の削除は
-      // 完了しているとみなし、残りの Firebase Auth 削除へ進む。
-      if (e.statusCode != 404 && e.statusCode != 401) {
-        rethrow;
-      }
-      logger.w(
-        'サーバーユーザーは既に削除済みとみなして続行します。'
-        ' error:$e, stackTrace:$s',
-      );
-    }
     final authRepository = ref.read(authRepositoryProvider);
-    try {
-      await authRepository.deleteUser();
-    } on FirebaseAuthException catch (e) {
-      if (e.code != 'requires-recent-login') {
-        rethrow;
-      }
-      await authRepository.reauthenticateWithLinkedProvider();
-      await authRepository.deleteUser();
+    final pendingUid = authRepository.serverDeletedUserId;
+    final uid = pendingUid ?? await authRepository.prepareAccountDeletion();
+    if (pendingUid == null) {
+      await ref.read(registerUserRepositoryProvider).deleteUser();
+      authRepository.serverDeletedUserId = uid;
     }
+    await authRepository.deletePreparedUser(uid);
     final analytics = ref.read(analyticsServiceProvider);
     await analytics.logEvent(AnalyticsEvent.accountDeleted);
     await analytics.setUserId(null);
-  }
-
-  /// 別の既存アカウントへ切り替えるため、現在のアカウントを破棄する。
-  ///
-  /// サーバーユーザーを先に削除し、Firebase Auth の匿名ユーザー削除に失敗しても
-  /// credential による切り替えを続行できるようにする。
-  Future<void> deleteUserForAccountSwitch() async {
-    try {
-      await ref.read(registerUserRepositoryProvider).deleteUser();
-    } on ApiException catch (e, s) {
-      if (e.statusCode != 404 && e.statusCode != 401) {
-        rethrow;
-      }
-      logger.w(
-        'サーバーユーザーは既に削除済みとみなしてアカウント切り替えを続行します。'
-        ' error:$e, stackTrace:$s',
-      );
-    }
-
-    try {
-      await ref.read(authRepositoryProvider).deleteUser();
-    } on Exception catch (e, s) {
-      logger.w(
-        'Firebase Auth の旧ユーザー削除に失敗しましたが、アカウント切り替えを続行します。'
-        ' error:$e, stackTrace:$s',
-      );
-    }
   }
 }

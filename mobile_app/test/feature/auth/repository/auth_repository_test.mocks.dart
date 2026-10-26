@@ -23,7 +23,6 @@ import 'package:teigi_app/feature/auth/repository/auth_repository.dart' as _i8;
 // ignore_for_file: implementation_imports
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 // ignore_for_file: must_be_immutable
-// ignore_for_file: duplicate_ignore
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
@@ -64,37 +63,29 @@ class _FakeGoogleSignInAccount_5 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeGoogleSignInAuthentication_6 extends _i1.SmartFake
-    implements _i5.GoogleSignInAuthentication {
-  _FakeGoogleSignInAuthentication_6(Object parent, Invocation parentInvocation)
+class _FakeUserMetadata_6 extends _i1.SmartFake implements _i3.UserMetadata {
+  _FakeUserMetadata_6(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeGoogleSignInAuthorizationClient_7 extends _i1.SmartFake
-    implements _i5.GoogleSignInAuthorizationClient {
-  _FakeGoogleSignInAuthorizationClient_7(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(parent, parentInvocation);
-}
-
-class _FakeUserMetadata_8 extends _i1.SmartFake implements _i3.UserMetadata {
-  _FakeUserMetadata_8(Object parent, Invocation parentInvocation)
+class _FakeMultiFactor_7 extends _i1.SmartFake implements _i4.MultiFactor {
+  _FakeMultiFactor_7(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeMultiFactor_9 extends _i1.SmartFake implements _i4.MultiFactor {
-  _FakeMultiFactor_9(Object parent, Invocation parentInvocation)
+class _FakeIdTokenResult_8 extends _i1.SmartFake implements _i3.IdTokenResult {
+  _FakeIdTokenResult_8(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeIdTokenResult_10 extends _i1.SmartFake implements _i3.IdTokenResult {
-  _FakeIdTokenResult_10(Object parent, Invocation parentInvocation)
+class _FakeUser_9 extends _i1.SmartFake implements _i4.User {
+  _FakeUser_9(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeUser_11 extends _i1.SmartFake implements _i4.User {
-  _FakeUser_11(Object parent, Invocation parentInvocation)
+class _FakeFirebaseOptions_10 extends _i1.SmartFake
+    implements _i2.FirebaseOptions {
+  _FakeFirebaseOptions_10(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -695,77 +686,6 @@ class MockGoogleSignInClient extends _i1.Mock
           as _i6.Future<_i5.GoogleSignInAccount>);
 }
 
-/// A class which mocks [GoogleSignInAccount].
-///
-/// See the documentation for Mockito's code generation for more information.
-// ignore: must_be_immutable
-class MockGoogleSignInAccount extends _i1.Mock
-    implements _i5.GoogleSignInAccount {
-  @override
-  String get email =>
-      (super.noSuchMethod(
-            Invocation.getter(#email),
-            returnValue: _i7.dummyValue<String>(
-              this,
-              Invocation.getter(#email),
-            ),
-            returnValueForMissingStub: _i7.dummyValue<String>(
-              this,
-              Invocation.getter(#email),
-            ),
-          )
-          as String);
-
-  @override
-  String get id =>
-      (super.noSuchMethod(
-            Invocation.getter(#id),
-            returnValue: _i7.dummyValue<String>(this, Invocation.getter(#id)),
-            returnValueForMissingStub: _i7.dummyValue<String>(
-              this,
-              Invocation.getter(#id),
-            ),
-          )
-          as String);
-
-  @override
-  _i5.GoogleSignInAuthentication get authentication =>
-      (super.noSuchMethod(
-            Invocation.getter(#authentication),
-            returnValue: _FakeGoogleSignInAuthentication_6(
-              this,
-              Invocation.getter(#authentication),
-            ),
-            returnValueForMissingStub: _FakeGoogleSignInAuthentication_6(
-              this,
-              Invocation.getter(#authentication),
-            ),
-          )
-          as _i5.GoogleSignInAuthentication);
-
-  @override
-  _i5.GoogleSignInAuthorizationClient get authorizationClient =>
-      (super.noSuchMethod(
-            Invocation.getter(#authorizationClient),
-            returnValue: _FakeGoogleSignInAuthorizationClient_7(
-              this,
-              Invocation.getter(#authorizationClient),
-            ),
-            returnValueForMissingStub: _FakeGoogleSignInAuthorizationClient_7(
-              this,
-              Invocation.getter(#authorizationClient),
-            ),
-          )
-          as _i5.GoogleSignInAuthorizationClient);
-}
-
-/// A class which mocks [GoogleSignInAuthentication].
-///
-/// See the documentation for Mockito's code generation for more information.
-// ignore: must_be_immutable
-class MockGoogleSignInAuthentication extends _i1.Mock
-    implements _i5.GoogleSignInAuthentication {}
-
 /// A class which mocks [User].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -792,11 +712,11 @@ class MockUser extends _i1.Mock implements _i4.User {
   _i3.UserMetadata get metadata =>
       (super.noSuchMethod(
             Invocation.getter(#metadata),
-            returnValue: _FakeUserMetadata_8(
+            returnValue: _FakeUserMetadata_6(
               this,
               Invocation.getter(#metadata),
             ),
-            returnValueForMissingStub: _FakeUserMetadata_8(
+            returnValueForMissingStub: _FakeUserMetadata_6(
               this,
               Invocation.getter(#metadata),
             ),
@@ -828,11 +748,11 @@ class MockUser extends _i1.Mock implements _i4.User {
   _i4.MultiFactor get multiFactor =>
       (super.noSuchMethod(
             Invocation.getter(#multiFactor),
-            returnValue: _FakeMultiFactor_9(
+            returnValue: _FakeMultiFactor_7(
               this,
               Invocation.getter(#multiFactor),
             ),
-            returnValueForMissingStub: _FakeMultiFactor_9(
+            returnValueForMissingStub: _FakeMultiFactor_7(
               this,
               Invocation.getter(#multiFactor),
             ),
@@ -864,13 +784,13 @@ class MockUser extends _i1.Mock implements _i4.User {
       (super.noSuchMethod(
             Invocation.method(#getIdTokenResult, [forceRefresh]),
             returnValue: _i6.Future<_i3.IdTokenResult>.value(
-              _FakeIdTokenResult_10(
+              _FakeIdTokenResult_8(
                 this,
                 Invocation.method(#getIdTokenResult, [forceRefresh]),
               ),
             ),
             returnValueForMissingStub: _i6.Future<_i3.IdTokenResult>.value(
-              _FakeIdTokenResult_10(
+              _FakeIdTokenResult_8(
                 this,
                 Invocation.method(#getIdTokenResult, [forceRefresh]),
               ),
@@ -1071,10 +991,10 @@ class MockUser extends _i1.Mock implements _i4.User {
       (super.noSuchMethod(
             Invocation.method(#unlink, [providerId]),
             returnValue: _i6.Future<_i4.User>.value(
-              _FakeUser_11(this, Invocation.method(#unlink, [providerId])),
+              _FakeUser_9(this, Invocation.method(#unlink, [providerId])),
             ),
             returnValueForMissingStub: _i6.Future<_i4.User>.value(
-              _FakeUser_11(this, Invocation.method(#unlink, [providerId])),
+              _FakeUser_9(this, Invocation.method(#unlink, [providerId])),
             ),
           )
           as _i6.Future<_i4.User>);
@@ -1168,4 +1088,98 @@ class MockUserInfo extends _i1.Mock implements _i3.UserInfo {
             ),
           )
           as String);
+}
+
+/// A class which mocks [AdditionalUserInfo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAdditionalUserInfo extends _i1.Mock
+    implements _i3.AdditionalUserInfo {
+  @override
+  bool get isNewUser =>
+      (super.noSuchMethod(
+            Invocation.getter(#isNewUser),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
+}
+
+/// A class which mocks [FirebaseApp].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFirebaseApp extends _i1.Mock implements _i2.FirebaseApp {
+  @override
+  String get name =>
+      (super.noSuchMethod(
+            Invocation.getter(#name),
+            returnValue: _i7.dummyValue<String>(this, Invocation.getter(#name)),
+            returnValueForMissingStub: _i7.dummyValue<String>(
+              this,
+              Invocation.getter(#name),
+            ),
+          )
+          as String);
+
+  @override
+  _i2.FirebaseOptions get options =>
+      (super.noSuchMethod(
+            Invocation.getter(#options),
+            returnValue: _FakeFirebaseOptions_10(
+              this,
+              Invocation.getter(#options),
+            ),
+            returnValueForMissingStub: _FakeFirebaseOptions_10(
+              this,
+              Invocation.getter(#options),
+            ),
+          )
+          as _i2.FirebaseOptions);
+
+  @override
+  bool get isAutomaticDataCollectionEnabled =>
+      (super.noSuchMethod(
+            Invocation.getter(#isAutomaticDataCollectionEnabled),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
+
+  @override
+  _i6.Future<void> delete() =>
+      (super.noSuchMethod(
+            Invocation.method(#delete, []),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> setAutomaticDataCollectionEnabled(bool? enabled) =>
+      (super.noSuchMethod(
+            Invocation.method(#setAutomaticDataCollectionEnabled, [enabled]),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> setAutomaticResourceManagementEnabled(bool? enabled) =>
+      (super.noSuchMethod(
+            Invocation.method(#setAutomaticResourceManagementEnabled, [
+              enabled,
+            ]),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
+
+  @override
+  void registerService<T extends _i2.FirebaseService>(
+    T? service, {
+    _i6.Future<void> Function(T)? dispose,
+  }) => super.noSuchMethod(
+    Invocation.method(#registerService, [service], {#dispose: dispose}),
+    returnValueForMissingStub: null,
+  );
 }

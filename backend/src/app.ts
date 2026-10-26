@@ -45,6 +45,7 @@ type ServerEnvironment = {
 };
 
 type CreateAppOptions = {
+  now?: () => number;
   generatePublicId?: () => string;
   generateRequestId?: () => string;
   logRequest?: (entry: RequestLogEntry) => void;
@@ -56,6 +57,7 @@ type CreateAppOptions = {
  * @doc doc/specs/workers-api-server.md#リクエスト処理順序
  */
 export function createApp({
+  now,
   generatePublicId,
   generateRequestId,
   logRequest,
@@ -65,7 +67,13 @@ export function createApp({
 }: CreateAppOptions = {}) {
   const v1 = new OpenAPIHono<ServerEnvironment>()
     .route("/", appConfigRoutes)
-    .route("/", createUserRoutes(generatePublicId ? { generatePublicId } : {}))
+    .route(
+      "/",
+      createUserRoutes({
+        ...(generatePublicId ? { generatePublicId } : {}),
+        ...(now ? { now } : {}),
+      }),
+    )
     .route("/", meRoutes)
     .route("/", wordRoutes)
     .route("/", definitionRoutes)

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -14,6 +15,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'core/analytics/analytics_event.dart';
 import 'core/analytics/analytics_service.dart';
+import 'core/common_provider/account_cleanup_state_provider.dart';
 import 'core/common_provider/app_scope_reset.dart';
 import 'core/common_provider/firebase_providers.dart';
 import 'core/common_provider/flavor_state.dart';
@@ -25,6 +27,7 @@ import 'core/design_system/design_system.dart';
 import 'core/router/app_router.dart';
 import 'core/telemetry/perf_screen_observer.dart';
 import 'core/telemetry/perf_telemetry_service.dart';
+import 'feature/auth/domain/account_cleanup_state.dart';
 import 'feature/force_event/application/app_config_state.dart';
 import 'feature/force_event/presentation/app_config_gate.dart';
 import 'feature/force_event/presentation/overlay_force_update_dialog.dart';
@@ -117,6 +120,7 @@ class AppRoot extends StatefulWidget {
 
 class _AppRootState extends State<AppRoot> {
   var _scopeVersion = 0;
+  final _accountCleanupState = AccountCleanupState();
 
   @override
   void initState() {
@@ -143,6 +147,7 @@ class _AppRootState extends State<AppRoot> {
         return ProviderScope(
           key: ValueKey(_scopeVersion),
           overrides: [
+            accountCleanupStateProvider.overrideWithValue(_accountCleanupState),
             flavorProvider.overrideWithValue(widget.flavor),
             appScopeResetControllerProvider.overrideWithValue(
               widget.scopeResetController,
@@ -197,6 +202,13 @@ class _MyAppState extends ConsumerState<MyApp> {
       routerConfig: ref
           .watch(appRouterProvider)
           .config(
+            deepLinkBuilder: (deepLink) =>
+                ref.read(accountCleanupStateProvider).pendingAnonymousCleanup !=
+                    null
+                ? DeepLink([
+                    const SettingRouterRoute(children: [AccountLinkRoute()]),
+                  ])
+                : deepLink,
             navigatorObservers: () => [
               FirebaseAnalyticsObserver(
                 analytics: ref.watch(firebaseAnalyticsProvider),

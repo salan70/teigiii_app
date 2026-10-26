@@ -2,10 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:teigi_app/core/api/api_exception.dart';
 import 'package:teigi_app/core/common_provider/app_scope_reset.dart';
 import 'package:teigi_app/feature/auth/application/account_link_service.dart';
-import 'package:teigi_app/feature/auth/application/auth_service.dart';
 import 'package:teigi_app/feature/auth/domain/auth_provider_type.dart';
 import 'package:teigi_app/feature/auth/repository/account_data_repository.dart';
 import 'package:teigi_app/feature/auth/repository/auth_repository.dart';
@@ -16,206 +14,187 @@ import 'account_link_service_test.mocks.dart';
   MockSpec<AccountDataRepository>(),
   MockSpec<AppScopeResetController>(),
   MockSpec<AuthRepository>(),
-  MockSpec<AuthService>(),
+  MockSpec<User>(),
 ])
 void main() {
-  late MockAccountDataRepository accountDataRepository;
-  late MockAppScopeResetController scopeResetController;
-  late MockAuthRepository authRepository;
-  late MockAuthService authService;
+  late MockAccountDataRepository dataRepository;
+  late MockAppScopeResetController scopeReset;
+  late MockAuthRepository auth;
+  late MockUser user;
   late AccountLinkService service;
-
-  const emptyData = AccountDataSnapshot(
-    definedWordCount: 0,
-    savedWordCount: 0,
-    followingCount: 0,
-    hasEditedProfile: false,
-  );
-  const dataWithDefinitions = AccountDataSnapshot(
+  late CapturedAnonymousAccount source;
+  final credential = GoogleAuthProvider.credential(idToken: 'credential');
+  const data = AccountDataSnapshot(
     definedWordCount: 3,
-    savedWordCount: 0,
-    followingCount: 0,
-    hasEditedProfile: false,
+    savedWordCount: 2,
+    followingCount: 1,
+    hasEditedProfile: true,
   );
 
   setUp(() {
-    accountDataRepository = MockAccountDataRepository();
-    scopeResetController = MockAppScopeResetController();
-    authRepository = MockAuthRepository();
-    authService = MockAuthService();
+    auth = MockAuthRepository();
+    dataRepository = MockAccountDataRepository();
+    scopeReset = MockAppScopeResetController();
+    user = MockUser();
+    source = CapturedAnonymousAccount(uid: 'A', idToken: 'token-A');
+    when(auth.currentUser).thenReturn(user);
+    when(user.uid).thenReturn('A');
+    when(auth.captureAnonymousAccount()).thenAnswer((_) async => source);
+    when(
+      dataRepository.fetchCurrentAccountData(),
+    ).thenAnswer((_) async => data);
+    when(auth.linkWithGoogle()).thenThrow(
+      FirebaseAuthException(
+        code: 'credential-already-in-use',
+        credential: credential,
+      ),
+    );
     service = AccountLinkService(
-      authRepository: authRepository,
-      authService: authService,
-      accountDataRepository: accountDataRepository,
-      scopeResetController: scopeResetController,
+      authRepository: auth,
+      accountDataRepository: dataRepository,
+      scopeResetController: scopeReset,
     );
-
-    when(
-      accountDataRepository.fetchCurrentAccountData(),
-    ).thenAnswer((_) async => emptyData);
-    when(authService.deleteUserForAccountSwitch()).thenAnswer((_) async {});
   });
 
-  test('連携が成功した場合は現在の UID を維持して完了する', () async {
-    when(authRepository.linkWithApple()).thenAnswer((_) async {});
-
-    final result = await service.link(
-      AuthProviderType.apple,
-      confirmDiscard: (_) async => fail('空のアカウントでは確認しない'),
-    );
-
-    expect(result, AccountLinkResult.linked);
-    verify(authRepository.linkWithApple()).called(1);
-    verifyNever(accountDataRepository.fetchCurrentAccountData());
-    verifyNever(authService.deleteUserForAccountSwitch());
-    verifyNever(scopeResetController.reset());
-  });
-
-  test('復元サインインが成功した場合は ProviderScope を再生成する', () async {
-    when(authRepository.signInWithApple()).thenAnswer((_) async {});
-
-    await service.signIn(AuthProviderType.apple);
-
-    verifyInOrder([
-      authRepository.signInWithApple(),
-      scopeResetController.reset(),
-    ]);
-  });
-
-  test('衝突した空の匿名アカウントは確認なしで削除して既存 credential に切り替える', () async {
-    final credential = GoogleAuthProvider.credential(idToken: 'id-token');
-    when(authRepository.linkWithGoogle()).thenThrow(
-      FirebaseAuthException(
-        code: 'credential-already-in-use',
-        credential: credential,
+  test('通常連携では切替も削除も行わない', () async {
+    expect(
+      await service.link(
+        AuthProviderType.apple,
+        confirmDiscard: (_) async => fail('不要な確認'),
       ),
+      AccountLinkResult.linked,
     );
-    when(
-      authRepository.signInWithCredential(credential),
-    ).thenAnswer((_) async {});
-
-    final result = await service.link(
-      AuthProviderType.google,
-      confirmDiscard: (_) async => fail('空のアカウントでは確認しない'),
-    );
-
-    expect(result, AccountLinkResult.switched);
-    verifyInOrder([
-      authService.deleteUserForAccountSwitch(),
-      authRepository.signInWithCredential(credential),
-      scopeResetController.reset(),
-    ]);
+    verifyNever(auth.captureAnonymousAccount());
+    verifyNever(auth.deleteCapturedAnonymousAccount(any));
+    verifyNever(scopeReset.reset());
   });
-
-  test('衝突したデータありの匿名アカウントは確認キャンセルで無傷のまま中断する', () async {
-    when(
-      accountDataRepository.fetchCurrentAccountData(),
-    ).thenAnswer((_) async => dataWithDefinitions);
-    final credential = GoogleAuthProvider.credential(idToken: 'id-token');
-    when(authRepository.linkWithGoogle()).thenThrow(
-      FirebaseAuthException(
-        code: 'credential-already-in-use',
-        credential: credential,
+  test('件数の確認キャンセルでは A は無傷', () async {
+    expect(
+      await service.link(
+        AuthProviderType.google,
+        confirmDiscard: (value) async {
+          expect(value, data);
+          return false;
+        },
       ),
+      AccountLinkResult.cancelled,
     );
-
-    final result = await service.link(
-      AuthProviderType.google,
-      confirmDiscard: (data) async {
-        expect(data, dataWithDefinitions);
-        return false;
-      },
-    );
-
-    expect(result, AccountLinkResult.cancelled);
-    verifyNever(authService.deleteUserForAccountSwitch());
-    verifyNever(authRepository.signInWithCredential(any));
-    verifyNever(scopeResetController.reset());
+    verifyNever(auth.signInWithCredential(any));
+    verifyNever(auth.deleteCapturedAnonymousAccount(any));
   });
-
-  test('衝突したデータありの匿名アカウントは確認後に削除して切り替える', () async {
+  test('データ取得失敗ではサインインも削除も行わない', () async {
     when(
-      accountDataRepository.fetchCurrentAccountData(),
-    ).thenAnswer((_) async => dataWithDefinitions);
-    final credential = GoogleAuthProvider.credential(idToken: 'id-token');
-    when(authRepository.linkWithGoogle()).thenThrow(
-      FirebaseAuthException(
-        code: 'account-exists-with-different-credential',
-        credential: credential,
-      ),
-    );
-    when(
-      authRepository.signInWithCredential(credential),
-    ).thenAnswer((_) async {});
-
-    final result = await service.link(
-      AuthProviderType.google,
-      confirmDiscard: (data) async {
-        expect(data.definedWordCount, 3);
-        return true;
-      },
-    );
-
-    expect(result, AccountLinkResult.switched);
-    verifyInOrder([
-      authService.deleteUserForAccountSwitch(),
-      authRepository.signInWithCredential(credential),
-      scopeResetController.reset(),
-    ]);
-  });
-
-  test('サーバー側の匿名アカウント削除に失敗した場合は切り替えを中断する', () async {
-    final credential = GoogleAuthProvider.credential(idToken: 'id-token');
-    when(authRepository.linkWithGoogle()).thenThrow(
-      FirebaseAuthException(
-        code: 'credential-already-in-use',
-        credential: credential,
-      ),
-    );
-    when(
-      authService.deleteUserForAccountSwitch(),
-    ).thenThrow(ApiException(statusCode: 500));
-
+      dataRepository.fetchCurrentAccountData(),
+    ).thenThrow(StateError('offline'));
     await expectLater(
       service.link(AuthProviderType.google, confirmDiscard: (_) async => true),
-      throwsA(isA<ApiException>()),
+      throwsStateError,
     );
-
-    verifyNever(authRepository.signInWithCredential(any));
-    verifyNever(scopeResetController.reset());
+    verifyNever(auth.signInWithCredential(any));
+    verifyNever(auth.deleteCapturedAnonymousAccount(any));
   });
-
-  test('添付 credential での切り替えに失敗した場合はフルサインインへフォールバックする', () async {
-    final credential = GoogleAuthProvider.credential(idToken: 'id-token');
-    when(authRepository.linkWithGoogle()).thenThrow(
-      FirebaseAuthException(
-        code: 'account-exists-with-different-credential',
-        credential: credential,
+  test('B 成功後にだけ捕捉した A を削除する', () async {
+    expect(
+      await service.link(
+        AuthProviderType.google,
+        confirmDiscard: (_) async => true,
       ),
+      AccountLinkResult.switched,
     );
+    verifyInOrder([
+      auth.captureAnonymousAccount(),
+      auth.signInWithCredential(credential),
+      auth.deleteCapturedAnonymousAccount(source),
+      scopeReset.reset(),
+    ]);
+  });
+  test('credential 失敗とフォールバックキャンセルでは A を削除しない', () async {
     when(
-      authRepository.signInWithCredential(credential),
+      auth.signInWithCredential(any),
     ).thenThrow(FirebaseAuthException(code: 'invalid-credential'));
-    when(authRepository.signInWithApple()).thenAnswer((_) async {});
-    when(authRepository.signInWithGoogle()).thenAnswer((_) async {});
-
-    var fallbackCalled = false;
-    final result = await service.link(
+    expect(
+      await service.link(
+        AuthProviderType.google,
+        confirmDiscard: (_) async => true,
+        onCredentialFallback: () async => null,
+      ),
+      AccountLinkResult.cancelled,
+    );
+    verifyNever(auth.deleteCapturedAnonymousAccount(any));
+  });
+  test('添付 credential がない衝突も既存プロバイダで認証してから削除', () async {
+    when(auth.linkWithGoogle()).thenThrow(
+      FirebaseAuthException(code: 'account-exists-with-different-credential'),
+    );
+    await service.link(
       AuthProviderType.google,
       confirmDiscard: (_) async => true,
-      onCredentialFallback: () async {
-        fallbackCalled = true;
-        return AuthProviderType.apple;
-      },
+      onCredentialFallback: () async => AuthProviderType.apple,
     );
-
-    expect(result, AccountLinkResult.switched);
-    expect(fallbackCalled, isTrue);
     verifyInOrder([
-      authService.deleteUserForAccountSwitch(),
-      authRepository.signInWithCredential(credential),
-      authRepository.signInWithApple(),
-      scopeResetController.reset(),
+      auth.signInWithApple(),
+      auth.deleteCapturedAnonymousAccount(source),
     ]);
+  });
+  test('フォールバック認証失敗でも A を削除しない', () async {
+    when(
+      auth.signInWithCredential(any),
+    ).thenThrow(FirebaseAuthException(code: 'invalid-credential'));
+    when(
+      auth.signInWithApple(),
+    ).thenThrow(FirebaseAuthException(code: 'web-context-cancelled'));
+    await expectLater(
+      service.link(
+        AuthProviderType.google,
+        confirmDiscard: (_) async => true,
+        onCredentialFallback: () async => AuthProviderType.apple,
+      ),
+      throwsA(isA<FirebaseAuthException>()),
+    );
+    verifyNever(auth.deleteCapturedAnonymousAccount(any));
+  });
+  test('復元も匿名 A の確認と B 成功後の削除を行う', () async {
+    await service.signIn(
+      AuthProviderType.apple,
+      confirmDiscard: (_) async => true,
+    );
+    verifyInOrder([
+      auth.captureAnonymousAccount(),
+      auth.signInWithApple(),
+      auth.deleteCapturedAnonymousAccount(source),
+      scopeReset.reset(),
+    ]);
+  });
+  test('匿名 A の復元で確認手段がなければ安全に中断', () async {
+    expect(
+      await service.signIn(AuthProviderType.apple),
+      AccountLinkResult.cancelled,
+    );
+    verifyNever(auth.signInWithApple());
+  });
+  test('元アカウントがなければそのまま復元', () async {
+    when(auth.captureAnonymousAccount()).thenAnswer((_) async => null);
+    await service.signIn(AuthProviderType.apple);
+    verify(auth.signInWithApple()).called(1);
+    verifyNever(auth.deleteCapturedAnonymousAccount(any));
+    verify(scopeReset.reset()).called(1);
+  });
+  test('A 削除失敗も途中状態として報告し Scope をリセットする', () async {
+    when(
+      auth.deleteCapturedAnonymousAccount(any),
+    ).thenThrow(Exception('offline'));
+    await expectLater(
+      service.link(AuthProviderType.google, confirmDiscard: (_) async => true),
+      throwsA(isA<AccountCleanupPendingException>()),
+    );
+    verify(auth.signInWithCredential(credential)).called(1);
+    verify(scopeReset.reset()).called(1);
+  });
+  test('途中状態の再試行は同じ A のみを削除する', () async {
+    when(auth.pendingAnonymousCleanup).thenReturn(source);
+    await service.retryPendingCleanup();
+    verify(auth.deleteCapturedAnonymousAccount(source)).called(1);
+    verify(scopeReset.reset()).called(1);
+    verifyNever(auth.signInWithApple());
   });
 }

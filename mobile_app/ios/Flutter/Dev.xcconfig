@@ -4,9 +4,7 @@ appName=Teigiii dev
 appIdSuffix=.dev
 apiBaseUrl=https:/$()/teigiii-api-dev.tetsuo21ad.workers.dev
 
-// Firebase Console で発行した dev 用 iOS OAuth クライアント情報へ置き換える。
-GOOGLE_IOS_CLIENT_ID=REPLACE_WITH_DEV_IOS_CLIENT_ID
-GOOGLE_IOS_REVERSED_CLIENT_ID=REPLACE_WITH_DEV_REVERSED_CLIENT_ID
+#include "Firebase-dev.xcconfig"
 CODE_SIGN_ENTITLEMENTS=Runner/Runner.entitlements
 CODE_SIGN_IDENTITY=Apple Development
 CODE_SIGN_STYLE=Manual

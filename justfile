@@ -117,6 +117,15 @@ mobile-run-prod:
 mobile-check-ios-flavors:
     bash mobile_app/ios/scripts/check_flavor_configuration.sh
 
+firebase-configure env:
+    python3 scripts/firebase/config.py configure "{{env}}"
+
+firebase-check env:
+    python3 scripts/firebase/config.py check "{{env}}"
+
+firebase-audit env:
+    python3 scripts/firebase/config.py audit "{{env}}"
+
 mobile-check-ios-native-asset binary sdk:
     bash mobile_app/ios/scripts/check_native_asset_platform.sh "{{binary}}" "{{sdk}}"
 
