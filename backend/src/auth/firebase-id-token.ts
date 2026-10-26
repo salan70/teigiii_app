@@ -2,6 +2,8 @@ import { decodeProtectedHeader, jwtVerify, type JWTVerifyGetKey } from "jose";
 
 export type FirebaseIdentity = {
   uid: string;
+  authTime?: number;
+  signInProvider?: string;
 };
 
 type FirebaseIdTokenVerifierOptions = {
@@ -46,6 +48,23 @@ export class FirebaseIdTokenVerifier {
       throw new Error("invalid_firebase_id_token_sub");
     }
 
-    return { uid: payload.sub };
+    const identity: FirebaseIdentity = { uid: payload.sub };
+    if (payload.auth_time !== undefined) {
+      if (
+        typeof payload.auth_time !== "number" ||
+        !Number.isInteger(payload.auth_time) ||
+        payload.auth_time < 0 ||
+        payload.auth_time > nowSeconds
+      ) {
+        throw new Error("invalid_firebase_id_token_auth_time");
+      }
+      identity.authTime = payload.auth_time;
+    }
+    const firebase = payload.firebase;
+    if (typeof firebase === "object" && firebase !== null && !Array.isArray(firebase)) {
+      const provider = (firebase as Record<string, unknown>).sign_in_provider;
+      if (typeof provider === "string" && provider.length > 0) identity.signInProvider = provider;
+    }
+    return identity;
   }
 }

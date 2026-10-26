@@ -69,5 +69,44 @@ final isSignedInProvider = Provider<bool>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef IsSignedInRef = ProviderRef<bool>;
+String _$isAnonymousHash() => r'128fe32af4bd426658f7d5b07d4f48bb95b3ff8c';
+
+/// 現在のユーザーが匿名ユーザーかどうかを返す。
+///
+/// Copied from [isAnonymous].
+@ProviderFor(isAnonymous)
+final isAnonymousProvider = Provider<bool>.internal(
+  isAnonymous,
+  name: r'isAnonymousProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$isAnonymousHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef IsAnonymousRef = ProviderRef<bool>;
+String _$linkedAuthProvidersHash() =>
+    r'c044022b666ed6cb0e4cf1e582cbf0156fc300e5';
+
+/// 現在のユーザーにリンクされている外部認証プロバイダを返す。
+///
+/// Copied from [linkedAuthProviders].
+@ProviderFor(linkedAuthProviders)
+final linkedAuthProvidersProvider = Provider<List<UserInfo>>.internal(
+  linkedAuthProviders,
+  name: r'linkedAuthProvidersProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$linkedAuthProvidersHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef LinkedAuthProvidersRef = ProviderRef<List<UserInfo>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

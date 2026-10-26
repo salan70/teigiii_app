@@ -2,6 +2,7 @@ import { applyD1Migrations, env } from "cloudflare:test";
 import { beforeEach, describe, expect, test } from "vitest";
 
 import { createApp } from "../src/app";
+import type { FirebaseIdentity } from "../src/auth/firebase-id-token";
 import { AvatarService } from "../src/users/user-service";
 
 const authHeaders = {
@@ -13,7 +14,7 @@ function testApp(uid: string) {
   return createApp({
     logRequest: () => {},
     verifyAppCheck: async () => ({ appId: "test-app-id" }),
-    verifyFirebaseIdToken: async () => ({ uid }),
+    verifyFirebaseIdToken: async () => ({ uid, signInProvider: "anonymous" }),
   });
 }
 
@@ -65,6 +66,72 @@ beforeEach(async () => {
 });
 
 describe("user routes", () => {
+  test.each([
+    [{}, 401],
+    [{ signInProvider: "google.com" }, 401],
+    [{ signInProvider: "google.com", authTime: 999_699 }, 401],
+    [{ signInProvider: "apple.com", authTime: 1_000_001 }, 401],
+    [{ authTime: 1_000_000 }, 401],
+    [{ signInProvider: "google.com", authTime: 999_700 }, 204],
+    [{ signInProvider: "apple.com", authTime: 1_000_000 }, 204],
+    [{ signInProvider: "anonymous" }, 204],
+  ] as const)("enforces recent login on delete: %j", async (claims, status) => {
+    await createUser("alice");
+    await env.DB.batch([
+      env.DB.prepare(
+        "insert into words (id, word, reading, reading_sub_group, created_by, created_at, updated_at) values (?, ?, ?, ?, ?, ?, ?)",
+      ).bind("recent-word", "自由", "じゆう", "さ", "alice", 1, 1),
+      env.DB.prepare(
+        "insert into definitions (id, word_id, author_id, body, status, finalized_at, created_at, updated_at) values (?, ?, ?, ?, ?, ?, ?, ?)",
+      ).bind("recent-definition", "recent-word", "alice", "body", "public", 1, 1, 1),
+    ]);
+    const identity: FirebaseIdentity = { uid: "alice", ...claims };
+    const app = createApp({
+      now: () => 1_000_000_000,
+      logRequest: () => {},
+      verifyAppCheck: async () => ({ appId: "test-app-id" }),
+      verifyFirebaseIdToken: async () => identity,
+    });
+    const before = await env.DB.prepare("select * from users where id = ?").bind("alice").first();
+    const definitionBefore = await env.DB.prepare("select * from definitions where id = ?")
+      .bind("recent-definition")
+      .first();
+    expect((await app.request("/v1/users/me", { headers: authHeaders }, env)).status).toBe(200);
+    const response = await app.request(
+      "/v1/users/me",
+      { method: "DELETE", headers: authHeaders },
+      env,
+    );
+    expect(response.status).toBe(status);
+    if (status === 401) {
+      expect(await response.json()).toMatchObject({ error: { code: "requires_recent_login" } });
+      expect(
+        await env.DB.prepare("select * from users where id = ?").bind("alice").first(),
+      ).toEqual(before);
+      expect(
+        await env.DB.prepare("select * from definitions where id = ?")
+          .bind("recent-definition")
+          .first(),
+      ).toEqual(definitionBefore);
+    } else {
+      // The same bearer token remains cryptographically valid, but the active-user guard rejects it.
+      expect((await app.request("/v1/users/me", { headers: authHeaders }, env)).status).toBe(404);
+      expect(
+        (
+          await app.request(
+            "/v1/users/me",
+            {
+              method: "PATCH",
+              headers: { ...authHeaders, "Content-Type": "application/json" },
+              body: JSON.stringify({ name: "revived" }),
+            },
+            env,
+          )
+        ).status,
+      ).toBe(404);
+    }
+  });
+
   test("publicId の UNIQUE 衝突時は新しい 9 桁 ID で再試行する", async () => {
     const now = Date.now();
     await env.DB.prepare(

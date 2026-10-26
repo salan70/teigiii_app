@@ -5,13 +5,11 @@ import {
   createAppCheckMiddleware,
   createFirebaseAuthMiddleware,
   idTokenExemptPaths,
+  type AuthenticationVariables,
 } from "../../src/auth/middleware";
 
 type TestEnv = {
-  Variables: {
-    appId: string;
-    firebaseUid: string;
-  };
+  Variables: AuthenticationVariables;
 };
 
 function createTestApp() {

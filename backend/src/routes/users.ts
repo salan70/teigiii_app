@@ -349,6 +349,22 @@ export function createUserRoutes(options: UserServiceOptions = {}) {
       return new Response(object.body, { headers });
     })
     .openapi(deleteMeRoute, async (context) => {
+      const identity = context.get("firebaseIdentity");
+      const nowSeconds = Math.floor((options.now?.() ?? Date.now()) / 1000);
+      if (
+        identity.signInProvider !== "anonymous" &&
+        (!identity.signInProvider ||
+          typeof identity.authTime !== "number" ||
+          !Number.isInteger(identity.authTime) ||
+          identity.authTime < 0 ||
+          identity.authTime > nowSeconds ||
+          nowSeconds - identity.authTime > 300)
+      ) {
+        return context.json(
+          { error: { code: "requires_recent_login", message: "Recent authentication required" } },
+          401,
+        );
+      }
       await users(context.env).delete(context.get("firebaseUid"));
       return context.body(null, 204);
     })

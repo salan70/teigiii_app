@@ -122,25 +122,16 @@ class AuthService {
   ///
   /// 関連データの削除はサーバー側（`DELETE /v1/users/me`）に集約されている。
   ///
-  /// サーバー削除が成功した後に Firebase Auth 削除が失敗すると、再試行時に
-  /// サーバー削除が「既に削除済み」で 404/401 を返し、Firebase Auth を削除
-  /// できないまま詰まる。そのため既に削除済みのレスポンスは成功とみなし、
-  /// Firebase Auth 削除まで確実に到達させる。
+  /// サーバー削除の成功を同じ UID に限って保持し、Firebase 削除を再試行する。
   Future<void> deleteUser() async {
-    try {
+    final authRepository = ref.read(authRepositoryProvider);
+    final pendingUid = authRepository.serverDeletedUserId;
+    final uid = pendingUid ?? await authRepository.prepareAccountDeletion();
+    if (pendingUid == null) {
       await ref.read(registerUserRepositoryProvider).deleteUser();
-    } on ApiException catch (e, s) {
-      // 論理削除済みユーザーの再削除は 404/401 になる。サーバー側の削除は
-      // 完了しているとみなし、残りの Firebase Auth 削除へ進む。
-      if (e.statusCode != 404 && e.statusCode != 401) {
-        rethrow;
-      }
-      logger.w(
-        'サーバーユーザーは既に削除済みとみなして続行します。'
-        ' error:$e, stackTrace:$s',
-      );
+      authRepository.serverDeletedUserId = uid;
     }
-    await ref.read(authRepositoryProvider).deleteUser();
+    await authRepository.deletePreparedUser(uid);
     final analytics = ref.read(analyticsServiceProvider);
     await analytics.logEvent(AnalyticsEvent.accountDeleted);
     await analytics.setUserId(null);

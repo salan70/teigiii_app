@@ -13,11 +13,12 @@ async function createToken(
     issuedAt?: number;
     issuer?: string;
     subject?: string;
+    claims?: Record<string, unknown>;
   } = {},
 ) {
   const { privateKey, publicKey } = await generateKeyPair("RS256");
   const nowSeconds = Math.floor(now.getTime() / 1000);
-  const token = await new SignJWT({})
+  const token = await new SignJWT(overrides.claims ?? {})
     .setProtectedHeader({ alg: "RS256", kid: "test-key", typ: "JWT" })
     .setIssuer(overrides.issuer ?? `https://securetoken.google.com/${projectId}`)
     .setAudience(overrides.audience ?? projectId)
@@ -30,6 +31,50 @@ async function createToken(
 }
 
 describe("FirebaseIdTokenVerifier", () => {
+  test("returns verified authentication metadata", async () => {
+    const authTime = Math.floor(now.getTime() / 1000) - 300;
+    const { publicKey, token } = await createToken({
+      claims: { auth_time: authTime, firebase: { sign_in_provider: "google.com" } },
+    });
+    const verifier = new FirebaseIdTokenVerifier({
+      getKey: async () => publicKey,
+      now: () => now,
+      projectId,
+    });
+    await expect(verifier.verify(token)).resolves.toEqual({
+      uid: "firebase-uid",
+      authTime,
+      signInProvider: "google.com",
+    });
+  });
+
+  test.each(["123", null, -1, 1.5, Math.floor(now.getTime() / 1000) + 1])(
+    "rejects invalid auth_time %s",
+    async (authTime) => {
+      const { publicKey, token } = await createToken({ claims: { auth_time: authTime } });
+      const verifier = new FirebaseIdTokenVerifier({
+        getKey: async () => publicKey,
+        now: () => now,
+        projectId,
+      });
+      await expect(verifier.verify(token)).rejects.toThrow("invalid_firebase_id_token_auth_time");
+    },
+  );
+
+  test.each([
+    { firebase: null },
+    { firebase: [] },
+    { firebase: { sign_in_provider: 42 } },
+    { firebase: { sign_in_provider: "" } },
+  ])("does not infer anonymous identity from invalid provider metadata %s", async (firebase) => {
+    const { publicKey, token } = await createToken({ claims: firebase });
+    const verifier = new FirebaseIdTokenVerifier({
+      getKey: async () => publicKey,
+      now: () => now,
+      projectId,
+    });
+    await expect(verifier.verify(token)).resolves.toEqual({ uid: "firebase-uid" });
+  });
   test("Firebase ID トークン検証器を公開する", async () => {
     const modulePromise = import("../../src/auth/firebase-id-token");
 
