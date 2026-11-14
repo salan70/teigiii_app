@@ -1,0 +1,8 @@
+---
+description: pstack の poteto-mode を、このプロジェクトの上書き付きで使う
+alwaysApply: true
+---
+
+複数段階の作業は、最初に `.claude/skills/poteto-mode/SKILL.md` を末尾の Project overrides まで読んで従う。
+pstack の Skill を使うときは `.claude/rules/pstack.md` の上書き規則と、`.claude/rules/pstack-models.md` の役割ごとのモデルに従う。`python3 tool/pstack/pstack.py models show` が出す git 管理外の上書きを読み、その行を優先する。
+上流の Skill は `.claude/skills/` にある。`~/.cursor/plugins/` の pstack は使わない。

@@ -7,8 +7,6 @@ description: mobile_app の UI 実装をデザインシステム経由で行う�
 
 `mobile_app/` の UI を実装・変更するとき、人間と AI が同じ選択手順を踏むための判断順序を定める。
 
-**開始時の宣言:** 「implementing-ui-with-design-system スキルを使用して、デザインシステム経由で UI を実装します。」
-
 ## 正本
 
 本スキルは仕様を持たない。値・命名・基準はすべて次を参照する。
