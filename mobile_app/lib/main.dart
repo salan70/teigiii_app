@@ -45,9 +45,13 @@ Future<void> main() async {
     androidProvider: kReleaseMode
         ? AndroidProvider.playIntegrity
         : AndroidProvider.debug,
-    appleProvider: kReleaseMode
-        ? AppleProvider.deviceCheck
-        : AppleProvider.debug,
+    // 実機の Profile / Debug では、ビルド時の APP_CHECK_DEBUG_TOKEN を固定の debug token にする。
+    // 起動時の環境変数と違い、ホーム画面からの再起動でも効く。未指定なら端末ごとに自動生成される。
+    providerApple: kReleaseMode
+        ? const AppleDeviceCheckProvider()
+        : AppleDebugProvider(
+            debugToken: appCheckDebugToken.isEmpty ? null : appCheckDebugToken,
+          ),
     // Web は QA 専用のため、kReleaseMode でも常に WebDebugProvider を使う。
     // （本番 Web 提供はスコープ外。将来本番化するときはここで分岐を入れる。）
     // 登録済みデバッグトークンを dart-define で固定注入する（全 origin 通過）。
