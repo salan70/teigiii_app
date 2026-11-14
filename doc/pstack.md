@@ -63,7 +63,7 @@ Codex と Cursor は `python3 tool/pstack/pstack.py models show` を実行して
 ```bash
 python3 tool/pstack/pstack.py models path
 python3 tool/pstack/pstack.py models set provider codex
-python3 tool/pstack/pstack.py models set small edits codex:luna high
+python3 tool/pstack/pstack.py models set 'small edits' codex:luna high
 ```
 
 既定を変えるときは `setup-pstack` を実行するか、`pstack-models.md` を直接直す。
