@@ -5,9 +5,6 @@ Issue: #258（親） / 本仕様の確定: #259
 本書はデザインシステムの**正本**。UI を実装する人間および AI エージェント
 （Claude / Codex）は、実装前に本書を参照する。
 
-現状のスナップショット（値の分布・コンポーネント台帳・移行難度）は
-`doc/specs/mobile-app-design-system-audit.md` を参照。
-
 ## 1. 目的と原則
 
 - 同じ入力から同じコンポーネントとトークンを選べる状態をつくる
@@ -40,18 +37,18 @@ Issue: #258（親） / 本仕様の確定: #259
 
 意味ベース（用途）で命名する。値ベースの名前（`gap16`、`greenPrimary`）を禁止する。
 
-| 分類 | 型 | 対象 | 出典 |
-|---|---|---|---|
-| color | `ColorScheme` + `DsColors`（`ThemeExtension`） | 既存 `lightColorScheme` / `darkColorScheme` をそのまま維持。`likeColor` のような意味色のみ拡張 | 監査 3.6 |
-| typography | `TextTheme` + `DsTypography` | 現行の実効値（`titleLarge` / `titleMedium` / `bodyLarge` + Flutter デフォルト）を固定してから意味名を与える | 監査 3.6 |
-| spacing | `DsSpacing` | 3.1 の公開 member | 監査 3.1 / 3.2 |
-| radius | `DsRadius` | 3.2 の公開 member | 監査 3.3 |
-| size | `DsSize` | 3.3 の公開 member | 監査 3.2 |
-| elevation | `DsElevation` | 3.4 の公開 member | 監査 3.4 |
-| opacity | `DsOpacity` | 3.5 の公開 member | 監査 3.5 |
+| 分類 | 型 | 対象 |
+|---|---|---|
+| color | `ColorScheme` + `DsColors`（`ThemeExtension`） | 既存 `lightColorScheme` / `darkColorScheme` をそのまま維持。`likeColor` のような意味色のみ拡張 |
+| typography | `TextTheme` + `DsTypography` | 現行の実効値（`titleLarge` / `titleMedium` / `bodyLarge` + Flutter デフォルト）を固定してから意味名を与える |
+| spacing | `DsSpacing` | 3.1 の公開 member |
+| radius | `DsRadius` | 3.2 の公開 member |
+| size | `DsSize` | 3.3 の公開 member |
+| elevation | `DsElevation` | 3.4 の公開 member |
+| opacity | `DsOpacity` | 3.5 の公開 member |
 
-以下 3.1〜3.5 が **#260 が実装する公開 API の確定リスト**。値は現行の実効値をそのまま採用し、
-見た目を変えない。写像表に無い値は 3.6 の個別判定表で扱う。
+以下 3.1〜3.5 が公開 API の確定リスト。値は現行の実効値をそのまま採用し、
+見た目を変えない。写像表に無い値は 3.6 の方針で扱う。
 
 <!-- @code mobile_app/lib/core/design_system/token/ds_spacing.dart#DsSpacing -->
 ### 3.1 `DsSpacing`
@@ -151,53 +148,12 @@ Issue: #258（親） / 本仕様の確定: #259
 0.4 / 0.8 は単独利用でありコンポーネント内部へ閉じる。`withOpacity(0)` は
 不透明度ではなく透明色の指定なので `Colors.transparent` を使う。
 
-### 3.6 写像表で決まらない値の個別判定
+### 3.6 写像表で決まらない値の扱い
 
-以下は #260 が個別に処理する。行番号は対象コミット `5c366b7` 時点のもの。
-
-| 箇所 | 現行 | 判定 |
-|---|---|---|
-| `definition_detail_page.dart:78` | `Gap(2)` | `tight`（4）へ丸める |
-| `profile_tile.dart:107` | `Gap(20)` | `item`（16）へ丸める |
-| `word_page_shimmer.dart:23` | `Gap(26)` | `section`（24）へ丸める |
-| `setting_page.dart:158` | `Gap(72)` | 例外申請。アカウント削除ボタンを他導線から隔離する画面固有余白 |
-| `word_registration_page.dart:200`, `write_definition_base_page.dart:131` | `Gap(300)` | 例外申請。キーボード回避の下部余白 |
-| `post_definition_fab.dart:150` ほか | `Gap(10)` / `radius 28` / `elevation 3` / `opacity 0.35` / `padding(20, 12)` | FAB は Ds 対象外。例外申請 |
-| `word_search_result_page.dart:67` | `symmetric(horizontal: 36)` | `screenContent`（24）との差分意図を確認し、無ければ集約 |
-| `dictionary_everyone_page.dart:36`, `user_search_page.dart:17` | `symmetric(horizontal: 40)` | **`DsSearchField` 内部へ閉じる**（#280。#264 では呼び出し側に残したが、下記で統一） |
-| `word_page_shimmer.dart:15` | `symmetric(horizontal: 20)` | `DsShimmer` 利用側で `screenHorizontal` へ集約 |
-| `dictionary_word_index_list.dart:111` | `symmetric(horizontal: 16, vertical: 6)` | `DsListTile` 内部へ閉じる |
-| `setting_page.dart:43` | `only(left: 24, right: 20)` | 左右非対称の意図が読めない。`screenContent` へ集約 |
-| `like_widget.dart:34` | `only(top: 4, right: 4, bottom: 4)` | タップ領域の調整。`DsIconButton` 内部へ閉じる |
-| `self_definition_action_icon_button.dart:201` | `only(top: 16, bottom: 8)` | `DsDialog` の `contentPadding` として内部へ閉じる |
-| `overlay_force_update_dialog.dart`, `overlay_in_maintenance_dialog.dart` | `radius 8` | `DsDialog` 移行時に `container`（16）へ統一。golden 差分を意図として説明する |
-| `changeable_profile_image.dart` | `size: 28` / `opacity 0.8` | コンポーネント内部値として閉じる |
-| `select_post_type_button.dart` | `size: 8` | 装飾ドット。コンポーネント内部値として閉じる |
-
-### #264 での判断の訂正と #280 での統一
-
-`DsSearchField` の外枠（高さ・左右余白）は、監査時点では「コンポーネント内部へ閉じる」と
-判断していたが、**呼び出し元によって値が違う**ことがパイロット移行で判明したため、
-#264 では呼び出し側に残して例外申請した。#280 で次のとおり統一した。
-
-| 画面 | 統一前の高さ | 統一前の左右余白 |
-|---|---|---|
-| `DictionaryEveryonePage` | 80（`SizedBox` で引き伸ばし） | 40 |
-| `WordSearchResultPage` | 48（`DsSearchField` 固有値） | 36 |
-| `UserSearchPage` | 80（`SearchUserTextField` の `SizedBox`） | 40 |
-| `UserSearchResultPage` | 80（同上） | 16（外側。フィールド自体に左右余白なし） |
-
-- **高さは 48**（`DsSearchField` の固有値）に統一し、`SizedBox` による引き伸ばしをやめた。
-  80 に根拠がなく、言葉検索の 1 画面とユーザー検索の 2 画面が引き伸ばされていたため
-- **左右余白は 40** に統一し、`DsSearchField` 内部へ閉じた。36 / 40 / 16 の差に意図はない。
-  用途がこのコンポーネントに閉じているため `DsSpacing` には出さず、内部定数にしている
-- `SearchUserTextField` も `DsSearchField` ベースへ移行し、ID 入力制約と
-  `KeyboardActions` はラッパー側に残した
-- `maxLength` を付けてもカウンター（`0/9`）は出さず、高さ 48 を崩さない
-- 呼び出し側で `SizedBox` / 左右 `Padding` を重ねない。結果画面の外側 16 は
-  リスト本文用であり、検索欄には掛けない（画面端から検索欄まで最終的に 40）
-
-`Gap(300)`（キーボード回避）は予定どおり例外申請とし、仕組みでの置き換えを #281 で扱う。
+- 画面固有の余白（例: 設定画面のアカウント削除ボタンを隔離する `Gap(72)`、キーボード回避の `Gap(300)`）は例外申請とする。`Gap(300)` の仕組みでの置き換えは #281 で扱う
+- 1 つのコンポーネントの内部でしか使わない値は、トークンに出さずコンポーネント内部に閉じる
+- `DsSearchField` は高さ 48、左右余白 40 に固定し、呼び出し側で `SizedBox` や左右 `Padding` を重ねない。左右余白は内部定数で、`DsSpacing` には出さない
+- FAB は Ds の対象外とし、固有の値は例外申請とする（5 章）
 
 ### トークン追加基準
 
@@ -207,13 +163,12 @@ Issue: #258（親） / 本仕様の確定: #259
 2. 名前が値ではなく用途を表せる
 3. 現に実装で使う（**将来要件だけを理由に追加しない**）
 
-motion（アニメーション時間・カーブ）は監査で十分な実利用が確認できなかったため、
+motion（アニメーション時間・カーブ）は十分な実利用が無いため、
 初期スコープではトークン化しない。
 
 ### 制約
 
 - `ThemeData` の構築に呼び出し元の `BuildContext` を要求しない
-  （現行 `getThemeData(ThemeMode, BuildContext)` は `BuildContext` を必要とする。#260 で解消する）
 - feature から任意の生値を渡す API を作らない
 - 外部デザインツールの出力を正本にしない
 
@@ -271,12 +226,10 @@ Ds コンポーネントにしない:
 4. `DsListTile`
 5. `DsSearchField`
 6. `DsIconButton`（`self_definition_action_icon_button` / `other_user_action_icon_button` で
-   サイズ・padding の直書きが重複している。監査 4.2）
+   サイズ・padding の直書きが重複していた）
 7. `DsTextField`（検索以外の汎用テキスト入力。`singleLine` / `multiline` の closed variant を持つ）
 
-`DsTextField` は #259 時点の最低セットに含めていなかったが、パイロットの
-`DefinitionPostPage` / `WriteDefinitionBasePage` が `TextFormField` を 6 箇所で使っており、
-これなしでは入力系パイロットが成立しないため #261 のスコープに含める。
+`DsTextField` の
 `controller` / `focusNode` / `validator` / `maxLength` は受け取るが、
 `InputDecoration` や `TextStyle` は公開 API で受け取らない。
 
@@ -294,7 +247,7 @@ Ds コンポーネントにしない:
 | 対象 | 根拠 |
 |---|---|
 | FAB | 実利用は `post_definition_fab.dart` の 1 箇所のみ。定義投稿への遷移というドメイン知識と独自の展開アニメーションを持ち、「2 画面以上で同じ見た目・操作仕様」を満たさない。4 章の基準どおり feature 側の責務とし、#261 でも扱わない |
-| motion | 監査でトークン化に足る実利用が確認できなかった（3 章） |
+| motion | トークン化に足る実利用が無い（3 章） |
 
 ### Widgetbook use case の最低セット
 
@@ -378,15 +331,6 @@ const Gap(300),
 3. Widgetbook の use case
 4. 対応するテスト
 
-### パイロット
-
-初期パイロットは次の 2 系統（#264）。
-
-- `DictionaryEveryonePage`
-- `DefinitionPostPage` / `WriteDefinitionBasePage`
-
-いずれも**振る舞いと意図した見た目を変えずに**移行する。
-
 ## 6.5 実行方法
 
 | 目的 | コマンド | CI |
@@ -403,18 +347,6 @@ const Gap(300),
 
 `just mobile-ds-baseline-update` は**違反が減ったときだけ**実行する。
 増えたときに実行して通すのは禁止。例外が必要なら 6 章の例外申請を使う。
-
-## 7. 検証条件（後続 Issue への引き継ぎ）
-
-| Issue | 検証条件 |
-|---|---|
-| #260 トークン | light / dark 双方で全トークンが解決できる unit / widget test。`ThemeData` 構築に `BuildContext` 不要。既存テーマ値を意図せず変更していないこと |
-| #261 コンポーネント | 全公開コンポーネントに Widgetbook use case と widget test |
-| #262 CI | Flutter Accessibility Guideline 検査（Ds コンポーネント）と違反ベースライン比較を CI で実行。golden は下記のとおり CI 対象外 |
-| #263 ドキュメント | 本仕様と主要コード宣言を DocBridge で双方向リンク（`just docbridge-check`） |
-| #264 パイロット | 2 系統の移行前後で golden が一致、または差分を意図として説明できること |
-
-共通: `just mobile-analyze`、`just mobile-test`、`just docbridge-check` が通ること。
 
 ### golden test の位置づけ
 

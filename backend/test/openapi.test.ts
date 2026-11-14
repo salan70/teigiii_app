@@ -1,12 +1,12 @@
 /**
- * OpenAPI ドキュメントが生成でき、plan のエンドポイント一覧と一致することを検証する。
+ * OpenAPI ドキュメントが生成でき、エンドポイント一覧と一致することを検証する。
  */
 import { describe, expect, test } from "bun:test";
 import { Validator } from "@seriousme/openapi-schema-validator";
 import { buildOpenApiDocument } from "../src/app";
 import { idTokenExemptPaths } from "../src/auth/middleware";
 
-/** plan（doc/plans/2026-07-15-rdb-schema-api-design.md）のエンドポイント一覧 */
+/** エンドポイント一覧 */
 const expectedOperations = [
   "GET /v1/app-config",
   "POST /v1/users",
@@ -33,7 +33,7 @@ const expectedOperations = [
   "GET /v1/me/saved-words",
   "POST /v1/words",
   "GET /v1/words",
-  // #306 で追加。plan は doc/plans/2026-07-30-word-registration-existing-word-ux.md
+  // #306 で追加
   "GET /v1/words/lookup",
   "GET /v1/words/{id}",
   "PATCH /v1/words/{id}",
@@ -57,7 +57,7 @@ const expectedOperations = [
 describe("OpenAPI document", () => {
   const document = buildOpenApiDocument();
 
-  test("plan のエンドポイント一覧と過不足なく一致する", () => {
+  test("エンドポイント一覧と過不足なく一致する", () => {
     const operations = Object.entries(document.paths ?? {})
       .flatMap(([path, item]) =>
         Object.keys(item ?? {})

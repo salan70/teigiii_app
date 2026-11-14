@@ -23,16 +23,19 @@
 ### core
 
 - pageを表すWidgetを格納する（page/）
-- 複数のfeatureで使うような汎用的なwidgetを格納する（common_widget/）
+- デザインシステムのトークンとコンポーネントを格納する（design_system/。UIはここを経由して実装する）
+- Workers APIのクライアントと認証interceptorを格納する（api/）
+- 複数のfeatureで使うような汎用的なwidgetを格納する（common_widget/。デザインシステムへ移行中）
 - 複数のfeatureで使うような汎用的なproviderを格納する（common_provider/）
 - routerを格納する（router/）
+- Analyticsとフレームパフォーマンスのテレメトリはそれぞれanalytics/、telemetry/に格納する
 
 ### util
 
 - アプリ全体で使用する汎用的なコードを格納する
   - constやextension, mixinなど
 - coreとの境界は曖昧
-  - page, common_widget, common_provider, router 以外はutilとしている
+  - core配下のディレクトリ以外はutilとしている
 
 ### feature/presentation
 
@@ -49,23 +52,19 @@
 - serviceクラスを格納する
   - presentationとrepositoryの橋渡しや、ビジネスロジックの実装を担う
   - ローディング表示やトースト表示はpresentationで行う
-- ~~原則UnitTest書く~~
 - 作成が容易そう、もしくは重要度の高い関数について、UnitTestを書く
-  - 理想は原則UnitTestを書くことだが、ユーザーが増えるまではこの方針で進める
 
 ### feature/domain
 
 - アプリ全体で使用するようなEntityを格納する
   - Entityと強く結びつくロジックも格納する
 - Freezedでイミュータブルにする
-- ~~原則UnitTest書く~~
 - 作成が容易そう、もしくは重要度の高い関数について、UnitTestを書く
-  - 理想は原則UnitTestを書くことだが、ユーザーが増えるまではこの方針で進める
 
 ### feature/repository
 - 外部と直接通信するようなクラスを格納する
-  - Firebase関連の処理がメイン
-  - Hiveなど端末のローカルDB関連の処理も含める
+  - Workers APIの呼び出しがメイン（生成クライアントは `mobile_app/packages/teigiii_api`）
+  - FirebaseのAuth、Analytics、Crashlyticsなど、Workers API以外の外部サービスの処理も含める
 - repository内で一時的に使うようなEntityを格納する
 
 ### feature/util
@@ -197,11 +196,3 @@ Service系はクラス名に対応させる。
 #### ファイル名
 
 クラス名に対応させる。
-
-### 補足
-
-VS Codeの設定で、クラス名変更時にファイル名が自動的に変更されるようにできる。  
-※クラス名とファイル名が一致している場合のみ（大文字小文字、アンダースコアは無視される）
-
-参考  
-https://zenn.dev/inari_sushio/articles/0f4c606c8340ee#クラス名変更時にファイル名を自動で変える

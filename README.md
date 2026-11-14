@@ -1,10 +1,11 @@
 # みんなの定義
 
-みんなの定義は、ユーザーが自身の解釈や体験に基づいて言葉の「定義」を投稿し、共有することができるアプリです。
+みんなの定義は、ユーザーが自身の解釈や体験に基づいて言葉の「定義」を投稿し、共有できるアプリです。
 
-言葉の背後にある多様な価値観や感じるニュアンスを共有し、新しい視点や考え方を発見することができます。
+言葉の背後にある多様な価値観や感じるニュアンスを共有し、新しい視点や考え方を発見できます。
 
-TODO: DL用のリンク貼る
+- [App Store](https://apps.apple.com/jp/app/id6472884411)
+- [Google Play](https://play.google.com/store/apps/details?id=com.toda.teigiii)
 
 # リポジトリ構成
 
@@ -14,10 +15,17 @@ TODO: DL用のリンク貼る
 .
 ├── mobile_app/   # Flutter アプリ（iOS / Android）
 ├── backend/      # Cloudflare Workers API
-├── doc/          # プロダクト横断の仕様・計画
+├── doc/          # アーキテクチャと仕様
 ├── nix/          # 共通開発環境
 └── justfile      # ルートからのオーケストレーション
 ```
+
+# 使用技術
+
+- mobile_app: Flutter 3.41.8（`flake.nix` で固定）、Riverpod、Freezed、auto_route
+- backend: Cloudflare Workers、Hono、Drizzle、D1、R2
+- Firebase: Authentication、App Check、Analytics、Crashlytics
+- CI / CD: GitHub Actions
 
 # 開発環境セットアップ
 
@@ -30,73 +38,30 @@ just setup
 
 direnv を使わない場合は、先に `nix develop` で開発シェルへ入ってください。
 
-`just setup`（および `just mobile-setup`）は依存関係の導入のみで、`flutter clean` は実行しません。ビルドキャッシュを消すときは `just mobile-clean` を使ってください。
+`just setup` は `mobile_app/` と `backend/` の依存関係を導入するだけで、ビルドキャッシュは消しません。消すときは `just mobile-clean` を使います。
 
 # アプリ起動（run）
 
 開発環境
+
 ```sh
 just mobile-run-dev
 ```
 
 本番環境
+
 ```sh
 just mobile-run-prod
 ```
 
-Xcode GUIから起動する場合は`mobile_app/ios/Runner.xcworkspace`を開き、開発環境は`dev`、本番環境は`prod` Schemeを選択します。Schemeに対応するBuild Configuration、Bundle ID、App Icon、Firebase設定、Dart Defineが自動的に選択されるため、Build Settingsを手動で変更する必要はありません。
+Xcode GUI から起動する場合は `mobile_app/ios/Runner.xcworkspace` を開き、開発環境は `dev`、本番環境は `prod` Scheme を選択します。Scheme に対応する Build Configuration、Bundle ID、App Icon、Firebase 設定、Dart Define が自動的に選択されるため、Build Settings を手動で変更する必要はありません。
 
-# 使用技術
-## Flutter
-
-以下環境を使用しています。
-
-Flutter 3.41.8 を `flake.nix` で固定しています。
-
-また、状態管理はRiverpodを使用しています。
-
-## Firebase
-
-以下を使用しています。
-
-- Authentication
-- Firestore Database
-- Storage
-- Analytics
-- Crashlytics
-
-## GitHub Actions
-
-CIの構築に使用しています。  
-CIは、Pull Request作成時とPush時に、静的解析とテストの実行が行われるようにしています。
+iOS 実機での確認手順は [doc/ios-physical-device-debug.md](doc/ios-physical-device-debug.md) を参照してください。
 
 # 開発方針
 
-## アーキテクチャ
-
-[アーキテクチャについて](/doc/architecture.md)
-に記載しています。
-
-## GitHub関連
-
-- Issueベースで開発する
-- 開発時はdevelopブランチからブランチを切り、developブランチへプルリクエストを出してマージする
-- ブランチ名は「feature/#〇〇（対応するIssueの番号）_〇〇（対応内容）」とする
-- [VS Codeの拡張](https://marketplace.visualstudio.com/items?itemName=vivaxy.vscode-conventional-commits)を使用するなどして、commit時に「feat」「chore」などの接頭辞をつける
-
-## テスト
-
-- ~~ビジネスロジックに対してUnit Testを原則書く~~
-  - ~~書かない場合は、理由や後で書く旨をコメントで残す~~
-- ~~プライベート関数に対してはUnit Testを原則書かない~~
-  - ~~書く場合は、理由をコメントで残す~~
-- Unit Testは、作成が容易そうな関数、重要度が高そうな関数に対して書く
-  - 理想は原則UnitTestを書くことだが、ユーザーが増えるまではこの方針で進める
-- Widget Test, Integration Testは実装しない
-  - ある程度ユーザーが増えたら実装予定
-- テストはCIで自動実行する
-- 動作確認は適宜行い、プルリクエスト作成時に確認内容や結果を記載する
-
-## その他
-
-- 使用するIDEはVS Codeを前提とする
+- アーキテクチャは [doc/architecture.md](doc/architecture.md)、仕様は [doc/specs/README.md](doc/specs/README.md) にあります
+- Issue を起点にし、`develop` ブランチから切ったブランチで作業して、`develop` へ Pull Request を出します
+- commit message は `feat`、`fix`、`chore` などの接頭辞で始めます
+- Unit Test は、作成が容易な関数と重要度が高い関数に書きます。Widget Test と Integration Test は、ユーザーが増えてから実装します
+- 検証コマンド（`just analyze`、`just test` など）、CI、Agent 向けの運用は [AGENTS.md](AGENTS.md) を参照してください

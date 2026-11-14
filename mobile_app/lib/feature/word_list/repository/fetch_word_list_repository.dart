@@ -19,8 +19,6 @@ FetchWordListRepository fetchWordListRepository(
 }
 
 /// 言葉一覧を Workers API から取得する Repository。
-///
-/// @doc doc/specs/legacy-repository-api-mapping.md#言葉
 class FetchWordListRepository {
   FetchWordListRepository(this._wordsApi, this._searchApi);
 
