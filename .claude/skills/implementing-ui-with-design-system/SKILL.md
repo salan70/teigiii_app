@@ -18,6 +18,7 @@ description: mobile_app の UI 実装をデザインシステム経由で行う�
 | `doc/specs/mobile-app-design-system.md` | 仕様の正本。トークン一覧、選択フロー、コンポーネント規約、運用ルール |
 | `mobile_app/lib/core/design_system/` | 型付き Dart API の正本。`token/` と `component/` |
 | `mobile_app/widgetbook/use_cases/` + `just mobile-widgetbook` | 見た目と状態の正本 |
+| `doc/guides/ui-review.md` | 画面とコンポーネントの全状態を並べる UI レビュー用カタログの手順書 |
 | `doc/specs/mobile-app-design-system-audit.md` | 移行時の現状スナップショット |
 
 **仕様本文をここへ複製しない。** 迷ったら仕様を開く。
@@ -67,6 +68,14 @@ just mobile-test-golden  # 見た目を変えない移行の証明。生成物�
 ```
 
 見た目の変化を伴う変更では、golden 差分を意図として説明できることを確認する。
+
+UI を変えたら、該当する対象 ID を撮り直して見た目を確認する（手順は `doc/guides/ui-review.md`）。
+新しい画面や Ds コンポーネントは、`mobile_app/tool/ui_review/targets.json` に対象を足す。
+
+```bash
+just ui-review capture --only <ID>   # 例: screen.home,component.ds_chip
+just ui-review serve                 # artifacts/ui-review/ を手元で開く
+```
 
 ## 完了
 

@@ -69,3 +69,6 @@ app.*.map.json
 
 # エージェント／手動検証用のローカル成果物（スクショ等）
 .artifacts/
+
+# UI レビュー用カタログの撮影結果（just ui-review）
+/artifacts/

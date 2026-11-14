@@ -1,0 +1,16 @@
+// UI レビュー用カタログ（artifacts/ui-review/）を teigiii-ui.oda79.me で配る（doc/guides/ui-review.md）。
+// Cloudflare Access で許可した利用者だけが見られる。配るのは `just deploy-ui-review` だけで、
+// publish は Access のアプリがこのホスト名にあることを確かめてから wrangler deploy を呼ぶ。
+// workers.dev とプレビューの URL は Access の外になるので使わない。
+// ホスト名は oda79.me の 1 階層下にする（2 階層は Universal SSL の対象外）。
+{
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
+  "name": "teigiii-ui-review",
+  "compatibility_date": "2026-07-01",
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {
+    "directory": "../../../artifacts/ui-review"
+  },
+  "routes": [{ "pattern": "teigiii-ui.oda79.me", "custom_domain": true }]
+}
