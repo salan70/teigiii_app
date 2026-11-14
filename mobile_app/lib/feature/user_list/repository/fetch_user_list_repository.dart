@@ -18,8 +18,6 @@ FetchUserListRepository fetchUserListRepository(
 }
 
 /// ユーザー ID 一覧を Workers API から取得する Repository。
-///
-/// @doc doc/specs/legacy-repository-api-mapping.md#ユーザー-フォロー-ミュート
 class FetchUserListRepository {
   FetchUserListRepository(this._usersApi, this._definitionsApi);
 

@@ -4,7 +4,7 @@
 
 ## 仕様一覧
 
-**現行規範** — 実装が従うべき仕様。
+実装が従うべき仕様。履歴や計画は置かない（履歴は Git と Issue、計画は Issue に書く）。
 
 | 仕様 | いつ読むか |
 | --- | --- |
@@ -14,14 +14,6 @@
 | [analytics-events.md](analytics-events.md) | Analytics イベントを追加・変更する前（イベント名・パラメータ・発火タイミングの正本） |
 | [app-performance-telemetry.md](app-performance-telemetry.md) | フレーム計測テレメトリのクライアント側を変更する前（画面遷移境界の対応付け契約・ジャンク判定・送信方針） |
 
-**履歴** — 特定時点のスナップショット。現状とずれうるため、規範としては扱わない。
-
-| 仕様 | いつ読むか |
-| --- | --- |
-| [mobile-app-design-system-audit.md](mobile-app-design-system-audit.md) | デザインシステム移行の残作業や当時の逸脱状況を確認したい時（2026-07-25 時点） |
-| [legacy-repository-api-mapping.md](legacy-repository-api-mapping.md) | 旧 repository 操作と新 API の対応を遡って確認したい時（#183 の台帳） |
-
-**補助資料** — この README（DocBridge の書き方規約と索引）。
 
 ## DocBridge の書き方
 
@@ -31,6 +23,4 @@
 
 アノテーションの追加、リンクの修正、`related --gate` の所見の確認には `docbridge` スキルを使う。
 
-注意: Freezed は元クラスの doc コメントを生成ファイルへ複製することがあるため、
-最初のアノテーション追加時に重複リンクの挙動を検証すること
-（詳細: `doc/plans/done/2026-07-12-docbridge-adoption.md` の将来課題）。
+注意: Freezed は元クラスの doc コメントを生成ファイルへ複製することがある。Freezed クラスに `@doc` を付けたら、重複リンクが出ないか `just docbridge-check` で確認する。

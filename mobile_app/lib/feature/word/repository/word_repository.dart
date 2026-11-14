@@ -13,7 +13,6 @@ part 'word_repository.g.dart';
 WordRepository wordRepository(WordRepositoryRef ref) =>
     WordRepository(ref.watch(teigiiiApiProvider).getWordsApi());
 
-/// @doc doc/specs/legacy-repository-api-mapping.md#言葉
 class WordRepository {
   WordRepository(this._wordsApi);
 
