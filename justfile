@@ -130,7 +130,7 @@ device-prod device="":
       echo 'Aborted.' >&2
       exit 1
     fi
-    bash mobile_app/scripts/install-device.sh prod ${1:+"$1"}
+    CONFIRM_PROD=1 bash mobile_app/scripts/install-device.sh prod ${1:+"$1"}
 
 mobile-check-ios-flavors:
     bash mobile_app/ios/scripts/check_flavor_configuration.sh

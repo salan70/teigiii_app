@@ -5,9 +5,11 @@
 # 署名は ios/Flutter/{Dev,Prod}.xcconfig の手動署名（端末に入るプロファイルを Xcode が持つ前提）。
 #   App Store Connect の API キーは使わない。
 # 環境変数:
-#   SKIP_BUILD=1            前回のビルドを使い、インストールと起動だけをする
+#   TEIGIII_DEVICE          既定の端末名か UDID（端末名は repo に書かないため .env か環境変数で渡す）
+#   SKIP_BUILD=1            前回のビルドを使い、インストールと起動だけをする（APP_CHECK_DEBUG_TOKEN は反映されない）
 #   NO_LAUNCH=1             インストールだけで起動しない
-#   APP_CHECK_DEBUG_TOKEN   UUID を指定すると、起動時の FIRAAppCheckDebugToken として渡す
+#   CONFIRM_PROD=1          prod を入れる確認。prod を直接実行するときに必須（just device-prod は確認後に付ける）
+#   APP_CHECK_DEBUG_TOKEN   UUID を指定すると、ビルド時の --dart-define として焼き込む。起動のたびに有効になる
 #                           （Profile は kReleaseMode でないため iOS の App Check は debug provider になる）
 set -euo pipefail
 
@@ -20,11 +22,28 @@ die() {
   exit 1
 }
 
+for tool in jq xcrun flutter; do
+  command -v "$tool" >/dev/null 2>&1 || die "${tool} が見つからない。開発環境（nix develop など）に入ってから実行する"
+done
+
 flavor="${1:-}"
 case "$flavor" in
-  dev | prod) ;;
+  dev) bundle_id_expected="com.toda.teigiii.dev" ;;
+  prod)
+    bundle_id_expected="com.toda.teigiii"
+    [[ "${CONFIRM_PROD:-}" == 1 ]] ||
+      die "prod を入れるには CONFIRM_PROD=1 を付ける（just device-prod は確認後に付ける）"
+    ;;
   *) die "flavor に dev か prod を指定する（例: install-device.sh dev [端末]）" ;;
 esac
+
+token="${APP_CHECK_DEBUG_TOKEN:-}"
+if [[ -n "$token" ]]; then
+  [[ "$token" =~ ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$ ]] ||
+    die "APP_CHECK_DEBUG_TOKEN は UUID で指定する"
+  [[ "${SKIP_BUILD:-}" != 1 ]] ||
+    echo "注意: SKIP_BUILD=1 のため APP_CHECK_DEBUG_TOKEN は反映されない（ビルド時に焼き込むため）" >&2
+fi
 
 device_query="${2:-${TEIGIII_DEVICE:-}}"
 [[ -n "$device_query" ]] ||
@@ -51,10 +70,20 @@ resolve_device() {
   fi
   device_id="$(jq -r '.identifier' <<<"$found")"
   device_label="$(jq -r '.deviceProperties.name' <<<"$found")"
+  tunnel_state="$(jq -r '.connectionProperties.tunnelState // ""' <<<"$found")"
   [[ "$(jq -r '.connectionProperties.pairingState // ""' <<<"$found")" == paired ]] ||
     die "端末「${device_label}」がペアリングされていない。ケーブルで接続して「このコンピュータを信頼」を押す"
   [[ "$(jq -r '.deviceProperties.developerModeStatus // ""' <<<"$found")" == enabled ]] ||
     die "端末「${device_label}」の開発者モードが無効。設定 > プライバシーとセキュリティ > 開発者モードを ON にして再起動する"
+  # tunnelState が connected でなくても、devicectl の操作で接続が張られることがある。数分かかるビルドの前に 1 回つないで確かめる。
+  if [[ "$tunnel_state" != connected ]]; then
+    xcrun devicectl device info details --device "$device_id" --timeout 20 >/dev/null 2>&1 || true
+    xcrun devicectl list devices --json-output "$scratch/devices.json" >/dev/null 2>&1 || true
+    tunnel_state="$(jq -r --arg id "$device_id" '
+      [.result.devices[] | select(.identifier == $id)] | first | .connectionProperties.tunnelState // ""' "$scratch/devices.json")"
+    [[ "$tunnel_state" == connected ]] ||
+      die "端末「${device_label}」に接続できない（tunnelState: ${tunnel_state:-不明}）。ケーブルを繋いでロックを解除するか、同じネットワークで Xcode の「ネットワーク経由で接続」を確認する"
+  fi
 }
 
 # devicectl の失敗を、原因と対処の 1 行へ言い換える。分からなければ原文を出す。
@@ -97,10 +126,8 @@ run_devicectl() {
 resolve_device
 echo "端末: ${device_label}（${device_id}）/ flavor: ${flavor}"
 
-app_candidates=(
-  "$mobile/build/ios/iphoneos/Runner.app"
-  "$mobile/build/ios/Profile-${flavor}-iphoneos/Runner.app"
-)
+# flavor ごとの出力先だけを見る。flavor 非依存の build/ios/iphoneos は別 flavor の成果物かもしれない。
+app="$mobile/build/ios/Profile-${flavor}-iphoneos/Runner.app"
 
 # flutter build は Xcode の SourcePackages を既定の場所に置かないため、Crashlytics の run が見つからない。
 # deliver.yml と同じく、Package.resolved が固定する firebase-ios-sdk のスクリプトを取得して渡す。
@@ -124,35 +151,25 @@ prepare_crashlytics_scripts() {
   export CRASHLYTICS_RUN_SCRIPT="$dir/run"
 }
 
-if [[ -z "${SKIP_BUILD:-}" ]]; then
+if [[ "${SKIP_BUILD:-}" != 1 ]]; then
   # 古い成果物を入れ直さないよう、先に消す。
-  rm -rf "${app_candidates[@]}"
+  rm -rf "$app"
   prepare_crashlytics_scripts
-  (cd "$mobile" && flutter build ios --profile --flavor "$flavor" \
-    --dart-define-from-file="dart_defines/${flavor}.json")
+  define_args=(--dart-define-from-file="dart_defines/${flavor}.json")
+  [[ -z "$token" ]] || define_args+=(--dart-define="APP_CHECK_DEBUG_TOKEN=${token}")
+  (cd "$mobile" && flutter build ios --profile --flavor "$flavor" "${define_args[@]}")
 fi
 
-app=""
-for candidate in "${app_candidates[@]}"; do
-  if [[ -d "$candidate" ]]; then
-    app="$candidate"
-    break
-  fi
-done
-[[ -n "$app" ]] || die "ビルド済みの app が無い（${app_candidates[*]}）。SKIP_BUILD を外して作り直す"
+[[ -d "$app" ]] || die "ビルド済みの app が無い（${app}）。SKIP_BUILD を外して作り直す"
 
 bundle_id="$(/usr/bin/plutil -extract CFBundleIdentifier raw "$app/Info.plist")"
 echo "bundle ID: ${bundle_id}"
+[[ "$bundle_id" == "$bundle_id_expected" ]] ||
+  die "bundle ID が ${flavor} の期待値 ${bundle_id_expected} と違う（${bundle_id}）。SKIP_BUILD を外して作り直す"
 
 run_devicectl install xcrun devicectl device install app --device "$device_id" "$app"
 
-if [[ -z "${NO_LAUNCH:-}" ]]; then
-  token="${APP_CHECK_DEBUG_TOKEN:-}"
-  if [[ -n "$token" ]]; then
-    [[ "$token" =~ ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$ ]] ||
-      die "APP_CHECK_DEBUG_TOKEN は UUID で指定する"
-    export DEVICECTL_CHILD_FIRAAppCheckDebugToken="$token"
-  fi
+if [[ "${NO_LAUNCH:-}" != 1 ]]; then
   run_devicectl launch xcrun devicectl device process launch --device "$device_id" \
     --terminate-existing "$bundle_id"
 fi

@@ -15,12 +15,14 @@ SKIP_BUILD=1 just device-dev   # ビルド済みを入れ直すだけ
 NO_LAUNCH=1 just device-dev    # 入れるだけで起動しない
 ```
 
+- 端末名は repo に書かない。既定は `.env` の `TEIGIII_DEVICE` で、`TEIGIII_DEVICE=<端末> just device-dev` のように環境変数でも渡せる。引数が最優先
 - 実体は `mobile_app/scripts/install-device.sh`。`flutter build ios --profile --flavor dev` で作り、`xcrun devicectl` で入れて起動する
 - 署名は `mobile_app/ios/Flutter/Dev.xcconfig` の手動署名（プロファイル `Teigiii Dev`）。App Store Connect の API キーは使わない。プロファイルに端末が含まれ、Xcode に入っている必要がある
 - bundle ID は、ビルドした `Runner.app` の `Info.plist` から取る。`just mobile-check-ios-flavors` が検査する flavor 設定と同じ値になる
-- Profile ビルドは `kReleaseMode` が偽なので、iOS の App Check は debug provider になる。`.env` の `APP_CHECK_DEBUG_TOKEN`（UUID）を書くと、起動時に `FIRAAppCheckDebugToken` として渡す。書かなければ端末ごとに自動生成され、Firebase に登録が要る
-- `just device-prod` は prod を入れる。確認を挟む。prod の Profile は配布用プロファイルで署名するため、端末へ入らない場合がある
-- 端末が見つからない、ロックされている、開発者モードが無効、などの失敗は、原因と対処を 1 行で出す
+- Profile ビルドは `kReleaseMode` が偽なので、iOS の App Check は debug provider になる。`.env` の `APP_CHECK_DEBUG_TOKEN`（UUID）を書くと、ビルド時の `--dart-define` として焼き込み、`main.dart` が `AppleDebugProvider(debugToken:)` に渡す。起動時の環境変数と違い、ホーム画面からの再起動でも効く。`SKIP_BUILD=1` では反映されない。書かなければ端末ごとに自動生成され（初回起動のコンソールに `Firebase App Check Debug Token:` と出る）、Firebase の App Check に登録が要る
+- `just device-prod` は prod を入れる。確認を挟む。スクリプトを直接実行するときは `CONFIRM_PROD=1` が要る。prod の Profile は配布用プロファイルで署名するため、端末へ入らない場合がある
+- 端末が見つからない、接続できない（ビルド前に検査する）、ロックされている、開発者モードが無効、などの失敗は、原因と対処を 1 行で出す
+- `SKIP_BUILD=1` は `build/ios/Profile-<flavor>-iphoneos/Runner.app` だけを使い、bundle ID が flavor と合わなければ入れずに止まる
 
 実機側の前提: 開発者モードが ON、Mac を信頼済み。
 
