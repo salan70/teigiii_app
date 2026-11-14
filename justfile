@@ -33,9 +33,13 @@ docbridge-check:
 docbridge-related-staged:
     git diff --cached --name-only | {{docbridge}} related --stdin --gate || true
 
-# .githooks/pre-commit を有効にする。clone 後に 1 回実行する。
-install-git-hooks:
-    git config core.hooksPath .githooks
+# 全体を検証する（docbridge、mobile、backend）。出力は要約で、全文はログに書く
+check:
+    @python3 tool/dev_check.py check
+
+# 変更範囲だけを検証する。CI の changes ジョブと同じ規則で mobile / backend を選ぶ
+check-changed *args:
+    @python3 tool/dev_check.py check-changed {{args}}
 
 # --- mobile（Flutter アプリ）---
 

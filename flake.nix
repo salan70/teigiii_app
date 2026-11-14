@@ -182,6 +182,7 @@
             pkgs.ripgrep
             pkgs.qrencode
             pkgs.openapi-generator-cli
+            pkgs.lefthook
           ]
           ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.cocoapods ];
         in
@@ -236,6 +237,15 @@
                   export CXX="$(xcrun --find clang++)"
                 fi
               ''}
+              # Git hook を入れる。hook は共通の .git/hooks に入るため worktree でも効く。
+              # 旧 .githooks を指す core.hooksPath が残っていると lefthook が入れられないので外す。
+              hook_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+              if [ -n "$hook_root" ] && [ -f "$hook_root/lefthook.yml" ]; then
+                if [ "$(git config --get core.hooksPath)" = ".githooks" ]; then
+                  git config --unset core.hooksPath
+                fi
+                (cd "$hook_root" && lefthook install >/dev/null) || echo "[nix] lefthook install に失敗しました" >&2
+              fi
               # stdout は `$(nix develop --command ...)` で捕捉されるコマンド出力用に空けておく。
               # バナーは informational なので stderr へ出す。
               echo "[nix] teigi_app dev shell ready (Flutter ${flutterVersion}, just, lcov${lib.optionalString pkgs.stdenv.isDarwin ", CocoaPods"})" >&2

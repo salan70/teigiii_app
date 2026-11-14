@@ -1,0 +1,29 @@
+# Git hook の定義。direnv で Nix の shell に入ると `lefthook install` が走り、hook が有効になる（flake.nix の shellHook）。
+# hook は共通の .git/hooks に入るため、worktree でも同じ hook が効く。
+# 検証の本体は tool/dev_check.py と justfile にある。ここは「いつ何を走らせるか」だけを決める。
+# 出力は要約だけ。全文は dev_check.py が示すログファイルに書く。
+output:
+  - success
+  - failure
+
+# 速い検査だけ。analyze とテストは pre-push と CI が担う。
+pre-commit:
+  commands:
+    format:
+      run: python3 tool/dev_check.py format-staged
+    docbridge-check:
+      run: python3 tool/dev_check.py run docbridge-check
+    md-links:
+      glob: "*.md"
+      run: python3 tool/dev_check.py md-links
+    # 対応先の更新漏れとデバッグコードは報告だけで、commit は止めない。
+    docbridge-related:
+      run: python3 tool/dev_check.py run docbridge-related-staged
+    debug-code:
+      run: python3 tool/dev_check.py debug-code
+
+# 変更範囲に応じた検証。mobile / backend の判定は CI と同じ .github/changes-filter*.yml を読む。
+pre-push:
+  commands:
+    check-changed:
+      run: python3 tool/dev_check.py check-changed

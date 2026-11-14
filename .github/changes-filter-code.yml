@@ -1,0 +1,7 @@
+# Markdown 以外の変更が 1 つでもあるかを判定する規則。
+# paths-filter では predicate-quantifier: every で読むため、mobile / backend の規則とはファイルを分けている。
+# CI とローカル（tool/dev_check.py）が同じファイルを読む。
+code:
+  - '**'
+  - '!**/*.md'
+  - '!*.md'

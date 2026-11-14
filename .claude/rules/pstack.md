@@ -32,7 +32,7 @@ This is a monorepo. `mobile_app/` is a Flutter and Dart app (iOS and Android). `
 - Never rebase a pushed branch and never force-push. Bring in `develop` with a merge. Never run `git reset --hard` on a branch with work you did not make.
 - Commit messages follow `<type>: #<issue> <Japanese summary> <gitmoji>`. The types are `feat` ✨, `fix` 🐛, `docs` 📝, `style` 💄, `refactor` ♻️, `test` 🧪, `chore` 🔧, `build` 📦, and `ci` 💚. PR titles follow `<type>: #<issue> <summary>`. PR bodies use `.github/PULL_REQUEST_TEMPLATE.md` in Japanese and include `closes #<issue>`.
 - Stage explicit paths, never `git add .`. Check `git diff --cached --name-only` for secrets (`.env*`, `*.pem`, `*.key`, `service-account*.json`) and unstage real ones.
-- Never merge, arm auto-merge, or squash. Merges are merge commits that the user approves for each PR. Shipping and Autopilot-full never run. Never bypass `.githooks/pre-commit` with `--no-verify`.
+- Never merge, arm auto-merge, or squash. Merges are merge commits that the user approves for each PR. Shipping and Autopilot-full never run. Never bypass the Git hooks (`lefthook.yml`) with `--no-verify`.
 
 ## Autonomy and cost
 
