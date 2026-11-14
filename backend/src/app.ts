@@ -124,8 +124,7 @@ export function buildOpenApiDocument() {
     info: {
       title: "teigiii API",
       version: "1.0.0",
-      description:
-        "teigiii の REST API。設計の詳細は doc/specs/workers-api-server.md を参照。",
+      description: "teigiii の REST API。設計の詳細は doc/specs/workers-api-server.md を参照。",
     },
   });
 }
