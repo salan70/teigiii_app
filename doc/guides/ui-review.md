@@ -75,8 +75,9 @@ just ui-review-test
 just deploy-ui-review    # capture --all → widgetbook → publish
 ```
 
-`publish` は、Cloudflare Access の self-hosted アプリがこのホスト名にあり、利用者を絞った allow の policy（include が空でなく、`everyone` を含まない）を持つことを API で確かめてから、`wrangler deploy` を呼ぶ。
-確かめられないときは、配らずに止まる。
+`publish` は、Cloudflare Access の self-hosted アプリがこのホスト名にあり、利用者を絞った allow の policy（メールやグループなどで限定した include）を持つことを API で確かめてから、`wrangler deploy` を呼ぶ。
+そのホスト名を覆うアプリの全 policy を見て、bypass、全員向けの allow、評価できない policy が 1 つでもあれば配らずに止まる。
+確かめられないときも、配らずに止まる。
 配る中身は `wrangler.jsonc` の `assets.directory`（`artifacts/ui-review/`）で決まるので、`publish` に `--out` はない。
 `workers.dev` とプレビュー URL は無効にしてある（`wrangler.jsonc`）。
 

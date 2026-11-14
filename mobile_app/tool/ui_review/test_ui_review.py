@@ -42,19 +42,67 @@ class AccessTest(unittest.TestCase):
     def app(self, policies, **extra):
         return {"id": "x", "type": "self_hosted", "domain": "teigiii-ui.oda79.me", "policies": policies, **extra}
 
+    EMAIL = [{"email": {"email": "a@example.com"}}]
+
     def test_requires_allow_policy(self):
-        email = [{"email": {"email": "a@example.com"}}]
-        self.assertTrue(self.protects(self.app([{"decision": "allow", "include": email}])))
-        self.assertFalse(self.protects(self.app([{"decision": "bypass", "include": email}])))
+        self.assertTrue(self.protects(self.app([{"decision": "allow", "include": self.EMAIL}])))
+        # allow が無く bypass だけ
+        with self.assertRaises(RuntimeError):
+            self.protects(self.app([{"decision": "bypass", "include": self.EMAIL}]))
 
     def test_rejects_allow_for_everyone(self):
-        everyone = [{"everyone": {}}]
-        self.assertFalse(self.protects(self.app([{"decision": "allow", "include": everyone}])))
-        mixed = [{"email": {"email": "a@example.com"}}, {"everyone": {}}]
-        self.assertFalse(self.protects(self.app([{"decision": "allow", "include": mixed}])))
+        with self.assertRaises(RuntimeError):
+            self.protects(self.app([{"decision": "allow", "include": [{"everyone": {}}]}]))
+        with self.assertRaises(RuntimeError):
+            self.protects(self.app([{"decision": "allow", "include": [*self.EMAIL, {"everyone": {}}]}]))
 
     def test_rejects_allow_without_include(self):
-        self.assertFalse(self.protects(self.app([{"decision": "allow", "include": []}])))
+        with self.assertRaises(RuntimeError):
+            self.protects(self.app([{"decision": "allow", "include": []}]))
+
+    def test_rejects_restricted_allow_mixed_with_bypass(self):
+        restricted = {"decision": "allow", "include": self.EMAIL}
+        for rule in ({"everyone": {}}, {"ip": {"ip": "0.0.0.0/0"}}, {"email": {"email": "a@example.com"}}):
+            with self.assertRaises(RuntimeError):
+                self.protects(self.app([restricted, {"decision": "bypass", "include": [rule]}]))
+            with self.assertRaises(RuntimeError):
+                self.protects(self.app([{"decision": "bypass", "include": [rule]}, restricted]))
+
+    def test_rejects_restricted_allow_mixed_with_everyone_allow(self):
+        restricted = {"decision": "allow", "include": self.EMAIL}
+        everyone = {"decision": "allow", "include": [{"everyone": {}}]}
+        with self.assertRaises(RuntimeError):
+            self.protects(self.app([restricted, everyone]))
+        with self.assertRaises(RuntimeError):
+            self.protects(self.app([everyone, restricted]))
+
+    def test_fails_closed_on_unknown_policy(self):
+        restricted = {"decision": "allow", "include": self.EMAIL}
+        unknown_decision = {"decision": "mystery", "include": self.EMAIL}
+        unknown_rule = {"decision": "allow", "include": [{"future_rule": {}}]}
+        ip_allow = {"decision": "allow", "include": [{"ip": {"ip": "0.0.0.0/0"}}]}
+        for bad in (unknown_decision, unknown_rule, ip_allow, {"decision": "allow", "include": ["x"]}):
+            with self.assertRaises(RuntimeError):
+                self.protects(self.app([restricted, bad]))
+
+    def test_deny_policy_does_not_unprotect(self):
+        deny = {"decision": "deny", "include": [{"email": {"email": "b@example.com"}}]}
+        self.assertTrue(self.protects(self.app([{"decision": "allow", "include": self.EMAIL}, deny])))
+        self.assertFalse(self.protects(self.app([deny])))
+
+    def test_fails_closed_on_incomplete_policy_info(self):
+        app = self.app([{"id": "p1"}])
+        responses = {"/accounts/acc/access/apps": [app], "/accounts/acc/access/apps/x/policies": [{"id": "p1"}]}
+        with mock.patch.object(ur, "cf_get", side_effect=lambda path, token: responses[path]):
+            with self.assertRaises(RuntimeError):
+                ur.access_protects("acc", "teigiii-ui.oda79.me", "t")
+
+    def test_every_app_covering_host_must_be_protected(self):
+        protected = self.app([{"decision": "allow", "include": self.EMAIL}])
+        open_app = {**self.app([]), "id": "y"}
+        responses = {"/accounts/acc/access/apps": [protected, open_app], "/accounts/acc/access/apps/y/policies": []}
+        with mock.patch.object(ur, "cf_get", side_effect=lambda path, token: responses[path]):
+            self.assertFalse(ur.access_protects("acc", "teigiii-ui.oda79.me", "t"))
 
     def test_ignores_non_self_hosted_apps(self):
         email = [{"email": {"email": "a@example.com"}}]

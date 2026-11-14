@@ -563,32 +563,67 @@ def app_hosts(app):
     return hosts
 
 
-def is_restrictive_allow(policy):
-    """利用者を絞る allow か。include が空、または everyone を含むものは絞っていない。"""
-    if not isinstance(policy, dict) or policy.get("decision") != "allow":
+# 利用者を個人・グループ単位で絞れる include の種別。これ以外（ip、geo、証明書など）は、絞れているかを評価できない。
+IDENTITY_RULES = frozenset(
+    {"email", "email_domain", "email_list", "group", "github-organization", "gsuite", "azure", "okta", "saml", "oidc"}
+)
+
+
+def policy_protects(policy):
+    """policy 1 件を評価する。利用者を絞る allow なら True、アクセスを広げない deny なら False。
+    アクセスを広げうる policy（bypass、全員向け allow）と、評価できない policy は UnsafePolicy を投げる（fail closed）。"""
+    if not isinstance(policy, dict) or not isinstance(policy.get("decision"), str):
+        raise UnsafePolicy("policy の内容（decision）を読み取れない")
+    decision = policy["decision"]
+    if decision == "deny":
         return False
+    if decision == "bypass":
+        raise UnsafePolicy("bypass の policy がある（利用者を問わず通す）")
+    if decision != "allow":
+        raise UnsafePolicy(f"評価できない decision がある: {decision}")
     include = policy.get("include")
     if not isinstance(include, list) or not include:
-        return False
-    return not any(isinstance(rule, dict) and "everyone" in rule for rule in include)
+        raise UnsafePolicy("include が空の allow がある")
+    for rule in include:
+        if not isinstance(rule, dict) or not rule:
+            raise UnsafePolicy("読み取れない include がある")
+        if "everyone" in rule:
+            raise UnsafePolicy("全員向けの allow がある（include に everyone）")
+        unknown = set(rule) - IDENTITY_RULES
+        if unknown:
+            raise UnsafePolicy(f"利用者を絞れるか評価できない include 種別がある: {', '.join(sorted(unknown))}")
+    return True
+
+
+class UnsafePolicy(RuntimeError):
+    """Access の policy が公開を許せない、または評価できない。"""
 
 
 def has_allow_policy(account, app, token):
+    """app の全 policy を評価し、利用者を絞る allow が 1 つ以上あり、他に広げる policy が無ければ True。"""
     policies = app.get("policies") or []
-    # アプリ一覧の policy が参照だけで include を持たないことがあるので、そのときは policy を取り直す。
-    if not any(isinstance(policy, dict) and "include" in policy for policy in policies):
+    # アプリ一覧の policy が参照だけで decision や include を持たないことがあるので、そのときは policy を取り直す。
+    complete = bool(policies) and all(
+        isinstance(policy, dict) and "decision" in policy and "include" in policy for policy in policies
+    )
+    if not complete:
         policies = cf_get(f"/accounts/{account}/access/apps/{app['id']}/policies", token)
-    return any(is_restrictive_allow(policy) for policy in policies)
+    if not isinstance(policies, list):
+        raise UnsafePolicy("policy 一覧を読み取れない")
+    restricted = [policy_protects(policy) for policy in policies]
+    return any(restricted)
 
 
 def access_protects(account, hostname, token):
-    """hostname を覆う self_hosted の Access アプリが、利用者を絞る allow の policy を持つか。"""
-    for app in cf_get(f"/accounts/{account}/access/apps", token):
-        if app.get("type") != "self_hosted":
-            continue
-        if any(covers(host, hostname) for host in app_hosts(app)) and has_allow_policy(account, app, token):
-            return True
-    return False
+    """hostname を覆う self_hosted の Access アプリがすべて、利用者を絞る allow だけで守られているか。
+    bypass・全員向け allow・評価できない policy があれば UnsafePolicy（RuntimeError）を投げ、配らない。"""
+    matched = [
+        app
+        for app in cf_get(f"/accounts/{account}/access/apps", token)
+        if app.get("type") == "self_hosted" and any(covers(host, hostname) for host in app_hosts(app))
+    ]
+    # 同じホスト名を覆うアプリが複数あるときは、どれか 1 つでも守れていなければ守られていないとみなす。
+    return bool(matched) and all(has_allow_policy(account, app, token) for app in matched)
 
 
 def wrangler_command():
