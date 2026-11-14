@@ -1,79 +1,50 @@
-# iOS 実機デバッグ（iOS 26 / Flutter 3.41）
+# iOS 実機での確認（iOS 26 / Flutter 3.41）
 
-鬼瓦（iPhone 16 / iOS 26.5）での調査結果に基づく運用メモ。アプリ側の不具合ではなく、Apple のメモリ保護変更と Flutter の回避策の組み合わせが原因。
+実機の確認は、dev の Profile ビルドを入れて Mac から切り離して触る方法を既定にする。
+iOS 26 の無線 debug が実用にならないためで、アプリ側の不具合ではない。
 
-## 結論（使い分け）
+## 既定の手順: 1 コマンドでインストール
+
+```bash
+# 初回だけ。.env（gitignore 済み）に既定の端末を書く。例は .env.example
+echo 'TEIGIII_DEVICE=<端末名か UDID>' >> .env   # 一覧: xcrun devicectl list devices
+
+just device-dev                # 既定の端末へ dev をビルド → インストール → 起動
+just device-dev <端末>         # 端末を指定する
+SKIP_BUILD=1 just device-dev   # ビルド済みを入れ直すだけ
+NO_LAUNCH=1 just device-dev    # 入れるだけで起動しない
+```
+
+- 実体は `mobile_app/scripts/install-device.sh`。`flutter build ios --profile --flavor dev` で作り、`xcrun devicectl` で入れて起動する
+- 署名は `mobile_app/ios/Flutter/Dev.xcconfig` の手動署名（プロファイル `Teigiii Dev`）。App Store Connect の API キーは使わない。プロファイルに端末が含まれ、Xcode に入っている必要がある
+- bundle ID は、ビルドした `Runner.app` の `Info.plist` から取る。`just mobile-check-ios-flavors` が検査する flavor 設定と同じ値になる
+- Profile ビルドは `kReleaseMode` が偽なので、iOS の App Check は debug provider になる。`.env` の `APP_CHECK_DEBUG_TOKEN`（UUID）を書くと、起動時に `FIRAAppCheckDebugToken` として渡す。書かなければ端末ごとに自動生成され、Firebase に登録が要る
+- `just device-prod` は prod を入れる。確認を挟む。prod の Profile は配布用プロファイルで署名するため、端末へ入らない場合がある
+- 端末が見つからない、ロックされている、開発者モードが無効、などの失敗は、原因と対処を 1 行で出す
+
+実機側の前提: 開発者モードが ON、Mac を信頼済み。
+
+## debug / hot reload が要るとき
 
 | 目的 | 推奨 | 理由 |
 |------|------|------|
-| 日常の実装・hot reload | **シミュレータ debug** | JIT 制限なし。最速 |
-| 実機の見た目・端末固有挙動 | **実機 `--profile`（無線可）** | AOT。LLDB JIT ペナルティなし |
-| 実機で debug / hot reload | **USB 接続の debug** | 無線 debug は実用不可レベル |
-| 実機で無線 debug | 非推奨 | iOS 26 では使い物にならない |
-
-## 何が起きているか
-
-1. **iOS 18.4 / 26 の JIT 制限**  
-   アプリ自身が実行可能メモリを `mprotect` で書き換えられない（`RUNTIME_EXCEPTION_ALLOW_JIT = NO`）。  
-   参照: [flutter/flutter#163984](https://github.com/flutter/flutter/issues/163984)
-
-2. **Flutter の回避策 = LLDB 経由で RX ページを書く**  
-   `flutter config --enable-lldb-debugging` が必須（未設定だと debug 起動時に VM が落ちる）。  
-   `ios/Flutter/ephemeral/flutter_lldb_helper.py` が `NOTIFY_DEBUGGER_ABOUT_RX_PAGES` を処理する。  
-   ページごとにデバッガ往復が発生し、**ワイヤレスでは数百 ms〜秒単位**のストールになる。  
-   参照: [flutter/flutter#175962](https://github.com/flutter/flutter/issues/175962)
-
-3. **無線の Dart VM Service 発見**  
-   Bonjour (`_dartVmService._tcp`) に依存。Local Network 許可が必要。  
-   同 bundle id のシミュレータが動いていると mDNS が汚染され、接続に失敗しやすい。  
-   参照: [flutter/flutter#144634](https://github.com/flutter/flutter/issues/144634)（2024〜の無線 VM 発見問題）
-
-## 初回セットアップ（ホスト Mac）
+| 日常の実装・hot reload | シミュレータ debug | JIT 制限なし。最速 |
+| 実機で debug / hot reload | USB 接続の debug | 無線 debug は実用不可レベル |
 
 ```bash
-# iOS 26 実機 debug に必須。マシン単位の設定。
-flutter config --enable-lldb-debugging
-
-# 確認（Feature flags に enable-lldb-debugging が出ること）
-flutter doctor -v
+flutter config --enable-lldb-debugging    # 初回のみ。iOS 26 実機 debug に必須
+just mobile-run-dev-on <端末 ID>          # シミュレータや、USB 接続の実機 debug
+just mobile-run-dev-profile-on <端末 ID>  # flutter run で Profile を起動する（接続が残る）
 ```
 
-実機側:
+USB なのに `wireless` と出る場合は、Xcode の Devices and Simulators でネットワークデバッグを切り、ケーブル接続を優先する。
+実機の初回起動時の **ローカルネットワーク** ダイアログで許可する（拒否済みならアプリを削除して再インストール）。
 
-- 開発者モード ON
-- 初回起動時の **ローカルネットワーク** ダイアログで許可（拒否済みならアプリを削除して再インストール）
-- 設定 → Teigiii dev → ローカルネットワーク = ON
+## 原因の要約
 
-## コマンド
+- iOS 18.4 / 26 は、アプリ自身が実行可能メモリを書き換える JIT を禁じた（[flutter/flutter#163984](https://github.com/flutter/flutter/issues/163984)）
+- Flutter の回避策は LLDB 経由で RX ページを書く方式で、ページごとにデバッガ往復が起き、無線では数百 ms〜秒単位で止まる（[flutter/flutter#175962](https://github.com/flutter/flutter/issues/175962)）
+- 無線の Dart VM Service 発見は Bonjour に依存する。同 bundle ID のシミュレータが動いていると mDNS が汚染される（[flutter/flutter#144634](https://github.com/flutter/flutter/issues/144634)）
+- Profile / Release は AOT なので、この影響を受けない
 
-```bash
-# 端末 ID 確認（wireless 表記に注意）
-flutter devices
-
-# 日常: シミュレータ debug
-just mobile-run-dev-on DDCA5D1C-5B99-4ACD-A370-551F158CBE26
-
-# 実機の動作確認（無線でも実用速度）: profile / AOT
-just mobile-run-dev-profile-on 00008140-001A78C82147001C
-
-# 実機 debug（USB 接続時のみ推奨。無線は重い）
-just mobile-run-dev-on 00008140-001A78C82147001C
-```
-
-USB なのに `wireless` と出る場合は、Xcode の Devices and Simulators でネットワークデバッグを切り、ケーブル接続を優先する。Flutter は無線経路を選ぶと LLDB JIT が極端に遅くなる。
-
-## 切り分けチェックリスト
-
-1. `flutter doctor -v` に `enable-lldb-debugging` があるか  
-2. `flutter devices` が `(wireless)` か USB か  
-3. 同 bundle id のシミュレータ Runner が生きていないか（`pgrep -lf Runner.app/Runner`）  
-4. `dns-sd -B _dartVmService._tcp` で実機ホスト名（例: `onigawarakarakihachirou.local`）が出るか。`127.0.0.1` / Mac ホスト名だけならシミュレータ汚染  
-5. debug で重いが profile/release が軽い → アプリロジックではなく JIT/LLDB 側
-
-## このリポジトリでの検証メモ（2026-07-22）
-
-- 対象: 鬼瓦 毅八郎 `00008140-001A78C82147001C` / iOS 26.5 / Xcode 26.1 / Flutter 3.41.8
-- LLDB 有効化後、無線 debug で `Dart execution mode: JIT` まで到達（起動自体は成功）
-- 無線 debug は Flutter 自身が `Wireless debugging on iOS 26 may be slower than expected` を警告
-- WebContent / Networking プロセス起動だけで数〜十数秒。操作は実用不可レベル
-- 同一 bundle id のシミュレータが mDNS を汚染し、VM Service 発見がさらに不安定だった
+debug だけ重いときは、`flutter doctor -v` に `enable-lldb-debugging` があるか、`flutter devices` が `(wireless)` でないか、`pgrep -lf Runner.app/Runner` で同 bundle ID のシミュレータが生きていないかを確認する。

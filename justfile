@@ -114,6 +114,24 @@ mobile-run-dev-profile-on device:
 mobile-run-prod:
     cd mobile_app && flutter run --flavor prod --dart-define-from-file=dart_defines/prod.json
 
+# 実機へ dev の Profile ビルドを入れて起動する（ケーブル不要で触れる）。端末は引数か .env の TEIGIII_DEVICE
+# 環境変数: SKIP_BUILD=1（入れ直しのみ）/ NO_LAUNCH=1（起動しない）。詳細は doc/ios-physical-device-debug.md
+device-dev device="":
+    bash mobile_app/scripts/install-device.sh dev "{{device}}"
+
+# prod の Profile ビルドを実機へ入れる。誤操作を避けるため確認を挟む
+[positional-arguments]
+device-prod device="":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "prod flavor（com.toda.teigiii）を実機へ入れます。"
+    read -r -p "続行するには 'install prod' と入力: " confirmation
+    if [ "$confirmation" != 'install prod' ]; then
+      echo 'Aborted.' >&2
+      exit 1
+    fi
+    bash mobile_app/scripts/install-device.sh prod ${1:+"$1"}
+
 mobile-check-ios-flavors:
     bash mobile_app/ios/scripts/check_flavor_configuration.sh
 
