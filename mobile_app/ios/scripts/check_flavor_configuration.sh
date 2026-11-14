@@ -10,6 +10,9 @@ framework_package="$project_root/ios/Flutter/ephemeral/Packages/.packages/Flutte
 xcode_project="$project_root/ios/Runner.xcodeproj/project.pbxproj"
 deliver_workflow="$repo_root/.github/workflows/deliver.yml"
 
+python3 "$repo_root/scripts/firebase/config.py" check dev
+python3 "$repo_root/scripts/firebase/config.py" check prod
+
 if [[ ! -f "$plugin_package" ]] || ! grep -Fq '.iOS("15.0")' "$plugin_package"; then
   echo "FlutterGeneratedPluginSwiftPackage is not configured for iOS 15.0. Run 'just setup'." >&2
   exit 1
@@ -175,6 +178,6 @@ check_flavor \
   "Teigiii prod" \
   everyone-teigi-prod \
   713374936833 \
-  1:713374936833:ios:662108d31ce8b881927500
+  1:713374936833:ios:245c65657f69da4a927500
 
 echo "iOS flavor configurations are valid."

@@ -69,3 +69,6 @@ app.*.map.json
 
 # エージェント／手動検証用のローカル成果物（スクショ等）
 .artifacts/
+
+scripts/firebase/__pycache__/
+scripts/firebase/tests/__pycache__/

@@ -7,7 +7,9 @@ import '../../../core/router/app_router.dart';
 import '../application/introduction_service.dart';
 
 class ConfirmAgreementDialog extends ConsumerWidget {
-  const ConfirmAgreementDialog({super.key});
+  const ConfirmAgreementDialog({super.key, this.onAgreed});
+
+  final Future<void> Function()? onAgreed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,13 +30,19 @@ class ConfirmAgreementDialog extends ConsumerWidget {
           ),
         ),
         InkWell(
-          onTap: () {
-            ref.read(introductionServiceProvider).onAgreePolicy();
+          onTap: () async {
+            await ref.read(introductionServiceProvider).onAgreePolicy();
 
             if (!context.mounted) {
               return;
             }
-            context.pushRoute(const BaseRoute());
+
+            if (onAgreed != null) {
+              await context.maybePop();
+              await onAgreed!();
+              return;
+            }
+            await context.pushRoute(const BaseRoute());
           },
           child: Padding(
             padding: const EdgeInsets.all(16),

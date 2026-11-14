@@ -13,6 +13,7 @@ const idTokenExemptPathSet = new Set<string>(idTokenExemptPaths);
 export type AuthenticationVariables = {
   appId: string;
   firebaseUid: string;
+  firebaseIdentity: FirebaseIdentity;
 };
 
 type AuthenticationEnvironment = {
@@ -74,6 +75,7 @@ export function createFirebaseAuthMiddleware({
     try {
       const identity = await verify(token, context);
       context.set("firebaseUid", identity.uid);
+      context.set("firebaseIdentity", identity);
     } catch {
       return unauthorized(context, "firebase_id_token_invalid");
     }

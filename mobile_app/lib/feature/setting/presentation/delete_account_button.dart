@@ -62,6 +62,9 @@ class DeleteAccountButton extends ConsumerWidget with PresentationMixin {
                   },
                   inBaseRouteBeforeAction: false,
                   inBaseRouteAfterAction: false,
+                  errorToastMessage:
+                      '削除を完了できませんでした。もう一度「アカウント削除」を実行し、'
+                      '再認証してください。サーバー削除後に中断した場合は、残りの認証アカウント削除を再試行します。',
                 );
               },
               confirmButtonText: '削除する',

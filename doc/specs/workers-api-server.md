@@ -97,6 +97,12 @@ prod（`env.prod`）では空文字を明示して allowlist を空にする。�
 - `sub` が非空文字列であること
 
 トークン失効確認は行わず、最長1時間の自然失効を許容する。
+ただし、アカウントの論理削除後は、署名が有効な旧トークンでも削除済みユーザーとして本人向け API と更新操作を拒否する。
+
+`DELETE /v1/users/me` では、署名検証済みの `firebase.sign_in_provider` が `anonymous` である場合を除き、直近 300 秒以内の `auth_time` を要求する。
+プロバイダや認証時刻が欠落している場合、認証時刻が不正な場合、または再認証から 300 秒を超えている場合は、削除を行わず `401 requires_recent_login` を返す。
+クライアントは削除を始める前に連携済みプロバイダで再認証し、ID トークンを強制更新する。
+この制約はアカウント削除に限定し、通常の API 利用に定期的な再認証を要求しない。
 
 <!-- @code backend/src/auth/firebase-public-keys.ts#FirebasePublicKeyProvider -->
 ### 公開鍵キャッシュ

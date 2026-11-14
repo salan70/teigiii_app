@@ -2,4 +2,6 @@
 flavor=prod
 appName=Teigiii
 appIdSuffix=
+CODE_SIGN_ENTITLEMENTS=Runner/Runner.entitlements
 #include "Generated.xcconfig"
+#include "Firebase-prod.xcconfig"

@@ -45,6 +45,18 @@ class SettingPage extends ConsumerWidget {
         child: ListView(
           children: [
             const Gap(24),
+            // アカウント
+            Text('アカウント', style: Theme.of(context).textTheme.titleSmall),
+            const Gap(DsSpacing.inline),
+            DsListTile.withLeadingIcon(
+              leadingIcon: CupertinoIcons.link,
+              label: 'アカウント連携',
+              onTap: () {
+                context.navigateTo(const AccountLinkRoute());
+              },
+            ),
+            const Gap(DsSpacing.block),
+
             // 一般
             Text('一般', style: Theme.of(context).textTheme.titleSmall),
             const Gap(8),

@@ -60,7 +60,7 @@
     "ds_hardcoded_spacing": 3
   },
   "lib/core/page/welcome_page.dart": {
-    "ds_hardcoded_spacing": 4
+    "ds_hardcoded_spacing": 3
   },
   "lib/core/page/word_search_result_page.dart": {
     "ds_hardcoded_spacing": 4

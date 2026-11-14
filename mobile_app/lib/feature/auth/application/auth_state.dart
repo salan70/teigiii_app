@@ -29,3 +29,23 @@ bool isSignedIn(IsSignedInRef ref) {
   ref.watch(userChangesProvider);
   return ref.watch(authRepositoryProvider).currentUser != null;
 }
+
+/// 現在のユーザーが匿名ユーザーかどうかを返す。
+@Riverpod(keepAlive: true)
+bool isAnonymous(IsAnonymousRef ref) {
+  ref.watch(userChangesProvider);
+  return ref.watch(authRepositoryProvider).currentUser?.isAnonymous ?? false;
+}
+
+/// 現在のユーザーにリンクされている外部認証プロバイダを返す。
+@Riverpod(keepAlive: true)
+List<UserInfo> linkedAuthProviders(LinkedAuthProvidersRef ref) {
+  ref.watch(userChangesProvider);
+  return [
+    ...?ref
+        .watch(authRepositoryProvider)
+        .currentUser
+        ?.providerData
+        .where((provider) => provider.providerId != 'firebase'),
+  ];
+}

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -36,6 +37,9 @@ void main() {
   // ProviderContainerの初期化を行う。
   // このとき、isSignedInProvider はfalse（未ログイン状態）であることに注意する。
   setUp(() {
+    when(
+      mockAuthRepository.prepareAccountDeletion(),
+    ).thenAnswer((_) async => mockUserId);
     fakeAnalytics = FakeAnalyticsClient();
     container = ProviderContainer(
       overrides: [
@@ -332,29 +336,46 @@ void main() {
   });
 
   group('deleteUser()', () {
-    test(
-      'DELETE /v1/users/me → Firebase Auth deleteUser の順で呼ばれることを検証',
-      () async {
-        // * Arrange
-        final authService = container.read(authServiceProvider);
-        updateContainersOverride(isSignedIn: true);
+    test('サーバー成功後の Firebase 削除失敗は同じ UID で残りだけ再試行する', () async {
+      final service = container.read(authServiceProvider);
+      when(
+        mockAuthRepository.deletePreparedUser(mockUserId),
+      ).thenThrow(FirebaseAuthException(code: 'network-request-failed'));
+      await expectLater(
+        service.deleteUser(),
+        throwsA(isA<FirebaseAuthException>()),
+      );
+      verify(mockAuthRepository.serverDeletedUserId = mockUserId).called(1);
+      when(mockAuthRepository.serverDeletedUserId).thenReturn(mockUserId);
+      when(
+        mockAuthRepository.deletePreparedUser(mockUserId),
+      ).thenAnswer((_) async {});
+      await service.deleteUser();
+      verify(mockRegisterUserRepository.deleteUser()).called(1);
+      verify(mockAuthRepository.prepareAccountDeletion()).called(1);
+      verify(mockAuthRepository.deletePreparedUser(mockUserId)).called(2);
+    });
+    test('再認証 → サーバー削除 → 同じ UID の Firebase 削除の順で処理する', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      updateContainersOverride(isSignedIn: true);
 
-        // * Act
-        await authService.deleteUser();
+      // * Act
+      await authService.deleteUser();
 
-        // * Assert
-        verifyInOrder([
-          mockRegisterUserRepository.deleteUser(),
-          mockAuthRepository.deleteUser(),
-        ]);
-        expect(fakeAnalytics.loggedEvents.map((e) => e.name), [
-          AnalyticsEvent.accountDeleted,
-        ]);
-        expect(fakeAnalytics.userIds, [null]);
-      },
-    );
+      // * Assert
+      verifyInOrder([
+        mockAuthRepository.prepareAccountDeletion(),
+        mockRegisterUserRepository.deleteUser(),
+        mockAuthRepository.deletePreparedUser(mockUserId),
+      ]);
+      expect(fakeAnalytics.loggedEvents.map((e) => e.name), [
+        AnalyticsEvent.accountDeleted,
+      ]);
+      expect(fakeAnalytics.userIds, [null]);
+    });
 
-    test('サーバー削除が 404（削除済み）でも Firebase Auth 削除へ進む', () async {
+    test('サーバー削除の 404 は削除成功と扱わない', () async {
       // * Arrange
       final authService = container.read(authServiceProvider);
       updateContainersOverride(isSignedIn: true);
@@ -363,10 +384,10 @@ void main() {
       ).thenThrow(ApiException(statusCode: 404));
 
       // * Act
-      await authService.deleteUser();
+      await expectLater(authService.deleteUser(), throwsA(isA<ApiException>()));
 
       // * Assert
-      verify(mockAuthRepository.deleteUser()).called(1);
+      verifyNever(mockAuthRepository.deletePreparedUser(any));
     });
 
     test('サーバー削除が 500 の場合は rethrow し Firebase Auth 削除しない', () async {
@@ -379,7 +400,42 @@ void main() {
 
       // * Act & Assert
       await expectLater(authService.deleteUser(), throwsA(isA<ApiException>()));
-      verifyNever(mockAuthRepository.deleteUser());
+      verifyNever(mockAuthRepository.deletePreparedUser(any));
+    });
+
+    test('再認証失敗の場合はサーバーを削除しない', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      updateContainersOverride(isSignedIn: true);
+      when(
+        mockAuthRepository.prepareAccountDeletion(),
+      ).thenThrow(FirebaseAuthException(code: 'web-context-cancelled'));
+
+      // * Act
+      await expectLater(
+        authService.deleteUser(),
+        throwsA(isA<FirebaseAuthException>()),
+      );
+
+      // * Assert
+      verifyNever(mockRegisterUserRepository.deleteUser());
+      verifyNever(mockAuthRepository.deletePreparedUser(any));
+    });
+
+    test('サーバー 401 requires_recent_login は Firebase 削除せず利用者に返す', () async {
+      // * Arrange
+      final authService = container.read(authServiceProvider);
+      updateContainersOverride(isSignedIn: true);
+      when(
+        mockRegisterUserRepository.deleteUser(),
+      ).thenThrow(ApiException(statusCode: 401, code: 'requires_recent_login'));
+
+      // * Act
+      await expectLater(authService.deleteUser(), throwsA(isA<ApiException>()));
+
+      // * Assert
+      verify(mockRegisterUserRepository.deleteUser()).called(1);
+      verifyNever(mockAuthRepository.deletePreparedUser(any));
     });
   });
 }
