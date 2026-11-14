@@ -6,9 +6,6 @@ Workers API は Firebase Auth で認証された利用者に対し、D1 上の t
 
 Firebase Auth、App Check、Analytics、Crashlytics は継続利用する。Workers から Firebase Admin SDK は利用せず、公開鍵による JWT 検証だけを行う。
 
-Flutter repository の接続は #185、Firestore / Firebase Storage の既存データ移行と
-初回 prod 切替は #186 で完了している。
-
 ## 環境
 
 | 環境 | Worker | Firebase | D1 | R2 | 配信 |
@@ -167,15 +164,17 @@ JWT、Authorization、App Check token、プロフィール内容などの個人�
 <!-- @code backend/src/users/user-service.ts#AvatarService -->
 ### アバター
 
+アバター未設定は `avatarUrl: null` で表し、デフォルトアイコンは保存しない。クライアントは null のとき同梱 asset 3 種から `hash(userId)` で決定的に 1 種を表示する。
+
 `PUT /v1/users/me/avatar` は JPEG / PNG を受け付け、Content-Type とファイルシグネチャの両方を検証する。10 MiB を安全上限とし、Workers では画像変換しない。
 
-Issue `#185` の Flutter クライアントは HEIC を含む元画像を切り抜き、512 x 512 JPEG quality 85 に変換して送る。R2 key はユーザー単位で固定し、再アップロードは上書きする。削除は R2 object がなくても成功する。
+Flutter クライアントは HEIC を含む元画像を切り抜き、512 x 512 JPEG quality 85 に変換して送る。R2 key はユーザー単位で固定し、再アップロードは上書きする。削除は R2 object がなくても成功する。
 
 R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object の HTTP metadata に検証済み Content-Type を保存する。bucket に r2.dev URL または R2 custom domain を設定せず、object は公開しない。
 
 レスポンスの `avatarUrl` は `<AVATAR_BASE_URL>/avatars/<URL エンコード済み Firebase UID>` とする。`AVATAR_BASE_URL` は各環境の Worker API `/v1` URLを指す。`GET /v1/avatars/{id}` は App Check と Firebase ID token に加え、閲覧者と対象ユーザーが論理削除されていないことを検証してから R2 object を返す。応答は保存済み Content-Type、`ETag`、`Cache-Control: private, max-age=300`、`X-Content-Type-Options: nosniff` を設定する。URLだけを知る未認証者には画像を返さない。
 
-#185 の Flutter クライアントは通常 API と同様に画像取得へ `X-Firebase-AppCheck` と `Authorization` ヘッダーを付ける。
+Flutter クライアントは通常 API と同様に画像取得へ `X-Firebase-AppCheck` と `Authorization` ヘッダーを付ける。
 
 <!-- @code backend/src/words/word-service.ts#WordService -->
 ### 言葉
@@ -187,6 +186,7 @@ R2 key は `avatars/<URL エンコード済み Firebase UID>` とし、object �
 - 新規 ID は UUIDv7、読みグループは正規化済み reading からサーバーが算出する
 - 最初の明示登録日時・登録者と、ユーザーごとの `word_registrations` を保持する。同じユーザーの再登録は冪等で、別ユーザーの再登録は最初の登録日時を更新しない
 - 公開経路（みんなの辞書・検索・保存一覧・直接取得・タイムラインの言葉登録）は、ミュートしていない明示登録または公開定義がある言葉だけを返す。閲覧権限のない直接取得は 404 `word_not_found`
+- 定義が 0 件になった言葉は削除せず残す。確定済み定義の言葉・よみは変更できない
 - 言葉の修正は登録後1時間以内かつ、行の作成者と最初の明示登録者が同一の本人で、他ユーザーの定義または保存がない場合だけ許可する
 - 一覧は reading の文字種クラス（五十音 → 英字 → 数字・記号）と reading、id の安定順とし、指定された行、定義有無、検索語を適用する
 
@@ -253,7 +253,7 @@ Scheduled Handler は30日以前に論理削除された定義とユーザーを
 
 期限は Scheduled Event の `scheduledTime - 30日` とし、`deleted_at` が期限と同値の行も対象に含める。定義は一括削除し、ユーザーは R2 削除後に1件ずつ D1 から削除する。R2 またはユーザー D1 削除に失敗した場合は当該ユーザーを D1 に保持して他のユーザーを継続する。定義の一括削除に失敗した場合もユーザー削除は継続する。残った対象は次回実行で再試行するため、処理は冪等である。
 
-完了ログは定義とユーザーごとに `target`、`success`、`failure` を記録する。失敗ログは対象種別、`avatar_delete` / `database_delete` の段階、例外型だけを記録し、UID、R2 key、例外メッセージ、stack trace は含めない。dev では remote bindings を使う scheduled endpoint から手動検証し、prod Cron は #186 で有効化する。
+完了ログは定義とユーザーごとに `target`、`success`、`failure` を記録する。失敗ログは対象種別、`avatar_delete` / `database_delete` の段階、例外型だけを記録し、UID、R2 key、例外メッセージ、stack trace は含めない。dev では remote bindings を使う scheduled endpoint から手動検証する。`backend/wrangler.toml` に Cron Trigger は未設定で、prod では定期実行されない。
 
 ## テストと検証
 
@@ -261,9 +261,8 @@ Scheduled Handler は30日以前に論理削除された定義とユーザーを
 - Web Crypto、D1、R2、Scheduled Handler は Cloudflare Vitest integration で workerd 上の結合テスト
 - OpenAPI 生成物は schema validation とルート集合を検証する
 - 主要 D1 クエリは `EXPLAIN QUERY PLAN` で意図した index 利用を確認する
-- HEIC から JPEG への変換は #185 で iOS 実機テストする
 
-各 PR で lint、typecheck、format check、全テスト、OpenAPI 差分、DocBridge check を通す。
+各 PR で lint、typecheck、format check、全テスト、DocBridge check を通す。OpenAPI の差分検査は CI にない。
 
 ## 運用
 
@@ -317,8 +316,8 @@ shebang 経由で node に起動されるため Node.js 22 以上を要求し、
    を通過した場合にだけ prod Worker を deploy し、その commit を `DEPLOYED_SHA` として打つ。
 6. `just backend-drift-check` が green になることを確認し、prod の主要フローを smoke test する。
 
-R2 public access は有効化しない。Cron は Wrangler 設定を正本とし、UTC の実行時刻を
-変更する場合はデプロイ前に確認する。
+R2 public access は有効化しない。prod の主要フローは手動で確認する。App Check が全ルート必須で
+トークンは 1 時間で失効し、`backend-smoke-dev` は本番データを汚すため、prod 向けの自動 smoke test は置かない。
 
 <!-- @code backend/src/compat/draft-count-shim.ts#withDraftCount -->
 #### 配信済みアプリとの後方互換

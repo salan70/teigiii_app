@@ -17,8 +17,6 @@ FetchDefinitionRepository fetchDefinitionRepository(
 );
 
 /// 定義の取得に関する処理を記述するRepository
-///
-/// @doc doc/specs/legacy-repository-api-mapping.md#定義の読み書き
 class FetchDefinitionRepository {
   FetchDefinitionRepository(this._definitionsApi);
 

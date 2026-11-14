@@ -2,14 +2,9 @@
 
 Flutter アプリ（teigi_app）の作業ガイド。ルートの `AGENTS.md` を前提とし、ここには `mobile_app/` 固有の要点のみ書く。
 
-## レイヤー規約（要点）
+## レイヤー規約
 
-- feature ファースト。feature 配下を `presentation` / `application` / `domain` / `repository` の 4 層に分ける
-- `lib/` 直下は `core` / `feature` / `util`。page を表す Widget は `core/page/`（feature の presentation ではない）
-- 依存の向き: presentation → application → repository。presentation から repository を直接 import しない
-- domain は Flutter / Riverpod に依存しない（Freezed のみ）
-
-詳細（層ごとの責務、import の可否表、命名規則）は `doc/architecture.md` を参照する。UI を実装・変更する場合はデザインシステム仕様（`doc/specs/mobile-app-design-system.md`）が正本で、手順は `implementing-ui-with-design-system` スキルに従う。
+層の責務、依存の向き、import の可否表、命名規則は `doc/architecture.md` が正本。ファイルを追加・移動する前に読む。UI を実装・変更する場合はデザインシステム仕様（`doc/specs/mobile-app-design-system.md`）が正本で、手順は `implementing-ui-with-design-system` スキルに従う。
 
 ## 検証
 

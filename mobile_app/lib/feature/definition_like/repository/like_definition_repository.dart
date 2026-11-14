@@ -14,8 +14,6 @@ LikeDefinitionRepository likeDefinitionRepository(
     LikeDefinitionRepository(ref.watch(teigiiiApiProvider).getDefinitionsApi());
 
 /// 定義のいいねに関する処理を記述するRepository
-///
-/// @doc doc/specs/legacy-repository-api-mapping.md#いいね
 class LikeDefinitionRepository {
   LikeDefinitionRepository(this._definitionsApi);
 

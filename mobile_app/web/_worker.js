@@ -6,6 +6,12 @@ import { shouldSkipBasicAuth } from "./_lib/basic-auth-paths.js";
  * native / Workers API / prod には適用しない。
  *
  * Pages Advanced mode: build/web/_worker.js として Direct Upload される。
+ *
+ * Basic 認証は必須。匿名 Auth があるため、URL を開ける人は共有 dev DB に書き込めてしまう。
+ * APP_CHECK_DEBUG_TOKEN はビルド成果物に焼き込まれるので、パスワードが漏れたら token も失効・再発行する。
+ * 必要な値: FIREBASE_WEB_API_KEY、FIREBASE_WEB_APP_ID、APP_CHECK_DEBUG_TOKEN、
+ * WEB_PREVIEW_BASIC_AUTH_USER、WEB_PREVIEW_BASIC_AUTH_PASSWORD。
+ * exchangeDebugToken が 403 のときは、debug token の未登録か、Web API key の referrer 制限に *.pages.dev が無いことを疑う。
  */
 export default {
   /**
