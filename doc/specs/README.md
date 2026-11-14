@@ -29,8 +29,7 @@
 - 仕様書側: 見出しの直前に `<!-- @code mobile_app/lib/<file>.dart#<canonical-id> -->` を書く
 - リンクの検証: `just docbridge-check`
 
-書き方の支援には `docbridge-annotate` スキル、既存コードとのリンク付けには
-`docbridge-link` スキル（Claude 側のみ）を使用する。
+アノテーションの追加、リンクの修正、`related --gate` の所見の確認には `docbridge` スキルを使う。
 
 注意: Freezed は元クラスの doc コメントを生成ファイルへ複製することがあるため、
 最初のアノテーション追加時に重複リンクの挙動を検証すること

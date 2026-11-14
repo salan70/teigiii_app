@@ -62,23 +62,8 @@ just perf-query 'SELECT screen_name, COUNT(*) AS n FROM frame_stats GROUP BY 1'
 
 ## スキーマ（`frame_stats`）
 
-1 行 = 1 セッション × 1 画面。正本は `backend/src/db/telemetry-schema.ts`。
-
-| 列 | 意味 |
-|---|---|
-| `session_id` | 端末セッションの使い捨て ID（利用者と紐づけない） |
-| `screen_name` | 画面名 |
-| `build_number` | 数値。**新旧判定はこの列**（`app_version` 文字列順は使わない） |
-| `platform` / `flavor` | iOS/Android と dev/prod など |
-| `refresh_rate_hz` | 端末リフレッシュレート。slow 判定予算の元 |
-| `frame_count` | フレーム総数（分母） |
-| `slow_build_count` | buildDuration が予算超 |
-| `slow_raster_count` | rasterDuration が予算超 |
-| `frozen_count` | totalSpan > 700ms |
-| `recorded_at` | クライアント計測時刻 |
-| `created_at` | サーバー受信時刻（リテンション基準） |
-
-`user_id` もパーセンタイル列もない。
+1 行 = 1 セッション × 1 画面。列の定義の正本は `backend/src/db/telemetry-schema.ts`、計測の意味は `doc/specs/app-performance-telemetry.md`。
+新旧判定は数値の `build_number` で行う。`user_id` もパーセンタイル列もない。
 
 ## 解釈基準
 
