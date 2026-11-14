@@ -5,6 +5,7 @@
 output:
   - success
   - failure
+  - execution_out
 
 # 速い検査だけ。analyze とテストは pre-push と CI が担う。
 pre-commit:
