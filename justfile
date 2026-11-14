@@ -79,6 +79,21 @@ mobile-widgetbook:
 mobile-widgetbook-build:
     cd mobile_app && flutter build web -t widgetbook/main.dart --output build/widgetbook
 
+# UI レビュー用のスクリーンショットカタログ（#339）。手順は doc/guides/ui-review.md
+# 例: just ui-review capture --all / just ui-review capture --only screen.home / just ui-review serve
+ui-review *args:
+    python3 mobile_app/tool/ui_review/ui_review.py {{args}}
+
+# ui-review ツール（Python）の単体テスト
+ui-review-test:
+    python3 -m unittest discover -s mobile_app/tool/ui_review -p 'test_ui_review.py'
+
+# 全対象を撮り直し、Widgetbook を載せ、Access の存在を確かめてから teigiii-ui.oda79.me へ配る
+deploy-ui-review:
+    just ui-review capture --all
+    just ui-review widgetbook
+    just ui-review publish
+
 # golden はローカル限定（CI では実行しない）。移行前後の比較に使う
 mobile-test-golden:
     cd mobile_app && TZ=Asia/Tokyo flutter test --tags golden

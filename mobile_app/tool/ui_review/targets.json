@@ -1,0 +1,739 @@
+{
+ "variants": [
+  {
+   "id": "light",
+   "label": "ライト",
+   "theme": "light",
+   "width": 390,
+   "textScale": 1.0
+  },
+  {
+   "id": "dark",
+   "label": "ダーク",
+   "theme": "dark",
+   "width": 390,
+   "textScale": 1.0
+  },
+  {
+   "id": "small",
+   "label": "幅 360",
+   "theme": "light",
+   "width": 360,
+   "textScale": 1.0
+  },
+  {
+   "id": "large-text",
+   "label": "文字 1.5 倍",
+   "theme": "light",
+   "width": 390,
+   "textScale": 1.5
+  }
+ ],
+ "targets": [
+  {
+   "id": "screen.welcome",
+   "kind": "screen",
+   "title": "ようこそ",
+   "description": "初回起動の画面。",
+   "source": "mobile_app/lib/core/page/welcome_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    }
+   ]
+  },
+  {
+   "id": "screen.sign_in_failure",
+   "kind": "screen",
+   "title": "サインイン失敗",
+   "description": "サインインに失敗したときの再試行画面。",
+   "source": "mobile_app/lib/core/page/sign_in_failure_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    }
+   ]
+  },
+  {
+   "id": "screen.home",
+   "kind": "screen",
+   "title": "ホーム",
+   "description": "おすすめとフォロー中のタブ。",
+   "source": "mobile_app/lib/core/page/home_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    },
+    {
+     "id": "empty",
+     "title": "空"
+    },
+    {
+     "id": "loading",
+     "title": "読み込み中"
+    },
+    {
+     "id": "error",
+     "title": "エラー"
+    }
+   ]
+  },
+  {
+   "id": "screen.dictionary_individual",
+   "kind": "screen",
+   "title": "あなたの辞書",
+   "description": "自分の辞書の索引。",
+   "source": "mobile_app/lib/core/page/dictionary_individual_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    },
+    {
+     "id": "empty",
+     "title": "空"
+    },
+    {
+     "id": "loading",
+     "title": "読み込み中"
+    },
+    {
+     "id": "error",
+     "title": "エラー"
+    }
+   ]
+  },
+  {
+   "id": "screen.dictionary_everyone",
+   "kind": "screen",
+   "title": "みんなの辞書",
+   "description": "全員の辞書の索引と検索。",
+   "source": "mobile_app/lib/core/page/dictionary_everyone_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    },
+    {
+     "id": "empty",
+     "title": "空"
+    },
+    {
+     "id": "loading",
+     "title": "読み込み中"
+    },
+    {
+     "id": "error",
+     "title": "エラー"
+    }
+   ]
+  },
+  {
+   "id": "screen.word_top",
+   "kind": "screen",
+   "title": "言葉",
+   "description": "言葉の定義一覧（投稿順・いいね数順）。",
+   "source": "mobile_app/lib/core/page/word_top_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    },
+    {
+     "id": "empty",
+     "title": "空"
+    },
+    {
+     "id": "loading",
+     "title": "読み込み中"
+    },
+    {
+     "id": "error",
+     "title": "エラー"
+    },
+    {
+     "id": "not-found",
+     "title": "言葉なし"
+    }
+   ]
+  },
+  {
+   "id": "screen.word_search_result",
+   "kind": "screen",
+   "title": "言葉の検索結果",
+   "description": "検索語に一致する言葉の一覧。",
+   "source": "mobile_app/lib/core/page/word_search_result_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    },
+    {
+     "id": "empty",
+     "title": "空"
+    },
+    {
+     "id": "loading",
+     "title": "読み込み中"
+    },
+    {
+     "id": "error",
+     "title": "エラー"
+    }
+   ]
+  },
+  {
+   "id": "screen.word_registration",
+   "kind": "screen",
+   "title": "言葉の登録",
+   "description": "言葉を新しく登録するフォーム。",
+   "source": "mobile_app/lib/core/page/word_registration_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "初期"
+    },
+    {
+     "id": "with-initial-word",
+     "title": "検索語を引き継ぎ"
+    }
+   ]
+  },
+  {
+   "id": "screen.definition_detail",
+   "kind": "screen",
+   "title": "定義の詳細",
+   "description": "定義 1 件の詳細。",
+   "source": "mobile_app/lib/core/page/definition_detail_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    },
+    {
+     "id": "own",
+     "title": "自分の定義"
+    },
+    {
+     "id": "loading",
+     "title": "読み込み中"
+    },
+    {
+     "id": "error",
+     "title": "エラー"
+    }
+   ]
+  },
+  {
+   "id": "screen.definition_post",
+   "kind": "screen",
+   "title": "定義の投稿",
+   "description": "定義を新しく書くフォーム。",
+   "source": "mobile_app/lib/core/page/definition_post_page.dart",
+   "states": [
+    {
+     "id": "empty-form",
+     "title": "空のフォーム"
+    },
+    {
+     "id": "with-word",
+     "title": "言葉を指定"
+    }
+   ]
+  },
+  {
+   "id": "screen.definition_edit",
+   "kind": "screen",
+   "title": "定義の編集",
+   "description": "投稿済みの定義を直すフォーム。",
+   "source": "mobile_app/lib/core/page/definition_edit_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    }
+   ]
+  },
+  {
+   "id": "screen.profile_top",
+   "kind": "screen",
+   "title": "プロフィール",
+   "description": "自分のプロフィールと投稿・いいね・保存した言葉。",
+   "source": "mobile_app/lib/core/page/profile_top_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    },
+    {
+     "id": "empty",
+     "title": "空"
+    },
+    {
+     "id": "loading",
+     "title": "読み込み中"
+    },
+    {
+     "id": "error",
+     "title": "エラー"
+    },
+    {
+     "id": "other-user",
+     "title": "他のユーザー"
+    }
+   ]
+  },
+  {
+   "id": "screen.profile_edit",
+   "kind": "screen",
+   "title": "プロフィール編集",
+   "description": "名前、自己紹介、アイコンの編集。",
+   "source": "mobile_app/lib/core/page/profile_edit_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    },
+    {
+     "id": "loading",
+     "title": "読み込み中"
+    }
+   ]
+  },
+  {
+   "id": "screen.setting",
+   "kind": "screen",
+   "title": "設定",
+   "description": "設定の一覧。",
+   "source": "mobile_app/lib/core/page/setting_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    }
+   ]
+  },
+  {
+   "id": "screen.license",
+   "kind": "screen",
+   "title": "ライセンス",
+   "description": "オープンソースのライセンス表示。",
+   "source": "mobile_app/lib/core/page/license_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    },
+    {
+     "id": "loading",
+     "title": "読み込み中"
+    }
+   ]
+  },
+  {
+   "id": "screen.user_search",
+   "kind": "screen",
+   "title": "ユーザー検索",
+   "description": "ユーザー ID で探す入口。",
+   "source": "mobile_app/lib/core/page/user_search_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    }
+   ]
+  },
+  {
+   "id": "screen.user_search_result",
+   "kind": "screen",
+   "title": "ユーザー検索結果",
+   "description": "ID に一致したユーザー。",
+   "source": "mobile_app/lib/core/page/user_search_result_page.dart",
+   "states": [
+    {
+     "id": "found",
+     "title": "見つかった"
+    },
+    {
+     "id": "not-found",
+     "title": "見つからない"
+    }
+   ]
+  },
+  {
+   "id": "screen.user_list_following_or_follower",
+   "kind": "screen",
+   "title": "フォロー・フォロワー",
+   "description": "フォロー中とフォロワーのタブ。",
+   "source": "mobile_app/lib/core/page/user_list_following_or_follower_page.dart",
+   "states": [
+    {
+     "id": "following",
+     "title": "フォロー中"
+    },
+    {
+     "id": "following-empty",
+     "title": "フォロー中・空"
+    },
+    {
+     "id": "follower",
+     "title": "フォロワー"
+    },
+    {
+     "id": "follower-empty",
+     "title": "フォロワー・空"
+    }
+   ]
+  },
+  {
+   "id": "screen.user_list_liked",
+   "kind": "screen",
+   "title": "いいねしたユーザー",
+   "description": "定義にいいねしたユーザーの一覧。",
+   "source": "mobile_app/lib/core/page/user_list_liked_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    },
+    {
+     "id": "empty",
+     "title": "空"
+    },
+    {
+     "id": "loading",
+     "title": "読み込み中"
+    },
+    {
+     "id": "error",
+     "title": "エラー"
+    }
+   ]
+  },
+  {
+   "id": "screen.user_list_muted",
+   "kind": "screen",
+   "title": "ミュート中のユーザー",
+   "description": "ミュートしたユーザーの一覧。",
+   "source": "mobile_app/lib/core/page/user_list_muted_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    },
+    {
+     "id": "empty",
+     "title": "空"
+    },
+    {
+     "id": "loading",
+     "title": "読み込み中"
+    },
+    {
+     "id": "error",
+     "title": "エラー"
+    }
+   ]
+  },
+  {
+   "id": "screen.user_word_definition_list",
+   "kind": "screen",
+   "title": "言葉ごとの自分の定義",
+   "description": "あなたの辞書から開く、1 つの言葉への自分の定義。",
+   "source": "mobile_app/lib/core/page/user_word_definition_list_page.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    },
+    {
+     "id": "empty",
+     "title": "空"
+    },
+    {
+     "id": "loading",
+     "title": "読み込み中"
+    },
+    {
+     "id": "error",
+     "title": "エラー"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_filled_button",
+   "kind": "component",
+   "title": "DsFilledButton",
+   "description": "塗りつぶしボタン。primary / tertiary と無効。内部の _DsButtonBase を含む。",
+   "source": "mobile_app/lib/core/design_system/component/ds_button.dart",
+   "states": [
+    {
+     "id": "primary",
+     "title": "primary"
+    },
+    {
+     "id": "primary-disabled",
+     "title": "primary・無効"
+    },
+    {
+     "id": "tertiary",
+     "title": "tertiary"
+    },
+    {
+     "id": "tertiary-disabled",
+     "title": "tertiary・無効"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_outlined_button",
+   "kind": "component",
+   "title": "DsOutlinedButton",
+   "description": "枠線ボタン。primary / tertiary と無効。",
+   "source": "mobile_app/lib/core/design_system/component/ds_button.dart",
+   "states": [
+    {
+     "id": "primary",
+     "title": "primary"
+    },
+    {
+     "id": "primary-disabled",
+     "title": "primary・無効"
+    },
+    {
+     "id": "tertiary",
+     "title": "tertiary"
+    },
+    {
+     "id": "tertiary-disabled",
+     "title": "tertiary・無効"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_icon_button",
+   "kind": "component",
+   "title": "DsIconButton",
+   "description": "アイコンだけのボタン。",
+   "source": "mobile_app/lib/core/design_system/component/ds_icon_button.dart",
+   "states": [
+    {
+     "id": "enabled",
+     "title": "有効"
+    },
+    {
+     "id": "disabled",
+     "title": "無効"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_list_tile",
+   "kind": "component",
+   "title": "DsListTile",
+   "description": "一覧の 1 行。アイコン付きとラベルだけ。",
+   "source": "mobile_app/lib/core/design_system/component/ds_list_tile.dart",
+   "states": [
+    {
+     "id": "with-leading-icon",
+     "title": "アイコン付き"
+    },
+    {
+     "id": "label-only",
+     "title": "ラベルだけ"
+    },
+    {
+     "id": "disabled",
+     "title": "無効"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_chip",
+   "kind": "component",
+   "title": "DsChip",
+   "description": "遷移できる小さな帯。",
+   "source": "mobile_app/lib/core/design_system/component/ds_chip.dart",
+   "states": [
+    {
+     "id": "navigable",
+     "title": "通常"
+    },
+    {
+     "id": "long-label",
+     "title": "長いラベル"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_dialog",
+   "kind": "component",
+   "title": "DsDialog",
+   "description": "ダイアログの外枠。",
+   "source": "mobile_app/lib/core/design_system/component/ds_dialog.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_confirm_dialog",
+   "kind": "component",
+   "title": "DsConfirmDialog",
+   "description": "確認ダイアログ。内部の _DsDialogAction を含む。",
+   "source": "mobile_app/lib/core/design_system/component/ds_dialog.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_app_bar_action",
+   "kind": "component",
+   "title": "DsAppBarAction",
+   "description": "AppBar 右の操作。",
+   "source": "mobile_app/lib/core/design_system/component/ds_app_bar_action.dart",
+   "states": [
+    {
+     "id": "enabled",
+     "title": "有効"
+    },
+    {
+     "id": "disabled",
+     "title": "無効"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_search_field",
+   "kind": "component",
+   "title": "DsSearchField",
+   "description": "検索欄。内部の _DsSearchFieldState を含む。",
+   "source": "mobile_app/lib/core/design_system/component/ds_search_field.dart",
+   "states": [
+    {
+     "id": "empty",
+     "title": "空"
+    },
+    {
+     "id": "filled",
+     "title": "入力あり"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_text_field",
+   "kind": "component",
+   "title": "DsTextField",
+   "description": "入力欄。",
+   "source": "mobile_app/lib/core/design_system/component/ds_text_field.dart",
+   "states": [
+    {
+     "id": "single-line",
+     "title": "1 行"
+    },
+    {
+     "id": "single-line-error",
+     "title": "1 行・エラー"
+    },
+    {
+     "id": "single-line-hint",
+     "title": "1 行・ヒント"
+    },
+    {
+     "id": "multiline",
+     "title": "複数行"
+    },
+    {
+     "id": "read-only",
+     "title": "読み取り専用"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_empty_view",
+   "kind": "component",
+   "title": "DsEmptyView",
+   "description": "空状態の表示。",
+   "source": "mobile_app/lib/core/design_system/component/ds_feedback.dart",
+   "states": [
+    {
+     "id": "default",
+     "title": "通常"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_error_view",
+   "kind": "component",
+   "title": "DsErrorView",
+   "description": "エラー表示。内部の _DsCompactErrorView を含む。",
+   "source": "mobile_app/lib/core/design_system/component/ds_feedback.dart",
+   "states": [
+    {
+     "id": "standard",
+     "title": "標準"
+    },
+    {
+     "id": "standard-with-secondary",
+     "title": "標準・副操作つき"
+    },
+    {
+     "id": "compact",
+     "title": "コンパクト"
+    }
+   ]
+  },
+  {
+   "id": "component.ds_shimmer",
+   "kind": "component",
+   "title": "DsShimmer",
+   "description": "読み込み中の骨組み。",
+   "source": "mobile_app/lib/core/design_system/component/ds_feedback.dart",
+   "states": [
+    {
+     "id": "rectangular",
+     "title": "矩形"
+    },
+    {
+     "id": "circular",
+     "title": "円"
+    }
+   ]
+  }
+ ],
+ "excluded": [
+  {
+   "id": "screen.base",
+   "source": "mobile_app/lib/core/page/base_page.dart",
+   "reason": "下部タブの土台（AutoTabsRouter）で、ルーターなしでは描けない。中身の 3 タブは screen.home / screen.dictionary_individual / screen.dictionary_everyone で撮る。"
+  },
+  {
+   "id": "component._DsButtonBase",
+   "source": "mobile_app/lib/core/design_system/component/ds_button.dart",
+   "reason": "非公開。DsFilledButton / DsOutlinedButton の撮影で描かれる。"
+  },
+  {
+   "id": "component._DsDialogAction",
+   "source": "mobile_app/lib/core/design_system/component/ds_dialog.dart",
+   "reason": "非公開。DsDialog / DsConfirmDialog の撮影で描かれる。"
+  },
+  {
+   "id": "component._DsCompactErrorView",
+   "source": "mobile_app/lib/core/design_system/component/ds_feedback.dart",
+   "reason": "非公開。DsErrorView.compact の撮影で描かれる。"
+  },
+  {
+   "id": "component._DsSearchFieldState",
+   "source": "mobile_app/lib/core/design_system/component/ds_search_field.dart",
+   "reason": "DsSearchField の State。DsSearchField の撮影で描かれる。"
+  }
+ ]
+}

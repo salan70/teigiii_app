@@ -17,6 +17,7 @@ teigiii プロジェクトのモノレポ。Claude Code / Codex / Cursor 共通�
 | `doc/specs/README.md` | 仕様の一覧を確認する。個別仕様はここから辿る |
 | `doc/specs/mobile-app-design-system.md` | Ds のコンポーネントとトークンを扱う前 |
 | `doc/specs/workers-api-server.md` | backend の API を追加・変更する前 |
+| `doc/guides/ui-review.md` | UI を変えて見た目を確認する前、UI レビュー用カタログ（`just ui-review`）を使う前 |
 | `doc/ios-physical-device-debug.md` | iOS 実機で動作確認する前 |
 | `doc/pstack.md` | pstack の導入範囲、上書き、更新手順を確認する前 |
 
