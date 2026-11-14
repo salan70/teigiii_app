@@ -19,11 +19,13 @@ FILTER = ROOT / ".github" / "changes-filter.yml"
 FILTER_CODE = ROOT / ".github" / "changes-filter-code.yml"
 DEFAULT_BASE = "origin/develop"
 TAIL_LINES = 15
+# 成功しても出力が報告そのものになる手順。justfile 側で `|| true` により常に成功するため、出力を捨てると報告が見えない。
+REPORT_STEPS = {"docbridge-related-staged"}
 
 # just のレシピ名。上から順に実行し、最初の失敗で止める。
 DOCS_STEPS = ["docbridge-check"]
 MOBILE_STEPS = ["mobile-format-check", "mobile-analyze", "mobile-ds-check", "mobile-test", "web-test"]
-BACKEND_STEPS = ["backend-format-check", "backend-analyze", "backend-test"]
+BACKEND_STEPS = ["backend-format-check", "backend-analyze", "backend-test-unit", "backend-test-workers"]
 
 # Markdown のリンク検査から外す。取り込み物と生成物のリンクは直せないため。
 MD_LINK_EXCLUDES = ("tool/pstack/upstream/", ".claude/skills/", "mobile_app/packages/teigiii_api/", "node_modules/")
@@ -54,8 +56,11 @@ def log_dir() -> Path:
 
 
 def clean_env() -> dict[str, str]:
-    """hook から呼ばれると git が GIT_DIR などを渡す。子プロセスの git が誤ったリポジトリを見ないよう外す。"""
-    drop = {"GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_PREFIX"}
+    """hook から呼ばれると git が GIT_DIR などを渡す。子プロセスの git が誤ったリポジトリを見ないよう外す。
+
+    GIT_INDEX_FILE は残す。`git commit -a` や `commit <path>` では hook が一時 index を指しており、外すと本物の index を見てしまう。
+    """
+    drop = {"GIT_DIR", "GIT_WORK_TREE", "GIT_PREFIX"}
     env = {k: v for k, v in os.environ.items() if k not in drop}
     env["PWD"] = str(ROOT)  # subprocess の cwd は PWD を更新しない。nix が PWD を見て flake を探すため合わせる
     return env
@@ -75,6 +80,9 @@ def run_step(name: str, cmd: list[str], logs: Path) -> bool:
     seconds = time.monotonic() - started
     if result.returncode == 0:
         print(f"✓ {name} ({seconds:.0f}s)")
+        if name in REPORT_STEPS:
+            for line in log.read_text(errors="replace").splitlines():
+                print(f"  | {line}")
         return True
     print(f"✗ {name} ({seconds:.0f}s) exit={result.returncode}\n  log: {log}")
     lines = log.read_text(errors="replace").splitlines()
@@ -86,7 +94,7 @@ def run_step(name: str, cmd: list[str], logs: Path) -> bool:
 def run_recipes(recipes: list[str]) -> int:
     logs = log_dir()
     prefix = tool_prefix()
-    # 既知の失敗（macOS の backend-test は #328）を外すための明示的な逃げ道。黙って外さず、skip を表示する。
+    # 既知の失敗（macOS の backend-test-unit は #328）を外すための明示的な逃げ道。黙って外さず、skip を表示する。
     skipped = set(os.environ.get("TEIGIII_SKIP_STEPS", "").split())
     for recipe in recipes:
         if recipe in skipped:
@@ -183,7 +191,7 @@ def changed_files(base: str) -> list[str] | None:
         merge_base = git("merge-base", base, "HEAD").strip()
     except RuntimeError:
         return None
-    tracked = git("diff", "--name-only", merge_base).splitlines()
+    tracked = git("diff", "--name-only", "--no-renames", merge_base).splitlines()
     untracked = git("ls-files", "--others", "--exclude-standard").splitlines()
     return sorted(set(tracked + untracked))
 

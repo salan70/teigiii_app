@@ -242,9 +242,13 @@
               hook_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
               if [ -n "$hook_root" ] && [ -f "$hook_root/lefthook.yml" ]; then
                 if [ "$(git config --get core.hooksPath)" = ".githooks" ]; then
-                  git config --unset core.hooksPath
+                  git config --unset core.hooksPath >/dev/null 2>&1 || echo "[nix] core.hooksPath を外せませんでした" >&2
                 fi
-                (cd "$hook_root" && lefthook install >/dev/null) || echo "[nix] lefthook install に失敗しました" >&2
+                # hook が lefthook 製で、設定より新しいときは何もしない。入っていない・古いときだけ入れ直す。
+                hook_file="$(git rev-parse --git-path hooks/pre-commit 2>/dev/null || true)"
+                if [ -z "$hook_file" ] || ! grep -q LEFTHOOK "$hook_file" 2>/dev/null || [ "$hook_root/lefthook.yml" -nt "$hook_file" ]; then
+                  (cd "$hook_root" && lefthook install >/dev/null 2>&1) || echo "[nix] lefthook install に失敗しました（手動: lefthook install）" >&2
+                fi
               fi
               # stdout は `$(nix develop --command ...)` で捕捉されるコマンド出力用に空けておく。
               # バナーは informational なので stderr へ出す。

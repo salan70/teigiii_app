@@ -179,8 +179,13 @@ backend-format:
 backend-format-check:
     cd backend && bun run format:check
 
-backend-test:
-    cd backend && bun run test
+backend-test: backend-test-unit backend-test-workers
+
+backend-test-unit:
+    cd backend && bun run test:unit
+
+backend-test-workers:
+    cd backend && bun run test:workers
 
 # openapi.json と Drizzle マイグレーション SQL（本体・テレメトリ）を生成する
 backend-generate:

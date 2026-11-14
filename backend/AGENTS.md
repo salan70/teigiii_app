@@ -13,6 +13,6 @@ Cloudflare Workers API の作業ガイド。ルートの `AGENTS.md` を前提�
 
 - 変更後は `just check-changed` を実行する。`backend/` の変更では format、lint、型検査、テストが走る。全体は `just check`。
 - `check` に含まれないもの: スキーマ（`src/db/`）とルート（`src/routes/`）を変えたときの `just backend-generate`。
-- macOS では `backend/test/schema.test.ts` が 13 件落ちる既知の失敗がある（#328）。CI（Linux）では通る。macOS で `just check-changed` を通すときは `TEIGIII_SKIP_STEPS=backend-test` を付け、`bun run test:workers` を別に実行する。
+- macOS では `backend/test/schema.test.ts` が 13 件落ちる既知の失敗がある（#328）。CI（Linux）では通る。macOS で `just check-changed` を通すときは `TEIGIII_SKIP_STEPS=backend-test-unit` を付け、続けて `cd backend && bun test --path-ignore-patterns '**/schema.test.ts'` を実行する（workers テストは `backend-test-workers` で走る）。
 
 ローカル起動は `just backend-dev`（:8787、D1 / R2 は Miniflare のローカルエミュレーション）。
