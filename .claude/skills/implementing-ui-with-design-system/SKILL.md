@@ -7,8 +7,6 @@ description: mobile_app の UI 実装をデザインシステム経由で行う�
 
 `mobile_app/` の UI を実装・変更するとき、人間と AI が同じ選択手順を踏むための判断順序を定める。
 
-**開始時の宣言:** 「implementing-ui-with-design-system スキルを使用して、デザインシステム経由で UI を実装します。」
-
 ## 正本
 
 本スキルは仕様を持たない。値・命名・基準はすべて次を参照する。
@@ -19,7 +17,6 @@ description: mobile_app の UI 実装をデザインシステム経由で行う�
 | `mobile_app/lib/core/design_system/` | 型付き Dart API の正本。`token/` と `component/` |
 | `mobile_app/widgetbook/use_cases/` + `just mobile-widgetbook` | 見た目と状態の正本 |
 | `doc/guides/ui-review.md` | 画面とコンポーネントの全状態を並べる UI レビュー用カタログの手順書 |
-| `doc/specs/mobile-app-design-system-audit.md` | 移行時の現状スナップショット |
 
 **仕様本文をここへ複製しない。** 迷ったら仕様を開く。
 

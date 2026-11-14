@@ -16,8 +16,6 @@ WriteDefinitionRepository writeDefinitionRepository(
 );
 
 /// 定義の書き込み（新規作成、更新、削除）に関する処理を記述するRepository
-///
-/// @doc doc/specs/legacy-repository-api-mapping.md#定義の読み書き
 class WriteDefinitionRepository {
   WriteDefinitionRepository(this._definitionsApi);
 

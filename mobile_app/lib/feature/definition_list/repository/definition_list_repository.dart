@@ -28,8 +28,6 @@ DefinitionListRepository definitionListRepository(
 ///
 /// 一覧 API は定義本体（DefinitionResponse）を返すため、ID へ潰さず
 /// [Definition] のまま返す。ID だけにすると各 tile が個別取得して N+1 になる。
-///
-/// @doc doc/specs/legacy-repository-api-mapping.md#定義一覧-フィード
 class DefinitionListRepository {
   DefinitionListRepository(this._timelineApi, this._wordsApi, this._usersApi);
 

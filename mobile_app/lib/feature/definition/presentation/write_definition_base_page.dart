@@ -15,8 +15,6 @@ import 'select_post_type_button.dart';
 ///
 /// この画面に直接遷移はせず、
 /// この画面をもとに作成した画面（定義投稿, 定義編集など）へ遷移すること。
-///
-/// @doc doc/specs/legacy-repository-api-mapping.md#フェーズ-4-の挙動変更-例外-まとめ
 class WriteDefinitionBasePage extends ConsumerWidget {
   const WriteDefinitionBasePage({
     super.key,
