@@ -1,0 +1,21 @@
+# mobile / backend のどちらを検証するかを決めるパスの規則。
+# CI（.github/workflows/ci.yml の dorny/paths-filter）とローカル（tool/dev_check.py）が同じファイルを読む。
+# 追加するときはここだけを直す。
+mobile:
+  - 'mobile_app/**'
+  - 'flake.nix'
+  - 'flake.lock'
+  - 'nix/**'
+  - 'justfile'
+  - '.github/workflows/ci.yml'
+  - '.github/actions/**'
+  - '.github/changes-filter.yml'
+backend:
+  - 'backend/**'
+  - 'flake.nix'
+  - 'flake.lock'
+  - 'nix/**'
+  - 'justfile'
+  - '.github/workflows/ci.yml'
+  - '.github/actions/**'
+  - '.github/changes-filter.yml'

@@ -41,23 +41,8 @@ jobs:
         id: filter
         uses: dorny/paths-filter@v3
         with:
-          filters: |
-            mobile:
-              - 'mobile_app/**'
-              - 'flake.nix'
-              - 'flake.lock'
-              - 'nix/**'
-              - 'justfile'
-              - '.github/workflows/ci.yml'
-              - '.github/actions/**'
-            backend:
-              - 'backend/**'
-              - 'flake.nix'
-              - 'flake.lock'
-              - 'nix/**'
-              - 'justfile'
-              - '.github/workflows/ci.yml'
-              - '.github/actions/**'
+          # パスの規則は tool/dev_check.py（ローカルの check-changed）と共有する。
+          filters: .github/changes-filter.yml
 
       # Markdown 以外の変更が 1 つでもあるかを判定する。
       # predicate-quantifier は step 単位の設定で、既定の `some` だと除外パターンが
@@ -69,11 +54,7 @@ jobs:
         uses: dorny/paths-filter@v3
         with:
           predicate-quantifier: 'every'
-          filters: |
-            code:
-              - '**'
-              - '!**/*.md'
-              - '!*.md'
+          filters: .github/changes-filter-code.yml
 
       - name: Resolve job gates
         id: gates
