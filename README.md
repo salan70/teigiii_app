@@ -63,5 +63,5 @@ iOS 実機での確認手順は [doc/ios-physical-device-debug.md](doc/ios-physi
 - アーキテクチャは [doc/architecture.md](doc/architecture.md)、仕様は [doc/specs/README.md](doc/specs/README.md) にあります
 - Issue を起点にし、`develop` ブランチから切ったブランチで作業して、`develop` へ Pull Request を出します
 - commit message は `feat`、`fix`、`chore` などの接頭辞で始めます
-- Unit Test は、作成が容易な関数と重要度が高い関数に書きます。Widget Test と Integration Test は、ユーザーが増えてから実装します
+- Unit Test は、作成が容易な関数と重要度が高い関数に書きます。Ds コンポーネントの Widget Test は CI で必須です。Integration Test は、ユーザーが増えてから実装します
 - 検証コマンド（`just analyze`、`just test` など）、CI、Agent 向けの運用は [AGENTS.md](AGENTS.md) を参照してください

@@ -229,9 +229,7 @@ Ds コンポーネントにしない:
    サイズ・padding の直書きが重複していた）
 7. `DsTextField`（検索以外の汎用テキスト入力。`singleLine` / `multiline` の closed variant を持つ）
 
-`DsTextField` の
-`controller` / `focusNode` / `validator` / `maxLength` は受け取るが、
-`InputDecoration` や `TextStyle` は公開 API で受け取らない。
+`DsTextField` は `controller` / `focusNode` / `validator` / `maxLength` を受け取るが、`InputDecoration` や `TextStyle` は公開 API で受け取らない。
 
 <!-- @code mobile_app/lib/core/design_system/component/ds_chip.dart#DsChip -->
 <!-- @code mobile_app/lib/core/design_system/component/ds_app_bar_action.dart#DsAppBarAction -->
