@@ -27,4 +27,6 @@ pre-commit:
 pre-push:
   commands:
     check-changed:
-      run: python3 tool/dev_check.py check-changed
+      # push 対象は標準入力で受け取る。HEAD 以外の ref を push するときは検証せず警告する。
+      use_stdin: true
+      run: python3 tool/dev_check.py pre-push

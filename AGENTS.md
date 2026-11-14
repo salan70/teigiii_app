@@ -24,7 +24,7 @@ teigiii プロジェクトのモノレポ。Claude Code / Codex / Cursor 共通�
 
 - 検証の入口は `just check-changed`（変更範囲）と `just check`（全体）。出力は要約で、全文はログに書かれる。mobile / backend の選択は CI と同じ `.github/changes-filter*.yml` を読む。
 - そのほか `just setup`、`just format`、`just mobile-generate`、`just backend-generate`、`just docbridge-check`。
-- Git hook は lefthook（`lefthook.yml`）。direnv で Nix の shell に入ると自動で入り、worktree でも効く。pre-commit は整形、`docbridge-check`、Markdown のリンク切れを検査し、pre-push は `just check-changed` を走らせる。
+- Git hook は lefthook（`lefthook.yml`）。direnv で Nix の shell に入ると自動で入り、worktree でも効く。pre-commit は整形、`docbridge-check`、Markdown のリンク切れをステージした内容（index）で検査する。pre-push は push 対象が現在の HEAD のときだけ、commit から決めた変更範囲を作業ツリーで検証する。HEAD と違う ref の push は警告して飛ばし、CI に任せる。
 
 ## エージェントの運用
 

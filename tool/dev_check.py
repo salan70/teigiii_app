@@ -7,6 +7,7 @@ mobile / backend のどちらを検証するかは、CI と同じ `.github/chang
 import argparse
 import os
 from pathlib import Path
+import posixpath
 import re
 import shutil
 import subprocess
@@ -179,20 +180,37 @@ def resolve_gates(files: list[str]) -> tuple[bool, bool]:
 
 
 def git(*args: str) -> str:
-    result = subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
+    # core.quotePath=false で、非 ASCII のパスが引用符付きのエスケープ表記にならないようにする。
+    result = subprocess.run(["git", "-c", "core.quotePath=false", *args], cwd=ROOT, capture_output=True, text=True)
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip())
     return result.stdout
 
 
-def changed_files(base: str) -> list[str] | None:
-    """base との merge-base から作業ツリーまでの変更。base が無ければ None。"""
+def git_paths(*args: str) -> list[str]:
+    """パスを返す git コマンドを `-z` 付きで実行し、NUL で分割する。日本語・空白・改行を含む名前も壊れない。"""
+    return [p for p in git(args[0], "-z", *args[1:]).split("\0") if p]
+
+
+def git_bytes(*args: str) -> bytes:
+    result = subprocess.run(["git", *args], cwd=ROOT, capture_output=True)
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.decode(errors="replace").strip())
+    return result.stdout
+
+
+def changed_files(base: str, head: str | None = None) -> list[str] | None:
+    """base との merge-base からの変更。base が無ければ None。
+
+    head が無ければ作業ツリー（未追跡を含む）まで、head があればその commit までを見る。
+    名前変更は削除 + 追加として数え、変更前後のパスを両方含める。
+    """
     try:
-        merge_base = git("merge-base", base, "HEAD").strip()
+        merge_base = git("merge-base", base, head or "HEAD").strip()
     except RuntimeError:
         return None
-    tracked = git("diff", "--name-only", "--no-renames", merge_base).splitlines()
-    untracked = git("ls-files", "--others", "--exclude-standard").splitlines()
+    tracked = git_paths("diff", "--name-only", "--no-renames", merge_base, *([head] if head else []))
+    untracked = [] if head else git_paths("ls-files", "--others", "--exclude-standard")
     return sorted(set(tracked + untracked))
 
 
@@ -203,13 +221,9 @@ def cmd_check(_: argparse.Namespace) -> int:
     return run_recipes([*DOCS_STEPS, *MOBILE_STEPS, *BACKEND_STEPS])
 
 
-def cmd_check_changed(args: argparse.Namespace) -> int:
-    files = changed_files(args.base)
-    if files is None:
-        print(f"{args.base} が無いため、全体を検証します。", file=sys.stderr)
-        return cmd_check(args)
+def run_for_files(files: list[str], base: str) -> int:
     mobile, backend = resolve_gates(files)
-    print(f"変更 {len(files)} 件 → mobile={mobile} backend={backend}（基準: {args.base}）")
+    print(f"変更 {len(files)} 件 → mobile={mobile} backend={backend}（基準: {base}）")
     steps = list(DOCS_STEPS)
     if mobile:
         steps += MOBILE_STEPS
@@ -218,17 +232,85 @@ def cmd_check_changed(args: argparse.Namespace) -> int:
     return run_recipes(steps)
 
 
+def cmd_check_changed(args: argparse.Namespace) -> int:
+    files = changed_files(args.base)
+    if files is None:
+        print(f"{args.base} が無いため、全体を検証します。", file=sys.stderr)
+        return cmd_check(args)
+    return run_for_files(files, args.base)
+
+
+def is_zero_sha(sha: str) -> bool:
+    return set(sha) == {"0"}
+
+
+def cmd_pre_push(args: argparse.Namespace) -> int:
+    """pre-push の標準入力（`<local ref> <local sha> <remote ref> <remote sha>`）を読み、push 対象を検証する。
+
+    検証は作業ツリーで走るため、検証できるのは HEAD を push するときだけ。変更範囲は作業ツリーではなく HEAD の commit から決める。
+    HEAD と違う branch や tag の push は検証できないので、その旨を警告して飛ばす（CI が検証する）。
+    """
+    head = git("rev-parse", "HEAD").strip()
+    verify = False
+    for line in sys.stdin:
+        parts = line.split()
+        if len(parts) < 4:
+            continue
+        local_ref, local_sha = parts[0], parts[1]
+        if is_zero_sha(local_sha):
+            continue  # 削除の push
+        if local_sha == head and local_ref.startswith("refs/heads/"):
+            verify = True
+        else:
+            print(
+                f"! {local_ref} は現在の HEAD ではないため、ローカルでは検証しません（CI が検証します）。"
+                f"検証するには `git switch` してから push してください。",
+                file=sys.stderr,
+            )
+    if not verify:
+        print("- pre-push: 検証対象の ref がありません。")
+        return 0
+    dirty = [p for p in git_paths("status", "--porcelain=v1", "--untracked-files=no") if p]
+    if dirty:
+        print("! 未コミットの変更を含む作業ツリーで検証します。push されるのは commit 済みの内容だけです。", file=sys.stderr)
+    files = changed_files(args.base, head)
+    if files is None:
+        print(f"{args.base} が無いため、全体を検証します。", file=sys.stderr)
+        return cmd_check(args)
+    return run_for_files(files, args.base)
+
+
 def cmd_run(args: argparse.Namespace) -> int:
     return run_recipes(args.recipes)
 
 
 def staged(*globs: str) -> list[str]:
-    out = git("diff", "--cached", "--name-only", "--diff-filter=ACM", "--", *globs)
-    return [f for f in out.splitlines() if f]
+    # R（名前変更）も含める。移動で壊れたリンクや、移動と同時の編集を検査から漏らさないため。
+    return git_paths("diff", "--cached", "--name-only", "--diff-filter=ACMR", "--", *globs)
+
+
+def unstaged_among(files: list[str]) -> set[str]:
+    """index と作業ツリーの内容が違うファイル。部分ステージや、ステージ後の編集がある。"""
+    return set(git_paths("diff", "--name-only", "--", *files)) if files else set()
+
+
+def stdin_format_ok(label: str, make_cmd, files: list[str]) -> bool:
+    """index の内容を整形器の標準入力に渡し、出力が入力と同じか確かめる。作業ツリーは読まない。"""
+    ok = True
+    for f in files:
+        content = git_bytes("show", f":{f}")
+        result = subprocess.run(make_cmd(f), input=content, capture_output=True, env=clean_env(), cwd=ROOT)
+        if result.returncode != 0 or result.stdout != content:
+            print(f"✗ {label}: ステージした内容が未整形です: {f}")
+            ok = False
+    return ok
 
 
 def cmd_format_staged(_: argparse.Namespace) -> int:
-    """ステージした Dart と backend の TypeScript が整形済みかを判定する（書き換えない）。"""
+    """ステージした Dart と backend の TypeScript が整形済みかを、index の内容で判定する（書き換えない）。
+
+    作業ツリーと index が同じファイルはまとめて検査し、違うファイルは index の内容を標準入力で検査する。
+    """
     dart = [f.removeprefix("mobile_app/") for f in staged("mobile_app/*.dart")]
     backend_roots = ("src/", "scripts/", "test/", "worker-test/")
     ts = [
@@ -238,33 +320,50 @@ def cmd_format_staged(_: argparse.Namespace) -> int:
     ]
     if not dart and not ts:
         return 0
+    diverged = unstaged_among([f"mobile_app/{f}" for f in dart] + [f"backend/{f}" for f in ts])
+    dart_clean = [f for f in dart if f"mobile_app/{f}" not in diverged]
+    dart_diverged = [f for f in dart if f"mobile_app/{f}" in diverged]
+    ts_clean = [f for f in ts if f"backend/{f}" not in diverged]
+    ts_diverged = [f for f in ts if f"backend/{f}" in diverged]
     logs = log_dir()
     prefix = tool_prefix()
+    has_oxfmt = (ROOT / "backend" / "node_modules" / ".bin" / "oxfmt").exists()
     ok = True
-    if dart:
+    if dart_clean:
         ok &= run_step(
             "format-dart",
-            in_dir(prefix, "mobile_app", ["dart", "format", "--set-exit-if-changed", "--output=none", *dart]),
+            in_dir(prefix, "mobile_app", ["dart", "format", "--set-exit-if-changed", "--output=none", *dart_clean]),
             logs,
         )
-    if ts:
-        if (ROOT / "backend" / "node_modules" / ".bin" / "oxfmt").exists():
-            ok &= run_step(
-                "format-backend",
-                in_dir(prefix, "backend", ["bunx", "oxfmt", "--check", *ts]),
-                logs,
-            )
-        else:
+    if dart_diverged:
+        # dart format は引数なしだと標準入力を整形して標準出力へ出す。
+        ok &= stdin_format_ok(
+            "format-dart",
+            lambda f: in_dir(prefix, "mobile_app", ["dart", "format"]),
+            [f"mobile_app/{f}" for f in dart_diverged],
+        )
+    if ts_clean or ts_diverged:
+        if not has_oxfmt:
             print("- format-backend: backend の依存が未導入のため skip（just backend-setup）")
+        else:
+            if ts_clean:
+                ok &= run_step("format-backend", in_dir(prefix, "backend", ["bunx", "oxfmt", "--check", *ts_clean]), logs)
+            if ts_diverged:
+                ok &= stdin_format_ok(
+                    "format-backend",
+                    lambda f: in_dir(prefix, "backend", ["bunx", "oxfmt", f"--stdin-filepath={f.removeprefix('backend/')}"]),
+                    [f"backend/{f}" for f in ts_diverged],
+                )
     if not ok:
-        print("整形は `just format` で直せます。")
+        print("整形は `just format` で直せます。部分ステージしたファイルは、整形後に必要な部分を `git add` し直してください。")
     return 0 if ok else 1
 
 
-def md_link_errors(md: Path) -> list[str]:
+def md_link_errors(rel: str, text: str, exists) -> list[str]:
+    """text の相対リンクを検査する。リンク先の有無は exists(リポジトリ直下からの相対パス) で判定する。"""
     errors = []
     in_fence = False
-    for no, line in enumerate(md.read_text(errors="replace").splitlines(), 1):
+    for no, line in enumerate(text.splitlines(), 1):
         if line.lstrip().startswith(("```", "~~~")):
             in_fence = not in_fence
             continue
@@ -277,19 +376,34 @@ def md_link_errors(md: Path) -> list[str]:
             path = unquote(target.split("#")[0].split("?")[0])
             if not path:
                 continue
-            base = ROOT if path.startswith("/") else md.parent
-            if not (base / path.lstrip("/")).exists():
-                errors.append(f"{md.relative_to(ROOT)}:{no}: リンク先がありません: {target}")
+            resolved = posixpath.normpath(path.lstrip("/") if path.startswith("/") else posixpath.join(posixpath.dirname(rel), path))
+            if resolved.startswith("..") or not exists(resolved):
+                errors.append(f"{rel}:{no}: リンク先がありません: {target}")
     return errors
 
 
+def index_exists():
+    """index（ステージ内容）にファイルまたはディレクトリがあるかを返す関数。作業ツリーは見ない。"""
+    entries = set()
+    for p in git_paths("ls-files", "--cached"):
+        entries.add(p)
+        entries.update(str(parent) for parent in Path(p).parents if str(parent) != ".")
+    entries.add(".")
+    return entries.__contains__
+
+
 def cmd_md_links(args: argparse.Namespace) -> int:
+    """Markdown の相対リンクを検査する。既定はステージした内容（index）、--all は作業ツリー。"""
     if args.all:
-        files = [f for f in git("ls-files", "*.md").splitlines() if f]
+        files = [f for f in git_paths("ls-files", "*.md") if (ROOT / f).exists()]
+        exists = lambda p: (ROOT / p).exists()
+        read = lambda f: (ROOT / f).read_text(errors="replace")
     else:
         files = staged("*.md")
-    files = [f for f in files if not f.startswith(MD_LINK_EXCLUDES) and (ROOT / f).exists()]
-    errors = [e for f in files for e in md_link_errors(ROOT / f)]
+        exists = index_exists()
+        read = lambda f: git_bytes("show", f":{f}").decode(errors="replace")
+    files = [f for f in files if not f.startswith(MD_LINK_EXCLUDES)]
+    errors = [e for f in files for e in md_link_errors(f, read(f), exists)]
     for e in errors:
         print(e)
     print(f"{'✗' if errors else '✓'} md-links（{len(files)} ファイル、リンク切れ {len(errors)} 件）")
@@ -298,7 +412,7 @@ def cmd_md_links(args: argparse.Namespace) -> int:
 
 def cmd_debug_code(_: argparse.Namespace) -> int:
     """ステージした追加行のデバッグコードを報告する。commit は止めない。"""
-    diff = git("diff", "--cached", "-U0", "--diff-filter=AM", "--", *DEBUG_CODE_GLOBS)
+    diff = git("diff", "--cached", "-U0", "--diff-filter=ACMR", "--", *DEBUG_CODE_GLOBS)
     found = [
         line for line in diff.splitlines() if line.startswith("+") and not line.startswith("+++") and DEBUG_CODE.search(line)
     ]
@@ -316,6 +430,9 @@ def main() -> int:
     changed = sub.add_parser("check-changed", help="変更範囲だけを検証する")
     changed.add_argument("--base", default=DEFAULT_BASE, help=f"比較元（既定: {DEFAULT_BASE}）")
     changed.set_defaults(func=cmd_check_changed)
+    push = sub.add_parser("pre-push", help="pre-push の標準入力から push 対象を検証する")
+    push.add_argument("--base", default=DEFAULT_BASE, help=f"比較元（既定: {DEFAULT_BASE}）")
+    push.set_defaults(func=cmd_pre_push)
     run = sub.add_parser("run", help="just のレシピを要約付きで実行する")
     run.add_argument("recipes", nargs="+")
     run.set_defaults(func=cmd_run)

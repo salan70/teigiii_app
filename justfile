@@ -31,7 +31,7 @@ docbridge-check:
 
 # ステージした変更の未ステージの対応先を報告する。報告だけで、commit は止めない。
 docbridge-related-staged:
-    git diff --cached --name-only | {{docbridge}} related --stdin --gate || true
+    git -c core.quotePath=false diff --cached --name-only | {{docbridge}} related --stdin --gate || true
 
 # 全体を検証する（docbridge、mobile、backend）。出力は要約で、全文はログに書く
 check:
@@ -40,6 +40,10 @@ check:
 # 変更範囲だけを検証する。CI の changes ジョブと同じ規則で mobile / backend を選ぶ
 check-changed *args:
     @python3 tool/dev_check.py check-changed {{args}}
+
+# tool/dev_check.py の単体テスト
+tool-test:
+    python3 -m unittest discover -s tool -p 'test_dev_check.py'
 
 # --- mobile（Flutter アプリ）---
 
