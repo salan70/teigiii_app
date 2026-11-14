@@ -13,6 +13,7 @@
 """
 
 import argparse
+import contextlib
 import datetime
 import functools
 import html
@@ -135,8 +136,10 @@ def cmd_capture(args):
         f"--dart-define=UI_REVIEW_OUT={out}",
         f"--dart-define=UI_REVIEW_ONLY={only}",
     ]
+    # 日付の表示が実行環境のタイムゾーンで変わらないよう、JST に固定する。
+    env = {**os.environ, "TZ": "Asia/Tokyo"}
     try:
-        code = subprocess.run(command, cwd=MOBILE_DIR).returncode
+        code = subprocess.run(command, cwd=MOBILE_DIR, env=env).returncode
     except FileNotFoundError:
         print("flutter が PATH にない（nix develop の中で実行する）", file=sys.stderr)
         return 2
@@ -405,6 +408,29 @@ def cmd_gallery(args):
     return 0
 
 
+@contextlib.contextmanager
+def placeholder_env():
+    """ビルド中だけ mobile_app/.env をプレースホルダに替える。
+
+    .env は pubspec の必須アセットで、Web ビルドの成果物に丸ごと入る。
+    公開物に手元の値（広告 ID や Firebase の設定）を入れないため、終わったら必ず元に戻す。
+    """
+    env_path = MOBILE_DIR / ".env"
+    backup = MOBILE_DIR / ".env.ui-review-backup"
+    if backup.exists() or backup.is_symlink():
+        raise SystemExit(f"{backup} が残っている。前回のビルドが中断した可能性があるので、内容を確かめて .env に戻す")
+    had_env = env_path.exists() or env_path.is_symlink()
+    if had_env:
+        env_path.rename(backup)
+    try:
+        env_path.write_text("# UI レビュー用ビルドのプレースホルダ（値は入れない）\n", encoding="utf-8")
+        yield
+    finally:
+        env_path.unlink(missing_ok=True)
+        if had_env:
+            backup.rename(env_path)
+
+
 def cmd_widgetbook(args):
     """Widgetbook の Web ビルドを出力先の `/widgetbook/` に置く。"""
     out = Path(args.out).resolve()
@@ -421,7 +447,8 @@ def cmd_widgetbook(args):
         str(target),
     ]
     try:
-        code = subprocess.run(command, cwd=MOBILE_DIR).returncode
+        with placeholder_env():
+            code = subprocess.run(command, cwd=MOBILE_DIR).returncode
     except FileNotFoundError:
         print("flutter が PATH にない（nix develop の中で実行する）", file=sys.stderr)
         return 2
@@ -512,16 +539,29 @@ def app_hosts(app):
     return hosts
 
 
+def is_restrictive_allow(policy):
+    """利用者を絞る allow か。include が空、または everyone を含むものは絞っていない。"""
+    if not isinstance(policy, dict) or policy.get("decision") != "allow":
+        return False
+    include = policy.get("include")
+    if not isinstance(include, list) or not include:
+        return False
+    return not any(isinstance(rule, dict) and "everyone" in rule for rule in include)
+
+
 def has_allow_policy(account, app, token):
     policies = app.get("policies") or []
-    if not any(isinstance(policy, dict) for policy in policies):
+    # アプリ一覧の policy が参照だけで include を持たないことがあるので、そのときは policy を取り直す。
+    if not any(isinstance(policy, dict) and "include" in policy for policy in policies):
         policies = cf_get(f"/accounts/{account}/access/apps/{app['id']}/policies", token)
-    return any(policy.get("decision") == "allow" for policy in policies)
+    return any(is_restrictive_allow(policy) for policy in policies)
 
 
 def access_protects(account, hostname, token):
-    """hostname を覆う Access アプリが、allow の policy を 1 つでも持つか。"""
+    """hostname を覆う self_hosted の Access アプリが、利用者を絞る allow の policy を持つか。"""
     for app in cf_get(f"/accounts/{account}/access/apps", token):
+        if app.get("type") != "self_hosted":
+            continue
         if any(covers(host, hostname) for host in app_hosts(app)) and has_allow_policy(account, app, token):
             return True
     return False
@@ -539,7 +579,8 @@ def wrangler_command():
 
 
 def cmd_publish(args):
-    out = Path(args.out).resolve()
+    # 配る中身は wrangler.jsonc の assets.directory で決まるので、出力先は DEFAULT_OUT に固定する。
+    out = DEFAULT_OUT
     if not (out / "manifest.json").exists() or not (out / "index.html").exists():
         print(f"{out} に manifest.json と index.html がない。先に capture --all を実行する", file=sys.stderr)
         return 2
@@ -549,7 +590,7 @@ def cmd_publish(args):
         return 2
     env = dict(os.environ)
     if not args.dry_run:
-        # 本番へ配る前に、公開ホスト名に Access（allow の policy 付き）がかかっていることを確かめる。
+        # 本番へ配る前に、公開ホスト名に Access（利用者を絞った allow の policy 付き）がかかっていることを確かめる。
         token = os.environ.get("CLOUDFLARE_API_TOKEN") or keychain_token()
         if not token:
             print(
@@ -569,7 +610,7 @@ def cmd_publish(args):
             return 1
         if not protected:
             print(
-                f"{publish_hostname()} に Access がかかっていない（allow の policy が無い）ので配らない",
+                f"{publish_hostname()} に Access がかかっていない（利用者を絞った allow の policy が無い）ので配らない",
                 file=sys.stderr,
             )
             return 1
@@ -611,7 +652,6 @@ def main():
     serve.set_defaults(func=cmd_serve)
 
     publish = sub.add_parser("publish", help="Access の存在を確かめてから Cloudflare へ配る")
-    publish.add_argument("--out", default=str(DEFAULT_OUT))
     publish.add_argument("--dry-run", action="store_true", help="wrangler deploy --dry-run で設定を確かめるだけ")
     publish.set_defaults(func=cmd_publish)
 

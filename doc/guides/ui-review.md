@@ -55,7 +55,16 @@ UI を変えたら、変えた画面とコンポーネントの ID を `--only` 
 操作して確かめたいときは、同じサイトの `/widgetbook/` を使う。
 `just deploy-ui-review` が、撮影のあとに Web ビルドを載せる。
 手元で載せるだけなら `just ui-review widgetbook` を実行する。
+`widgetbook` は、ビルドの間だけ `mobile_app/.env` をプレースホルダに替え、終わると元に戻す。
+手元の広告 ID や Firebase の値を、公開する成果物に入れないためである。
+撮影は日付の表示がずれないよう、`TZ=Asia/Tokyo` で `flutter test` を実行する。
 保守が負担になったら Widgetbook を廃止し、カタログに一本化する。
+
+ツール自体（Python）の単体テストは次で実行する。
+
+```bash
+just ui-review-test
+```
 
 ## 公開
 
@@ -66,8 +75,9 @@ UI を変えたら、変えた画面とコンポーネントの ID を `--only` 
 just deploy-ui-review    # capture --all → widgetbook → publish
 ```
 
-`publish` は、Cloudflare Access のアプリがこのホスト名にあり、allow の policy を持つことを API で確かめてから、`wrangler deploy` を呼ぶ。
+`publish` は、Cloudflare Access の self-hosted アプリがこのホスト名にあり、利用者を絞った allow の policy（include が空でなく、`everyone` を含まない）を持つことを API で確かめてから、`wrangler deploy` を呼ぶ。
 確かめられないときは、配らずに止まる。
+配る中身は `wrangler.jsonc` の `assets.directory`（`artifacts/ui-review/`）で決まるので、`publish` に `--out` はない。
 `workers.dev` とプレビュー URL は無効にしてある（`wrangler.jsonc`）。
 
 ### 初回の準備（Cloudflare 側）

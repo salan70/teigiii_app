@@ -33,16 +33,69 @@ class AccessTest(unittest.TestCase):
         self.assertTrue(ur.covers("https://teigiii-ui.oda79.me/*", "teigiii-ui.oda79.me"))
         self.assertFalse(ur.covers("other.oda79.me", "teigiii-ui.oda79.me"))
 
+    def protects(self, app):
+        with mock.patch.object(ur, "cf_get", return_value=[app]):
+            return ur.access_protects("acc", "teigiii-ui.oda79.me", "t")
+
+    def app(self, policies, **extra):
+        return {"id": "x", "type": "self_hosted", "domain": "teigiii-ui.oda79.me", "policies": policies, **extra}
+
     def test_requires_allow_policy(self):
-        app = {"id": "x", "domain": "teigiii-ui.oda79.me", "policies": [{"decision": "allow"}]}
-        with mock.patch.object(ur, "cf_get", return_value=[app]):
+        email = [{"email": {"email": "a@example.com"}}]
+        self.assertTrue(self.protects(self.app([{"decision": "allow", "include": email}])))
+        self.assertFalse(self.protects(self.app([{"decision": "bypass", "include": email}])))
+
+    def test_rejects_allow_for_everyone(self):
+        everyone = [{"everyone": {}}]
+        self.assertFalse(self.protects(self.app([{"decision": "allow", "include": everyone}])))
+        mixed = [{"email": {"email": "a@example.com"}}, {"everyone": {}}]
+        self.assertFalse(self.protects(self.app([{"decision": "allow", "include": mixed}])))
+
+    def test_rejects_allow_without_include(self):
+        self.assertFalse(self.protects(self.app([{"decision": "allow", "include": []}])))
+
+    def test_ignores_non_self_hosted_apps(self):
+        email = [{"email": {"email": "a@example.com"}}]
+        app = self.app([{"decision": "allow", "include": email}], type="bookmark")
+        self.assertFalse(self.protects(app))
+
+    def test_fetches_policies_when_app_lists_only_references(self):
+        email = [{"email": {"email": "a@example.com"}}]
+        app = self.app([{"id": "p1"}])
+        responses = {"/accounts/acc/access/apps": [app]}
+
+        def fake_get(path, token):
+            return responses.get(path, [{"decision": "allow", "include": email}])
+
+        with mock.patch.object(ur, "cf_get", side_effect=fake_get):
             self.assertTrue(ur.access_protects("acc", "teigiii-ui.oda79.me", "t"))
-        app["policies"] = [{"decision": "bypass"}]
-        with mock.patch.object(ur, "cf_get", return_value=[app]):
-            self.assertFalse(ur.access_protects("acc", "teigiii-ui.oda79.me", "t"))
 
     def test_hostname_comes_from_wrangler_config(self):
         self.assertEqual(ur.publish_hostname(), "teigiii-ui.oda79.me")
+
+
+class PlaceholderEnvTest(unittest.TestCase):
+    def test_swaps_env_and_restores_it(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            mobile = Path(tmp)
+            (mobile / ".env").write_text("SECRET=1\n", encoding="utf-8")
+            with mock.patch.object(ur, "MOBILE_DIR", mobile):
+                with ur.placeholder_env():
+                    self.assertNotIn("SECRET", (mobile / ".env").read_text(encoding="utf-8"))
+                self.assertEqual((mobile / ".env").read_text(encoding="utf-8"), "SECRET=1\n")
+                with self.assertRaises(RuntimeError):
+                    with ur.placeholder_env():
+                        raise RuntimeError("build failed")
+                self.assertEqual((mobile / ".env").read_text(encoding="utf-8"), "SECRET=1\n")
+                self.assertFalse((mobile / ".env.ui-review-backup").exists())
+
+    def test_removes_placeholder_when_no_env_existed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            mobile = Path(tmp)
+            with mock.patch.object(ur, "MOBILE_DIR", mobile):
+                with ur.placeholder_env():
+                    self.assertTrue((mobile / ".env").exists())
+                self.assertFalse((mobile / ".env").exists())
 
 
 class GalleryTest(unittest.TestCase):

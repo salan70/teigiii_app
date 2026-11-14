@@ -84,6 +84,10 @@ mobile-widgetbook-build:
 ui-review *args:
     python3 mobile_app/tool/ui_review/ui_review.py {{args}}
 
+# ui-review ツール（Python）の単体テスト
+ui-review-test:
+    python3 -m unittest discover -s mobile_app/tool/ui_review -p 'test_ui_review.py'
+
 # 全対象を撮り直し、Widgetbook を載せ、Access の存在を確かめてから teigiii-ui.oda79.me へ配る
 deploy-ui-review:
     just ui-review capture --all
