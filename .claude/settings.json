@@ -4,5 +4,17 @@
       "mcp__pencil"
     ]
   },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/tool/pstack/pstack.py\" models show 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  },
   "theme": "dark-ansi"
 }
