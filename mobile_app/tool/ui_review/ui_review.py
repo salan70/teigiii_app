@@ -102,9 +102,28 @@ def merge_entries(previous, fresh, selected_ids, valid_ids):
     return kept + fresh
 
 
-def clean_targets(out, ids):
+def install_targets(staging, out, ids):
+    """撮影結果のある対象だけ、既存の成果物を新しいものに差し替える。"""
     for target_id in ids:
+        fresh_dir = staging / target_id
+        if not fresh_dir.is_dir():
+            continue
         shutil.rmtree(out / target_id, ignore_errors=True)
+        shutil.move(str(fresh_dir), str(out / target_id))
+
+
+def missing_shots(registry, selected, fresh):
+    """登録表にあるのに結果がない（対象, 状態, バリアント）。"""
+    got = {entry_key(e) for e in fresh}
+    wanted = set(selected)
+    return [
+        (t["id"], s["id"], v)
+        for t in registry["targets"]
+        if t["id"] in wanted
+        for s in t["states"]
+        for v in state_variants(registry, s)
+        if (t["id"], s["id"], v) not in got
+    ]
 
 
 def cmd_capture(args):
@@ -124,16 +143,24 @@ def cmd_capture(args):
 
     out = Path(args.out).resolve()
     out.mkdir(parents=True, exist_ok=True)
-    clean_targets(out, selected)
-    results_path = out / "results.json"
-    results_path.unlink(missing_ok=True)
+    # 既存の成果物は、撮影が結果を出すまで消さない。作業用のディレクトリに撮って差し替える。
+    staging = out / ".staging"
+    shutil.rmtree(staging, ignore_errors=True)
+    staging.mkdir()
+    try:
+        return capture_into(args, registry, known, selected, out, staging)
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
 
+
+def capture_into(args, registry, known, selected, out, staging):
+    results_path = staging / "results.json"
     only = "" if args.all else ",".join(selected)
     command = [
         "flutter",
         "test",
         CAPTURE_TEST,
-        f"--dart-define=UI_REVIEW_OUT={out}",
+        f"--dart-define=UI_REVIEW_OUT={staging}",
         f"--dart-define=UI_REVIEW_ONLY={only}",
     ]
     # 日付の表示が実行環境のタイムゾーンで変わらないよう、JST に固定する。
@@ -144,10 +171,12 @@ def cmd_capture(args):
         print("flutter が PATH にない（nix develop の中で実行する）", file=sys.stderr)
         return 2
     if not results_path.exists():
-        print(f"撮影の結果（{results_path}）が出ていない。flutter test が失敗した（exit {code}）", file=sys.stderr)
+        print(f"撮影の結果（{results_path}）が出ていない。flutter test が失敗した（exit {code}）。既存の成果物は残した", file=sys.stderr)
         return 1
     fresh = json.loads(results_path.read_text(encoding="utf-8"))
-    results_path.unlink()
+
+    shot_ids = {e["id"] for e in fresh}
+    install_targets(staging, out, shot_ids)
 
     manifest_path = out / "manifest.json"
     previous = []
@@ -156,7 +185,7 @@ def cmd_capture(args):
     manifest = {
         "generatedAt": datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
         "git": git_info(),
-        "entries": merge_entries(previous, fresh, set(selected), set(known)),
+        "entries": merge_entries(previous, fresh, shot_ids, set(known)),
     }
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf-8")
     write_gallery(out, registry, manifest)
@@ -170,20 +199,15 @@ def cmd_capture(args):
     for e in fresh:
         if e["status"] != "ok":
             print(f"  {STATUS_LABEL[e['status']]}: {e['id']} / {e['state']} / {e['variant']}: {e.get('reason', '')}")
-    # 撮り漏れ（登録表にあるのに結果がない状態）は、全件撮影のときだけ数える。
-    if args.all:
-        got = {(e["id"], e["state"], e["variant"]) for e in fresh}
-        absent = [
-            (t["id"], s["id"], v)
-            for t in registry["targets"]
-            for s in t["states"]
-            for v in state_variants(registry, s)
-            if (t["id"], s["id"], v) not in got
-        ]
-        if absent:
-            print(f"撮影されなかった {len(absent)} 枚（flutter test が途中で止まった可能性）", file=sys.stderr)
-            return 1
-    return 0 if counts["failed"] == 0 and counts["missing"] == 0 else 1
+    ok = counts["failed"] == 0 and counts["missing"] == 0
+    if code != 0:
+        print(f"flutter test が異常終了した（exit {code}）", file=sys.stderr)
+        ok = False
+    absent = missing_shots(registry, selected, fresh)
+    if absent:
+        print(f"撮影されなかった {len(absent)} 枚（flutter test が途中で止まった可能性）", file=sys.stderr)
+        ok = False
+    return 0 if ok else 1
 
 
 # ---------------------------------------------------------------- ギャラリー
